@@ -895,6 +895,12 @@ export default function ProductsPage() {
       if (product.barcode) {
         addToIndex(barcodeIndex, product.barcode, product.id)
       }
+
+      if (product.barcodes && Array.isArray(product.barcodes)) {
+        product.barcodes.forEach((bc: string) => {
+          if (bc) addToIndex(barcodeIndex, bc, product.id)
+        })
+      }
     })
 
     return { nameIndex, codeIndex, barcodeIndex }

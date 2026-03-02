@@ -1566,9 +1566,9 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
     const barcodeToAdd = formData.barcode.trim()
     if (!barcodeToAdd) return
     
-    // Check if barcode already exists
+    // Check if barcode already exists in this product
     if (productBarcodes.includes(barcodeToAdd)) {
-      alert('هذا الباركود موجود بالفعل')
+      alert('هذا الباركود موجود بالفعل في هذا المنتج')
       return
     }
     

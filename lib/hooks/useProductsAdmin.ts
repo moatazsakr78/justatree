@@ -43,6 +43,7 @@ export interface Product {
   name: string;
   name_en?: string | null;
   barcode?: string | null;
+  barcodes?: string[] | null;
   price: number;
   cost_price: number;
   main_image_url?: string | null;
@@ -142,6 +143,7 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
             id,
             name,
             barcode,
+            barcodes,
             price,
             cost_price,
             main_image_url,
@@ -818,7 +820,7 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
       const { data: product, error: productError } = await supabase
         .from('products')
         .select(`
-          id, name, barcode, price, cost_price, main_image_url, sub_image_url,
+          id, name, barcode, barcodes, price, cost_price, main_image_url, sub_image_url,
           additional_images_urls, category_id, is_active, display_order, stock,
           min_stock, max_stock, unit, description, wholesale_price, price1, price2,
           price3, price4, quantity_per_carton, product_code, rating, rating_count, discount_percentage, discount_amount,

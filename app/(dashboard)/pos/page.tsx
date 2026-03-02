@@ -2063,6 +2063,15 @@ function POSPageContent() {
         map.set(product.barcode.toLowerCase(), { product });
       }
 
+      // باركودات المنتج الإضافية
+      if (product.barcodes && Array.isArray(product.barcodes)) {
+        product.barcodes.forEach((bc: string) => {
+          if (bc && !map.has(bc.toLowerCase())) {
+            map.set(bc.toLowerCase(), { product });
+          }
+        });
+      }
+
       // باركود الألوان من colors (من جدول product_color_shape_definitions)
       const productColors = (product as any).colors;
       if (productColors && Array.isArray(productColors)) {
