@@ -104,23 +104,36 @@ export function useCustomSections() {
       setIsLoading(true);
       setError(null);
 
-      // Fetch sections and all products in parallel
-      const [sectionsResponse, productsResponse] = await Promise.all([
-        (supabase as any)
-          .from('custom_sections')
-          .select('*')
-          .order('display_order', { ascending: true }),
-        supabase
-          .from('products')
-          .select('id, name, description, main_image_url, sub_image_url, price, discount_percentage, discount_amount, is_hidden, rating, rating_count')
-          .eq('is_hidden', false)
-      ]);
+      // Step 1: Fetch sections first
+      const sectionsResponse = await (supabase as any)
+        .from('custom_sections')
+        .select('*')
+        .order('display_order', { ascending: true });
 
       if (sectionsResponse.error) {
         console.error('Error fetching custom sections:', sectionsResponse.error);
         setError(sectionsResponse.error.message);
         return [];
       }
+
+      // Step 2: Collect all unique product IDs from all sections
+      const allProductIds = [...new Set(
+        (sectionsResponse.data || []).flatMap((section: any) =>
+          Array.isArray(section.products) ? section.products : []
+        )
+      )] as string[];
+
+      if (allProductIds.length === 0) {
+        setSections(sectionsResponse.data || []);
+        return sectionsResponse.data || [];
+      }
+
+      // Step 3: Fetch only the needed products by ID (avoids 1000-row default limit)
+      const productsResponse = await supabase
+        .from('products')
+        .select('id, name, description, main_image_url, sub_image_url, price, discount_percentage, discount_amount, is_hidden, rating, rating_count')
+        .in('id', allProductIds)
+        .eq('is_hidden', false);
 
       if (productsResponse.error) {
         console.error('Error fetching products:', productsResponse.error);
