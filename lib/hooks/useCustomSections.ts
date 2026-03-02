@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import { supabase } from '../../app/lib/supabase/client';
 
 export interface CustomSection {
@@ -27,6 +28,7 @@ export interface CustomSectionProduct {
 }
 
 export function useCustomSections() {
+  const { data: session } = useSession();
   const [sections, setSections] = useState<CustomSection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -167,8 +169,6 @@ export function useCustomSections() {
   // Create a new custom section
   const createSection = useCallback(async (sectionData: Partial<CustomSection>) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-
       const { data, error: createError } = await (supabase as any)
         .from('custom_sections')
         .insert({
@@ -178,7 +178,7 @@ export function useCustomSections() {
           is_active: sectionData.is_active !== undefined ? sectionData.is_active : true,
           display_order: sectionData.display_order || 0,
           products: sectionData.products || [],
-          created_by: user?.id || null
+          created_by: session?.user?.id || null
         })
         .select()
         .single();
@@ -195,7 +195,7 @@ export function useCustomSections() {
       console.error('Error in createSection:', err);
       throw err;
     }
-  }, [fetchSections]);
+  }, [fetchSections, session]);
 
   // Update an existing custom section
   const updateSection = useCallback(async (sectionId: string, updates: Partial<CustomSection>) => {
