@@ -383,6 +383,7 @@ export async function getProductWithAllData(productId: string) {
           .ilike('name', `%${baseName}%`)
           .neq('id', productId)
           .eq('is_active', true)
+          .eq('is_hidden', false)
           .limit(10);
 
         if (relatedProducts && relatedProducts.length > 0) {

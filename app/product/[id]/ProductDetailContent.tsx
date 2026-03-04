@@ -455,6 +455,7 @@ export default function ProductDetailContent({ productId, serverData }: ProductD
                 .ilike('name', `%${baseName}%`)
                 .neq('id', product.id)
                 .eq('is_active', true)
+                .eq('is_hidden', false)
                 .limit(10);
 
               if (relatedProducts && relatedProducts.length > 0) {

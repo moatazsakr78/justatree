@@ -60,6 +60,17 @@ export default function ShippingCompanyDetails() {
   const [newAreaName, setNewAreaName] = useState('')
   const [newAreaPrice, setNewAreaPrice] = useState('')
 
+  // Edit area modal states
+  const [showEditAreaModal, setShowEditAreaModal] = useState(false)
+  const [editingArea, setEditingArea] = useState<{ govId: string, area: Area } | null>(null)
+  const [editAreaName, setEditAreaName] = useState('')
+  const [editAreaPrice, setEditAreaPrice] = useState('')
+
+  // Edit governorate modal states
+  const [showEditGovModal, setShowEditGovModal] = useState(false)
+  const [editingGov, setEditingGov] = useState<Governorate | null>(null)
+  const [editGovPrice, setEditGovPrice] = useState('')
+
   useEffect(() => {
     if (companyId) {
       loadCompanyData()
@@ -251,6 +262,75 @@ export default function ShippingCompanyDetails() {
     }
   }
 
+  const handleEditArea = async () => {
+    if (!editingArea || !editAreaName.trim() || !editAreaPrice.trim() || isSubmitting) return
+
+    try {
+      setIsSubmitting(true)
+      const { error } = await (supabase as any)
+        .from('shipping_areas')
+        .update({
+          name: editAreaName.trim(),
+          price: parseFloat(editAreaPrice)
+        })
+        .eq('id', editingArea.area.id)
+
+      if (error) throw error
+
+      const updatedGovernorates = governorates.map(gov =>
+        gov.id === editingArea.govId
+          ? {
+              ...gov,
+              areas: gov.areas.map(area =>
+                area.id === editingArea.area.id
+                  ? { ...area, name: editAreaName.trim(), price: parseFloat(editAreaPrice) }
+                  : area
+              )
+            }
+          : gov
+      )
+      setGovernorates(updatedGovernorates)
+      setShowEditAreaModal(false)
+      setEditingArea(null)
+      setEditAreaName('')
+      setEditAreaPrice('')
+    } catch (error) {
+      console.error('Error editing area:', error)
+      alert('حدث خطأ في تعديل المنطقة')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleEditGovernorate = async () => {
+    if (!editingGov || !editGovPrice.trim() || isSubmitting) return
+
+    try {
+      setIsSubmitting(true)
+      const { error } = await (supabase as any)
+        .from('shipping_governorates')
+        .update({ price: parseFloat(editGovPrice) })
+        .eq('id', editingGov.id)
+
+      if (error) throw error
+
+      const updatedGovernorates = governorates.map(gov =>
+        gov.id === editingGov.id
+          ? { ...gov, price: parseFloat(editGovPrice) }
+          : gov
+      )
+      setGovernorates(updatedGovernorates)
+      setShowEditGovModal(false)
+      setEditingGov(null)
+      setEditGovPrice('')
+    } catch (error) {
+      console.error('Error editing governorate:', error)
+      alert('حدث خطأ في تعديل المحافظة')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const availableGovernorates = egyptianGovernorates.filter(
     gov => !governorates.some(g => g.name === gov)
   )
@@ -370,7 +450,16 @@ export default function ShippingCompanyDetails() {
                         </button>
                       )}
                       
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                      <button
+                        onClick={() => {
+                          if (gov.type === 'simple') {
+                            setEditingGov(gov)
+                            setEditGovPrice(String(gov.price || ''))
+                            setShowEditGovModal(true)
+                          }
+                        }}
+                        className={`p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors ${gov.type === 'complex' ? 'opacity-0 pointer-events-none' : ''}`}
+                      >
                         <PencilIcon className="h-5 w-5" />
                       </button>
                       <button 
@@ -420,12 +509,25 @@ export default function ShippingCompanyDetails() {
                                   <div className="font-semibold text-gray-800">{area.name}</div>
                                   <div className="text-lg font-bold text-green-600">{area.price} جنيه</div>
                                 </div>
-                                <button
-                                  onClick={() => handleDeleteArea(gov.id, area.id)}
-                                  className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                                >
-                                  <TrashIcon className="h-4 w-4" />
-                                </button>
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    onClick={() => {
+                                      setEditingArea({ govId: gov.id, area })
+                                      setEditAreaName(area.name)
+                                      setEditAreaPrice(String(area.price))
+                                      setShowEditAreaModal(true)
+                                    }}
+                                    className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                                  >
+                                    <PencilIcon className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteArea(gov.id, area.id)}
+                                    className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                  >
+                                    <TrashIcon className="h-4 w-4" />
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           ))}
@@ -539,6 +641,120 @@ export default function ShippingCompanyDetails() {
                     setNewGovName('')
                     setGovPrice('')
                     setGovType('simple')
+                  }}
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 px-4 py-3 rounded-lg transition-colors font-medium"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Governorate Modal */}
+      {showEditGovModal && editingGov && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+                تعديل المحافظة
+              </h2>
+              <p className="text-gray-600 text-center mb-6">{editingGov.name}</p>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  سعر الشحن (جنيه)
+                </label>
+                <input
+                  type="number"
+                  value={editGovPrice}
+                  onChange={(e) => setEditGovPrice(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="أدخل سعر الشحن"
+                  autoFocus
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleEditGovernorate}
+                  disabled={!editGovPrice.trim() || isSubmitting}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-500 text-white px-4 py-3 rounded-lg transition-colors font-medium"
+                >
+                  {isSubmitting ? 'جاري الحفظ...' : 'حفظ التعديلات'}
+                </button>
+                <button
+                  onClick={() => {
+                    setShowEditGovModal(false)
+                    setEditingGov(null)
+                    setEditGovPrice('')
+                  }}
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 px-4 py-3 rounded-lg transition-colors font-medium"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Area Modal */}
+      {showEditAreaModal && editingArea && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+                تعديل المنطقة
+              </h2>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  اسم المنطقة
+                </label>
+                <input
+                  type="text"
+                  value={editAreaName}
+                  onChange={(e) => setEditAreaName(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="أدخل اسم المنطقة"
+                  autoFocus
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  سعر الشحن (جنيه)
+                </label>
+                <input
+                  type="number"
+                  value={editAreaPrice}
+                  onChange={(e) => setEditAreaPrice(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="أدخل سعر الشحن"
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleEditArea}
+                  disabled={!editAreaName.trim() || !editAreaPrice.trim() || isSubmitting}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-500 text-white px-4 py-3 rounded-lg transition-colors font-medium"
+                >
+                  {isSubmitting ? 'جاري الحفظ...' : 'حفظ التعديلات'}
+                </button>
+                <button
+                  onClick={() => {
+                    setShowEditAreaModal(false)
+                    setEditingArea(null)
+                    setEditAreaName('')
+                    setEditAreaPrice('')
                   }}
                   disabled={isSubmitting}
                   className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 px-4 py-3 rounded-lg transition-colors font-medium"

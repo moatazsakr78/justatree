@@ -26,6 +26,8 @@ interface ProductManagementItem {
   suggestedProducts: string[];
 }
 
+type ActiveFilter = 'hidden' | 'visible' | 'no_image' | 'featured';
+
 export default function ProductManagementPage() {
   const router = useRouter();
   const { products: databaseProducts, isLoading, fetchProducts } = useProductsAdmin();
@@ -49,6 +51,23 @@ export default function ProductManagementPage() {
   const [isManageSizeGroupsModalOpen, setIsManageSizeGroupsModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Set<ActiveFilter>>(new Set());
+
+  // Toggle a filter chip
+  const toggleFilter = (filter: ActiveFilter) => {
+    setActiveFilters(prev => {
+      const next = new Set(prev);
+      if (next.has(filter)) {
+        next.delete(filter);
+      } else {
+        // Hidden and visible are mutually exclusive
+        if (filter === 'hidden') next.delete('visible');
+        if (filter === 'visible') next.delete('hidden');
+        next.add(filter);
+      }
+      return next;
+    });
+  };
 
   // Set client-side flag after component mounts
   useEffect(() => {
@@ -114,10 +133,11 @@ export default function ProductManagementPage() {
     }
   }, [storeCategories, managementMode, isSaving]);
 
-  // Load store categories when switching to categories mode
+  // Load store categories when switching to categories mode, reset product filters
   useEffect(() => {
     if (managementMode === 'categories') {
       fetchStoreCategories();
+      setActiveFilters(new Set());
     }
   }, [managementMode]);
 
@@ -488,12 +508,31 @@ export default function ProductManagementPage() {
     setSelectedProductId(selectedProductId === productId ? null : productId);
   };
 
-  // Filter products based on search term
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter products based on search term and active filters
+  const filteredProducts = products.filter(product => {
+    // Text search
+    const matchesSearch = !searchTerm ||
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    if (!matchesSearch) return false;
+
+    // Active filters (AND logic)
+    if (activeFilters.has('hidden') && !product.isHidden) return false;
+    if (activeFilters.has('visible') && product.isHidden) return false;
+    if (activeFilters.has('no_image') && product.image !== '/placeholder-product.svg') return false;
+    if (activeFilters.has('featured') && !product.isFeatured) return false;
+
+    return true;
+  });
+
+  // Counts for filter badges
+  const filterCounts = {
+    hidden: products.filter(p => p.isHidden).length,
+    visible: products.filter(p => !p.isHidden).length,
+    no_image: products.filter(p => p.image === '/placeholder-product.svg').length,
+    featured: products.filter(p => p.isFeatured).length,
+  };
   
   // Filter categories based on search term
   const filteredCategories = categories.filter(category =>
@@ -930,9 +969,9 @@ export default function ProductManagementPage() {
 
               {/* Search Results Count */}
               <div className="hidden md:block text-sm text-gray-500">
-                {searchTerm && (
+                {(searchTerm || activeFilters.size > 0) && (
                   <span>
-                    {managementMode === 'products' 
+                    {managementMode === 'products'
                       ? `${filteredProducts.length} من ${products.length} منتج`
                       : `${filteredCategories.length} من ${categories.length} فئة`
                     }
@@ -940,6 +979,96 @@ export default function ProductManagementPage() {
                 )}
               </div>
             </div>
+
+            {/* Filter Chips - Only in products mode */}
+            {managementMode === 'products' && (
+              <div className="flex items-center gap-2 mt-3 flex-wrap">
+                {/* الكل */}
+                <button
+                  onClick={() => setActiveFilters(new Set())}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    activeFilters.size === 0
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  الكل
+                  <span className={`mr-1.5 text-xs ${activeFilters.size === 0 ? 'bg-gray-500 text-gray-100' : 'bg-gray-200 text-gray-500'} px-1.5 py-0.5 rounded-full`}>
+                    {products.length}
+                  </span>
+                </button>
+
+                {/* مخفي من المتجر */}
+                <button
+                  onClick={() => toggleFilter('hidden')}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    activeFilters.has('hidden')
+                      ? 'bg-red-600 text-white'
+                      : 'bg-red-50 text-red-600 hover:bg-red-100'
+                  }`}
+                >
+                  مخفي من المتجر
+                  <span className={`mr-1.5 text-xs ${activeFilters.has('hidden') ? 'bg-red-500 text-red-100' : 'bg-red-100 text-red-500'} px-1.5 py-0.5 rounded-full`}>
+                    {filterCounts.hidden}
+                  </span>
+                </button>
+
+                {/* ظاهر في المتجر */}
+                <button
+                  onClick={() => toggleFilter('visible')}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    activeFilters.has('visible')
+                      ? 'bg-green-600 text-white'
+                      : 'bg-green-50 text-green-600 hover:bg-green-100'
+                  }`}
+                >
+                  ظاهر في المتجر
+                  <span className={`mr-1.5 text-xs ${activeFilters.has('visible') ? 'bg-green-500 text-green-100' : 'bg-green-100 text-green-500'} px-1.5 py-0.5 rounded-full`}>
+                    {filterCounts.visible}
+                  </span>
+                </button>
+
+                {/* بدون صورة */}
+                <button
+                  onClick={() => toggleFilter('no_image')}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    activeFilters.has('no_image')
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                  }`}
+                >
+                  بدون صورة
+                  <span className={`mr-1.5 text-xs ${activeFilters.has('no_image') ? 'bg-orange-400 text-orange-100' : 'bg-orange-100 text-orange-500'} px-1.5 py-0.5 rounded-full`}>
+                    {filterCounts.no_image}
+                  </span>
+                </button>
+
+                {/* منتج مميز */}
+                <button
+                  onClick={() => toggleFilter('featured')}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    activeFilters.has('featured')
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                  }`}
+                >
+                  منتج مميز
+                  <span className={`mr-1.5 text-xs ${activeFilters.has('featured') ? 'bg-blue-500 text-blue-100' : 'bg-blue-100 text-blue-500'} px-1.5 py-0.5 rounded-full`}>
+                    {filterCounts.featured}
+                  </span>
+                </button>
+
+                {/* مسح الفلاتر */}
+                {activeFilters.size > 0 && (
+                  <button
+                    onClick={() => setActiveFilters(new Set())}
+                    className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 underline transition-colors"
+                  >
+                    مسح الفلاتر
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           {managementMode === 'products' ? (
