@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useProducts, Product as DatabaseProduct } from '@/app/lib/hooks/useProducts';
 import { UserInfo, Product } from '@/components/website/shared/types';
@@ -25,6 +25,7 @@ import { useSocialMediaPublic } from '@/lib/hooks/useSocialMedia';
 import WhatsAppFloatingButton from '@/app/components/WhatsAppFloatingButton';
 import { preloadImagesInBackground } from '@/lib/utils/imagePreloader';
 import { getTransformedUrls } from '@/lib/utils/supabaseImageTransform';
+import { useWebsiteCurrency } from '@/lib/hooks/useCurrency';
 
 interface MobileHomeProps {
   userInfo: UserInfo;
@@ -108,6 +109,18 @@ export default function MobileHome({
   const [sectionsWithProducts, setSectionsWithProducts] = useState<any[]>([]);
   const [isSectionsReady, setIsSectionsReady] = useState(false);
   const [rawSectionsData, setRawSectionsData] = useState<any[]>([]);
+  const [expandedCloneProductId, setExpandedCloneProductId] = useState<string | null>(null);
+  const cloneAccordionRef = useRef<HTMLDivElement>(null);
+  const websiteCurrency = useWebsiteCurrency();
+
+  // Scroll to clone accordion when expanded
+  useEffect(() => {
+    if (expandedCloneProductId && cloneAccordionRef.current) {
+      setTimeout(() => {
+        cloneAccordionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+  }, [expandedCloneProductId]);
 
   // Handle adding products to cart - now opens quantity modal
   const handleAddToCart = async (product: Product) => {
@@ -124,7 +137,8 @@ export default function MobileHome({
       const selectedColorName = selectedProduct.selectedColor?.name || undefined;
       const selectedShapeName = selectedProduct.selectedShape?.name || undefined;
       const productNote = selectedProduct.note || undefined;
-      await addToCart(String(selectedProduct.id), quantity, selectedProduct.price, selectedColorName, selectedShapeName, undefined, productNote);
+      const customImageUrl = selectedProduct.customImage || undefined;
+      await addToCart(String(selectedProduct.id), quantity, selectedProduct.price, selectedColorName, selectedShapeName, undefined, productNote, customImageUrl);
       console.log('✅ Mobile: Product added successfully');
     } catch (error) {
       console.error('❌ Mobile: Error adding product to cart:', error);
@@ -329,7 +343,7 @@ export default function MobileHome({
             description: product.description || '',
             price: product.finalPrice || product.price,
             originalPrice: product.hasDiscount ? product.price : undefined,
-            image: product.main_image_url,
+            image: product.customImage || product.main_image_url,
             images: [product.main_image_url, product.sub_image_url].filter(Boolean),
             category: 'عام',
             colors: [],
@@ -342,7 +356,9 @@ export default function MobileHome({
             isOnSale: product.hasDiscount || false,
             discount: product.discount_percentage ? Math.round(product.discount_percentage) : undefined,
             tags: [],
-            isFeatured: false
+            isFeatured: false,
+            customImage: product.customImage || null,
+            clones: product.clones || []
           }))
         }));
 
@@ -360,7 +376,7 @@ export default function MobileHome({
     const sectionsWithConvertedProducts = activeSections.map((section: any) => {
       const convertedProducts = section.productDetails.map((product: any) => {
         const dbProduct = websiteProducts.find(wp => wp.id === product.id);
-        return dbProduct || {
+        const base = dbProduct || {
           id: product.id,
           name: product.name,
           description: product.description || '',
@@ -380,6 +396,12 @@ export default function MobileHome({
           discount: product.discount_percentage ? Math.round(product.discount_percentage) : undefined,
           tags: [],
           isFeatured: false
+        };
+        return {
+          ...base,
+          image: product.customImage || base.image,
+          customImage: product.customImage || null,
+          clones: product.clones || [],
         };
       });
 
@@ -1099,26 +1121,112 @@ export default function MobileHome({
         {/* Custom Sections (Dynamic) - Show at the top, before categories */}
         {isSectionsReady && selectedCategory === 'الكل' && !searchQuery && sectionsWithProducts.length > 0 && (
           <>
-            {sectionsWithProducts.map((section: any) => (
+            {sectionsWithProducts.map((section: any) => {
+              const expandedProduct = expandedCloneProductId
+                ? section.products?.find((p: any) => String(p.id) === expandedCloneProductId)
+                : null;
+              return (
               section.products && section.products.length > 0 && (
                 <section key={section.id} className="mb-6">
                   <h3 className="text-xl font-bold mb-4 text-black">{section.name}</h3>
                   <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                    {section.products.map((product: any) => (
+                    {section.products.map((product: any) => {
+                      const hasClones = product.clones && product.clones.length > 0;
+                      return (
                       <div key={product.id} className="flex-shrink-0 w-44">
                         <InteractiveProductCard
                           product={product}
-                          onAddToCart={handleAddToCart}
+                          onAddToCart={hasClones ? async (p: Product) => {
+                            setExpandedCloneProductId(prev =>
+                              prev === String(p.id) ? null : String(p.id)
+                            );
+                          } : handleAddToCart}
                           deviceType="mobile"
-                          onProductClick={handleProductClick}
+                          onProductClick={hasClones ? () => {
+                            setExpandedCloneProductId(prev =>
+                              prev === String(product.id) ? null : String(product.id)
+                            );
+                          } : handleProductClick}
                           displaySettings={displaySettings}
                         />
+                        {/* Clone badge overlay */}
+                        {hasClones && (
+                          <div className="relative -mt-10 mr-1 mb-2 z-10 pointer-events-none">
+                            <span className="bg-black/70 text-white px-2 py-0.5 rounded text-[10px] font-medium">
+                              {product.clones.length} شكل
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
+                  {/* Clone Accordion Panel */}
+                  {expandedProduct && expandedProduct.clones && expandedProduct.clones.length > 0 && (
+                    <div
+                      ref={cloneAccordionRef}
+                      className="mt-3 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden"
+                      style={{ animation: 'slideDown 0.3s ease-out' }}
+                    >
+                      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100" style={{backgroundColor: 'var(--primary-color)'}}>
+                        <h4 className="text-sm font-bold text-white">
+                          اختار الشكل الذي تريده - {expandedProduct.name}
+                        </h4>
+                        <button
+                          onClick={() => setExpandedCloneProductId(null)}
+                          className="text-white/80 hover:text-white transition-colors"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="p-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          {expandedProduct.clones.map((clone: any) => (
+                            <div
+                              key={clone.id}
+                              className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all"
+                            >
+                              <img
+                                src={clone.image || '/placeholder-product.svg'}
+                                alt={clone.label || expandedProduct.name}
+                                className="w-full h-44 object-cover"
+                                onError={(e: any) => {
+                                  if (e.target.src !== '/placeholder-product.svg') {
+                                    e.target.src = '/placeholder-product.svg';
+                                  }
+                                }}
+                              />
+                              <div className="p-2">
+                                {clone.label && (
+                                  <p className="text-xs font-medium text-gray-700 truncate mb-2 text-center">{clone.label}</p>
+                                )}
+                                <button
+                                  onClick={() => {
+                                    const productToAdd = {
+                                      ...expandedProduct,
+                                      price: profile?.role === 'جملة' && expandedProduct.wholesale_price ? expandedProduct.wholesale_price : expandedProduct.price,
+                                      customImage: clone.image,
+                                    };
+                                    handleAddToCart(productToAdd);
+                                  }}
+                                  className="w-full px-2 py-1.5 rounded-lg text-xs font-medium text-white transition-all active:scale-95"
+                                  style={{backgroundColor: 'var(--primary-color)'}}
+                                >
+                                  أضف للسلة
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </section>
               )
-            ))}
+              );
+            })}
           </>
         )}
 
