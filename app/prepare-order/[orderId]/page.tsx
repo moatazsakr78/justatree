@@ -49,6 +49,7 @@ export default function PrepareOrderPage() {
               id,
               quantity,
               unit_price,
+              custom_image_url,
               products (
                 id,
                 name,
@@ -75,7 +76,7 @@ export default function PrepareOrderPage() {
             name: item.products?.name || 'منتج غير معروف',
             quantity: item.quantity,
             price: Number(item.unit_price),
-            image: item.products?.main_image_url || undefined,
+            image: item.custom_image_url || item.products?.main_image_url || undefined,
             isPrepared: false
           }))
         };

@@ -34,6 +34,7 @@ export async function GET() {
           id,
           quantity,
           unit_price,
+          custom_image_url,
           products (
             id,
             name,

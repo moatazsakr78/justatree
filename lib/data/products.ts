@@ -528,13 +528,20 @@ export async function getCustomSections() {
       })
     );
 
-    // Step 5: Attach productDetails to each section
+    // Step 5: Attach productDetails to each section, merging custom_image/clones from JSONB
     return sections.map((section: any) => {
-      const productIds = Array.isArray(section.products)
-        ? section.products.map((p: any) => typeof p === 'string' ? p : p.product_id)
-        : [];
-      const productDetails = productIds
-        .map((id: string) => productsMap.get(id))
+      const rawProducts = Array.isArray(section.products) ? section.products : [];
+      const productDetails = rawProducts
+        .map((p: any) => {
+          const id = typeof p === 'string' ? p : p.product_id;
+          const productData = productsMap.get(id);
+          if (!productData) return null;
+          return {
+            ...productData,
+            customImage: (typeof p === 'object' ? p.custom_image : null) || null,
+            clones: (typeof p === 'object' ? p.clones : null) || [],
+          };
+        })
         .filter(Boolean);
       return { ...section, productDetails };
     });

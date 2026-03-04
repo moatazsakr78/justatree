@@ -159,15 +159,22 @@ export function useCustomSections() {
         })
       );
 
-      // Map sections to their products using the products map
+      // Map sections to their products using the products map, merging custom_image/clones
       const sectionsWithProducts = (sectionsResponse.data || []).map((section: any) => {
-        const productIds = Array.isArray(section.products)
-          ? section.products.map((p: any) => typeof p === 'string' ? p : p.product_id)
-          : [];
+        const rawProducts = Array.isArray(section.products) ? section.products : [];
 
-        const productDetails = productIds
-          .map((id: string) => productsMap.get(id))
-          .filter(Boolean); // Remove undefined entries
+        const productDetails = rawProducts
+          .map((p: any) => {
+            const id = typeof p === 'string' ? p : p.product_id;
+            const productData = productsMap.get(id);
+            if (!productData) return null;
+            return {
+              ...productData,
+              customImage: (typeof p === 'object' ? p.custom_image : null) || null,
+              clones: (typeof p === 'object' ? p.clones : null) || [],
+            };
+          })
+          .filter(Boolean);
 
         return { ...section, productDetails };
       });

@@ -84,6 +84,8 @@ export interface Product {
   isFeatured?: boolean;
   suggestedProducts?: string[];
   note?: string; // Customer note for the product
+  customImage?: string | null;
+  clones?: Array<{ id: string; image: string; label: string }>;
 }
 
 export interface Category {

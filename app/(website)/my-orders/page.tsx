@@ -133,7 +133,7 @@ export default function OrdersPage() {
               name: item.products?.name || 'منتج غير معروف',
               quantity: item.quantity,
               price: parseFloat(item.unit_price),
-              image: item.products?.main_image_url || undefined,
+              image: item.custom_image_url || item.products?.main_image_url || undefined,
               barcode: item.products?.barcode || null,
               isPrepared: false // Initialize as not prepared
             }));

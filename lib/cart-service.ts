@@ -54,7 +54,8 @@ export class CartService {
     selectedColor?: string,
     selectedShape?: string,
     selectedSize?: string,
-    notes?: string
+    notes?: string,
+    customImageUrl?: string
   ): Promise<CartItemData | null> {
     try {
       console.log('🏪 CartService.addToCart called with:', {
@@ -79,10 +80,12 @@ export class CartService {
         const itemColor = item.selected_color || '';
         const itemShape = item.selected_shape || '';
         const itemSize = item.selected_size || '';
+        const itemCustomImage = (item as any).custom_image_url || '';
         const inputColor = selectedColor || '';
         const inputShape = selectedShape || '';
         const inputSize = selectedSize || '';
-        return itemColor === inputColor && itemShape === inputShape && itemSize === inputSize;
+        const inputCustomImage = customImageUrl || '';
+        return itemColor === inputColor && itemShape === inputShape && itemSize === inputSize && itemCustomImage === inputCustomImage;
       });
 
       if (existingItem) {
@@ -101,7 +104,8 @@ export class CartService {
           selected_color: selectedColor,
           selected_shape: selectedShape,
           selected_size: selectedSize,
-          notes: notes || null
+          notes: notes || null,
+          custom_image_url: customImageUrl || null
         };
 
         const { data, error } = await supabase

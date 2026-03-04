@@ -8,6 +8,7 @@ interface OrderItem {
   quantity: number
   price: number
   notes?: string
+  custom_image_url?: string | null
 }
 
 interface CustomerData {
@@ -286,13 +287,18 @@ export async function POST(request: Request) {
     }
 
     // Insert order items (using server-validated prices)
-    const orderItems = validatedItems.map((item) => ({
-      order_id: orderResult.id,
-      product_id: item.product_id,
-      quantity: item.quantity,
-      unit_price: item.price,
-      notes: item.notes || null
-    }))
+    // Find matching original item to get custom_image_url (not in validatedItems since we rebuilt them)
+    const orderItems = validatedItems.map((item) => {
+      const originalItem = orderData.items.find(oi => oi.product_id === item.product_id)
+      return {
+        order_id: orderResult.id,
+        product_id: item.product_id,
+        quantity: item.quantity,
+        unit_price: item.price,
+        notes: item.notes || null,
+        custom_image_url: originalItem?.custom_image_url || null
+      }
+    })
 
     const { error: itemsError } = await supabaseAdmin
       .from('order_items')

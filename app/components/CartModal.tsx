@@ -395,18 +395,20 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
     }
   };
   
-  // Group cart items by product_id
+  // Group cart items by product_id + custom_image_url (different clones = different groups)
   const groupedCartItems = cartItems.reduce((groups, item) => {
-    const key = item.product_id;
+    const customImg = (item as any).custom_image_url || '';
+    const key = customImg ? `${item.product_id}__${customImg}` : item.product_id;
     if (!groups[key]) {
       groups[key] = {
         product: item.products,
+        custom_image_url: customImg || null,
         items: []
       };
     }
     groups[key].items.push(item);
     return groups;
-  }, {} as Record<string, { product: any; items: any[] }>);
+  }, {} as Record<string, { product: any; custom_image_url: string | null; items: any[] }>);
 
   // Calculate totals
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -496,7 +498,8 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
             product_id: item.product_id,
             quantity: item.quantity,
             price: item.price,
-            notes: item.notes || null
+            notes: item.notes || null,
+            custom_image_url: (item as any).custom_image_url || null
           })),
           customer: orderData.customer,
           delivery_method: orderData.delivery_method,
@@ -807,7 +810,7 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                                   <div className="flex items-center gap-3">
                                     <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
                                       <img 
-                                        src={group.product?.main_image_url || '/placeholder-product.svg'} 
+                                        src={group.custom_image_url || group.product?.main_image_url || '/placeholder-product.svg'} 
                                         alt={group.product?.name || 'منتج'}
                                         className="w-full h-full object-cover rounded-lg"
                                         onError={(e) => {
@@ -1275,7 +1278,7 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                                     <div className="flex items-center gap-3">
                                       <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
                                         <img 
-                                          src={group.product?.main_image_url || '/placeholder-product.svg'} 
+                                          src={group.custom_image_url || group.product?.main_image_url || '/placeholder-product.svg'} 
                                           alt={group.product?.name || 'منتج'}
                                           className="w-full h-full object-cover rounded-lg"
                                           onError={(e) => {
@@ -1469,7 +1472,7 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                           <div className="flex items-center gap-3 mb-3">
                             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
                               <img 
-                                src={group.product?.main_image_url || '/placeholder-product.svg'} 
+                                src={group.custom_image_url || group.product?.main_image_url || '/placeholder-product.svg'} 
                                 alt={group.product?.name || 'منتج'}
                                 className="w-full h-full object-cover rounded-lg"
                                 onError={(e) => {

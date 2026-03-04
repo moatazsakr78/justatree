@@ -30,6 +30,8 @@ export type CartItemUpdate = Database['public']['Tables']['cart_items']['Update'
 export interface CartItemData extends CartItemRow {
   // Customer notes for the item
   notes?: string | null;
+  // Custom image URL for clone products
+  custom_image_url?: string | null;
   // Joined product data
   products?: {
     name: string;

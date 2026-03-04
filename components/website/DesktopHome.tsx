@@ -120,7 +120,8 @@ export default function DesktopHome({
       const selectedColorName = selectedProduct.selectedColor?.name || undefined;
       const selectedShapeName = selectedProduct.selectedShape?.name || undefined;
       const productNote = selectedProduct.note || undefined;
-      await addToCart(String(selectedProduct.id), quantity, selectedProduct.price, selectedColorName, selectedShapeName, undefined, productNote);
+      const customImageUrl = selectedProduct.customImage || undefined;
+      await addToCart(String(selectedProduct.id), quantity, selectedProduct.price, selectedColorName, selectedShapeName, undefined, productNote, customImageUrl);
       console.log('✅ Desktop: Product added successfully');
     } catch (error) {
       console.error('❌ Desktop: Error adding product to cart:', error);
@@ -382,7 +383,7 @@ export default function DesktopHome({
             description: product.description || '',
             price: product.finalPrice || product.price,
             originalPrice: product.hasDiscount ? product.price : undefined,
-            image: product.main_image_url,
+            image: product.customImage || product.main_image_url,
             images: [product.main_image_url, product.sub_image_url].filter(Boolean),
             category: 'عام',
             colors: [],
@@ -395,7 +396,9 @@ export default function DesktopHome({
             isOnSale: product.hasDiscount || false,
             discount: product.discount_percentage ? Math.round(product.discount_percentage) : undefined,
             tags: [],
-            isFeatured: false
+            isFeatured: false,
+            customImage: product.customImage || null,
+            clones: product.clones || []
           }))
         }));
 
@@ -413,7 +416,7 @@ export default function DesktopHome({
     const sectionsWithConvertedProducts = activeSections.map((section: any) => {
       const convertedProducts = section.productDetails.map((product: any) => {
         const dbProduct = websiteProducts.find(wp => wp.id === product.id);
-        return dbProduct || {
+        const base = dbProduct || {
           id: product.id,
           name: product.name,
           description: product.description || '',
@@ -433,6 +436,12 @@ export default function DesktopHome({
           discount: product.discount_percentage ? Math.round(product.discount_percentage) : undefined,
           tags: [],
           isFeatured: false
+        };
+        return {
+          ...base,
+          image: product.customImage || base.image,
+          customImage: product.customImage || null,
+          clones: product.clones || [],
         };
       });
 
