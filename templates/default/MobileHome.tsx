@@ -1148,15 +1148,11 @@ export default function MobileHome({
                             );
                           } : handleProductClick}
                           displaySettings={displaySettings}
+                          {...(hasClones ? {
+                            addToCartLabel: 'اختر الشكل',
+                            imageBadge: `${product.clones.length} شكل`
+                          } : {})}
                         />
-                        {/* Clone badge overlay */}
-                        {hasClones && (
-                          <div className="relative -mt-10 mr-1 mb-2 z-10 pointer-events-none">
-                            <span className="bg-black/70 text-white px-2 py-0.5 rounded text-[10px] font-medium">
-                              {product.clones.length} شكل
-                            </span>
-                          </div>
-                        )}
                       </div>
                       );
                     })}

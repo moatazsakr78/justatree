@@ -22,6 +22,8 @@ interface InteractiveProductCardProps {
   displaySettings?: {
     display_mode: 'show_all' | 'show_with_stock' | 'show_with_stock_and_vote';
   };
+  addToCartLabel?: string;
+  imageBadge?: string;
 }
 
 export default function InteractiveProductCard({
@@ -29,7 +31,9 @@ export default function InteractiveProductCard({
   onAddToCart,
   deviceType,
   onProductClick,
-  displaySettings
+  displaySettings,
+  addToCartLabel,
+  imageBadge
 }: InteractiveProductCardProps) {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -395,6 +399,12 @@ export default function InteractiveProductCard({
           </div>
         )}
 
+        {imageBadge && (
+          <span className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded-lg text-xs font-medium">
+            {imageBadge}
+          </span>
+        )}
+
       </div>
       
       <div className="flex flex-col">
@@ -591,7 +601,7 @@ export default function InteractiveProductCard({
                   (e.target as HTMLButtonElement).style.backgroundColor = 'var(--primary-color)';
                 }}
               >
-                إضافة
+                {addToCartLabel || 'إضافة'}
               </button>
 
               {/* Note Button for Desktop/Tablet */}
@@ -668,7 +678,7 @@ export default function InteractiveProductCard({
                   (e.target as HTMLButtonElement).style.backgroundColor = 'var(--primary-color)';
                 }}
               >
-                إضافة
+                {addToCartLabel || 'إضافة'}
               </button>
 
               {/* Note Button (20% width) with gray color like in the image */}
