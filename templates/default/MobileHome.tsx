@@ -228,7 +228,7 @@ export default function MobileHome({
               // Apply display mode filter
               if (displaySettings.display_mode === 'show_with_stock') {
                 // Only show products with stock > 0
-                const totalStock = (dbProduct as any).totalQuantity || dbProduct.stock || 0;
+                const totalStock = (dbProduct as any).totalQuantity ?? dbProduct.stock ?? 0;
                 return totalStock > 0;
               } else if (displaySettings.display_mode === 'show_with_stock_and_vote') {
                 // Show all products (voting feature to be implemented later)
@@ -281,7 +281,7 @@ export default function MobileHome({
                 category: dbProduct.category?.name || 'عام',
                 brand: companyName,
                 stock: dbProduct.stock || 0,
-                totalQuantity: (dbProduct as any).totalQuantity || dbProduct.stock || 0,
+                totalQuantity: (dbProduct as any).totalQuantity ?? dbProduct.stock ?? 0,
                 rating: Number(dbProduct.rating) || 0,
                 reviews: dbProduct.rating_count || 0,
                 isOnSale: hasDiscount || false,
@@ -299,7 +299,7 @@ export default function MobileHome({
     };
 
     fetchProductsWithColors();
-  }, [databaseProducts]);
+  }, [databaseProducts, displaySettings]);
 
   // Load raw sections data immediately on mount
   useEffect(() => {
