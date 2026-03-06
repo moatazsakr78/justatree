@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useStoreTheme } from '@/lib/hooks/useStoreTheme';
 import { useCompanySettings } from '@/lib/hooks/useCompanySettings';
@@ -86,6 +86,8 @@ export default function TrackOrderPage() {
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
+  const isInitialLoad = useRef(true);
+
   // Product search states
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,8 +97,10 @@ export default function TrackOrderPage() {
   const fetchOrder = useCallback(async () => {
     if (!token) return;
     try {
-      setLoading(true);
-      const res = await fetch(`/api/orders/track/${token}`);
+      if (isInitialLoad.current) {
+        setLoading(true);
+      }
+      const res = await fetch(`/api/orders/track/${token}`, { cache: 'no-store' });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || 'حدث خطأ');
@@ -105,15 +109,27 @@ export default function TrackOrderPage() {
       setOrder(data);
       setOriginalItems(data.items.map((i: OrderItem) => ({ ...i })));
     } catch {
-      setError('فشل في تحميل بيانات الطلب');
+      if (isInitialLoad.current) {
+        setError('فشل في تحميل بيانات الطلب');
+      }
     } finally {
       setLoading(false);
+      isInitialLoad.current = false;
     }
   }, [token]);
 
   useEffect(() => {
     fetchOrder();
   }, [fetchOrder]);
+
+  // Auto-poll every 30 seconds for dashboard changes
+  useEffect(() => {
+    if (!token || error) return;
+    const interval = setInterval(() => {
+      fetchOrder();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [token, error, fetchOrder]);
 
   // Product search
   const searchProducts = useCallback(async (query: string) => {

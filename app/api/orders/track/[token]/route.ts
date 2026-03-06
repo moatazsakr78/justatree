@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/app/lib/supabase/admin'
 import { roundMoney } from '@/app/lib/utils/money'
 
+export const dynamic = 'force-dynamic'
+
+const noCacheHeaders = {
+  'Cache-Control': 'no-cache, no-store, must-revalidate',
+  'Pragma': 'no-cache',
+}
+
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 const NON_EDITABLE_STATUSES = ['delivered', 'shipped', 'cancelled']
@@ -16,7 +23,7 @@ export async function GET(
     if (!token || !UUID_REGEX.test(token)) {
       return NextResponse.json(
         { error: 'رابط التتبع غير صالح' },
-        { status: 400 }
+        { status: 400, headers: noCacheHeaders }
       )
     }
 
@@ -57,7 +64,7 @@ export async function GET(
     if (error || !order) {
       return NextResponse.json(
         { error: 'الطلب غير موجود' },
-        { status: 404 }
+        { status: 404, headers: noCacheHeaders }
       )
     }
 
@@ -95,12 +102,12 @@ export async function GET(
       isEditable,
       created_at: (order as any).created_at,
       updated_at: (order as any).updated_at,
-    })
+    }, { headers: noCacheHeaders })
   } catch (err) {
     console.error('Error fetching order by tracking token:', err)
     return NextResponse.json(
       { error: 'حدث خطأ في الخادم' },
-      { status: 500 }
+      { status: 500, headers: noCacheHeaders }
     )
   }
 }
