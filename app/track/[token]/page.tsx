@@ -261,19 +261,19 @@ export default function TrackOrderPage() {
   return (
     <div className="min-h-screen text-gray-800" dir="rtl" style={{ backgroundColor: '#c0c0c0' }}>
       {/* Header */}
-      <header className="sticky top-0 z-10 shadow-lg" style={{ backgroundColor: 'var(--primary-color, #DC2626)' }}>
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+      <header className="sticky top-0 z-10 shadow-lg min-h-[56px] md:min-h-[70px]" style={{ backgroundColor: 'var(--primary-color, #DC2626)' }}>
+        <div className="max-w-[95%] md:max-w-[90%] lg:max-w-[80%] mx-auto px-4 py-3 flex items-center gap-3">
           {logoUrl && (
-            <img src={logoUrl} alt={companyName} className="w-10 h-10 rounded-full object-cover" />
+            <img src={logoUrl} alt={companyName} className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover" />
           )}
           <div className="flex-1">
-            <h1 className="text-white font-bold text-lg">{companyName || 'تتبع الطلب'}</h1>
-            <p className="text-white/70 text-xs">تتبع الطلب</p>
+            <h1 className="text-white font-bold text-lg md:text-2xl">{companyName || 'تتبع الطلب'}</h1>
+            <p className="text-white/70 text-xs md:text-sm">تتبع الطلب</p>
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-4 space-y-4 pb-24">
+      <main className="max-w-[95%] md:max-w-[90%] lg:max-w-[80%] mx-auto px-3 md:px-4 lg:px-6 py-4 md:py-6 lg:py-8 space-y-3 md:space-y-4 lg:space-y-5 pb-24">
         {/* Success toast */}
         {saveSuccess && (
           <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg font-medium animate-pulse">
@@ -281,8 +281,8 @@ export default function TrackOrderPage() {
           </div>
         )}
 
-        {/* Order Status Card */}
-        <div className="bg-white rounded-xl p-4 shadow-lg">
+        {/* Order Status Card — Mobile */}
+        <div className="sm:hidden bg-white rounded-xl p-4 shadow-lg">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-gray-800 font-bold text-lg">طلب رقم {order.id}</h2>
             <span
@@ -313,6 +313,43 @@ export default function TrackOrderPage() {
           </div>
         </div>
 
+        {/* Order Status Card — Desktop */}
+        <div className="hidden sm:block bg-white rounded-xl p-4 md:p-6 lg:p-8 shadow-lg">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left: Customer info */}
+            <div className="col-span-7 space-y-2">
+              <h2 className="text-gray-800 font-bold text-base md:text-lg mb-3">معلومات العميل</h2>
+              <p className="text-gray-600 text-base md:text-lg">
+                <span className="text-gray-500">الاسم:</span> {order.customerName}
+              </p>
+              {order.customerPhone && (
+                <p className="text-gray-600 text-base md:text-lg">
+                  <span className="text-gray-500">الهاتف:</span> {order.customerPhone}
+                </p>
+              )}
+              {order.customerAddress && (
+                <p className="text-gray-600 text-base md:text-lg">
+                  <span className="text-gray-500">العنوان:</span> {order.customerAddress}
+                </p>
+              )}
+              <p className="text-gray-600 text-base md:text-lg">
+                <span className="text-gray-500">التاريخ:</span>{' '}
+                {new Date(order.date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            </div>
+            {/* Right: Order number & status */}
+            <div className="col-span-5 flex flex-col items-end justify-center gap-3">
+              <h2 className="text-gray-800 font-bold text-lg md:text-2xl">طلب رقم {order.id}</h2>
+              <span
+                className="px-4 md:px-6 py-2 md:py-3 rounded-full text-sm md:text-lg font-bold text-white"
+                style={{ backgroundColor: statusColors[order.status] }}
+              >
+                {statusIcons[order.status]} {statusTranslations[order.status]}
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Edit Toggle */}
         {order.isEditable && !editMode && (
           <button
@@ -320,7 +357,7 @@ export default function TrackOrderPage() {
               setOriginalItems(order.items.map(i => ({ ...i })));
               setEditMode(true);
             }}
-            className="w-full py-3 rounded-xl text-white font-bold text-base transition-colors"
+            className="w-full py-3 md:py-4 rounded-xl text-white font-bold text-base md:text-lg transition-colors"
             style={{ backgroundColor: buttonColor }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = buttonHoverColor; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = buttonColor; }}
@@ -336,9 +373,9 @@ export default function TrackOrderPage() {
 
         {/* Add Product Section (Edit Mode) */}
         {editMode && (
-          <div className="bg-white rounded-xl p-4 shadow-lg">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-lg">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-gray-800 font-bold">عناصر الطلب</h3>
+              <h3 className="text-gray-800 text-base md:text-lg font-bold">عناصر الطلب</h3>
               <button
                 onClick={() => setShowAddProduct(!showAddProduct)}
                 className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
@@ -360,7 +397,7 @@ export default function TrackOrderPage() {
                     searchProducts(e.target.value);
                   }}
                   placeholder="ابحث بالاسم أو الكود..."
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
                 />
                 {isSearching && (
                   <div className="text-center py-3">
@@ -403,11 +440,11 @@ export default function TrackOrderPage() {
           {order.items.map((item) => (
             <div
               key={item.id}
-              className={`bg-white rounded-xl p-3 shadow-lg ${item.isNew ? 'border border-green-500' : ''}`}
+              className={`bg-white rounded-xl p-3 md:p-5 lg:p-6 shadow-lg ${item.isNew ? 'border border-green-500' : ''}`}
             >
               <div className="flex items-center gap-3">
                 {/* Image */}
-                <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {item.image ? (
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   ) : (
@@ -419,8 +456,8 @@ export default function TrackOrderPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h4 className="text-gray-800 font-medium text-sm truncate">{item.name}</h4>
-                      <p className="text-gray-500 text-xs">{formatPrice(item.price)} للقطعة</p>
+                      <h4 className="text-gray-800 font-medium text-sm md:text-base lg:text-lg truncate">{item.name}</h4>
+                      <p className="text-gray-500 text-xs md:text-sm">{formatPrice(item.price)} للقطعة</p>
                       {item.isNew && (
                         <span className="inline-block mt-1 px-2 py-0.5 bg-green-600 text-white text-[10px] rounded-full font-medium">جديد</span>
                       )}
@@ -431,14 +468,14 @@ export default function TrackOrderPage() {
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() => updateItemQuantity(item.id, item.quantity - 1)}
-                        className="w-7 h-7 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+                        className="w-7 h-7 md:w-8 md:h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
                       >
                         -
                       </button>
-                      <span className="w-8 text-center font-bold text-gray-800 text-sm">{item.quantity}</span>
+                      <span className="w-8 text-center font-bold text-gray-800 text-sm md:text-base">{item.quantity}</span>
                       <button
                         onClick={() => updateItemQuantity(item.id, item.quantity + 1)}
-                        className="w-7 h-7 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+                        className="w-7 h-7 md:w-8 md:h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
                       >
                         +
                       </button>
@@ -454,13 +491,13 @@ export default function TrackOrderPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="text-gray-500 text-xs mt-1">الكمية: {item.quantity}</p>
+                    <p className="text-gray-500 text-xs md:text-sm mt-1">الكمية: {item.quantity}</p>
                   )}
                 </div>
 
                 {/* Item total */}
                 <div className="text-left flex-shrink-0">
-                  <p className="text-gray-800 font-bold text-sm">{formatPrice(item.price * item.quantity)}</p>
+                  <p className="text-gray-800 font-bold text-sm md:text-base lg:text-lg">{formatPrice(item.price * item.quantity)}</p>
                 </div>
               </div>
 
@@ -472,12 +509,12 @@ export default function TrackOrderPage() {
                     value={item.notes || ''}
                     onChange={(e) => updateItemNotes(item.id, e.target.value)}
                     placeholder="ملاحظات..."
-                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs"
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs md:text-sm"
                   />
                 </div>
               ) : (
                 item.notes && (
-                  <p className="mt-2 text-xs text-gray-500 bg-gray-100 rounded px-2 py-1">
+                  <p className="mt-2 text-xs md:text-sm text-gray-500 bg-gray-100 rounded px-2 py-1">
                     📝 {item.notes}
                   </p>
                 )
@@ -487,26 +524,26 @@ export default function TrackOrderPage() {
         </div>
 
         {/* Financial Summary */}
-        <div className="bg-white rounded-xl p-4 shadow-lg">
+        <div className="bg-white rounded-xl p-4 md:p-6 lg:p-8 shadow-lg">
           {order.shipping !== null && order.shipping !== undefined ? (
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 text-sm">المنتجات</span>
-                <span className="text-gray-800 font-medium text-sm">{formatPrice(order.subtotal)}</span>
+                <span className="text-gray-600 text-sm md:text-base lg:text-lg">المنتجات</span>
+                <span className="text-gray-800 font-medium text-sm md:text-base lg:text-lg">{formatPrice(order.subtotal)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 text-sm">الشحن</span>
-                <span className="text-gray-800 font-medium text-sm">{formatPrice(order.shipping)}</span>
+                <span className="text-gray-600 text-sm md:text-base lg:text-lg">الشحن</span>
+                <span className="text-gray-800 font-medium text-sm md:text-base lg:text-lg">{formatPrice(order.shipping)}</span>
               </div>
               <div className="border-t border-gray-200 pt-2 flex justify-between items-center">
-                <span className="text-gray-800 font-bold">الإجمالي</span>
-                <span className="text-gray-800 font-bold text-lg">{formatPrice(order.total)}</span>
+                <span className="text-gray-800 font-bold md:text-lg lg:text-xl">الإجمالي</span>
+                <span className="text-gray-800 font-bold text-lg md:text-xl lg:text-2xl">{formatPrice(order.total)}</span>
               </div>
             </div>
           ) : (
             <div className="flex justify-between items-center">
-              <span className="text-gray-800 font-bold">الإجمالي</span>
-              <span className="text-gray-800 font-bold text-lg">{formatPrice(order.total)}</span>
+              <span className="text-gray-800 font-bold md:text-lg lg:text-xl">الإجمالي</span>
+              <span className="text-gray-800 font-bold text-lg md:text-xl lg:text-2xl">{formatPrice(order.total)}</span>
             </div>
           )}
         </div>
@@ -515,11 +552,11 @@ export default function TrackOrderPage() {
       {/* Edit Mode Footer */}
       {editMode && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-20 shadow-lg">
-          <div className="max-w-2xl mx-auto flex gap-3">
+          <div className="max-w-[95%] md:max-w-[90%] lg:max-w-[80%] mx-auto flex gap-3">
             <button
               onClick={saveChanges}
               disabled={saving}
-              className="flex-1 py-3 rounded-xl text-white font-bold text-base transition-colors disabled:opacity-50"
+              className="flex-1 py-3 md:py-4 rounded-xl text-white font-bold text-base md:text-lg transition-colors disabled:opacity-50"
               style={{ backgroundColor: buttonColor }}
               onMouseEnter={(e) => { if (!saving) e.currentTarget.style.backgroundColor = buttonHoverColor; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = buttonColor; }}
@@ -535,7 +572,7 @@ export default function TrackOrderPage() {
             </button>
             <button
               onClick={cancelEdit}
-              className="px-6 py-3 rounded-xl text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-gray-400 font-medium transition-colors"
+              className="px-6 md:px-8 py-3 md:py-4 rounded-xl text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-gray-400 font-medium text-base md:text-lg transition-colors"
             >
               إلغاء
             </button>
