@@ -77,27 +77,6 @@ export function useStoreTheme() {
     };
 
     fetchActiveTheme();
-
-    // Subscribe to changes
-    const subscription = (supabase as any)
-      .channel('store_theme_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'elfaroukgroup',
-          table: 'store_theme_colors',
-        },
-        (payload: any) => {
-          // Re-fetch when theme changes
-          fetchActiveTheme();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
   return {
@@ -139,26 +118,6 @@ export function useStoreThemes() {
 
   useEffect(() => {
     fetchThemes();
-
-    // Subscribe to changes
-    const subscription = (supabase as any)
-      .channel('store_themes_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'elfaroukgroup',
-          table: 'store_theme_colors',
-        },
-        () => {
-          fetchThemes();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
   const addTheme = async (name: string, primaryColor: string, primaryHoverColor: string, interactiveColor: string, buttonColor: string, buttonHoverColor: string) => {

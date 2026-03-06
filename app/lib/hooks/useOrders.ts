@@ -197,55 +197,10 @@ export function useOrders() {
     }
   }, [lastFetch])
 
-  // ✨ OPTIMIZED: Real-time handler for orders
-  const handleOrderChange = useCallback((payload: any) => {
-    console.log('📡 Order change detected:', payload.eventType)
-
-    // Refetch all data when changes occur to maintain data consistency
-    setTimeout(() => fetchOrders(true), 500)
-  }, [fetchOrders])
-
-  // ✨ OPTIMIZED: Real-time handler for order items
-  const handleOrderItemChange = useCallback((payload: any) => {
-    console.log('📡 Order item change detected:', payload.eventType)
-
-    // Refetch when order items change
-    setTimeout(() => fetchOrders(true), 500)
-  }, [fetchOrders])
-
   // Initial fetch
   useEffect(() => {
     fetchOrders()
   }, [fetchOrders])
-
-  // ✨ OPTIMIZED: Real-time subscriptions
-  useEffect(() => {
-    console.log('🔴 Setting up orders real-time subscriptions')
-
-    // Subscribe to orders table changes
-    const ordersChannel = supabase
-      .channel('orders_changes_optimized')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'orders' },
-        handleOrderChange
-      )
-      .subscribe()
-
-    // Subscribe to order_items table changes
-    const orderItemsChannel = supabase
-      .channel('order_items_changes_optimized')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'order_items' },
-        handleOrderItemChange
-      )
-      .subscribe()
-
-    return () => {
-      console.log('🔴 Cleaning up orders subscriptions')
-      ordersChannel.unsubscribe()
-      orderItemsChannel.unsubscribe()
-    }
-  }, [handleOrderChange, handleOrderItemChange])
 
   return {
     orders,

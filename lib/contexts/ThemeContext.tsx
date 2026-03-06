@@ -50,26 +50,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     fetchActiveTheme();
-
-    // Subscribe to theme changes
-    const subscription = (supabase as any)
-      .channel('store_theme_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'elfaroukgroup',
-          table: 'store_theme_colors',
-        },
-        () => {
-          fetchActiveTheme();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
   return (

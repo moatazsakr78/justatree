@@ -152,19 +152,6 @@ export default function CategoriesTreeView({
   // Fetch categories from database
   useEffect(() => {
     fetchCategories()
-    
-    // Subscribe to real-time changes
-    const subscription = supabase
-      .channel('categories_tree')
-      .on('postgres_changes', 
-        { event: '*', schema: 'elfaroukgroup', table: 'categories' },
-        handleCategoryChange
-      )
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
-    }
   }, [])
 
   const fetchCategories = async () => {
@@ -192,22 +179,6 @@ export default function CategoriesTreeView({
     }
   }
 
-  const handleCategoryChange = (payload: any) => {
-    if (payload.eventType === 'INSERT') {
-      // ADMIN SYSTEM: Add all categories, not just active ones
-      if (payload.new) {
-        setCategories(prev => [...prev, payload.new])
-      }
-    } else if (payload.eventType === 'UPDATE') {
-      // Update existing category
-      setCategories(prev => prev.map(cat => 
-        cat.id === payload.new.id ? payload.new : cat
-      )) // Show all categories in admin system
-    } else if (payload.eventType === 'DELETE') {
-      // Remove deleted category from the list
-      setCategories(prev => prev.filter(cat => cat.id !== payload.old.id))
-    }
-  }
 
   const updateGroupsFromCategories = (cats: Category[]) => {
     console.log('Updating groups from categories:', cats)

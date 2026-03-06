@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../supabase/client'
 
 export interface Customer {
@@ -76,21 +76,6 @@ export function useCustomers() {
     }
   }, [lastFetch])
 
-  // ✨ OPTIMIZED: Debounced real-time handler
-  const handleCustomerChange = useCallback((payload: any) => {
-    console.log('📡 Customer change detected:', payload.eventType)
-
-    if (payload.eventType === 'INSERT') {
-      setCustomers(prev => [payload.new, ...prev])
-    } else if (payload.eventType === 'UPDATE') {
-      setCustomers(prev => prev.map(customer =>
-        customer.id === payload.new.id ? payload.new : customer
-      ))
-    } else if (payload.eventType === 'DELETE') {
-      setCustomers(prev => prev.filter(customer => customer.id !== payload.old.id))
-    }
-  }, [])
-
   // ✨ OPTIMIZED: Memoized helper functions
   const isDefaultCustomer = useCallback((customerId: string): boolean => {
     return customerId === DEFAULT_CUSTOMER_ID
@@ -105,23 +90,6 @@ export function useCustomers() {
     fetchCustomers()
   }, [fetchCustomers])
 
-  // ✨ OPTIMIZED: Real-time subscription with cleanup
-  useEffect(() => {
-    console.log('🔴 Setting up customers real-time subscription')
-
-    const subscription = supabase
-      .channel('customers_changes_optimized')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'customers' },
-        handleCustomerChange
-      )
-      .subscribe()
-
-    return () => {
-      console.log('🔴 Cleaning up customers subscription')
-      subscription.unsubscribe()
-    }
-  }, [handleCustomerChange])
 
   return {
     customers,

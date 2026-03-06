@@ -378,41 +378,7 @@ export default function SuppliersPage() {
     }
   }, [])
 
-  // Set up real-time subscription for balance updates (SMART - selective updates)
-  useEffect(() => {
-    const invoicesChannel = supabase
-      .channel('suppliers_page_invoices')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'purchase_invoices' },
-        (payload: any) => {
-          // ✨ Only update the affected supplier's balance
-          const supplierId = payload.new?.supplier_id || payload.old?.supplier_id
-          if (supplierId) {
-            updateSingleSupplierBalance(supplierId)
-          }
-        }
-      )
-      .subscribe()
 
-    const paymentsChannel = supabase
-      .channel('suppliers_page_payments')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'supplier_payments' },
-        (payload: any) => {
-          // ✨ Only update the affected supplier's balance
-          const supplierId = payload.new?.supplier_id || payload.old?.supplier_id
-          if (supplierId) {
-            updateSingleSupplierBalance(supplierId)
-          }
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(invoicesChannel)
-      supabase.removeChannel(paymentsChannel)
-    }
-  }, [updateSingleSupplierBalance])
 
   // Get all columns for columns control modal
   const getAllColumns = () => {

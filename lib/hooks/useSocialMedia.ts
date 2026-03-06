@@ -301,39 +301,10 @@ export function useSocialMedia() {
     }
   }, [settings]);
 
-  // Set up realtime subscription for admin
+  // Initial fetch
   useEffect(() => {
-    // Initial fetch
     fetchLinks();
     fetchSettings();
-
-    // Subscribe to changes
-    const linksSubscription = supabase
-      .channel('social_media_links_changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'social_media_links' },
-        () => {
-          fetchLinks();
-        }
-      )
-      .subscribe();
-
-    const settingsSubscription = supabase
-      .channel('social_media_settings_changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'social_media_settings' },
-        () => {
-          fetchSettings();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      linksSubscription.unsubscribe();
-      settingsSubscription.unsubscribe();
-    };
   }, [fetchLinks, fetchSettings]);
 
   return {

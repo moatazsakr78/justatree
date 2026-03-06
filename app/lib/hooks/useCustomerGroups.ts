@@ -110,35 +110,8 @@ export function useCustomerGroups() {
     }
   }
 
-  const handleGroupChange = (payload: any) => {
-    console.log('🔄 Customer group real-time change detected:', payload)
-    console.log('📊 Event type:', payload.eventType)
-    console.log('📝 New data:', payload.new)
-    console.log('🗑️ Old data:', payload.old)
-    // Refetch to rebuild hierarchy properly
-    fetchGroups()
-  }
-
   useEffect(() => {
-    console.log('🚀 Initializing customer groups hook')
     fetchGroups()
-
-    // Subscribe to real-time changes
-    console.log('📡 Setting up customer groups subscription')
-    const subscription = supabase
-      .channel('customer_groups_realtime')
-      .on('postgres_changes', 
-        { event: '*', schema: 'elfaroukgroup', table: 'customer_groups' },
-        handleGroupChange
-      )
-      .subscribe((status) => {
-        console.log('🔗 Customer groups subscription status:', status)
-      })
-
-    return () => {
-      console.log('🔌 Unsubscribing from customer groups')
-      subscription.unsubscribe()
-    }
   }, [])
 
   const toggleGroupExpansion = (groupId: string, groupsList: CustomerGroup[] = groups): CustomerGroup[] => {

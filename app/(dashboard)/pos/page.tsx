@@ -477,7 +477,6 @@ function POSPageContent() {
   // Categories state
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-  const categoriesSubRef = useRef<any>(null);
 
   // Selected Category for filtering products
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -1592,37 +1591,6 @@ function POSPageContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // OPTIMIZED: Deferred categories real-time subscription
-  useEffect(() => {
-    if (isLoadingCategories) return;
-
-    const timer = setTimeout(() => {
-      const subscription = supabase
-        .channel("categories-realtime-optimized")
-        .on(
-          "postgres_changes",
-          { event: "*", schema: "public", table: "categories" },
-          (payload: any) => {
-            console.log("Categories change detected:", payload.eventType);
-            if (payload.eventType !== "DELETE" || payload.old?.is_active) {
-              fetchCategories();
-            }
-          },
-        )
-        .subscribe();
-
-      categoriesSubRef.current = subscription;
-    }, 2000);
-
-    return () => {
-      clearTimeout(timer);
-      if (categoriesSubRef.current) {
-        categoriesSubRef.current.unsubscribe();
-        categoriesSubRef.current = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoadingCategories]);
 
   // Ref to track previous activeTabId for cart sync
   const prevCartSyncTabIdRef = useRef<string | null>(null);

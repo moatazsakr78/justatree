@@ -111,22 +111,6 @@ export default function PaymentMethodsPage() {
 
   useEffect(() => {
     fetchPaymentMethods()
-
-    // Set up real-time subscription
-    const channel = supabase
-      .channel('payment_methods_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'elfaroukgroup', table: 'payment_methods' },
-        (payload: any) => {
-          console.log('Real-time update:', payload)
-          fetchPaymentMethods()
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
   }, [])
 
   const formatDate = (dateString: string | null) => {

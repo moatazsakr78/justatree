@@ -157,33 +157,8 @@ export function useBranches() {
     }
   }
 
-  const handleBranchChange = (payload: any) => {
-    if (payload.eventType === 'INSERT') {
-      setBranches(prev => [...prev, payload.new])
-    } else if (payload.eventType === 'UPDATE') {
-      setBranches(prev => prev.map(branch => 
-        branch.id === payload.new.id ? payload.new : branch
-      ))
-    } else if (payload.eventType === 'DELETE') {
-      setBranches(prev => prev.filter(branch => branch.id !== payload.old.id))
-    }
-  }
-
   useEffect(() => {
     fetchBranches()
-
-    // Subscribe to real-time changes
-    const subscription = supabase
-      .channel('branches')
-      .on('postgres_changes', 
-        { event: '*', schema: 'elfaroukgroup', table: 'branches' },
-        handleBranchChange
-      )
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
-    }
   }, [])
 
   return {

@@ -152,40 +152,9 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
   }
 
 
-  // Setup real-time subscriptions
+  // Fetch orders on mount
   useEffect(() => {
     fetchOrders()
-
-    // Set up real-time subscription for orders
-    const ordersChannel = supabase
-      .channel('orders_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'elfaroukgroup', table: 'orders' },
-        (payload: any) => {
-          console.log('Orders real-time update:', payload)
-          fetchOrders()
-        }
-      )
-      .subscribe()
-
-    // Set up real-time subscription for order_items
-    const orderItemsChannel = supabase
-      .channel('order_items_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'elfaroukgroup', table: 'order_items' },
-        (payload: any) => {
-          console.log('Order items real-time update:', payload)
-          if (selectedOrder) {
-            fetchOrderItems(selectedOrder.id)
-          }
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(ordersChannel)
-      supabase.removeChannel(orderItemsChannel)
-    }
   }, [])
 
   // Update order items when selected order changes

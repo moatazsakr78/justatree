@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { posTabsService } from '@/lib/services/posTabsService';
 import { saveToLocalStorage, loadFromLocalStorage } from '@/lib/services/posTabsLocalStorage';
-import { supabase } from '@/app/lib/supabase/client';
 import { useAuth } from '@/lib/useAuth';
 
 export interface POSTab {
@@ -94,8 +93,6 @@ export function usePOSTabs(): UsePOSTabsReturn {
   const isInitialMount = useRef(true);
   const lastDbSavedDataRef = useRef<string>('');
   const userIdRef = useRef<string | null>(null);
-  // Cooldown: ignore realtime events for a short period after saving
-  const realtimeCooldownRef = useRef<boolean>(false);
 
   const activeTab = tabs.find(tab => tab.id === activeTabId);
 
@@ -128,9 +125,6 @@ export function usePOSTabs(): UsePOSTabsReturn {
     // This prevents the race condition where realtime fires before save callback
     const previousData = lastDbSavedDataRef.current;
     lastDbSavedDataRef.current = dataToSave;
-    // Enable cooldown to block realtime events during save
-    realtimeCooldownRef.current = true;
-
     try {
       setIsSaving(true);
       const success = await posTabsService.saveTabsState(userId, tabsToSave, activeId);
@@ -146,10 +140,6 @@ export function usePOSTabs(): UsePOSTabsReturn {
       return false;
     } finally {
       setIsSaving(false);
-      // Keep cooldown for 500ms after save completes to catch late realtime events
-      setTimeout(() => {
-        realtimeCooldownRef.current = false;
-      }, 500);
     }
   }, []);
 
@@ -634,53 +624,6 @@ export function usePOSTabs(): UsePOSTabsReturn {
 
     loadTabsState();
   }, [user?.id, isAuthenticated, authLoading]);
-
-  // ============================================
-  // REAL-TIME SYNC FROM OTHER DEVICES
-  // ============================================
-  useEffect(() => {
-    if (!userIdRef.current) return;
-
-    const userId = userIdRef.current;
-
-    const subscription = supabase
-      .channel(`pos_tabs_state_${userId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'elfaroukgroup',
-          table: 'pos_tabs_state',
-          filter: `user_id=eq.${userId}`
-        },
-        (payload: any) => {
-          // Skip realtime events during/after our own saves
-          if (realtimeCooldownRef.current) {
-            return;
-          }
-
-          const newData = payload.new;
-          if (newData && newData.tabs) {
-            const incomingData = JSON.stringify({ tabs: newData.tabs, activeTabId: newData.active_tab_id });
-
-            // Only update if change came from another device
-            if (incomingData !== lastDbSavedDataRef.current) {
-              console.log('POS Tabs: Received update from another device');
-              setTabs(newData.tabs);
-              setActiveTabId(newData.active_tab_id || 'main');
-              lastDbSavedDataRef.current = incomingData;
-              // Update localStorage too
-              saveToLocalStorage(userId, newData.tabs, newData.active_tab_id || 'main');
-            }
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [user?.id]);
 
   // ============================================
   // CLEANUP: Clear DB timeout on unmount

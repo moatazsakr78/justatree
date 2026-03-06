@@ -112,63 +112,9 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
     }
   }, [isOpen])
 
-  // Set up real-time subscription
+  // Fetch data on mount
   useEffect(() => {
-    // Always fetch data when component mounts
     fetchData()
-
-    // Create unique channel names with timestamp to avoid conflicts
-    const channelId = Date.now()
-    
-    const branchesChannel = supabase
-      .channel(`branches-realtime-${channelId}`)
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'elfaroukgroup',
-        table: 'branches'
-      }, (payload) => {
-        console.log('Branch realtime update:', payload)
-        if (payload.eventType === 'INSERT') {
-          setBranches(prev => [payload.new as Branch, ...prev])
-        } else if (payload.eventType === 'UPDATE') {
-          setBranches(prev => prev.map(branch => 
-            branch.id === payload.new.id ? payload.new as Branch : branch
-          ))
-        } else if (payload.eventType === 'DELETE') {
-          setBranches(prev => prev.filter(branch => branch.id !== payload.old.id))
-        }
-      })
-      .subscribe((status) => {
-        console.log('Branches subscription status:', status)
-      })
-
-    const warehousesChannel = supabase
-      .channel(`warehouses-realtime-${channelId}`)
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'elfaroukgroup',
-        table: 'warehouses'
-      }, (payload) => {
-        console.log('Warehouse realtime update:', payload)
-        if (payload.eventType === 'INSERT') {
-          setWarehouses(prev => [payload.new as Warehouse, ...prev])
-        } else if (payload.eventType === 'UPDATE') {
-          setWarehouses(prev => prev.map(warehouse => 
-            warehouse.id === payload.new.id ? payload.new as Warehouse : warehouse
-          ))
-        } else if (payload.eventType === 'DELETE') {
-          setWarehouses(prev => prev.filter(warehouse => warehouse.id !== payload.old.id))
-        }
-      })
-      .subscribe((status) => {
-        console.log('Warehouses subscription status:', status)
-      })
-
-    return () => {
-      console.log('Cleaning up realtime subscriptions')
-      supabase.removeChannel(branchesChannel)
-      supabase.removeChannel(warehousesChannel)
-    }
   }, [])
 
   const handleEditBranch = (branch: Branch) => {

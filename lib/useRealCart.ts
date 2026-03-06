@@ -28,7 +28,6 @@ export function useRealCart(options: UseRealCartOptions = {}): RealCartHook {
   const [error, setError] = useState<string | null>(null);
 
   const sessionIdRef = useRef<string>('');
-  const subscriptionRef = useRef<any>(null);
   const isMountedRef = useRef(true);
   const previousUserIdRef = useRef<string | null>(null);
   
@@ -62,22 +61,6 @@ export function useRealCart(options: UseRealCartOptions = {}): RealCartHook {
     }
   }, []);
   
-  const setupRealtimeSubscription = useCallback(() => {
-    if (!sessionIdRef.current || subscriptionRef.current) return;
-    
-    subscriptionRef.current = CartService.subscribeToCartChanges(
-      sessionIdRef.current,
-      (payload) => {
-        // Small delay to prevent race conditions
-        setTimeout(() => {
-          if (isMountedRef.current) {
-            refreshCart();
-          }
-        }, 100);
-      }
-    );
-  }, [refreshCart]);
-
   // Handle user authentication changes and cart migration
   const setUserId = useCallback((newUserId: string | null) => {
     if (newUserId === previousUserIdRef.current) return;
@@ -91,16 +74,9 @@ export function useRealCart(options: UseRealCartOptions = {}): RealCartHook {
     sessionIdRef.current = CartSession.getSessionId();
     previousUserIdRef.current = newUserId;
 
-    // Clear existing subscription
-    if (subscriptionRef.current) {
-      subscriptionRef.current.unsubscribe();
-      subscriptionRef.current = null;
-    }
-
     // Refresh cart with new session
     refreshCart();
-    setupRealtimeSubscription();
-  }, [refreshCart, setupRealtimeSubscription]);
+  }, [refreshCart]);
 
   // Initialize session ID and handle user ID from props
   useEffect(() => {
@@ -113,15 +89,11 @@ export function useRealCart(options: UseRealCartOptions = {}): RealCartHook {
     sessionIdRef.current = CartSession.getSessionId();
 
     refreshCart();
-    setupRealtimeSubscription();
 
     return () => {
       isMountedRef.current = false;
-      if (subscriptionRef.current) {
-        subscriptionRef.current.unsubscribe();
-      }
     };
-  }, [refreshCart, setupRealtimeSubscription]);
+  }, [refreshCart]);
 
   // Handle userId changes from props
   useEffect(() => {
@@ -135,10 +107,6 @@ export function useRealCart(options: UseRealCartOptions = {}): RealCartHook {
     const handleVisibilityChange = () => {
       if (!document.hidden && isMountedRef.current) {
         refreshCart();
-        // Re-setup subscription if needed
-        if (!subscriptionRef.current) {
-          setupRealtimeSubscription();
-        }
       }
     };
 
@@ -155,8 +123,8 @@ export function useRealCart(options: UseRealCartOptions = {}): RealCartHook {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
     };
-  }, [refreshCart, setupRealtimeSubscription]);
-  
+  }, [refreshCart]);
+
   const addToCart = useCallback(async (
     productId: string,
     quantity: number = 1,

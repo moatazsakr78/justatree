@@ -891,64 +891,6 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       fetchSales()
       fetchPurchaseInvoices()
 
-      // Set up real-time subscription for sales
-      const salesChannel = supabase
-        .channel('record_modal_sales_changes')
-        .on('postgres_changes', 
-          { event: '*', schema: 'elfaroukgroup', table: 'sales' },
-          (payload: any) => {
-            console.log('Sales real-time update:', payload)
-            fetchSales()
-          }
-        )
-        .subscribe()
-
-      // Set up real-time subscription for sale_items
-      const saleItemsChannel = supabase
-        .channel('record_modal_sale_items_changes')
-        .on('postgres_changes', 
-          { event: '*', schema: 'elfaroukgroup', table: 'sale_items' },
-          (payload: any) => {
-            console.log('Sale items real-time update:', payload)
-            if (sales.length > 0 && selectedTransaction < sales.length) {
-              fetchSaleItems(sales[selectedTransaction].id)
-            }
-          }
-        )
-        .subscribe()
-
-      // Set up real-time subscription for purchase_invoices
-      const purchaseInvoicesChannel = supabase
-        .channel('record_modal_purchase_invoices_changes')
-        .on('postgres_changes', 
-          { event: '*', schema: 'elfaroukgroup', table: 'purchase_invoices' },
-          (payload: any) => {
-            console.log('Purchase invoices real-time update:', payload)
-            fetchPurchaseInvoices()
-          }
-        )
-        .subscribe()
-
-      // Set up real-time subscription for purchase_invoice_items
-      const purchaseInvoiceItemsChannel = supabase
-        .channel('record_modal_purchase_invoice_items_changes')
-        .on('postgres_changes', 
-          { event: '*', schema: 'elfaroukgroup', table: 'purchase_invoice_items' },
-          (payload: any) => {
-            console.log('Purchase invoice items real-time update:', payload)
-            if (purchaseInvoices.length > 0 && selectedTransaction < purchaseInvoices.length) {
-              fetchPurchaseInvoiceItems(purchaseInvoices[selectedTransaction].id)
-            }
-          }
-        )
-        .subscribe()
-
-      return () => {
-        supabase.removeChannel(salesChannel)
-        supabase.removeChannel(saleItemsChannel)
-        supabase.removeChannel(purchaseInvoicesChannel)
-        supabase.removeChannel(purchaseInvoiceItemsChannel)
-      }
     }
   }, [isOpen, record?.id, dateFilter, isLoadingPreferences])
 

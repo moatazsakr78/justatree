@@ -324,41 +324,4 @@ export class CartService {
     }
   }
 
-  // Subscribe to cart changes (real-time)
-  static subscribeToCartChanges(
-    sessionId: string,
-    onCartChange: (payload: any) => void
-  ) {
-    const channel = supabase
-      .channel(`cart_changes_${sessionId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'elfaroukgroup',
-          table: 'cart_items',
-          filter: `session_id=eq.${sessionId}`
-        },
-        (payload) => {
-          console.log('Cart change detected:', payload);
-          // Clear cache when changes occur
-          CartCache.clear(`cart_${sessionId}`);
-          // Add a small delay to prevent rapid-fire updates
-          setTimeout(() => {
-            onCartChange(payload);
-          }, 200);
-        }
-      )
-      .subscribe();
-
-    return channel;
-  }
-
-  // Unsubscribe from cart changes
-  static unsubscribeFromCartChanges(channelName: string) {
-    const channel = supabase.getChannels().find(ch => ch.topic === channelName);
-    if (channel) {
-      supabase.removeChannel(channel);
-    }
-  }
 }

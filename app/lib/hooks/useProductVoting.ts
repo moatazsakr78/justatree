@@ -124,27 +124,6 @@ export function useProductVoting(productId: string) {
     fetchVoteStats()
   }, [fetchVoteStats])
 
-  // Subscribe to vote changes
-  useEffect(() => {
-    const channel = supabase
-      .channel(`product_votes_${productId}`)
-      .on('postgres_changes',
-        {
-          event: '*',
-          schema: 'elfaroukgroup',
-          table: 'product_votes',
-          filter: `product_id=eq.${productId}`
-        },
-        () => {
-          fetchVoteStats()
-        }
-      )
-      .subscribe()
-
-    return () => {
-      channel.unsubscribe()
-    }
-  }, [productId, fetchVoteStats])
 
   return {
     voteStats,

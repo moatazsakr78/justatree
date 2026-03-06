@@ -164,12 +164,10 @@ export function CartProvider({ children }: CartProviderProps) {
 
     dispatch({ type: 'ADD_ITEM', payload: newItem });
 
-    // 2. Sync with database and refresh
+    // 2. Save to database
     try {
       const sessionId = CartSession.getSessionId();
       await CartService.addToCart(sessionId, productId, quantity, price, selectedColor, selectedShape, selectedSize, notes, customImageUrl);
-      // Refresh cart from database to ensure accuracy
-      await syncWithDatabase();
     } catch (error) {
       console.error('Error syncing add to cart:', error);
     }
@@ -179,11 +177,9 @@ export function CartProvider({ children }: CartProviderProps) {
     // 1. Immediate UI update
     dispatch({ type: 'REMOVE_ITEM', payload: itemId });
     
-    // 2. Sync with database and refresh
+    // 2. Remove from database
     try {
       await CartService.removeFromCart(itemId);
-      // Refresh cart from database to ensure accuracy
-      await syncWithDatabase();
     } catch (error) {
       console.error('Error syncing remove from cart:', error);
     }
@@ -193,11 +189,9 @@ export function CartProvider({ children }: CartProviderProps) {
     // 1. Immediate UI update
     dispatch({ type: 'UPDATE_QUANTITY', payload: { itemId, quantity } });
 
-    // 2. Sync with database and refresh
+    // 2. Update in database
     try {
       await CartService.updateCartItemQuantity(itemId, quantity);
-      // Refresh cart from database to ensure accuracy
-      await syncWithDatabase();
     } catch (error) {
       console.error('Error syncing quantity update:', error);
     }
@@ -207,11 +201,9 @@ export function CartProvider({ children }: CartProviderProps) {
     // 1. Immediate UI update
     dispatch({ type: 'UPDATE_NOTES', payload: { itemId, notes } });
 
-    // 2. Sync with database and refresh
+    // 2. Update in database
     try {
       await CartService.updateCartItemNotes(itemId, notes);
-      // Refresh cart from database to ensure accuracy
-      await syncWithDatabase();
     } catch (error) {
       console.error('Error syncing notes update:', error);
     }
@@ -221,12 +213,10 @@ export function CartProvider({ children }: CartProviderProps) {
     // 1. Immediate UI update
     dispatch({ type: 'CLEAR_CART' });
     
-    // 2. Sync with database and refresh
+    // 2. Clear in database
     try {
       const sessionId = CartSession.getSessionId();
       await CartService.clearCart(sessionId);
-      // Refresh cart from database to ensure accuracy
-      await syncWithDatabase();
     } catch (error) {
       console.error('Error syncing clear cart:', error);
     }

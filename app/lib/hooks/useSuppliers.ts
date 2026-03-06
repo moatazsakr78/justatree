@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../supabase/client'
 
 export interface Supplier {
@@ -78,21 +78,6 @@ export function useSuppliers() {
     }
   }, [lastFetch])
 
-  // ✨ OPTIMIZED: Debounced real-time handler
-  const handleSupplierChange = useCallback((payload: any) => {
-    console.log('📡 Supplier change detected:', payload.eventType)
-
-    if (payload.eventType === 'INSERT') {
-      setSuppliers(prev => [payload.new, ...prev])
-    } else if (payload.eventType === 'UPDATE') {
-      setSuppliers(prev => prev.map(supplier =>
-        supplier.id === payload.new.id ? payload.new : supplier
-      ))
-    } else if (payload.eventType === 'DELETE') {
-      setSuppliers(prev => prev.filter(supplier => supplier.id !== payload.old.id))
-    }
-  }, [])
-
   // ✨ OPTIMIZED: Memoized helper functions
   const isDefaultSupplier = useCallback((supplierId: string): boolean => {
     return supplierId === DEFAULT_SUPPLIER_ID
@@ -107,23 +92,6 @@ export function useSuppliers() {
     fetchSuppliers()
   }, [fetchSuppliers])
 
-  // ✨ OPTIMIZED: Real-time subscription with cleanup
-  useEffect(() => {
-    console.log('🔴 Setting up suppliers real-time subscription')
-
-    const subscription = supabase
-      .channel('suppliers_changes_optimized')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'suppliers' },
-        handleSupplierChange
-      )
-      .subscribe()
-
-    return () => {
-      console.log('🔴 Cleaning up suppliers subscription')
-      subscription.unsubscribe()
-    }
-  }, [handleSupplierChange])
 
   return {
     suppliers,

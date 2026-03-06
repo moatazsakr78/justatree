@@ -110,27 +110,8 @@ export function useSupplierGroups() {
     }
   }
 
-  const handleGroupChange = (payload: any) => {
-    console.log('Supplier group change:', payload)
-    // Refetch to rebuild hierarchy properly
-    fetchGroups()
-  }
-
   useEffect(() => {
     fetchGroups()
-
-    // Subscribe to real-time changes - exactly like useCustomerGroups
-    const subscription = supabase
-      .channel('supplier_groups')
-      .on('postgres_changes', 
-        { event: '*', schema: 'elfaroukgroup', table: 'supplier_groups' },
-        handleGroupChange
-      )
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
-    }
   }, [])
 
   const toggleGroupExpansion = (groupId: string, groupsList: SupplierGroup[] = groups): SupplierGroup[] => {

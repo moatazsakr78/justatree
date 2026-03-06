@@ -557,65 +557,7 @@ export default function SafesPage() {
     fetchPaymentMethods()
   }, [fetchSafes, fetchPaymentMethods])
 
-  // Real-time subscriptions
-  useEffect(() => {
-    const debounceRef = { timer: null as NodeJS.Timeout | null }
-    const debouncedFetchSafes = () => {
-      if (debounceRef.timer) clearTimeout(debounceRef.timer)
-      debounceRef.timer = setTimeout(() => {
-        fetchSafes()
-        refreshTransactions()
-      }, 500)
-    }
 
-    const safesChannel = supabase
-      .channel('safes_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'records' },
-        () => {
-          fetchSafes()
-        }
-      )
-      .subscribe()
-
-    const paymentMethodsChannel = supabase
-      .channel('payment_methods_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'payment_methods' },
-        () => {
-          fetchPaymentMethods()
-        }
-      )
-      .subscribe()
-
-    const cashDrawersChannel = supabase
-      .channel('cash_drawers_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'cash_drawers' },
-        () => {
-          debouncedFetchSafes()
-        }
-      )
-      .subscribe()
-
-    const cashDrawerTransactionsChannel = supabase
-      .channel('cash_drawer_transactions_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'elfaroukgroup', table: 'cash_drawer_transactions' },
-        () => {
-          debouncedFetchSafes()
-        }
-      )
-      .subscribe()
-
-    return () => {
-      if (debounceRef.timer) clearTimeout(debounceRef.timer)
-      supabase.removeChannel(safesChannel)
-      supabase.removeChannel(paymentMethodsChannel)
-      supabase.removeChannel(cashDrawersChannel)
-      supabase.removeChannel(cashDrawerTransactionsChannel)
-    }
-  }, [fetchSafes, fetchPaymentMethods, refreshTransactions])
 
   // Transaction fetching and filter handling is now managed by useInfiniteTransactions hook
   // The hook automatically:

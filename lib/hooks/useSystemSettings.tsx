@@ -310,28 +310,6 @@ export const SystemSettingsProvider: React.FC<SystemSettingsProviderProps> = ({ 
     loadSettings();
   }, []);
 
-  // Subscribe to settings changes (real-time)
-  useEffect(() => {
-    const subscription = supabase
-      .channel('system_settings_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'elfaroukgroup',
-          table: 'system_settings'
-        },
-        () => {
-          // Reload settings when they change
-          loadSettings();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
 
   const contextValue: SystemSettingsContextType = {
     settings,
