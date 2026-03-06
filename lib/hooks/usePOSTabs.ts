@@ -94,6 +94,8 @@ export function usePOSTabs(): UsePOSTabsReturn {
   const isInitialMount = useRef(true);
   const lastDbSavedDataRef = useRef<string>('');
   const userIdRef = useRef<string | null>(null);
+  // Cooldown: ignore realtime events for a short period after saving
+  const realtimeCooldownRef = useRef<boolean>(false);
 
   const activeTab = tabs.find(tab => tab.id === activeTabId);
 
@@ -122,20 +124,32 @@ export function usePOSTabs(): UsePOSTabsReturn {
       return true;
     }
 
+    // Set BEFORE the DB save so realtime subscription ignores our own changes
+    // This prevents the race condition where realtime fires before save callback
+    const previousData = lastDbSavedDataRef.current;
+    lastDbSavedDataRef.current = dataToSave;
+    // Enable cooldown to block realtime events during save
+    realtimeCooldownRef.current = true;
+
     try {
       setIsSaving(true);
       const success = await posTabsService.saveTabsState(userId, tabsToSave, activeId);
       if (success) {
-        lastDbSavedDataRef.current = dataToSave;
         setLastSaved(new Date());
-        console.log('POS Tabs: Saved to database');
+      } else {
+        lastDbSavedDataRef.current = previousData;
       }
       return success;
     } catch (error) {
       console.error('POS Tabs: Failed to save to database:', error);
+      lastDbSavedDataRef.current = previousData;
       return false;
     } finally {
       setIsSaving(false);
+      // Keep cooldown for 500ms after save completes to catch late realtime events
+      setTimeout(() => {
+        realtimeCooldownRef.current = false;
+      }, 500);
     }
   }, []);
 
@@ -146,7 +160,10 @@ export function usePOSTabs(): UsePOSTabsReturn {
     // 1. INSTANT: Save to localStorage (synchronous, never fails)
     saveToLocal(newTabs, newActiveTabId);
 
-    // 2. DEBOUNCED: Save to database (async, for cross-device sync)
+    // 2. Pre-set lastDbSavedDataRef so realtime ignores stale events during debounce
+    lastDbSavedDataRef.current = JSON.stringify({ tabs: newTabs, activeTabId: newActiveTabId });
+
+    // 3. DEBOUNCED: Save to database (async, for cross-device sync)
     if (dbSaveTimeoutRef.current) {
       clearTimeout(dbSaveTimeoutRef.current);
     }
@@ -637,6 +654,11 @@ export function usePOSTabs(): UsePOSTabsReturn {
           filter: `user_id=eq.${userId}`
         },
         (payload: any) => {
+          // Skip realtime events during/after our own saves
+          if (realtimeCooldownRef.current) {
+            return;
+          }
+
           const newData = payload.new;
           if (newData && newData.tabs) {
             const incomingData = JSON.stringify({ tabs: newData.tabs, activeTabId: newData.active_tab_id });
