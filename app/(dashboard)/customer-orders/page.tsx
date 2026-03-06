@@ -919,6 +919,25 @@ export default function CustomerOrdersPage() {
     });
   };
 
+  // Update item price
+  const updateItemPrice = (itemId: string, newPrice: number) => {
+    if (!selectedOrderForEdit || newPrice < 0) return;
+
+    const updatedItems = selectedOrderForEdit.items.map(item =>
+      item.id === itemId ? { ...item, price: newPrice } : item
+    );
+
+    const newSubtotal = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const newTotal = newSubtotal + (selectedOrderForEdit.shipping || 0);
+
+    setSelectedOrderForEdit({
+      ...selectedOrderForEdit,
+      items: updatedItems,
+      subtotal: newSubtotal,
+      total: newTotal
+    });
+  };
+
   // Update item notes
   const updateItemNotes = (itemId: string, notes: string) => {
     if (!selectedOrderForEdit) return;
@@ -1067,6 +1086,7 @@ export default function CustomerOrdersPage() {
           .from('order_items')
           .update({
             quantity: item.quantity,
+            unit_price: item.price,
             notes: item.notes || null
           })
           .eq('id', item.id);
@@ -2251,7 +2271,20 @@ export default function CustomerOrdersPage() {
                             {/* Product Info */}
                             <div className="flex-1">
                               <h5 className="font-semibold text-gray-800">{item.name}</h5>
-                              <p className="text-gray-600 text-sm">{formatPrice(item.price)} لكل قطعة</p>
+                              <div className="flex items-center gap-1 text-sm">
+                                <input
+                                  type="number"
+                                  value={item.price}
+                                  onChange={(e) => {
+                                    const val = parseFloat(e.target.value);
+                                    if (!isNaN(val)) updateItemPrice(item.id, val);
+                                  }}
+                                  className="w-20 px-1 py-0.5 border border-transparent hover:border-gray-300 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 rounded text-gray-700 bg-transparent text-sm text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-600">لكل قطعة</span>
+                              </div>
                             </div>
 
                             {/* Quantity Controls */}
