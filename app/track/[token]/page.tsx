@@ -237,10 +237,10 @@ export default function TrackOrderPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen text-gray-800 flex items-center justify-center" dir="rtl" style={{ backgroundColor: '#c0c0c0' }}>
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-400 text-lg">جاري تحميل بيانات الطلب...</p>
+          <div className="w-12 h-12 border-4 border-gray-400 border-t-gray-700 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">جاري تحميل بيانات الطلب...</p>
         </div>
       </div>
     );
@@ -248,20 +248,20 @@ export default function TrackOrderPage() {
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen text-gray-800 flex items-center justify-center" dir="rtl" style={{ backgroundColor: '#c0c0c0' }}>
         <div className="text-center max-w-md mx-auto px-4">
           <div className="text-6xl mb-4">😔</div>
-          <h1 className="text-2xl font-bold text-white mb-2">الطلب غير موجود</h1>
-          <p className="text-gray-400">{error || 'رابط التتبع غير صالح أو منتهي الصلاحية'}</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">الطلب غير موجود</h1>
+          <p className="text-gray-600">{error || 'رابط التتبع غير صالح أو منتهي الصلاحية'}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900" dir="rtl">
+    <div className="min-h-screen text-gray-800" dir="rtl" style={{ backgroundColor: '#c0c0c0' }}>
       {/* Header */}
-      <header className="sticky top-0 z-10 shadow-lg" style={{ backgroundColor: primaryColor }}>
+      <header className="sticky top-0 z-10 shadow-lg" style={{ backgroundColor: 'var(--primary-color, #DC2626)' }}>
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
           {logoUrl && (
             <img src={logoUrl} alt={companyName} className="w-10 h-10 rounded-full object-cover" />
@@ -282,9 +282,9 @@ export default function TrackOrderPage() {
         )}
 
         {/* Order Status Card */}
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+        <div className="bg-white rounded-xl p-4 shadow-lg">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-white font-bold text-lg">طلب رقم {order.id}</h2>
+            <h2 className="text-gray-800 font-bold text-lg">طلب رقم {order.id}</h2>
             <span
               className="px-3 py-1 rounded-full text-sm font-bold text-white"
               style={{ backgroundColor: statusColors[order.status] }}
@@ -293,20 +293,20 @@ export default function TrackOrderPage() {
             </span>
           </div>
           <div className="space-y-1 text-sm">
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               <span className="text-gray-500">التاريخ:</span>{' '}
               {new Date(order.date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               <span className="text-gray-500">العميل:</span> {order.customerName}
             </p>
             {order.customerPhone && (
-              <p className="text-gray-400">
+              <p className="text-gray-600">
                 <span className="text-gray-500">الهاتف:</span> {order.customerPhone}
               </p>
             )}
             {order.customerAddress && (
-              <p className="text-gray-400">
+              <p className="text-gray-600">
                 <span className="text-gray-500">العنوان:</span> {order.customerAddress}
               </p>
             )}
@@ -336,9 +336,9 @@ export default function TrackOrderPage() {
 
         {/* Add Product Section (Edit Mode) */}
         {editMode && (
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+          <div className="bg-white rounded-xl p-4 shadow-lg">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-white font-bold">عناصر الطلب</h3>
+              <h3 className="text-gray-800 font-bold">عناصر الطلب</h3>
               <button
                 onClick={() => setShowAddProduct(!showAddProduct)}
                 className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
@@ -351,7 +351,7 @@ export default function TrackOrderPage() {
             </div>
 
             {showAddProduct && (
-              <div className="mb-4 p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <input
                   type="text"
                   value={searchQuery}
@@ -360,11 +360,11 @@ export default function TrackOrderPage() {
                     searchProducts(e.target.value);
                   }}
                   placeholder="ابحث بالاسم أو الكود..."
-                  className="w-full px-4 py-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 />
                 {isSearching && (
                   <div className="text-center py-3">
-                    <div className="w-6 h-6 border-2 border-gray-600 border-t-white rounded-full animate-spin mx-auto"></div>
+                    <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin mx-auto"></div>
                   </div>
                 )}
                 {searchResults.length > 0 && (
@@ -372,20 +372,20 @@ export default function TrackOrderPage() {
                     {searchResults.map((product) => (
                       <div
                         key={product.id}
-                        className="flex items-center gap-3 p-2 bg-gray-800 rounded-lg hover:bg-gray-700 cursor-pointer transition-colors"
+                        className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors"
                         onClick={() => addProductToOrder(product)}
                       >
-                        <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                           {product.main_image_url ? (
                             <img src={product.main_image_url} alt={product.name} className="w-full h-full object-cover" />
                           ) : (
-                            <span className="text-gray-500 text-sm">📦</span>
+                            <span className="text-gray-400 text-sm">📦</span>
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-white text-sm font-medium truncate">{product.name}</p>
+                          <p className="text-gray-800 text-sm font-medium truncate">{product.name}</p>
                         </div>
-                        <p className="text-green-400 text-sm font-bold">{formatPrice(product.price)}</p>
+                        <p className="text-green-600 text-sm font-bold">{formatPrice(product.price)}</p>
                       </div>
                     ))}
                   </div>
@@ -403,15 +403,15 @@ export default function TrackOrderPage() {
           {order.items.map((item) => (
             <div
               key={item.id}
-              className={`bg-gray-800 rounded-xl p-3 border ${item.isNew ? 'border-green-500' : 'border-gray-700'}`}
+              className={`bg-white rounded-xl p-3 shadow-lg ${item.isNew ? 'border border-green-500' : ''}`}
             >
               <div className="flex items-center gap-3">
                 {/* Image */}
-                <div className="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {item.image ? (
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-gray-500 text-2xl">📦</span>
+                    <span className="text-gray-400 text-2xl">📦</span>
                   )}
                 </div>
 
@@ -419,7 +419,7 @@ export default function TrackOrderPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h4 className="text-white font-medium text-sm truncate">{item.name}</h4>
+                      <h4 className="text-gray-800 font-medium text-sm truncate">{item.name}</h4>
                       <p className="text-gray-500 text-xs">{formatPrice(item.price)} للقطعة</p>
                       {item.isNew && (
                         <span className="inline-block mt-1 px-2 py-0.5 bg-green-600 text-white text-[10px] rounded-full font-medium">جديد</span>
@@ -435,7 +435,7 @@ export default function TrackOrderPage() {
                       >
                         -
                       </button>
-                      <span className="w-8 text-center font-bold text-white text-sm">{item.quantity}</span>
+                      <span className="w-8 text-center font-bold text-gray-800 text-sm">{item.quantity}</span>
                       <button
                         onClick={() => updateItemQuantity(item.id, item.quantity + 1)}
                         className="w-7 h-7 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
@@ -454,13 +454,13 @@ export default function TrackOrderPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-xs mt-1">الكمية: {item.quantity}</p>
+                    <p className="text-gray-500 text-xs mt-1">الكمية: {item.quantity}</p>
                   )}
                 </div>
 
                 {/* Item total */}
                 <div className="text-left flex-shrink-0">
-                  <p className="text-white font-bold text-sm">{formatPrice(item.price * item.quantity)}</p>
+                  <p className="text-gray-800 font-bold text-sm">{formatPrice(item.price * item.quantity)}</p>
                 </div>
               </div>
 
@@ -472,12 +472,12 @@ export default function TrackOrderPage() {
                     value={item.notes || ''}
                     onChange={(e) => updateItemNotes(item.id, e.target.value)}
                     placeholder="ملاحظات..."
-                    className="w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs"
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs"
                   />
                 </div>
               ) : (
                 item.notes && (
-                  <p className="mt-2 text-xs text-gray-500 bg-gray-700/50 rounded px-2 py-1">
+                  <p className="mt-2 text-xs text-gray-500 bg-gray-100 rounded px-2 py-1">
                     📝 {item.notes}
                   </p>
                 )
@@ -487,26 +487,26 @@ export default function TrackOrderPage() {
         </div>
 
         {/* Financial Summary */}
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+        <div className="bg-white rounded-xl p-4 shadow-lg">
           {order.shipping !== null && order.shipping !== undefined ? (
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-gray-400 text-sm">المنتجات</span>
-                <span className="text-white font-medium text-sm">{formatPrice(order.subtotal)}</span>
+                <span className="text-gray-600 text-sm">المنتجات</span>
+                <span className="text-gray-800 font-medium text-sm">{formatPrice(order.subtotal)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-400 text-sm">الشحن</span>
-                <span className="text-white font-medium text-sm">{formatPrice(order.shipping)}</span>
+                <span className="text-gray-600 text-sm">الشحن</span>
+                <span className="text-gray-800 font-medium text-sm">{formatPrice(order.shipping)}</span>
               </div>
-              <div className="border-t border-gray-700 pt-2 flex justify-between items-center">
-                <span className="text-white font-bold">الإجمالي</span>
-                <span className="text-white font-bold text-lg">{formatPrice(order.total)}</span>
+              <div className="border-t border-gray-200 pt-2 flex justify-between items-center">
+                <span className="text-gray-800 font-bold">الإجمالي</span>
+                <span className="text-gray-800 font-bold text-lg">{formatPrice(order.total)}</span>
               </div>
             </div>
           ) : (
             <div className="flex justify-between items-center">
-              <span className="text-white font-bold">الإجمالي</span>
-              <span className="text-white font-bold text-lg">{formatPrice(order.total)}</span>
+              <span className="text-gray-800 font-bold">الإجمالي</span>
+              <span className="text-gray-800 font-bold text-lg">{formatPrice(order.total)}</span>
             </div>
           )}
         </div>
@@ -514,7 +514,7 @@ export default function TrackOrderPage() {
 
       {/* Edit Mode Footer */}
       {editMode && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 p-4 z-20">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-20 shadow-lg">
           <div className="max-w-2xl mx-auto flex gap-3">
             <button
               onClick={saveChanges}
@@ -535,7 +535,7 @@ export default function TrackOrderPage() {
             </button>
             <button
               onClick={cancelEdit}
-              className="px-6 py-3 rounded-xl text-gray-400 hover:text-white border border-gray-600 hover:border-gray-500 font-medium transition-colors"
+              className="px-6 py-3 rounded-xl text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-gray-400 font-medium transition-colors"
             >
               إلغاء
             </button>

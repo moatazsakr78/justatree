@@ -69,7 +69,8 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
       pathname === '/profile' ||
       pathname === '/customer-orders' ||
       pathname === '/my-invoices' ||
-      pathname === '/social-media') {
+      pathname === '/social-media' ||
+      pathname?.startsWith('/track')) {
     return null;
   }
 
