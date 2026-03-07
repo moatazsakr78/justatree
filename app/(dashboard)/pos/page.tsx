@@ -6376,6 +6376,13 @@ function POSPageContent() {
                                 {product.name}
                               </h3>
 
+                              {/* Product Code */}
+                              {product.product_code && (
+                                <p className="text-gray-400 text-xs text-center mb-1">
+                                  {product.product_code}
+                                </p>
+                              )}
+
                               {/* Product Details */}
                               <div className="space-y-1 text-xs">
                                 {/* Price */}
