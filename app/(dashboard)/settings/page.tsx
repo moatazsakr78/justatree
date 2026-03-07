@@ -16,6 +16,7 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   ArrowDownTrayIcon,
+  BoltIcon,
 } from '@heroicons/react/24/outline';
 import { revalidateAll } from '../../../lib/utils/revalidate';
 import BackupSettings from '@/app/components/settings/BackupSettings';
@@ -23,7 +24,7 @@ import TopHeader from '@/app/components/layout/TopHeader';
 import Sidebar from '@/app/components/layout/Sidebar';
 import { Currency, DEFAULT_SYSTEM_CURRENCY, DEFAULT_WEBSITE_CURRENCY, DEFAULT_UNIFIED_CURRENCY, CURRENCY_MODES } from '@/lib/constants/currencies';
 import { useCurrencySettings } from '@/lib/hooks/useCurrency';
-import { useCurrencySettings as useDbCurrencySettings } from '@/lib/hooks/useSystemSettings';
+import { useCurrencySettings as useDbCurrencySettings, useSystemSettings } from '@/lib/hooks/useSystemSettings';
 import { useRatingsDisplay } from '@/lib/hooks/useRatingSettings';
 import { useStoreDisplaySettings } from '@/lib/hooks/useStoreDisplaySettings';
 import { useCompanySettings } from '@/lib/hooks/useCompanySettings';
@@ -207,6 +208,12 @@ const settingsCategories: SettingsCategory[] = [
     name: 'النسخ الاحتياطي',
     icon: ArrowDownTrayIcon,
     description: 'تصدير واستيراد نسخة احتياطية من البيانات'
+  },
+  {
+    id: 'performance',
+    name: 'الأداء',
+    icon: BoltIcon,
+    description: 'إعدادات أداء النظام والتحميل'
   }
 ];
 
@@ -1877,6 +1884,63 @@ export default function SettingsPage() {
   };
 
 
+  const renderPerformanceSettings = () => {
+    const { getSetting, updateSettings: updateSystemSettings } = useSystemSettings();
+    const backgroundCreation = getSetting<boolean>('performance.background_product_creation', false);
+
+    const handleToggle = async (value: boolean) => {
+      try {
+        await updateSystemSettings({ performance: { background_product_creation: value } });
+      } catch (error) {
+        console.error('Error updating performance settings:', error);
+        alert('حدث خطأ أثناء حفظ الإعدادات');
+      }
+    };
+
+    return (
+      <div className="space-y-6 max-w-4xl">
+        <h3 className="text-white font-medium text-lg mb-6">إعدادات الأداء</h3>
+        <p className="text-sm text-gray-400 mb-6">
+          تحكم في طريقة عمل النظام وسرعة الأداء
+        </p>
+
+        <div className="space-y-4 p-4 bg-[#374151] rounded-lg border border-gray-600">
+          <div className="flex justify-between items-center p-3 bg-[#2B3544] rounded-lg">
+            <div className="flex-1">
+              <label className="text-white text-sm font-medium">تسجيل المنتج مباشره</label>
+              <p className="text-xs text-gray-400 mt-1">
+                عند التفعيل، يتم حفظ المنتج في الخلفية ويمكنك متابعة العمل فوراً. عند الإيقاف، ينتظر النظام حتى يكتمل الحفظ بالكامل.
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={backgroundCreation}
+                onChange={(e) => handleToggle(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+            </label>
+          </div>
+        </div>
+
+        <div className="p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-blue-300 text-sm font-medium">ملاحظة</p>
+              <p className="text-gray-400 text-xs mt-1">
+                التغييرات يتم حفظها تلقائياً عند تبديل أي خيار
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderSettingsContent = () => {
     switch (selectedCategory) {
       case 'system':
@@ -1891,6 +1955,8 @@ export default function SettingsPage() {
         return renderSecuritySettings();
       case 'backup':
         return <BackupSettings />;
+      case 'performance':
+        return renderPerformanceSettings();
       default:
         return renderPlaceholderContent(selectedCategory);
     }

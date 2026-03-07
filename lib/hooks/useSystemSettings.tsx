@@ -125,7 +125,8 @@ export const SystemSettingsProvider: React.FC<SystemSettingsProviderProps> = ({ 
           pos: { ...DEFAULT_SETTINGS.pos, ...settingsData.settings_data.pos },
           reports: { ...DEFAULT_SETTINGS.reports, ...settingsData.settings_data.reports },
           security: { ...DEFAULT_SETTINGS.security, ...settingsData.settings_data.security },
-          company: { ...DEFAULT_SETTINGS.company, ...settingsData.settings_data.company }
+          company: { ...DEFAULT_SETTINGS.company, ...settingsData.settings_data.company },
+          performance: { ...DEFAULT_SETTINGS.performance, ...settingsData.settings_data.performance }
         };
         setSettings(loadedSettings);
       } else {
@@ -160,6 +161,7 @@ export const SystemSettingsProvider: React.FC<SystemSettingsProviderProps> = ({ 
         ...(updates.reports && { reports: { ...settings.reports, ...updates.reports } }),
         ...(updates.security && { security: { ...settings.security, ...updates.security } }),
         ...(updates.company && { company: { ...settings.company, ...updates.company } }),
+        ...(updates.performance && { performance: { ...settings.performance, ...updates.performance } }),
         last_updated: new Date().toISOString()
       } as SystemSettingsObject;
 

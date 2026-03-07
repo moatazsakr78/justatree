@@ -112,6 +112,11 @@ export interface Branch {
   locationLink: string;
 }
 
+// Performance settings
+export interface PerformanceSettings {
+  background_product_creation: boolean;
+}
+
 // Company settings
 export interface CompanySettings {
   name: string;
@@ -131,6 +136,7 @@ export interface SystemSettingsObject {
   reports: ReportsSettings;
   security: SecuritySettings;
   company: CompanySettings;
+  performance: PerformanceSettings;
   version: string;
   last_updated: string;
   updated_by?: string;
@@ -220,6 +226,9 @@ export const DEFAULT_SETTINGS: SystemSettingsObject = {
     logoShape: 'square',
     socialMedia: [{ platform: '', link: '' }],
     branches: []
+  },
+  performance: {
+    background_product_creation: false
   },
   version: '1.0.0',
   last_updated: new Date().toISOString()

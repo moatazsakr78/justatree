@@ -14,7 +14,9 @@ import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
 import { useProductVideos, ProductVideo } from '../lib/hooks/useProductVideos'
 import ProductVideoUpload from './ProductVideoUpload'
 import { useBackgroundProduct } from '@/lib/contexts/BackgroundProductContext'
-import type { BackgroundProductSnapshot, ProductColor as BgProductColor, ProductShape as BgProductShape } from '../lib/services/backgroundProductService'
+import type { BackgroundProductSnapshot, ProductColor as BgProductColor, ProductShape as BgProductShape, BackgroundProductTask, TaskCallbacks } from '../lib/services/backgroundProductService'
+import { executeProductCreation } from '../lib/services/backgroundProductService'
+import { useSystemSettings } from '@/lib/hooks/useSystemSettings'
 
 interface Branch {
   id: string
@@ -235,6 +237,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
   const { isAdmin } = useAuth()
   const activityLog = useActivityLogger()
   const { queueProductCreation } = useBackgroundProduct()
+  const { getSetting } = useSystemSettings()
   const [activeTab, setActiveTab] = useState('تفاصيل المنتج')
   const [activeShapeColorTab, setActiveShapeColorTab] = useState('شكل وصف')
   const [branches, setBranches] = useState<Branch[]>([])
@@ -2005,7 +2008,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           activityLog({ entityType: 'product', actionType: 'update', entityId: editProduct.id, entityName: formData.name })
         }
       } else {
-        // Create new product - queue for background processing
+        // Create new product
         // Step 1: Convert blob URLs in colors/shapes to File objects BEFORE clearing form
         const snapshotColors: BgProductColor[] = await Promise.all(
           productColors.map(async (color) => {
@@ -2056,14 +2059,38 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           mainImageFile,
           additionalImageFiles,
           pendingVideoFiles: pendingVideoFilesCopy,
-          userId: undefined, // logActivity will use the params
+          userId: undefined,
           userName: undefined,
         }
 
-        // Step 4: Queue and close immediately
-        queueProductCreation(snapshot, createProduct, onProductCreated)
-        handleClearFields()
-        onClose()
+        const backgroundCreation = getSetting<boolean>('performance.background_product_creation', false)
+
+        if (backgroundCreation) {
+          // Background mode: queue and close immediately
+          queueProductCreation(snapshot, createProduct, onProductCreated)
+          handleClearFields()
+          onClose()
+        } else {
+          // Synchronous mode: wait until complete
+          const taskId = `sync-${Date.now()}`
+          const task: BackgroundProductTask = {
+            id: taskId,
+            productName: productData.name || '',
+            status: 'queued',
+            progress: 0,
+            snapshot,
+            createdAt: Date.now(),
+          }
+          const noopCallbacks: TaskCallbacks = {
+            onStatusChange: () => {},
+            onComplete: () => {},
+            onError: () => {},
+          }
+          await executeProductCreation(task, noopCallbacks, createProduct)
+          onProductCreated?.()
+          handleClearFields()
+          alert('تم إنشاء المنتج بنجاح!')
+        }
       }
     } catch (error) {
       console.error(`Error ${isEditMode ? 'updating' : 'creating'} product:`, error)
