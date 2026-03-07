@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { SessionProvider } from 'next-auth/react'
 import { EditOrderProvider } from '@/lib/contexts/EditOrderContext'
+import { BackgroundProductProvider } from '@/lib/contexts/BackgroundProductContext'
 import { FavoritesProvider } from '@/lib/contexts/FavoritesContext'
 import { CurrentBranchProvider } from '@/lib/contexts/CurrentBranchContext'
 import { AutoSelectInputProvider } from './components/AutoSelectInputProvider'
@@ -27,9 +28,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <FavoritesProvider>
         <CurrentBranchProvider>
           <EditOrderProvider>
-            <AutoSelectInputProvider>
-              {children}
-            </AutoSelectInputProvider>
+            <BackgroundProductProvider>
+              <AutoSelectInputProvider>
+                {children}
+              </AutoSelectInputProvider>
+            </BackgroundProductProvider>
           </EditOrderProvider>
         </CurrentBranchProvider>
       </FavoritesProvider>

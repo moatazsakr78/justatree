@@ -7,7 +7,9 @@ import { SignalIcon, SignalSlashIcon } from '@heroicons/react/24/solid';
 import { useOfflineStatus } from '@/app/lib/hooks/useOfflineStatus';
 import { triggerManualSync, isSyncInProgress } from '@/app/lib/offline/syncManager';
 import PendingSalesModal from '../PendingSalesModal';
+import BackgroundProductsModal from '../BackgroundProductsModal';
 import BranchSwitcher from '../BranchSwitcher';
+import { useBackgroundProduct } from '@/lib/contexts/BackgroundProductContext';
 
 interface TopHeaderProps {
   onMenuClick?: () => void;
@@ -20,6 +22,8 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
   const { isOnline, pendingSalesCount, connectionQuality, isOfflineReady } = useOfflineStatus();
   const [isSyncing, setIsSyncing] = useState(false);
   const [showPendingSalesModal, setShowPendingSalesModal] = useState(false);
+  const [showBackgroundProductsModal, setShowBackgroundProductsModal] = useState(false);
+  const { activeTaskCount, hasFailedTasks, tasks } = useBackgroundProduct();
 
   // Function to get page title based on pathname
   const getPageTitle = (): string => {
@@ -129,6 +133,21 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
               <span className="text-xs text-orange-400 font-medium">{pendingSalesCount}</span>
             </button>
           )}
+
+          {/* Background product creation indicator */}
+          {tasks.length > 0 && (
+            <button
+              onClick={() => setShowBackgroundProductsModal(true)}
+              className="relative flex items-center gap-1 px-2 py-1 rounded-full transition-colors bg-blue-500/20 hover:bg-blue-500/30 cursor-pointer"
+              title={`${activeTaskCount} منتجات قيد الإنشاء - اضغط للعرض`}
+            >
+              <CloudArrowUpIcon className={`h-4 w-4 text-blue-400 ${activeTaskCount > 0 ? 'animate-pulse' : ''}`} />
+              <span className="text-xs text-blue-400 font-medium">{tasks.length}</span>
+              {hasFailedTasks && (
+                <span className="absolute -top-0.5 -left-0.5 h-2 w-2 bg-red-500 rounded-full" />
+              )}
+            </button>
+          )}
         </div>
 
         {/* Center - App title */}
@@ -157,6 +176,12 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
       <PendingSalesModal
         isOpen={showPendingSalesModal}
         onClose={() => setShowPendingSalesModal(false)}
+      />
+
+      {/* Background Products Modal */}
+      <BackgroundProductsModal
+        isOpen={showBackgroundProductsModal}
+        onClose={() => setShowBackgroundProductsModal(false)}
       />
     </div>
   );
