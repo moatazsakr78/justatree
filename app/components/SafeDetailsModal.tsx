@@ -123,6 +123,20 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [withdrawNotes, setWithdrawNotes] = useState('')
   const [withdrawSourceId, setWithdrawSourceId] = useState<string>('')
 
+  // Reserve (تجنيب) state
+  const [reserves, setReserves] = useState<{id: string; record_id: string; amount: number; notes: string; created_at: string}[]>([])
+  const [isLoadingReserves, setIsLoadingReserves] = useState(false)
+  const [showReserveModal, setShowReserveModal] = useState(false)
+  const [reserveModalMode, setReserveModalMode] = useState<'add' | 'edit'>('add')
+  const [editingReserve, setEditingReserve] = useState<any>(null)
+  const [reserveAmount, setReserveAmount] = useState<string>('')
+  const [reserveNotes, setReserveNotes] = useState<string>('')
+  const [reserveSourceId, setReserveSourceId] = useState<string>('')
+  const [isSavingReserve, setIsSavingReserve] = useState(false)
+  const [showDeleteReserveModal, setShowDeleteReserveModal] = useState(false)
+  const [reserveToDelete, setReserveToDelete] = useState<any>(null)
+  const [isDeletingReserve, setIsDeletingReserve] = useState(false)
+
   // Account statement - using infinite scroll hook
   // The old state-based approach is replaced with the hook
   // const [accountStatementData, setAccountStatementData] = useState<any[]>([])
@@ -187,6 +201,23 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   // The safe balance is the actual cash drawer balance (paid amounts, not invoice totals)
   // This is fetched from the cash_drawers table
   const safeBalance = cashDrawerBalance
+
+  // Reserves filtered by current drawer selection
+  const filteredReserves = useMemo(() => {
+    if (!reserves.length) return []
+    if (!selectedDrawerFilters) return reserves
+    const selectedIds = new Set<string>()
+    selectedDrawerFilters.forEach(f => selectedIds.add(f === 'transfers' ? safe.id : f))
+    return reserves.filter(r => selectedIds.has(r.record_id))
+  }, [reserves, selectedDrawerFilters, safe?.id])
+
+  const totalReserved = useMemo(() =>
+    filteredReserves.reduce((sum, r) => sum + r.amount, 0)
+  , [filteredReserves])
+
+  const availableBalance = useMemo(() =>
+    Math.max(0, safeBalance - totalReserved)
+  , [safeBalance, totalReserved])
 
   // Context Menu State for editing invoices
   const [contextMenu, setContextMenu] = useState<{
@@ -296,6 +327,22 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     )
   }
 
+  // Fetch reserves (تجنيب)
+  const fetchReserves = async () => {
+    if (!safe?.id) return
+    setIsLoadingReserves(true)
+    try {
+      const ids = allRecordIds.length > 0 ? allRecordIds : [safe.id]
+      const { data, error } = await (supabase as any)
+        .from('cash_drawer_reserves')
+        .select('id, record_id, amount, notes, created_at')
+        .in('record_id', ids)
+        .order('created_at', { ascending: false })
+      if (!error) setReserves(data || [])
+    } catch (e) { console.error('Error fetching reserves:', e) }
+    finally { setIsLoadingReserves(false) }
+  }
+
   // Load preferences and child safes on mount
   useEffect(() => {
     if (isOpen && safe?.id) {
@@ -311,6 +358,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       }
     }
   }, [isOpen, safe?.id])
+
+  // Re-fetch reserves when allRecordIds changes (after child safes load)
+  useEffect(() => {
+    if (isOpen && allRecordIds.length > 0) {
+      fetchReserves()
+    }
+  }, [isOpen, allRecordIds.join(',')])
 
   // Device detection for mobile layout
   useEffect(() => {
@@ -1983,6 +2037,106 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }
 
+  // === Reserve (تجنيب) CRUD functions ===
+  const openAddReserveModal = () => {
+    setReserveModalMode('add')
+    setEditingReserve(null)
+    setReserveAmount('')
+    setReserveNotes('')
+    // Default to first drawer if safe has drawers, otherwise safe itself
+    setReserveSourceId(childSafes.length > 0 ? childSafes[0].id : safe?.id || '')
+    setShowReserveModal(true)
+  }
+
+  const openEditReserveModal = (reserve: any) => {
+    setReserveModalMode('edit')
+    setEditingReserve(reserve)
+    setReserveAmount(String(reserve.amount))
+    setReserveNotes(reserve.notes || '')
+    setReserveSourceId(reserve.record_id)
+    setShowReserveModal(true)
+  }
+
+  const getDrawerAvailableBalance = (recordId: string) => {
+    // Get drawer balance
+    const drawer = childSafes.find(d => d.id === recordId)
+    const balance = drawer ? drawer.balance : (recordId === safe?.id ? cashDrawerBalance : 0)
+    // Subtract existing reserves for this drawer
+    const existingReserves = reserves
+      .filter(r => r.record_id === recordId && r.id !== editingReserve?.id)
+      .reduce((sum, r) => sum + r.amount, 0)
+    return Math.max(0, balance - existingReserves)
+  }
+
+  const handleSaveReserve = async () => {
+    const amount = parseFloat(reserveAmount)
+    if (!amount || amount <= 0) return
+
+    const maxAvailable = getDrawerAvailableBalance(reserveSourceId)
+    if (amount > maxAvailable) {
+      alert(`المبلغ أكبر من المتاح (${formatPrice(maxAvailable, 'system')})`)
+      return
+    }
+
+    setIsSavingReserve(true)
+    try {
+      if (reserveModalMode === 'add') {
+        const { error } = await (supabase as any)
+          .from('cash_drawer_reserves')
+          .insert({
+            record_id: reserveSourceId,
+            amount,
+            notes: reserveNotes.trim(),
+            created_by: user?.name || 'system'
+          })
+        if (error) throw error
+      } else {
+        const { error } = await (supabase as any)
+          .from('cash_drawer_reserves')
+          .update({
+            amount,
+            notes: reserveNotes.trim(),
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', editingReserve.id)
+        if (error) throw error
+      }
+
+      await fetchReserves()
+      setShowReserveModal(false)
+    } catch (error: any) {
+      console.error('Error saving reserve:', error)
+      alert(`حدث خطأ: ${error.message}`)
+    } finally {
+      setIsSavingReserve(false)
+    }
+  }
+
+  const confirmDeleteReserve = async () => {
+    if (!reserveToDelete) return
+    setIsDeletingReserve(true)
+    try {
+      const { error } = await (supabase as any)
+        .from('cash_drawer_reserves')
+        .delete()
+        .eq('id', reserveToDelete.id)
+      if (error) throw error
+      await fetchReserves()
+      setShowDeleteReserveModal(false)
+      setReserveToDelete(null)
+    } catch (error: any) {
+      console.error('Error deleting reserve:', error)
+      alert(`حدث خطأ: ${error.message}`)
+    } finally {
+      setIsDeletingReserve(false)
+    }
+  }
+
+  const getDrawerNameForReserve = (recordId: string) => {
+    const drawer = childSafes.find(d => d.id === recordId)
+    return drawer?.name || (recordId === safe?.id ? 'التحويلات' : '')
+  }
+
   if (!safe) return null
 
   // Transfers data - now uses infinite scroll hook (useInfiniteTransactions)
@@ -2917,6 +3071,66 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         </div>
                       )}
 
+                      {/* Reserve (تجنيب) Section - Mobile */}
+                      <div className="bg-[#2B3544] rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <button
+                            onClick={openAddReserveModal}
+                            className="p-1 rounded hover:bg-orange-600/20 text-orange-400 transition-colors"
+                          >
+                            <PlusIcon className="h-4 w-4" />
+                          </button>
+                          <h4 className="text-white font-medium text-sm">التجنيب</h4>
+                        </div>
+
+                        {filteredReserves.length > 0 && (
+                          <div className="space-y-1 mb-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-green-400 text-sm font-medium">{formatPrice(availableBalance)}</span>
+                              <span className="text-gray-400 text-xs">المتاح / اليومي</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-orange-400 text-sm font-medium">{formatPrice(totalReserved)}</span>
+                              <span className="text-gray-400 text-xs">المُجنّب</span>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="space-y-2">
+                          {filteredReserves.length > 0 ? filteredReserves.map(reserve => (
+                            <div key={reserve.id} className="bg-[#374151] rounded p-2 relative">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    onClick={() => openEditReserveModal(reserve)}
+                                    className="p-0.5 rounded hover:bg-blue-600/20 text-blue-400 transition-colors"
+                                  >
+                                    <PencilSquareIcon className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => { setReserveToDelete(reserve); setShowDeleteReserveModal(true) }}
+                                    className="p-0.5 rounded hover:bg-red-600/20 text-red-400 transition-colors"
+                                  >
+                                    <XMarkIcon className="h-3.5 w-3.5" />
+                                  </button>
+                                </div>
+                                <div className="text-right">
+                                  <span className="text-orange-400 text-sm font-medium">{formatPrice(reserve.amount)}</span>
+                                  {reserve.notes && (
+                                    <p className="text-gray-400 text-xs mt-0.5">{reserve.notes}</p>
+                                  )}
+                                  {childSafes.length > 0 && (
+                                    <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve.record_id)}</p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )) : (
+                            <p className="text-gray-500 text-xs text-center py-1">لا يوجد مبالغ مُجنّبة</p>
+                          )}
+                        </div>
+                      </div>
+
                       {/* Date Filter Button */}
                       <button
                         onClick={() => setShowDateFilter(true)}
@@ -3458,6 +3672,67 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       <span className="text-white text-sm">{new Date().toLocaleDateString('en-GB')}</span>
                       <span className="text-gray-400 text-xs">التاريخ</span>
                     </div>
+                  </div>
+                </div>
+
+                {/* Reserve (تجنيب) Section */}
+                <div className="p-4 border-t border-gray-600">
+                  <div className="flex items-center justify-between mb-3">
+                    <button
+                      onClick={openAddReserveModal}
+                      className="p-1 rounded hover:bg-orange-600/20 text-orange-400 transition-colors"
+                      title="تجنيب مبلغ"
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                    </button>
+                    <h4 className="text-white font-medium text-sm">التجنيب</h4>
+                  </div>
+
+                  {filteredReserves.length > 0 && (
+                    <div className="space-y-1.5 mb-3">
+                      <div className="flex justify-between items-center px-1">
+                        <span className="text-green-400 text-sm font-medium">{formatPrice(availableBalance, 'system')}</span>
+                        <span className="text-gray-400 text-xs">المتاح / اليومي</span>
+                      </div>
+                      <div className="flex justify-between items-center px-1">
+                        <span className="text-orange-400 text-sm font-medium">{formatPrice(totalReserved, 'system')}</span>
+                        <span className="text-gray-400 text-xs">المُجنّب</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-2 max-h-[200px] overflow-y-auto scrollbar-hide">
+                    {filteredReserves.length > 0 ? filteredReserves.map(reserve => (
+                      <div key={reserve.id} className="group bg-[#2B3544] rounded p-2.5 relative">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => openEditReserveModal(reserve)}
+                              className="p-0.5 rounded hover:bg-blue-600/20 text-blue-400 transition-colors"
+                            >
+                              <PencilSquareIcon className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              onClick={() => { setReserveToDelete(reserve); setShowDeleteReserveModal(true) }}
+                              className="p-0.5 rounded hover:bg-red-600/20 text-red-400 transition-colors"
+                            >
+                              <XMarkIcon className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-orange-400 text-sm font-medium">{formatPrice(reserve.amount, 'system')}</span>
+                            {reserve.notes && (
+                              <p className="text-gray-400 text-xs mt-0.5">{reserve.notes}</p>
+                            )}
+                            {childSafes.length > 0 && (
+                              <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve.record_id)}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )) : (
+                      <p className="text-gray-500 text-xs text-center py-2">لا يوجد مبالغ مُجنّبة</p>
+                    )}
                   </div>
                 </div>
 
@@ -4161,6 +4436,103 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           </div>
         </div>
       )}
+
+      {/* Reserve Add/Edit Modal */}
+      {showReserveModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowReserveModal(false)} />
+          <div className="relative bg-[#1F2937] rounded-lg shadow-xl w-full max-w-md mx-4">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-600">
+              <button onClick={() => setShowReserveModal(false)} className="text-gray-400 hover:text-white">
+                <XMarkIcon className="h-5 w-5" />
+              </button>
+              <h3 className="text-white font-bold text-lg">
+                {reserveModalMode === 'add' ? 'تجنيب مبلغ' : 'تعديل التجنيب'}
+              </h3>
+            </div>
+
+            {/* Body */}
+            <div className="p-4 space-y-4">
+              {/* Drawer selector - only for safes with drawers and in add mode */}
+              {reserveModalMode === 'add' && safe.supports_drawers && childSafes.length > 0 && (
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2 text-right">الدرج</label>
+                  <select
+                    value={reserveSourceId}
+                    onChange={(e) => setReserveSourceId(e.target.value)}
+                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                  >
+                    {childSafes.map(drawer => (
+                      <option key={drawer.id} value={drawer.id}>
+                        {drawer.name} ({formatPrice(drawer.balance, 'system')})
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-gray-500 text-xs mt-1 text-right">
+                    المتاح للتجنيب: {formatPrice(getDrawerAvailableBalance(reserveSourceId), 'system')}
+                  </p>
+                </div>
+              )}
+
+              {/* Amount input */}
+              <div>
+                <label className="block text-gray-300 text-sm mb-2 text-right">المبلغ</label>
+                <input
+                  type="number"
+                  value={reserveAmount}
+                  onChange={(e) => setReserveAmount(e.target.value)}
+                  placeholder="أدخل المبلغ..."
+                  className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                  min="0"
+                  step="0.01"
+                  autoFocus
+                />
+              </div>
+
+              {/* Notes input */}
+              <div>
+                <label className="block text-gray-300 text-sm mb-2 text-right">ملاحظات (اختياري)</label>
+                <input
+                  type="text"
+                  value={reserveNotes}
+                  onChange={(e) => setReserveNotes(e.target.value)}
+                  placeholder="مثال: فكة لبكرة..."
+                  className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                />
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex gap-2 p-4 border-t border-gray-600">
+              <button
+                onClick={() => setShowReserveModal(false)}
+                className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded text-sm font-medium transition-colors"
+              >
+                إلغاء
+              </button>
+              <button
+                onClick={handleSaveReserve}
+                disabled={isSavingReserve || !reserveAmount || parseFloat(reserveAmount) <= 0}
+                className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded text-sm font-medium transition-colors disabled:bg-orange-800 disabled:cursor-not-allowed"
+              >
+                {isSavingReserve ? 'جاري...' : reserveModalMode === 'add' ? 'تجنيب' : 'حفظ'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Reserve Confirmation */}
+      <ConfirmDeleteModal
+        isOpen={showDeleteReserveModal}
+        onClose={() => { setShowDeleteReserveModal(false); setReserveToDelete(null) }}
+        onConfirm={confirmDeleteReserve}
+        isDeleting={isDeletingReserve}
+        title="حذف التجنيب"
+        message="هل أنت متأكد؟ سيتم إضافة هذا المبلغ ضمن نقود الدرج"
+        itemName={reserveToDelete ? formatPrice(reserveToDelete.amount, 'system') : ''}
+      />
 
       {/* Context Menu for Statement */}
       <ContextMenu
