@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
-import { MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, PlusIcon, PencilSquareIcon, TrashIcon, TableCellsIcon, CalendarDaysIcon, PrinterIcon, EllipsisVerticalIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, PlusIcon, PencilSquareIcon, TrashIcon, CalendarDaysIcon, PrinterIcon, EllipsisVerticalIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import ResizableTable from './tables/ResizableTable'
 import { supabase } from '../lib/supabase/client'
 import { roundMoney } from '../lib/utils/money'
@@ -67,12 +67,25 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   // Child safe IDs for main safe aggregation
   const [childSafeIds, setChildSafeIds] = useState<string[]>([])
 
+  // Drawer filter state (for safes with drawers)
+  const [childSafes, setChildSafes] = useState<{id: string; name: string; balance: number}[]>([])
+  const [mainSafeOwnBalance, setMainSafeOwnBalance] = useState<number>(0)
+  const [selectedDrawerFilters, setSelectedDrawerFilters] = useState<Set<string> | null>(null) // null = "all"
+
   // Compute all record IDs: safe.id + childSafeIds (drawers) + additionalSafeIds (multi-select)
   const allRecordIds = useMemo(() => {
     if (!safe?.id) return []
     const ids = [safe.id, ...childSafeIds, ...additionalSafeIds]
     return Array.from(new Set(ids)) // deduplicate
   }, [safe?.id, childSafeIds, additionalSafeIds])
+
+  // Filtered record IDs based on drawer filter selection
+  const filteredRecordIds = useMemo(() => {
+    if (!selectedDrawerFilters || selectedDrawerFilters.size === 0) return allRecordIds
+    const ids: string[] = []
+    selectedDrawerFilters.forEach(f => ids.push(f === 'transfers' ? safe.id : f))
+    return Array.from(new Set(ids))
+  }, [selectedDrawerFilters, allRecordIds, safe?.id])
 
   // Display name for combined view
   const displayName = additionalSafeIds.length > 0
@@ -108,6 +121,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [allSafes, setAllSafes] = useState<any[]>([])
   const [isWithdrawing, setIsWithdrawing] = useState(false)
   const [withdrawNotes, setWithdrawNotes] = useState('')
+  const [withdrawSourceId, setWithdrawSourceId] = useState<string>('')
 
   // Account statement - using infinite scroll hook
   // The old state-based approach is replaced with the hook
@@ -121,7 +135,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     loadMore: loadMoreStatements,
     refresh: refreshStatements
   } = useInfiniteStatements({
-    recordIds: allRecordIds.length > 0 ? allRecordIds : undefined,
+    recordIds: filteredRecordIds.length > 0 ? filteredRecordIds : undefined,
     dateFilter,
     enabled: isOpen && activeTab === 'statement' && !isLoadingPreferences,
     pageSize: 200
@@ -153,7 +167,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     loadMore: loadMoreTransfers,
     refresh: refreshTransfers
   } = useInfiniteTransactions({
-    recordIds: allRecordIds.length > 0 ? allRecordIds : undefined,
+    recordIds: filteredRecordIds.length > 0 ? filteredRecordIds : undefined,
     dateFilter,
     enabled: isOpen && activeTab === 'payments' && !isLoadingPreferences,
     pageSize: 200,
@@ -239,25 +253,55 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }
 
-  // Fetch child safe IDs for main safe aggregation (only for safes that support drawers)
-  const fetchChildSafeIds = async () => {
+  // Fetch child safes (drawers) with names and balances for main safe aggregation
+  const fetchChildSafes = async () => {
     if (!safe?.id || safe.safe_type === 'sub' || !safe.supports_drawers) {
       setChildSafeIds([])
+      setChildSafes([])
+      setMainSafeOwnBalance(0)
       return
     }
-    const { data } = await supabase
+    // Fetch child records (drawers)
+    const { data: children } = await supabase
       .from('records')
-      .select('id')
+      .select('id, name')
       .eq('parent_id', safe.id)
       .eq('safe_type', 'sub')
-    setChildSafeIds(data?.map((r: any) => r.id) || [])
+
+    const childIds = children?.map((r: any) => r.id) || []
+    setChildSafeIds(childIds)
+
+    // Fetch balances for all children + main safe itself
+    const allIds = [safe.id, ...childIds]
+    const { data: drawers } = await supabase
+      .from('cash_drawers')
+      .select('record_id, current_balance')
+      .in('record_id', allIds)
+
+    const balanceMap: Record<string, number> = {}
+    ;(drawers || []).forEach((d: any) => {
+      balanceMap[d.record_id] = d.current_balance || 0
+    })
+
+    // Set main safe's own balance (for "transfers" filter)
+    setMainSafeOwnBalance(balanceMap[safe.id] || 0)
+
+    // Set child safes with balances
+    setChildSafes(
+      (children || []).map((c: any) => ({
+        id: c.id,
+        name: c.name,
+        balance: balanceMap[c.id] || 0
+      }))
+    )
   }
 
   // Load preferences and child safes on mount
   useEffect(() => {
     if (isOpen && safe?.id) {
       loadDateFilterPreferences()
-      fetchChildSafeIds()
+      fetchChildSafes()
+      setSelectedDrawerFilters(null) // Reset filter when safe changes
     }
 
     // Cleanup timeout on unmount
@@ -402,42 +446,92 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     try {
       setIsLoadingSales(true)
 
-      let query = supabase
-        .from('sales')
-        .select(`
-          id,
-          invoice_number,
-          customer_id,
-          total_amount,
-          payment_method,
-          notes,
-          created_at,
-          time,
-          invoice_type,
-          status,
-          customer:customers(
-            name,
-            phone
-          ),
-          cashier:user_profiles(
-            full_name
-          )
-        `)
-        .in('record_id', allRecordIds)
+      let salesData: any[] = []
 
-      // Apply date filter
-      query = applyDateFilter(query)
+      // When drawer filter is active, use two-step approach:
+      // 1. Get sale_ids from cash_drawer_transactions for the filtered record_ids
+      // 2. Fetch sales by those sale_ids
+      if (selectedDrawerFilters && selectedDrawerFilters.size > 0) {
+        let txQuery = supabase
+          .from('cash_drawer_transactions')
+          .select('sale_id')
+          .in('record_id', filteredRecordIds)
+          .not('sale_id', 'is', null)
+        txQuery = applyDateFilter(txQuery)
+        const { data: txData } = await txQuery
 
-      const { data, error } = await query
-        .order('created_at', { ascending: false })
-        .limit(50)
+        const saleIds = Array.from(new Set((txData || []).map((t: any) => t.sale_id).filter(Boolean)))
 
-      if (error) {
-        console.error('Error fetching sales:', error)
-        return
+        if (saleIds.length > 0) {
+          const { data, error } = await supabase
+            .from('sales')
+            .select(`
+              id,
+              invoice_number,
+              customer_id,
+              total_amount,
+              payment_method,
+              notes,
+              created_at,
+              time,
+              invoice_type,
+              status,
+              customer:customers(
+                name,
+                phone
+              ),
+              cashier:user_profiles(
+                full_name
+              )
+            `)
+            .in('id', saleIds)
+            .order('created_at', { ascending: false })
+            .limit(50)
+
+          if (error) {
+            console.error('Error fetching sales:', error)
+            return
+          }
+          salesData = data || []
+        }
+      } else {
+        // No filter active - use standard approach
+        let query = supabase
+          .from('sales')
+          .select(`
+            id,
+            invoice_number,
+            customer_id,
+            total_amount,
+            payment_method,
+            notes,
+            created_at,
+            time,
+            invoice_type,
+            status,
+            customer:customers(
+              name,
+              phone
+            ),
+            cashier:user_profiles(
+              full_name
+            )
+          `)
+          .in('record_id', allRecordIds)
+
+        query = applyDateFilter(query)
+
+        const { data, error } = await query
+          .order('created_at', { ascending: false })
+          .limit(50)
+
+        if (error) {
+          console.error('Error fetching sales:', error)
+          return
+        }
+        salesData = data || []
       }
 
-      const salesData = data || []
       setSales(salesData)
       setAllSalesData(salesData) // Store for client-side filtering
 
@@ -445,12 +539,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       if (salesData.length > 0) {
         const saleIds = salesData.map((s: any) => s.id)
 
-        // Fetch paid amounts (include child safe transactions)
+        // Fetch paid amounts (scoped to filteredRecordIds)
         let txQuery = supabase
           .from('cash_drawer_transactions')
           .select('sale_id, amount')
           .in('sale_id', saleIds)
-        txQuery = txQuery.in('record_id', allRecordIds)
+        txQuery = txQuery.in('record_id', filteredRecordIds)
         const { data: transactions } = await txQuery
 
         if (transactions) {
@@ -491,15 +585,24 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }
 
-  // Fetch cash drawer balance (actual paid amounts, aggregated across children)
+  // Fetch cash drawer balance (actual paid amounts, aggregated across filtered records)
   const fetchCashDrawerBalance = async () => {
     if (!safe?.id) return
 
     try {
-      // For safes with drawers, only sum children balances (not the parent's own balance)
-      const balanceIds = (safe.supports_drawers && childSafeIds.length > 0)
-        ? [...childSafeIds, ...additionalSafeIds]
-        : allRecordIds
+      // Determine which IDs to sum for balance
+      let balanceIds: string[]
+      if (!selectedDrawerFilters) {
+        // "All" mode: for safes with drawers, sum only children (+ additionalSafeIds)
+        // This matches the safes page behavior — the main safe's own record tracks
+        // digital/non-physical payment flows, not actual cash in drawers
+        balanceIds = (safe.supports_drawers && childSafeIds.length > 0)
+          ? [...childSafeIds, ...additionalSafeIds]
+          : allRecordIds
+      } else {
+        // Specific filter active: use filteredRecordIds as-is
+        balanceIds = filteredRecordIds
+      }
       const { data: drawers, error } = await supabase
         .from('cash_drawers')
         .select('current_balance')
@@ -525,8 +628,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     try {
       const aggregated: Record<string, number> = {}
 
+      // Same logic as balance: when no filter active, exclude main safe for drawer-based safes
+      const breakdownIds = (!selectedDrawerFilters && safe.supports_drawers && childSafeIds.length > 0)
+        ? [...childSafeIds, ...additionalSafeIds]
+        : filteredRecordIds
+
       // Call RPC for each safe and aggregate
-      for (const id of allRecordIds) {
+      for (const id of breakdownIds) {
         const { data, error } = await (supabase as any)
           .rpc('get_safe_payment_breakdown', { p_record_id: id })
         if (error) {
@@ -750,41 +858,88 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     try {
       setIsLoadingPurchases(true)
 
-      let query = supabase
-        .from('purchase_invoices')
-        .select(`
-          id,
-          invoice_number,
-          supplier_id,
-          total_amount,
-          payment_status,
-          notes,
-          created_at,
-          time,
-          invoice_type,
-          supplier:suppliers(
-            name,
-            phone
-          ),
-          creator:user_profiles(
-            full_name
-          )
-        `)
-        .in('record_id', allRecordIds)
+      let purchasesData: any[] = []
 
-      // Apply date filter
-      query = applyDateFilter(query)
+      // When drawer filter is active, use two-step approach
+      if (selectedDrawerFilters && selectedDrawerFilters.size > 0) {
+        let txQuery = supabase
+          .from('cash_drawer_transactions')
+          .select('purchase_invoice_id')
+          .in('record_id', filteredRecordIds)
+          .not('purchase_invoice_id', 'is', null)
+        txQuery = applyDateFilter(txQuery)
+        const { data: txData } = await txQuery
 
-      const { data, error } = await query
-        .order('created_at', { ascending: false })
-        .limit(50)
+        const purchaseIds = Array.from(new Set((txData || []).map((t: any) => t.purchase_invoice_id).filter(Boolean)))
 
-      if (error) {
-        console.error('Error fetching purchase invoices:', error)
-        return
+        if (purchaseIds.length > 0) {
+          const { data, error } = await supabase
+            .from('purchase_invoices')
+            .select(`
+              id,
+              invoice_number,
+              supplier_id,
+              total_amount,
+              payment_status,
+              notes,
+              created_at,
+              time,
+              invoice_type,
+              supplier:suppliers(
+                name,
+                phone
+              ),
+              creator:user_profiles(
+                full_name
+              )
+            `)
+            .in('id', purchaseIds)
+            .order('created_at', { ascending: false })
+            .limit(50)
+
+          if (error) {
+            console.error('Error fetching purchase invoices:', error)
+            return
+          }
+          purchasesData = data || []
+        }
+      } else {
+        // No filter active - use standard approach
+        let query = supabase
+          .from('purchase_invoices')
+          .select(`
+            id,
+            invoice_number,
+            supplier_id,
+            total_amount,
+            payment_status,
+            notes,
+            created_at,
+            time,
+            invoice_type,
+            supplier:suppliers(
+              name,
+              phone
+            ),
+            creator:user_profiles(
+              full_name
+            )
+          `)
+          .in('record_id', allRecordIds)
+
+        query = applyDateFilter(query)
+
+        const { data, error } = await query
+          .order('created_at', { ascending: false })
+          .limit(50)
+
+        if (error) {
+          console.error('Error fetching purchase invoices:', error)
+          return
+        }
+        purchasesData = data || []
       }
 
-      const purchasesData = data || []
       setPurchaseInvoices(purchasesData)
       setAllPurchasesData(purchasesData) // Store for client-side filtering
 
@@ -792,12 +947,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       if (purchasesData.length > 0) {
         const purchaseIds = purchasesData.map((p: any) => p.id)
 
-        // Fetch paid amounts
+        // Fetch paid amounts (scoped to filteredRecordIds)
         let purchaseTxQuery = supabase
           .from('cash_drawer_transactions')
           .select('purchase_invoice_id, amount')
           .in('purchase_invoice_id', purchaseIds)
-        purchaseTxQuery = purchaseTxQuery.in('record_id', allRecordIds)
+        purchaseTxQuery = purchaseTxQuery.in('record_id', filteredRecordIds)
         const { data: transactions } = await purchaseTxQuery
 
         if (transactions) {
@@ -1273,7 +1428,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       // Account statement and transfers are now handled by infinite scroll hooks
 
     }
-  }, [isOpen, safe?.id, dateFilter, isLoadingPreferences, childSafeIds, additionalSafeIds])
+  }, [isOpen, safe?.id, dateFilter, isLoadingPreferences, childSafeIds, additionalSafeIds, selectedDrawerFilters])
 
   // Client-side search for product in loaded invoices
   const searchProductInInvoices = (query: string) => {
@@ -1607,12 +1762,24 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }
 
+  // Drawer filter toggle functions
+  const handleDrawerFilterToggle = (filterId: string) => {
+    setSelectedDrawerFilters(prev => {
+      if (!prev) { return new Set([filterId]) } // from "all" to specific
+      const next = new Set(prev)
+      next.has(filterId) ? next.delete(filterId) : next.add(filterId)
+      return next.size === 0 ? null : next
+    })
+  }
+  const handleSelectAllDrawers = () => setSelectedDrawerFilters(null)
+
   // Open withdraw modal
   const openWithdrawModal = () => {
     setWithdrawAmount('')
     setWithdrawType('withdraw')
     setTargetSafeId('')
     setWithdrawNotes('')
+    setWithdrawSourceId('')
     loadAllSafes()
     setShowWithdrawModal(true)
   }
@@ -1626,14 +1793,32 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       return
     }
 
+    // For safes with drawers, require source selection for withdraw/transfer
+    if (safe.supports_drawers && childSafes.length > 0 && (withdrawType === 'withdraw' || withdrawType === 'transfer') && !withdrawSourceId) {
+      alert('يرجى اختيار مصدر السحب')
+      return
+    }
+
+    // Resolve source record_id
+    const sourceRecordId = (safe.supports_drawers && childSafes.length > 0 && withdrawSourceId)
+      ? (withdrawSourceId === 'transfers' ? safe.id : withdrawSourceId)
+      : safe.id
+
+    // Get source balance for validation
+    const sourceBalance = (safe.supports_drawers && childSafes.length > 0 && withdrawSourceId)
+      ? (withdrawSourceId === 'transfers'
+        ? mainSafeOwnBalance
+        : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
+      : safeBalance
+
     // فقط للسحب والتحويل: التحقق من الرصيد الكافي
-    if ((withdrawType === 'withdraw' || withdrawType === 'transfer') && amount > safeBalance) {
+    if ((withdrawType === 'withdraw' || withdrawType === 'transfer') && amount > sourceBalance) {
       alert('لا يوجد رصيد كافي في الخزنة')
       return
     }
 
     // منع السحب إذا كان الرصيد بالسالب أو صفر
-    if ((withdrawType === 'withdraw' || withdrawType === 'transfer') && safeBalance <= 0) {
+    if ((withdrawType === 'withdraw' || withdrawType === 'transfer') && sourceBalance <= 0) {
       alert('لا يوجد رصيد كافي في الخزنة للسحب')
       return
     }
@@ -1646,18 +1831,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     setIsWithdrawing(true)
 
     try {
-      // 1. Get current safe's drawer
+      // 1. Get source drawer (using resolved source record_id)
       let { data: sourceDrawer, error: sourceError } = await supabase
         .from('cash_drawers')
         .select('*')
-        .eq('record_id', safe.id)
+        .eq('record_id', sourceRecordId)
         .single()
 
       // إنشاء الخزنة إذا لم تكن موجودة (للإيداع)
       if (sourceError && sourceError.code === 'PGRST116' && withdrawType === 'deposit') {
         const { data: newDrawer, error: createError } = await supabase
           .from('cash_drawers')
-          .insert({ record_id: safe.id, current_balance: 0 })
+          .insert({ record_id: sourceRecordId, current_balance: 0 })
           .select()
           .single()
 
@@ -1703,7 +1888,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         .from('cash_drawer_transactions')
         .insert({
           drawer_id: sourceDrawer.id,
-          record_id: safe.id,
+          record_id: sourceRecordId,
           transaction_type: transactionType,
           amount: transactionAmount,
           balance_after: newSourceBalance,
@@ -1769,13 +1954,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         }
       }
 
-      // 5. Update local state
-      setCashDrawerBalance(newSourceBalance)
+      // 5. Refresh balances
+      fetchCashDrawerBalance()
+      fetchChildSafes() // Refresh drawer balances
 
       // 6. Reset form
       setWithdrawAmount('')
       setWithdrawNotes('')
       setTargetSafeId('')
+      setWithdrawSourceId('')
 
       // 7. Close modal and show success
       setShowWithdrawModal(false)
@@ -2680,31 +2867,55 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         </div>
                       </div>
 
-                      {/* Payment Method Breakdown */}
-                      <div className="bg-[#2B3544] rounded-lg p-3">
-                        <h4 className="text-white font-medium mb-2 flex items-center gap-2 text-sm">
-                          <span>💳</span>
-                          <span>طرق الدفع</span>
-                        </h4>
-                        {paymentBreakdown.length > 0 ? (
-                          <div className="space-y-2 text-sm">
-                            {paymentBreakdown.map(({ method, amount }) => (
-                              <div key={method} className="flex justify-between">
-                                <span className={method === 'cash' ? 'text-green-400' : 'text-blue-400'}>
-                                  {formatPrice(amount)}
-                                </span>
-                                <span className="text-gray-400">{method}</span>
+                      {/* Drawer Filter - Only for safes with drawers */}
+                      {safe.supports_drawers && childSafes.length > 0 && (
+                        <div className="bg-[#2B3544] rounded-lg p-3">
+                          <h4 className="text-white font-medium mb-2 text-sm text-right">تصفية حسب الدرج</h4>
+                          <div className="space-y-1.5">
+                            <label className="flex items-center justify-between cursor-pointer px-1 py-1">
+                              <span className="text-white text-sm font-medium">{formatPrice(
+                                childSafes.reduce((sum, c) => sum + c.balance, 0)
+                              )}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-300 text-sm">الكل</span>
+                                <input
+                                  type="checkbox"
+                                  checked={!selectedDrawerFilters}
+                                  onChange={handleSelectAllDrawers}
+                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                />
                               </div>
+                            </label>
+                            {childSafes.map(drawer => (
+                              <label key={drawer.id} className="flex items-center justify-between cursor-pointer px-1 py-1">
+                                <span className="text-green-400 text-sm">{formatPrice(drawer.balance)}</span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-gray-300 text-sm truncate max-w-[100px]">{drawer.name}</span>
+                                  <input
+                                    type="checkbox"
+                                    checked={!selectedDrawerFilters || selectedDrawerFilters.has(drawer.id)}
+                                    onChange={() => handleDrawerFilterToggle(drawer.id)}
+                                    className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                  />
+                                </div>
+                              </label>
                             ))}
-                            <div className="flex justify-between border-t border-gray-600 pt-2">
-                              <span className="text-white font-bold">{formatPrice(safeBalance)}</span>
-                              <span className="text-gray-400 font-medium">رصيد الخزنة</span>
-                            </div>
+                            <div className="border-t border-gray-600 my-1"></div>
+                            <label className="flex items-center justify-between cursor-pointer px-1 py-1">
+                              <span className="text-blue-400 text-sm">{formatPrice(mainSafeOwnBalance)}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-300 text-sm">التحويلات</span>
+                                <input
+                                  type="checkbox"
+                                  checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
+                                  onChange={() => handleDrawerFilterToggle('transfers')}
+                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                />
+                              </div>
+                            </label>
                           </div>
-                        ) : (
-                          <div className="text-gray-500 text-sm text-center">لا توجد بيانات</div>
-                        )}
-                      </div>
+                        </div>
+                      )}
 
                       {/* Date Filter Button */}
                       <button
@@ -3047,46 +3258,42 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     <span className="text-sm">سحب الخزنة</span>
                   </button>
 
-                  <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px] transition-colors">
-                    <TableCellsIcon className="h-5 w-5 mb-1" />
-                    <span className="text-sm">إدارة الأعمدة</span>
-                  </button>
                 </div>
 
                 {/* Tab Navigation - Same row */}
                 <div className="flex gap-2">
-                  <button 
+                  <button
                     onClick={() => setActiveTab('payments')}
-                    className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
-                      activeTab === 'payments' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                    className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
+                      activeTab === 'payments'
+                        ? 'text-blue-400 border-blue-400 bg-blue-600/10'
                         : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
                     }`}
                   >
                     التحويلات
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('statement')}
-                    className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
-                      activeTab === 'statement' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                    className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
+                      activeTab === 'statement'
+                        ? 'text-blue-400 border-blue-400 bg-blue-600/10'
                         : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
                     }`}
                   >
                     كشف الحساب
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab('transactions')}
-                    className={`px-6 py-3 text-base font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
-                      activeTab === 'transactions' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                    className={`px-5 py-2.5 text-sm font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
+                      activeTab === 'transactions'
+                        ? 'text-blue-400 border-blue-400 bg-blue-600/10'
                         : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
                     }`}
                   >
                     فواتير الخزنة ({allTransactions.length})
                   </button>
                 </div>
-                
+
                 {/* View Mode Toggle Buttons - Only show for transactions tab */}
                 {activeTab === 'transactions' && (
                   <div className="flex gap-1 bg-gray-600/50 rounded-lg p-1">
@@ -3153,8 +3360,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
             {/* Right Sidebar - Record Info (First in RTL) */}
             {showSafeDetails && (
-              <div className="w-80 bg-[#3B4754] border-l border-gray-600 flex flex-col">
-                
+              <div className="w-80 bg-[#3B4754] border-l border-gray-600 flex flex-col overflow-y-auto scrollbar-hide">
+
                 {/* Record Balance */}
                 <div className="p-4 border-b border-gray-600">
                   <div className="bg-purple-600 rounded p-4 text-center">
@@ -3163,24 +3370,72 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   </div>
                 </div>
 
-                {/* Record Details */}
-                <div className="p-4 space-y-4 flex-1">
-                  <h3 className="text-white font-medium text-lg text-right">معلومات الخزنة</h3>
+                {/* Drawer Filter Section - Only for safes with drawers */}
+                {safe.supports_drawers && childSafes.length > 0 && (
+                  <div className="p-4 border-b border-gray-600">
+                    <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية حسب الدرج</h4>
+                    <div className="space-y-1.5">
+                      {/* All checkbox */}
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                        <span className="text-white font-medium text-sm">{formatPrice(
+                          childSafes.reduce((sum, c) => sum + c.balance, 0), 'system'
+                        )}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-300 text-sm">الكل</span>
+                          <input
+                            type="checkbox"
+                            checked={!selectedDrawerFilters}
+                            onChange={handleSelectAllDrawers}
+                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                          />
+                        </div>
+                      </label>
 
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-white">{displayName}</span>
-                    <span className="text-gray-400 text-sm">اسم الخزنة</span>
+                      {/* Individual drawer checkboxes */}
+                      {childSafes.map(drawer => (
+                        <label key={drawer.id} className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                          <span className="text-green-400 text-sm">{formatPrice(drawer.balance, 'system')}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-300 text-sm truncate max-w-[120px]">{drawer.name}</span>
+                            <input
+                              type="checkbox"
+                              checked={!selectedDrawerFilters || selectedDrawerFilters.has(drawer.id)}
+                              onChange={() => handleDrawerFilterToggle(drawer.id)}
+                              className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                            />
+                          </div>
+                        </label>
+                      ))}
+
+                      {/* Separator */}
+                      <div className="border-t border-gray-600 my-1"></div>
+
+                      {/* Transfers checkbox (non-physical payments routed to main safe) */}
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                        <span className="text-blue-400 text-sm">{formatPrice(mainSafeOwnBalance, 'system')}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-300 text-sm">التحويلات</span>
+                          <input
+                            type="checkbox"
+                            checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
+                            onChange={() => handleDrawerFilterToggle('transfers')}
+                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                          />
+                        </div>
+                      </label>
+                    </div>
                   </div>
+                )}
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-white">جميع الفروع</span>
-                    <span className="text-gray-400 text-sm">الفرع</span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-blue-400 flex items-center gap-1">
-                      <span>
+                {/* Safe Info */}
+                <div className="p-4 space-y-3 flex-1">
+                  <div className="space-y-2.5">
+                    <div className="flex justify-between items-center">
+                      <span className="text-white text-sm">{displayName}</span>
+                      <span className="text-gray-400 text-xs">اسم الخزنة</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-blue-400 text-sm">
                         {dateFilter.type === 'today' && 'اليوم'}
                         {dateFilter.type === 'current_week' && 'الأسبوع الحالي'}
                         {dateFilter.type === 'last_week' && 'الأسبوع الماضي'}
@@ -3189,81 +3444,48 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         {dateFilter.type === 'custom' && 'فترة مخصصة'}
                         {dateFilter.type === 'all' && 'جميع الفترات'}
                       </span>
-                      <span>📅</span>
-                    </span>
-                    <span className="text-gray-400 text-sm">الفترة الزمنية</span>
-                  </div>
-
-                  {dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-white text-xs">
-                        {dateFilter.startDate.toLocaleDateString('en-GB')} - {dateFilter.endDate.toLocaleDateString('en-GB')}
-                      </span>
-                      <span className="text-gray-400 text-sm">من - إلى</span>
+                      <span className="text-gray-400 text-xs">الفترة</span>
                     </div>
-                  )}
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-white">
-                      {new Date().toLocaleDateString('en-GB')}
-                    </span>
-                    <span className="text-gray-400 text-sm">التاريخ الحالي</span>
+                    {dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-white text-xs">
+                          {dateFilter.startDate.toLocaleDateString('en-GB')} - {dateFilter.endDate.toLocaleDateString('en-GB')}
+                        </span>
+                        <span className="text-gray-400 text-xs">من - إلى</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center">
+                      <span className="text-white text-sm">{new Date().toLocaleDateString('en-GB')}</span>
+                      <span className="text-gray-400 text-xs">التاريخ</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Payment Method Breakdown */}
-              <div className="p-4 border-t border-gray-600">
-                <h4 className="text-white font-medium mb-3 text-right flex items-center gap-2">
-                  <span>💳</span>
-                  <span>طرق الدفع</span>
-                </h4>
-                {paymentBreakdown.length > 0 ? (
-                  <div className="space-y-2">
-                    {paymentBreakdown.map(({ method, amount }) => (
-                      <div key={method} className="flex justify-between items-center">
-                        <span className={method === 'cash' ? 'text-green-400' : 'text-blue-400'}>
-                          {formatPrice(amount, 'system')}
-                        </span>
-                        <span className="text-gray-400 text-sm">{method}</span>
-                      </div>
-                    ))}
-                    <div className="flex justify-between items-center border-t border-gray-600 pt-2">
-                      <span className="text-white font-bold">{formatPrice(safeBalance, 'system')}</span>
-                      <span className="text-gray-400 text-sm font-medium">رصيد الخزنة</span>
+                {/* Date Filter Button */}
+                <div className="p-4 border-t border-gray-600">
+                  <button
+                    onClick={() => setShowDateFilter(true)}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <CalendarDaysIcon className="h-5 w-5" />
+                    <span>التاريخ</span>
+                  </button>
+
+                  {dateFilter.type !== 'all' && (
+                    <div className="mt-2 text-center">
+                      <span className="text-xs text-purple-400">
+                        {dateFilter.type === 'today' && 'عرض فواتير اليوم'}
+                        {dateFilter.type === 'current_week' && 'عرض فواتير الأسبوع الحالي'}
+                        {dateFilter.type === 'last_week' && 'عرض فواتير الأسبوع الماضي'}
+                        {dateFilter.type === 'current_month' && 'عرض فواتير الشهر الحالي'}
+                        {dateFilter.type === 'last_month' && 'عرض فواتير الشهر الماضي'}
+                        {dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate &&
+                          `من ${dateFilter.startDate.toLocaleDateString('en-GB')} إلى ${dateFilter.endDate.toLocaleDateString('en-GB')}`}
+                      </span>
                     </div>
-                  </div>
-                ) : (
-                  <div className="text-gray-500 text-sm text-center">لا توجد بيانات</div>
-                )}
+                  )}
+                </div>
               </div>
-
-              {/* Date Filter Button */}
-              <div className="p-4 border-t border-gray-600">
-                <button
-                  onClick={() => setShowDateFilter(true)}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
-                >
-                  <CalendarDaysIcon className="h-5 w-5" />
-                  <span>التاريخ</span>
-                </button>
-                
-                {/* Current Filter Display */}
-                {dateFilter.type !== 'all' && (
-                  <div className="mt-2 text-center">
-                    <span className="text-xs text-purple-400">
-                      {dateFilter.type === 'today' && 'عرض فواتير اليوم'}
-                      {dateFilter.type === 'current_week' && 'عرض فواتير الأسبوع الحالي'}
-                      {dateFilter.type === 'last_week' && 'عرض فواتير الأسبوع الماضي'}
-                      {dateFilter.type === 'current_month' && 'عرض فواتير الشهر الحالي'}
-                      {dateFilter.type === 'last_month' && 'عرض فواتير الشهر الماضي'}
-                      {dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate &&
-                        `من ${dateFilter.startDate.toLocaleDateString('en-GB')} إلى ${dateFilter.endDate.toLocaleDateString('en-GB')}`}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
             )}
 
             {/* Main Content Area - Left side containing both tables */}
@@ -3776,8 +3998,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             <div className="p-4 space-y-4">
               {/* Current Balance Display */}
               <div className="bg-purple-600/20 border border-purple-500 rounded p-3 text-center">
-                <div className="text-purple-300 text-sm">الرصيد الحالي</div>
-                <div className="text-white text-xl font-bold">{formatPrice(safeBalance, 'system')}</div>
+                <div className="text-purple-300 text-sm">
+                  {safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                    ? (withdrawSourceId === 'transfers' ? 'رصيد التحويلات' : `رصيد ${childSafes.find(c => c.id === withdrawSourceId)?.name || 'الدرج'}`)
+                    : 'الرصيد الحالي'}
+                </div>
+                <div className="text-white text-xl font-bold">{formatPrice(
+                  safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                    ? (withdrawSourceId === 'transfers'
+                      ? mainSafeOwnBalance
+                      : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
+                    : safeBalance
+                , 'system')}</div>
               </div>
 
               {/* Operation Type */}
@@ -3817,6 +4049,30 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 </div>
               </div>
 
+              {/* Source Selection - Only for safes with drawers */}
+              {safe.supports_drawers && childSafes.length > 0 && (
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2 text-right">
+                    {withdrawType === 'deposit' ? 'الإيداع في' : 'السحب من'}
+                  </label>
+                  <select
+                    value={withdrawSourceId}
+                    onChange={(e) => setWithdrawSourceId(e.target.value)}
+                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">اختر المصدر...</option>
+                    {childSafes.map(drawer => (
+                      <option key={drawer.id} value={drawer.id}>
+                        {drawer.name} ({formatPrice(drawer.balance, 'system')})
+                      </option>
+                    ))}
+                    <option value="transfers">
+                      التحويلات ({formatPrice(mainSafeOwnBalance, 'system')})
+                    </option>
+                  </select>
+                </div>
+              )}
+
               {/* Target Safe (if transfer) */}
               {withdrawType === 'transfer' && (
                 <div>
@@ -3844,18 +4100,27 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   placeholder="أدخل المبلغ"
                   className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
                   min="0"
-                  max={withdrawType === 'deposit' ? undefined : safeBalance}
+                  max={withdrawType === 'deposit' ? undefined : (
+                    safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                      ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
+                      : safeBalance
+                  )}
                   step="0.01"
                 />
                 {/* زر سحب الرصيد بالكامل - فقط للسحب والتحويل */}
-                {withdrawType !== 'deposit' && safeBalance > 0 && (
-                  <button
-                    onClick={() => setWithdrawAmount(safeBalance.toString())}
-                    className="mt-2 text-xs text-blue-400 hover:text-blue-300"
-                  >
-                    سحب الرصيد بالكامل ({formatPrice(safeBalance, 'system')})
-                  </button>
-                )}
+                {withdrawType !== 'deposit' && (() => {
+                  const sourceBalanceForButton = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                    ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
+                    : safeBalance
+                  return sourceBalanceForButton > 0 ? (
+                    <button
+                      onClick={() => setWithdrawAmount(sourceBalanceForButton.toString())}
+                      className="mt-2 text-xs text-blue-400 hover:text-blue-300"
+                    >
+                      سحب الرصيد بالكامل ({formatPrice(sourceBalanceForButton, 'system')})
+                    </button>
+                  ) : null
+                })()}
               </div>
 
               {/* Notes */}
