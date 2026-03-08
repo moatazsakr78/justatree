@@ -18,7 +18,9 @@ export interface CashDrawerTransaction {
   performed_by: string | null
   created_at: string | null
   payment_method?: string | null
+  related_record_id?: string | null
   safe_name?: string
+  related_safe_name?: string
   customer_name?: string
 }
 
@@ -179,11 +181,20 @@ export function useInfiniteTransactions(
   const mapSafeNames = useCallback((txs: CashDrawerTransaction[], currentSafes: Array<{ id: string; name: string }>): CashDrawerTransaction[] => {
     return txs.map(tx => {
       // Check if this is a "لا يوجد" record
+      let safe_name = 'غير معروف'
       if (tx.record_id === null || tx.record_id === NO_SAFE_RECORD_ID) {
-        return { ...tx, safe_name: 'لا يوجد' }
+        safe_name = 'لا يوجد'
+      } else {
+        const safe = currentSafes.find(s => s.id === tx.record_id)
+        safe_name = safe?.name || 'غير معروف'
       }
-      const safe = currentSafes.find(s => s.id === tx.record_id)
-      return { ...tx, safe_name: safe?.name || 'غير معروف' }
+      // Map related_record_id to safe name (for transfers)
+      let related_safe_name: string | undefined
+      if (tx.related_record_id) {
+        const relatedSafe = currentSafes.find(s => s.id === tx.related_record_id)
+        related_safe_name = relatedSafe?.name || 'غير معروف'
+      }
+      return { ...tx, safe_name, related_safe_name }
     })
   }, [])
 

@@ -122,6 +122,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [isWithdrawing, setIsWithdrawing] = useState(false)
   const [withdrawNotes, setWithdrawNotes] = useState('')
   const [withdrawSourceId, setWithdrawSourceId] = useState<string>('')
+  const [showWithdrawSuggestions, setShowWithdrawSuggestions] = useState(false)
+  const [withdrawAllMode, setWithdrawAllMode] = useState<'full' | 'excluding_reserves' | null>(null)
+
+  // Operations tab state
+  const [operationsTypeFilter, setOperationsTypeFilter] = useState<string>('all')
 
   // Reserve (تجنيب) state
   const [reserves, setReserves] = useState<{id: string; record_id: string; amount: number; notes: string; created_at: string}[]>([])
@@ -194,6 +199,56 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     enabled: hasMoreTransfers && !isLoadingMoreTransfers && activeTab === 'payments',
     isLoading: isLoadingMoreTransfers
   })
+
+  // Operations tab - reuse same data source as payments (non-sale transactions)
+  // Build safes list for name mapping (childSafes + main safe + allSafes)
+  const safesForMapping = useMemo(() => {
+    const list: Array<{ id: string; name: string }> = []
+    if (safe?.id) list.push({ id: safe.id, name: safe.name || 'التحويلات' })
+    childSafes.forEach(c => list.push({ id: c.id, name: c.name }))
+    allSafes.forEach(s => {
+      if (!list.find(l => l.id === s.id)) list.push({ id: s.id, name: s.name })
+    })
+    return list
+  }, [safe?.id, safe?.name, childSafes, allSafes])
+
+  const {
+    transactions: operationsTransactions,
+    isLoading: isLoadingOperations,
+    isLoadingMore: isLoadingMoreOperations,
+    hasMore: hasMoreOperations,
+    loadMore: loadMoreOperations,
+    refresh: refreshOperations
+  } = useInfiniteTransactions({
+    recordIds: filteredRecordIds.length > 0 ? filteredRecordIds : undefined,
+    dateFilter,
+    enabled: isOpen && activeTab === 'operations' && !isLoadingPreferences,
+    pageSize: 200,
+    excludeSales: true,
+    safes: safesForMapping
+  })
+
+  // Scroll detection for operations infinite scroll
+  const { sentinelRef: operationsSentinelRef } = useScrollDetection({
+    onLoadMore: loadMoreOperations,
+    enabled: hasMoreOperations && !isLoadingMoreOperations && activeTab === 'operations',
+    isLoading: isLoadingMoreOperations
+  })
+
+  // Filtered operations based on type filter
+  const filteredOperations = useMemo(() => {
+    if (operationsTypeFilter === 'all') return operationsTransactions
+    return operationsTransactions.filter(t => t.transaction_type === operationsTypeFilter)
+  }, [operationsTransactions, operationsTypeFilter])
+
+  // Operations summary cards data
+  const operationsSummary = useMemo(() => {
+    const deposits = operationsTransactions.filter(t => t.transaction_type === 'deposit').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
+    const withdrawals = operationsTransactions.filter(t => t.transaction_type === 'withdrawal').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
+    const transfersIn = operationsTransactions.filter(t => t.transaction_type === 'transfer_in').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
+    const transfersOut = operationsTransactions.filter(t => t.transaction_type === 'transfer_out').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
+    return { deposits, withdrawals, transfersIn, transfersOut }
+  }, [operationsTransactions])
 
   // Paid amounts mapped by sale_id or purchase_invoice_id
   const [paidAmounts, setPaidAmounts] = useState<Record<string, number>>({})
@@ -342,6 +397,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     } catch (e) { console.error('Error fetching reserves:', e) }
     finally { setIsLoadingReserves(false) }
   }
+
+  // Load all safes for name mapping when operations tab is opened
+  useEffect(() => {
+    if (isOpen && activeTab === 'operations' && allSafes.length === 0) {
+      loadAllSafes()
+    }
+  }, [isOpen, activeTab])
 
   // Load preferences and child safes on mount
   useEffect(() => {
@@ -1834,6 +1896,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     setTargetSafeId('')
     setWithdrawNotes('')
     setWithdrawSourceId('')
+    setShowWithdrawSuggestions(false)
+    setWithdrawAllMode(null)
     loadAllSafes()
     setShowWithdrawModal(true)
   }
@@ -1844,6 +1908,81 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
     if (!amount || amount <= 0) {
       alert('يرجى إدخال مبلغ صحيح')
+      return
+    }
+
+    // === "الكل" (All sources) withdrawal ===
+    if (withdrawSourceId === 'all' && withdrawType === 'withdraw') {
+      if (!withdrawAllMode) {
+        alert('يرجى اختيار طريقة السحب')
+        return
+      }
+
+      setIsWithdrawing(true)
+      try {
+        // Collect all sources with balance > 0
+        const allSources: { id: string; name: string; balance: number }[] = []
+        childSafes.forEach(c => { if (c.balance > 0) allSources.push({ id: c.id, name: c.name, balance: c.balance }) })
+        if (mainSafeOwnBalance > 0) allSources.push({ id: safe.id, name: 'التحويلات', balance: mainSafeOwnBalance })
+
+        for (const source of allSources) {
+          // Calculate amount to withdraw from this source
+          let withdrawFromSource = source.balance
+          if (withdrawAllMode === 'excluding_reserves') {
+            const sourceReserveAmount = reserves.filter(r => r.record_id === source.id).reduce((sum, r) => sum + r.amount, 0)
+            withdrawFromSource = Math.max(0, source.balance - sourceReserveAmount)
+          }
+          if (withdrawFromSource <= 0) continue
+
+          // Get the drawer
+          const { data: drawer, error: drawerError } = await supabase
+            .from('cash_drawers')
+            .select('*')
+            .eq('record_id', source.id)
+            .single()
+
+          if (drawerError || !drawer) continue
+
+          const newBalance = roundMoney((drawer.current_balance || 0) - withdrawFromSource)
+
+          // Update drawer balance
+          await supabase
+            .from('cash_drawers')
+            .update({ current_balance: newBalance, updated_at: new Date().toISOString() })
+            .eq('id', drawer.id)
+
+          // Create withdrawal transaction
+          await supabase
+            .from('cash_drawer_transactions')
+            .insert({
+              drawer_id: drawer.id,
+              record_id: source.id,
+              transaction_type: 'withdrawal',
+              amount: -withdrawFromSource,
+              balance_after: newBalance,
+              notes: `سحب من الخزنة (سحب الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+              performed_by: user?.name || 'system'
+            })
+        }
+
+        // Refresh balances
+        fetchCashDrawerBalance()
+        fetchChildSafes()
+
+        // Reset form
+        setWithdrawAmount('')
+        setWithdrawNotes('')
+        setTargetSafeId('')
+        setWithdrawSourceId('')
+        setWithdrawAllMode(null)
+        setShowWithdrawModal(false)
+        alert(`تم سحب ${amount} بنجاح`)
+      } catch (error: any) {
+        console.error('Error in withdraw all:', error)
+        alert(`حدث خطأ: ${error.message}`)
+      } finally {
+        setIsWithdrawing(false)
+      }
       return
     }
 
@@ -1947,7 +2086,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           amount: transactionAmount,
           balance_after: newSourceBalance,
           notes: transactionNotes,
-          performed_by: user?.name || 'system'
+          performed_by: user?.name || 'system',
+          ...(withdrawType === 'transfer' && targetSafeId ? { related_record_id: targetSafeId } : {})
         })
 
       if (txError) {
@@ -1988,7 +2128,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             })
             .eq('id', targetDrawer.id)
 
-          // Create deposit transaction for target
+          // Create deposit transaction for target with related_record_id
           const { error: targetTxError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
@@ -1998,7 +2138,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               amount: amount,
               balance_after: newTargetBalance,
               notes: `تحويل من خزنة ${safe.name}${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
-              performed_by: user?.name || 'system'
+              performed_by: user?.name || 'system',
+              related_record_id: sourceRecordId
             })
 
           if (targetTxError) {
@@ -2017,6 +2158,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       setWithdrawNotes('')
       setTargetSafeId('')
       setWithdrawSourceId('')
+      setWithdrawAllMode(null)
 
       // 7. Close modal and show success
       setShowWithdrawModal(false)
@@ -3290,6 +3432,127 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     </div>
                   )}
 
+                  {/* Operations Tab Content (Mobile) */}
+                  {activeTab === 'operations' && (
+                    <div className="p-3 space-y-3">
+                      {/* Summary Cards */}
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                          <div className="text-green-400 text-sm font-bold">{formatPrice(operationsSummary.deposits, 'system')}</div>
+                          <div className="text-gray-400 text-[10px] mt-0.5">إيداعات ↑</div>
+                        </div>
+                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                          <div className="text-red-400 text-sm font-bold">{formatPrice(operationsSummary.withdrawals, 'system')}</div>
+                          <div className="text-gray-400 text-[10px] mt-0.5">سحوبات ↓</div>
+                        </div>
+                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                          <div className="text-blue-400 text-sm font-bold">{formatPrice(operationsSummary.transfersIn, 'system')}</div>
+                          <div className="text-gray-400 text-[10px] mt-0.5">تحويلات واردة ←</div>
+                        </div>
+                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                          <div className="text-orange-400 text-sm font-bold">{formatPrice(operationsSummary.transfersOut, 'system')}</div>
+                          <div className="text-gray-400 text-[10px] mt-0.5">تحويلات صادرة →</div>
+                        </div>
+                      </div>
+
+                      {/* Type Filter */}
+                      <div className="flex gap-1.5 flex-wrap">
+                        {[
+                          { key: 'all', label: 'الكل' },
+                          { key: 'deposit', label: 'إيداع' },
+                          { key: 'withdrawal', label: 'سحب' },
+                          { key: 'transfer_in', label: 'وارد' },
+                          { key: 'transfer_out', label: 'صادر' }
+                        ].map(f => (
+                          <button
+                            key={f.key}
+                            onClick={() => setOperationsTypeFilter(f.key)}
+                            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+                              operationsTypeFilter === f.key
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-700 text-gray-300'
+                            }`}
+                          >
+                            {f.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Transaction List */}
+                      {isLoadingOperations ? (
+                        <div className="flex items-center justify-center py-8">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                        </div>
+                      ) : filteredOperations.length === 0 ? (
+                        <div className="text-center py-8 text-gray-400">لا توجد معاملات</div>
+                      ) : (
+                        filteredOperations.map((op) => {
+                          const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
+                            'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-500/20' },
+                            'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-500/20' },
+                            'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-500/20' },
+                            'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-500/20' }
+                          }
+                          const typeInfo = typeMap[op.transaction_type || ''] || { text: op.transaction_type || '-', color: 'text-gray-400', bg: 'bg-gray-500/20' }
+                          const isPositive = (op.amount || 0) >= 0
+                          return (
+                            <div key={op.id} className="bg-[#374151] rounded-lg p-3">
+                              <div className="flex justify-between items-start mb-2">
+                                <span className={`px-2 py-0.5 rounded text-xs font-medium ${typeInfo.bg} ${typeInfo.color}`}>
+                                  {typeInfo.text}
+                                </span>
+                                <span className={`font-bold text-lg ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+                                  {isPositive ? '+' : ''}{formatPrice(op.amount || 0, 'system')}
+                                </span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs border-t border-gray-600 pt-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-500">التاريخ:</span>
+                                  <span className="text-gray-300">{op.created_at ? new Date(op.created_at).toLocaleDateString('en-GB') : '-'}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-500">الساعة:</span>
+                                  <span className="text-gray-300">{op.created_at ? new Date(op.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : '-'}</span>
+                                </div>
+                                {op.safe_name && (
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">الدرج:</span>
+                                    <span className="text-purple-400">{op.safe_name}</span>
+                                  </div>
+                                )}
+                                {(op.transaction_type === 'transfer_in' || op.transaction_type === 'transfer_out') && (
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">من/إلى:</span>
+                                    <span className="text-cyan-400">{op.related_safe_name || '-'}</span>
+                                  </div>
+                                )}
+                                {op.performed_by && (
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">الموظف:</span>
+                                    <span className="text-yellow-400">{op.performed_by}</span>
+                                  </div>
+                                )}
+                              </div>
+                              {op.notes && (
+                                <div className="mt-2 text-xs text-gray-300 bg-[#2B3544] rounded p-2">
+                                  {op.notes}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })
+                      )}
+                      {/* Sentinel for infinite scroll */}
+                      <div ref={operationsSentinelRef} className="h-4" />
+                      {isLoadingMoreOperations && (
+                        <div className="flex items-center justify-center py-4">
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                          <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Statement Tab Content */}
                   {activeTab === 'statement' && (
                     <div className="p-4 space-y-3">
@@ -3432,6 +3695,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     <span className="text-sm">📊</span>
                     <span className="text-xs font-medium">كشف الحساب</span>
                   </button>
+
+                  <button
+                    onClick={() => setActiveTab('operations')}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
+                      activeTab === 'operations'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    <span className="text-sm">🔄</span>
+                    <span className="text-xs font-medium">المعاملات</span>
+                  </button>
                 </div>
               </>
             )}
@@ -3505,6 +3780,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     }`}
                   >
                     فواتير الخزنة ({allTransactions.length})
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('operations')}
+                    className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
+                      activeTab === 'operations'
+                        ? 'text-blue-400 border-blue-400 bg-blue-600/10'
+                        : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                    }`}
+                  >
+                    المعاملات
                   </button>
                 </div>
 
@@ -4222,6 +4507,166 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     </div>
                   </div>
                 )}
+
+                {activeTab === 'operations' && (
+                  <div className="h-full flex flex-col">
+                    {/* Operations Header - Summary Cards */}
+                    <div className="bg-[#2B3544] border-b border-gray-600 p-4">
+                      <div className="grid grid-cols-4 gap-3 mb-4">
+                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                          <div className="text-green-400 text-lg font-bold">{formatPrice(operationsSummary.deposits, 'system')}</div>
+                          <div className="text-gray-400 text-xs mt-1">إيداعات ↑</div>
+                        </div>
+                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                          <div className="text-red-400 text-lg font-bold">{formatPrice(operationsSummary.withdrawals, 'system')}</div>
+                          <div className="text-gray-400 text-xs mt-1">سحوبات ↓</div>
+                        </div>
+                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                          <div className="text-blue-400 text-lg font-bold">{formatPrice(operationsSummary.transfersIn, 'system')}</div>
+                          <div className="text-gray-400 text-xs mt-1">تحويلات واردة ←</div>
+                        </div>
+                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                          <div className="text-orange-400 text-lg font-bold">{formatPrice(operationsSummary.transfersOut, 'system')}</div>
+                          <div className="text-gray-400 text-xs mt-1">تحويلات صادرة →</div>
+                        </div>
+                      </div>
+
+                      {/* Type Filter Buttons */}
+                      <div className="flex gap-2 flex-wrap">
+                        {[
+                          { key: 'all', label: 'الكل' },
+                          { key: 'deposit', label: 'إيداع' },
+                          { key: 'withdrawal', label: 'سحب' },
+                          { key: 'transfer_in', label: 'تحويل وارد' },
+                          { key: 'transfer_out', label: 'تحويل صادر' }
+                        ].map(f => (
+                          <button
+                            key={f.key}
+                            onClick={() => setOperationsTypeFilter(f.key)}
+                            className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                              operationsTypeFilter === f.key
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            }`}
+                          >
+                            {f.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Operations Table */}
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                      {isLoadingOperations ? (
+                        <div className="flex items-center justify-center h-full">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                          <span className="text-gray-400">جاري تحميل المعاملات...</span>
+                        </div>
+                      ) : filteredOperations.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full p-8">
+                          <div className="text-6xl mb-4">🔄</div>
+                          <p className="text-gray-400 text-lg mb-2">لا توجد معاملات</p>
+                          <p className="text-gray-500 text-sm">الإيداعات والسحوبات والتحويلات ستظهر هنا</p>
+                        </div>
+                      ) : (
+                        <div className="flex-1 overflow-auto scrollbar-hide">
+                          <ResizableTable
+                            className="h-full w-full"
+                            columns={[
+                              {
+                                id: 'index',
+                                header: '#',
+                                accessor: '#',
+                                width: 50,
+                                render: (_v: any, _item: any, index: number) => <span className="text-gray-400">{index + 1}</span>
+                              },
+                              {
+                                id: 'date',
+                                header: 'التاريخ',
+                                accessor: 'created_at',
+                                width: 100,
+                                render: (value: string) => <span className="text-white">{value ? new Date(value).toLocaleDateString('en-GB') : '-'}</span>
+                              },
+                              {
+                                id: 'time',
+                                header: 'الساعة',
+                                accessor: 'created_at',
+                                width: 90,
+                                render: (value: string) => <span className="text-blue-400">{value ? new Date(value).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : '-'}</span>
+                              },
+                              {
+                                id: 'type',
+                                header: 'نوع العملية',
+                                accessor: 'transaction_type',
+                                width: 120,
+                                render: (value: string) => {
+                                  const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
+                                    'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
+                                    'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
+                                    'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-600/20 border-blue-600' },
+                                    'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-600/20 border-orange-600' }
+                                  }
+                                  const typeInfo = typeMap[value] || { text: value || '-', color: 'text-gray-400', bg: 'bg-gray-600/20 border-gray-600' }
+                                  return <span className={`px-2 py-1 rounded text-xs font-medium border ${typeInfo.bg} ${typeInfo.color}`}>{typeInfo.text}</span>
+                                }
+                              },
+                              {
+                                id: 'amount',
+                                header: 'المبلغ',
+                                accessor: 'amount',
+                                width: 130,
+                                render: (value: number) => {
+                                  const isPositive = (value || 0) >= 0
+                                  return <span className={`font-medium ${isPositive ? 'text-green-400' : 'text-red-400'}`}>{isPositive ? '+' : ''}{formatPrice(value || 0, 'system')}</span>
+                                }
+                              },
+                              {
+                                id: 'drawer_name',
+                                header: 'الدرج',
+                                accessor: 'safe_name',
+                                width: 120,
+                                render: (value: string) => <span className="text-purple-400">{value || '-'}</span>
+                              },
+                              {
+                                id: 'related',
+                                header: 'من/إلى',
+                                accessor: 'related_safe_name',
+                                width: 120,
+                                render: (value: string, item: any) => {
+                                  if (item.transaction_type !== 'transfer_in' && item.transaction_type !== 'transfer_out') return <span className="text-gray-500">-</span>
+                                  return <span className="text-cyan-400">{value || '-'}</span>
+                                }
+                              },
+                              {
+                                id: 'notes',
+                                header: 'البيان',
+                                accessor: 'notes',
+                                width: 200,
+                                render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+                              },
+                              {
+                                id: 'employee',
+                                header: 'الموظف',
+                                accessor: 'performed_by',
+                                width: 120,
+                                render: (value: string) => <span className="text-yellow-400">{value || '-'}</span>
+                              }
+                            ]}
+                            data={filteredOperations}
+                          />
+                          {/* Sentinel element for infinite scroll */}
+                          <div ref={operationsSentinelRef} className="h-4" />
+                          {isLoadingMoreOperations && (
+                            <div className="flex items-center justify-center py-4">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                              <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -4275,12 +4720,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               <div className="bg-purple-600/20 border border-purple-500 rounded p-3 text-center">
                 <div className="text-purple-300 text-sm">
                   {safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
-                    ? (withdrawSourceId === 'transfers' ? 'رصيد التحويلات' : `رصيد ${childSafes.find(c => c.id === withdrawSourceId)?.name || 'الدرج'}`)
+                    ? (withdrawSourceId === 'all' ? 'الرصيد الإجمالي' : withdrawSourceId === 'transfers' ? 'رصيد التحويلات' : `رصيد ${childSafes.find(c => c.id === withdrawSourceId)?.name || 'الدرج'}`)
                     : 'الرصيد الحالي'}
                 </div>
                 <div className="text-white text-xl font-bold">{formatPrice(
                   safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
-                    ? (withdrawSourceId === 'transfers'
+                    ? (withdrawSourceId === 'all' ? safeBalance : withdrawSourceId === 'transfers'
                       ? mainSafeOwnBalance
                       : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
                     : safeBalance
@@ -4292,7 +4737,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 <label className="block text-gray-300 text-sm mb-2 text-right">نوع العملية</label>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setWithdrawType('withdraw')}
+                    onClick={() => { setWithdrawType('withdraw'); setShowWithdrawSuggestions(false) }}
                     className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
                       withdrawType === 'withdraw'
                         ? 'bg-red-600 text-white'
@@ -4302,7 +4747,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     سحب
                   </button>
                   <button
-                    onClick={() => setWithdrawType('deposit')}
+                    onClick={() => { setWithdrawType('deposit'); setShowWithdrawSuggestions(false) }}
                     className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
                       withdrawType === 'deposit'
                         ? 'bg-green-600 text-white'
@@ -4312,7 +4757,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     إيداع
                   </button>
                   <button
-                    onClick={() => setWithdrawType('transfer')}
+                    onClick={() => { setWithdrawType('transfer'); setShowWithdrawSuggestions(false) }}
                     className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
                       withdrawType === 'transfer'
                         ? 'bg-blue-600 text-white'
@@ -4332,10 +4777,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   </label>
                   <select
                     value={withdrawSourceId}
-                    onChange={(e) => setWithdrawSourceId(e.target.value)}
+                    onChange={(e) => { setWithdrawSourceId(e.target.value); setShowWithdrawSuggestions(false); setWithdrawAllMode(null); setWithdrawAmount('') }}
                     className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">اختر المصدر...</option>
+                    {withdrawType === 'withdraw' && (
+                      <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
+                    )}
                     {childSafes.map(drawer => (
                       <option key={drawer.id} value={drawer.id}>
                         {drawer.name} ({formatPrice(drawer.balance, 'system')})
@@ -4365,38 +4813,113 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 </div>
               )}
 
-              {/* Amount */}
-              <div>
-                <label className="block text-gray-300 text-sm mb-2 text-right">المبلغ</label>
-                <input
-                  type="number"
-                  value={withdrawAmount}
-                  onChange={(e) => setWithdrawAmount(e.target.value)}
-                  placeholder="أدخل المبلغ"
-                  className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
-                  min="0"
-                  max={withdrawType === 'deposit' ? undefined : (
-                    safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+              {/* Amount - different UI when "الكل" is selected */}
+              {withdrawSourceId === 'all' && withdrawType === 'withdraw' ? (
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2 text-right">اختر طريقة السحب</label>
+                  <div className="space-y-2">
+                    {(() => {
+                      const totalReserves = reserves.reduce((sum, r) => sum + r.amount, 0)
+                      const balanceExcludingReserves = Math.max(0, safeBalance - totalReserves)
+                      return (
+                        <>
+                          <button
+                            onClick={() => {
+                              setWithdrawAllMode('full')
+                              setWithdrawAmount(safeBalance.toString())
+                            }}
+                            className={`w-full text-right px-4 py-3 rounded-lg text-sm font-medium transition-colors border ${
+                              withdrawAllMode === 'full'
+                                ? 'bg-red-600/30 border-red-500 text-red-300'
+                                : 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
+                            }`}
+                          >
+                            سحب الرصيد بالكامل ({formatPrice(safeBalance, 'system')})
+                          </button>
+                          {totalReserves > 0 && (
+                            <button
+                              onClick={() => {
+                                setWithdrawAllMode('excluding_reserves')
+                                setWithdrawAmount(balanceExcludingReserves.toString())
+                              }}
+                              className={`w-full text-right px-4 py-3 rounded-lg text-sm font-medium transition-colors border ${
+                                withdrawAllMode === 'excluding_reserves'
+                                  ? 'bg-orange-600/30 border-orange-500 text-orange-300'
+                                  : 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
+                              }`}
+                            >
+                              سحب الرصيد بدون المجنب ({formatPrice(balanceExcludingReserves, 'system')})
+                            </button>
+                          )}
+                        </>
+                      )
+                    })()}
+                  </div>
+                  {/* Show selected amount confirmation */}
+                  {withdrawAllMode && withdrawAmount && (
+                    <div className="mt-3 bg-green-600/20 border border-green-600 rounded p-2.5 text-center">
+                      <span className="text-green-300 text-sm">المبلغ: {formatPrice(parseFloat(withdrawAmount), 'system')}</span>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2 text-right">المبلغ</label>
+                  <input
+                    type="number"
+                    value={withdrawAmount}
+                    onChange={(e) => setWithdrawAmount(e.target.value)}
+                    placeholder="أدخل المبلغ"
+                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                    min="0"
+                    max={withdrawType === 'deposit' ? undefined : (
+                      safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                        ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
+                        : safeBalance
+                    )}
+                    step="0.01"
+                  />
+                  {/* اقتراحات السحب - فقط للسحب والتحويل */}
+                  {withdrawType !== 'deposit' && (() => {
+                    const sourceBalanceForButton = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                       ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
                       : safeBalance
-                  )}
-                  step="0.01"
-                />
-                {/* زر سحب الرصيد بالكامل - فقط للسحب والتحويل */}
-                {withdrawType !== 'deposit' && (() => {
-                  const sourceBalanceForButton = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
-                    ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
-                    : safeBalance
-                  return sourceBalanceForButton > 0 ? (
-                    <button
-                      onClick={() => setWithdrawAmount(sourceBalanceForButton.toString())}
-                      className="mt-2 text-xs text-blue-400 hover:text-blue-300"
-                    >
-                      سحب الرصيد بالكامل ({formatPrice(sourceBalanceForButton, 'system')})
-                    </button>
-                  ) : null
-                })()}
-              </div>
+                    const sourceReserves = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                      ? reserves.filter(r => r.record_id === (withdrawSourceId === 'transfers' ? safe.id : withdrawSourceId)).reduce((sum, r) => sum + r.amount, 0)
+                      : reserves.reduce((sum, r) => sum + r.amount, 0)
+                    const balanceExcludingReserves = Math.max(0, sourceBalanceForButton - sourceReserves)
+                    return sourceBalanceForButton > 0 ? (
+                      <div className="mt-2 relative">
+                        <button
+                          onClick={() => setShowWithdrawSuggestions(!showWithdrawSuggestions)}
+                          className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                        >
+                          اقتراحات
+                          <svg className={`w-3 h-3 transition-transform ${showWithdrawSuggestions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        {showWithdrawSuggestions && (
+                          <div className="mt-1 bg-gray-700 border border-gray-600 rounded-lg overflow-hidden">
+                            <button
+                              onClick={() => { setWithdrawAmount(sourceBalanceForButton.toString()); setShowWithdrawSuggestions(false) }}
+                              className="w-full text-right text-xs text-gray-200 hover:bg-gray-600 px-3 py-2 transition-colors"
+                            >
+                              سحب الرصيد بالكامل ({formatPrice(sourceBalanceForButton, 'system')})
+                            </button>
+                            {sourceReserves > 0 && (
+                              <button
+                                onClick={() => { setWithdrawAmount(balanceExcludingReserves.toString()); setShowWithdrawSuggestions(false) }}
+                                className="w-full text-right text-xs text-gray-200 hover:bg-gray-600 px-3 py-2 border-t border-gray-600 transition-colors"
+                              >
+                                سحب الرصيد بدون المجنب ({formatPrice(balanceExcludingReserves, 'system')})
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ) : null
+                  })()}
+                </div>
+              )}
 
               {/* Notes */}
               <div>
@@ -4421,7 +4944,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               </button>
               <button
                 onClick={handleWithdraw}
-                disabled={isWithdrawing || !withdrawAmount || parseFloat(withdrawAmount) <= 0}
+                disabled={isWithdrawing || !withdrawAmount || parseFloat(withdrawAmount) <= 0 || (withdrawSourceId === 'all' && !withdrawAllMode)}
                 className={`flex-1 py-2 px-4 rounded text-sm font-medium transition-colors ${
                   withdrawType === 'deposit'
                     ? 'bg-green-600 hover:bg-green-700 text-white disabled:bg-green-800 disabled:cursor-not-allowed'
