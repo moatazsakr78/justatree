@@ -358,10 +358,22 @@ export default function POSTabletView({
             {/* First 3 Selection Buttons with Red Dot Indicator */}
             <button
               onClick={() => setIsRecordsModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-all relative"
+              className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all relative ${
+                selections.record ? 'text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'text-gray-300 hover:text-white hover:bg-gray-600/30'
+              }`}
             >
               <BanknotesIcon className="h-4 w-4" />
-              <span>الخزنة</span>
+              <span>
+                {selections.record?.name ? (
+                  selections.subSafe?.name ? (
+                    <>
+                      <span>{selections.record.name}</span>
+                      {' '}
+                      <span className="text-yellow-400">{selections.subSafe.name}</span>
+                    </>
+                  ) : selections.record.name
+                ) : 'الخزنة'}
+              </span>
               {!selections.record && (
                 <div className="w-1.5 h-1.5 bg-red-400 rounded-full absolute top-1 right-1"></div>
               )}

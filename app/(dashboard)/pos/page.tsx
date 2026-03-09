@@ -375,13 +375,13 @@ function POSPageContent() {
 
   // Sync branch from context to global selections when context branch changes
   useEffect(() => {
-    if (contextBranch && selectionsLoaded) {
+    if (contextBranch) {
       // Only update if the branch is different to avoid loops
       if (!globalSelections.branch || globalSelections.branch.id !== contextBranch.id) {
         setGlobalBranch(contextBranch);
       }
     }
-  }, [contextBranch, selectionsLoaded, globalSelections.branch, setGlobalBranch]);
+  }, [contextBranch, globalSelections.branch, setGlobalBranch]);
 
   // Get selections from active tab (tab-specific selections)
   const selections = useMemo(() => {
@@ -446,8 +446,8 @@ function POSPageContent() {
   }, [activeTabId, clearGlobalSelections, updateActiveTabSelections]);
 
   const hasRequiredForCart = useCallback(() => {
-    return selections.branch !== null;
-  }, [selections.branch]);
+    return selections.branch !== null || contextBranch !== null;
+  }, [selections.branch, contextBranch]);
 
   const hasRequiredForSale = useCallback(() => {
     // عند البيع لمورد، نتحقق من وجود المورد بدلاً من العميل
@@ -460,8 +460,8 @@ function POSPageContent() {
 
   // Current branch for cart items - الفرع الحالي لإضافته للمنتجات في السلة
   const currentBranch = useMemo(() => {
-    return selections.branch;
-  }, [selections.branch]);
+    return selections.branch || contextBranch;
+  }, [selections.branch, contextBranch]);
 
   // إظهار اسم الفرع جنب كل منتج فقط لو فيه أكتر من فرع في السلة
   const showBranchPerItem = useMemo(() => {
@@ -2359,7 +2359,7 @@ function POSPageContent() {
 
       // التحقق من المتطلبات قبل الإضافة
       if (isPurchaseMode) {
-        if (!selectedSupplier || !selections.branch || !selections.record) {
+        if (!selectedSupplier || (!selections.branch && !contextBranch) || !selections.record) {
           return; // لا تضيف - المتطلبات غير مكتملة
         }
       } else if (isTransferMode) {
@@ -2547,7 +2547,7 @@ function POSPageContent() {
   const handleProductClick = (product: any) => {
     // Check if required selections are made before allowing cart operations
     if (isPurchaseMode) {
-      if (!selectedSupplier || !selections.branch || !selections.record) {
+      if (!selectedSupplier || (!selections.branch && !contextBranch) || !selections.record) {
         alert("يجب تحديد المورد والفرع والخزنة أولاً قبل إضافة المنتجات للسلة");
         return;
       }
@@ -4962,10 +4962,22 @@ function POSPageContent() {
                 {/* Selection Buttons - First three buttons grouped together */}
                 <button
                   onClick={toggleRecordsModal}
-                  className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px] transition-all relative"
+                  className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
+                    selections.record ? 'text-green-400 hover:text-green-300' : 'text-gray-300 hover:text-white'
+                  }`}
                 >
                   <BanknotesIcon className="h-5 w-5 mb-1" />
-                  <span className="text-sm">الخزنة</span>
+                  <span className="text-sm">
+                    {selections.record?.name ? (
+                      selections.subSafe?.name ? (
+                        <>
+                          <span>{selections.record.name}</span>
+                          {' '}
+                          <span className="text-yellow-400 text-xs">{selections.subSafe.name}</span>
+                        </>
+                      ) : selections.record.name
+                    ) : 'الخزنة'}
+                  </span>
                   {!selections.record && (
                     <div className="w-1 h-1 bg-red-400 rounded-full mt-1"></div>
                   )}
@@ -5132,7 +5144,7 @@ function POSPageContent() {
                   disabled={!selections.record}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     selections.record
-                      ? "text-yellow-400 hover:text-yellow-300"
+                      ? "text-gray-300 hover:text-white"
                       : "text-gray-500 cursor-not-allowed"
                   }`}
                   title={selections.record ? `مصروفات/إضافة - ${selections.record.name}` : "يجب اختيار سجل أولاً"}
@@ -5448,7 +5460,9 @@ function POSPageContent() {
               {/* زرار الخزنة */}
               <button
                 onClick={toggleRecordsModal}
-                className="flex items-center gap-1 px-2 py-1.5 bg-[#374151] border border-gray-600 rounded text-gray-300 hover:text-white hover:bg-[#4B5563] text-xs whitespace-nowrap flex-shrink-0"
+                className={`flex items-center gap-1 px-2 py-1.5 bg-[#374151] border rounded text-xs whitespace-nowrap flex-shrink-0 ${
+                  selections.record ? 'border-green-500/50 text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'border-gray-600 text-gray-300 hover:text-white hover:bg-[#4B5563]'
+                }`}
               >
                 <BanknotesIcon className="h-3.5 w-3.5" />
                 <span>
@@ -6992,7 +7006,7 @@ function POSPageContent() {
         product={modalProduct}
         onAddToCart={handleColorSelection}
         hasRequiredForCart={hasRequiredForCart()}
-        selectedBranchId={selections.branch?.id}
+        selectedBranchId={selections.branch?.id || contextBranch?.id}
         isPurchaseMode={isPurchaseMode}
         isTransferMode={isTransferMode}
         transferFromLocation={transferFromLocation}

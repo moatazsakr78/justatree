@@ -327,7 +327,8 @@ export default function SafesPage() {
       'sale': { bg: 'bg-green-900', text: 'text-green-300', label: 'بيع' },
       'return': { bg: 'bg-orange-900', text: 'text-orange-300', label: 'مرتجع' },
       'withdrawal': { bg: 'bg-red-900', text: 'text-red-300', label: 'سحب' },
-      'deposit': { bg: 'bg-blue-900', text: 'text-blue-300', label: 'إيداع' },
+      'deposit': { bg: 'bg-green-900', text: 'text-green-300', label: 'إضافه' },
+      'expense': { bg: 'bg-red-900', text: 'text-red-300', label: 'مصروفات' },
       'adjustment': { bg: 'bg-purple-900', text: 'text-purple-300', label: 'تسوية' },
       'transfer_in': { bg: 'bg-cyan-900', text: 'text-cyan-300', label: 'تحويل' },
       'transfer_out': { bg: 'bg-cyan-900', text: 'text-cyan-300', label: 'تحويل' }
@@ -821,7 +822,8 @@ export default function SafesPage() {
                   <option value="sale">بيع</option>
                   <option value="return">مرتجع</option>
                   <option value="withdrawal">سحب</option>
-                  <option value="deposit">إيداع</option>
+                  <option value="deposit">إضافه</option>
+                  <option value="expense">مصروفات</option>
                   <option value="adjustment">تسوية</option>
                   <option value="transfer">تحويل</option>
                 </select>

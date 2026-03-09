@@ -2520,6 +2520,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             ? 'bg-purple-600/20 text-purple-400 border border-purple-600'
             : value === 'رصيد أولي'
             ? 'bg-cyan-600/20 text-cyan-400 border border-cyan-600'
+            : value === 'إضافه'
+            ? 'bg-green-600/20 text-green-400 border border-green-600'
+            : value === 'مصروفات'
+            ? 'bg-red-600/20 text-red-400 border border-red-600'
             : 'bg-gray-600/20 text-gray-400 border border-gray-600'
         }`}>
           {value}
@@ -2794,9 +2798,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       width: 120,
       render: (value: string) => {
         const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
-          'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
+          'deposit': { text: 'إضافه', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
           'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
-          'expense': { text: 'مصروف', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
+          'expense': { text: 'مصروفات', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
           'adjustment': { text: 'تسوية', color: 'text-yellow-400', bg: 'bg-yellow-600/20 border-yellow-600' },
           'transfer_in': { text: 'تحويل وارد', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
           'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-600/20 border-orange-600' },
@@ -3562,9 +3566,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       <div className="flex gap-1.5 flex-wrap">
                         {[
                           { key: 'all', label: 'الكل' },
-                          { key: 'deposit', label: 'إيداع' },
+                          { key: 'deposit', label: 'إضافه' },
                           { key: 'withdrawal', label: 'سحب' },
-                          { key: 'expense', label: 'مصروف' },
+                          { key: 'expense', label: 'مصروفات' },
                           { key: 'transfer_in', label: 'وارد' },
                           { key: 'transfer_out', label: 'صادر' }
                         ].map(f => (
@@ -3592,9 +3596,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       ) : (
                         filteredOperations.map((op) => {
                           const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
-                            'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-500/20' },
+                            'deposit': { text: 'إضافه', color: 'text-green-400', bg: 'bg-green-500/20' },
                             'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-500/20' },
-                            'expense': { text: 'مصروف', color: 'text-red-400', bg: 'bg-red-500/20' },
+                            'expense': { text: 'مصروفات', color: 'text-red-400', bg: 'bg-red-500/20' },
                             'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-500/20' },
                             'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-500/20' }
                           }
@@ -3697,7 +3701,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                   ? 'border-2 border-blue-700/50'
                                   : statement.type === 'مرتجع بيع'
                                     ? 'border-2 border-red-700/50'
-                                    : 'border-2 border-gray-600/50'
+                                    : statement.type === 'إضافه'
+                                      ? 'border-2 border-green-700/50'
+                                      : statement.type === 'مصروفات'
+                                        ? 'border-2 border-red-700/50'
+                                        : 'border-2 border-gray-600/50'
                             }`}
                           >
                             {/* الصف العلوي: نوع العملية + التاريخ */}
@@ -3709,11 +3717,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                     ? 'bg-blue-900 text-blue-300'
                                     : statement.type === 'مرتجع بيع'
                                       ? 'bg-red-900 text-red-300'
-                                      : statement.type === 'إيداع'
+                                      : statement.type === 'إضافه'
                                         ? 'bg-emerald-900 text-emerald-300'
-                                        : statement.type === 'سحب'
-                                          ? 'bg-orange-900 text-orange-300'
-                                          : 'bg-gray-700 text-gray-300'
+                                        : statement.type === 'مصروفات'
+                                          ? 'bg-red-900 text-red-300'
+                                          : statement.type === 'سحب'
+                                            ? 'bg-orange-900 text-orange-300'
+                                            : 'bg-gray-700 text-gray-300'
                               }`}>
                                 {statement.type}
                               </span>
@@ -4689,9 +4699,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       <div className="flex gap-2 flex-wrap">
                         {[
                           { key: 'all', label: 'الكل' },
-                          { key: 'deposit', label: 'إيداع' },
+                          { key: 'deposit', label: 'إضافه' },
                           { key: 'withdrawal', label: 'سحب' },
-                          { key: 'expense', label: 'مصروف' },
+                          { key: 'expense', label: 'مصروفات' },
                           { key: 'transfer_in', label: 'تحويل وارد' },
                           { key: 'transfer_out', label: 'تحويل صادر' }
                         ].map(f => (
@@ -4756,9 +4766,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 width: 120,
                                 render: (value: string) => {
                                   const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
-                                    'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
+                                    'deposit': { text: 'إضافه', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
                                     'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
-                                    'expense': { text: 'مصروف', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
+                                    'expense': { text: 'مصروفات', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
                                     'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-600/20 border-blue-600' },
                                     'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-600/20 border-orange-600' }
                                   }

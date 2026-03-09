@@ -115,8 +115,10 @@ export function useInfiniteStatements(
         typeName = 'سحب'
       } else if (tx.transaction_type === 'adjustment') {
         typeName = 'تسوية'
+      } else if (tx.transaction_type === 'expense') {
+        typeName = 'مصروفات'
       } else if (tx.transaction_type === 'deposit') {
-        typeName = 'إيداع'
+        typeName = 'إضافه'
       } else if (tx.transaction_type === 'return') {
         typeName = 'مرتجع بيع'
       } else if (tx.transaction_type === 'transfer_out') {

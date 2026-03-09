@@ -238,8 +238,8 @@ export default function CashDrawerModal({
       sale: { text: "بيع", color: "text-green-400" },
       return: { text: "مرتجع", color: "text-red-400" },
       withdrawal: { text: "سحب", color: "text-orange-400" },
-      deposit: { text: "إيداع", color: "text-blue-400" },
-      expense: { text: "مصروف", color: "text-red-400" },
+      deposit: { text: "إضافه", color: "text-green-400" },
+      expense: { text: "مصروفات", color: "text-red-400" },
       adjustment: { text: "تعديل", color: "text-gray-400" },
     };
     return labels[type] || { text: type, color: "text-gray-400" };

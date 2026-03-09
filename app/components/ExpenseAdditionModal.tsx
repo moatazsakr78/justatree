@@ -139,7 +139,7 @@ export default function ExpenseAdditionModal({
 
       if (txnError) throw txnError;
 
-      const label = isExpense ? "مصروف" : "إضافة";
+      const label = isExpense ? "مصروفات" : "إضافه";
       alert(`تم تسجيل ${label} بمبلغ ${parsedAmount.toFixed(2)} بنجاح`);
 
       // Reset form and close
