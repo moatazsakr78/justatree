@@ -335,6 +335,14 @@ export default function SettingsPage() {
   const [showTokenValue, setShowTokenValue] = useState(false);
   const [isSavingToken, setIsSavingToken] = useState(false);
 
+  // Gemini API Key State
+  const [geminiKeyConfigured, setGeminiKeyConfigured] = useState(false);
+  const [geminiKeyLastUpdated, setGeminiKeyLastUpdated] = useState<string | null>(null);
+  const [showGeminiKeyInput, setShowGeminiKeyInput] = useState(false);
+  const [newGeminiKey, setNewGeminiKey] = useState('');
+  const [showGeminiKeyValue, setShowGeminiKeyValue] = useState(false);
+  const [isSavingGeminiKey, setIsSavingGeminiKey] = useState(false);
+
   // Store Display Settings using hook
   const {
     showQuantityInStore,
@@ -387,10 +395,17 @@ export default function SettingsPage() {
   useEffect(() => {
     const loadSecuritySettings = async () => {
       try {
-        const response = await fetch('/api/settings/api-keys?key=wasender_api_token');
-        const data = await response.json();
-        setWasenderTokenConfigured(data.isConfigured || false);
-        setWasenderTokenLastUpdated(data.updatedAt || null);
+        const [wasenderRes, geminiRes] = await Promise.all([
+          fetch('/api/settings/api-keys?key=wasender_api_token'),
+          fetch('/api/settings/api-keys?key=gemini_api_key'),
+        ]);
+        const wasenderData = await wasenderRes.json();
+        setWasenderTokenConfigured(wasenderData.isConfigured || false);
+        setWasenderTokenLastUpdated(wasenderData.updatedAt || null);
+
+        const geminiData = await geminiRes.json();
+        setGeminiKeyConfigured(geminiData.isConfigured || false);
+        setGeminiKeyLastUpdated(geminiData.updatedAt || null);
       } catch (error) {
         console.error('Error loading security settings:', error);
       } finally {
@@ -1716,6 +1731,68 @@ export default function SettingsPage() {
     }
   };
 
+  const handleSaveGeminiKey = async () => {
+    if (!newGeminiKey.trim()) {
+      alert('يرجى إدخال مفتاح API');
+      return;
+    }
+
+    setIsSavingGeminiKey(true);
+    try {
+      const response = await fetch('/api/settings/api-keys', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: 'gemini_api_key',
+          value: newGeminiKey.trim()
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setGeminiKeyConfigured(true);
+        setGeminiKeyLastUpdated(new Date().toISOString());
+        setShowGeminiKeyInput(false);
+        setNewGeminiKey('');
+        alert('تم حفظ مفتاح Gemini API بنجاح!');
+        activityLog({ entityType: 'setting', actionType: 'update', description: 'حفظ مفتاح Gemini API' });
+      } else {
+        throw new Error(data.error || 'Failed to save key');
+      }
+    } catch (error) {
+      console.error('Error saving Gemini key:', error);
+      alert('حدث خطأ أثناء حفظ المفتاح');
+    } finally {
+      setIsSavingGeminiKey(false);
+    }
+  };
+
+  const handleDeleteGeminiKey = async () => {
+    const confirmDelete = window.confirm('هل أنت متأكد من حذف مفتاح Gemini API؟ ستتوقف ميزة تحسين الصور.');
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch('/api/settings/api-keys?key=gemini_api_key', {
+        method: 'DELETE'
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setGeminiKeyConfigured(false);
+        setGeminiKeyLastUpdated(null);
+        alert('تم حذف المفتاح بنجاح');
+        activityLog({ entityType: 'setting', actionType: 'delete', description: 'حذف مفتاح Gemini API' });
+      } else {
+        throw new Error(data.error || 'Failed to delete key');
+      }
+    } catch (error) {
+      console.error('Error deleting Gemini key:', error);
+      alert('حدث خطأ أثناء حذف المفتاح');
+    }
+  };
+
   const renderSecuritySettings = () => {
     return (
       <div className="space-y-6 max-w-4xl">
@@ -1851,6 +1928,147 @@ export default function SettingsPage() {
                         onClick={() => {
                           setShowTokenInput(false);
                           setNewToken('');
+                        }}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors"
+                      >
+                        إلغاء
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Gemini API Key Section */}
+        <div className="p-6 bg-[#374151] rounded-lg border border-gray-600">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-[#2B3544] rounded-lg">
+              <BoltIcon className="h-8 w-8 text-purple-400" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-white font-medium text-lg">Gemini API Key</h4>
+              <p className="text-gray-400 text-sm mt-1">
+                مفتاح API لتحسين صور المنتجات بالذكاء الاصطناعي (Google Gemini)
+              </p>
+
+              {isLoadingSecuritySettings ? (
+                <div className="mt-4 flex items-center gap-2 text-gray-400">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
+                  جاري التحميل...
+                </div>
+              ) : geminiKeyConfigured && !showGeminiKeyInput ? (
+                <div className="mt-4 space-y-4">
+                  <div className="flex items-center gap-3 p-3 bg-green-900/20 border border-green-800 rounded-lg">
+                    <CheckCircleIcon className="h-6 w-6 text-green-400 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-green-300 font-medium">المفتاح مُعد بنجاح</p>
+                      {geminiKeyLastUpdated && (
+                        <p className="text-gray-400 text-xs mt-1">
+                          آخر تحديث: {new Date(geminiKeyLastUpdated).toLocaleDateString('ar-EG', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-amber-900/20 border border-amber-800 rounded-lg">
+                    <ExclamationTriangleIcon className="h-5 w-5 text-amber-400 flex-shrink-0" />
+                    <p className="text-amber-300 text-sm">
+                      المفتاح مشفر ومحفوظ بأمان. لا يمكن عرضه مرة أخرى لأسباب أمنية.
+                    </p>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setShowGeminiKeyInput(true)}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                    >
+                      <KeyIcon className="h-4 w-4" />
+                      تغيير المفتاح
+                    </button>
+                    <button
+                      onClick={handleDeleteGeminiKey}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                    >
+                      حذف المفتاح
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-4 space-y-4">
+                  {geminiKeyConfigured && (
+                    <div className="flex items-center gap-3 p-3 bg-blue-900/20 border border-blue-800 rounded-lg">
+                      <ExclamationTriangleIcon className="h-5 w-5 text-blue-400 flex-shrink-0" />
+                      <p className="text-blue-300 text-sm">
+                        سيتم استبدال المفتاح الحالي بالمفتاح الجديد
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <label className="block text-white text-sm font-medium">
+                      {geminiKeyConfigured ? 'مفتاح جديد' : 'أدخل مفتاح Gemini API'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showGeminiKeyValue ? 'text' : 'password'}
+                        value={newGeminiKey}
+                        onChange={(e) => setNewGeminiKey(e.target.value)}
+                        placeholder="الصق مفتاح API هنا..."
+                        className="w-full px-4 py-3 bg-[#2B3544] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pr-12"
+                        style={{ direction: 'ltr', textAlign: 'left' }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowGeminiKeyValue(!showGeminiKeyValue)}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                      >
+                        {showGeminiKeyValue ? (
+                          <EyeSlashIcon className="h-5 w-5" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      احصل على المفتاح من Google AI Studio (aistudio.google.com/apikey)
+                    </p>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleSaveGeminiKey}
+                      disabled={isSavingGeminiKey || !newGeminiKey.trim()}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                        isSavingGeminiKey || !newGeminiKey.trim()
+                          ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                          : 'bg-green-600 hover:bg-green-700 text-white'
+                      }`}
+                    >
+                      {isSavingGeminiKey ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                          جاري الحفظ...
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircleIcon className="h-4 w-4" />
+                          حفظ المفتاح
+                        </>
+                      )}
+                    </button>
+                    {geminiKeyConfigured && (
+                      <button
+                        onClick={() => {
+                          setShowGeminiKeyInput(false);
+                          setNewGeminiKey('');
                         }}
                         className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors"
                       >

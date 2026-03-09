@@ -2625,17 +2625,8 @@ function POSPageContent() {
             alert('العميل الافتراضي لا يقبل البيع بالآجل - يجب دفع قيمة الفاتورة كاملة');
             return;
           }
-        } else {
-          // العملاء العاديين: يمكنهم الدفع أكثر من الفاتورة بشرط أن لا يتجاوز رصيدهم
-          const customerBalance = selections.customer?.credit_balance || selections.customer?.calculatedBalance || 0;
-          // الحد الأقصى للدفع = قيمة الفاتورة + رصيد العميل (ما عليه)
-          const maxPaymentAllowed = discountedTotal + customerBalance;
-
-          if (totalPaid > maxPaymentAllowed) {
-            alert(`المبلغ المدفوع (${totalPaid.toFixed(0)}) أعلى من رصيد العميل (${customerBalance.toFixed(0)}) + قيمة الفاتورة (${discountedTotal.toFixed(0)})`);
-            return;
-          }
         }
+        // العملاء العاديين: يمكنهم الدفع بأي مبلغ (الفائض يُخصم من رصيدهم أو يصبح رصيد دائن)
       }
       // عند البيع لمورد - يمكن البيع بأي مبلغ (سداد مديونية)
     }

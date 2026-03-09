@@ -275,18 +275,11 @@ export default function SafesPage() {
 
       if (!drawersError && drawers) {
         const balanceMap: Record<string, number> = {}
-        // Identify parent safes with drawers - exclude them from total to avoid double-counting
-        const parentWithDrawersIds = new Set(
-          (data || []).filter((s: Safe) => s.supports_drawers && s.safe_type === 'main').map((s: Safe) => s.id)
-        )
         let total = 0
         drawers.forEach((d: any) => {
           if (d.record_id) {
             balanceMap[d.record_id] = d.current_balance || 0
-            // Only count in total if not a parent safe with drawers
-            if (!parentWithDrawersIds.has(d.record_id)) {
-              total += d.current_balance || 0
-            }
+            total += d.current_balance || 0
           }
         })
         setSafeBalances(balanceMap)
@@ -1134,7 +1127,7 @@ export default function SafesPage() {
                               {children.length > 0 ? (
                                 <div className="flex items-center justify-between">
                                   <span className="text-gray-400 text-xs">الرصيد</span>
-                                  <span className="text-white font-bold text-lg">{formatPrice(childrenBalance)}</span>
+                                  <span className="text-white font-bold text-lg">{formatPrice(totalMainBalance)}</span>
                                 </div>
                               ) : (
                                 <div className="flex items-center justify-between">

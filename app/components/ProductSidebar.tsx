@@ -3661,6 +3661,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           productName={editProduct.name}
         />
       )}
+
     </>
   )
 }

@@ -361,7 +361,14 @@
       "Bash(python3:*)",
       "mcp__supabase__search_docs",
       "mcp__supabase__get_organization",
-      "Bash(wc -l \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\safes\\\\page.tsx\")"
+      "Bash(wc -l \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\safes\\\\page.tsx\")",
+      "WebFetch(domain:ai.google.dev)",
+      "Bash(npm list:*)",
+      "Bash(npm show:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:discuss.ai.google.dev)",
+      "WebFetch(domain:developers.googleblog.com)",
+      "Bash(find C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\pos:*)"
     ],
     "deny": [],
     "additionalDirectories": [

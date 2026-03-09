@@ -528,6 +528,8 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
   };
 
   const handleConfirmOrder = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       if (cartItems.length === 0) {
         alert('السلة فارغة! يرجى إضافة منتجات أولاً.');
@@ -643,6 +645,8 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
     } catch (error) {
       console.error('Error confirming order:', error);
       alert('حدث خطأ أثناء تأكيد الطلب. يرجى المحاولة مرة أخرى.');
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -1209,15 +1213,15 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                       <div className="space-y-3 mt-6">
                         <button
                           onClick={handleConfirmOrder}
-                          disabled={cartItems.length === 0}
+                          disabled={cartItems.length === 0 || isLoading}
                           className={`w-full font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm ${
-                            cartItems.length === 0
+                            cartItems.length === 0 || isLoading
                               ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                               : 'text-white hover:opacity-90'
                           }`}
-                          style={cartItems.length > 0 ? {backgroundColor: 'var(--primary-color)'} : {}}
+                          style={cartItems.length > 0 && !isLoading ? {backgroundColor: 'var(--primary-color)'} : {}}
                         >
-                          تأكيد الطلب ({Object.keys(groupedCartItems).length} منتج)
+                          {isLoading ? 'جاري إرسال الطلب...' : `تأكيد الطلب (${Object.keys(groupedCartItems).length} منتج)`}
                         </button>
                         
                         <button
@@ -1838,15 +1842,15 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                   <div className="space-y-3 mt-6">
                     <button
                       onClick={handleConfirmOrder}
-                      disabled={cartItems.length === 0}
+                      disabled={cartItems.length === 0 || isLoading}
                       className={`w-full font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm ${
-                        cartItems.length === 0
+                        cartItems.length === 0 || isLoading
                           ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                           : 'text-white hover:opacity-90'
                       }`}
-                      style={cartItems.length > 0 ? {backgroundColor: 'var(--primary-color)'} : {}}
+                      style={cartItems.length > 0 && !isLoading ? {backgroundColor: 'var(--primary-color)'} : {}}
                     >
-                      تأكيد الطلب ({Object.keys(groupedCartItems).length} منتج)
+                      {isLoading ? 'جاري إرسال الطلب...' : `تأكيد الطلب (${Object.keys(groupedCartItems).length} منتج)`}
                     </button>
                     
                     <button

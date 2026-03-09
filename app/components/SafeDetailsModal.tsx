@@ -707,18 +707,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
     try {
       // Determine which IDs to sum for balance
-      let balanceIds: string[]
-      if (!selectedDrawerFilters) {
-        // "All" mode: for safes with drawers, sum only children (+ additionalSafeIds)
-        // This matches the safes page behavior — the main safe's own record tracks
-        // digital/non-physical payment flows, not actual cash in drawers
-        balanceIds = (safe.supports_drawers && childSafeIds.length > 0)
-          ? [...childSafeIds, ...additionalSafeIds]
-          : allRecordIds
-      } else {
-        // Specific filter active: use filteredRecordIds as-is
-        balanceIds = filteredRecordIds
-      }
+      // "All" mode includes everything (drawers + transfers/main safe)
+      const balanceIds = filteredRecordIds
       const { data: drawers, error } = await supabase
         .from('cash_drawers')
         .select('current_balance')
@@ -744,10 +734,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     try {
       const aggregated: Record<string, number> = {}
 
-      // Same logic as balance: when no filter active, exclude main safe for drawer-based safes
-      const breakdownIds = (!selectedDrawerFilters && safe.supports_drawers && childSafeIds.length > 0)
-        ? [...childSafeIds, ...additionalSafeIds]
-        : filteredRecordIds
+      // Use filteredRecordIds which includes all relevant IDs for the current filter
+      const breakdownIds = filteredRecordIds
 
       // Call RPC for each safe and aggregate
       for (const id of breakdownIds) {
@@ -3170,7 +3158,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <div className="space-y-1.5">
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
                               <span className="text-white text-sm font-medium">{formatPrice(
-                                childSafes.reduce((sum, c) => sum + c.balance, 0)
+                                childSafes.reduce((sum, c) => sum + c.balance, 0) + mainSafeOwnBalance
                               )}</span>
                               <div className="flex items-center gap-2">
                                 <span className="text-gray-300 text-sm">الكل</span>
@@ -3877,7 +3865,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {/* All checkbox */}
                       <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
                         <span className="text-white font-medium text-sm">{formatPrice(
-                          childSafes.reduce((sum, c) => sum + c.balance, 0), 'system'
+                          childSafes.reduce((sum, c) => sum + c.balance, 0) + mainSafeOwnBalance, 'system'
                         )}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-gray-300 text-sm">الكل</span>
