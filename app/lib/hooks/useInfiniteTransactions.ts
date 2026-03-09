@@ -40,6 +40,7 @@ export interface UseInfiniteTransactionsOptions {
   pageSize?: number // Number of records per page (default 200)
   safes?: Array<{ id: string; name: string }> // List of safes for name mapping
   excludeSales?: boolean // If true, only show non-sale transactions (transfers)
+  excludeTransferTypes?: boolean // If true, exclude transfer_in/transfer_out transactions
 }
 
 // Return type for the hook
@@ -68,7 +69,8 @@ export function useInfiniteTransactions(
     enabled = true,
     pageSize = 200,
     safes = [],
-    excludeSales = false
+    excludeSales = false,
+    excludeTransferTypes = false
   } = options
 
   const [transactions, setTransactions] = useState<CashDrawerTransaction[]>([])
@@ -132,6 +134,11 @@ export function useInfiniteTransactions(
     // Filter for non-sale transactions only (transfers, deposits, withdrawals)
     if (currentOptions.excludeSales) {
       query = query.is('sale_id', null)
+    }
+
+    // Exclude transfer_in/transfer_out transactions (for non-drawer safe "في الخزنة" filter)
+    if (currentOptions.excludeTransferTypes) {
+      query = query.not('transaction_type', 'in', '("transfer_in","transfer_out")')
     }
 
     // Apply payment method filter
@@ -284,6 +291,11 @@ export function useInfiniteTransactions(
         query = query.is('sale_id', null)
       }
 
+      // Exclude transfer_in/transfer_out transactions (for non-drawer safe "في الخزنة" filter)
+      if (optionsRef.current.excludeTransferTypes) {
+        query = query.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+      }
+
       // Apply payment method filter
       if (optionsRef.current.paymentMethod && optionsRef.current.paymentMethod !== 'all') {
         query = query.eq('payment_method', optionsRef.current.paymentMethod)
@@ -362,6 +374,7 @@ export function useInfiniteTransactions(
     transactionType,
     paymentMethodFilter,
     excludeSales,
+    excludeTransferTypes,
     dateFilter?.type,
     dateFilter?.startDate?.toString(),
     dateFilter?.endDate?.toString(),

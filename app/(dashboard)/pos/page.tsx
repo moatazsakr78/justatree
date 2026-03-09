@@ -124,6 +124,7 @@ const POSTabletView = dynamic(() => import("../../components/POSTabletView"), { 
 const DiscountModal = dynamic(() => import("../../components/DiscountModal"), { ssr: false });
 const PostponedInvoicesModal = dynamic(() => import("../../components/PostponedInvoicesModal"), { ssr: false });
 const CashDrawerModal = dynamic(() => import("../../components/CashDrawerModal"), { ssr: false });
+const ExpenseAdditionModal = dynamic(() => import("../../components/ExpenseAdditionModal"), { ssr: false });
 import { useProducts, Product } from "../../lib/hooks/useProductsOptimized";
 import { usePersistentSelections } from "../../lib/hooks/usePersistentSelections";
 import { usePOSTabs } from "@/lib/hooks/usePOSTabs";
@@ -164,6 +165,7 @@ import {
   PencilIcon,
   TruckIcon,
   TrashIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 
 function POSPageContent() {
@@ -347,6 +349,7 @@ function POSPageContent() {
 
   // Cash Drawer States
   const [isCashDrawerModalOpen, setIsCashDrawerModalOpen] = useState(false);
+  const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
 
   // Edit Invoice Mode States
   const [isEditMode, setIsEditMode] = useState(false);
@@ -5123,6 +5126,21 @@ function POSPageContent() {
                   <span className="text-sm">الدرج</span>
                 </button>
 
+                {/* Expense/Addition Button */}
+                <button
+                  onClick={() => setIsExpenseModalOpen(true)}
+                  disabled={!selections.record}
+                  className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
+                    selections.record
+                      ? "text-yellow-400 hover:text-yellow-300"
+                      : "text-gray-500 cursor-not-allowed"
+                  }`}
+                  title={selections.record ? `مصروفات/إضافة - ${selections.record.name}` : "يجب اختيار سجل أولاً"}
+                >
+                  <DocumentTextIcon className="h-5 w-5 mb-1" />
+                  <span className="text-sm">مصروفات</span>
+                </button>
+
                 <button
                   onClick={printPreviewReceipt}
                   disabled={cartItems.length === 0}
@@ -7034,6 +7052,13 @@ function POSPageContent() {
       <CashDrawerModal
         isOpen={isCashDrawerModalOpen}
         onClose={() => setIsCashDrawerModalOpen(false)}
+        record={selections.record}
+      />
+
+      {/* Expense/Addition Modal */}
+      <ExpenseAdditionModal
+        isOpen={isExpenseModalOpen}
+        onClose={() => setIsExpenseModalOpen(false)}
         record={selections.record}
       />
 

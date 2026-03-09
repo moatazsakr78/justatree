@@ -35,6 +35,8 @@ export interface UseInfiniteStatementsOptions {
   dateFilter?: DateFilter // Date range filter
   enabled?: boolean // Enable/disable fetching
   pageSize?: number // Number of records per page (default 200)
+  excludeTransferTypes?: boolean // If true, exclude transfer_in/transfer_out transactions
+  transferTypesOnly?: boolean // If true, only include transfer_in/transfer_out transactions
 }
 
 // Return type for the hook
@@ -56,7 +58,9 @@ export function useInfiniteStatements(
     recordIds,
     dateFilter = { type: 'today' },
     enabled = true,
-    pageSize = 200
+    pageSize = 200,
+    excludeTransferTypes = false,
+    transferTypesOnly = false
   } = options
 
   const [statements, setStatements] = useState<StatementItem[]>([])
@@ -201,6 +205,16 @@ export function useInfiniteStatements(
       query = query.lte('created_at', endDate.toISOString())
     }
 
+    // Exclude transfer_in/transfer_out transactions (for non-drawer safe "في الخزنة" filter)
+    if (optionsRef.current.excludeTransferTypes) {
+      query = query.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+    }
+
+    // Only include transfer_in/transfer_out transactions (for non-drawer safe "التحويلات" filter)
+    if (optionsRef.current.transferTypesOnly) {
+      query = query.in('transaction_type', ['transfer_in', 'transfer_out'])
+    }
+
     // Apply cursor for pagination (descending order - newest first)
     if (cursorData) {
       query = query.or(`created_at.lt.${cursorData.created_at},and(created_at.eq.${cursorData.created_at},id.lt.${cursorData.id})`)
@@ -342,6 +356,8 @@ export function useInfiniteStatements(
     enabled,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     recordIds?.join(','),
+    excludeTransferTypes,
+    transferTypesOnly,
     dateFilter?.type,
     dateFilter?.startDate?.toString(),
     dateFilter?.endDate?.toString()

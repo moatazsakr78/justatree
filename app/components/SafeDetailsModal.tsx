@@ -71,6 +71,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [childSafes, setChildSafes] = useState<{id: string; name: string; balance: number}[]>([])
   const [mainSafeOwnBalance, setMainSafeOwnBalance] = useState<number>(0)
   const [selectedDrawerFilters, setSelectedDrawerFilters] = useState<Set<string> | null>(null) // null = "all"
+  const [nonDrawerTransferBalance, setNonDrawerTransferBalance] = useState<number>(0)
 
   // Compute all record IDs: safe.id + childSafeIds (drawers) + additionalSafeIds (multi-select)
   const allRecordIds = useMemo(() => {
@@ -86,6 +87,17 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     selectedDrawerFilters.forEach(f => ids.push(f === 'transfers' ? safe.id : f))
     return Array.from(new Set(ids))
   }, [selectedDrawerFilters, allRecordIds, safe?.id])
+
+  // Non-drawer safe filter flags (filter by transaction_type instead of record_id)
+  const nonDrawerExcludeTransfers = useMemo(() => {
+    if (safe?.supports_drawers || !selectedDrawerFilters) return false
+    return selectedDrawerFilters.has('safe') && !selectedDrawerFilters.has('transfers')
+  }, [safe?.supports_drawers, selectedDrawerFilters])
+
+  const nonDrawerTransfersOnly = useMemo(() => {
+    if (safe?.supports_drawers || !selectedDrawerFilters) return false
+    return selectedDrawerFilters.has('transfers') && !selectedDrawerFilters.has('safe')
+  }, [safe?.supports_drawers, selectedDrawerFilters])
 
   // Display name for combined view
   const displayName = additionalSafeIds.length > 0
@@ -157,7 +169,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     recordIds: filteredRecordIds.length > 0 ? filteredRecordIds : undefined,
     dateFilter,
     enabled: isOpen && activeTab === 'statement' && !isLoadingPreferences,
-    pageSize: 200
+    pageSize: 200,
+    excludeTransferTypes: nonDrawerExcludeTransfers,
+    transferTypesOnly: nonDrawerTransfersOnly
   })
 
   // Scroll detection for infinite scroll
@@ -187,10 +201,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     refresh: refreshTransfers
   } = useInfiniteTransactions({
     recordIds: filteredRecordIds.length > 0 ? filteredRecordIds : undefined,
+    transactionType: nonDrawerTransfersOnly ? 'transfer' : undefined,
     dateFilter,
     enabled: isOpen && activeTab === 'payments' && !isLoadingPreferences,
     pageSize: 200,
-    excludeSales: true // Only get non-sale transactions (transfers, deposits, withdrawals)
+    excludeSales: true, // Only get non-sale transactions (transfers, deposits, withdrawals)
+    excludeTransferTypes: nonDrawerExcludeTransfers
   })
 
   // Scroll detection for transfers infinite scroll
@@ -221,10 +237,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     refresh: refreshOperations
   } = useInfiniteTransactions({
     recordIds: filteredRecordIds.length > 0 ? filteredRecordIds : undefined,
+    transactionType: nonDrawerTransfersOnly ? 'transfer' : undefined,
     dateFilter,
     enabled: isOpen && activeTab === 'operations' && !isLoadingPreferences,
     pageSize: 200,
     excludeSales: true,
+    excludeTransferTypes: nonDrawerExcludeTransfers,
     safes: safesForMapping
   })
 
@@ -345,6 +363,19 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       setChildSafeIds([])
       setChildSafes([])
       setMainSafeOwnBalance(0)
+      // For non-drawer safes, calculate transfer balance
+      if (safe?.id && !safe.supports_drawers && safe.safe_type !== 'sub') {
+        const { data } = await supabase
+          .from('cash_drawer_transactions')
+          .select('amount')
+          .eq('record_id', safe.id)
+          .in('transaction_type', ['transfer_in', 'transfer_out'])
+        setNonDrawerTransferBalance(
+          (data || []).reduce((sum: number, t: any) => sum + (parseFloat(String(t.amount)) || 0), 0)
+        )
+      } else {
+        setNonDrawerTransferBalance(0)
+      }
       return
     }
     // Fetch child records (drawers)
@@ -559,6 +590,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const fetchSales = async () => {
     if (!safe?.id) return
 
+    // Non-drawer safe: transfers don't have sale_ids, skip fetching entirely
+    if (nonDrawerTransfersOnly) {
+      setSales([])
+      setAllSalesData([])
+      setIsLoadingSales(false)
+      return
+    }
+
     try {
       setIsLoadingSales(true)
 
@@ -573,6 +612,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           .select('sale_id')
           .in('record_id', filteredRecordIds)
           .not('sale_id', 'is', null)
+        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
+        if (nonDrawerExcludeTransfers) {
+          txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
         txQuery = applyDateFilter(txQuery)
         const { data: txData } = await txQuery
 
@@ -661,6 +704,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           .select('sale_id, amount')
           .in('sale_id', saleIds)
         txQuery = txQuery.in('record_id', filteredRecordIds)
+        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
+        if (nonDrawerExcludeTransfers) {
+          txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
         const { data: transactions } = await txQuery
 
         if (transactions) {
@@ -959,6 +1006,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const fetchPurchaseInvoices = async () => {
     if (!safe?.id) return
 
+    // Non-drawer safe: transfers don't have purchase_invoice_ids, skip fetching entirely
+    if (nonDrawerTransfersOnly) {
+      setPurchaseInvoices([])
+      setAllPurchasesData([])
+      setIsLoadingPurchases(false)
+      return
+    }
+
     try {
       setIsLoadingPurchases(true)
 
@@ -971,6 +1026,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           .select('purchase_invoice_id')
           .in('record_id', filteredRecordIds)
           .not('purchase_invoice_id', 'is', null)
+        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
+        if (nonDrawerExcludeTransfers) {
+          txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
         txQuery = applyDateFilter(txQuery)
         const { data: txData } = await txQuery
 
@@ -1057,6 +1116,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           .select('purchase_invoice_id, amount')
           .in('purchase_invoice_id', purchaseIds)
         purchaseTxQuery = purchaseTxQuery.in('record_id', filteredRecordIds)
+        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
+        if (nonDrawerExcludeTransfers) {
+          purchaseTxQuery = purchaseTxQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
         const { data: transactions } = await purchaseTxQuery
 
         if (transactions) {
@@ -1872,6 +1935,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       if (!prev) { return new Set([filterId]) } // from "all" to specific
       const next = new Set(prev)
       next.has(filterId) ? next.delete(filterId) : next.add(filterId)
+      // Non-drawer safes: if both 'safe' and 'transfers' selected, that's "all"
+      if (!safe.supports_drawers && next.has('safe') && next.has('transfers')) return null
       return next.size === 0 ? null : next
     })
   }
@@ -2731,6 +2796,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
           'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
           'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
+          'expense': { text: 'مصروف', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
           'adjustment': { text: 'تسوية', color: 'text-yellow-400', bg: 'bg-yellow-600/20 border-yellow-600' },
           'transfer_in': { text: 'تحويل وارد', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
           'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-600/20 border-orange-600' },
@@ -3201,6 +3267,55 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         </div>
                       )}
 
+                      {/* Transaction Filter - For non-drawer safes (Mobile) */}
+                      {!safe.supports_drawers && (
+                        <div className="bg-[#2B3544] rounded-lg p-3">
+                          <h4 className="text-white font-medium mb-2 text-sm text-right">تصفية المعاملات</h4>
+                          <div className="space-y-1.5">
+                            {/* الكل */}
+                            <label className="flex items-center justify-between cursor-pointer px-1 py-1">
+                              <span className="text-white text-sm font-medium">{formatPrice(safeBalance)}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-300 text-sm">الكل</span>
+                                <input
+                                  type="checkbox"
+                                  checked={!selectedDrawerFilters}
+                                  onChange={handleSelectAllDrawers}
+                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                />
+                              </div>
+                            </label>
+                            {/* في الخزنة */}
+                            <label className="flex items-center justify-between cursor-pointer px-1 py-1">
+                              <span className="text-green-400 text-sm">{formatPrice(safeBalance - nonDrawerTransferBalance)}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-300 text-sm">في الخزنة</span>
+                                <input
+                                  type="checkbox"
+                                  checked={!selectedDrawerFilters || selectedDrawerFilters.has('safe')}
+                                  onChange={() => handleDrawerFilterToggle('safe')}
+                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                />
+                              </div>
+                            </label>
+                            <div className="border-t border-gray-600 my-1"></div>
+                            {/* التحويلات */}
+                            <label className="flex items-center justify-between cursor-pointer px-1 py-1">
+                              <span className="text-blue-400 text-sm">{formatPrice(nonDrawerTransferBalance)}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-300 text-sm">التحويلات</span>
+                                <input
+                                  type="checkbox"
+                                  checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
+                                  onChange={() => handleDrawerFilterToggle('transfers')}
+                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                />
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Reserve (تجنيب) Section - Mobile */}
                       <div className="bg-[#2B3544] rounded-lg p-3">
                         <div className="flex items-center justify-between mb-2">
@@ -3449,6 +3564,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           { key: 'all', label: 'الكل' },
                           { key: 'deposit', label: 'إيداع' },
                           { key: 'withdrawal', label: 'سحب' },
+                          { key: 'expense', label: 'مصروف' },
                           { key: 'transfer_in', label: 'وارد' },
                           { key: 'transfer_out', label: 'صادر' }
                         ].map(f => (
@@ -3478,6 +3594,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
                             'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-500/20' },
                             'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-500/20' },
+                            'expense': { text: 'مصروف', color: 'text-red-400', bg: 'bg-red-500/20' },
                             'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-500/20' },
                             'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-500/20' }
                           }
@@ -3900,6 +4017,55 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {/* Transfers checkbox (non-physical payments routed to main safe) */}
                       <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
                         <span className="text-blue-400 text-sm">{formatPrice(mainSafeOwnBalance, 'system')}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-300 text-sm">التحويلات</span>
+                          <input
+                            type="checkbox"
+                            checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
+                            onChange={() => handleDrawerFilterToggle('transfers')}
+                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                          />
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
+
+                {/* Transaction Filter - For non-drawer safes (Desktop) */}
+                {!safe.supports_drawers && (
+                  <div className="p-4 border-b border-gray-600">
+                    <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية المعاملات</h4>
+                    <div className="space-y-1.5">
+                      {/* الكل */}
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                        <span className="text-white font-medium text-sm">{formatPrice(safeBalance, 'system')}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-300 text-sm">الكل</span>
+                          <input
+                            type="checkbox"
+                            checked={!selectedDrawerFilters}
+                            onChange={handleSelectAllDrawers}
+                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                          />
+                        </div>
+                      </label>
+                      {/* في الخزنة */}
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                        <span className="text-green-400 text-sm">{formatPrice(safeBalance - nonDrawerTransferBalance, 'system')}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-300 text-sm">في الخزنة</span>
+                          <input
+                            type="checkbox"
+                            checked={!selectedDrawerFilters || selectedDrawerFilters.has('safe')}
+                            onChange={() => handleDrawerFilterToggle('safe')}
+                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                          />
+                        </div>
+                      </label>
+                      <div className="border-t border-gray-600 my-1"></div>
+                      {/* التحويلات */}
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                        <span className="text-blue-400 text-sm">{formatPrice(nonDrawerTransferBalance, 'system')}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-gray-300 text-sm">التحويلات</span>
                           <input
@@ -4525,6 +4691,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           { key: 'all', label: 'الكل' },
                           { key: 'deposit', label: 'إيداع' },
                           { key: 'withdrawal', label: 'سحب' },
+                          { key: 'expense', label: 'مصروف' },
                           { key: 'transfer_in', label: 'تحويل وارد' },
                           { key: 'transfer_out', label: 'تحويل صادر' }
                         ].map(f => (
@@ -4591,6 +4758,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                   const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
                                     'deposit': { text: 'إيداع', color: 'text-green-400', bg: 'bg-green-600/20 border-green-600' },
                                     'withdrawal': { text: 'سحب', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
+                                    'expense': { text: 'مصروف', color: 'text-red-400', bg: 'bg-red-600/20 border-red-600' },
                                     'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-600/20 border-blue-600' },
                                     'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-600/20 border-orange-600' }
                                   }
