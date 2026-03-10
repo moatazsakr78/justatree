@@ -87,6 +87,8 @@ export default function TrackOrderPage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   const isInitialLoad = useRef(true);
+  const editModeRef = useRef(false);
+  useEffect(() => { editModeRef.current = editMode; }, [editMode]);
 
   // Product search states
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -100,14 +102,16 @@ export default function TrackOrderPage() {
       if (isInitialLoad.current) {
         setLoading(true);
       }
-      const res = await fetch(`/api/orders/track/${token}`, { cache: 'no-store' });
+      const res = await fetch(`/api/orders/track/${token}?_t=${Date.now()}`, { cache: 'no-store' });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || 'حدث خطأ');
         return;
       }
       setOrder(data);
-      setOriginalItems(data.items.map((i: OrderItem) => ({ ...i })));
+      if (!editModeRef.current) {
+        setOriginalItems(data.items.map((i: OrderItem) => ({ ...i })));
+      }
     } catch {
       if (isInitialLoad.current) {
         setError('فشل في تحميل بيانات الطلب');
@@ -122,14 +126,14 @@ export default function TrackOrderPage() {
     fetchOrder();
   }, [fetchOrder]);
 
-  // Auto-poll every 30 seconds for dashboard changes
+  // Auto-poll every 30 seconds for dashboard changes (skip during edit mode)
   useEffect(() => {
-    if (!token || error) return;
+    if (!token || error || editMode) return;
     const interval = setInterval(() => {
       fetchOrder();
     }, 30000);
     return () => clearInterval(interval);
-  }, [token, error, fetchOrder]);
+  }, [token, error, editMode, fetchOrder]);
 
   // Product search
   const searchProducts = useCallback(async (query: string) => {
@@ -238,10 +242,10 @@ export default function TrackOrderPage() {
       }
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-      setEditMode(false);
       setShowAddProduct(false);
-      // Refetch to get fresh data with proper IDs
+      // Refetch BEFORE disabling edit mode so polling stays suppressed
       await fetchOrder();
+      setEditMode(false);
     } catch {
       alert('فشل في حفظ التغييرات');
     } finally {

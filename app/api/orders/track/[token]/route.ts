@@ -5,8 +5,9 @@ import { roundMoney } from '@/app/lib/utils/money'
 export const dynamic = 'force-dynamic'
 
 const noCacheHeaders = {
-  'Cache-Control': 'no-cache, no-store, must-revalidate',
+  'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
   'Pragma': 'no-cache',
+  'Expires': '0',
 }
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i

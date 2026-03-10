@@ -26,6 +26,9 @@ export const getSupabaseAdmin = (): SupabaseClient<Database, string> => {
       auth: {
         autoRefreshToken: false,
         persistSession: false
+      },
+      global: {
+        fetch: (url: any, options: any = {}) => fetch(url, { ...options, cache: 'no-store' })
       }
     })
   }
