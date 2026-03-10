@@ -105,6 +105,7 @@ export default function CustomerOrdersPage() {
   const [productSearchQuery, setProductSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [savingOrder, setSavingOrder] = useState(false);
 
   // Debug: Log context menu state changes
   useEffect(() => {
@@ -1046,41 +1047,49 @@ export default function CustomerOrdersPage() {
   const saveOrderChanges = async () => {
     if (!selectedOrderForEdit) return;
 
+    const orderId = selectedOrderForEdit.orderId;
+    if (!orderId) {
+      alert('خطأ: لم يتم العثور على معرف الطلب');
+      return;
+    }
+
+    setSavingOrder(true);
+
     try {
-      // Get the order's database ID first
-      const { data: orderData, error: orderFetchError } = await supabase
-        .from('orders')
+      // 1. Fetch ALL real order_items IDs from DB
+      const { data: dbRows, error: dbRowsError } = await supabase
+        .from('order_items')
         .select('id')
-        .eq('order_number', selectedOrderForEdit.id)
-        .single();
+        .eq('order_id', orderId);
 
-      if (orderFetchError || !orderData) {
-        console.error('Error fetching order:', orderFetchError);
+      if (dbRowsError) {
+        alert('خطأ في جلب بيانات الطلب من قاعدة البيانات');
         return;
       }
 
-      const orderId = orderData.id;
-
-      // Update order total
-      const { error: orderError } = await supabase
-        .from('orders')
-        .update({
-          total_amount: selectedOrderForEdit.total,
-          subtotal_amount: selectedOrderForEdit.subtotal,
-          updated_at: new Date().toISOString()
-        })
-        .eq('order_number', selectedOrderForEdit.id);
-
-      if (orderError) {
-        console.error('Error updating order:', orderError);
-        return;
-      }
+      const allDbIds = (dbRows || []).map((r: any) => r.id.toString());
 
       // Separate new items from existing items
       const newItems = selectedOrderForEdit.items.filter((item: any) => item.isNew);
       const existingItems = selectedOrderForEdit.items.filter((item: any) => !item.isNew);
 
-      // Update existing order items quantities and notes
+      // 2. Build keep set from existing edited items
+      const keepItemIds = new Set(existingItems.map(item => item.id.toString()));
+
+      // 3. Delete DB rows NOT in keep set
+      const idsToDelete = allDbIds.filter((id: string) => !keepItemIds.has(id));
+      for (const id of idsToDelete) {
+        const { error: deleteError } = await supabase
+          .from('order_items')
+          .delete()
+          .eq('id', id);
+
+        if (deleteError) {
+          console.error('Error deleting item:', deleteError);
+        }
+      }
+
+      // 4. Update existing items quantity/price/notes
       for (const item of existingItems) {
         const { error: itemError } = await supabase
           .from('order_items')
@@ -1096,7 +1105,7 @@ export default function CustomerOrdersPage() {
         }
       }
 
-      // Insert new items
+      // 5. Insert new items
       for (const newItem of newItems) {
         const { error: insertError } = await supabase
           .from('order_items')
@@ -1113,24 +1122,7 @@ export default function CustomerOrdersPage() {
         }
       }
 
-      // Remove items that were deleted
-      const originalItems = orders.find(o => o.id === selectedOrderForEdit.id)?.items || [];
-      const deletedItems = originalItems.filter(original =>
-        !selectedOrderForEdit.items.find(current => current.id === original.id)
-      );
-
-      for (const deletedItem of deletedItems) {
-        const { error: deleteError } = await supabase
-          .from('order_items')
-          .delete()
-          .eq('id', deletedItem.id);
-
-        if (deleteError) {
-          console.error('Error deleting item:', deleteError);
-        }
-      }
-
-      // Refetch order items to get proper IDs for newly inserted items
+      // 6. Refetch items from DB - do NOT fall back to local state
       const { data: updatedItems, error: refetchError } = await supabase
         .from('order_items')
         .select(`
@@ -1147,22 +1139,36 @@ export default function CustomerOrdersPage() {
         `)
         .eq('order_id', orderId);
 
-      if (refetchError) {
-        console.error('Error refetching items:', refetchError);
+      if (refetchError || !updatedItems) {
+        alert('تم حفظ التغييرات لكن فشل في إعادة تحميل البيانات. يرجى تحديث الصفحة.');
+        closeEditModal();
+        return;
       }
 
-      // Update local state with refetched data
-      const refetchedItems = updatedItems?.map((item: any) => ({
-        id: item.id,
+      // 7. Update order totals using refetched data
+      const refetchedItems = updatedItems.map((item: any) => ({
+        id: item.id.toString(),
         product_id: item.product_id,
         name: item.products?.name || 'منتج غير معروف',
         price: parseFloat(item.unit_price),
         quantity: item.quantity,
         image: item.products?.main_image_url || null,
         notes: item.notes
-      })) || selectedOrderForEdit.items;
+      }));
       const newSubtotal = refetchedItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
       const newTotal = newSubtotal + (selectedOrderForEdit.shipping || 0);
+
+      // Update order totals in DB
+      await supabase
+        .from('orders')
+        .update({
+          total_amount: newTotal,
+          subtotal_amount: newSubtotal,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', orderId);
+
+      // 8. Update local state and close modal
       const updatedOrder = {
         ...selectedOrderForEdit,
         items: refetchedItems,
@@ -1180,6 +1186,9 @@ export default function CustomerOrdersPage() {
       closeEditModal();
     } catch (error) {
       console.error('Error saving order changes:', error);
+      alert('حدث خطأ أثناء حفظ التغييرات');
+    } finally {
+      setSavingOrder(false);
     }
   };
 
@@ -2372,16 +2381,17 @@ export default function CustomerOrdersPage() {
               <div className="flex gap-3 justify-start">
                 <button
                   onClick={saveOrderChanges}
-                  className="px-8 py-3 text-white rounded-lg transition-colors text-lg font-medium"
+                  disabled={savingOrder}
+                  className="px-8 py-3 text-white rounded-lg transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: 'var(--primary-color)' }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#4a1919';
+                    if (!savingOrder) e.currentTarget.style.backgroundColor = '#4a1919';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'var(--primary-color)';
                   }}
                 >
-                  حفظ التغييرات
+                  {savingOrder ? 'جاري الحفظ...' : 'حفظ التغييرات'}
                 </button>
                 <button
                   onClick={closeEditModal}

@@ -195,7 +195,29 @@ export async function PUT(
     const newItems = items.filter((item: any) => item.isNew)
     const existingItems = items.filter((item: any) => !item.isNew)
 
-    // 1. Update existing items
+    // 1. Fetch original DB items BEFORE any mutations
+    const { data: originalDbItems } = await supabaseAdmin
+      .from('order_items')
+      .select('id')
+      .eq('order_id', orderId)
+
+    const keepIds = new Set(existingItems.map((item: any) => item.id?.toString()))
+
+    // 2. Delete items not in keep set
+    for (const dbItem of (originalDbItems || [])) {
+      if (!keepIds.has(dbItem.id.toString())) {
+        const { error: deleteError } = await supabaseAdmin
+          .from('order_items')
+          .delete()
+          .eq('id', dbItem.id)
+
+        if (deleteError) {
+          console.error('Error deleting item:', deleteError)
+        }
+      }
+    }
+
+    // 3. Update existing items
     for (const item of existingItems) {
       const { error: itemError } = await supabaseAdmin
         .from('order_items')
@@ -210,7 +232,7 @@ export async function PUT(
       }
     }
 
-    // 2. Insert new items with server-validated prices
+    // 4. Insert new items with server-validated prices
     for (const item of newItems) {
       const product = productMap.get(item.product_id)
       const realPrice = product ? parseFloat(String(product.price)) : parseFloat(String(item.price))
@@ -227,41 +249,6 @@ export async function PUT(
 
       if (insertError) {
         console.error('Error inserting new item:', insertError)
-      }
-    }
-
-    // 3. Delete removed items - fetch current items and compare
-    const { data: currentDbItems } = await supabaseAdmin
-      .from('order_items')
-      .select('id')
-      .eq('order_id', orderId)
-
-    const submittedExistingIds = new Set(existingItems.map((item: any) => item.id))
-    const deletedItems = (currentDbItems || []).filter(
-      (dbItem: any) => !submittedExistingIds.has(dbItem.id.toString()) && !submittedExistingIds.has(dbItem.id)
-    )
-
-    // Only delete items that existed before this edit (not newly inserted ones)
-    // We need to exclude items we just inserted
-    const { data: freshItems } = await supabaseAdmin
-      .from('order_items')
-      .select('id')
-      .eq('order_id', orderId)
-
-    // Get IDs of items that were in the original set but not in the submitted existing items
-    if (currentDbItems) {
-      for (const dbItem of currentDbItems) {
-        const idStr = dbItem.id.toString()
-        if (!submittedExistingIds.has(idStr) && !submittedExistingIds.has(dbItem.id)) {
-          const { error: deleteError } = await supabaseAdmin
-            .from('order_items')
-            .delete()
-            .eq('id', dbItem.id)
-
-          if (deleteError) {
-            console.error('Error deleting item:', deleteError)
-          }
-        }
       }
     }
 

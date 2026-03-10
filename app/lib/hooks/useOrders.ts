@@ -136,23 +136,7 @@ export function useOrders() {
             isPrepared: item.is_prepared || false
           }));
 
-          // Group items by product_id and combine quantities
-          const groupedItemsMap = new Map();
-          rawItems.forEach((item: any) => {
-            const key = item.product_id || item.name;
-            if (groupedItemsMap.has(key)) {
-              const existingItem = groupedItemsMap.get(key);
-              existingItem.quantity += item.quantity;
-              existingItem.isPrepared = existingItem.isPrepared || item.isPrepared;
-              if (item.notes && item.notes !== existingItem.notes) {
-                existingItem.notes = existingItem.notes ? `${existingItem.notes}، ${item.notes}` : item.notes;
-              }
-            } else {
-              groupedItemsMap.set(key, { ...item });
-            }
-          });
-
-          const items = Array.from(groupedItemsMap.values());
+          const items = rawItems;
 
           // Calculate preparation progress
           const preparedItems = items.filter((item: OrderItem) => item.isPrepared).length;

@@ -368,7 +368,9 @@
       "WebFetch(domain:www.npmjs.com)",
       "WebFetch(domain:discuss.ai.google.dev)",
       "WebFetch(domain:developers.googleblog.com)",
-      "Bash(find C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\pos:*)"
+      "Bash(find C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\pos:*)",
+      "Bash(find \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\customer-orders\" -type f -name \"*.tsx\" -o -name \"*.ts\" | head -20)",
+      "Bash(wc -l \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\customer-orders\\\\page.tsx\")"
     ],
     "deny": [],
     "additionalDirectories": [
