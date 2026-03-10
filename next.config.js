@@ -9,6 +9,14 @@ const withPWA = require('next-pwa')({
     document: '/offline.html'  // صفحة بديلة عند فشل التحميل
   },
   runtimeCaching: [
+    // Order tracking API - NEVER cache (must always show fresh data)
+    {
+      urlPattern: /\/api\/orders\/track\/.*/i,
+      handler: 'NetworkOnly',
+      options: {
+        cacheName: 'tracking-no-cache',
+      },
+    },
     // Supabase API - Network First with cache fallback
     {
       urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/i,
@@ -19,7 +27,7 @@ const withPWA = require('next-pwa')({
           maxEntries: 200,
           maxAgeSeconds: 60 * 60 // 1 hour
         },
-        networkTimeoutSeconds: 3,
+        networkTimeoutSeconds: 10,
         cacheableResponse: {
           statuses: [0, 200]
         }
@@ -71,7 +79,7 @@ const withPWA = require('next-pwa')({
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 // 1 hour
         },
-        networkTimeoutSeconds: 3
+        networkTimeoutSeconds: 10
       }
     },
     // Critical POS page - StaleWhileRevalidate (show from cache immediately, update in background)
