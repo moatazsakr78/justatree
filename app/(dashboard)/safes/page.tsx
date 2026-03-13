@@ -226,15 +226,6 @@ export default function SafesPage() {
       return
     }
 
-    // Prevent deleting last drawer in a drawer-supporting safe
-    if (safe.safe_type === 'sub' && safe.parent_id) {
-      const siblingDrawers = safes.filter(s => s.parent_id === safe.parent_id && s.safe_type === 'sub')
-      if (siblingDrawers.length <= 1) {
-        alert('لا يمكن حذف الدرج الأخير في الخزنة. يجب أن تحتوي الخزنة على درج واحد على الأقل')
-        return
-      }
-    }
-
     // Check for child safes (sub-safes/drawers)
     if (safe.safe_type === 'main') {
       const childSafes = safes.filter(s => s.parent_id === safe.id)
