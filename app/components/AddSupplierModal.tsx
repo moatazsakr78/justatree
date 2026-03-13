@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import SearchableSelect from './ui/SearchableSelect'
 import { useSupplierGroups } from '@/app/lib/hooks/useSupplierGroups'
@@ -8,13 +8,18 @@ import { ranks } from '@/app/lib/data/ranks'
 import { egyptianGovernorates } from '@/app/lib/data/governorates'
 import { supabase } from '@/app/lib/supabase/client'
 import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
+import type { SupplierFormDefaults } from '@/app/lib/services/testDataService'
+import TestBadge from './TestBadge'
 
 interface AddSupplierModalProps {
   isOpen: boolean
   onClose: () => void
+  defaultValues?: SupplierFormDefaults
+  isTest?: boolean
+  onCreated?: () => void
 }
 
-export default function AddSupplierModal({ isOpen, onClose }: AddSupplierModalProps) {
+export default function AddSupplierModal({ isOpen, onClose, defaultValues, isTest, onCreated }: AddSupplierModalProps) {
   const activityLog = useActivityLogger()
   const [activeTab, setActiveTab] = useState('details')
   const [isLoading, setIsLoading] = useState(false)
@@ -33,6 +38,19 @@ export default function AddSupplierModal({ isOpen, onClose }: AddSupplierModalPr
   })
 
   const { groups, isLoading: groupsLoading } = useSupplierGroups()
+
+  // Populate form with default values when opening in test mode
+  useEffect(() => {
+    if (isOpen && defaultValues) {
+      setFormData(prev => ({
+        ...prev,
+        name: defaultValues.name || '',
+        phone: defaultValues.phone || '',
+        governorate: defaultValues.governorate || '',
+        allowedLimit: defaultValues.allowedLimit || '',
+      }))
+    }
+  }, [isOpen, defaultValues])
 
   const tabs = [
     { id: 'details', label: 'تفاصيل المورد', active: true }
@@ -110,8 +128,9 @@ export default function AddSupplierModal({ isOpen, onClose }: AddSupplierModalPr
         category: formData.group ? supplierGroupOptions.find(opt => opt.value === formData.group)?.label : null,
         opening_balance: formData.openingBalance ? parseFloat(formData.openingBalance) : 0,
         credit_limit: formData.allowedLimit ? parseFloat(formData.allowedLimit) : 5000,
-        is_active: true
-      }
+        is_active: true,
+        ...(isTest ? { is_test: true } : {})
+      } as any
 
       // Insert supplier into database
       const { data, error } = await supabase
@@ -127,6 +146,7 @@ export default function AddSupplierModal({ isOpen, onClose }: AddSupplierModalPr
 
       setSuccess('تم إضافة المورد بنجاح!')
       activityLog({ entityType: 'supplier', actionType: 'create', entityId: data[0]?.id, entityName: formData.name.trim() });
+      onCreated?.()
 
       // Reset form after 1.5 seconds and close modal
       setTimeout(() => {
@@ -183,7 +203,10 @@ export default function AddSupplierModal({ isOpen, onClose }: AddSupplierModalPr
         
         {/* Header */}
         <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-          <h2 className="text-white text-lg font-medium flex-1 text-right">إضافة مورد</h2>
+          <h2 className="text-white text-lg font-medium flex-1 text-right flex items-center justify-end gap-2">
+            {isTest && <TestBadge />}
+            إضافة مورد
+          </h2>
           <button
             onClick={onClose}
             className="text-white hover:text-gray-200 transition-colors ml-4"

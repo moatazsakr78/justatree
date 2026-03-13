@@ -15,6 +15,9 @@ import {
 } from '@heroicons/react/24/outline'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../../lib/supabase/client'
+import TestBadge from '../../components/TestBadge'
+import { generateTestSafeDefaults, deleteTestEntity } from '../../lib/services/testDataService'
+import type { SafeFormDefaults } from '../../lib/services/testDataService'
 import Sidebar from '../../components/layout/Sidebar'
 import TopHeader from '../../components/layout/TopHeader'
 import SafeDetailsModal from '../../components/SafeDetailsModal'
@@ -47,6 +50,7 @@ interface Safe {
   parent_id: string | null
   safe_type: string | null
   supports_drawers: boolean | null
+  is_test: boolean | null
 }
 
 // CashDrawerTransaction is now imported from useInfiniteTransactions hook
@@ -90,6 +94,8 @@ export default function SafesPage() {
   const [totalBalance, setTotalBalance] = useState(0)
   const [safesSearchTerm, setSafesSearchTerm] = useState('')
   const [addSubSafeParent, setAddSubSafeParent] = useState<Safe | null>(null)
+  const [isTestMode, setIsTestMode] = useState(false)
+  const [testSafeDefaults, setTestSafeDefaults] = useState<SafeFormDefaults | undefined>(undefined)
 
   // Records Tab State - Filter configurations
   const [transactionFilters, setTransactionFilters] = useState<{
@@ -200,6 +206,21 @@ export default function SafesPage() {
   }
 
   const handleDeleteSafe = async (safe: Safe) => {
+    // Test safe: bypass all restrictions, cascade delete via RPC
+    if (safe.is_test) {
+      if (window.confirm(`هل أنت متأكد من حذف الخزنة التجريبية "${safe.name}" وجميع بياناتها؟`)) {
+        try {
+          await deleteTestEntity(supabase, 'safe', safe.id)
+          activityLog({ entityType: 'cash_drawer', actionType: 'delete', entityId: safe.id, entityName: safe.name, description: 'حذف خزنة تجريبية' })
+          fetchSafes()
+        } catch (error) {
+          console.error('Error deleting test safe:', error)
+          alert('حدث خطأ أثناء حذف الخزنة التجريبية')
+        }
+      }
+      return
+    }
+
     if (safe.is_primary) {
       alert('لا يمكن حذف الخزنة الرئيسية')
       return
@@ -956,6 +977,17 @@ export default function SafesPage() {
                     <PlusIcon className="h-4 w-4" />
                     إضافة خزنة جديدة
                   </button>
+                  <button
+                    onClick={() => {
+                      setTestSafeDefaults(generateTestSafeDefaults())
+                      setIsTestMode(true)
+                      setIsAddSafeModalOpen(true)
+                    }}
+                    className="px-4 py-2 bg-orange-600/20 text-orange-300 border border-orange-600/50 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-orange-600/30 transition-colors"
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                    بيانات تجريبية
+                  </button>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -1119,6 +1151,7 @@ export default function SafesPage() {
                                     <span className={`px-2 py-0.5 rounded-full text-[10px] ${mainSafe.is_active ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'}`}>
                                       {mainSafe.is_active ? 'نشطة' : 'غير نشطة'}
                                     </span>
+                                    {mainSafe.is_test && <TestBadge />}
                                   </div>
                                 </div>
                               </div>
@@ -1521,9 +1554,11 @@ export default function SafesPage() {
       {/* Add Safe Modal */}
       <AddSafeModal
         isOpen={isAddSafeModalOpen}
-        onClose={() => { closeAddSafeModal(); setAddSubSafeParent(null) }}
+        onClose={() => { closeAddSafeModal(); setAddSubSafeParent(null); setIsTestMode(false); setTestSafeDefaults(undefined) }}
         onSafeAdded={handleSafeAdded}
         parentSafe={addSubSafeParent}
+        defaultValues={testSafeDefaults}
+        isTest={isTestMode}
       />
 
       {/* Edit Safe Modal */}

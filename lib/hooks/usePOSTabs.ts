@@ -591,7 +591,7 @@ export function usePOSTabs(): UsePOSTabsReturn {
           setActiveTabId(localState.activeTabId || 'main');
         }
 
-        // STEP 2: Sync with database in background
+        // STEP 2: Sync with database in background (compare timestamps)
         const dbState = await posTabsService.loadTabsState(user.id);
 
         if (dbState && dbState.tabs && dbState.tabs.length > 0) {
@@ -603,13 +603,20 @@ export function usePOSTabs(): UsePOSTabsReturn {
             return tab;
           });
 
-          // If no local state, use DB state
-          if (!localState || !localState.tabs || localState.tabs.length === 0) {
-            console.log('POS Tabs: Using database state:', cleanedDbTabs.length, 'tabs');
+          const dbTimestamp = dbState.updated_at ? new Date(dbState.updated_at).getTime() : 0;
+          const localTimestamp = localState?.lastUpdated || 0;
+
+          // Use DB state if: no local data OR DB is newer
+          if (!localState || !localState.tabs || localState.tabs.length === 0 || dbTimestamp > localTimestamp) {
+            console.log('POS Tabs: DB is newer or no local data, using database state:', cleanedDbTabs.length, 'tabs',
+              '(DB:', new Date(dbTimestamp).toISOString(), 'vs Local:', localTimestamp ? new Date(localTimestamp).toISOString() : 'none', ')');
             setTabs(cleanedDbTabs);
             setActiveTabId(dbState.active_tab_id || 'main');
             // Also save to localStorage for next time
             saveToLocalStorage(user.id, cleanedDbTabs, dbState.active_tab_id || 'main');
+          } else {
+            console.log('POS Tabs: Local is newer, keeping local state',
+              '(Local:', new Date(localTimestamp).toISOString(), 'vs DB:', dbTimestamp ? new Date(dbTimestamp).toISOString() : 'none', ')');
           }
           lastDbSavedDataRef.current = JSON.stringify({ tabs: cleanedDbTabs, activeTabId: dbState.active_tab_id });
         }

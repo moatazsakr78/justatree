@@ -4,6 +4,7 @@ import { POSTab } from '@/lib/hooks/usePOSTabs';
 export interface POSTabsState {
   tabs: POSTab[];
   active_tab_id: string;
+  updated_at?: string;
 }
 
 /**
@@ -23,7 +24,7 @@ class POSTabsService {
     try {
       const { data, error } = await supabase
         .from('pos_tabs_state')
-        .select('tabs, active_tab_id')
+        .select('tabs, active_tab_id, updated_at')
         .eq('user_id', userId)
         .single();
 
@@ -40,7 +41,8 @@ class POSTabsService {
       console.log('POS Tabs: State loaded successfully');
       return {
         tabs: data.tabs as unknown as POSTab[],
-        active_tab_id: data.active_tab_id as string
+        active_tab_id: data.active_tab_id as string,
+        updated_at: data.updated_at as string
       };
     } catch (error) {
       console.error('POS Tabs: Exception loading state:', error);

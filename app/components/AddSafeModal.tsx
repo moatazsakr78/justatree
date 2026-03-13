@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { supabase } from '../lib/supabase/client'
+import type { SafeFormDefaults } from '@/app/lib/services/testDataService'
+import TestBadge from './TestBadge'
 
 interface SafeItem {
   id: string
@@ -16,15 +18,25 @@ interface AddSafeModalProps {
   onClose: () => void
   onSafeAdded: () => void
   parentSafe?: SafeItem | null
+  defaultValues?: SafeFormDefaults
+  isTest?: boolean
 }
 
-export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe }: AddSafeModalProps) {
+export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe, defaultValues, isTest }: AddSafeModalProps) {
   const [safeName, setSafeName] = useState('')
   const [initialBalance, setInitialBalance] = useState<string>('0')
   const [supportsDrawers, setSupportsDrawers] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const isSubSafe = !!parentSafe
+
+  // Populate form with default values when opening in test mode
+  useEffect(() => {
+    if (isOpen && defaultValues) {
+      setSafeName(defaultValues.name || '')
+      setInitialBalance(defaultValues.initialBalance || '0')
+    }
+  }, [isOpen, defaultValues])
 
   const handleSave = async () => {
     if (!safeName.trim()) return
@@ -41,8 +53,9 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
           initial_balance: balance,
           parent_id: parentSafe?.id || null,
           safe_type: isSubSafe ? 'sub' : 'main',
-          supports_drawers: isSubSafe ? false : supportsDrawers
-        })
+          supports_drawers: isSubSafe ? false : supportsDrawers,
+          ...(isTest ? { is_test: true } : {})
+        } as any)
         .select('id')
         .single()
 
@@ -74,8 +87,9 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
               initial_balance: balance,
               parent_id: newRecord.id,
               safe_type: 'sub',
-              supports_drawers: false
-            })
+              supports_drawers: false,
+              ...(isTest ? { is_test: true } : {})
+            } as any)
             .select('id')
             .single()
 
@@ -111,7 +125,8 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
       <div className="bg-pos-darker rounded-lg p-6 w-96 max-w-md mx-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            {isTest && <TestBadge />}
             {parentSafe ? `إضافة درج في "${parentSafe.name}"` : 'إضافة خزنة جديدة'}
           </h2>
           <button

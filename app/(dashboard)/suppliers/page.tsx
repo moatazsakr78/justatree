@@ -15,6 +15,9 @@ import SupplierDetailsModal from '../../components/SupplierDetailsModal'
 import ColumnsControlModal from '../../components/ColumnsControlModal'
 import SuppliersGridView from '../../components/SuppliersGridView'
 import MergeSuppliersModal from '../../components/MergeSuppliersModal'
+import TestBadge from '../../components/TestBadge'
+import { generateTestSupplierDefaults, deleteTestEntity } from '../../lib/services/testDataService'
+import type { SupplierFormDefaults } from '../../lib/services/testDataService'
 import { useSupplierGroups, SupplierGroup } from '../../lib/hooks/useSupplierGroups'
 import { useSuppliers, Supplier, DEFAULT_SUPPLIER_ID } from '../../lib/hooks/useSuppliers'
 import {
@@ -69,10 +72,11 @@ const tableColumns = [
         {supplier.id === DEFAULT_SUPPLIER_ID && (
           <span className="text-yellow-400">★</span>
         )}
+        {supplier.is_test && <TestBadge />}
       </div>
     )
   },
-  { 
+  {
     id: 'category', 
     header: 'الفئة', 
     accessor: 'category', 
@@ -244,6 +248,8 @@ export default function SuppliersPage() {
   const [selectedSupplier, setSelectedSupplier] = useState<any>(null)
   const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null)
   const [selectedSupplierGroup, setSelectedSupplierGroup] = useState<SupplierGroup | null>(null)
+  const [isTestMode, setIsTestMode] = useState(false)
+  const [testDefaultValues, setTestDefaultValues] = useState<SupplierFormDefaults | undefined>(undefined)
   const [supplierGroups, setSupplierGroups] = useState<any[]>([])
   const [editGroup, setEditGroup] = useState<any | null>(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -259,7 +265,7 @@ export default function SuppliersPage() {
 
   // Use the real-time hooks for supplier groups and suppliers
   const { groups, isLoading: groupsLoading, error: groupsError, toggleGroup } = useSupplierGroups()
-  const { suppliers, isLoading: suppliersLoading, error: suppliersError, isDefaultSupplier } = useSuppliers()
+  const { suppliers, isLoading: suppliersLoading, error: suppliersError, isDefaultSupplier, refetch } = useSuppliers()
   const activityLog = useActivityLogger();
 
   // Fetch all supplier balances efficiently
@@ -432,6 +438,8 @@ export default function SuppliersPage() {
   }
 
   const toggleAddSupplierModal = () => {
+    setIsTestMode(false)
+    setTestDefaultValues(undefined)
     setIsAddSupplierModalOpen(!isAddSupplierModalOpen)
   }
 
@@ -463,20 +471,26 @@ export default function SuppliersPage() {
     setIsDeleting(true)
 
     try {
-      const { error } = await supabase
-        .from('suppliers')
-        .delete()
-        .eq('id', selectedSupplier.id)
+      if (selectedSupplier.is_test) {
+        // Test supplier: use RPC to cascade delete all related data
+        await deleteTestEntity(supabase, 'supplier', selectedSupplier.id)
+      } else {
+        const { error } = await supabase
+          .from('suppliers')
+          .delete()
+          .eq('id', selectedSupplier.id)
 
-      if (error) {
-        console.error('Error deleting supplier:', error)
-        alert('حدث خطأ أثناء حذف المورد: ' + error.message)
-        return
+        if (error) {
+          console.error('Error deleting supplier:', error)
+          alert('حدث خطأ أثناء حذف المورد: ' + error.message)
+          return
+        }
       }
 
       // Clear selection after successful deletion
       setSelectedSupplier(null)
       activityLog({ entityType: 'supplier', actionType: 'delete', entityId: selectedSupplier.id, entityName: selectedSupplier.name });
+      refetch()
 
     } catch (err) {
       console.error('Unexpected error:', err)
@@ -748,6 +762,18 @@ export default function SuppliersPage() {
             </button>
 
             <button
+              onClick={() => {
+                setTestDefaultValues(generateTestSupplierDefaults())
+                setIsTestMode(true)
+                setIsAddSupplierModalOpen(true)
+              }}
+              className="flex items-center gap-2 px-3 py-2 text-orange-300 hover:text-orange-200 hover:bg-orange-900/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
+            >
+              <PlusIcon className="h-4 w-4" />
+              <span className="text-sm">بيانات تجريبية</span>
+            </button>
+
+            <button
               onClick={() => selectedSupplier && openEditSupplierModal(selectedSupplier)}
               className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
                 selectedSupplier
@@ -981,9 +1007,12 @@ export default function SuppliersPage() {
       </div>
 
       {/* Add Supplier Modal */}
-      <AddSupplierModal 
-        isOpen={isAddSupplierModalOpen} 
-        onClose={() => setIsAddSupplierModalOpen(false)} 
+      <AddSupplierModal
+        isOpen={isAddSupplierModalOpen}
+        onClose={() => { setIsAddSupplierModalOpen(false); setIsTestMode(false); setTestDefaultValues(undefined) }}
+        defaultValues={testDefaultValues}
+        isTest={isTestMode}
+        onCreated={() => refetch()}
       />
 
       {/* Edit Supplier Modal */}

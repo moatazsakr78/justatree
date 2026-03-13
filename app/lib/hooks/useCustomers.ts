@@ -28,6 +28,7 @@ export interface Customer {
   user_id: string | null
   profile_image_url: string | null
   governorate: string | null
+  is_test: boolean | null
 }
 
 // Default customer ID that should never be deleted

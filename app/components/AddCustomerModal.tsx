@@ -8,6 +8,8 @@ import { ranks } from '@/app/lib/data/ranks'
 import { egyptianGovernorates } from '@/app/lib/data/governorates'
 import { supabase } from '@/app/lib/supabase/client'
 import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
+import type { CustomerFormDefaults } from '@/app/lib/services/testDataService'
+import TestBadge from './TestBadge'
 
 // Price type options
 const priceTypeOptions = [
@@ -22,9 +24,12 @@ const priceTypeOptions = [
 interface AddCustomerModalProps {
   isOpen: boolean
   onClose: () => void
+  defaultValues?: CustomerFormDefaults
+  isTest?: boolean
+  onCreated?: () => void
 }
 
-export default function AddCustomerModal({ isOpen, onClose }: AddCustomerModalProps) {
+export default function AddCustomerModal({ isOpen, onClose, defaultValues, isTest, onCreated }: AddCustomerModalProps) {
   const activityLog = useActivityLogger()
   const [activeTab, setActiveTab] = useState('details')
   const [isLoading, setIsLoading] = useState(false)
@@ -48,6 +53,19 @@ export default function AddCustomerModal({ isOpen, onClose }: AddCustomerModalPr
   })
 
   const { groups, isLoading: groupsLoading } = useCustomerGroups()
+
+  // Populate form with default values when opening in test mode
+  useEffect(() => {
+    if (isOpen && defaultValues) {
+      setFormData(prev => ({
+        ...prev,
+        name: defaultValues.name || '',
+        phone: defaultValues.phone || '',
+        governorate: defaultValues.governorate || '',
+        allowedLimit: defaultValues.allowedLimit || '',
+      }))
+    }
+  }, [isOpen, defaultValues])
 
   // Fetch records for the dropdown
   useEffect(() => {
@@ -166,8 +184,9 @@ export default function AddCustomerModal({ isOpen, onClose }: AddCustomerModalPr
         credit_limit: formData.allowedLimit ? parseFloat(formData.allowedLimit) : 1000,
         is_active: true,
         default_record_id: formData.defaultRecordId || null,
-        default_price_type: formData.defaultPriceType || 'price'
-      }
+        default_price_type: formData.defaultPriceType || 'price',
+        ...(isTest ? { is_test: true } : {})
+      } as any
 
       // Insert customer into database
       const { data, error } = await supabase
@@ -183,6 +202,7 @@ export default function AddCustomerModal({ isOpen, onClose }: AddCustomerModalPr
 
       setSuccess('تم إضافة العميل بنجاح!')
       activityLog({ entityType: 'customer', actionType: 'create', entityId: data[0]?.id, entityName: formData.name.trim() })
+      onCreated?.()
 
       // Reset form after 1.5 seconds and close modal
       setTimeout(() => {
@@ -245,7 +265,10 @@ export default function AddCustomerModal({ isOpen, onClose }: AddCustomerModalPr
 
         {/* Header */}
         <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-          <h2 className="text-white text-lg font-medium flex-1 text-right">إضافة عميل</h2>
+          <h2 className="text-white text-lg font-medium flex-1 text-right flex items-center justify-end gap-2">
+            {isTest && <TestBadge />}
+            إضافة عميل
+          </h2>
           <button
             onClick={onClose}
             className="text-white hover:text-gray-200 transition-colors ml-4"

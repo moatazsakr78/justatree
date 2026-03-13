@@ -14,6 +14,7 @@ import {
   StarIcon,
   TrophyIcon
 } from '@heroicons/react/24/outline'
+import TestBadge from './TestBadge'
 
 interface CustomersGridViewProps {
   customers: Customer[]
@@ -185,6 +186,7 @@ export default function CustomersGridView({
                     {isDefault && (
                       <StarIcon className="h-4 w-4 text-yellow-400 flex-shrink-0" />
                     )}
+                    {customer.is_test && <TestBadge />}
                   </div>
 
                   {/* Category */}
