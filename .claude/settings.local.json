@@ -373,7 +373,9 @@
       "Bash(wc -l \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\customer-orders\\\\page.tsx\")",
       "Bash(wc -l /c/Users/pc/Desktop/elfaroukgroup/app/\\\\\\(dashboard\\\\\\)/pos/page.tsx)",
       "Bash(wc -l \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\settings\\\\page.tsx\")",
-      "Bash(head -50 \"/c/Users/pc/Desktop/elfaroukgroup/app/\\(dashboard\\)/suppliers/page.tsx\")"
+      "Bash(head -50 \"/c/Users/pc/Desktop/elfaroukgroup/app/\\(dashboard\\)/suppliers/page.tsx\")",
+      "Bash(/tmp/architecture_diagram.txt:*)",
+      "Read(//tmp/**)"
     ],
     "deny": [],
     "additionalDirectories": [

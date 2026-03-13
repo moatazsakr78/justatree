@@ -249,6 +249,14 @@ export function usePersistentSelections(userProfileBranchId?: string | null) {
     })
   }
 
+  const clearSelectionsExceptRecord = () => {
+    setSelections(prev => ({
+      ...prev,
+      customer: null,
+      branch: null,
+    }))
+  }
+
   // Reset customer to default customer
   const resetToDefaultCustomer = async () => {
     const defaultCustomer = await loadDefaultCustomer()
@@ -279,6 +287,7 @@ export function usePersistentSelections(userProfileBranchId?: string | null) {
     setBranch,
     setSubSafe,
     clearSelections,
+    clearSelectionsExceptRecord,
     resetToDefaultCustomer,
     isComplete,
     hasRequiredForCart,

@@ -8,78 +8,95 @@ export interface POSTabsState {
 }
 
 /**
- * Service for managing POS tabs state in Supabase
- * Uses NextAuth user ID (not Supabase Auth)
+ * Service for managing POSTPONED POS tabs in Supabase (account-wide, cross-device)
+ * Active/cart tabs are stored in localStorage only (device-specific)
  */
 class POSTabsService {
   /**
-   * Load POS tabs state from database
+   * Load ONLY postponed tabs from database
    */
-  async loadTabsState(userId: string): Promise<POSTabsState | null> {
+  async loadPostponedTabs(userId: string): Promise<POSTab[]> {
     if (!userId) {
       console.warn('POS Tabs: No user ID provided');
-      return null;
+      return [];
     }
 
     try {
       const { data, error } = await supabase
         .from('pos_tabs_state')
-        .select('tabs, active_tab_id, updated_at')
+        .select('tabs, updated_at')
         .eq('user_id', userId)
         .single();
 
       if (error) {
         if (error.code === 'PGRST116') {
-          // No data found, return null
-          console.log('POS Tabs: No saved state found for user');
-          return null;
+          // No data found
+          console.log('POS Tabs: No postponed tabs found for user');
+          return [];
         }
-        console.error('POS Tabs: Error loading state:', error);
-        return null;
+        console.error('POS Tabs: Error loading postponed tabs:', error);
+        return [];
       }
 
-      console.log('POS Tabs: State loaded successfully');
-      return {
-        tabs: data.tabs as unknown as POSTab[],
-        active_tab_id: data.active_tab_id as string,
-        updated_at: data.updated_at as string
-      };
+      const allTabs = (data.tabs as unknown as POSTab[]) || [];
+      const postponedTabs = allTabs.filter(tab => tab.isPostponed === true);
+      console.log('POS Tabs: Loaded', postponedTabs.length, 'postponed tabs from DB');
+      return postponedTabs;
     } catch (error) {
-      console.error('POS Tabs: Exception loading state:', error);
-      return null;
+      console.error('POS Tabs: Exception loading postponed tabs:', error);
+      return [];
     }
   }
 
   /**
-   * Save POS tabs state to database
+   * Save ONLY postponed tabs to database
+   * If no postponed tabs exist, delete the DB record
    */
-  async saveTabsState(userId: string, tabs: POSTab[], activeTabId: string): Promise<boolean> {
+  async savePostponedTabs(userId: string, allTabs: POSTab[]): Promise<boolean> {
     if (!userId) {
       console.warn('POS Tabs: Cannot save - no user ID provided');
       return false;
     }
 
+    const postponedTabs = allTabs.filter(tab => tab.isPostponed === true);
+
     try {
+      if (postponedTabs.length === 0) {
+        // No postponed tabs - delete DB record
+        const { error } = await supabase
+          .from('pos_tabs_state')
+          .delete()
+          .eq('user_id', userId);
+
+        if (error) {
+          console.error('POS Tabs: Error deleting empty state:', error);
+          return false;
+        }
+        console.log('POS Tabs: No postponed tabs, cleared DB record');
+        return true;
+      }
+
+      // Save only postponed tabs
       const { error } = await supabase
         .from('pos_tabs_state')
         .upsert({
           user_id: userId,
-          tabs: tabs as unknown as any,
-          active_tab_id: activeTabId,
+          tabs: postponedTabs as unknown as any,
+          active_tab_id: 'main', // Not relevant for postponed-only storage
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'user_id'
         });
 
       if (error) {
-        console.error('POS Tabs: Error saving state:', error);
+        console.error('POS Tabs: Error saving postponed tabs:', error);
         return false;
       }
 
-      console.log('POS Tabs: State saved successfully');
+      console.log('POS Tabs: Saved', postponedTabs.length, 'postponed tabs to DB');
       return true;
     } catch (error) {
-      console.error('POS Tabs: Exception saving state:', error);
+      console.error('POS Tabs: Exception saving postponed tabs:', error);
       return false;
     }
   }

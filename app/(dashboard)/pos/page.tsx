@@ -365,6 +365,7 @@ function POSPageContent() {
     setCustomer: setGlobalCustomer,
     setBranch: setGlobalBranch,
     clearSelections: clearGlobalSelections,
+    clearSelectionsExceptRecord: clearGlobalSelectionsExceptRecord,
     resetToDefaultCustomer,
     hasRequiredForCart: globalHasRequiredForCart,
     hasRequiredForSale: globalHasRequiredForSale,
@@ -444,6 +445,14 @@ function POSPageContent() {
       updateActiveTabSelections({ customer: null, branch: null, record: null, subSafe: null });
     }
   }, [activeTabId, clearGlobalSelections, updateActiveTabSelections]);
+
+  const clearSelectionsExceptRecord = useCallback(() => {
+    if (activeTabId === 'main') {
+      clearGlobalSelectionsExceptRecord();
+    } else {
+      updateActiveTabSelections({ customer: null, branch: null });
+    }
+  }, [activeTabId, clearGlobalSelectionsExceptRecord, updateActiveTabSelections]);
 
   const hasRequiredForCart = useCallback(() => {
     return selections.branch !== null || contextBranch !== null;
@@ -1349,11 +1358,6 @@ function POSPageContent() {
     } else {
       // Either not main tab OR selecting default customer - update customer and apply defaults
       setCustomer(customer);
-
-      // Apply customer's default record if set
-      if (customer?.default_record_id) {
-        setRecord({ id: customer.default_record_id });
-      }
 
       // Apply customer's default price type if set
       if (customer?.default_price_type) {
@@ -3149,8 +3153,8 @@ function POSPageContent() {
   const confirmPurchaseMode = () => {
     setIsPurchaseMode(true);
     setShowPurchaseModeConfirm(false);
-    // Clear existing selections when switching to purchase mode
-    clearSelections();
+    // Clear customer/branch but preserve record (safe) when switching to purchase mode
+    clearSelectionsExceptRecord();
     clearCart();
   };
 
@@ -3162,7 +3166,8 @@ function POSPageContent() {
     setIsPurchaseMode(false);
     setIsReturnMode(false); // Also exit return mode
     setSelectedCustomerForPurchase(null); // Reset customer for purchase
-    clearSelections();
+    // Clear customer/branch but preserve record (safe) when exiting purchase mode
+    clearSelectionsExceptRecord();
     clearCart();
   };
 

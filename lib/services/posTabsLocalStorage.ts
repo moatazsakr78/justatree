@@ -1,7 +1,8 @@
 /**
  * POS Tabs Local Storage Service
- * Provides instant local persistence for POS tabs/cart data
- * Works offline and syncs with database in background
+ * Stores ALL tabs (active + postponed) for device-specific persistence.
+ * Active/cart tabs are ONLY stored here (never in DB).
+ * Postponed tabs are also saved to DB separately for cross-device sync.
  */
 
 import { POSTab } from '@/lib/hooks/usePOSTabs';
