@@ -1544,12 +1544,14 @@ export default function SafesPage() {
       {/* ==================== Modals ==================== */}
 
       {/* Safe Details Modal */}
-      <SafeDetailsModal
-        isOpen={isSafeDetailsModalOpen}
-        onClose={closeSafeDetails}
-        safe={selectedSafe}
-        additionalSafeIds={combinedSafeIds}
-      />
+      {selectedSafe && (
+        <SafeDetailsModal
+          isOpen={isSafeDetailsModalOpen}
+          onClose={closeSafeDetails}
+          safe={selectedSafe}
+          additionalSafeIds={combinedSafeIds}
+        />
+      )}
 
       {/* Add Safe Modal */}
       <AddSafeModal

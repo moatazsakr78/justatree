@@ -82,6 +82,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // Filtered record IDs based on drawer filter selection
   const filteredRecordIds = useMemo(() => {
+    if (!safe?.id) return allRecordIds
     if (!selectedDrawerFilters || selectedDrawerFilters.size === 0) return allRecordIds
     const ids: string[] = []
     selectedDrawerFilters.forEach(f => ids.push(f === 'transfers' ? safe.id : f))
@@ -270,6 +271,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // Paid amounts mapped by sale_id or purchase_invoice_id
   const [paidAmounts, setPaidAmounts] = useState<Record<string, number>>({})
+  const [paymentBreakdowns, setPaymentBreakdowns] = useState<Record<string, {method: string, amount: number}[]>>({})
 
   // The safe balance is the actual cash drawer balance (paid amounts, not invoice totals)
   // This is fetched from the cash_drawers table
@@ -277,6 +279,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // Reserves filtered by current drawer selection
   const filteredReserves = useMemo(() => {
+    if (!safe?.id) return reserves
     if (!reserves.length) return []
     if (!selectedDrawerFilters) return reserves
     const selectedIds = new Set<string>()
@@ -701,7 +704,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Fetch paid amounts (scoped to filteredRecordIds)
         let txQuery = supabase
           .from('cash_drawer_transactions')
-          .select('sale_id, amount')
+          .select('sale_id, amount, payment_method')
           .in('sale_id', saleIds)
         txQuery = txQuery.in('record_id', filteredRecordIds)
         // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
@@ -712,12 +715,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
         if (transactions) {
           const amounts: Record<string, number> = {}
+          const breakdowns: Record<string, {method: string, amount: number}[]> = {}
           transactions.forEach((t: any) => {
             if (t.sale_id) {
-              amounts[t.sale_id] = Math.abs(t.amount || 0)
+              amounts[t.sale_id] = (amounts[t.sale_id] || 0) + Math.abs(t.amount || 0)
+              if (!breakdowns[t.sale_id]) breakdowns[t.sale_id] = []
+              breakdowns[t.sale_id].push({ method: t.payment_method || 'نقد', amount: Math.abs(t.amount || 0) })
             }
           })
           setPaidAmounts(prev => ({ ...prev, ...amounts }))
+          setPaymentBreakdowns(prev => ({ ...prev, ...breakdowns }))
         }
 
         // Batch load all sale items for client-side search
@@ -1113,7 +1120,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Fetch paid amounts (scoped to filteredRecordIds)
         let purchaseTxQuery = supabase
           .from('cash_drawer_transactions')
-          .select('purchase_invoice_id, amount')
+          .select('purchase_invoice_id, amount, payment_method')
           .in('purchase_invoice_id', purchaseIds)
         purchaseTxQuery = purchaseTxQuery.in('record_id', filteredRecordIds)
         // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
@@ -1124,12 +1131,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
         if (transactions) {
           const amounts: Record<string, number> = {}
+          const breakdowns: Record<string, {method: string, amount: number}[]> = {}
           transactions.forEach((t: any) => {
             if (t.purchase_invoice_id) {
-              amounts[t.purchase_invoice_id] = Math.abs(t.amount || 0)
+              amounts[t.purchase_invoice_id] = (amounts[t.purchase_invoice_id] || 0) + Math.abs(t.amount || 0)
+              if (!breakdowns[t.purchase_invoice_id]) breakdowns[t.purchase_invoice_id] = []
+              breakdowns[t.purchase_invoice_id].push({ method: t.payment_method || 'نقد', amount: Math.abs(t.amount || 0) })
             }
           })
           setPaidAmounts(prev => ({ ...prev, ...amounts }))
+          setPaymentBreakdowns(prev => ({ ...prev, ...breakdowns }))
         }
 
         // Batch load all purchase invoice items for client-side search
@@ -1689,6 +1700,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       transactionType: 'sale',
       amount: sale.total_amount,
       paid_amount: paidAmounts[sale.id] || 0,
+      paymentBreakdown: paymentBreakdowns[sale.id] || [],
       client: sale.customer,
       clientType: 'عميل'
     }))
@@ -1698,6 +1710,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       transactionType: 'purchase',
       amount: purchase.total_amount,
       paid_amount: paidAmounts[purchase.id] || 0,
+      paymentBreakdown: paymentBreakdowns[purchase.id] || [],
       client: purchase.supplier,
       clientType: 'مورد'
     }))
@@ -1706,7 +1719,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     return [...salesWithType, ...purchasesWithType].sort((a, b) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
-  }, [sales, purchaseInvoices, paidAmounts])
+  }, [sales, purchaseInvoices, paidAmounts, paymentBreakdowns])
 
   // Create combined transaction items based on selected transaction type
   const allTransactionItems = useMemo(() => {
@@ -1936,7 +1949,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       const next = new Set(prev)
       next.has(filterId) ? next.delete(filterId) : next.add(filterId)
       // Non-drawer safes: if both 'safe' and 'transfers' selected, that's "all"
-      if (!safe.supports_drawers && next.has('safe') && next.has('transfers')) return null
+      if (!safe?.supports_drawers && next.has('safe') && next.has('transfers')) return null
       return next.size === 0 ? null : next
     })
   }
@@ -2469,6 +2482,22 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   ];
 
+  // Payment method color helper
+  const methodColorMap: Record<string, string> = {
+    'نقد': 'text-green-400', 'نقدي': 'text-green-400', 'cash': 'text-green-400',
+    'تحويل': 'text-orange-400', 'transfer': 'text-orange-400', 'تحويل بنكي': 'text-orange-400',
+  }
+  const fallbackColors = ['text-blue-400', 'text-purple-400', 'text-cyan-400', 'text-pink-400', 'text-yellow-400']
+  const getMethodColor = (method: string) => {
+    const lower = method?.toLowerCase() || ''
+    for (const [key, color] of Object.entries(methodColorMap)) {
+      if (lower.includes(key)) return color
+    }
+    let hash = 0
+    for (let i = 0; i < lower.length; i++) hash += lower.charCodeAt(i)
+    return fallbackColors[Math.abs(hash) % fallbackColors.length]
+  }
+
   // Define columns for each table - exactly like Products page structure
   const statementColumns = [
     {
@@ -2561,7 +2590,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       header: 'طريقة الدفع',
       accessor: 'payment_method',
       width: 120,
-      render: (value: string) => <span className="text-blue-400">{value || '-'}</span>
+      render: (value: string) => <span className={getMethodColor(value || '-')}>{value || '-'}</span>
     },
     {
       id: 'balance',
@@ -2675,12 +2704,26 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         )
       }
     },
-    { 
-      id: 'payment_method', 
-      header: 'طريقة الدفع', 
-      accessor: 'payment_method', 
-      width: 120,
-      render: (value: string) => <span className="text-blue-400">{value || 'نقد'}</span>
+    {
+      id: 'payment_method',
+      header: 'طريقة الدفع',
+      accessor: 'payment_method',
+      width: 200,
+      render: (value: string, item: any) => {
+        if (item.paymentBreakdown?.length > 1) {
+          return (
+            <span className="flex flex-wrap gap-x-1">
+              {item.paymentBreakdown.map((b: {method: string, amount: number}, i: number) => (
+                <span key={i}>
+                  <span className={getMethodColor(b.method)}>{b.method}: {formatPrice(b.amount, 'system')}</span>
+                  {i < item.paymentBreakdown.length - 1 && <span className="text-gray-500"> , </span>}
+                </span>
+              ))}
+            </span>
+          )
+        }
+        return <span className={getMethodColor(value || 'نقد')}>{value || 'نقد'}</span>
+      }
     },
     { 
       id: 'invoice_type', 

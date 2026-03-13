@@ -375,7 +375,14 @@
       "Bash(wc -l \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\settings\\\\page.tsx\")",
       "Bash(head -50 \"/c/Users/pc/Desktop/elfaroukgroup/app/\\(dashboard\\)/suppliers/page.tsx\")",
       "Bash(/tmp/architecture_diagram.txt:*)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(wc -l \"C:/Users/pc/Desktop/elfaroukgroup/app/\\(dashboard\\)/safes/page.tsx\")",
+      "Bash(grep -l \"onClose\\(\\)\" app/components/*.tsx | head -15)",
+      "Bash(grep -l \"onClose\\(\\)\" app/components/*.tsx)",
+      "Bash(while read:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/pc/Desktop/elfaroukgroup/**)",
+      "Bash(grep -rn \"catch\\\\s*\\(\" app/components/*.tsx | wc -l)"
     ],
     "deny": [],
     "additionalDirectories": [
