@@ -1977,8 +1977,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       return
     }
 
-    // === "الكل" (All sources) withdrawal ===
-    if (withdrawSourceId === 'all' && withdrawType === 'withdraw') {
+    // === "الكل" (All sources) withdrawal - only for drawer safes ===
+    if (withdrawSourceId === 'all' && withdrawType === 'withdraw' && safe.supports_drawers && childSafes.length > 0) {
       if (!withdrawAllMode) {
         alert('يرجى اختيار طريقة السحب')
         return
@@ -2052,8 +2052,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       return
     }
 
-    // For safes with drawers, require source selection for withdraw/transfer
-    if (safe.supports_drawers && childSafes.length > 0 && (withdrawType === 'withdraw' || withdrawType === 'transfer') && !withdrawSourceId) {
+    // For safes with drawers or non-drawer safes with transfers, require source selection for withdraw/transfer
+    const isNonDrawerWithTransfers = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+    if ((safe.supports_drawers && childSafes.length > 0 || isNonDrawerWithTransfers) && (withdrawType === 'withdraw' || withdrawType === 'transfer') && !withdrawSourceId) {
       alert('يرجى اختيار مصدر السحب')
       return
     }
@@ -2061,14 +2062,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     // Resolve source record_id
     const sourceRecordId = (safe.supports_drawers && childSafes.length > 0 && withdrawSourceId)
       ? (withdrawSourceId === 'transfers' ? safe.id : withdrawSourceId)
-      : safe.id
+      : safe.id // For non-drawer safes, record_id is always safe.id regardless of source selection
 
     // Get source balance for validation
     const sourceBalance = (safe.supports_drawers && childSafes.length > 0 && withdrawSourceId)
       ? (withdrawSourceId === 'transfers'
         ? mainSafeOwnBalance
         : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
-      : safeBalance
+      : (isNonDrawerWithTransfers && withdrawSourceId)
+        ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+        : safeBalance
 
     // فقط للسحب والتحويل: التحقق من الرصيد الكافي
     if ((withdrawType === 'withdraw' || withdrawType === 'transfer') && amount > sourceBalance) {
@@ -4943,14 +4946,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 <div className="text-purple-300 text-sm">
                   {safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                     ? (withdrawSourceId === 'all' ? 'الرصيد الإجمالي' : withdrawSourceId === 'transfers' ? 'رصيد التحويلات' : `رصيد ${childSafes.find(c => c.id === withdrawSourceId)?.name || 'الدرج'}`)
-                    : 'الرصيد الحالي'}
+                    : (!safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0 && withdrawSourceId)
+                      ? (withdrawSourceId === 'safe-only' ? 'رصيد الخزنة' : withdrawSourceId === 'transfers' ? 'رصيد التحويلات' : withdrawSourceId === 'all' ? 'الرصيد الإجمالي' : 'الرصيد الحالي')
+                      : 'الرصيد الحالي'}
                 </div>
                 <div className="text-white text-xl font-bold">{formatPrice(
                   safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                     ? (withdrawSourceId === 'all' ? safeBalance : withdrawSourceId === 'transfers'
                       ? mainSafeOwnBalance
                       : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
-                    : safeBalance
+                    : (!safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0 && withdrawSourceId)
+                      ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+                      : safeBalance
                 , 'system')}</div>
               </div>
 
@@ -4991,32 +4998,62 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 </div>
               </div>
 
-              {/* Source Selection - Only for safes with drawers */}
-              {safe.supports_drawers && childSafes.length > 0 && (
-                <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">
-                    {withdrawType === 'deposit' ? 'الإيداع في' : 'السحب من'}
-                  </label>
-                  <select
-                    value={withdrawSourceId}
-                    onChange={(e) => { setWithdrawSourceId(e.target.value); setShowWithdrawSuggestions(false); setWithdrawAllMode(null); setWithdrawAmount('') }}
-                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">اختر المصدر...</option>
-                    {withdrawType === 'withdraw' && (
-                      <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
-                    )}
-                    {childSafes.map(drawer => (
-                      <option key={drawer.id} value={drawer.id}>
-                        {drawer.name} ({formatPrice(drawer.balance, 'system')})
-                      </option>
-                    ))}
-                    <option value="transfers">
-                      التحويلات ({formatPrice(mainSafeOwnBalance, 'system')})
-                    </option>
-                  </select>
-                </div>
-              )}
+              {/* Source Selection - For safes with drawers OR non-drawer safes with transfers */}
+              {(() => {
+                const isNonDrawerWithTransfers = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+                if (safe.supports_drawers && childSafes.length > 0) {
+                  return (
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2 text-right">
+                        {withdrawType === 'deposit' ? 'الإيداع في' : 'السحب من'}
+                      </label>
+                      <select
+                        value={withdrawSourceId}
+                        onChange={(e) => { setWithdrawSourceId(e.target.value); setShowWithdrawSuggestions(false); setWithdrawAllMode(null); setWithdrawAmount('') }}
+                        className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">اختر المصدر...</option>
+                        {withdrawType === 'withdraw' && (
+                          <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
+                        )}
+                        {childSafes.map(drawer => (
+                          <option key={drawer.id} value={drawer.id}>
+                            {drawer.name} ({formatPrice(drawer.balance, 'system')})
+                          </option>
+                        ))}
+                        <option value="transfers">
+                          التحويلات ({formatPrice(mainSafeOwnBalance, 'system')})
+                        </option>
+                      </select>
+                    </div>
+                  )
+                } else if (isNonDrawerWithTransfers) {
+                  return (
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2 text-right">
+                        {withdrawType === 'deposit' ? 'الإيداع في' : 'السحب من'}
+                      </label>
+                      <select
+                        value={withdrawSourceId}
+                        onChange={(e) => { setWithdrawSourceId(e.target.value); setShowWithdrawSuggestions(false); setWithdrawAllMode(null); setWithdrawAmount('') }}
+                        className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">اختر المصدر...</option>
+                        {withdrawType === 'withdraw' && (
+                          <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
+                        )}
+                        <option value="safe-only">
+                          الخزنة ({formatPrice(safeBalance - nonDrawerTransferBalance, 'system')})
+                        </option>
+                        <option value="transfers">
+                          التحويلات ({formatPrice(nonDrawerTransferBalance, 'system')})
+                        </option>
+                      </select>
+                    </div>
+                  )
+                }
+                return null
+              })()}
 
               {/* Target Safe (if transfer) */}
               {withdrawType === 'transfer' && (
@@ -5097,15 +5134,20 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     max={withdrawType === 'deposit' ? undefined : (
                       safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                         ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
-                        : safeBalance
+                        : (!safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0 && withdrawSourceId)
+                          ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+                          : safeBalance
                     )}
                     step="0.01"
                   />
                   {/* اقتراحات السحب - فقط للسحب والتحويل */}
                   {withdrawType !== 'deposit' && (() => {
+                    const isNonDrawerSrc = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
                     const sourceBalanceForButton = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                       ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
-                      : safeBalance
+                      : (isNonDrawerSrc && withdrawSourceId)
+                        ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+                        : safeBalance
                     const sourceReserves = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                       ? reserves.filter(r => r.record_id === (withdrawSourceId === 'transfers' ? safe.id : withdrawSourceId)).reduce((sum, r) => sum + r.amount, 0)
                       : reserves.reduce((sum, r) => sum + r.amount, 0)

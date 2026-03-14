@@ -807,6 +807,7 @@ function POSPageContent() {
           addTabWithCustomerAndCart(customerForTab, newCartItems, tabTitle, {
             branch: globalSelections.branch,
             record: globalSelections.record,
+            subSafe: globalSelections.subSafe,
             priceType: selectedPriceType,
           }, {
             isEditMode: true,
@@ -819,6 +820,7 @@ function POSPageContent() {
             addTabWithCustomerAndCart(customerForTab, [], tabTitle, {
               branch: globalSelections.branch,
               record: globalSelections.record,
+              subSafe: globalSelections.subSafe,
               priceType: selectedPriceType,
             }, {
               isEditMode: true,
@@ -869,6 +871,7 @@ function POSPageContent() {
           addTabWithCustomerAndCart(customerForTab, fallbackItems, tabTitle, {
             branch: globalSelections.branch,
             record: globalSelections.record,
+            subSafe: globalSelections.subSafe,
             priceType: selectedPriceType,
           }, {
             isEditMode: true,
@@ -881,6 +884,7 @@ function POSPageContent() {
             addTabWithCustomerAndCart(customerForTab, [], tabTitle, {
               branch: globalSelections.branch,
               record: globalSelections.record,
+              subSafe: globalSelections.subSafe,
               priceType: selectedPriceType,
             }, {
               isEditMode: true,
@@ -1306,6 +1310,7 @@ function POSPageContent() {
             {
               branch: globalSelections.branch,
               record: globalSelections.record,
+              subSafe: globalSelections.subSafe,
               priceType: selectedPriceType,
             },
             defaultCustomer
@@ -1317,6 +1322,7 @@ function POSPageContent() {
           addTabWithCustomer(customer, {
             branch: globalSelections.branch,
             record: globalSelections.record,
+            subSafe: globalSelections.subSafe,
             priceType: selectedPriceType,
           });
           console.log("Created new tab for customer from context menu:", customer?.name);
@@ -1339,6 +1345,7 @@ function POSPageContent() {
           {
             branch: globalSelections.branch,
             record: globalSelections.record,
+            subSafe: globalSelections.subSafe,
             priceType: selectedPriceType,
           },
           defaultCustomer
@@ -1351,6 +1358,7 @@ function POSPageContent() {
         addTabWithCustomer(customer, {
           branch: globalSelections.branch,
           record: globalSelections.record,
+          subSafe: globalSelections.subSafe,
           priceType: selectedPriceType,
         });
         console.log("Created new tab for customer:", customer?.name);
@@ -1376,6 +1384,7 @@ function POSPageContent() {
     addTabWithCustomer(customer, {
       branch: globalSelections.branch,
       record: globalSelections.record,
+      subSafe: globalSelections.subSafe,
       priceType: selectedPriceType,
     });
     setShowNewTabCustomerModal(false);
@@ -1436,6 +1445,7 @@ function POSPageContent() {
       addTabWithCustomer(customer, {
         branch: globalSelections.branch,
         record: globalSelections.record,
+        subSafe: globalSelections.subSafe,
         priceType: selectedPriceType,
       });
     } else {
@@ -1450,6 +1460,7 @@ function POSPageContent() {
       addTabWithCustomer(defaultCustomer, {
         branch: globalSelections.branch,
         record: globalSelections.record,
+        subSafe: globalSelections.subSafe,
         priceType: selectedPriceType,
       });
       // Set the supplier for this new tab
@@ -1481,6 +1492,7 @@ function POSPageContent() {
         customer: null,
         branch: globalSelections.branch,
         record: globalSelections.record,
+        subSafe: globalSelections.subSafe,
         priceType: 'cost_price',
         isPurchaseMode: true,
         selectedSupplier: supplier,
@@ -1520,6 +1532,7 @@ function POSPageContent() {
           customer: customer,
           branch: globalSelections.branch,
           record: globalSelections.record,
+          subSafe: globalSelections.subSafe,
           priceType: 'cost_price',
           isPurchaseMode: true,
           selectedSupplier: linkedSupplier,
@@ -3184,6 +3197,7 @@ function POSPageContent() {
       customer: null,
       branch: globalSelections.branch,
       record: globalSelections.record,
+      subSafe: globalSelections.subSafe,
       priceType: 'cost_price',
       isPurchaseMode: true,
       selectedSupplier: supplier,
@@ -4751,6 +4765,7 @@ function POSPageContent() {
                       customer: defaultCustomer || globalSelections.customer,
                       branch: globalSelections.branch,
                       record: globalSelections.record,
+                      subSafe: globalSelections.subSafe,
                       priceType: selectedPriceType,
                     });
                     setNewTabName("");
@@ -4777,6 +4792,7 @@ function POSPageContent() {
                         customer: defaultCustomer || globalSelections.customer,
                         branch: globalSelections.branch,
                         record: globalSelections.record,
+                        subSafe: globalSelections.subSafe,
                         priceType: selectedPriceType,
                       });
                       setNewTabName("");
@@ -5662,6 +5678,7 @@ function POSPageContent() {
                           const customerToSave = selections.customer;
                           const branchToSave = selections.branch;
                           const recordToSave = selections.record;
+                          const subSafeToSave = selections.subSafe;
                           const priceTypeToSave = selectedPriceType;
 
                           // Create new tab with the saved items
@@ -5672,6 +5689,7 @@ function POSPageContent() {
                             {
                               branch: branchToSave,
                               record: recordToSave,
+                              subSafe: subSafeToSave,
                               priceType: priceTypeToSave,
                             }
                           );
@@ -5958,6 +5976,7 @@ function POSPageContent() {
                                     const customerToSave = selections.customer;
                                     const branchToSave = selections.branch;
                                     const recordToSave = selections.record;
+                                    const subSafeToSave = selections.subSafe;
                                     const priceTypeToSave = selectedPriceType;
 
                                     // Create new tab with the saved items
@@ -5968,6 +5987,7 @@ function POSPageContent() {
                                       {
                                         branch: branchToSave,
                                         record: recordToSave,
+                                        subSafe: subSafeToSave,
                                         priceType: priceTypeToSave,
                                       }
                                     );
@@ -6505,6 +6525,7 @@ function POSPageContent() {
                               const customerToSave = selections.customer;
                               const branchToSave = selections.branch;
                               const recordToSave = selections.record;
+                              const subSafeToSave = selections.subSafe;
                               const priceTypeToSave = selectedPriceType;
 
                               // Create new tab with the saved items
@@ -6515,6 +6536,7 @@ function POSPageContent() {
                                 {
                                   branch: branchToSave,
                                   record: recordToSave,
+                                  subSafe: subSafeToSave,
                                   priceType: priceTypeToSave,
                                 }
                               );
@@ -8041,6 +8063,7 @@ function POSPageContent() {
                     customer: defaultCustomer || globalSelections.customer,
                     branch: globalSelections.branch,
                     record: globalSelections.record,
+                    subSafe: globalSelections.subSafe,
                     priceType: selectedPriceType,
                   });
                   setNewTabName("");
@@ -8067,6 +8090,7 @@ function POSPageContent() {
                       customer: defaultCustomer || globalSelections.customer,
                       branch: globalSelections.branch,
                       record: globalSelections.record,
+                      subSafe: globalSelections.subSafe,
                       priceType: selectedPriceType,
                     });
                     setNewTabName("");

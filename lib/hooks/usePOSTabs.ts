@@ -33,6 +33,7 @@ interface InheritedSelections {
   customer?: any;
   branch?: any;
   record?: any;
+  subSafe?: any;
   priceType?: string;
   isPurchaseMode?: boolean;
   selectedSupplier?: any;
@@ -194,6 +195,7 @@ export function usePOSTabs(): UsePOSTabsReturn {
             customer: inheritedSelections?.customer || null,
             branch: inheritedSelections?.branch || null,
             record: inheritedSelections?.record || null,
+            subSafe: inheritedSelections?.subSafe || null,
             priceType: inheritedSelections?.priceType as any || 'price',
           },
           isPurchaseMode: inheritedSelections?.isPurchaseMode || false,
@@ -226,6 +228,11 @@ export function usePOSTabs(): UsePOSTabsReturn {
       customerRecord = inheritedSelections.record;
     }
 
+    // If customer overrides record, clear subSafe (drawer belongs to original record)
+    const customerSubSafe = (customer?.default_record_id && customer.default_record_id !== inheritedSelections?.record?.id)
+      ? null
+      : (inheritedSelections?.subSafe || null);
+
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
 
@@ -241,6 +248,7 @@ export function usePOSTabs(): UsePOSTabsReturn {
             customer: customer,
             branch: inheritedSelections?.branch || null,
             record: customerRecord,
+            subSafe: customerSubSafe,
             priceType: customerPriceType as any,
           },
         },
@@ -267,6 +275,11 @@ export function usePOSTabs(): UsePOSTabsReturn {
       customerRecord = inheritedSelections.record;
     }
 
+    // If customer overrides record, clear subSafe (drawer belongs to original record)
+    const customerSubSafe = (customer?.default_record_id && customer.default_record_id !== inheritedSelections?.record?.id)
+      ? null
+      : (inheritedSelections?.subSafe || null);
+
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
 
@@ -282,6 +295,7 @@ export function usePOSTabs(): UsePOSTabsReturn {
             customer: customer,
             branch: inheritedSelections?.branch || null,
             record: customerRecord,
+            subSafe: customerSubSafe,
             priceType: customerPriceType as any,
           },
           // Set edit mode directly when creating the tab (no setTimeout needed)
@@ -320,6 +334,11 @@ export function usePOSTabs(): UsePOSTabsReturn {
       customerRecord = inheritedSelections.record;
     }
 
+    // If customer overrides record, clear subSafe (drawer belongs to original record)
+    const customerSubSafe = (customer?.default_record_id && customer.default_record_id !== inheritedSelections?.record?.id)
+      ? null
+      : (inheritedSelections?.subSafe || null);
+
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
 
@@ -354,6 +373,7 @@ export function usePOSTabs(): UsePOSTabsReturn {
           customer: customer,
           branch: inheritedSelections?.branch || null,
           record: customerRecord,
+          subSafe: customerSubSafe,
           priceType: customerPriceType as any,
         },
       });
