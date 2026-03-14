@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   XMarkIcon,
@@ -19,6 +19,7 @@ interface PostponedInvoicesModalProps {
   postponedTabs: POSTab[];
   onRestoreTab: (tabId: string) => void;
   onDeleteTab: (tabId: string) => void;
+  onRefresh?: () => Promise<void>;
 }
 
 export default function PostponedInvoicesModal({
@@ -27,7 +28,18 @@ export default function PostponedInvoicesModal({
   postponedTabs,
   onRestoreTab,
   onDeleteTab,
+  onRefresh,
 }: PostponedInvoicesModalProps) {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Refresh postponed tabs from DB when modal opens
+  useEffect(() => {
+    if (isOpen && onRefresh) {
+      setIsRefreshing(true);
+      onRefresh().finally(() => setIsRefreshing(false));
+    }
+  }, [isOpen, onRefresh]);
+
   const formatDate = (dateString: string | undefined) => {
     if (!dateString) return "غير محدد";
     const date = new Date(dateString);
@@ -85,6 +97,9 @@ export default function PostponedInvoicesModal({
                   <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
                     <ClockIcon className="h-6 w-6 text-orange-400" />
                     الفواتير المؤجلة
+                    {isRefreshing && (
+                      <ArrowPathIcon className="h-4 w-4 text-gray-400 animate-spin" />
+                    )}
                   </Dialog.Title>
                   <button
                     onClick={onClose}

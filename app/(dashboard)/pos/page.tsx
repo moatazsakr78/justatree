@@ -6,6 +6,7 @@ import POSSearchInput, { POSSearchInputRef } from "../../components/pos/POSSearc
 // Local storage key for POS column visibility
 const POS_COLUMN_VISIBILITY_KEY = 'pos-column-visibility-v2';
 import { useCart, CartProvider } from "@/lib/contexts/CartContext";
+import ToastProvider, { useToast } from "@/app/components/ui/ToastProvider";
 import { useCartBadge } from "@/lib/hooks/useCartBadge";
 import { useUserProfile } from "@/lib/contexts/UserProfileContext";
 import { useCurrentBranch } from "@/lib/contexts/CurrentBranchContext";
@@ -227,9 +228,22 @@ function POSPageContent() {
     clearActiveTabCart,
     postponeTab,
     restoreTab,
+    refreshPostponedTabs,
     postponedTabs,
     isLoading: isLoadingTabs,
   } = usePOSTabs();
+
+  const { showToast } = useToast();
+
+  // Wrapper for postponeTab that shows toast feedback
+  const handlePostponeTab = useCallback(async (tabId: string) => {
+    const success = await postponeTab(tabId);
+    if (success) {
+      showToast('تم تأجيل الفاتورة بنجاح', 'success');
+    } else if (tabId !== 'main') {
+      showToast('فشل حفظ الفاتورة المؤجلة', 'error');
+    }
+  }, [postponeTab, showToast]);
 
   // Dedicated POS Cart State (separate from website cart)
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -5701,7 +5715,7 @@ function POSPageContent() {
                           // Postpone the newly created tab
                           setTimeout(() => {
                             // Postpone the new tab (this switches to main tab)
-                            postponeTab(newTabId);
+                            handlePostponeTab(newTabId);
 
                             // Make sure main tab is selected
                             switchTab('main');
@@ -5746,7 +5760,7 @@ function POSPageContent() {
                       onClick={() => {
                         const tab = posTabs.find(t => t.id === tabContextMenu.tabId);
                         if (tab && tab.cartItems && tab.cartItems.length > 0) {
-                          postponeTab(tabContextMenu.tabId);
+                          handlePostponeTab(tabContextMenu.tabId);
                         }
                         setTabContextMenu(null);
                       }}
@@ -5999,7 +6013,7 @@ function POSPageContent() {
                                     // Postpone the newly created tab
                                     setTimeout(() => {
                                       // Postpone the new tab (this switches to main tab)
-                                      postponeTab(newTabId);
+                                      handlePostponeTab(newTabId);
 
                                       // Make sure main tab is selected
                                       switchTab('main');
@@ -6548,7 +6562,7 @@ function POSPageContent() {
                               // Postpone the newly created tab
                               setTimeout(() => {
                                 // Postpone the new tab (this switches to main tab)
-                                postponeTab(newTabId);
+                                handlePostponeTab(newTabId);
 
                                 // Make sure main tab is selected
                                 switchTab('main');
@@ -7091,6 +7105,7 @@ function POSPageContent() {
         postponedTabs={postponedTabs}
         onRestoreTab={restoreTab}
         onDeleteTab={closeTab}
+        onRefresh={refreshPostponedTabs}
       />
 
       {/* Cash Drawer Modal */}
@@ -8183,7 +8198,9 @@ function POSPageContent() {
 export default function POSPage() {
   return (
     <CartProvider>
-      <POSPageContent />
+      <ToastProvider>
+        <POSPageContent />
+      </ToastProvider>
     </CartProvider>
   );
 }
