@@ -390,9 +390,13 @@ function POSPageContent() {
     if (activeTabId === 'main') {
       return globalSelections;
     }
+    // While tabs are loading, use globalSelections as fallback (loaded from localStorage synchronously)
+    if (isLoadingTabs || !activePOSTab) {
+      return globalSelections;
+    }
     // For other tabs, use tab-specific selections
-    return activePOSTab?.selections || { customer: null, branch: null, record: null, subSafe: null };
-  }, [activeTabId, activePOSTab?.selections, globalSelections]);
+    return activePOSTab.selections;
+  }, [activeTabId, activePOSTab?.selections, globalSelections, isLoadingTabs]);
 
   // Ensure main tab always shows default customer
   // When a non-default customer is selected on main, a new tab is auto-created,

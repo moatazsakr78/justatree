@@ -1977,10 +1977,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       return
     }
 
-    // === "الكل" (All sources) withdrawal - only for drawer safes ===
-    if (withdrawSourceId === 'all' && withdrawType === 'withdraw' && safe.supports_drawers && childSafes.length > 0) {
+    // === "الكل" (All sources) withdrawal/transfer - only for drawer safes ===
+    if (withdrawSourceId === 'all' && (withdrawType === 'withdraw' || withdrawType === 'transfer') && safe.supports_drawers && childSafes.length > 0) {
       if (!withdrawAllMode) {
-        alert('يرجى اختيار طريقة السحب')
+        alert(withdrawType === 'withdraw' ? 'يرجى اختيار طريقة السحب' : 'يرجى اختيار طريقة التحويل')
+        return
+      }
+
+      if (withdrawType === 'transfer' && !targetSafeId) {
+        alert('يرجى اختيار الخزنة المستهدفة')
         return
       }
 
@@ -1990,6 +1995,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         const allSources: { id: string; name: string; balance: number }[] = []
         childSafes.forEach(c => { if (c.balance > 0) allSources.push({ id: c.id, name: c.name, balance: c.balance }) })
         if (mainSafeOwnBalance > 0) allSources.push({ id: safe.id, name: 'التحويلات', balance: mainSafeOwnBalance })
+
+        let totalTransferred = 0
 
         for (const source of allSources) {
           // Calculate amount to withdraw from this source
@@ -2017,16 +2024,152 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             .update({ current_balance: newBalance, updated_at: new Date().toISOString() })
             .eq('id', drawer.id)
 
-          // Create withdrawal transaction
+          // Create withdrawal/transfer_out transaction
           await supabase
             .from('cash_drawer_transactions')
             .insert({
               drawer_id: drawer.id,
               record_id: source.id,
-              transaction_type: 'withdrawal',
+              transaction_type: withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal',
               amount: -withdrawFromSource,
               balance_after: newBalance,
-              notes: `سحب من الخزنة (سحب الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+              notes: withdrawType === 'transfer'
+                ? `تحويل إلى خزنة أخرى (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
+                : `سحب من الخزنة (سحب الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+              performed_by: user?.name || 'system',
+              ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
+            })
+
+          totalTransferred += withdrawFromSource
+        }
+
+        // For transfer: deposit total amount to target safe
+        if (withdrawType === 'transfer' && totalTransferred > 0) {
+          // Get or create target drawer
+          let { data: targetDrawer } = await supabase
+            .from('cash_drawers')
+            .select('*')
+            .eq('record_id', targetSafeId)
+            .single()
+
+          if (!targetDrawer) {
+            const { data: newDrawer } = await supabase
+              .from('cash_drawers')
+              .insert({
+                record_id: targetSafeId,
+                current_balance: 0,
+                status: 'open'
+              })
+              .select()
+              .single()
+            targetDrawer = newDrawer
+          }
+
+          if (targetDrawer) {
+            const targetNewBalance = roundMoney((targetDrawer.current_balance || 0) + totalTransferred)
+
+            await supabase
+              .from('cash_drawers')
+              .update({ current_balance: targetNewBalance, updated_at: new Date().toISOString() })
+              .eq('id', targetDrawer.id)
+
+            await supabase
+              .from('cash_drawer_transactions')
+              .insert({
+                drawer_id: targetDrawer.id,
+                record_id: targetSafeId,
+                transaction_type: 'transfer_in',
+                amount: totalTransferred,
+                balance_after: targetNewBalance,
+                notes: `تحويل من خزنة أخرى (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+                performed_by: user?.name || 'system',
+                related_record_id: safe.id
+              })
+          }
+        }
+
+        // Refresh balances
+        fetchCashDrawerBalance()
+        fetchChildSafes()
+
+        // Reset form
+        setWithdrawAmount('')
+        setWithdrawNotes('')
+        setTargetSafeId('')
+        setWithdrawSourceId('')
+        setWithdrawAllMode(null)
+        setShowWithdrawModal(false)
+        alert(withdrawType === 'transfer' ? 'تم تحويل الكل بنجاح' : `تم سحب ${amount} بنجاح`)
+      } catch (error: any) {
+        console.error('Error in withdraw/transfer all:', error)
+        alert(`حدث خطأ: ${error.message}`)
+      } finally {
+        setIsWithdrawing(false)
+      }
+      return
+    }
+
+    // === "الكل" (All targets) deposit - only for drawer safes ===
+    if (withdrawSourceId === 'all' && withdrawType === 'deposit' && safe.supports_drawers && childSafes.length > 0) {
+      setIsWithdrawing(true)
+      try {
+        // Collect all targets: childSafes + main safe (التحويلات)
+        const allTargets: { id: string; name: string }[] = []
+        childSafes.forEach(c => allTargets.push({ id: c.id, name: c.name }))
+        allTargets.push({ id: safe.id, name: 'التحويلات' })
+
+        // Split amount equally among all targets
+        const perTarget = Math.floor((amount / allTargets.length) * 100) / 100
+        let remaining = roundMoney(amount)
+
+        for (let i = 0; i < allTargets.length; i++) {
+          const target = allTargets[i]
+          // Last target gets remainder for rounding
+          const depositAmount = i === allTargets.length - 1 ? remaining : perTarget
+          remaining = roundMoney(remaining - depositAmount)
+
+          if (depositAmount <= 0) continue
+
+          // Get or create drawer
+          let { data: drawer } = await supabase
+            .from('cash_drawers')
+            .select('*')
+            .eq('record_id', target.id)
+            .single()
+
+          if (!drawer) {
+            const { data: newDrawer } = await supabase
+              .from('cash_drawers')
+              .insert({
+                record_id: target.id,
+                current_balance: 0,
+                status: 'open'
+              })
+              .select()
+              .single()
+            drawer = newDrawer
+          }
+
+          if (!drawer) continue
+
+          const newBalance = roundMoney((drawer.current_balance || 0) + depositAmount)
+
+          // Update drawer balance
+          await supabase
+            .from('cash_drawers')
+            .update({ current_balance: newBalance, updated_at: new Date().toISOString() })
+            .eq('id', drawer.id)
+
+          // Create deposit transaction
+          await supabase
+            .from('cash_drawer_transactions')
+            .insert({
+              drawer_id: drawer.id,
+              record_id: target.id,
+              transaction_type: 'deposit',
+              amount: depositAmount,
+              balance_after: newBalance,
+              notes: `إيداع في الخزنة (إيداع الكل - ${target.name})${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
               performed_by: user?.name || 'system'
             })
         }
@@ -2042,9 +2185,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         setWithdrawSourceId('')
         setWithdrawAllMode(null)
         setShowWithdrawModal(false)
-        alert(`تم سحب ${amount} بنجاح`)
+        alert('تم الإيداع بنجاح')
       } catch (error: any) {
-        console.error('Error in withdraw all:', error)
+        console.error('Error in deposit all:', error)
         alert(`حدث خطأ: ${error.message}`)
       } finally {
         setIsWithdrawing(false)
@@ -5013,9 +5156,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">اختر المصدر...</option>
-                        {withdrawType === 'withdraw' && (
-                          <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
-                        )}
+                        <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
                         {childSafes.map(drawer => (
                           <option key={drawer.id} value={drawer.id}>
                             {drawer.name} ({formatPrice(drawer.balance, 'system')})
@@ -5039,9 +5180,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">اختر المصدر...</option>
-                        {withdrawType === 'withdraw' && (
-                          <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
-                        )}
+                        <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
                         <option value="safe-only">
                           الخزنة ({formatPrice(safeBalance - nonDrawerTransferBalance, 'system')})
                         </option>
@@ -5073,9 +5212,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               )}
 
               {/* Amount - different UI when "الكل" is selected */}
-              {withdrawSourceId === 'all' && withdrawType === 'withdraw' ? (
+              {withdrawSourceId === 'all' && (withdrawType === 'withdraw' || withdrawType === 'transfer') ? (
                 <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">اختر طريقة السحب</label>
+                  <label className="block text-gray-300 text-sm mb-2 text-right">{withdrawType === 'withdraw' ? 'اختر طريقة السحب' : 'اختر طريقة التحويل'}</label>
                   <div className="space-y-2">
                     {(() => {
                       const totalReserves = reserves.reduce((sum, r) => sum + r.amount, 0)
@@ -5093,7 +5232,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 : 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
                             }`}
                           >
-                            سحب الرصيد بالكامل ({formatPrice(safeBalance, 'system')})
+                            {withdrawType === 'withdraw' ? 'سحب' : 'تحويل'} الرصيد بالكامل ({formatPrice(safeBalance, 'system')})
                           </button>
                           {totalReserves > 0 && (
                             <button
@@ -5107,7 +5246,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                   : 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
                               }`}
                             >
-                              سحب الرصيد بدون المجنب ({formatPrice(balanceExcludingReserves, 'system')})
+                              {withdrawType === 'withdraw' ? 'سحب' : 'تحويل'} الرصيد بدون المجنب ({formatPrice(balanceExcludingReserves, 'system')})
                             </button>
                           )}
                         </>
@@ -5208,7 +5347,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               </button>
               <button
                 onClick={handleWithdraw}
-                disabled={isWithdrawing || !withdrawAmount || parseFloat(withdrawAmount) <= 0 || (withdrawSourceId === 'all' && !withdrawAllMode)}
+                disabled={isWithdrawing || !withdrawAmount || parseFloat(withdrawAmount) <= 0 || (withdrawSourceId === 'all' && withdrawType !== 'deposit' && !withdrawAllMode)}
                 className={`flex-1 py-2 px-4 rounded text-sm font-medium transition-colors ${
                   withdrawType === 'deposit'
                     ? 'bg-green-600 hover:bg-green-700 text-white disabled:bg-green-800 disabled:cursor-not-allowed'
