@@ -21,6 +21,7 @@ import ColumnsControlModal from '../../components/ColumnsControlModal'
 import QuantityAdjustmentModal from '../../components/QuantityAdjustmentModal'
 import TransferQuantityModal from '../../components/TransferQuantityModal'
 import InventoryPDFExportModal from '../../components/InventoryPDFExportModal'
+import TransferHistoryModal from '../../components/TransferHistoryModal'
 import { useProductsAdmin } from '../../../lib/hooks/useProductsAdmin'
 import { supabase } from '../../lib/supabase/client'
 import { revalidateProductPage } from '../../../lib/utils/revalidate'
@@ -96,6 +97,7 @@ export default function InventoryPage() {
   const [isTablet, setIsTablet] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [showAuditBadges, setShowAuditBadges] = useState(false)
+  const [showTransferHistoryModal, setShowTransferHistoryModal] = useState(false)
 
   // Quantity adjustment modal states
   const [showQuantityModal, setShowQuantityModal] = useState(false)
@@ -1471,6 +1473,14 @@ export default function InventoryPage() {
               <span className="text-sm">الأعمدة</span>
             </button>
 
+            <button
+              onClick={() => setShowTransferHistoryModal(true)}
+              className="flex flex-col items-center p-2 text-green-400 hover:text-green-300 cursor-pointer min-w-[80px]"
+            >
+              <ArrowsRightLeftIcon className="h-5 w-5 mb-1" />
+              <span className="text-sm">حركة النقل</span>
+            </button>
+
             {/* Separator */}
             <div className="h-10 w-px bg-gray-500 mx-1"></div>
 
@@ -2403,6 +2413,11 @@ export default function InventoryPage() {
           setIsSelectionMode(true)
           setSelectedProductIds([])
         }}
+      />
+
+      <TransferHistoryModal
+        isOpen={showTransferHistoryModal}
+        onClose={() => setShowTransferHistoryModal(false)}
       />
     </div>
   )

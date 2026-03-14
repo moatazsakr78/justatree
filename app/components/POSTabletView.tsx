@@ -455,7 +455,7 @@ export default function POSTabletView({
               }}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 isTransferMode && !isReturnMode
-                  ? 'bg-orange-600 text-white'
+                  ? 'bg-green-600 text-white'
                   : 'text-gray-300 hover:text-white hover:bg-gray-600/30'
               }`}
             >
@@ -795,7 +795,7 @@ export default function POSTabletView({
                       </div>
                     ) : (
                       <div className="text-right">
-                        <div className="text-orange-400 text-xs font-medium">وضع النقل</div>
+                        <div className="text-green-400 text-xs font-medium">وضع النقل</div>
                         <div className="text-white font-bold text-lg">
                           {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                         </div>
@@ -812,7 +812,7 @@ export default function POSTabletView({
                     }
                     className={`flex-1 py-2 px-4 rounded-lg font-medium text-xs transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed text-white ${
                       isTransferMode
-                        ? 'bg-orange-600 hover:bg-orange-700'
+                        ? 'bg-green-600 hover:bg-green-700'
                         : isReturnMode
                           ? 'bg-red-600 hover:bg-red-700'
                           : isPurchaseMode

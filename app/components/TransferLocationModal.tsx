@@ -131,7 +131,7 @@ export default function TransferLocationModal({
         {/* Modal Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-600">
           <div className="flex items-center gap-2">
-            <ArrowsRightLeftIcon className="h-5 w-5 text-orange-400" />
+            <ArrowsRightLeftIcon className="h-5 w-5 text-green-400" />
             <h2 className="text-white text-lg font-semibold">
               {currentStep === 'from' ? 'اختيار مصدر النقل' : 'اختيار وجهة النقل'}
             </h2>
@@ -147,9 +147,9 @@ export default function TransferLocationModal({
         {/* Progress Indicator */}
         <div className="px-6 py-4 bg-[#2B3544]">
           <div className="flex items-center justify-center gap-4">
-            <div className={`flex items-center gap-2 ${currentStep === 'from' ? 'text-orange-400' : fromLocation ? 'text-green-400' : 'text-gray-400'}`}>
+            <div className={`flex items-center gap-2 ${currentStep === 'from' ? 'text-green-400' : fromLocation ? 'text-green-400' : 'text-gray-400'}`}>
               <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-                fromLocation ? 'border-green-400 bg-green-400' : currentStep === 'from' ? 'border-orange-400' : 'border-gray-400'
+                fromLocation ? 'border-green-400 bg-green-400' : currentStep === 'from' ? 'border-green-400' : 'border-gray-400'
               }`}>
                 {fromLocation ? <CheckIcon className="h-4 w-4 text-white" /> : '1'}
               </div>
@@ -158,9 +158,9 @@ export default function TransferLocationModal({
             
             <ArrowsRightLeftIcon className="h-5 w-5 text-gray-400" />
             
-            <div className={`flex items-center gap-2 ${currentStep === 'to' ? 'text-orange-400' : toLocation ? 'text-green-400' : 'text-gray-400'}`}>
+            <div className={`flex items-center gap-2 ${currentStep === 'to' ? 'text-green-400' : toLocation ? 'text-green-400' : 'text-gray-400'}`}>
               <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-                toLocation ? 'border-green-400 bg-green-400' : currentStep === 'to' ? 'border-orange-400' : 'border-gray-400'
+                toLocation ? 'border-green-400 bg-green-400' : currentStep === 'to' ? 'border-green-400' : 'border-gray-400'
               }`}>
                 {toLocation ? <CheckIcon className="h-4 w-4 text-white" /> : '2'}
               </div>
@@ -199,7 +199,7 @@ export default function TransferLocationModal({
           <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mb-4"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mb-4"></div>
                 <p className="text-gray-400">جاري تحميل المواقع...</p>
               </div>
             ) : error ? (
@@ -209,7 +209,7 @@ export default function TransferLocationModal({
                 <p className="text-gray-500 text-sm mb-4">{error}</p>
                 <button
                   onClick={fetchLocations}
-                  className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm transition-colors"
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors"
                 >
                   إعادة المحاولة
                 </button>
@@ -218,10 +218,10 @@ export default function TransferLocationModal({
               getAvailableLocations().map((location) => (
                 <div
                   key={location.id}
-                  className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:border-orange-400 ${
-                    (currentStep === 'from' && fromLocation?.id === location.id) || 
+                  className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:border-green-400 ${
+                    (currentStep === 'from' && fromLocation?.id === location.id) ||
                     (currentStep === 'to' && toLocation?.id === location.id)
-                      ? 'border-orange-500 bg-orange-500/10'
+                      ? 'border-green-500 bg-green-500/10'
                       : 'border-gray-600 bg-[#2B3544]'
                   }`}
                   onClick={() => handleLocationSelect(location)}
@@ -301,7 +301,7 @@ export default function TransferLocationModal({
             <button
               onClick={handleConfirm}
               disabled={!fromLocation || !toLocation}
-              className="px-6 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors"
+              className="px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors"
             >
               تأكيد النقل
             </button>

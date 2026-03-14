@@ -36,6 +36,9 @@ interface InheritedSelections {
   subSafe?: any;
   priceType?: string;
   isPurchaseMode?: boolean;
+  isTransferMode?: boolean;
+  transferFromLocation?: any;
+  transferToLocation?: any;
   selectedSupplier?: any;
   selectedCustomerForPurchase?: any;
 }
@@ -54,6 +57,7 @@ interface UsePOSTabsReturn {
   addTabWithCustomerAndCart: (customer: any, cartItems: any[], title: string, inheritedSelections?: InheritedSelections, editModeOptions?: EditModeOptions) => string;
   createTabFromMainWithCart: (customer: any, cartItems: any[], inheritedSelections?: InheritedSelections, defaultCustomer?: any) => string;
   updateTabCustomerAndTitle: (tabId: string, customer: any, title: string) => void;
+  updateTabTransferLocations: (tabId: string, fromLocation: any, toLocation: any, title: string) => void;
   closeTab: (tabId: string) => Promise<void>;
   switchTab: (tabId: string) => void;
   updateActiveTabCart: (cartItems: any[]) => void;
@@ -193,6 +197,9 @@ export function usePOSTabs(): UsePOSTabsReturn {
             priceType: inheritedSelections?.priceType as any || 'price',
           },
           isPurchaseMode: inheritedSelections?.isPurchaseMode || false,
+          isTransferMode: inheritedSelections?.isTransferMode || false,
+          transferFromLocation: inheritedSelections?.transferFromLocation || null,
+          transferToLocation: inheritedSelections?.transferToLocation || null,
           selectedSupplier: inheritedSelections?.selectedSupplier || null,
           selectedCustomerForPurchase: inheritedSelections?.selectedCustomerForPurchase || null,
         },
@@ -402,6 +409,25 @@ export function usePOSTabs(): UsePOSTabsReturn {
               record: customerRecord,
               priceType: customerPriceType as any,
             },
+          };
+        }
+        return tab;
+      });
+      saveState(newTabs, activeTabId);
+      return newTabs;
+    });
+  }, [activeTabId, saveState]);
+
+  // Update tab's transfer locations and title (for changing transfer from context menu)
+  const updateTabTransferLocations = useCallback((tabId: string, fromLocation: any, toLocation: any, title: string) => {
+    setTabs(prev => {
+      const newTabs = prev.map(tab => {
+        if (tab.id === tabId) {
+          return {
+            ...tab,
+            title,
+            transferFromLocation: fromLocation,
+            transferToLocation: toLocation,
           };
         }
         return tab;
@@ -771,6 +797,7 @@ export function usePOSTabs(): UsePOSTabsReturn {
     addTabWithCustomerAndCart,
     createTabFromMainWithCart,
     updateTabCustomerAndTitle,
+    updateTabTransferLocations,
     closeTab,
     switchTab,
     updateActiveTabCart,

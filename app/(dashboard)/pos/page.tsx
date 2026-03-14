@@ -220,6 +220,7 @@ function POSPageContent() {
     addTabWithCustomerAndCart,
     createTabFromMainWithCart,
     updateTabCustomerAndTitle,
+    updateTabTransferLocations,
     closeTab,
     switchTab,
     updateActiveTabCart,
@@ -360,6 +361,8 @@ function POSPageContent() {
 
   // Context Menu Customer Change State
   const [contextMenuCustomerTabId, setContextMenuCustomerTabId] = useState<string | null>(null);
+  // Context Menu Transfer Location Change State
+  const [contextMenuTransferTabId, setContextMenuTransferTabId] = useState<string | null>(null);
 
   // Cash Drawer States
   const [isCashDrawerModalOpen, setIsCashDrawerModalOpen] = useState(false);
@@ -2890,7 +2893,7 @@ function POSPageContent() {
           record: selections.record,
         });
 
-        // Store transfer invoice data for printing (with orange theme)
+        // Store transfer invoice data for printing
         setLastInvoiceData({
           invoiceNumber: transferInvoice.invoiceNumber,
           totalAmount: 0, // No amount in transfer
@@ -2906,9 +2909,13 @@ function POSPageContent() {
         setShowPrintReceiptModal(true);
         activityLog({ entityType: 'purchase', actionType: 'create', entityId: transferInvoice.invoiceId, entityName: `نقل #${transferInvoice.invoiceNumber}` });
 
-        // Clear cart and exit transfer mode
+        // Clear cart and close the transfer tab
         clearCart();
-        exitTransferMode();
+        if (activeTabId !== 'main') {
+          closeTab(activeTabId);
+        } else {
+          exitTransferMode();
+        }
       } else if (isPurchaseMode) {
         // Handle purchase invoice creation (or return)
         // Transform cartItems to match sales invoice CartItem interface
@@ -3236,17 +3243,7 @@ function POSPageContent() {
 
   // Transfer Mode Functions
   const handleTransferModeToggle = () => {
-    // Clear existing modes and cart when starting transfer mode
-    setIsPurchaseMode(false);
-    setIsReturnMode(false);
-    setSelectedCustomerForPurchase(null); // Reset customer for purchase
-    clearCart();
-
-    // Reset transfer locations
-    setTransferFromLocation(null);
-    setTransferToLocation(null);
-
-    // Open transfer location selection modal
+    // Just open the transfer location modal — don't clear cart or change modes on current tab
     setIsTransferLocationModalOpen(true);
   };
 
@@ -3254,10 +3251,39 @@ function POSPageContent() {
     fromLocation: any,
     toLocation: any,
   ) => {
+    setIsTransferLocationModalOpen(false);
+    const title = `\u2066${fromLocation.name} → ${toLocation.name}\u2069`;
+
+    // If changing transfer locations for an existing tab (from context menu)
+    if (contextMenuTransferTabId) {
+      const targetTabId = contextMenuTransferTabId;
+      updateTabTransferLocations(targetTabId, fromLocation, toLocation, title);
+      // Update local state if this is the active tab
+      if (targetTabId === activeTabId) {
+        setTransferFromLocation(fromLocation);
+        setTransferToLocation(toLocation);
+      }
+      setContextMenuTransferTabId(null);
+      return;
+    }
+
+    // Create a NEW TAB for this transfer (LTR isolate to prevent BiDi reordering)
+    addTab(title, {
+      branch: selections.branch,
+      record: selections.record,
+      subSafe: selections.subSafe,
+      priceType: selectedPriceType,
+      isTransferMode: true,
+      transferFromLocation: fromLocation,
+      transferToLocation: toLocation,
+    });
+    // Set local mode states for the new active tab
+    setIsTransferMode(true);
+    setIsPurchaseMode(false);
+    setIsReturnMode(false);
     setTransferFromLocation(fromLocation);
     setTransferToLocation(toLocation);
-    setIsTransferMode(true);
-    setIsTransferLocationModalOpen(false);
+    setSelectedCustomerForPurchase(null);
   };
 
   const exitTransferMode = () => {
@@ -5101,7 +5127,7 @@ function POSPageContent() {
                   onClick={handleTransferModeToggle}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     isTransferMode
-                      ? "text-orange-400 hover:text-orange-300"
+                      ? "text-green-400 hover:text-green-300"
                       : "text-gray-300 hover:text-white"
                   }`}
                 >
@@ -5256,23 +5282,6 @@ function POSPageContent() {
                       <span className="text-sm">شراء</span>
                     </button>
                   </div>
-                ) : isTransferMode ? (
-                  <div className="flex items-center gap-2">
-                    <span className="text-orange-400 text-sm font-medium">
-                      وضع النقل مفعل
-                    </span>
-                    <div className="text-xs text-gray-300">
-                      من: {transferFromLocation?.name} → إلى:{" "}
-                      {transferToLocation?.name}
-                    </div>
-                    <button
-                      onClick={exitTransferMode}
-                      className="flex flex-col items-center p-2 text-red-400 hover:text-red-300 cursor-pointer min-w-[80px] transition-all"
-                    >
-                      <XMarkIcon className="h-5 w-5 mb-1" />
-                      <span className="text-sm">إنهاء النقل</span>
-                    </button>
-                  </div>
                 ) : (
                   <button
                     onClick={handlePurchaseModeToggle}
@@ -5312,7 +5321,7 @@ function POSPageContent() {
                 onClick={handleTransferModeToggle}
                 className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   isTransferMode
-                    ? "bg-orange-600 text-white hover:bg-orange-700"
+                    ? "bg-green-600 text-white hover:bg-green-700"
                     : "bg-[#2B3544] text-gray-300 hover:text-white hover:bg-[#374151]"
                 }`}
               >
@@ -5428,14 +5437,6 @@ function POSPageContent() {
                     <span className="text-xs">شراء</span>
                   </button>
                 </>
-              ) : isTransferMode ? (
-                <button
-                  onClick={exitTransferMode}
-                  className="flex items-center gap-2 px-3 py-2 bg-red-600 border border-red-500 rounded text-white hover:bg-red-700 cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
-                >
-                  <XMarkIcon className="h-4 w-4" />
-                  <span className="text-xs">إنهاء النقل</span>
-                </button>
               ) : (
                 <button
                   onClick={handlePurchaseModeToggle}
@@ -5458,9 +5459,11 @@ function POSPageContent() {
                     key={tab.id}
                     className={`flex items-center border-l border-gray-600 first:border-l-0 ${
                       tab.active
-                        ? tab.isPurchaseMode
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-[#F97316] text-white'
+                        ? tab.isTransferMode
+                          ? 'bg-green-600 text-white'
+                          : tab.isPurchaseMode
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-[#F97316] text-white'
                         : 'text-gray-300 hover:text-white hover:bg-[#4B5563]'
                     }`}
                   >
@@ -5626,9 +5629,11 @@ function POSPageContent() {
                   key={tab.id}
                   className={`flex items-center border-l border-gray-600 ${
                     tab.active
-                      ? tab.isPurchaseMode
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-[#F97316] text-white'
+                      ? tab.isTransferMode
+                        ? 'bg-green-600 text-white'
+                        : tab.isPurchaseMode
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-[#F97316] text-white'
                       : 'text-gray-300 hover:text-white hover:bg-[#4B5563]'
                   }`}
                   onContextMenu={(e) => {
@@ -5774,18 +5779,32 @@ function POSPageContent() {
                       <ClockIcon className="h-4 w-4" />
                       تأجيل الفاتورة
                     </button>
-                    {/* Change Customer Button for Non-main Tab */}
-                    <button
-                      onClick={() => {
-                        setContextMenuCustomerTabId(tabContextMenu.tabId);
-                        setIsCustomerModalOpen(true);
-                        setTabContextMenu(null);
-                      }}
-                      className="w-full px-4 py-2 text-right text-sm text-gray-300 hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
-                    >
-                      <UserIcon className="h-4 w-4" />
-                      تغيير العميل
-                    </button>
+                    {/* Change Customer / Transfer Button for Non-main Tab */}
+                    {posTabs.find(t => t.id === tabContextMenu.tabId)?.isTransferMode ? (
+                      <button
+                        onClick={() => {
+                          setContextMenuTransferTabId(tabContextMenu.tabId);
+                          setIsTransferLocationModalOpen(true);
+                          setTabContextMenu(null);
+                        }}
+                        className="w-full px-4 py-2 text-right text-sm text-gray-300 hover:bg-green-500/20 hover:text-green-400 flex items-center gap-2 transition-colors"
+                      >
+                        <ArrowsRightLeftIcon className="h-4 w-4" />
+                        تغيير النقل
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setContextMenuCustomerTabId(tabContextMenu.tabId);
+                          setIsCustomerModalOpen(true);
+                          setTabContextMenu(null);
+                        }}
+                        className="w-full px-4 py-2 text-right text-sm text-gray-300 hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
+                      >
+                        <UserIcon className="h-4 w-4" />
+                        تغيير العميل
+                      </button>
+                    )}
                   </>
                 )}
               </div>
@@ -6045,6 +6064,17 @@ function POSPageContent() {
                           </div>
                         </div>
 
+                        {/* Transfer Direction Header */}
+                        {isTransferMode && transferFromLocation && transferToLocation && (
+                          <div className="px-4 py-2 bg-green-600/10 border-b border-green-600/30 flex-shrink-0">
+                            <div className="flex items-center justify-center gap-2 text-sm" dir="ltr">
+                              <span className="text-green-400 font-medium">{transferFromLocation.name}</span>
+                              <span className="text-green-400">→</span>
+                              <span className="text-green-400 font-medium">{transferToLocation.name}</span>
+                            </div>
+                          </div>
+                        )}
+
                         {/* Cart Items */}
                         <div
                           ref={cartContainerRef}
@@ -6266,7 +6296,7 @@ function POSPageContent() {
                           </div>
                         ) : (
                           <div className="text-right">
-                            <div className="text-orange-400 text-sm font-medium">وضع النقل</div>
+                            <div className="text-green-400 text-sm font-medium">وضع النقل</div>
                             <div className="text-white font-bold text-lg">
                               {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                             </div>
@@ -6334,7 +6364,7 @@ function POSPageContent() {
                             activePOSTab?.isEditMode
                               ? "bg-amber-600 hover:bg-amber-700"
                               : isTransferMode
-                                ? "bg-orange-600 hover:bg-orange-700"
+                                ? "bg-green-600 hover:bg-green-700"
                                 : isReturnMode
                                   ? "bg-red-600 hover:bg-red-700"
                                   : "bg-purple-600 hover:bg-purple-700"
@@ -6593,6 +6623,17 @@ function POSPageContent() {
                       )}
                     </div>
                   </div>
+
+                  {/* Transfer Direction Header */}
+                  {isTransferMode && transferFromLocation && transferToLocation && (
+                    <div className="px-4 py-2 bg-green-600/10 border-b border-green-600/30 flex-shrink-0">
+                      <div className="flex items-center justify-center gap-2 text-sm">
+                        <span className="text-green-400 font-medium">{transferFromLocation.name}</span>
+                        <span className="text-green-400">→</span>
+                        <span className="text-green-400 font-medium">{transferToLocation.name}</span>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Cart Items */}
                   <div
@@ -6863,7 +6904,7 @@ function POSPageContent() {
                     </div>
                   ) : (
                     <div className="text-right">
-                      <div className="text-orange-400 text-sm font-medium">وضع النقل</div>
+                      <div className="text-green-400 text-sm font-medium">وضع النقل</div>
                       <div className="text-white font-bold text-lg">
                         {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                       </div>
@@ -6931,7 +6972,7 @@ function POSPageContent() {
                       activePOSTab?.isEditMode
                         ? "bg-amber-600 hover:bg-amber-700"
                         : isTransferMode
-                          ? "bg-orange-600 hover:bg-orange-700"
+                          ? "bg-green-600 hover:bg-green-700"
                           : isReturnMode
                             ? "bg-red-600 hover:bg-red-700"
                             : "bg-purple-600 hover:bg-purple-700"
