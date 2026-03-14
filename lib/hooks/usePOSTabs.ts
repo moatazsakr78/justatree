@@ -54,14 +54,14 @@ interface UsePOSTabsReturn {
   addTabWithCustomerAndCart: (customer: any, cartItems: any[], title: string, inheritedSelections?: InheritedSelections, editModeOptions?: EditModeOptions) => string;
   createTabFromMainWithCart: (customer: any, cartItems: any[], inheritedSelections?: InheritedSelections, defaultCustomer?: any) => string;
   updateTabCustomerAndTitle: (tabId: string, customer: any, title: string) => void;
-  closeTab: (tabId: string) => void;
+  closeTab: (tabId: string) => Promise<void>;
   switchTab: (tabId: string) => void;
   updateActiveTabCart: (cartItems: any[]) => void;
   updateActiveTabSelections: (selections: any) => void;
   updateActiveTabMode: (updates: Partial<POSTab>) => void;
   clearActiveTabCart: () => void;
   postponeTab: (tabId: string) => Promise<boolean>;
-  restoreTab: (tabId: string) => void;
+  restoreTab: (tabId: string) => Promise<void>;
   refreshPostponedTabs: () => Promise<void>;
   postponedTabs: POSTab[];
   isLoading: boolean;
@@ -424,12 +424,15 @@ export function usePOSTabs(): UsePOSTabsReturn {
     });
   }, [activeTabId, saveState]);
 
-  const closeTab = useCallback((tabId: string) => {
+  const closeTab = useCallback(async (tabId: string) => {
     if (tabId === 'main') return;
+
+    let tabsToSaveToDb: POSTab[] | null = null;
+    let wasPostponed = false;
 
     setTabs(prev => {
       const closingTab = prev.find(tab => tab.id === tabId);
-      const wasPostponed = closingTab?.isPostponed === true;
+      wasPostponed = closingTab?.isPostponed === true;
 
       const newTabs = prev.filter(tab => tab.id !== tabId);
       let newActiveId = activeTabId;
@@ -449,13 +452,18 @@ export function usePOSTabs(): UsePOSTabsReturn {
       // Save to localStorage
       saveToLocal(finalTabs, newActiveId);
 
-      // If the closed tab was postponed, immediately sync DB
+      // Capture tabs for DB save outside setTabs
       if (wasPostponed) {
-        savePostponedImmediately(finalTabs);
+        tabsToSaveToDb = finalTabs;
       }
 
       return finalTabs;
     });
+
+    // Await DB save outside of setTabs for reliable persistence
+    if (wasPostponed && tabsToSaveToDb) {
+      await savePostponedImmediately(tabsToSaveToDb);
+    }
   }, [activeTabId, saveToLocal, savePostponedImmediately]);
 
   const switchTab = useCallback((tabId: string) => {
@@ -582,7 +590,9 @@ export function usePOSTabs(): UsePOSTabsReturn {
   // RESTORE TAB: Restore a postponed tab and switch to it
   // Immediately saves to DB to remove from postponed
   // ============================================
-  const restoreTab = useCallback((tabId: string) => {
+  const restoreTab = useCallback(async (tabId: string) => {
+    let tabsToSaveToDb: POSTab[] | null = null;
+
     setTabs(prev => {
       const newTabs = prev.map(tab => {
         if (tab.id === tabId) {
@@ -597,10 +607,15 @@ export function usePOSTabs(): UsePOSTabsReturn {
       });
 
       saveToLocal(newTabs, tabId);
-      savePostponedImmediately(newTabs);
+      tabsToSaveToDb = newTabs;
       setActiveTabId(tabId);
       return newTabs;
     });
+
+    // Await DB save outside of setTabs for reliable persistence
+    if (tabsToSaveToDb) {
+      await savePostponedImmediately(tabsToSaveToDb);
+    }
   }, [saveToLocal, savePostponedImmediately]);
 
   // ============================================
@@ -610,14 +625,13 @@ export function usePOSTabs(): UsePOSTabsReturn {
     if (!userIdRef.current) return;
     try {
       const dbPostponedTabs = await posTabsService.loadPostponedTabs(userIdRef.current);
-      if (dbPostponedTabs.length > 0) {
-        setTabs(prev => {
-          const activeTabs = prev.filter(t => !t.isPostponed);
-          const activeIds = new Set(activeTabs.map(t => t.id));
-          const unique = dbPostponedTabs.filter(t => !activeIds.has(t.id));
-          return [...activeTabs, ...unique];
-        });
-      }
+      // REPLACE all local postponed tabs with DB tabs (DB is source of truth)
+      setTabs(prev => {
+        const activeTabs = prev.filter(t => !t.isPostponed);
+        return [...activeTabs, ...dbPostponedTabs];
+      });
+      // Update ref so debounced saves don't overwrite with stale data
+      lastDbSavedDataRef.current = JSON.stringify(dbPostponedTabs);
     } catch (error) {
       console.error('POS Tabs: Failed to refresh postponed tabs:', error);
     }
@@ -760,12 +774,15 @@ export function usePOSTabs(): UsePOSTabsReturn {
           // the main postponeTab already awaits. This is a safety net.
           posTabsService.savePostponedTabs(userIdRef.current, currentTabs);
         }
+      } else if (document.visibilityState === 'visible' && userIdRef.current) {
+        // Refresh from DB when user comes back (picks up changes from other devices)
+        refreshPostponedTabs();
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, []);
+  }, [refreshPostponedTabs]);
 
   // Filter out postponed tabs from active tabs display
   const activeTabs = tabs.filter(tab => !tab.isPostponed);
