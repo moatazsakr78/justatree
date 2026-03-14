@@ -20,6 +20,7 @@ export interface StatementItem {
   isPositive: boolean
   employee_name?: string | null
   payment_method?: string | null
+  paymentBreakdown?: { method: string; amount: number }[]
   index?: number
 }
 
@@ -157,6 +158,64 @@ export function useInfiniteStatements(
     }
   }, [])
 
+  // Merge statements that share the same sale_id into one row
+  const mergeStatementsBySale = useCallback((items: StatementItem[]): StatementItem[] => {
+    const result: StatementItem[] = []
+    const saleGroups = new Map<string, StatementItem[]>()
+
+    for (const item of items) {
+      if (item.sale_id) {
+        const group = saleGroups.get(item.sale_id)
+        if (group) {
+          group.push(item)
+        } else {
+          saleGroups.set(item.sale_id, [item])
+        }
+      } else {
+        result.push(item)
+      }
+    }
+
+    saleGroups.forEach((group) => {
+      if (group.length === 1) {
+        result.push(group[0])
+        return
+      }
+
+      // Find the last transaction chronologically for balance
+      const sorted = [...group].sort((a: StatementItem, b: StatementItem) => {
+        const cmp = a.created_at.localeCompare(b.created_at)
+        if (cmp !== 0) return cmp
+        return a.balance - b.balance
+      })
+      const last = sorted[sorted.length - 1]
+      const first = group[0] // first in original order for description/type
+
+      const totalAmount = group.reduce((sum: number, s: StatementItem) => {
+        return sum + (s.isPositive ? s.paidAmount : -s.paidAmount)
+      }, 0)
+
+      const breakdown = group.map((s: StatementItem) => ({
+        method: s.payment_method || '-',
+        amount: s.paidAmount
+      }))
+
+      result.push({
+        ...first,
+        paidAmount: Math.abs(totalAmount),
+        balance: last.balance,
+        isPositive: totalAmount >= 0,
+        paymentBreakdown: breakdown
+      })
+    })
+
+    // Re-sort by created_at descending to maintain order
+    result.sort((a, b) => b.created_at.localeCompare(a.created_at))
+
+    // Re-index
+    return result.map((item, i) => ({ ...item, index: i + 1 }))
+  }, [])
+
   // Fetch sales map for a list of sale_ids
   const fetchSalesMap = useCallback(async (saleIds: string[]): Promise<Map<string, any>> => {
     const salesMap = new Map()
@@ -267,8 +326,9 @@ export function useInfiniteStatements(
       const processedStatements = transactionsData.map((tx: any, index: number) =>
         processTransactionToStatement(tx, salesMap, index)
       )
+      const mergedStatements = mergeStatementsBySale(processedStatements)
 
-      setStatements(processedStatements)
+      setStatements(mergedStatements)
 
       // Set cursor for next page
       if (transactionsData.length > 0 && moreAvailable) {
@@ -290,7 +350,7 @@ export function useInfiniteStatements(
     } finally {
       setIsLoading(false)
     }
-  }, [enabled, fetchPage, fetchSalesMap, processTransactionToStatement])
+  }, [enabled, fetchPage, fetchSalesMap, processTransactionToStatement, mergeStatementsBySale])
 
   // Load more (next page)
   const loadMore = useCallback(async () => {
@@ -320,9 +380,14 @@ export function useInfiniteStatements(
       const processedStatements = transactionsData.map((tx: any, index: number) =>
         processTransactionToStatement(tx, salesMap, currentCount + index)
       )
+      const mergedStatements = mergeStatementsBySale(processedStatements)
 
       // Append to existing statements
-      setStatements(prev => [...prev, ...processedStatements])
+      setStatements(prev => {
+        const combined = [...prev, ...mergedStatements]
+        // Re-index after appending
+        return combined.map((item, i) => ({ ...item, index: i + 1 }))
+      })
 
       // Update cursor for next page
       if (transactionsData.length > 0 && moreAvailable) {
@@ -341,7 +406,7 @@ export function useInfiniteStatements(
     } finally {
       setIsLoadingMore(false)
     }
-  }, [enabled, hasMore, isLoadingMore, cursor, fetchPage, fetchSalesMap, processTransactionToStatement, statements.length])
+  }, [enabled, hasMore, isLoadingMore, cursor, fetchPage, fetchSalesMap, processTransactionToStatement, mergeStatementsBySale, statements.length])
 
   // Refresh - reset and fetch first page again
   const refresh = useCallback(async () => {

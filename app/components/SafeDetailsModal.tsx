@@ -2589,8 +2589,21 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       id: 'payment_method',
       header: 'طريقة الدفع',
       accessor: 'payment_method',
-      width: 120,
-      render: (value: string) => <span className={getMethodColor(value || '-')}>{value || '-'}</span>
+      width: 200,
+      render: (value: string, item: any) => {
+        if (item.paymentBreakdown?.length > 1) {
+          return (
+            <div className="flex flex-col gap-0.5">
+              {item.paymentBreakdown.map((b: { method: string; amount: number }, i: number) => (
+                <span key={i} className={`text-xs ${getMethodColor(b.method)}`}>
+                  {b.method}: {formatPrice(b.amount, 'system')}
+                </span>
+              ))}
+            </div>
+          )
+        }
+        return <span className={getMethodColor(value || '-')}>{value || '-'}</span>
+      }
     },
     {
       id: 'balance',
