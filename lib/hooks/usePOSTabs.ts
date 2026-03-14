@@ -163,27 +163,14 @@ export function usePOSTabs(): UsePOSTabsReturn {
   }, [savePostponedToDatabase]);
 
   // ============================================
-  // COMBINED SAVE: localStorage (instant, ALL) + DB (debounced, POSTPONED only)
+  // SAVE STATE: localStorage only (instant, ALL tabs, device-specific)
   // ============================================
   const saveState = useCallback((newTabs: POSTab[], newActiveTabId: string) => {
-    // 1. INSTANT: Save ALL tabs to localStorage (device-specific)
+    // Save ALL tabs to localStorage only (device-specific)
+    // Postponed tabs are saved to DB immediately via savePostponedImmediately
+    // in postponeTab/restoreTab/closeTab — no debounced DB save needed
     saveToLocal(newTabs, newActiveTabId);
-
-    // 2. DEBOUNCED: Save only POSTPONED tabs to database (cross-device)
-    const hasPostponed = newTabs.some(t => t.isPostponed === true);
-    if (hasPostponed) {
-      // Pre-set ref so realtime ignores stale events during debounce
-      const postponedOnly = newTabs.filter(t => t.isPostponed === true);
-      lastDbSavedDataRef.current = JSON.stringify(postponedOnly);
-
-      if (dbSaveTimeoutRef.current) {
-        clearTimeout(dbSaveTimeoutRef.current);
-      }
-      dbSaveTimeoutRef.current = setTimeout(() => {
-        savePostponedToDatabase(newTabs);
-      }, 2000);
-    }
-  }, [saveToLocal, savePostponedToDatabase]);
+  }, [saveToLocal]);
 
   // ============================================
   // TAB MANAGEMENT FUNCTIONS
@@ -623,6 +610,11 @@ export function usePOSTabs(): UsePOSTabsReturn {
   // ============================================
   const refreshPostponedTabs = useCallback(async () => {
     if (!userIdRef.current) return;
+    // Cancel any pending debounced save so it can't overwrite fresh DB data
+    if (dbSaveTimeoutRef.current) {
+      clearTimeout(dbSaveTimeoutRef.current);
+      dbSaveTimeoutRef.current = null;
+    }
     try {
       const dbPostponedTabs = await posTabsService.loadPostponedTabs(userIdRef.current);
       // REPLACE all local postponed tabs with DB tabs (DB is source of truth)
@@ -700,13 +692,8 @@ export function usePOSTabs(): UsePOSTabsReturn {
         setTabs(activeTabs);
         setActiveTabId(localActiveTabId);
 
-        // STEP 2: Load postponed tabs from DB (cross-device) with retry
-        let dbPostponedTabs = await posTabsService.loadPostponedTabs(user.id);
-        // Retry once after 2 seconds if initial load returned empty (may be network issue)
-        if (dbPostponedTabs.length === 0) {
-          await new Promise(r => setTimeout(r, 2000));
-          dbPostponedTabs = await posTabsService.loadPostponedTabs(user.id);
-        }
+        // STEP 2: Load postponed tabs from DB (cross-device, source of truth)
+        const dbPostponedTabs = await posTabsService.loadPostponedTabs(user.id);
 
         if (dbPostponedTabs.length > 0) {
           console.log('POS Tabs: Loaded', dbPostponedTabs.length, 'postponed tabs from DB');
@@ -721,14 +708,6 @@ export function usePOSTabs(): UsePOSTabsReturn {
           // Update localStorage with merged state
           saveToLocalStorage(user.id, mergedTabs, localActiveTabId);
           lastDbSavedDataRef.current = JSON.stringify(dbPostponedTabs);
-        } else {
-          // Also check localStorage for any postponed tabs (fallback)
-          const localPostponed = localState?.tabs?.filter(t => t.isPostponed) || [];
-          if (localPostponed.length > 0) {
-            console.log('POS Tabs: Using', localPostponed.length, 'postponed tabs from localStorage (DB had none)');
-            const mergedTabs = [...activeTabs, ...localPostponed];
-            setTabs(mergedTabs);
-          }
         }
 
       } catch (error) {
@@ -750,15 +729,11 @@ export function usePOSTabs(): UsePOSTabsReturn {
       if (dbSaveTimeoutRef.current) {
         clearTimeout(dbSaveTimeoutRef.current);
       }
-      // Force-save only postponed tabs on unmount
-      if (userIdRef.current && !isInitialMount.current) {
-        const hasPostponed = tabs.some(t => t.isPostponed === true);
-        if (hasPostponed) {
-          posTabsService.savePostponedTabs(userIdRef.current, tabs);
-        }
-      }
+      // No DB save here — visibility handler already covers page hide/close.
+      // Using stale closure data from [] deps would overwrite fresh DB data.
     };
-  }, [tabs, activeTabId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ============================================
   // VISIBILITY CHANGE: Reliably save postponed tabs when page becomes hidden
