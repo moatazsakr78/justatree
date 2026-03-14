@@ -5836,7 +5836,7 @@ function POSPageContent() {
                             قبل: {(selections.customer.calculated_balance || 0).toFixed(0)}
                           </span>
                           <span className="text-green-400" title="رصيد العميل بعد">
-                            بعد: {((selections.customer.calculated_balance || 0) + calculateTotalWithDiscounts() - parseFloat(paidAmount || '0')).toFixed(0)}
+                            بعد: {((selections.customer.calculated_balance || 0) + (isReturnMode ? -1 : 1) * calculateTotalWithDiscounts() - paymentSplitData.reduce((sum, p) => sum + (p.amount || 0), 0)).toFixed(0)}
                           </span>
                         </>
                       )}

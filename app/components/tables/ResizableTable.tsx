@@ -176,6 +176,17 @@ export default function ResizableTable({
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const lastConfigHash = useRef<string>('')
 
+  // Stabilize initialColumns to prevent re-initialization on parent re-renders
+  const stableColumnsRef = useRef<Column[]>(initialColumns)
+  const stableInitialColumns = useMemo(() => {
+    const newKey = JSON.stringify(initialColumns.map(c => ({ id: c.id, header: c.header, accessor: c.accessor, width: c.width, minWidth: c.minWidth })))
+    const oldKey = JSON.stringify(stableColumnsRef.current.map(c => ({ id: c.id, header: c.header, accessor: c.accessor, width: c.width, minWidth: c.minWidth })))
+    if (newKey !== oldKey) {
+      stableColumnsRef.current = initialColumns
+    }
+    return stableColumnsRef.current
+  }, [initialColumns])
+
   // Helper function to generate config hash for change detection
   const generateConfigHash = useCallback((columns: Column[], visibleState: {[key: string]: boolean}) => {
     const configString = JSON.stringify({
@@ -210,7 +221,7 @@ export default function ResizableTable({
     }))
 
     // Add hidden columns from current state
-    const hiddenColumnsForStorage = initialColumns
+    const hiddenColumnsForStorage = stableInitialColumns
       .filter(initCol => !reorderedColumns.find(rc => rc.id === initCol.id))
       .filter(initCol => currentVisibleState[initCol.id] === false)
       .map((col, index) => ({
@@ -231,7 +242,7 @@ export default function ResizableTable({
         showToast('خطأ في حفظ ترتيب الأعمدة', 'error', 3000)
       }
     }
-  }, [reportType, currentVisibleState, initialColumns, showToast])
+  }, [reportType, currentVisibleState, stableInitialColumns, showToast])
 
   // Enhanced visibility update that preserves current state
   const updateColumnVisibilityPreservingOrder = useCallback(async (visibilityMap: { [columnId: string]: boolean }) => {
@@ -260,7 +271,7 @@ export default function ResizableTable({
       // Add newly visible columns that weren't displayed before
       Object.entries(visibilityMap).forEach(([columnId, visible]) => {
         if (visible && !columns.find(col => col.id === columnId)) {
-          const originalCol = initialColumns.find(col => col.id === columnId)
+          const originalCol = stableInitialColumns.find(col => col.id === columnId)
           if (originalCol) {
             columnsForStorage.push({
               id: columnId,
@@ -276,7 +287,7 @@ export default function ResizableTable({
       Object.entries(visibilityMap).forEach(([columnId, visible]) => {
         if (!visible) {
           const currentCol = columns.find(col => col.id === columnId) ||
-                           initialColumns.find(col => col.id === columnId)
+                           stableInitialColumns.find(col => col.id === columnId)
           columnsForStorage.push({
             id: columnId,
             width: currentCol?.width || 100,
@@ -295,7 +306,7 @@ export default function ResizableTable({
         showToast('خطأ في حفظ إعدادات الأعمدة', 'error', 3000)
       }
     }
-  }, [reportType, columns, initialColumns, showToast])
+  }, [reportType, columns, stableInitialColumns, showToast])
 
   // Enhanced column initialization with deduplication
   const initializeColumns = useCallback(async (preserveCurrentOrder = false) => {
@@ -305,7 +316,7 @@ export default function ResizableTable({
     try {
       if (!reportType) {
         // No reportType - use basic columns
-        const basicColumns = initialColumns.map(col => ({
+        const basicColumns = stableInitialColumns.map(col => ({
           ...col,
           width: col.width || col.minWidth || 100
         }))
@@ -332,7 +343,7 @@ export default function ResizableTable({
           .filter(savedCol => savedCol.visible)
           .sort((a, b) => a.order - b.order)
           .map(savedCol => {
-            const originalCol = initialColumns.find(col => col.id === savedCol.id)
+            const originalCol = stableInitialColumns.find(col => col.id === savedCol.id)
             return originalCol ? {
               ...originalCol,
               width: savedCol.width || 100
@@ -342,7 +353,7 @@ export default function ResizableTable({
 
         // Add any new columns not in saved config
         const savedIds = new Set(savedConfig.columns.map(col => col.id))
-        const newColumns = initialColumns
+        const newColumns = stableInitialColumns
           .filter(col => !savedIds.has(col.id))
           .map(col => ({ ...col, width: col.width || col.minWidth || 100 }))
 
@@ -353,7 +364,7 @@ export default function ResizableTable({
         setCurrentVisibleState(savedVisibilityState)
       } else {
         // No saved config, use defaults
-        const defaultColumns = initialColumns.map(col => ({
+        const defaultColumns = stableInitialColumns.map(col => ({
           ...col,
           width: col.width || col.minWidth || 100
         }))
@@ -366,7 +377,7 @@ export default function ResizableTable({
     } catch (error) {
       console.error('❌ Error loading table config:', error)
       // Fallback to initial columns
-      const fallbackColumns = initialColumns.map(col => ({
+      const fallbackColumns = stableInitialColumns.map(col => ({
         ...col,
         width: col.width || col.minWidth || 100
       }))
@@ -378,7 +389,7 @@ export default function ResizableTable({
     } finally {
       isInitializing.current = false
     }
-  }, [initialColumns, reportType])
+  }, [stableInitialColumns, reportType])
 
   // Initialize table when component mounts or reportType changes (with debounce)
   useEffect(() => {
@@ -389,7 +400,7 @@ export default function ResizableTable({
     }, 50) // Small delay to prevent rapid re-initialization
 
     return () => clearTimeout(timeoutId)
-  }, [reportType, initialColumns.length, initializeColumns])
+  }, [reportType, stableInitialColumns, initializeColumns])
 
   // Debounced event handler to prevent excessive updates
   const eventHandlerRef = useRef<NodeJS.Timeout | null>(null)
@@ -576,7 +587,7 @@ export default function ResizableTable({
         })
 
         // Add hidden columns from current visible state
-        initialColumns.forEach(initCol => {
+        stableInitialColumns.forEach(initCol => {
           if (currentVisibleState[initCol.id] === false) {
             columnsForStorage.push({
               id: initCol.id,
@@ -618,7 +629,7 @@ export default function ResizableTable({
 
     // Execute save immediately
     saveWidth()
-  }, [reportType, columns, currentVisibleState, initialColumns, showToast])
+  }, [reportType, columns, currentVisibleState, stableInitialColumns, showToast])
 
   // Update container width whenever columns change
   useEffect(() => {

@@ -487,13 +487,15 @@ export async function createSalesInvoice({
     await Promise.all([...inventoryUpdatePromises, ...variantUpdatePromises, ...shapeUpdatePromises])
 
     // Save payment split data to customer_payments table (batch insert instead of loop)
-    if (!isReturn && validPayments.length > 0) {
+    if (validPayments.length > 0) {
       if (validPayments.length > 0) {
         const allPayments = validPayments.map(payment => ({
           customer_id: customerId,
           amount: payment.amount,
           payment_method: methodMap.get(payment.paymentMethodId) || 'cash',
-          notes: `دفعة من فاتورة رقم ${invoiceNumber}`,
+          notes: isReturn
+            ? `دفعة من فاتورة مرتجع رقم ${invoiceNumber}`
+            : `دفعة من فاتورة رقم ${invoiceNumber}`,
           payment_date: new Date().toISOString().split('T')[0],
           created_by: userId || null,
           safe_id: hasNoSafe ? null : selections.record.id,
@@ -526,10 +528,6 @@ export async function createSalesInvoice({
         .filter(p => p.amount > 0 && p.paymentMethodId)
         .reduce((sum, p) => sum + p.amount, 0)
 
-      // للمرتجعات: الفلوس تخرج من الخزنة (قيمة سالبة)
-      if (isReturn) {
-        totalToDrawer = -totalToDrawer
-      }
     } else {
       // Single payment - entire amount goes to drawer
       // For returns, this will be negative (money out of drawer)
@@ -602,7 +600,7 @@ export async function createSalesInvoice({
         for (const payment of validPayments) {
           const methodName = methodMap.get(payment.paymentMethodId) || 'cash'
           const isPhysical = physicalMap.get(payment.paymentMethodId) !== false
-          let amount = isReturn ? -payment.amount : payment.amount
+          let amount = payment.amount
 
           // Determine target: physical → subSafe (if exists), digital → mainSafe
           let targetRecordId: string | null = null

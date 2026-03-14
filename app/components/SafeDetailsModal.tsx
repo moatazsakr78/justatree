@@ -291,6 +291,34 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     filteredReserves.reduce((sum, r) => sum + r.amount, 0)
   , [filteredReserves])
 
+  // Displayed balance: adjusts for non-drawer safe filters
+  const displayedBalance = useMemo(() => {
+    if (safe?.supports_drawers) return safeBalance
+    // Non-drawer safes: adjust based on filter
+    if (!selectedDrawerFilters || selectedDrawerFilters.size === 0) return safeBalance
+    if (selectedDrawerFilters.has('safe') && !selectedDrawerFilters.has('transfers')) {
+      return safeBalance - nonDrawerTransferBalance
+    }
+    if (selectedDrawerFilters.has('transfers') && !selectedDrawerFilters.has('safe')) {
+      return nonDrawerTransferBalance
+    }
+    return safeBalance
+  }, [safe?.supports_drawers, safeBalance, selectedDrawerFilters, nonDrawerTransferBalance])
+
+  // Recalculate statement balances client-side for coherent running total
+  const recalculatedStatements = useMemo(() => {
+    if (accountStatementData.length === 0) return accountStatementData
+    const result = [...accountStatementData]
+    // Row 0 is newest → its balance = displayedBalance
+    result[0] = { ...result[0], balance: displayedBalance }
+    for (let i = 1; i < result.length; i++) {
+      const prev = result[i - 1]
+      const signedAmount = prev.isPositive ? prev.paidAmount : -prev.paidAmount
+      result[i] = { ...result[i], balance: roundMoney(prev.balance - signedAmount) }
+    }
+    return result
+  }, [accountStatementData, displayedBalance])
+
   const availableBalance = useMemo(() =>
     Math.max(0, safeBalance - totalReserved)
   , [safeBalance, totalReserved])
@@ -762,7 +790,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     try {
       // Determine which IDs to sum for balance
       // "All" mode includes everything (drawers + transfers/main safe)
-      const balanceIds = filteredRecordIds
+      const balanceIds = safe.supports_drawers ? filteredRecordIds : allRecordIds
       const { data: drawers, error } = await supabase
         .from('cash_drawers')
         .select('current_balance')
@@ -3372,7 +3400,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       className="flex-1 bg-purple-600 rounded-lg px-4 py-2 text-center"
                     >
                       <div className="font-bold text-white text-xl">
-                        {formatPrice(safeBalance)}
+                        {formatPrice(displayedBalance)}
                       </div>
                       <div className="text-purple-200 text-[10px]">
                         رصيد الخزنة
@@ -3871,10 +3899,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         <div className="flex items-center justify-center py-8">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                         </div>
-                      ) : accountStatementData.length === 0 ? (
+                      ) : recalculatedStatements.length === 0 ? (
                         <div className="text-center py-8 text-gray-400">لا توجد حركات</div>
                       ) : (
-                        accountStatementData.map((statement, index) => (
+                        recalculatedStatements.map((statement, index) => (
                           <div
                             key={statement.id || index}
                             onClick={() => {
@@ -4181,7 +4209,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 {/* Record Balance */}
                 <div className="p-4 border-b border-gray-600">
                   <div className="bg-purple-600 rounded p-4 text-center">
-                    <div className="text-2xl font-bold text-white">{formatPrice(safeBalance, 'system')}</div>
+                    <div className="text-2xl font-bold text-white">{formatPrice(displayedBalance, 'system')}</div>
                     <div className="text-purple-200 text-sm">رصيد الخزنة</div>
                   </div>
                 </div>
@@ -4661,7 +4689,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
                               <span className="text-gray-400 mb-1">رصيد الخزنة</span>
                               <span className="text-blue-400 font-bold">
-                                {formatPrice(safeBalance)}
+                                {formatPrice(displayedBalance)}
                               </span>
                             </div>
                           </div>
@@ -4694,7 +4722,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
                               <span className="text-gray-400">جاري تحميل كشف الحساب...</span>
                             </div>
-                          ) : accountStatementData.length === 0 ? (
+                          ) : recalculatedStatements.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full p-8">
                               <div className="text-6xl mb-4">📊</div>
                               <p className="text-gray-400 text-lg mb-2">لا توجد عمليات في كشف الحساب</p>
@@ -4705,7 +4733,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               <ResizableTable
                                 className="h-full w-full"
                                 columns={statementColumns}
-                                data={accountStatementData}
+                                data={recalculatedStatements}
                                 onRowDoubleClick={handleStatementRowDoubleClick}
                                 onRowContextMenu={handleStatementContextMenu}
                               />
