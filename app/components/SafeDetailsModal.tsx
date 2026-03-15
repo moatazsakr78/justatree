@@ -838,8 +838,41 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     if (!safe?.id) return
 
     try {
-      // Determine which IDs to sum for balance
-      // "All" mode includes everything (drawers + transfers/main safe)
+      // For non-drawer main safes: calculate from transactions (source of truth)
+      // This avoids stale cash_drawers.current_balance issues
+      if (!safe.supports_drawers && safe.safe_type !== 'sub') {
+        const { data: allTxs, error } = await supabase
+          .from('cash_drawer_transactions')
+          .select('amount, transaction_type')
+          .eq('record_id', safe.id)
+
+        if (error) {
+          console.error('Error fetching transactions for balance:', error)
+          setCashDrawerBalance(0)
+          return
+        }
+
+        const total = (allTxs || []).reduce((sum: number, t: any) =>
+          sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0
+        )
+        const correctedBalance = Math.max(0, total)
+        setCashDrawerBalance(correctedBalance)
+
+        // Fix stale cash_drawers.current_balance if mismatched
+        const { data: drawer } = await supabase
+          .from('cash_drawers')
+          .select('id, current_balance')
+          .eq('record_id', safe.id)
+          .single()
+        if (drawer && Math.abs((drawer.current_balance || 0) - correctedBalance) > 0.01) {
+          await supabase.from('cash_drawers')
+            .update({ current_balance: correctedBalance })
+            .eq('id', drawer.id)
+        }
+        return
+      }
+
+      // For drawer safes: use cash_drawers.current_balance (aggregated across drawers)
       const balanceIds = safe.supports_drawers ? filteredRecordIds : allRecordIds
       const { data: drawers, error } = await supabase
         .from('cash_drawers')
