@@ -722,6 +722,7 @@ export default function ProductsPage() {
       // Pass true to force soft delete if product has usage
       await deleteProduct(selectedProduct.id, productUsageStats?.hasUsage || false)
       activityLog({ entityType: 'product', actionType: 'delete', entityId: selectedProduct.id, entityName: selectedProduct.name })
+      fetchProducts()
 
       // Clear selection and close confirmation
       setSelectedProduct(null)
@@ -756,6 +757,7 @@ export default function ProductsPage() {
     try {
       await hideProduct(selectedProduct.id)
       activityLog({ entityType: 'product', actionType: 'delete', entityId: selectedProduct.id, entityName: selectedProduct.name, description: 'أخفى منتج: ' + selectedProduct.name })
+      fetchProducts()
       setSelectedProduct(null)
       setShowHideProductConfirm(false)
     } catch (error) {

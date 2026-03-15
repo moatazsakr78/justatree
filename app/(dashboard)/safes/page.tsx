@@ -267,6 +267,10 @@ export default function SafesPage() {
         }
 
         activityLog({ entityType: 'cash_drawer', actionType: 'delete', entityId: safe.id, entityName: safe.name, description: 'حذف خزنة' })
+        fetchSafes()
+        if (selectedSafe?.id === safe.id) {
+          setSelectedSafe(null)
+        }
       }
     } catch (error) {
       console.error('Error deleting safe:', error)

@@ -158,15 +158,17 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
           .from('branches')
           .delete()
           .eq('id', deleteConfirmModal.item.id)
-        
+
         if (error) throw error
+        fetchBranches()
       } else {
         const { error } = await supabase
           .from('warehouses')
           .delete()
           .eq('id', deleteConfirmModal.item.id)
-        
+
         if (error) throw error
+        fetchWarehouses()
       }
       
       // Close modal on success
