@@ -66,14 +66,27 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
 
       // Create cash_drawer for the new safe
       if (newRecord?.id) {
-        const { error: drawerError } = await supabase
+        const { data: newDrawer, error: drawerError } = await supabase
           .from('cash_drawers')
           .insert({
             record_id: newRecord.id,
             current_balance: supportsDrawers ? 0 : balance
           })
+          .select('id')
+          .single()
         if (drawerError) {
           console.error('Error creating cash drawer:', drawerError)
+        }
+
+        // Create opening balance transaction for non-drawer safes
+        if (newDrawer?.id && !supportsDrawers && balance > 0) {
+          await supabase.from('cash_drawer_transactions').insert({
+            record_id: newRecord.id,
+            cash_drawer_id: newDrawer.id,
+            amount: balance,
+            transaction_type: 'deposit',
+            notes: 'رصيد افتتاحي'
+          })
         }
 
         // Auto-create first drawer when supports_drawers is enabled
@@ -94,10 +107,21 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
             .single()
 
           if (drawerRecord?.id) {
-            await supabase.from('cash_drawers').insert({
+            const { data: subDrawer } = await supabase.from('cash_drawers').insert({
               record_id: drawerRecord.id,
               current_balance: balance
-            })
+            }).select('id').single()
+
+            // Create opening balance transaction for the sub-drawer
+            if (subDrawer?.id && balance > 0) {
+              await supabase.from('cash_drawer_transactions').insert({
+                record_id: drawerRecord.id,
+                cash_drawer_id: subDrawer.id,
+                amount: balance,
+                transaction_type: 'deposit',
+                notes: 'رصيد افتتاحي'
+              })
+            }
           }
         }
       }
