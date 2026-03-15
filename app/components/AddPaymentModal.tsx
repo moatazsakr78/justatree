@@ -219,7 +219,7 @@ export default function AddPaymentModal({
                   drawer_id: drawer.id,
                   record_id: recordId,
                   transaction_type: paymentType === 'loan' ? 'withdrawal' : 'deposit',
-                  amount: drawerChange,
+                  amount: paymentAmount,
                   balance_after: newBalance,
                   notes: paymentType === 'loan'
                     ? `سلفة لعميل: ${entityName}${notes ? ` - ${notes}` : ''}`
@@ -308,7 +308,7 @@ export default function AddPaymentModal({
                   drawer_id: drawer.id,
                   record_id: recordId,
                   transaction_type: paymentType === 'loan' ? 'deposit' : 'withdrawal',
-                  amount: drawerChange,
+                  amount: paymentAmount,
                   balance_after: newBalance,
                   notes: paymentType === 'loan'
                     ? `سلفة من مورد: ${entityName}${notes ? ` - ${notes}` : ''}`

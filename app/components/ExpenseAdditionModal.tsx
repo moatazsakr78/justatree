@@ -131,7 +131,7 @@ export default function ExpenseAdditionModal({
           drawer_id: drawerId,
           record_id: record.id,
           transaction_type: isExpense ? "expense" : "deposit",
-          amount: isExpense ? -parsedAmount : parsedAmount,
+          amount: parsedAmount,
           balance_after: newBalance,
           notes: notes.trim(),
           performed_by: user?.name || user?.email || "user",

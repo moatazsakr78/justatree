@@ -293,11 +293,11 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
       let runningBalance = drawer ? (drawer.current_balance || 0) : 0
       for (const payment of validPayments) {
         const methodName = methodMap.get(payment.paymentMethodId) || 'cash'
-        const amount = isReturn ? -payment.amount : payment.amount
+        const signedAmount = isReturn ? -payment.amount : payment.amount
 
         const txData: any = {
           transaction_type: isReturn ? 'return' : 'sale',
-          amount: amount,
+          amount: payment.amount,
           sale_id: salesData.id,
           payment_method: methodName,
           notes: `${isReturn ? 'مرتجع' : 'بيع'} - فاتورة رقم ${invoiceNumber} (${methodName}) (offline sync)`,
@@ -307,7 +307,7 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
         if (!hasNoSafe && drawer) {
           txData.drawer_id = drawer.id
           txData.record_id = sale.record_id
-          runningBalance = roundMoney(runningBalance + amount)
+          runningBalance = roundMoney(runningBalance + signedAmount)
           txData.balance_after = runningBalance
         }
 
@@ -317,7 +317,7 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
       // Single payment - single transaction
       const txData: any = {
         transaction_type: isReturn ? 'return' : 'sale',
-        amount: totalToDrawer,
+        amount: Math.abs(totalToDrawer),
         sale_id: salesData.id,
         payment_method: sale.payment_method || 'cash',
         notes: `${isReturn ? 'مرتجع' : 'بيع'} - فاتورة رقم ${invoiceNumber} (offline sync)`,

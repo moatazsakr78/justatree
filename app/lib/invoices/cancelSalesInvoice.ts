@@ -2,6 +2,7 @@
 
 import { supabase } from '../supabase/client'
 import { roundMoney } from '../utils/money'
+import { getSignedAmount } from '../utils/transactionTypes'
 
 export interface CancelSalesInvoiceParams {
   saleId: string
@@ -194,7 +195,7 @@ export async function cancelSalesInvoice({
     // 5. Reverse cash drawer transactions
     const { data: drawerTransactions, error: transError } = await supabase
       .from('cash_drawer_transactions')
-      .select('id, drawer_id, amount, record_id')
+      .select('id, drawer_id, amount, record_id, transaction_type')
       .eq('sale_id', saleId)
 
     if (!transError && drawerTransactions && drawerTransactions.length > 0) {
@@ -206,7 +207,7 @@ export async function cancelSalesInvoice({
           .single()
 
         if (drawer) {
-          const newBalance = roundMoney((drawer.current_balance || 0) - transaction.amount)
+          const newBalance = roundMoney((drawer.current_balance || 0) - getSignedAmount(transaction.amount, transaction.transaction_type))
 
           await supabase
             .from('cash_drawers')
@@ -223,7 +224,7 @@ export async function cancelSalesInvoice({
               drawer_id: drawer.id,
               record_id: transaction.record_id,
               transaction_type: 'invoice_cancel',
-              amount: -transaction.amount,
+              amount: Math.abs(transaction.amount),
               balance_after: newBalance,
               sale_id: saleId,
               notes: `إلغاء فاتورة رقم ${sale.invoice_number}`,

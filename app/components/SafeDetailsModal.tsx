@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, Chev
 import ResizableTable from './tables/ResizableTable'
 import { supabase } from '../lib/supabase/client'
 import { roundMoney } from '../lib/utils/money'
+import { getSignedAmount } from '../lib/utils/transactionTypes'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
 import { cancelSalesInvoice } from '../lib/invoices/cancelSalesInvoice'
 import SimpleDateFilterModal, { DateFilter } from './SimpleDateFilterModal'
@@ -398,11 +399,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       if (safe?.id && !safe.supports_drawers && safe.safe_type !== 'sub') {
         const { data } = await supabase
           .from('cash_drawer_transactions')
-          .select('amount')
+          .select('amount, transaction_type')
           .eq('record_id', safe.id)
           .in('transaction_type', ['transfer_in', 'transfer_out'])
         setNonDrawerTransferBalance(
-          (data || []).reduce((sum: number, t: any) => sum + (parseFloat(String(t.amount)) || 0), 0)
+          Math.max(0, (data || []).reduce((sum: number, t: any) => sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0))
         )
       } else {
         setNonDrawerTransferBalance(0)
@@ -489,6 +490,49 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       fetchReserves()
     }
   }, [isOpen, allRecordIds.join(',')])
+
+  // Auto-cleanup reserves when balance drops below reserved amount
+  const isCleaningReserves = useRef(false)
+  useEffect(() => {
+    const cleanup = async () => {
+      if (!safe?.id || isLoadingReserves || cashDrawerBalance === null) return
+      if (reserves.length === 0 || totalReserved <= displayedBalance) return
+      if (isCleaningReserves.current) return
+      isCleaningReserves.current = true
+
+      try {
+        if (displayedBalance <= 0) {
+          // Delete all reserves
+          await (supabase as any).from('cash_drawer_reserves')
+            .delete().in('id', reserves.map(r => r.id))
+        } else {
+          // Delete oldest reserves until total fits within balance
+          const sorted = [...reserves].sort((a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          )
+          let excess = totalReserved - displayedBalance
+          for (const reserve of sorted) {
+            if (excess <= 0) break
+            if (reserve.amount <= excess) {
+              await (supabase as any).from('cash_drawer_reserves').delete().eq('id', reserve.id)
+              excess -= reserve.amount
+            } else {
+              // Reduce this reserve's amount to fit
+              await (supabase as any).from('cash_drawer_reserves')
+                .update({ amount: roundMoney(reserve.amount - excess) }).eq('id', reserve.id)
+              excess = 0
+            }
+          }
+        }
+        fetchReserves()
+      } catch (e) {
+        console.error('Error auto-cleaning reserves:', e)
+      } finally {
+        isCleaningReserves.current = false
+      }
+    }
+    cleanup()
+  }, [cashDrawerBalance, displayedBalance, totalReserved, reserves.length])
 
   // Device detection for mobile layout
   useEffect(() => {
@@ -2059,7 +2103,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               drawer_id: drawer.id,
               record_id: source.id,
               transaction_type: withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal',
-              amount: -withdrawFromSource,
+              amount: withdrawFromSource,
               balance_after: newBalance,
               notes: withdrawType === 'transfer'
                 ? `تحويل إلى خزنة أخرى (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
@@ -2116,9 +2160,19 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           }
         }
 
+        // If full mode: delete all reserves for withdrawn sources
+        if (withdrawAllMode === 'full') {
+          const withdrawnSourceIds = allSources.filter(s => s.balance > 0).map(s => s.id)
+          if (withdrawnSourceIds.length > 0) {
+            await (supabase as any).from('cash_drawer_reserves')
+              .delete().in('record_id', withdrawnSourceIds)
+          }
+        }
+
         // Refresh balances
         fetchCashDrawerBalance()
         fetchChildSafes()
+        fetchReserves()
 
         // Reset form
         setWithdrawAmount('')
@@ -2256,6 +2310,20 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       return
     }
 
+    // Check if withdrawal would dip below reserved amount
+    if (withdrawType === 'withdraw' || withdrawType === 'transfer') {
+      const sourceReserves = reserves
+        .filter(r => r.record_id === sourceRecordId)
+        .reduce((sum, r) => sum + r.amount, 0)
+
+      if (sourceReserves > 0 && amount > (sourceBalance - sourceReserves)) {
+        const proceed = confirm(
+          `تحذير: هذا السحب سيتجاوز المبلغ المُجنّب (${formatPrice(sourceReserves, 'system')}). سيتم تعديل التجنيب تلقائياً. هل تريد المتابعة؟`
+        )
+        if (!proceed) return
+      }
+    }
+
     if (withdrawType === 'transfer' && !targetSafeId) {
       alert('يرجى اختيار الخزنة المستهدفة للتحويل')
       return
@@ -2300,7 +2368,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       } else {
         // سحب أو تحويل: خصم من الرصيد
         newSourceBalance = roundMoney((sourceDrawer.current_balance || 0) - amount)
-        transactionAmount = -amount
+        transactionAmount = amount
         transactionType = withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal'
         transactionNotes = withdrawType === 'transfer'
           ? `تحويل إلى خزنة أخرى${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
@@ -3553,12 +3621,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {/* Reserve (تجنيب) Section - Mobile */}
                       <div className="bg-[#2B3544] rounded-lg p-3">
                         <div className="flex items-center justify-between mb-2">
-                          <button
-                            onClick={openAddReserveModal}
-                            className="p-1 rounded hover:bg-orange-600/20 text-orange-400 transition-colors"
-                          >
-                            <PlusIcon className="h-4 w-4" />
-                          </button>
+                          {displayedBalance > 0 ? (
+                            <button
+                              onClick={openAddReserveModal}
+                              className="p-1 rounded hover:bg-orange-600/20 text-orange-400 transition-colors"
+                            >
+                              <PlusIcon className="h-4 w-4" />
+                            </button>
+                          ) : <div />}
                           <h4 className="text-white font-medium text-sm">التجنيب</h4>
                         </div>
 
@@ -4357,13 +4427,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 {/* Reserve (تجنيب) Section */}
                 <div className="p-4 border-t border-gray-600">
                   <div className="flex items-center justify-between mb-3">
-                    <button
-                      onClick={openAddReserveModal}
-                      className="p-1 rounded hover:bg-orange-600/20 text-orange-400 transition-colors"
-                      title="تجنيب مبلغ"
-                    >
-                      <PlusIcon className="h-4 w-4" />
-                    </button>
+                    {displayedBalance > 0 ? (
+                      <button
+                        onClick={openAddReserveModal}
+                        className="p-1 rounded hover:bg-orange-600/20 text-orange-400 transition-colors"
+                        title="تجنيب مبلغ"
+                      >
+                        <PlusIcon className="h-4 w-4" />
+                      </button>
+                    ) : <div />}
                     <h4 className="text-white font-medium text-sm">التجنيب</h4>
                   </div>
 
@@ -4861,7 +4933,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         <div className="text-right">
                           <div className="text-white text-lg font-medium">تحويلات الخزنة</div>
                           <div className="text-gray-400 text-sm mt-1">
-                            إجمالي التحويلات: {formatPrice(transfers.reduce((sum, t) => sum + (t.amount || 0), 0), 'system')}
+                            إجمالي التحويلات: {formatPrice(transfers.reduce((sum, t) => sum + Math.abs(t.amount || 0), 0), 'system')}
                           </div>
                         </div>
                       </div>

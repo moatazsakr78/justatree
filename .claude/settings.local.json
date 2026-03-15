@@ -387,7 +387,8 @@
       "Bash(cat \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\pos\\\\page.tsx\" | sed -n '422,480p')",
       "Bash(find \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\pos\" -type f \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\) ! -name \"page.tsx\" | head -20)",
       "Bash(find \"C:\\\\Users\\\\pc\\\\Desktop\\\\elfaroukgroup\\\\app\\\\\\(dashboard\\)\\\\pos\" -type f -name \"*.tsx\" | head -20)",
-      "Bash(find \"/c/Users/pc/Desktop/elfaroukgroup/app/\\(dashboard\\)/safes\" -type f -name \"*.tsx\" -o -name \"*.ts\" | head -20)"
+      "Bash(find \"/c/Users/pc/Desktop/elfaroukgroup/app/\\(dashboard\\)/safes\" -type f -name \"*.tsx\" -o -name \"*.ts\" | head -20)",
+      "Bash(cd:*)"
     ],
     "deny": [],
     "additionalDirectories": [

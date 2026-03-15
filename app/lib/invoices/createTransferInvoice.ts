@@ -130,26 +130,44 @@ export async function createTransferInvoice({
       let inventoryUpdateResult
       
       if (transferFromLocation.type === 'branch' && transferToLocation.type === 'branch') {
-        // Branch to Branch transfer - use the transfer_stock function
+        // Branch to Branch transfer - decrease source, increase destination
         console.log(`نقل بين الفروع: ${transferFromLocation.id} → ${transferToLocation.id}`)
-        
-        const { data, error: transferStockError } = await (supabase as any)
-          .rpc('transfer_stock', {
-            p_product_id: item.product.id,
-            p_from_branch_id: transferFromLocation.id.toString(),
-            p_to_branch_id: transferToLocation.id.toString(),
-            p_quantity: item.quantity,
-            p_user_id: '00000000-0000-0000-0000-000000000000' // Default user ID for system transfers
-          })
 
-        if (transferStockError) {
-          console.error(`خطأ في نقل المخزون للمنتج ${item.product.name}:`, transferStockError)
-          throw new Error(`خطأ في نقل المخزون للمنتج ${item.product.name}: ${transferStockError.message}`)
+        const { error: decreaseError } = await (supabase as any).rpc(
+          'atomic_adjust_inventory',
+          {
+            p_product_id: item.product.id,
+            p_branch_id: transferFromLocation.id.toString(),
+            p_warehouse_id: null,
+            p_change: -item.quantity,
+            p_allow_negative: false
+          }
+        )
+
+        if (decreaseError) {
+          console.error(`خطأ في تقليل المخزون من الفرع للمنتج ${item.product.name}:`, decreaseError)
+          throw new Error(`خطأ في تقليل المخزون من الفرع للمنتج ${item.product.name}`)
         }
 
-        inventoryUpdateResult = data
+        const { error: increaseError } = await (supabase as any).rpc(
+          'atomic_adjust_inventory',
+          {
+            p_product_id: item.product.id,
+            p_branch_id: transferToLocation.id.toString(),
+            p_warehouse_id: null,
+            p_change: item.quantity,
+            p_allow_negative: false
+          }
+        )
+
+        if (increaseError) {
+          console.error(`خطأ في زيادة المخزون في الفرع للمنتج ${item.product.name}:`, increaseError)
+          throw new Error(`خطأ في زيادة المخزون في الفرع للمنتج ${item.product.name}`)
+        }
+
+        inventoryUpdateResult = true
         console.log(`تم نقل المخزون بنجاح للمنتج: ${item.product.name}`)
-        
+
       } else {
         // Manual inventory updates for warehouse transfers or mixed transfers
         // Use atomic functions to prevent race conditions

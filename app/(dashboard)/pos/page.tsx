@@ -2840,7 +2840,7 @@ function POSPageContent() {
                   drawer_id: drawer.id,
                   record_id: originalTransaction.record_id,
                   transaction_type: 'invoice_edit',
-                  amount: totalDifference,
+                  amount: Math.abs(totalDifference),
                   balance_after: newDrawerBalance,
                   sale_id: saleId,
                   notes: `تعديل فاتورة رقم ${tabEditInvoiceData.invoiceNumber} - الفرق: ${totalDifference}`,

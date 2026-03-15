@@ -642,7 +642,7 @@ export async function createSalesInvoice({
 
         const txData: any = {
           transaction_type: isReturn ? 'return' : 'sale',
-          amount: amount,
+          amount: Math.abs(amount),
           sale_id: salesData.id,
           payment_method: paymentMethodSummary,
           notes: isReturn

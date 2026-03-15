@@ -11,6 +11,7 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import { supabase } from "../lib/supabase/client";
+import { isOutgoingType } from "../lib/utils/transactionTypes";
 
 interface CashDrawerTransaction {
   id: string;
@@ -134,7 +135,7 @@ export default function CashDrawerModal({
           drawer_id: drawerId,
           record_id: record.id,
           transaction_type: "withdrawal",
-          amount: -amount,
+          amount: amount,
           balance_after: newBalance,
           notes: withdrawNotes || "سحب نقدي",
           performed_by: "user", // Can be enhanced to include actual user
@@ -197,7 +198,7 @@ export default function CashDrawerModal({
           drawer_id: drawerId,
           record_id: record.id,
           transaction_type: "withdrawal",
-          amount: -amount,
+          amount: amount,
           balance_after: 0,
           notes: "سحب كامل الرصيد",
           performed_by: "user",
@@ -409,10 +410,10 @@ export default function CashDrawerModal({
                                   <div className="text-left">
                                     <span
                                       className={`font-bold ${
-                                        txn.amount >= 0 ? "text-green-400" : "text-red-400"
+                                        isOutgoingType(txn.transaction_type) ? "text-red-400" : "text-green-400"
                                       }`}
                                     >
-                                      {txn.amount >= 0 ? "+" : ""}
+                                      {isOutgoingType(txn.transaction_type) ? "-" : "+"}
                                       {txn.amount.toFixed(2)}
                                     </span>
                                   </div>

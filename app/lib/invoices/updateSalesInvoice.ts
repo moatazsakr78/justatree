@@ -2,6 +2,7 @@
 
 import { supabase } from '../supabase/client'
 import { roundMoney } from '../utils/money'
+import { getSignedAmount } from '../utils/transactionTypes'
 
 export interface UpdateSalesInvoiceParams {
   saleId: string
@@ -62,7 +63,7 @@ export async function updateSalesInvoice({
     const transactions = allTransactions || []
     // For backward compat: use first transaction as "the transaction" for single-transaction logic
     const transaction = transactions.length === 1 ? transactions[0] : null
-    const transactionAmount = transactions.reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0) || sale.total_amount || 0
+    const transactionAmount = transactions.reduce((sum: number, tx: any) => sum + getSignedAmount(tx.amount || 0, tx.transaction_type), 0) || sale.total_amount || 0
 
     // تتبع التغييرات
     const changes: UpdateSalesInvoiceResult['changes'] = {}
@@ -87,7 +88,7 @@ export async function updateSalesInvoice({
             .single()
 
           if (oldDrawer) {
-            const newOldBalance = roundMoney((oldDrawer.current_balance || 0) - (tx.amount || 0))
+            const newOldBalance = roundMoney((oldDrawer.current_balance || 0) - getSignedAmount(tx.amount || 0, tx.transaction_type))
             await supabase
               .from('cash_drawers')
               .update({

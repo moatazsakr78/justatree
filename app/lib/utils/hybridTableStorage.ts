@@ -44,7 +44,9 @@ const REPORT_TYPE_MAP = {
   'RECORD_STATEMENT_REPORT': 'record_statement',
   'RECORD_TRANSACTIONS_REPORT': 'record_transactions',
   'RECORD_TRANSACTION_DETAILS_REPORT': 'record_transaction_details',
-  'RECORD_PAYMENTS_REPORT': 'record_payments'
+  'RECORD_PAYMENTS_REPORT': 'record_payments',
+  'TRANSFER_INVOICES_REPORT': 'transfer_invoices',
+  'TRANSFER_ITEMS_REPORT': 'transfer_items'
 } as const;
 
 type ReportType = keyof typeof REPORT_TYPE_MAP;
@@ -72,7 +74,9 @@ class HybridTableStorage {
     RECORD_STATEMENT_REPORT: 'pos-reports-record-statement-table-config',
     RECORD_TRANSACTIONS_REPORT: 'pos-reports-record-transactions-table-config',
     RECORD_TRANSACTION_DETAILS_REPORT: 'pos-reports-record-transaction-details-table-config',
-    RECORD_PAYMENTS_REPORT: 'pos-reports-record-payments-table-config'
+    RECORD_PAYMENTS_REPORT: 'pos-reports-record-payments-table-config',
+    TRANSFER_INVOICES_REPORT: 'pos-transfer-invoices-table-config',
+    TRANSFER_ITEMS_REPORT: 'pos-transfer-items-table-config'
   } as const;
 
   private readonly CONFIG_VERSION = '2.1.0';
