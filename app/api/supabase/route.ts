@@ -187,96 +187,62 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Get current quantities for both branches
-      const { data: fromRecord, error: fromError } = await supabase
-        .from('inventory')
-        .select('id, quantity')
-        .eq('product_id', productId)
-        .eq('branch_id', fromBranchId)
-        .maybeSingle()
+      // Use atomic RPC to prevent race conditions (no read-modify-write)
+      // Decrease source branch atomically
+      const { data: fromResult, error: fromError } = await supabase.rpc(
+        'atomic_adjust_inventory' as any,
+        {
+          p_product_id: productId,
+          p_branch_id: fromBranchId,
+          p_warehouse_id: null,
+          p_change: -transferQty,
+          p_allow_negative: false
+        }
+      )
 
       if (fromError) {
         return NextResponse.json(
-          { success: false, error: 'Error checking source branch inventory', details: fromError.message },
+          { success: false, error: 'Failed to update source branch (insufficient stock or error)', details: fromError.message },
           { status: 500 }
         )
       }
 
-      const { data: toRecord, error: toError } = await supabase
-        .from('inventory')
-        .select('id, quantity')
-        .eq('product_id', productId)
-        .eq('branch_id', toBranchId)
-        .maybeSingle()
+      // Increase destination branch atomically
+      const { data: toResult, error: toError } = await supabase.rpc(
+        'atomic_adjust_inventory' as any,
+        {
+          p_product_id: productId,
+          p_branch_id: toBranchId,
+          p_warehouse_id: null,
+          p_change: transferQty,
+          p_allow_negative: false
+        }
+      )
 
       if (toError) {
+        // Rollback source branch change
+        await supabase.rpc(
+          'atomic_adjust_inventory' as any,
+          {
+            p_product_id: productId,
+            p_branch_id: fromBranchId,
+            p_warehouse_id: null,
+            p_change: transferQty,
+            p_allow_negative: true
+          }
+        )
         return NextResponse.json(
-          { success: false, error: 'Error checking destination branch inventory', details: toError.message },
+          { success: false, error: 'Failed to update destination branch', details: toError.message },
           { status: 500 }
         )
       }
 
-      const fromCurrentQty = fromRecord?.quantity || 0
-      const toCurrentQty = toRecord?.quantity || 0
-      const fromNewQty = fromCurrentQty - transferQty
-      const toNewQty = toCurrentQty + transferQty
-
-      // Update source branch
-      let fromResult
-      if (fromRecord) {
-        fromResult = await supabase
-          .from('inventory')
-          .update({ quantity: fromNewQty, last_updated: new Date().toISOString() })
-          .eq('id', fromRecord.id)
-          .select('*')
-          .single()
-      } else {
-        fromResult = await supabase
-          .from('inventory')
-          .insert({ product_id: productId, branch_id: fromBranchId, quantity: fromNewQty, last_updated: new Date().toISOString() })
-          .select('*')
-          .single()
-      }
-
-      if (fromResult.error) {
-        return NextResponse.json(
-          { success: false, error: 'Failed to update source branch', details: fromResult.error.message },
-          { status: 500 }
-        )
-      }
-
-      // Update destination branch
-      let toResult
-      if (toRecord) {
-        toResult = await supabase
-          .from('inventory')
-          .update({ quantity: toNewQty, last_updated: new Date().toISOString() })
-          .eq('id', toRecord.id)
-          .select('*')
-          .single()
-      } else {
-        toResult = await supabase
-          .from('inventory')
-          .insert({ product_id: productId, branch_id: toBranchId, quantity: toNewQty, last_updated: new Date().toISOString() })
-          .select('*')
-          .single()
-      }
-
-      if (toResult.error) {
-        return NextResponse.json(
-          { success: false, error: 'Failed to update destination branch', details: toResult.error.message },
-          { status: 500 }
-        )
-      }
-
-      console.log('Successfully transferred inventory:', { from: fromResult.data, to: toResult.data })
+      console.log('Successfully transferred inventory atomically:', { from: fromResult, to: toResult })
 
       return NextResponse.json({
         success: true,
-        data: { from: fromResult.data, to: toResult.data },
-        message: 'Inventory transferred successfully',
-        fromNewQty,
-        toNewQty
+        data: { from: fromResult, to: toResult },
+        message: 'Inventory transferred successfully'
       })
     }
 

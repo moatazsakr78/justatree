@@ -248,7 +248,8 @@ export const fetchTopProducts = async (filter: DateFilter, limit: number = 10): 
   return Array.from(productMap.values())
     .map(p => ({
       ...p,
-      profitMargin: p.totalRevenue > 0 ? (p.totalProfit / p.totalRevenue) * 100 : 0,
+      // Use absolute revenue for margin calculation to handle products with net returns
+      profitMargin: Math.abs(p.totalRevenue) > 0 ? (p.totalProfit / Math.abs(p.totalRevenue)) * 100 : 0,
     }))
     .sort((a, b) => b.totalRevenue - a.totalRevenue)
     .slice(0, limit);
@@ -652,7 +653,6 @@ export const fetchSaleTypeBreakdown = async (filter: DateFilter): Promise<SaleTy
   if (error) throw error;
 
   const sales = data || [];
-  const totalCount = sales.length;
 
   const groundSales = sales.filter(s => s.sale_type !== 'online');
   const onlineSales = sales.filter(s => s.sale_type === 'online');
@@ -666,24 +666,28 @@ export const fetchSaleTypeBreakdown = async (filter: DateFilter): Promise<SaleTy
   const sumProfit = (arr: typeof sales) => arr.reduce((sum, s) => sum + (parseFloat(String(s.profit ?? 0)) || 0), 0);
   const sumShipping = (arr: typeof sales) => arr.reduce((sum, s) => sum + (parseFloat(String(s.shipping_amount ?? 0)) || 0), 0);
 
+  const groundTotal = sumAmount(groundSales);
+  const onlineTotal = sumAmount(onlineSales);
+  const totalRevenue = Math.abs(groundTotal) + Math.abs(onlineTotal);
+
   return {
     ground: {
       invoiceCount: groundInvoices.length,
       invoiceTotal: sumAmount(groundInvoices),
       returnCount: groundReturns.length,
       returnTotal: sumAmount(groundReturns),
-      total: sumAmount(groundSales),
+      total: groundTotal,
       profit: sumProfit(groundSales),
-      percentage: totalCount > 0 ? (groundSales.length / totalCount) * 100 : 0,
+      percentage: totalRevenue > 0 ? (Math.abs(groundTotal) / totalRevenue) * 100 : 0,
     },
     online: {
       invoiceCount: onlineInvoices.length,
       invoiceTotal: sumAmount(onlineInvoices),
       returnCount: onlineReturns.length,
       returnTotal: sumAmount(onlineReturns),
-      total: sumAmount(onlineSales),
+      total: onlineTotal,
       profit: sumProfit(onlineSales),
-      percentage: totalCount > 0 ? (onlineSales.length / totalCount) * 100 : 0,
+      percentage: totalRevenue > 0 ? (Math.abs(onlineTotal) / totalRevenue) * 100 : 0,
       shippingTotal: sumShipping(onlineSales),
     },
   };

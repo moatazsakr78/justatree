@@ -118,7 +118,7 @@ export default function DashboardPage() {
   // Calculate percentage change helper
   const calcChange = (current: number, previous: number): number | undefined => {
     if (previous === 0) return undefined;
-    return previous;
+    return ((current - previous) / previous) * 100;
   };
 
   return (

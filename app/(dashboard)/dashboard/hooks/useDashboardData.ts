@@ -169,9 +169,7 @@ const fetchPeriodPurchases = async (dateFilter: DateFilter): Promise<CapitalData
       };
       existing.capital += amount;
       locationMap.set(key, existing);
-    }
-
-    if (item.warehouse_id) {
+    } else if (item.warehouse_id) {
       const key = `warehouse:${item.warehouse_id}`;
       const existing = locationMap.get(key) || {
         name: item.warehouses?.name || 'مخزن غير معروف',
@@ -433,7 +431,7 @@ function computeFilteredDashboardData(
   const topProducts = Array.from(productMap.values())
     .map(p => ({
       ...p,
-      profitMargin: p.totalRevenue > 0 ? (p.totalProfit / p.totalRevenue) * 100 : 0,
+      profitMargin: Math.abs(p.totalRevenue) > 0 ? (p.totalProfit / Math.abs(p.totalRevenue)) * 100 : 0,
     }))
     .sort((a, b) => b.totalRevenue - a.totalRevenue)
     .slice(0, 5);
@@ -509,24 +507,28 @@ function computeFilteredDashboardData(
   const sumPrf = (arr: typeof filteredSales) => arr.reduce((sum, s) => sum + (parseFloat(String(s.profit ?? 0)) || 0), 0);
   const sumShp = (arr: typeof filteredSales) => arr.reduce((sum, s) => sum + (parseFloat(String(s.shipping_amount ?? 0)) || 0), 0);
 
+  const groundTotalAmt = sumAmt(groundSales);
+  const onlineTotalAmt = sumAmt(onlineSalesArr);
+  const totalRevenueAmt = Math.abs(groundTotalAmt) + Math.abs(onlineTotalAmt);
+
   const saleTypeBreakdown: SaleTypeBreakdownData = {
     ground: {
       invoiceCount: groundInvoices.length,
       invoiceTotal: sumAmt(groundInvoices),
       returnCount: groundReturns.length,
       returnTotal: sumAmt(groundReturns),
-      total: sumAmt(groundSales),
+      total: groundTotalAmt,
       profit: sumPrf(groundSales),
-      percentage: orderCount > 0 ? (groundSales.length / orderCount) * 100 : 0,
+      percentage: totalRevenueAmt > 0 ? (Math.abs(groundTotalAmt) / totalRevenueAmt) * 100 : 0,
     },
     online: {
       invoiceCount: onlineInvoices.length,
       invoiceTotal: sumAmt(onlineInvoices),
       returnCount: onlineReturns.length,
       returnTotal: sumAmt(onlineReturns),
-      total: sumAmt(onlineSalesArr),
+      total: onlineTotalAmt,
       profit: sumPrf(onlineSalesArr),
-      percentage: orderCount > 0 ? (onlineSalesArr.length / orderCount) * 100 : 0,
+      percentage: totalRevenueAmt > 0 ? (Math.abs(onlineTotalAmt) / totalRevenueAmt) * 100 : 0,
       shippingTotal: sumShp(onlineSalesArr),
     },
   };

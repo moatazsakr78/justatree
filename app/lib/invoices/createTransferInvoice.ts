@@ -92,35 +92,12 @@ export async function createTransferInvoice({
       notes: hasNoSafe
         ? `[TRANSFER] نقل من ${transferFromLocation.name} إلى ${transferToLocation.name} [بدون خزنة]`
         : `[TRANSFER] نقل من ${transferFromLocation.name} إلى ${transferToLocation.name}`,
-      invoice_type: 'Purchase Invoice',
+      invoice_type: 'Transfer',
       is_active: true
     }
 
-    // Build all items array upfront for atomic insert
-    const transferItems = cartItems.map(item => ({
-      product_id: item.product.id,
-      quantity: item.quantity,
-      unit_purchase_price: 0,
-      total_price: 0,
-      notes: `[TRANSFER] نقل من ${transferFromLocation.name} إلى ${transferToLocation.name}`
-    }))
-
-    // Atomic insert: invoice + all items in a single transaction
-    // @ts-ignore - function exists in database but not in generated types
-    const { data: rpcResult, error: rpcError } = await supabase.rpc(
-      'create_purchase_invoice_with_items' as any,
-      { p_invoice_data: transferInvoiceData, p_items: transferItems }
-    )
-
-    if (rpcError) {
-      console.error('خطأ في إنشاء فاتورة النقل:', rpcError)
-      throw new Error(`خطأ في إنشاء فاتورة النقل: ${rpcError.message}`)
-    }
-
-    const transferInvoice = rpcResult as { id: string; invoice_number: string }
-    console.log('تم إنشاء فاتورة النقل بنجاح:', transferInvoice)
-
-    // Process inventory updates for each cart item
+    // === STEP 1: Process inventory updates FIRST (before creating invoice) ===
+    // This prevents orphaned invoices if inventory is insufficient
     const transferResults = []
 
     for (const item of cartItems) {
@@ -128,7 +105,7 @@ export async function createTransferInvoice({
 
       // Handle inventory updates based on location types
       let inventoryUpdateResult
-      
+
       if (transferFromLocation.type === 'branch' && transferToLocation.type === 'branch') {
         // Branch to Branch transfer - decrease source, increase destination
         console.log(`نقل بين الفروع: ${transferFromLocation.id} → ${transferToLocation.id}`)
@@ -146,7 +123,7 @@ export async function createTransferInvoice({
 
         if (decreaseError) {
           console.error(`خطأ في تقليل المخزون من الفرع للمنتج ${item.product.name}:`, decreaseError)
-          throw new Error(`خطأ في تقليل المخزون من الفرع للمنتج ${item.product.name}`)
+          throw new Error(`الكمية غير كافية للمنتج ${item.product.name} في ${transferFromLocation.name}`)
         }
 
         const { error: increaseError } = await (supabase as any).rpc(
@@ -188,7 +165,7 @@ export async function createTransferInvoice({
 
           if (decreaseError) {
             console.error(`خطأ في تقليل المخزون من الفرع للمنتج ${item.product.name}:`, decreaseError)
-            throw new Error(`خطأ في تقليل المخزون من الفرع للمنتج ${item.product.name}`)
+            throw new Error(`الكمية غير كافية للمنتج ${item.product.name} في ${transferFromLocation.name}`)
           }
         } else if (transferFromLocation.type === 'warehouse') {
           const { error: decreaseError } = await (supabase as any).rpc(
@@ -204,7 +181,7 @@ export async function createTransferInvoice({
 
           if (decreaseError) {
             console.error(`خطأ في تقليل المخزون من المخزن للمنتج ${item.product.name}:`, decreaseError)
-            throw new Error(`خطأ في تقليل المخزون من المخزن للمنتج ${item.product.name}`)
+            throw new Error(`الكمية غير كافية للمنتج ${item.product.name} في ${transferFromLocation.name}`)
           }
         }
 
@@ -249,10 +226,34 @@ export async function createTransferInvoice({
       transferResults.push({
         product: item.product,
         quantity: item.quantity,
-        transferItemId: transferInvoice.id,
         inventoryUpdated: inventoryUpdateResult
       })
     }
+
+    // === STEP 2: Create invoice AFTER inventory validated successfully ===
+    // Build all items array upfront for atomic insert
+    const transferItems = cartItems.map(item => ({
+      product_id: item.product.id,
+      quantity: item.quantity,
+      unit_purchase_price: 0,
+      total_price: 0,
+      notes: `[TRANSFER] نقل من ${transferFromLocation.name} إلى ${transferToLocation.name}`
+    }))
+
+    // Atomic insert: invoice + all items in a single transaction
+    // @ts-ignore - function exists in database but not in generated types
+    const { data: rpcResult, error: rpcError } = await supabase.rpc(
+      'create_purchase_invoice_with_items' as any,
+      { p_invoice_data: transferInvoiceData, p_items: transferItems }
+    )
+
+    if (rpcError) {
+      console.error('خطأ في إنشاء فاتورة النقل:', rpcError)
+      throw new Error(`خطأ في إنشاء فاتورة النقل: ${rpcError.message}`)
+    }
+
+    const transferInvoice = rpcResult as { id: string; invoice_number: string }
+    console.log('تم إنشاء فاتورة النقل بنجاح:', transferInvoice)
 
     console.log('تم إنجاز عملية النقل بنجاح!')
     console.log('نتائج النقل:', transferResults)

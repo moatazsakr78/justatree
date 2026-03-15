@@ -217,6 +217,9 @@ export async function createSalesInvoice({
     const discountAmount = 0 // You can add discount calculation here if needed
     const profit = cartItems.reduce((sum, item) => {
       const costPrice = item.product.cost_price || 0
+      if (costPrice === 0) {
+        console.warn(`Product "${item.product.name}" (${item.product.id}) has no cost_price — profit will show as 100% margin`)
+      }
       // حساب الربح بعد الخصم: الربح = إجمالي البيع بعد الخصم - التكلفة
       const itemProfit = item.total - (costPrice * item.quantity)
       return sum + (isReturn ? -itemProfit : itemProfit)
@@ -507,8 +510,10 @@ export async function createSalesInvoice({
           .insert(allPayments)
 
         if (paymentError) {
-          console.warn('Failed to save payment entries:', paymentError.message)
+          console.error('Failed to save payment entries:', paymentError.message)
           console.error('Payment error details:', paymentError)
+          // Payment failure is critical - customer balance will be wrong without payments
+          throw new Error(`فشل في حفظ بيانات الدفع: ${paymentError.message}`)
         } else {
           console.log(`✅ ${allPayments.length} payments saved successfully`)
         }
@@ -527,6 +532,12 @@ export async function createSalesInvoice({
       totalToDrawer = paymentSplitData
         .filter(p => p.amount > 0 && p.paymentMethodId)
         .reduce((sum, p) => sum + p.amount, 0)
+
+      // Validate split payments total matches expected amount
+      const expectedTotal = Math.abs(totalAmount) - (creditAmount || 0)
+      if (expectedTotal > 0 && Math.abs(totalToDrawer - expectedTotal) > 0.01) {
+        console.warn(`Split payment total (${totalToDrawer}) doesn't match expected (${expectedTotal}). Diff: ${totalToDrawer - expectedTotal}`)
+      }
 
     } else {
       // Single payment - entire amount goes to drawer
@@ -577,14 +588,15 @@ export async function createSalesInvoice({
         })
       }
 
-      // Track drawers and their balances (may need both main and sub drawers)
-      const drawerCache: Record<string, { drawer: any, balance: number }> = {}
+      // Track drawers (for ID lookup) and accumulate deltas per drawer for atomic update
+      const drawerCache: Record<string, { drawer: any }> = {}
+      const drawerDeltas: Record<string, number> = {} // drawerId → total delta
 
       const ensureDrawer = async (recordId: string) => {
         if (drawerCache[recordId]) return drawerCache[recordId]
         const drawer = await getOrCreateDrawer(recordId)
         if (drawer) {
-          drawerCache[recordId] = { drawer, balance: drawer.current_balance || 0 }
+          drawerCache[recordId] = { drawer }
         }
         return drawerCache[recordId] || null
       }
@@ -600,7 +612,8 @@ export async function createSalesInvoice({
         for (const payment of validPayments) {
           const methodName = methodMap.get(payment.paymentMethodId) || 'cash'
           const isPhysical = physicalMap.get(payment.paymentMethodId) !== false
-          let amount = payment.amount
+          // For returns, negate the amount so drawer balance decreases
+          let amount = isReturn ? -payment.amount : payment.amount
 
           // Determine target: physical → subSafe (if exists), digital → mainSafe
           let targetRecordId: string | null = null
@@ -628,8 +641,8 @@ export async function createSalesInvoice({
             if (drawerInfo) {
               txData.drawer_id = drawerInfo.drawer.id
               txData.record_id = targetRecordId
-              drawerInfo.balance = roundMoney(drawerInfo.balance + amount)
-              txData.balance_after = drawerInfo.balance
+              // Accumulate delta for atomic update later
+              drawerDeltas[drawerInfo.drawer.id] = roundMoney((drawerDeltas[drawerInfo.drawer.id] || 0) + amount)
             }
           }
 
@@ -656,25 +669,34 @@ export async function createSalesInvoice({
           if (drawerInfo) {
             txData.drawer_id = drawerInfo.drawer.id
             txData.record_id = targetRecordId
-            drawerInfo.balance = roundMoney(drawerInfo.balance + amount)
-            txData.balance_after = drawerInfo.balance
+            // Accumulate delta for atomic update later
+            drawerDeltas[drawerInfo.drawer.id] = roundMoney((drawerDeltas[drawerInfo.drawer.id] || 0) + amount)
           }
         }
 
         transactionsToInsert.push(txData)
       }
 
-      // Update all affected drawers
-      for (const [recordId, info] of Object.entries(drawerCache)) {
-        await supabase
-          .from('cash_drawers')
-          .update({
-            current_balance: info.balance,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', info.drawer.id)
+      // Atomically update all affected drawers using RPC (prevents race conditions)
+      for (const [drawerId, delta] of Object.entries(drawerDeltas)) {
+        const { data: result, error: rpcErr } = await supabase.rpc(
+          'atomic_adjust_drawer_balance' as any,
+          { p_drawer_id: drawerId, p_change: delta }
+        )
 
-        console.log(`✅ Cash drawer ${recordId} updated: new balance: ${info.balance}`)
+        if (rpcErr) {
+          console.warn(`Failed to atomically update drawer ${drawerId}:`, rpcErr.message)
+        } else {
+          const newBalance = result?.[0]?.new_balance ?? 'unknown'
+          console.log(`✅ Cash drawer ${drawerId} atomically updated: delta=${delta}, new balance=${newBalance}`)
+
+          // Set balance_after on transactions for this drawer
+          transactionsToInsert.forEach(tx => {
+            if (tx.drawer_id === drawerId) {
+              tx.balance_after = newBalance
+            }
+          })
+        }
       }
 
       // Insert all transaction records

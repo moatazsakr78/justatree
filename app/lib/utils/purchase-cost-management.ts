@@ -393,7 +393,7 @@ export async function recalculateProductCostFromHistory(productId: string): Prom
     runningQuantity = Math.max(0, runningQuantity - totalReturnedQuantity)
 
     const averageCost = runningQuantity > 0
-      ? Math.round((runningCost / (totalQuantityPurchased)) * 100) / 100
+      ? Math.round((runningCost / runningQuantity) * 100) / 100
       : (totalQuantityPurchased > 0 ? Math.round((totalCostAccumulated / totalQuantityPurchased) * 100) / 100 : 0)
 
     console.log('📊 Recalculated cost from history:', {

@@ -250,11 +250,9 @@ export async function cancelSalesInvoice({
       .eq('sale_id', saleId)
 
     if (paymentsError) {
-      // Try by invoice number as fallback
-      await supabase
-        .from('customer_payments')
-        .delete()
-        .ilike('notes', `%${sale.invoice_number}%`)
+      console.error('Failed to delete customer payments by sale_id:', paymentsError.message)
+      // Do NOT fallback to string matching — it could delete unrelated payments
+      // Log the error for manual investigation
     }
 
     // 7. Mark the sale as cancelled + record in update_history
