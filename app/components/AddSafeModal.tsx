@@ -26,6 +26,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
   const [safeName, setSafeName] = useState('')
   const [initialBalance, setInitialBalance] = useState<string>('0')
   const [supportsDrawers, setSupportsDrawers] = useState(false)
+  const [balanceDestination, setBalanceDestination] = useState<'safe' | 'transfers'>('safe')
   const [isLoading, setIsLoading] = useState(false)
 
   const isSubSafe = !!parentSafe
@@ -66,38 +67,44 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
 
       // Create cash_drawer for the new safe
       if (newRecord?.id) {
-        const { data: newDrawer, error: drawerError } = await supabase
-          .from('cash_drawers')
-          .insert({
-            record_id: newRecord.id,
-            current_balance: supportsDrawers ? 0 : balance
-          })
-          .select('id')
-          .single()
-        if (drawerError) {
-          console.error('Error creating cash drawer:', drawerError)
-        }
+        const isTransfers = balanceDestination === 'transfers'
 
-        // Create opening balance transaction for non-drawer safes
-        if (newDrawer?.id && !supportsDrawers && balance > 0) {
-          await supabase.from('cash_drawer_transactions').insert({
-            record_id: newRecord.id,
-            cash_drawer_id: newDrawer.id,
-            amount: balance,
-            transaction_type: 'deposit',
-            notes: 'رصيد افتتاحي'
-          })
-        }
-
-        // Auto-create first drawer when supports_drawers is enabled
         if (supportsDrawers) {
+          // For drawer safes: main safe gets balance if transfers, otherwise 0
+          const mainBalance = isTransfers ? balance : 0
+          const { data: newDrawer, error: drawerError } = await supabase
+            .from('cash_drawers')
+            .insert({
+              record_id: newRecord.id,
+              current_balance: mainBalance
+            })
+            .select('id')
+            .single()
+          if (drawerError) {
+            console.error('Error creating cash drawer:', drawerError)
+          }
+
+          // If transfers, create transfer_in transaction on main safe
+          if (newDrawer?.id && isTransfers && balance > 0) {
+            await supabase.from('cash_drawer_transactions').insert({
+              record_id: newRecord.id,
+              drawer_id: newDrawer.id,
+              amount: balance,
+              balance_after: balance,
+              transaction_type: 'transfer_in',
+              notes: 'رصيد افتتاحي - تحويلات'
+            })
+          }
+
+          // Auto-create first drawer
+          const subBalance = isTransfers ? 0 : balance
           const { data: drawerRecord } = await supabase
             .from('records')
             .insert({
               name: 'درج 1',
               is_primary: false,
               is_active: true,
-              initial_balance: balance,
+              initial_balance: subBalance,
               parent_id: newRecord.id,
               safe_type: 'sub',
               supports_drawers: false,
@@ -109,19 +116,45 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
           if (drawerRecord?.id) {
             const { data: subDrawer } = await supabase.from('cash_drawers').insert({
               record_id: drawerRecord.id,
-              current_balance: balance
+              current_balance: subBalance
             }).select('id').single()
 
-            // Create opening balance transaction for the sub-drawer
-            if (subDrawer?.id && balance > 0) {
+            // Create opening balance transaction for the sub-drawer (only if not transfers)
+            if (subDrawer?.id && !isTransfers && balance > 0) {
               await supabase.from('cash_drawer_transactions').insert({
                 record_id: drawerRecord.id,
-                cash_drawer_id: subDrawer.id,
+                drawer_id: subDrawer.id,
                 amount: balance,
+                balance_after: balance,
                 transaction_type: 'deposit',
                 notes: 'رصيد افتتاحي'
               })
             }
+          }
+        } else {
+          // Non-drawer safe
+          const { data: newDrawer, error: drawerError } = await supabase
+            .from('cash_drawers')
+            .insert({
+              record_id: newRecord.id,
+              current_balance: balance
+            })
+            .select('id')
+            .single()
+          if (drawerError) {
+            console.error('Error creating cash drawer:', drawerError)
+          }
+
+          // Create opening balance transaction
+          if (newDrawer?.id && balance > 0) {
+            await supabase.from('cash_drawer_transactions').insert({
+              record_id: newRecord.id,
+              drawer_id: newDrawer.id,
+              amount: balance,
+              balance_after: balance,
+              transaction_type: isTransfers ? 'transfer_in' : 'deposit',
+              notes: isTransfers ? 'رصيد افتتاحي - تحويلات' : 'رصيد افتتاحي'
+            })
           }
         }
       }
@@ -139,6 +172,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
     setSafeName('')
     setInitialBalance('0')
     setSupportsDrawers(false)
+    setBalanceDestination('safe')
     onClose()
   }
 
@@ -211,6 +245,41 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
             />
             <p className="text-xs text-gray-500 mt-1">يمكنك تركه صفر إذا كانت الخزنة فارغة</p>
           </div>
+
+          {/* Balance Destination - only when balance > 0 */}
+          {(parseFloat(initialBalance) || 0) > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                وجهة الرصيد الافتتاحي
+              </label>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="balanceDestination"
+                    checked={balanceDestination === 'safe'}
+                    onChange={() => setBalanceDestination('safe')}
+                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                    disabled={isLoading}
+                  />
+                  <span className="text-sm text-gray-300">
+                    {supportsDrawers ? 'درج 1' : 'في الخزنة'}
+                  </span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="balanceDestination"
+                    checked={balanceDestination === 'transfers'}
+                    onChange={() => setBalanceDestination('transfers')}
+                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                    disabled={isLoading}
+                  />
+                  <span className="text-sm text-gray-300">التحويلات</span>
+                </label>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Actions */}

@@ -172,7 +172,7 @@ async function deleteTestSafe(supabase: SupabaseClient, id: string) {
     const childDrawerIds = (childDrawers || []).map((d: any) => d.id)
 
     if (childDrawerIds.length > 0) {
-      await supabase.from('cash_drawer_transactions').delete().in('cash_drawer_id', childDrawerIds)
+      await supabase.from('cash_drawer_transactions').delete().in('drawer_id', childDrawerIds)
       await supabase.from('cash_drawers').delete().eq('record_id', childId)
     }
     await supabase.from('records').delete().eq('id', childId)
@@ -186,7 +186,7 @@ async function deleteTestSafe(supabase: SupabaseClient, id: string) {
   const drawerIds = (drawers || []).map((d: any) => d.id)
 
   if (drawerIds.length > 0) {
-    await supabase.from('cash_drawer_transactions').delete().in('cash_drawer_id', drawerIds)
+    await supabase.from('cash_drawer_transactions').delete().in('drawer_id', drawerIds)
     await supabase.from('cash_drawers').delete().eq('record_id', id)
   }
 

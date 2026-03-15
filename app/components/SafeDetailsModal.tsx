@@ -22,11 +22,12 @@ interface SafeDetailsModalProps {
   onClose: () => void
   safe: any
   additionalSafeIds?: string[]
+  onSafeUpdated?: () => void
 }
 
 type ViewMode = 'split' | 'safes-only' | 'details-only'
 
-export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafeIds = [] }: SafeDetailsModalProps) {
+export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafeIds = [], onSafeUpdated }: SafeDetailsModalProps) {
   const formatPrice = useFormatPrice();
   const { user } = useAuth();
   const [selectedTransaction, setSelectedTransaction] = useState(0) // First row selected (index 0)
@@ -2246,6 +2247,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         setWithdrawSourceId('')
         setWithdrawAllMode(null)
         setShowWithdrawModal(false)
+        onSafeUpdated?.()
         alert(withdrawType === 'transfer' ? 'تم تحويل الكل بنجاح' : `تم سحب ${amount} بنجاح`)
       } catch (error: any) {
         console.error('Error in withdraw/transfer all:', error)
@@ -2424,6 +2426,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         setWithdrawSourceId('')
         setWithdrawAllMode(null)
         setShowWithdrawModal(false)
+        onSafeUpdated?.()
         alert(withdrawType === 'transfer' ? 'تم تحويل الكل بنجاح' : `تم سحب ${amount} بنجاح`)
       } catch (error: any) {
         console.error('Error in non-drawer withdraw/transfer all:', error)
@@ -2509,6 +2512,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         setWithdrawSourceId('')
         setWithdrawAllMode(null)
         setShowWithdrawModal(false)
+        onSafeUpdated?.()
         alert('تم الإيداع بنجاح')
       } catch (error: any) {
         console.error('Error in deposit all:', error)
@@ -2733,6 +2737,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
       // 7. Close modal and show success
       setShowWithdrawModal(false)
+      onSafeUpdated?.()
 
       const successMessage = withdrawType === 'deposit'
         ? `تم إيداع ${amount} بنجاح`

@@ -1554,6 +1554,7 @@ export default function SafesPage() {
           onClose={closeSafeDetails}
           safe={selectedSafe}
           additionalSafeIds={combinedSafeIds}
+          onSafeUpdated={handleSafeUpdated}
         />
       )}
 
