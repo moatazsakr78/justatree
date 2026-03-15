@@ -298,7 +298,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     // Non-drawer safes: adjust based on filter
     if (!selectedDrawerFilters || selectedDrawerFilters.size === 0) return safeBalance
     if (selectedDrawerFilters.has('safe') && !selectedDrawerFilters.has('transfers')) {
-      return safeBalance - nonDrawerTransferBalance
+      return Math.max(0, safeBalance - nonDrawerTransferBalance)
     }
     if (selectedDrawerFilters.has('transfers') && !selectedDrawerFilters.has('safe')) {
       return nonDrawerTransferBalance
@@ -2069,6 +2069,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         if (mainSafeOwnBalance > 0) allSources.push({ id: safe.id, name: 'التحويلات', balance: mainSafeOwnBalance })
 
         let totalTransferred = 0
+        let cashTransferred = 0 // From drawers (child safes)
+        let transferTransferred = 0 // From main safe (التحويلات)
 
         for (const source of allSources) {
           // Calculate amount to withdraw from this source
@@ -2112,9 +2114,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             })
 
           totalTransferred += withdrawFromSource
+          // Track cash vs transfer: main safe (source.id === safe.id) is transfers, drawers are cash
+          if (source.id === safe.id) {
+            transferTransferred += withdrawFromSource
+          } else {
+            cashTransferred += withdrawFromSource
+          }
         }
 
-        // For transfer: deposit total amount to target safe
+        // For transfer: deposit to target safe, split cash vs transfers
         if (withdrawType === 'transfer' && totalTransferred > 0) {
           // Get or create target drawer
           let { data: targetDrawer } = await supabase
@@ -2137,25 +2145,44 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           }
 
           if (targetDrawer) {
-            // Atomic balance update for target drawer
+            // Atomic balance update for target drawer (full amount)
             const { data: targetRpcResult } = await supabase.rpc(
               'atomic_adjust_drawer_balance' as any,
               { p_drawer_id: targetDrawer.id, p_change: totalTransferred }
             )
             const targetNewBalance = targetRpcResult?.[0]?.new_balance ?? roundMoney((targetDrawer.current_balance || 0) + totalTransferred)
 
-            await supabase
-              .from('cash_drawer_transactions')
-              .insert({
-                drawer_id: targetDrawer.id,
-                record_id: targetSafeId,
-                transaction_type: 'transfer_in',
-                amount: totalTransferred,
-                balance_after: roundMoney(targetNewBalance),
-                notes: `تحويل من خزنة أخرى (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
-                performed_by: user?.name || 'system',
-                related_record_id: safe.id
-              })
+            // Split into cash (deposit) and transfer (transfer_in) transactions on target
+            // Cash from drawers → deposit (goes to "في الخزنة" on target)
+            if (cashTransferred > 0) {
+              await supabase
+                .from('cash_drawer_transactions')
+                .insert({
+                  drawer_id: targetDrawer.id,
+                  record_id: targetSafeId,
+                  transaction_type: 'deposit',
+                  amount: cashTransferred,
+                  balance_after: roundMoney(targetNewBalance - transferTransferred),
+                  notes: `تحويل من خزنة أخرى - نقدي (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+                  performed_by: user?.name || 'system',
+                  related_record_id: safe.id
+                })
+            }
+            // Transfers from main safe → transfer_in (goes to "التحويلات" on target)
+            if (transferTransferred > 0) {
+              await supabase
+                .from('cash_drawer_transactions')
+                .insert({
+                  drawer_id: targetDrawer.id,
+                  record_id: targetSafeId,
+                  transaction_type: 'transfer_in',
+                  amount: transferTransferred,
+                  balance_after: roundMoney(targetNewBalance),
+                  notes: `تحويل من خزنة أخرى - تحويلات (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+                  performed_by: user?.name || 'system',
+                  related_record_id: safe.id
+                })
+            }
           }
         }
 
@@ -2183,6 +2210,184 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         alert(withdrawType === 'transfer' ? 'تم تحويل الكل بنجاح' : `تم سحب ${amount} بنجاح`)
       } catch (error: any) {
         console.error('Error in withdraw/transfer all:', error)
+        alert(`حدث خطأ: ${error.message}`)
+      } finally {
+        setIsWithdrawing(false)
+      }
+      return
+    }
+
+    // === "الكل" (All sources) withdrawal/transfer - for NON-drawer safes ===
+    if (withdrawSourceId === 'all' && (withdrawType === 'withdraw' || withdrawType === 'transfer') && !safe.supports_drawers) {
+      if (!withdrawAllMode) {
+        alert(withdrawType === 'withdraw' ? 'يرجى اختيار طريقة السحب' : 'يرجى اختيار طريقة التحويل')
+        return
+      }
+
+      if (withdrawType === 'transfer' && !targetSafeId) {
+        alert('يرجى اختيار الخزنة المستهدفة')
+        return
+      }
+
+      setIsWithdrawing(true)
+      try {
+        // Calculate cash vs transfer portions
+        let cashPortion = Math.max(0, safeBalance - nonDrawerTransferBalance)
+        let transferPortion = Math.min(nonDrawerTransferBalance, safeBalance)
+
+        // Handle reserves (excluding_reserves mode) - scale portions proportionally
+        if (withdrawAllMode === 'excluding_reserves') {
+          const totalReserves = reserves.reduce((sum, r) => sum + r.amount, 0)
+          const availableTotal = Math.max(0, safeBalance - totalReserves)
+          if (availableTotal <= 0) {
+            alert('لا يوجد رصيد متاح بعد استثناء المجنب')
+            setIsWithdrawing(false)
+            return
+          }
+          // Scale portions proportionally
+          const ratio = availableTotal / safeBalance
+          cashPortion = roundMoney(cashPortion * ratio)
+          transferPortion = roundMoney(availableTotal - cashPortion)
+        }
+
+        // Get the drawer (non-drawer safes have a single drawer with record_id = safe.id)
+        let { data: drawer } = await supabase
+          .from('cash_drawers')
+          .select('*')
+          .eq('record_id', safe.id)
+          .single()
+
+        if (!drawer) throw new Error('لم يتم العثور على الخزنة')
+
+        const totalAmount = roundMoney(cashPortion + transferPortion)
+        if (totalAmount <= 0) {
+          alert('لا يوجد رصيد للسحب')
+          setIsWithdrawing(false)
+          return
+        }
+
+        // Atomic balance update for full amount
+        const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+          'atomic_adjust_drawer_balance' as any,
+          { p_drawer_id: drawer.id, p_change: -totalAmount }
+        )
+        if (rpcErr) throw new Error(`فشل في تحديث الرصيد: ${rpcErr.message}`)
+        let runningBalance = rpcResult?.[0]?.new_balance ?? roundMoney((drawer.current_balance || 0) - totalAmount)
+
+        // Create withdrawal transaction for cash portion (doesn't affect nonDrawerTransferBalance)
+        if (cashPortion > 0) {
+          await supabase
+            .from('cash_drawer_transactions')
+            .insert({
+              drawer_id: drawer.id,
+              record_id: safe.id,
+              transaction_type: 'withdrawal',
+              amount: cashPortion,
+              balance_after: roundMoney(runningBalance + transferPortion),
+              notes: withdrawType === 'transfer'
+                ? `تحويل إلى خزنة أخرى - نقدي (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
+                : `سحب من الخزنة - نقدي (سحب الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+              performed_by: user?.name || 'system',
+              ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
+            })
+        }
+
+        // Create transfer_out transaction for transfer portion (DOES reduce nonDrawerTransferBalance)
+        if (transferPortion > 0) {
+          await supabase
+            .from('cash_drawer_transactions')
+            .insert({
+              drawer_id: drawer.id,
+              record_id: safe.id,
+              transaction_type: 'transfer_out',
+              amount: transferPortion,
+              balance_after: roundMoney(runningBalance),
+              notes: withdrawType === 'transfer'
+                ? `تحويل إلى خزنة أخرى - تحويلات (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
+                : `سحب من الخزنة - تحويلات (سحب الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+              performed_by: user?.name || 'system',
+              ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
+            })
+        }
+
+        // For transfer: deposit to target safe, preserving cash/transfer distinction
+        if (withdrawType === 'transfer' && totalAmount > 0) {
+          let { data: targetDrawer } = await supabase
+            .from('cash_drawers')
+            .select('*')
+            .eq('record_id', targetSafeId)
+            .single()
+
+          if (!targetDrawer) {
+            const { data: newDrawer } = await supabase
+              .from('cash_drawers')
+              .insert({ record_id: targetSafeId, current_balance: 0, status: 'open' })
+              .select()
+              .single()
+            targetDrawer = newDrawer
+          }
+
+          if (targetDrawer) {
+            const { data: targetRpcResult } = await supabase.rpc(
+              'atomic_adjust_drawer_balance' as any,
+              { p_drawer_id: targetDrawer.id, p_change: totalAmount }
+            )
+            const targetNewBalance = targetRpcResult?.[0]?.new_balance ?? roundMoney((targetDrawer.current_balance || 0) + totalAmount)
+
+            // Cash portion → deposit on target (goes to "في الخزنة")
+            if (cashPortion > 0) {
+              await supabase
+                .from('cash_drawer_transactions')
+                .insert({
+                  drawer_id: targetDrawer.id,
+                  record_id: targetSafeId,
+                  transaction_type: 'deposit',
+                  amount: cashPortion,
+                  balance_after: roundMoney(targetNewBalance - transferPortion),
+                  notes: `تحويل من خزنة ${safe.name} - نقدي (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+                  performed_by: user?.name || 'system',
+                  related_record_id: safe.id
+                })
+            }
+            // Transfer portion → transfer_in on target (goes to "التحويلات")
+            if (transferPortion > 0) {
+              await supabase
+                .from('cash_drawer_transactions')
+                .insert({
+                  drawer_id: targetDrawer.id,
+                  record_id: targetSafeId,
+                  transaction_type: 'transfer_in',
+                  amount: transferPortion,
+                  balance_after: roundMoney(targetNewBalance),
+                  notes: `تحويل من خزنة ${safe.name} - تحويلات (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
+                  performed_by: user?.name || 'system',
+                  related_record_id: safe.id
+                })
+            }
+          }
+        }
+
+        // If full mode: delete all reserves
+        if (withdrawAllMode === 'full') {
+          await (supabase as any).from('cash_drawer_reserves')
+            .delete().eq('record_id', safe.id)
+        }
+
+        // Refresh balances
+        fetchCashDrawerBalance()
+        fetchChildSafes()
+        fetchReserves()
+
+        // Reset form
+        setWithdrawAmount('')
+        setWithdrawNotes('')
+        setTargetSafeId('')
+        setWithdrawSourceId('')
+        setWithdrawAllMode(null)
+        setShowWithdrawModal(false)
+        alert(withdrawType === 'transfer' ? 'تم تحويل الكل بنجاح' : `تم سحب ${amount} بنجاح`)
+      } catch (error: any) {
+        console.error('Error in non-drawer withdraw/transfer all:', error)
         alert(`حدث خطأ: ${error.message}`)
       } finally {
         setIsWithdrawing(false)
@@ -2293,7 +2498,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         ? mainSafeOwnBalance
         : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
       : (isNonDrawerWithTransfers && withdrawSourceId)
-        ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+        ? (withdrawSourceId === 'safe-only' ? Math.max(0, safeBalance - nonDrawerTransferBalance) : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
         : safeBalance
 
     // فقط للسحب والتحويل: التحقق من الرصيد الكافي
@@ -2363,10 +2568,24 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         transactionNotes = `إيداع في الخزنة${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
       } else {
         transactionAmount = amount
-        transactionType = withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal'
+        // For non-drawer safes: use transfer_out when withdrawing from "التحويلات" (so nonDrawerTransferBalance decreases)
+        // and use withdrawal when withdrawing from "في الخزنة" (so only cash decreases)
+        const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+        if (isNonDrawerSafe && withdrawSourceId === 'transfers') {
+          transactionType = 'transfer_out' // Always transfer_out to reduce nonDrawerTransferBalance
+        } else if (isNonDrawerSafe && withdrawSourceId === 'safe-only') {
+          transactionType = 'withdrawal' // Always withdrawal so cash portion decreases
+        } else {
+          transactionType = withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal'
+        }
         transactionNotes = withdrawType === 'transfer'
           ? `تحويل إلى خزنة أخرى${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
           : `سحب من الخزنة${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
+      }
+
+      // Prevent negative balance for withdraw/transfer
+      if (withdrawType !== 'deposit' && (sourceDrawer.current_balance || 0) + balanceDelta < -0.01) {
+        throw new Error('لا يمكن سحب أكثر من الرصيد المتاح')
       }
 
       // تحديث رصيد الخزنة ذرياً (يمنع حالات السباق)
@@ -2434,12 +2653,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           const newTargetBalance = targetRpcResult?.[0]?.new_balance ?? roundMoney((targetDrawer.current_balance || 0) + amount)
 
           // Create deposit transaction for target with related_record_id
+          // For non-drawer safes: cash-sourced transfers → deposit on target (preserves cash category)
+          // transfer-sourced transfers → transfer_in on target (preserves transfer category)
+          const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+          const targetTxType = (isNonDrawerSafe && withdrawSourceId === 'safe-only') ? 'deposit' : 'transfer_in'
           const { error: targetTxError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
               drawer_id: targetDrawer.id,
               record_id: targetSafeId,
-              transaction_type: 'transfer_in',
+              transaction_type: targetTxType,
               amount: amount,
               balance_after: roundMoney(newTargetBalance),
               notes: `تحويل من خزنة ${safe.name}${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
@@ -3590,7 +3813,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             </label>
                             {/* في الخزنة */}
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
-                              <span className="text-green-400 text-sm">{formatPrice(safeBalance - nonDrawerTransferBalance)}</span>
+                              <span className="text-green-400 text-sm">{formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance))}</span>
                               <div className="flex items-center gap-2">
                                 <span className="text-gray-300 text-sm">في الخزنة</span>
                                 <input
@@ -4362,7 +4585,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       </label>
                       {/* في الخزنة */}
                       <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
-                        <span className="text-green-400 text-sm">{formatPrice(safeBalance - nonDrawerTransferBalance, 'system')}</span>
+                        <span className="text-green-400 text-sm">{formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance), 'system')}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-gray-300 text-sm">في الخزنة</span>
                           <input
@@ -5200,7 +5423,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       ? mainSafeOwnBalance
                       : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
                     : (!safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0 && withdrawSourceId)
-                      ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+                      ? (withdrawSourceId === 'safe-only' ? Math.max(0, safeBalance - nonDrawerTransferBalance) : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
                       : safeBalance
                 , 'system')}</div>
               </div>
@@ -5283,7 +5506,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         <option value="">اختر المصدر...</option>
                         <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
                         <option value="safe-only">
-                          الخزنة ({formatPrice(safeBalance - nonDrawerTransferBalance, 'system')})
+                          الخزنة ({formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance), 'system')})
                         </option>
                         <option value="transfers">
                           التحويلات ({formatPrice(nonDrawerTransferBalance, 'system')})
@@ -5375,7 +5598,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                         ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
                         : (!safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0 && withdrawSourceId)
-                          ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+                          ? (withdrawSourceId === 'safe-only' ? Math.max(0, safeBalance - nonDrawerTransferBalance) : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
                           : safeBalance
                     )}
                     step="0.01"
@@ -5386,7 +5609,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     const sourceBalanceForButton = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                       ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
                       : (isNonDrawerSrc && withdrawSourceId)
-                        ? (withdrawSourceId === 'safe-only' ? safeBalance - nonDrawerTransferBalance : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
+                        ? (withdrawSourceId === 'safe-only' ? Math.max(0, safeBalance - nonDrawerTransferBalance) : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
                         : safeBalance
                     const sourceReserves = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                       ? reserves.filter(r => r.record_id === (withdrawSourceId === 'transfers' ? safe.id : withdrawSourceId)).reduce((sum, r) => sum + r.amount, 0)
