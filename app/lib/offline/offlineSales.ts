@@ -145,7 +145,8 @@ export async function createOfflineSalesInvoice({
     const discountAmount = 0
     const profit = cartItems.reduce((sum, item) => {
       const costPrice = item.product.cost_price || 0
-      const itemProfit = (item.price - costPrice) * item.quantity
+      // Use item.total (includes item-level discounts) instead of raw price * quantity
+      const itemProfit = item.total - (costPrice * item.quantity)
       return sum + (isReturn ? -itemProfit : itemProfit)
     }, 0)
 

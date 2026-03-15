@@ -341,34 +341,51 @@ export async function createPurchaseInvoice({
 
       if (paymentError) {
         console.error('❌ Error creating supplier payment:', paymentError)
-        paymentErrorMsg = paymentError.message
-        // Don't fail the entire invoice, just log the error
+        // Payment failure is critical - supplier balance will be wrong without payments
+        throw new Error(`فشل في حفظ دفعة المورد: ${paymentError.message}`)
       } else {
         paymentCreated = true
         console.log('✅ Supplier payment created successfully')
 
-        // Update safe balance (deduct payment amount)
+        // Update cash drawer balance (deduct payment amount) using atomic RPC
         if (!hasNoSafe && selections.record?.id) {
-          // Get current balance
-          const { data: safeData, error: safeGetError } = await supabase
-            .from('records')
-            .select('balance')
-            .eq('id', selections.record.id)
+          const effectiveRecordId = selections.subSafe?.id || selections.record.id
+
+          // Find the drawer for this record
+          const { data: drawer, error: drawerError } = await supabase
+            .from('cash_drawers')
+            .select('id')
+            .eq('record_id', effectiveRecordId)
             .single()
 
-          if (!safeGetError && safeData) {
-            const currentBalance = safeData.balance || 0
-            const newBalance = roundMoney(currentBalance - paidAmount)
+          if (drawerError && drawerError.code === 'PGRST116') {
+            // Drawer doesn't exist, create it
+            const { data: newDrawer, error: createError } = await supabase
+              .from('cash_drawers')
+              .insert({ record_id: effectiveRecordId, current_balance: 0 })
+              .select('id')
+              .single()
 
-            const { error: safeUpdateError } = await supabase
-              .from('records')
-              .update({ balance: newBalance })
-              .eq('id', selections.record.id)
-
-            if (safeUpdateError) {
-              console.error('Error updating safe balance:', safeUpdateError)
+            if (!createError && newDrawer) {
+              const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+                'atomic_adjust_drawer_balance' as any,
+                { p_drawer_id: newDrawer.id, p_change: -paidAmount }
+              )
+              if (rpcErr) {
+                console.error('Error updating drawer balance:', rpcErr)
+              } else {
+                console.log(`✅ Cash drawer balance updated: ${rpcResult?.[0]?.new_balance}`)
+              }
+            }
+          } else if (!drawerError && drawer) {
+            const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+              'atomic_adjust_drawer_balance' as any,
+              { p_drawer_id: drawer.id, p_change: -paidAmount }
+            )
+            if (rpcErr) {
+              console.error('Error updating drawer balance:', rpcErr)
             } else {
-              console.log(`✅ Safe balance updated: ${currentBalance} → ${newBalance}`)
+              console.log(`✅ Cash drawer balance updated: ${rpcResult?.[0]?.new_balance}`)
             }
           }
         }

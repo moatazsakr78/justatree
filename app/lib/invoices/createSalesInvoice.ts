@@ -56,6 +56,9 @@ export interface CreateSalesInvoiceParams {
   saleType?: 'ground' | 'online'
   shippingAmount?: number
   orderId?: string | null
+  // Cart-level discount
+  cartDiscount?: number
+  cartDiscountType?: 'percentage' | 'fixed'
 }
 
 export async function createSalesInvoice({
@@ -73,7 +76,9 @@ export async function createSalesInvoice({
   supplierName = null,
   saleType = 'ground',
   shippingAmount = 0,
-  orderId = null
+  orderId = null,
+  cartDiscount = 0,
+  cartDiscountType = 'fixed'
 }: CreateSalesInvoiceParams) {
   if (!selections.branch) {
     throw new Error('يجب تحديد الفرع قبل إنشاء الفاتورة')
@@ -212,18 +217,33 @@ export async function createSalesInvoice({
 
     // Calculate totals (negative for returns)
     const baseTotal = cartItems.reduce((sum, item) => sum + item.total, 0)
-    const totalAmount = isReturn ? -baseTotal : baseTotal
+
+    // Apply cart-level discount
+    let cartDiscountValue = 0
+    if (cartDiscount && cartDiscount > 0) {
+      if (cartDiscountType === 'percentage') {
+        cartDiscountValue = roundMoney((baseTotal * cartDiscount) / 100)
+      } else {
+        cartDiscountValue = roundMoney(Math.min(cartDiscount, baseTotal))
+      }
+    }
+    const totalAfterCartDiscount = roundMoney(baseTotal - cartDiscountValue)
+    const totalAmount = isReturn ? -totalAfterCartDiscount : totalAfterCartDiscount
     const taxAmount = 0 // You can add tax calculation here if needed
-    const discountAmount = 0 // You can add discount calculation here if needed
-    const profit = cartItems.reduce((sum, item) => {
+    const discountAmount = cartDiscountValue
+
+    // Calculate profit (accounting for both item-level and cart-level discounts)
+    const baseProfit = cartItems.reduce((sum, item) => {
       const costPrice = item.product.cost_price || 0
       if (costPrice === 0) {
         console.warn(`Product "${item.product.name}" (${item.product.id}) has no cost_price — profit will show as 100% margin`)
       }
-      // حساب الربح بعد الخصم: الربح = إجمالي البيع بعد الخصم - التكلفة
+      // حساب الربح بعد خصم المنتج: الربح = إجمالي البيع بعد الخصم - التكلفة
       const itemProfit = item.total - (costPrice * item.quantity)
       return sum + (isReturn ? -itemProfit : itemProfit)
     }, 0)
+    // Deduct cart-level discount from profit
+    const profit = roundMoney(baseProfit + (isReturn ? cartDiscountValue : -cartDiscountValue))
 
     // Generate unique invoice number using database sequence (atomic operation)
     // @ts-ignore - function exists in database but not in generated types
@@ -627,7 +647,7 @@ export async function createSalesInvoice({
 
           const txData: any = {
             transaction_type: isReturn ? 'return' : 'sale',
-            amount: amount,
+            amount: Math.abs(amount), // Always positive — transaction_type indicates direction
             sale_id: salesData.id,
             payment_method: methodName,
             notes: isReturn

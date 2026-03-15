@@ -3027,6 +3027,9 @@ function POSPageContent() {
           partyType: selectedPartyType,
           supplierId: selectedPartyType === 'supplier' ? selectedSupplierForSale?.id : null,
           supplierName: selectedPartyType === 'supplier' ? selectedSupplierForSale?.name : null,
+          // Cart-level discount
+          cartDiscount: cartDiscount,
+          cartDiscountType: cartDiscountType,
         });
 
         // Fetch customer's updated data and calculate balance after invoice creation

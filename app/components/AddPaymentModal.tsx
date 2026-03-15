@@ -201,33 +201,35 @@ export default function AddPaymentModal({
             if (drawer) {
               // للدفعة: إضافة للخزنة / للسلفة: خصم من الخزنة
               const drawerChange = paymentType === 'loan' ? -paymentAmount : paymentAmount
-              const newBalance = roundMoney((drawer.current_balance || 0) + drawerChange)
 
-              // Update drawer balance
-              await supabase
-                .from('cash_drawers')
-                .update({
-                  current_balance: newBalance,
-                  updated_at: new Date().toISOString()
-                })
-                .eq('id', drawer.id)
+              // Atomic balance update (prevents race conditions)
+              const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+                'atomic_adjust_drawer_balance' as any,
+                { p_drawer_id: drawer.id, p_change: drawerChange }
+              )
 
-              // Create transaction record
-              await supabase
-                .from('cash_drawer_transactions')
-                .insert({
-                  drawer_id: drawer.id,
-                  record_id: recordId,
-                  transaction_type: paymentType === 'loan' ? 'withdrawal' : 'deposit',
-                  amount: paymentAmount,
-                  balance_after: newBalance,
-                  notes: paymentType === 'loan'
-                    ? `سلفة لعميل: ${entityName}${notes ? ` - ${notes}` : ''}`
-                    : `دفعة من عميل: ${entityName}${notes ? ` - ${notes}` : ''}`,
-                  performed_by: user?.name || 'system'
-                })
+              if (rpcErr) {
+                console.warn('Failed to atomically update drawer:', rpcErr.message)
+              } else {
+                const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney((drawer.current_balance || 0) + drawerChange)
 
-              console.log(`✅ Cash drawer updated with customer ${paymentType}: ${drawerChange}, new balance: ${newBalance}`)
+                // Create transaction record
+                await supabase
+                  .from('cash_drawer_transactions')
+                  .insert({
+                    drawer_id: drawer.id,
+                    record_id: recordId,
+                    transaction_type: paymentType === 'loan' ? 'withdrawal' : 'deposit',
+                    amount: paymentAmount,
+                    balance_after: roundMoney(newBalance),
+                    notes: paymentType === 'loan'
+                      ? `سلفة لعميل: ${entityName}${notes ? ` - ${notes}` : ''}`
+                      : `دفعة من عميل: ${entityName}${notes ? ` - ${notes}` : ''}`,
+                    performed_by: user?.name || 'system'
+                  })
+
+                console.log(`✅ Cash drawer updated with customer ${paymentType}: ${drawerChange}, new balance: ${newBalance}`)
+              }
             }
           } catch (drawerError) {
             console.warn('Failed to update cash drawer with customer payment:', drawerError)
@@ -290,33 +292,35 @@ export default function AddPaymentModal({
             if (drawer) {
               // للدفعة: خصم من الخزنة / للسلفة: إضافة للخزنة
               const drawerChange = paymentType === 'loan' ? paymentAmount : -paymentAmount
-              const newBalance = roundMoney((drawer.current_balance || 0) + drawerChange)
 
-              // Update drawer balance
-              await supabase
-                .from('cash_drawers')
-                .update({
-                  current_balance: newBalance,
-                  updated_at: new Date().toISOString()
-                })
-                .eq('id', drawer.id)
+              // Atomic balance update (prevents race conditions)
+              const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+                'atomic_adjust_drawer_balance' as any,
+                { p_drawer_id: drawer.id, p_change: drawerChange }
+              )
 
-              // Create transaction record
-              await supabase
-                .from('cash_drawer_transactions')
-                .insert({
-                  drawer_id: drawer.id,
-                  record_id: recordId,
-                  transaction_type: paymentType === 'loan' ? 'deposit' : 'withdrawal',
-                  amount: paymentAmount,
-                  balance_after: newBalance,
-                  notes: paymentType === 'loan'
-                    ? `سلفة من مورد: ${entityName}${notes ? ` - ${notes}` : ''}`
-                    : `دفعة لمورد: ${entityName}${notes ? ` - ${notes}` : ''}`,
-                  performed_by: user?.name || 'system'
-                })
+              if (rpcErr) {
+                console.warn('Failed to atomically update drawer:', rpcErr.message)
+              } else {
+                const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney((drawer.current_balance || 0) + drawerChange)
 
-              console.log(`✅ Cash drawer updated with supplier ${paymentType}: ${drawerChange}, new balance: ${newBalance}`)
+                // Create transaction record
+                await supabase
+                  .from('cash_drawer_transactions')
+                  .insert({
+                    drawer_id: drawer.id,
+                    record_id: recordId,
+                    transaction_type: paymentType === 'loan' ? 'deposit' : 'withdrawal',
+                    amount: paymentAmount,
+                    balance_after: roundMoney(newBalance),
+                    notes: paymentType === 'loan'
+                      ? `سلفة من مورد: ${entityName}${notes ? ` - ${notes}` : ''}`
+                      : `دفعة لمورد: ${entityName}${notes ? ` - ${notes}` : ''}`,
+                    performed_by: user?.name || 'system'
+                  })
+
+                console.log(`✅ Cash drawer updated with supplier ${paymentType}: ${drawerChange}, new balance: ${newBalance}`)
+              }
             }
           } catch (drawerError) {
             console.warn('Failed to update cash drawer with supplier payment:', drawerError)

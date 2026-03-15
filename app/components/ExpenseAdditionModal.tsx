@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { supabase } from "../lib/supabase/client";
 import { useAuth } from "@/lib/useAuth";
+import { roundMoney } from "../lib/utils/money";
 
 interface ExpenseAdditionModalProps {
   isOpen: boolean;
@@ -112,17 +113,16 @@ export default function ExpenseAdditionModal({
     setIsProcessing(true);
     try {
       const isExpense = operationType === "expense";
-      const newBalance = isExpense
-        ? currentBalance - parsedAmount
-        : currentBalance + parsedAmount;
+      const balanceDelta = isExpense ? -parsedAmount : parsedAmount;
 
-      // Update drawer balance
-      const { error: updateError } = await supabase
-        .from("cash_drawers")
-        .update({ current_balance: newBalance, updated_at: new Date().toISOString() })
-        .eq("id", drawerId);
+      // Atomic balance update (prevents race conditions)
+      const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+        'atomic_adjust_drawer_balance' as any,
+        { p_drawer_id: drawerId, p_change: balanceDelta }
+      );
 
-      if (updateError) throw updateError;
+      if (rpcErr) throw rpcErr;
+      const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney(currentBalance + balanceDelta);
 
       // Create transaction record
       const { error: txnError } = await supabase
@@ -132,12 +132,18 @@ export default function ExpenseAdditionModal({
           record_id: record.id,
           transaction_type: isExpense ? "expense" : "deposit",
           amount: parsedAmount,
-          balance_after: newBalance,
+          balance_after: roundMoney(newBalance),
           notes: notes.trim(),
           performed_by: user?.name || user?.email || "user",
         });
 
-      if (txnError) throw txnError;
+      if (txnError) {
+        // Reverse balance change if transaction record fails
+        await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+          p_drawer_id: drawerId, p_change: -balanceDelta
+        });
+        throw txnError;
+      }
 
       const label = isExpense ? "مصروفات" : "إضافه";
       alert(`تم تسجيل ${label} بمبلغ ${parsedAmount.toFixed(2)} بنجاح`);

@@ -2082,19 +2082,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           // Get the drawer
           const { data: drawer, error: drawerError } = await supabase
             .from('cash_drawers')
-            .select('*')
+            .select('id')
             .eq('record_id', source.id)
             .single()
 
           if (drawerError || !drawer) continue
 
-          const newBalance = roundMoney((drawer.current_balance || 0) - withdrawFromSource)
-
-          // Update drawer balance
-          await supabase
-            .from('cash_drawers')
-            .update({ current_balance: newBalance, updated_at: new Date().toISOString() })
-            .eq('id', drawer.id)
+          // Atomic balance update (prevents race conditions)
+          const { data: rpcResult } = await supabase.rpc(
+            'atomic_adjust_drawer_balance' as any,
+            { p_drawer_id: drawer.id, p_change: -withdrawFromSource }
+          )
+          const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney(source.balance - withdrawFromSource)
 
           // Create withdrawal/transfer_out transaction
           await supabase
@@ -2104,7 +2103,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               record_id: source.id,
               transaction_type: withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal',
               amount: withdrawFromSource,
-              balance_after: newBalance,
+              balance_after: roundMoney(newBalance),
               notes: withdrawType === 'transfer'
                 ? `تحويل إلى خزنة أخرى (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
                 : `سحب من الخزنة (سحب الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
@@ -2138,12 +2137,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           }
 
           if (targetDrawer) {
-            const targetNewBalance = roundMoney((targetDrawer.current_balance || 0) + totalTransferred)
-
-            await supabase
-              .from('cash_drawers')
-              .update({ current_balance: targetNewBalance, updated_at: new Date().toISOString() })
-              .eq('id', targetDrawer.id)
+            // Atomic balance update for target drawer
+            const { data: targetRpcResult } = await supabase.rpc(
+              'atomic_adjust_drawer_balance' as any,
+              { p_drawer_id: targetDrawer.id, p_change: totalTransferred }
+            )
+            const targetNewBalance = targetRpcResult?.[0]?.new_balance ?? roundMoney((targetDrawer.current_balance || 0) + totalTransferred)
 
             await supabase
               .from('cash_drawer_transactions')
@@ -2152,7 +2151,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 record_id: targetSafeId,
                 transaction_type: 'transfer_in',
                 amount: totalTransferred,
-                balance_after: targetNewBalance,
+                balance_after: roundMoney(targetNewBalance),
                 notes: `تحويل من خزنة أخرى (تحويل الكل)${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
                 performed_by: user?.name || 'system',
                 related_record_id: safe.id
@@ -2234,13 +2233,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
           if (!drawer) continue
 
-          const newBalance = roundMoney((drawer.current_balance || 0) + depositAmount)
-
-          // Update drawer balance
-          await supabase
-            .from('cash_drawers')
-            .update({ current_balance: newBalance, updated_at: new Date().toISOString() })
-            .eq('id', drawer.id)
+          // Atomic balance update (prevents race conditions)
+          const { data: depositRpcResult } = await supabase.rpc(
+            'atomic_adjust_drawer_balance' as any,
+            { p_drawer_id: drawer.id, p_change: depositAmount }
+          )
+          const newBalance = depositRpcResult?.[0]?.new_balance ?? roundMoney((drawer.current_balance || 0) + depositAmount)
 
           // Create deposit transaction
           await supabase
@@ -2250,7 +2248,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               record_id: target.id,
               transaction_type: 'deposit',
               amount: depositAmount,
-              balance_after: newBalance,
+              balance_after: roundMoney(newBalance),
               notes: `إيداع في الخزنة (إيداع الكل - ${target.name})${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
               performed_by: user?.name || 'system'
             })
@@ -2353,21 +2351,17 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         throw new Error('لم يتم العثور على الخزنة')
       }
 
-      // 2. حساب الرصيد الجديد بناءً على نوع العملية
-      let newSourceBalance: number
+      // 2. تحديد نوع العملية
       let transactionAmount: number
       let transactionType: string
       let transactionNotes: string
+      const balanceDelta = withdrawType === 'deposit' ? amount : -amount
 
       if (withdrawType === 'deposit') {
-        // إيداع: إضافة للرصيد
-        newSourceBalance = roundMoney((sourceDrawer.current_balance || 0) + amount)
         transactionAmount = amount
         transactionType = 'deposit'
         transactionNotes = `إيداع في الخزنة${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
       } else {
-        // سحب أو تحويل: خصم من الرصيد
-        newSourceBalance = roundMoney((sourceDrawer.current_balance || 0) - amount)
         transactionAmount = amount
         transactionType = withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal'
         transactionNotes = withdrawType === 'transfer'
@@ -2375,14 +2369,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           : `سحب من الخزنة${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
       }
 
-      // تحديث رصيد الخزنة
-      await supabase
-        .from('cash_drawers')
-        .update({
-          current_balance: newSourceBalance,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', sourceDrawer.id)
+      // تحديث رصيد الخزنة ذرياً (يمنع حالات السباق)
+      const { data: sourceRpcResult, error: sourceRpcErr } = await supabase.rpc(
+        'atomic_adjust_drawer_balance' as any,
+        { p_drawer_id: sourceDrawer.id, p_change: balanceDelta }
+      )
+
+      if (sourceRpcErr) throw new Error(`فشل في تحديث الرصيد: ${sourceRpcErr.message}`)
+      const newSourceBalance = sourceRpcResult?.[0]?.new_balance ?? roundMoney((sourceDrawer.current_balance || 0) + balanceDelta)
 
       // 3. إنشاء سجل المعاملة
       const { error: txError } = await supabase
@@ -2392,13 +2386,17 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           record_id: sourceRecordId,
           transaction_type: transactionType,
           amount: transactionAmount,
-          balance_after: newSourceBalance,
+          balance_after: roundMoney(newSourceBalance),
           notes: transactionNotes,
           performed_by: user?.name || 'system',
           ...(withdrawType === 'transfer' && targetSafeId ? { related_record_id: targetSafeId } : {})
         })
 
       if (txError) {
+        // Rollback balance change if transaction record fails (Bug 32 fix)
+        await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+          p_drawer_id: sourceDrawer.id, p_change: -balanceDelta
+        })
         console.error('Error creating transaction:', txError)
         throw new Error(`فشل في تسجيل المعاملة: ${txError.message}`)
       }
@@ -2426,15 +2424,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         }
 
         if (targetDrawer) {
-          const newTargetBalance = roundMoney((targetDrawer.current_balance || 0) + amount)
+          // Atomic balance update for target drawer
+          const { data: targetRpcResult, error: targetRpcErr } = await supabase.rpc(
+            'atomic_adjust_drawer_balance' as any,
+            { p_drawer_id: targetDrawer.id, p_change: amount }
+          )
 
-          await supabase
-            .from('cash_drawers')
-            .update({
-              current_balance: newTargetBalance,
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', targetDrawer.id)
+          if (targetRpcErr) throw new Error(`فشل في تحديث رصيد الخزنة المستهدفة: ${targetRpcErr.message}`)
+          const newTargetBalance = targetRpcResult?.[0]?.new_balance ?? roundMoney((targetDrawer.current_balance || 0) + amount)
 
           // Create deposit transaction for target with related_record_id
           const { error: targetTxError } = await supabase
@@ -2444,13 +2441,17 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               record_id: targetSafeId,
               transaction_type: 'transfer_in',
               amount: amount,
-              balance_after: newTargetBalance,
+              balance_after: roundMoney(newTargetBalance),
               notes: `تحويل من خزنة ${safe.name}${withdrawNotes ? ` - ${withdrawNotes}` : ''}`,
               performed_by: user?.name || 'system',
               related_record_id: sourceRecordId
             })
 
           if (targetTxError) {
+            // Rollback target balance change
+            await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+              p_drawer_id: targetDrawer.id, p_change: -amount
+            })
             console.error('Error creating target transaction:', targetTxError)
             throw new Error(`فشل في تسجيل التحويل للخزنة المستهدفة: ${targetTxError.message}`)
           }

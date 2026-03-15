@@ -12,6 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { supabase } from "../lib/supabase/client";
 import { isOutgoingType } from "../lib/utils/transactionTypes";
+import { roundMoney } from "../lib/utils/money";
 
 interface CashDrawerTransaction {
   id: string;
@@ -118,15 +119,14 @@ export default function CashDrawerModal({
 
     setIsProcessing(true);
     try {
-      const newBalance = currentBalance - amount;
+      // Atomic balance update (prevents race conditions)
+      const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+        'atomic_adjust_drawer_balance' as any,
+        { p_drawer_id: drawerId, p_change: -amount }
+      );
 
-      // Update drawer balance
-      const { error: updateError } = await supabase
-        .from("cash_drawers")
-        .update({ current_balance: newBalance, updated_at: new Date().toISOString() })
-        .eq("id", drawerId);
-
-      if (updateError) throw updateError;
+      if (rpcErr) throw rpcErr;
+      const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney(currentBalance - amount);
 
       // Create transaction record
       const { error: txnError } = await supabase
@@ -136,12 +136,18 @@ export default function CashDrawerModal({
           record_id: record.id,
           transaction_type: "withdrawal",
           amount: amount,
-          balance_after: newBalance,
+          balance_after: roundMoney(newBalance),
           notes: withdrawNotes || "سحب نقدي",
-          performed_by: "user", // Can be enhanced to include actual user
+          performed_by: "user",
         });
 
-      if (txnError) throw txnError;
+      if (txnError) {
+        // Reverse balance change if transaction record fails
+        await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+          p_drawer_id: drawerId, p_change: amount
+        });
+        throw txnError;
+      }
 
       // Refresh data
       setCurrentBalance(newBalance);
@@ -183,13 +189,14 @@ export default function CashDrawerModal({
 
     setIsProcessing(true);
     try {
-      // Update drawer balance to 0
-      const { error: updateError } = await supabase
-        .from("cash_drawers")
-        .update({ current_balance: 0, updated_at: new Date().toISOString() })
-        .eq("id", drawerId);
+      // Atomic balance update (prevents race conditions)
+      const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+        'atomic_adjust_drawer_balance' as any,
+        { p_drawer_id: drawerId, p_change: -amount }
+      );
 
-      if (updateError) throw updateError;
+      if (rpcErr) throw rpcErr;
+      const actualNewBalance = rpcResult?.[0]?.new_balance ?? 0;
 
       // Create transaction record
       const { error: txnError } = await supabase
@@ -199,12 +206,18 @@ export default function CashDrawerModal({
           record_id: record.id,
           transaction_type: "withdrawal",
           amount: amount,
-          balance_after: 0,
+          balance_after: roundMoney(actualNewBalance),
           notes: "سحب كامل الرصيد",
           performed_by: "user",
         });
 
-      if (txnError) throw txnError;
+      if (txnError) {
+        // Reverse balance change if transaction record fails
+        await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+          p_drawer_id: drawerId, p_change: amount
+        });
+        throw txnError;
+      }
 
       // Refresh data
       setCurrentBalance(0);
