@@ -278,6 +278,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   // This is fetched from the cash_drawers table
   const safeBalance = cashDrawerBalance
 
+  // Cap transfer balance at safeBalance to ensure consistency
+  // (transfers can never exceed total - excess is from past data inconsistencies)
+  const cappedNonDrawerTransferBalance = useMemo(() => {
+    return Math.min(nonDrawerTransferBalance, Math.max(0, safeBalance))
+  }, [nonDrawerTransferBalance, safeBalance])
+
   // Reserves filtered by current drawer selection
   const filteredReserves = useMemo(() => {
     if (!safe?.id) return reserves
@@ -298,13 +304,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     // Non-drawer safes: adjust based on filter
     if (!selectedDrawerFilters || selectedDrawerFilters.size === 0) return safeBalance
     if (selectedDrawerFilters.has('safe') && !selectedDrawerFilters.has('transfers')) {
-      return Math.max(0, safeBalance - nonDrawerTransferBalance)
+      return Math.max(0, safeBalance - cappedNonDrawerTransferBalance)
     }
     if (selectedDrawerFilters.has('transfers') && !selectedDrawerFilters.has('safe')) {
-      return nonDrawerTransferBalance
+      return cappedNonDrawerTransferBalance
     }
     return safeBalance
-  }, [safe?.supports_drawers, safeBalance, selectedDrawerFilters, nonDrawerTransferBalance])
+  }, [safe?.supports_drawers, safeBalance, selectedDrawerFilters, cappedNonDrawerTransferBalance])
 
   // Recalculate statement balances client-side for coherent running total
   const recalculatedStatements = useMemo(() => {
