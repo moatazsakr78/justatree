@@ -389,19 +389,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       setChildSafeIds([])
       setChildSafes([])
       setMainSafeOwnBalance(0)
-      // For non-drawer safes, calculate transfer balance
-      if (safe?.id && !safe.supports_drawers && safe.safe_type !== 'sub') {
-        const { data } = await supabase
-          .from('cash_drawer_transactions')
-          .select('amount, transaction_type')
-          .eq('record_id', safe.id)
-          .in('transaction_type', ['transfer_in', 'transfer_out'])
-        setNonDrawerTransferBalance(
-          roundMoney(Math.max(0, (data || []).reduce((sum: number, t: any) => sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0)))
-        )
-      } else {
-        setNonDrawerTransferBalance(0)
-      }
+      // nonDrawerTransferBalance is now fetched separately via fetchNonDrawerTransferBalance()
       return
     }
     // Fetch child records (drawers)
@@ -439,6 +427,34 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     )
   }
 
+  // Fetch non-drawer transfer balance (extracted from fetchChildSafes for proper error handling)
+  const fetchNonDrawerTransferBalance = async () => {
+    if (!safe?.id || safe.supports_drawers || safe.safe_type === 'sub') {
+      setNonDrawerTransferBalance(0)
+      return
+    }
+    try {
+      const { data, error } = await supabase
+        .from('cash_drawer_transactions')
+        .select('amount, transaction_type')
+        .eq('record_id', safe.id)
+        .in('transaction_type', ['transfer_in', 'transfer_out'])
+        .not('sale_id', 'is', null)
+
+      if (error) {
+        console.error('Error fetching non-drawer transfer balance:', error)
+        return
+      }
+
+      setNonDrawerTransferBalance(
+        roundMoney(Math.max(0, (data || []).reduce((sum: number, t: any) =>
+          sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0)))
+      )
+    } catch (e) {
+      console.error('Error fetching non-drawer transfer balance:', e)
+    }
+  }
+
   // Fetch reserves (تجنيب)
   const fetchReserves = async () => {
     if (!safe?.id) return
@@ -467,6 +483,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     if (isOpen && safe?.id) {
       loadDateFilterPreferences()
       fetchChildSafes()
+      fetchNonDrawerTransferBalance()
       setSelectedDrawerFilters(null) // Reset filter when safe changes
     }
 
@@ -833,15 +850,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
       if (error) {
         console.error('Error fetching cash drawer balance:', error)
-        setCashDrawerBalance(0)
-        return
+        return  // Keep cashDrawerBalance as null — prevents auto-cleanup from deleting reserves
       }
 
       const total = (drawers || []).reduce((sum: number, d: any) => sum + (d.current_balance || 0), 0)
       setCashDrawerBalance(total)
     } catch (error) {
       console.error('Error fetching cash drawer balance:', error)
-      setCashDrawerBalance(0)
+      // Keep cashDrawerBalance as null — prevents auto-cleanup from deleting reserves
     }
   }
 
@@ -1666,6 +1682,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       fetchPurchaseInvoices()
       fetchCashDrawerBalance()
       fetchPaymentBreakdown()
+      fetchNonDrawerTransferBalance()
       // Account statement and transfers are now handled by infinite scroll hooks
 
     }
@@ -2189,6 +2206,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Refresh balances
         fetchCashDrawerBalance()
         fetchChildSafes()
+        fetchNonDrawerTransferBalance()
         fetchReserves()
 
         // Reset form
@@ -2378,6 +2396,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Refresh balances
         fetchCashDrawerBalance()
         fetchChildSafes()
+        fetchNonDrawerTransferBalance()
         fetchReserves()
 
         // Reset form
@@ -2465,6 +2484,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Refresh balances
         fetchCashDrawerBalance()
         fetchChildSafes()
+        fetchNonDrawerTransferBalance()
 
         // Reset form
         setWithdrawAmount('')
@@ -2584,6 +2604,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           transactionType = 'transfer_out' // Always transfer_out to reduce nonDrawerTransferBalance
         } else if (isNonDrawerSafe && withdrawSourceId === 'safe-only') {
           transactionType = 'withdrawal' // Always withdrawal so cash portion decreases
+        } else if (isNonDrawerSafe) {
+          transactionType = 'withdrawal'
         } else {
           transactionType = withdrawType === 'transfer' ? 'transfer_out' : 'withdrawal'
         }
@@ -2665,7 +2687,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           // For non-drawer safes: cash-sourced transfers → deposit on target (preserves cash category)
           // transfer-sourced transfers → transfer_in on target (preserves transfer category)
           const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub'
-          const targetTxType = (isNonDrawerSafe && withdrawSourceId === 'safe-only') ? 'deposit' : 'transfer_in'
+          const targetTxType = (isNonDrawerSafe && (withdrawSourceId === 'safe-only' || !withdrawSourceId)) ? 'deposit' : 'transfer_in'
           const { error: targetTxError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
@@ -2693,6 +2715,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       // 5. Refresh balances
       fetchCashDrawerBalance()
       fetchChildSafes() // Refresh drawer balances
+      fetchNonDrawerTransferBalance()
 
       // 6. Reset form
       setWithdrawAmount('')
