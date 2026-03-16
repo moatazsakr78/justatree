@@ -108,7 +108,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     : safe?.name || 'الخزنة'
 
   // Cash drawer balance (actual paid amounts, not invoice totals)
-  const [cashDrawerBalance, setCashDrawerBalance] = useState<number>(0)
+  const [cashDrawerBalance, setCashDrawerBalance] = useState<number | null>(null)
 
   // Payment method breakdown from RPC
   const [paymentBreakdown, setPaymentBreakdown] = useState<{method: string, amount: number}[]>([])
@@ -277,7 +277,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // The safe balance is the actual cash drawer balance (paid amounts, not invoice totals)
   // This is fetched from the cash_drawers table
-  const safeBalance = cashDrawerBalance
+  const safeBalance = cashDrawerBalance ?? 0
 
 
   // Reserves filtered by current drawer selection
@@ -2744,7 +2744,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const getDrawerAvailableBalance = (recordId: string) => {
     // Get drawer balance
     const drawer = childSafes.find(d => d.id === recordId)
-    const balance = drawer ? drawer.balance : (recordId === safe?.id ? cashDrawerBalance : 0)
+    const balance = drawer ? drawer.balance : (recordId === safe?.id ? (cashDrawerBalance ?? 0) : 0)
     // Subtract existing reserves for this drawer
     const existingReserves = reserves
       .filter(r => r.record_id === recordId && r.id !== editingReserve?.id)
