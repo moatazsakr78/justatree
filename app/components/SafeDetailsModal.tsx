@@ -264,10 +264,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // Operations summary cards data
   const operationsSummary = useMemo(() => {
-    const deposits = operationsTransactions.filter(t => t.transaction_type === 'deposit').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
-    const withdrawals = operationsTransactions.filter(t => t.transaction_type === 'withdrawal').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
-    const transfersIn = operationsTransactions.filter(t => t.transaction_type === 'transfer_in').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
-    const transfersOut = operationsTransactions.filter(t => t.transaction_type === 'transfer_out').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0)
+    const deposits = roundMoney(operationsTransactions.filter(t => t.transaction_type === 'deposit').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0))
+    const withdrawals = roundMoney(operationsTransactions.filter(t => t.transaction_type === 'withdrawal').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0))
+    const transfersIn = roundMoney(operationsTransactions.filter(t => t.transaction_type === 'transfer_in').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0))
+    const transfersOut = roundMoney(operationsTransactions.filter(t => t.transaction_type === 'transfer_out').reduce((sum, t) => sum + Math.abs(t.amount || 0), 0))
     return { deposits, withdrawals, transfersIn, transfersOut }
   }, [operationsTransactions])
 
@@ -279,11 +279,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   // This is fetched from the cash_drawers table
   const safeBalance = cashDrawerBalance
 
-  // Cap transfer balance at safeBalance to ensure consistency
-  // (transfers can never exceed total - excess is from past data inconsistencies)
-  const cappedNonDrawerTransferBalance = useMemo(() => {
-    return Math.min(nonDrawerTransferBalance, Math.max(0, safeBalance))
-  }, [nonDrawerTransferBalance, safeBalance])
 
   // Reserves filtered by current drawer selection
   const filteredReserves = useMemo(() => {
@@ -296,22 +291,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   }, [reserves, selectedDrawerFilters, safe?.id])
 
   const totalReserved = useMemo(() =>
-    filteredReserves.reduce((sum, r) => sum + r.amount, 0)
+    roundMoney(filteredReserves.reduce((sum, r) => sum + r.amount, 0))
   , [filteredReserves])
 
-  // Displayed balance: adjusts for non-drawer safe filters
+  // Displayed balance: always show full safe balance
+  // Non-drawer safes have no separate "transfers pot" — all money is in the safe
   const displayedBalance = useMemo(() => {
-    if (safe?.supports_drawers) return safeBalance
-    // Non-drawer safes: adjust based on filter
-    if (!selectedDrawerFilters || selectedDrawerFilters.size === 0) return safeBalance
-    if (selectedDrawerFilters.has('safe') && !selectedDrawerFilters.has('transfers')) {
-      return Math.max(0, safeBalance - cappedNonDrawerTransferBalance)
-    }
-    if (selectedDrawerFilters.has('transfers') && !selectedDrawerFilters.has('safe')) {
-      return cappedNonDrawerTransferBalance
-    }
     return safeBalance
-  }, [safe?.supports_drawers, safeBalance, selectedDrawerFilters, cappedNonDrawerTransferBalance])
+  }, [safeBalance])
 
   // Recalculate statement balances client-side for coherent running total
   const recalculatedStatements = useMemo(() => {
@@ -410,7 +397,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           .eq('record_id', safe.id)
           .in('transaction_type', ['transfer_in', 'transfer_out'])
         setNonDrawerTransferBalance(
-          Math.max(0, (data || []).reduce((sum: number, t: any) => sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0))
+          roundMoney(Math.max(0, (data || []).reduce((sum: number, t: any) => sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0)))
         )
       } else {
         setNonDrawerTransferBalance(0)
@@ -856,7 +843,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         const total = (allTxs || []).reduce((sum: number, t: any) =>
           sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0
         )
-        const correctedBalance = Math.max(0, total)
+        const correctedBalance = roundMoney(Math.max(0, total))
         setCashDrawerBalance(correctedBalance)
 
         // Fix stale cash_drawers.current_balance if mismatched
@@ -2116,7 +2103,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           // Calculate amount to withdraw from this source
           let withdrawFromSource = source.balance
           if (withdrawAllMode === 'excluding_reserves') {
-            const sourceReserveAmount = reserves.filter(r => r.record_id === source.id).reduce((sum, r) => sum + r.amount, 0)
+            const sourceReserveAmount = roundMoney(reserves.filter(r => r.record_id === source.id).reduce((sum, r) => sum + r.amount, 0))
             withdrawFromSource = Math.max(0, source.balance - sourceReserveAmount)
           }
           if (withdrawFromSource <= 0) continue
@@ -2278,7 +2265,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
         // Handle reserves (excluding_reserves mode) - scale portions proportionally
         if (withdrawAllMode === 'excluding_reserves') {
-          const totalReserves = reserves.reduce((sum, r) => sum + r.amount, 0)
+          const totalReserves = roundMoney(reserves.reduce((sum, r) => sum + r.amount, 0))
           const availableTotal = Math.max(0, safeBalance - totalReserves)
           if (availableTotal <= 0) {
             alert('لا يوجد رصيد متاح بعد استثناء المجنب')
@@ -2524,7 +2511,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
 
     // For safes with drawers or non-drawer safes with transfers, require source selection for withdraw/transfer
-    const isNonDrawerWithTransfers = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+    const isNonDrawerWithTransfers = !safe.supports_drawers && safe.safe_type !== 'sub'
     if ((safe.supports_drawers && childSafes.length > 0 || isNonDrawerWithTransfers) && (withdrawType === 'withdraw' || withdrawType === 'transfer') && !withdrawSourceId) {
       alert('يرجى اختيار مصدر السحب')
       return
@@ -2558,9 +2545,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
     // Check if withdrawal would dip below reserved amount
     if (withdrawType === 'withdraw' || withdrawType === 'transfer') {
-      const sourceReserves = reserves
+      const sourceReserves = roundMoney(reserves
         .filter(r => r.record_id === sourceRecordId)
-        .reduce((sum, r) => sum + r.amount, 0)
+        .reduce((sum, r) => sum + r.amount, 0))
 
       if (sourceReserves > 0 && amount > (sourceBalance - sourceReserves)) {
         const proceed = confirm(
@@ -2607,13 +2594,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
       if (withdrawType === 'deposit') {
         transactionAmount = amount
-        transactionType = 'deposit'
+        const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub'
+        if (isNonDrawerSafe && withdrawSourceId === 'transfers') {
+          transactionType = 'transfer_in'
+        } else {
+          transactionType = 'deposit'
+        }
         transactionNotes = `إيداع في الخزنة${withdrawNotes ? ` - ${withdrawNotes}` : ''}`
       } else {
         transactionAmount = amount
         // For non-drawer safes: use transfer_out when withdrawing from "التحويلات" (so nonDrawerTransferBalance decreases)
         // and use withdrawal when withdrawing from "في الخزنة" (so only cash decreases)
-        const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+        const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub'
         if (isNonDrawerSafe && withdrawSourceId === 'transfers') {
           transactionType = 'transfer_out' // Always transfer_out to reduce nonDrawerTransferBalance
         } else if (isNonDrawerSafe && withdrawSourceId === 'safe-only') {
@@ -2698,7 +2690,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           // Create deposit transaction for target with related_record_id
           // For non-drawer safes: cash-sourced transfers → deposit on target (preserves cash category)
           // transfer-sourced transfers → transfer_in on target (preserves transfer category)
-          const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+          const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub'
           const targetTxType = (isNonDrawerSafe && withdrawSourceId === 'safe-only') ? 'deposit' : 'transfer_in'
           const { error: targetTxError } = await supabase
             .from('cash_drawer_transactions')
@@ -5511,7 +5503,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
               {/* Source Selection - For safes with drawers OR non-drawer safes with transfers */}
               {(() => {
-                const isNonDrawerWithTransfers = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
+                const isNonDrawerWithTransfers = !safe.supports_drawers && safe.safe_type !== 'sub'
                 if (safe.supports_drawers && childSafes.length > 0) {
                   return (
                     <div>
@@ -5585,14 +5577,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   <label className="block text-gray-300 text-sm mb-2 text-right">{withdrawType === 'withdraw' ? 'اختر طريقة السحب' : 'اختر طريقة التحويل'}</label>
                   <div className="space-y-2">
                     {(() => {
-                      const totalReserves = reserves.reduce((sum, r) => sum + r.amount, 0)
+                      const totalReserves = roundMoney(reserves.reduce((sum, r) => sum + r.amount, 0))
                       const balanceExcludingReserves = Math.max(0, safeBalance - totalReserves)
                       return (
                         <>
                           <button
                             onClick={() => {
                               setWithdrawAllMode('full')
-                              setWithdrawAmount(safeBalance.toString())
+                              setWithdrawAmount(roundMoney(safeBalance).toString())
                             }}
                             className={`w-full text-right px-4 py-3 rounded-lg text-sm font-medium transition-colors border ${
                               withdrawAllMode === 'full'
@@ -5606,7 +5598,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             <button
                               onClick={() => {
                                 setWithdrawAllMode('excluding_reserves')
-                                setWithdrawAmount(balanceExcludingReserves.toString())
+                                setWithdrawAmount(roundMoney(balanceExcludingReserves).toString())
                               }}
                               className={`w-full text-right px-4 py-3 rounded-lg text-sm font-medium transition-colors border ${
                                 withdrawAllMode === 'excluding_reserves'
@@ -5649,15 +5641,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   />
                   {/* اقتراحات السحب - فقط للسحب والتحويل */}
                   {withdrawType !== 'deposit' && (() => {
-                    const isNonDrawerSrc = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance !== 0
-                    const sourceBalanceForButton = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                    const isNonDrawerSrc = !safe.supports_drawers && safe.safe_type !== 'sub'
+                    const sourceBalanceForButton = roundMoney(safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                       ? (withdrawSourceId === 'transfers' ? mainSafeOwnBalance : (childSafes.find(c => c.id === withdrawSourceId)?.balance || 0))
                       : (isNonDrawerSrc && withdrawSourceId)
                         ? (withdrawSourceId === 'safe-only' ? Math.max(0, safeBalance - nonDrawerTransferBalance) : withdrawSourceId === 'transfers' ? nonDrawerTransferBalance : safeBalance)
-                        : safeBalance
-                    const sourceReserves = safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
+                        : safeBalance)
+                    const sourceReserves = roundMoney(safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                       ? reserves.filter(r => r.record_id === (withdrawSourceId === 'transfers' ? safe.id : withdrawSourceId)).reduce((sum, r) => sum + r.amount, 0)
-                      : reserves.reduce((sum, r) => sum + r.amount, 0)
+                      : reserves.reduce((sum, r) => sum + r.amount, 0))
                     const balanceExcludingReserves = Math.max(0, sourceBalanceForButton - sourceReserves)
                     return sourceBalanceForButton > 0 ? (
                       <div className="mt-2 relative">
@@ -5671,14 +5663,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         {showWithdrawSuggestions && (
                           <div className="mt-1 bg-gray-700 border border-gray-600 rounded-lg overflow-hidden">
                             <button
-                              onClick={() => { setWithdrawAmount(sourceBalanceForButton.toString()); setShowWithdrawSuggestions(false) }}
+                              onClick={() => { setWithdrawAmount(roundMoney(sourceBalanceForButton).toString()); setShowWithdrawSuggestions(false) }}
                               className="w-full text-right text-xs text-gray-200 hover:bg-gray-600 px-3 py-2 transition-colors"
                             >
                               سحب الرصيد بالكامل ({formatPrice(sourceBalanceForButton, 'system')})
                             </button>
                             {sourceReserves > 0 && (
                               <button
-                                onClick={() => { setWithdrawAmount(balanceExcludingReserves.toString()); setShowWithdrawSuggestions(false) }}
+                                onClick={() => { setWithdrawAmount(roundMoney(balanceExcludingReserves).toString()); setShowWithdrawSuggestions(false) }}
                                 className="w-full text-right text-xs text-gray-200 hover:bg-gray-600 px-3 py-2 border-t border-gray-600 transition-colors"
                               >
                                 سحب الرصيد بدون المجنب ({formatPrice(balanceExcludingReserves, 'system')})
