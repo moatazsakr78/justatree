@@ -821,46 +821,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }
 
-  // Fetch cash drawer balance (actual paid amounts, aggregated across filtered records)
+  // Fetch cash drawer balance from cash_drawers.current_balance (maintained atomically by RPC)
   const fetchCashDrawerBalance = async () => {
     if (!safe?.id) return
-
     try {
-      // For non-drawer main safes: calculate from transactions (source of truth)
-      // This avoids stale cash_drawers.current_balance issues
-      if (!safe.supports_drawers && safe.safe_type !== 'sub') {
-        const { data: allTxs, error } = await supabase
-          .from('cash_drawer_transactions')
-          .select('amount, transaction_type')
-          .eq('record_id', safe.id)
-
-        if (error) {
-          console.error('Error fetching transactions for balance:', error)
-          setCashDrawerBalance(0)
-          return
-        }
-
-        const total = (allTxs || []).reduce((sum: number, t: any) =>
-          sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0
-        )
-        const correctedBalance = roundMoney(Math.max(0, total))
-        setCashDrawerBalance(correctedBalance)
-
-        // Fix stale cash_drawers.current_balance if mismatched
-        const { data: drawer } = await supabase
-          .from('cash_drawers')
-          .select('id, current_balance')
-          .eq('record_id', safe.id)
-          .single()
-        if (drawer && Math.abs((drawer.current_balance || 0) - correctedBalance) > 0.01) {
-          await supabase.from('cash_drawers')
-            .update({ current_balance: correctedBalance })
-            .eq('id', drawer.id)
-        }
-        return
-      }
-
-      // For drawer safes: use cash_drawers.current_balance (aggregated across drawers)
       const balanceIds = safe.supports_drawers ? filteredRecordIds : allRecordIds
       const { data: drawers, error } = await supabase
         .from('cash_drawers')
@@ -2304,7 +2268,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
         // Create withdrawal transaction for cash portion (doesn't affect nonDrawerTransferBalance)
         if (cashPortion > 0) {
-          await supabase
+          const { error: cashTxError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
               drawer_id: drawer.id,
@@ -2318,11 +2282,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               performed_by: user?.name || 'system',
               ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
             })
+          if (cashTxError) {
+            // Rollback balance change
+            await supabase.rpc('atomic_adjust_drawer_balance' as any, { p_drawer_id: drawer.id, p_change: totalAmount })
+            throw new Error(`فشل في تسجيل المعاملة: ${cashTxError.message}`)
+          }
         }
 
         // Create transfer_out transaction for transfer portion (DOES reduce nonDrawerTransferBalance)
         if (transferPortion > 0) {
-          await supabase
+          const { error: transferTxError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
               drawer_id: drawer.id,
@@ -2336,6 +2305,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               performed_by: user?.name || 'system',
               ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
             })
+          if (transferTxError) {
+            // Rollback balance change
+            await supabase.rpc('atomic_adjust_drawer_balance' as any, { p_drawer_id: drawer.id, p_change: totalAmount })
+            throw new Error(`فشل في تسجيل المعاملة: ${transferTxError.message}`)
+          }
         }
 
         // For transfer: deposit to target safe, preserving cash/transfer distinction

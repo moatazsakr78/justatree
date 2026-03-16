@@ -221,11 +221,6 @@ export default function SafesPage() {
       return
     }
 
-    if (safe.is_primary) {
-      alert('لا يمكن حذف الخزنة الرئيسية')
-      return
-    }
-
     // Check for child safes (sub-safes/drawers)
     if (safe.safe_type === 'main') {
       const childSafes = safes.filter(s => s.parent_id === safe.id)
@@ -1139,16 +1134,13 @@ export default function SafesPage() {
                           <div className="p-4 pb-3">
                             <div className="flex items-start justify-between mb-3">
                               <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 ${mainSafe.is_primary ? 'bg-purple-600' : 'bg-blue-600'} rounded-lg flex items-center justify-center shrink-0`}>
+                                <div className={`w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shrink-0`}>
                                   <BanknotesIcon className="h-5 w-5 text-white" />
                                 </div>
                                 <div>
                                   <h3 className="text-white font-bold text-base">{mainSafe.name}</h3>
                                   <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                                     <span className="px-2 py-0.5 rounded-full text-[10px] bg-blue-900/50 text-blue-300">رئيسية</span>
-                                    {mainSafe.is_primary && (
-                                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-purple-900 text-purple-300">أساسية</span>
-                                    )}
                                     {mainSafe.supports_drawers && (
                                       <span className="px-2 py-0.5 rounded-full text-[10px] bg-cyan-900/50 text-cyan-300">أدراج</span>
                                     )}
@@ -1236,15 +1228,13 @@ export default function SafesPage() {
                             >
                               <PencilIcon className="h-3.5 w-3.5" />
                             </button>
-                            {!mainSafe.is_primary && (
-                              <button
-                                onClick={(e) => { e.stopPropagation(); handleDeleteSafe(mainSafe) }}
-                                className="px-2.5 py-1.5 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                                title="حذف"
-                              >
-                                <TrashIcon className="h-3.5 w-3.5" />
-                              </button>
-                            )}
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDeleteSafe(mainSafe) }}
+                              className="px-2.5 py-1.5 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                              title="حذف"
+                            >
+                              <TrashIcon className="h-3.5 w-3.5" />
+                            </button>
                           </div>
                         </div>
                       )

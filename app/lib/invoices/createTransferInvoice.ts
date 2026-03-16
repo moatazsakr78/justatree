@@ -61,12 +61,15 @@ export async function createTransferInvoice({
       const { data: mainRecord, error: recordError } = await supabase
         .from('records')
         .select('id, name')
-        .eq('is_primary', true)
+        .eq('is_active', true)
+        .is('parent_id', null)
         .not('name', 'ilike', '%نقل%')
+        .order('created_at', { ascending: true })
+        .limit(1)
         .single()
 
       if (recordError || !mainRecord) {
-        throw new Error('فشل في العثور على الخزنة الرئيسية')
+        throw new Error('فشل في العثور على خزنة رئيسية نشطة')
       }
 
       finalRecord = mainRecord

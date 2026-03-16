@@ -7,7 +7,6 @@ import {
   BanknotesIcon,
   BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
-import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 import { supabase } from "../lib/supabase/client";
 
 interface Safe {
@@ -60,7 +59,6 @@ export default function SafesSelectionModal({
         `
         )
         .eq("is_active", true)
-        .order("is_primary", { ascending: false })
         .order("name", { ascending: true });
 
       if (error) {
@@ -223,9 +221,6 @@ export default function SafesSelectionModal({
                               <span className="text-xs text-gray-400 font-medium flex items-center gap-1">
                                 <BanknotesIcon className="h-3.5 w-3.5" />
                                 {mainSafe.name}
-                                {mainSafe.is_primary && (
-                                  <StarIconSolid className="h-3 w-3 text-yellow-500" />
-                                )}
                               </span>
                               <div className="h-px flex-1 bg-gray-600"></div>
                             </div>
@@ -281,9 +276,6 @@ export default function SafesSelectionModal({
                                 <div className="text-right">
                                   <div className="font-semibold flex items-center gap-2">
                                     {safe.name}
-                                    {safe.is_primary && (
-                                      <StarIconSolid className="h-4 w-4 text-yellow-500" />
-                                    )}
                                   </div>
                                   {safe.branch?.name && (
                                     <div className="text-sm text-gray-400 flex items-center gap-1">
@@ -294,11 +286,6 @@ export default function SafesSelectionModal({
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
-                                {safe.is_primary && (
-                                  <span className="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded-lg">
-                                    رئيسية
-                                  </span>
-                                )}
                               </div>
                             </button>
                           ))}
