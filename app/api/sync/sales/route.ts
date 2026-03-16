@@ -202,14 +202,18 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
     .map(p => p.paymentMethodId) || []
 
   let methodMap = new Map<string, string>()
+  const physicalMap = new Map<string, boolean>()
 
   if (paymentMethodIds.length > 0) {
     const { data: allPaymentMethods } = await supabase
       .from('payment_methods')
-      .select('id, name')
+      .select('id, name, is_physical')
       .in('id', paymentMethodIds)
 
     methodMap = new Map(allPaymentMethods?.map(m => [m.id, m.name]) || [])
+    allPaymentMethods?.forEach((pm: any) => {
+      physicalMap.set(pm.id, pm.is_physical !== false)
+    })
   }
 
   // Save payment split data
@@ -293,10 +297,13 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
       let runningBalance = drawer ? (drawer.current_balance || 0) : 0
       for (const payment of validPayments) {
         const methodName = methodMap.get(payment.paymentMethodId) || 'cash'
+        const isPhysical = physicalMap.get(payment.paymentMethodId) !== false
         const signedAmount = isReturn ? -payment.amount : payment.amount
 
         const txData: any = {
-          transaction_type: isReturn ? 'return' : 'sale',
+          transaction_type: isReturn
+            ? (isPhysical ? 'return' : 'transfer_out')
+            : (isPhysical ? 'sale' : 'transfer_in'),
           amount: payment.amount,
           sale_id: salesData.id,
           payment_method: methodName,
@@ -314,9 +321,23 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
         transactionsToInsert.push(txData)
       }
     } else {
-      // Single payment - single transaction
+      // Single payment - determine if physical
+      let singleIsPhysical = true
+      if (paymentMethodIds.length > 0 && physicalMap.has(paymentMethodIds[0])) {
+        singleIsPhysical = physicalMap.get(paymentMethodIds[0]) !== false
+      } else if (sale.payment_method) {
+        const { data: pmRow } = await supabase
+          .from('payment_methods')
+          .select('is_physical')
+          .eq('name', sale.payment_method)
+          .maybeSingle()
+        if (pmRow) singleIsPhysical = pmRow.is_physical !== false
+      }
+
       const txData: any = {
-        transaction_type: isReturn ? 'return' : 'sale',
+        transaction_type: isReturn
+          ? (singleIsPhysical ? 'return' : 'transfer_out')
+          : (singleIsPhysical ? 'sale' : 'transfer_in'),
         amount: Math.abs(totalToDrawer),
         sale_id: salesData.id,
         payment_method: sale.payment_method || 'cash',

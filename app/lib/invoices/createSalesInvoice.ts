@@ -646,7 +646,9 @@ export async function createSalesInvoice({
           }
 
           const txData: any = {
-            transaction_type: isReturn ? 'return' : 'sale',
+            transaction_type: isReturn
+              ? (isPhysical ? 'return' : 'transfer_out')
+              : (isPhysical ? 'sale' : 'transfer_in'),
             amount: Math.abs(amount), // Always positive — transaction_type indicates direction
             sale_id: salesData.id,
             payment_method: methodName,
@@ -669,12 +671,26 @@ export async function createSalesInvoice({
           transactionsToInsert.push(txData)
         }
       } else {
-        // Single payment (no split) - route to sub-safe if exists
+        // Single payment (no split) - determine if physical
+        let singleIsPhysical = true
+        if (paymentMethodIds.length > 0 && physicalMap.has(paymentMethodIds[0])) {
+          singleIsPhysical = physicalMap.get(paymentMethodIds[0]) !== false
+        } else if (paymentMethod) {
+          const { data: pmRow } = await supabase
+            .from('payment_methods')
+            .select('is_physical')
+            .eq('name', paymentMethod)
+            .maybeSingle()
+          if (pmRow) singleIsPhysical = pmRow.is_physical !== false
+        }
+
         const amount = totalToDrawer
-        let targetRecordId = hasNoSafe ? null : (subSafeId || mainSafeId)
+        let targetRecordId = hasNoSafe ? null : (singleIsPhysical ? (subSafeId || mainSafeId) : mainSafeId)
 
         const txData: any = {
-          transaction_type: isReturn ? 'return' : 'sale',
+          transaction_type: isReturn
+            ? (singleIsPhysical ? 'return' : 'transfer_out')
+            : (singleIsPhysical ? 'sale' : 'transfer_in'),
           amount: Math.abs(amount),
           sale_id: salesData.id,
           payment_method: paymentMethodSummary,
