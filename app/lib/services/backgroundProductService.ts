@@ -7,6 +7,7 @@ import { logActivity } from './activityLogger'
 export type BackgroundTaskStatus =
   | 'queued'
   | 'creating'
+  | 'updating'
   | 'uploading-variants'
   | 'creating-inventory'
   | 'saving-definitions'
@@ -64,10 +65,15 @@ export interface BackgroundProductSnapshot {
   pendingVideoFiles: File[]
   userId?: string
   userName?: string
+  // Fields for update operations
+  editProductId?: string
+  existingMainImageUrl?: string
+  additionalExistingImageUrls?: string[]
 }
 
 export interface BackgroundProductTask {
   id: string
+  type: 'create' | 'update'
   productName: string
   status: BackgroundTaskStatus
   progress: number
@@ -289,4 +295,159 @@ async function uploadColorAndShapeImages(
   )
 
   return { updatedColors, updatedShapes }
+}
+
+export async function executeProductUpdate(
+  task: BackgroundProductTask,
+  callbacks: TaskCallbacks,
+  updateProduct: (productId: string, data: Record<string, any>) => Promise<any>
+): Promise<void> {
+  try {
+    const { snapshot } = task
+    const productId = snapshot.editProductId!
+
+    // Step 1: Upload images (0-20%)
+    updateStatus(task, callbacks, 'uploading-images', 5)
+    let mainImageUrl = snapshot.existingMainImageUrl || undefined
+
+    if (snapshot.mainImageFile) {
+      const mainImageResult = await uploadAndSetMainImage(snapshot.mainImageFile, productId)
+      if (mainImageResult.success && mainImageResult.publicUrl) {
+        mainImageUrl = mainImageResult.publicUrl
+      }
+    }
+    updateStatus(task, callbacks, 'uploading-images', 10)
+
+    const additionalImageUrls: string[] = [...(snapshot.additionalExistingImageUrls || [])]
+    for (const file of snapshot.additionalImageFiles) {
+      const result = await addAdditionalVersionedImage(file, productId)
+      if (result.success && result.publicUrl) {
+        additionalImageUrls.push(result.publicUrl)
+      }
+    }
+    updateStatus(task, callbacks, 'uploading-images', 20)
+
+    // Build productData with uploaded image URLs
+    const productData = { ...snapshot.productData }
+    if (mainImageUrl) {
+      productData.main_image_url = mainImageUrl
+    }
+    productData.additional_images = additionalImageUrls.length > 0 ? additionalImageUrls : []
+
+    // Step 2: Update product in DB (20-35%)
+    updateStatus(task, callbacks, 'updating', 25)
+    const savedProduct = await updateProduct(productId, productData)
+    if (!savedProduct) {
+      throw new Error('فشل في تحديث المنتج')
+    }
+    task.savedProductId = savedProduct.id
+    updateStatus(task, callbacks, 'updating', 35)
+
+    // Step 3: Upload variant (color/shape) images (35-50%)
+    updateStatus(task, callbacks, 'uploading-variants', 40)
+    const { updatedColors, updatedShapes } = await uploadColorAndShapeImages(
+      productId,
+      snapshot.productColors,
+      snapshot.productShapes
+    )
+    updateStatus(task, callbacks, 'uploading-variants', 50)
+
+    const updatedLocationVariants = snapshot.locationVariants.map(variant => {
+      if (variant.elementType === 'color') {
+        const color = updatedColors.find(c => c.id === variant.elementId)
+        if (color) return { ...variant, image: color.image }
+      } else if (variant.elementType === 'shape') {
+        const shape = updatedShapes.find(s => s.id === variant.elementId)
+        if (shape) return { ...variant, image: shape.image }
+      }
+      return variant
+    })
+
+    // Step 4: Upsert inventory entries (50-65%)
+    updateStatus(task, callbacks, 'creating-inventory', 55)
+    const inventoryEntriesToSave = snapshot.locationThresholds
+      .filter(t => (t.quantity !== undefined && t.quantity > 0) || (t.minStockThreshold !== undefined && t.minStockThreshold > 0))
+
+    const inventoryPromises = inventoryEntriesToSave.map(threshold => {
+      const inventoryData: any = {
+        product_id: productId,
+        quantity: threshold.quantity ?? 0,
+        min_stock: threshold.minStockThreshold ?? 0
+      }
+      if (threshold.locationType === 'branch') {
+        inventoryData.branch_id = threshold.locationId
+      } else {
+        inventoryData.warehouse_id = threshold.locationId
+      }
+      return supabase.from('inventory').upsert(inventoryData, {
+        onConflict: threshold.locationType === 'branch' ? 'product_id,branch_id' : 'product_id,warehouse_id'
+      })
+    })
+    await Promise.all(inventoryPromises)
+    updateStatus(task, callbacks, 'creating-inventory', 65)
+
+    // Step 5: Save color/shape definitions via API (65-80%)
+    updateStatus(task, callbacks, 'saving-definitions', 70)
+    const saveResponse = await fetch('/api/products/save-color-shape-definitions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        productId: productId,
+        colors: updatedColors,
+        shapes: updatedShapes,
+        quantities: updatedLocationVariants
+      })
+    })
+    const saveResult = await saveResponse.json()
+    if (!saveResult.success) {
+      console.error('Failed to save definitions:', saveResult.error)
+    }
+    updateStatus(task, callbacks, 'saving-definitions', 80)
+
+    // Step 6: Upload videos (80-95%)
+    updateStatus(task, callbacks, 'uploading-videos', 85)
+    for (let i = 0; i < snapshot.pendingVideoFiles.length; i++) {
+      const file = snapshot.pendingVideoFiles[i]
+      const { data: uploadData, error: uploadError } = await uploadProductVideo(file, productId)
+      if (uploadData && !uploadError) {
+        await supabase.from('product_videos' as any).insert({
+          product_id: productId,
+          video_url: uploadData.publicUrl,
+          video_name: file.name,
+          video_size: file.size,
+          sort_order: i
+        } as any)
+      }
+      const videoProgress = 85 + ((i + 1) / Math.max(snapshot.pendingVideoFiles.length, 1)) * 10
+      updateStatus(task, callbacks, 'uploading-videos', Math.min(95, Math.round(videoProgress)))
+    }
+
+    // Step 7: Finalize - log activity (95-100%)
+    updateStatus(task, callbacks, 'finalizing', 96)
+    logActivity({
+      userId: snapshot.userId,
+      userName: snapshot.userName,
+      entityType: 'product',
+      actionType: 'update',
+      entityId: productId,
+      entityName: task.productName
+    })
+
+    updateStatus(task, callbacks, 'completed', 100)
+    callbacks.onComplete(task.id, productId)
+
+  } catch (error: any) {
+    task.status = 'failed'
+    task.error = error.message || 'حدث خطأ غير متوقع'
+    callbacks.onError(task.id, task.error!)
+  }
+}
+
+export async function retryProductUpdate(
+  task: BackgroundProductTask,
+  callbacks: TaskCallbacks,
+  updateProduct: (productId: string, data: Record<string, any>) => Promise<any>
+): Promise<void> {
+  task.error = undefined
+  await executeProductUpdate(task, callbacks, updateProduct)
 }

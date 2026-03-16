@@ -139,7 +139,7 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
             <button
               onClick={() => setShowBackgroundProductsModal(true)}
               className="relative flex items-center gap-1 px-2 py-1 rounded-full transition-colors bg-blue-500/20 hover:bg-blue-500/30 cursor-pointer"
-              title={`${activeTaskCount} منتجات قيد الإنشاء - اضغط للعرض`}
+              title={`${activeTaskCount} عمليات المنتجات في الخلفية - اضغط للعرض`}
             >
               <CloudArrowUpIcon className={`h-4 w-4 text-blue-400 ${activeTaskCount > 0 ? 'animate-pulse' : ''}`} />
               <span className="text-xs text-blue-400 font-medium">{tasks.length}</span>

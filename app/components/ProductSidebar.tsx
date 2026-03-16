@@ -236,7 +236,7 @@ const ImageUploadArea = ({ onImageSelect, images, onImageRemove, label, multiple
 export default function ProductSidebar({ isOpen, onClose, onProductCreated, createProduct, updateProduct, categories, editProduct, selectedCategory }: ProductSidebarProps) {
   const { isAdmin } = useAuth()
   const activityLog = useActivityLogger()
-  const { queueProductCreation } = useBackgroundProduct()
+  const { queueProductCreation, queueProductUpdate } = useBackgroundProduct()
   const { getSetting } = useSystemSettings()
   const [activeTab, setActiveTab] = useState('تفاصيل المنتج')
   const [activeShapeColorTab, setActiveShapeColorTab] = useState('شكل وصف')
@@ -1816,23 +1816,26 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
     console.log('📋 Current locationThresholds before save:', locationThresholds)
 
     setIsSaving(true)
+    const isBackgroundEdit = isEditMode && getSetting<boolean>('performance.background_product_creation', false)
+
     try {
-      // For edit mode, upload images immediately using versioned upload
+      // For edit mode (sync only), upload images immediately using versioned upload
+      // In background edit mode, images are uploaded by executeProductUpdate
       let mainImageUrl = isEditMode ? editProduct?.main_image_url : ''
-      if (isEditMode && mainProductImages.length > 0 && mainProductImages[0].id !== 'main-existing') {
+      if (isEditMode && !isBackgroundEdit && mainProductImages.length > 0 && mainProductImages[0].id !== 'main-existing') {
         const productId = editProduct?.id
         if (productId) {
           const result = await uploadAndSetMainImage(
             mainProductImages[0].file,
             productId
           )
-          
+
           if (!result.success) {
             console.error('Main image upload error:', result.error)
             alert('فشل في رفع الصورة الرئيسية')
             return
           }
-          
+
           if (result.publicUrl) {
             mainImageUrl = result.publicUrl
           }
@@ -1840,9 +1843,9 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
       }
       // For new products, we'll upload images after product creation
 
-      // Handle additional images for edit mode only - for new products, upload after creation
+      // Handle additional images for edit mode (sync only) - for new products, upload after creation
       let additionalImagesJson = null
-      if (isEditMode) {
+      if (isEditMode && !isBackgroundEdit) {
         if (additionalImages.length > 0) {
           const additionalImageUrls: string[] = []
 
@@ -1907,105 +1910,176 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
       let savedProduct: Product | null = null
 
       if (isEditMode && editProduct && updateProduct) {
-        // Update existing product
-        savedProduct = await updateProduct(editProduct.id, productData)
-
-        if (savedProduct) {
-          // Upload color and shape images first
-          const { updatedColors, updatedShapes } = await uploadColorAndShapeImages(savedProduct.id)
-
-          // Update productColors and productShapes with uploaded image URLs
-          setProductColors(updatedColors)
-          setProductShapes(updatedShapes)
-
-          // Create updated locationVariants with new image URLs
-          const updatedLocationVariants = locationVariants.map(variant => {
-            if (variant.elementType === 'color') {
-              const color = updatedColors.find(c => c.id === variant.elementId)
-              if (color) {
-                return { ...variant, image: color.image }
+        if (isBackgroundEdit) {
+          // Background mode: queue update and close immediately
+          // Step 1: Convert blob URLs in colors/shapes to File objects
+          const snapshotColorsEdit: BgProductColor[] = await Promise.all(
+            productColors.map(async (color) => {
+              let imageFile: File | undefined
+              if (color.image && (color.image.startsWith('blob:') || color.image.startsWith('data:'))) {
+                try {
+                  const resp = await fetch(color.image)
+                  const blob = await resp.blob()
+                  imageFile = new File([blob], `color-${color.name}.jpg`, { type: 'image/jpeg' })
+                } catch (e) { /* ignore failed conversion */ }
               }
-            } else if (variant.elementType === 'shape') {
-              const shape = updatedShapes.find(s => s.id === variant.elementId)
-              if (shape) {
-                return { ...variant, image: shape.image }
-              }
-            }
-            return variant
-          })
-
-          // Update state for future use
-          setLocationVariants(updatedLocationVariants)
-
-          // Update inventory entries
-          const inventoryPromises = locationThresholds
-            .filter(threshold => (threshold.quantity !== undefined && threshold.quantity > 0) || (threshold.minStockThreshold !== undefined && threshold.minStockThreshold > 0))
-            .map(async (threshold) => {
-              const inventoryData: any = {
-                product_id: savedProduct!.id,
-                quantity: threshold.quantity ?? 0,
-                min_stock: threshold.minStockThreshold ?? 0
-              }
-              
-              if (threshold.locationType === 'branch') {
-                inventoryData.branch_id = threshold.locationId
-              } else {
-                inventoryData.warehouse_id = threshold.locationId
-              }
-              
-              // Try to update existing inventory entry, or insert if it doesn't exist
-              const { error: upsertError } = await supabase
-                .from('inventory')
-                .upsert(inventoryData, {
-                  onConflict: threshold.locationType === 'branch' ? 'product_id,branch_id' : 'product_id,warehouse_id'
-                })
-              
-              if (upsertError) {
-                console.error('Error updating inventory:', upsertError)
-              }
+              return { ...color, imageFile }
             })
+          )
 
-          await Promise.all(inventoryPromises)
-
-          // ✅ NEW SYSTEM: Save colors/shapes via API (bypasses RLS with service_role_key)
-          console.log('💾 Saving color/shape definitions via API...')
-          console.log('🎨 updatedColors to save:', updatedColors)
-          console.log('🔶 updatedShapes to save:', updatedShapes)
-          console.log('📦 productId:', savedProduct.id)
-
-          try {
-            const saveResponse = await fetch('/api/products/save-color-shape-definitions', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                productId: savedProduct.id,
-                colors: updatedColors,
-                shapes: updatedShapes,
-                quantities: locationVariants
-              })
+          const snapshotShapesEdit: BgProductShape[] = await Promise.all(
+            productShapes.map(async (shape: any) => {
+              let imageFile: File | undefined
+              if (shape.image && (shape.image.startsWith('blob:') || shape.image.startsWith('data:'))) {
+                try {
+                  const resp = await fetch(shape.image)
+                  const blob = await resp.blob()
+                  imageFile = new File([blob], `shape-${shape.name || 'shape'}.jpg`, { type: 'image/jpeg' })
+                } catch (e) { /* ignore failed conversion */ }
+              }
+              return { ...shape, imageFile }
             })
+          )
 
-            const saveResult = await saveResponse.json()
+          // Step 2: Separate main image into existing URL vs new File
+          const editMainImageFile = (mainProductImages.length > 0 && mainProductImages[0].id !== 'main-existing')
+            ? mainProductImages[0].file
+            : null
+          const existingMainImageUrl = (mainProductImages.length > 0 && mainProductImages[0].id === 'main-existing')
+            ? mainProductImages[0].preview
+            : editProduct.main_image_url || undefined
 
-            if (!saveResult.success) {
-              throw new Error(saveResult.error || 'Failed to save definitions')
+          // Step 3: Separate additional images into existing URLs vs new Files
+          const additionalExistingImageUrls: string[] = []
+          const additionalNewImageFiles: File[] = []
+          for (const img of additionalImages) {
+            if (img.id.startsWith('additional-existing')) {
+              additionalExistingImageUrls.push(img.preview)
+            } else if (img.file) {
+              additionalNewImageFiles.push(img.file)
             }
-
-            console.log('✅ Successfully saved all variant data:', saveResult.data?.length || 0, 'definitions')
-          } catch (error: any) {
-            console.error('❌ Error saving variant definitions:', error)
-            alert('فشل في حفظ الألوان والأشكال: ' + error.message)
           }
-          
-          // Trigger refresh and close
-          onProductCreated?.()
-          
-          // Success - clear form and close AFTER everything is saved
+
+          const pendingVideoFilesCopy = [...pendingVideos]
+
+          // Remove image URLs from productData - they'll be set by executeProductUpdate after upload
+          const { main_image_url, additional_images, ...productDataWithoutImages } = productData as any
+
+          // Step 4: Build snapshot
+          const updateSnapshot: BackgroundProductSnapshot = {
+            productData: productDataWithoutImages,
+            productColors: snapshotColorsEdit,
+            productShapes: snapshotShapesEdit,
+            locationThresholds: [...locationThresholds],
+            locationVariants: [...locationVariants],
+            mainImageFile: editMainImageFile,
+            additionalImageFiles: additionalNewImageFiles,
+            pendingVideoFiles: pendingVideoFilesCopy,
+            userId: undefined,
+            userName: undefined,
+            editProductId: editProduct.id,
+            existingMainImageUrl,
+            additionalExistingImageUrls,
+          }
+
+          // Step 5: Queue and close
+          queueProductUpdate(updateSnapshot, updateProduct, onProductCreated)
           handleClearFields()
-          alert('تم تحديث المنتج بنجاح!')
-          activityLog({ entityType: 'product', actionType: 'update', entityId: editProduct.id, entityName: formData.name })
+          onClose()
+        } else {
+          // Synchronous mode: wait until complete
+          savedProduct = await updateProduct(editProduct.id, productData)
+
+          if (savedProduct) {
+            // Upload color and shape images first
+            const { updatedColors, updatedShapes } = await uploadColorAndShapeImages(savedProduct.id)
+
+            // Update productColors and productShapes with uploaded image URLs
+            setProductColors(updatedColors)
+            setProductShapes(updatedShapes)
+
+            // Create updated locationVariants with new image URLs
+            const updatedLocationVariants = locationVariants.map(variant => {
+              if (variant.elementType === 'color') {
+                const color = updatedColors.find(c => c.id === variant.elementId)
+                if (color) {
+                  return { ...variant, image: color.image }
+                }
+              } else if (variant.elementType === 'shape') {
+                const shape = updatedShapes.find(s => s.id === variant.elementId)
+                if (shape) {
+                  return { ...variant, image: shape.image }
+                }
+              }
+              return variant
+            })
+
+            // Update state for future use
+            setLocationVariants(updatedLocationVariants)
+
+            // Update inventory entries
+            const inventoryPromises = locationThresholds
+              .filter(threshold => (threshold.quantity !== undefined && threshold.quantity > 0) || (threshold.minStockThreshold !== undefined && threshold.minStockThreshold > 0))
+              .map(async (threshold) => {
+                const inventoryData: any = {
+                  product_id: savedProduct!.id,
+                  quantity: threshold.quantity ?? 0,
+                  min_stock: threshold.minStockThreshold ?? 0
+                }
+
+                if (threshold.locationType === 'branch') {
+                  inventoryData.branch_id = threshold.locationId
+                } else {
+                  inventoryData.warehouse_id = threshold.locationId
+                }
+
+                // Try to update existing inventory entry, or insert if it doesn't exist
+                const { error: upsertError } = await supabase
+                  .from('inventory')
+                  .upsert(inventoryData, {
+                    onConflict: threshold.locationType === 'branch' ? 'product_id,branch_id' : 'product_id,warehouse_id'
+                  })
+
+                if (upsertError) {
+                  console.error('Error updating inventory:', upsertError)
+                }
+              })
+
+            await Promise.all(inventoryPromises)
+
+            // Save colors/shapes via API
+            try {
+              const saveResponse = await fetch('/api/products/save-color-shape-definitions', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  productId: savedProduct.id,
+                  colors: updatedColors,
+                  shapes: updatedShapes,
+                  quantities: locationVariants
+                })
+              })
+
+              const saveResult = await saveResponse.json()
+
+              if (!saveResult.success) {
+                throw new Error(saveResult.error || 'Failed to save definitions')
+              }
+            } catch (error: any) {
+              console.error('Error saving variant definitions:', error)
+              alert('فشل في حفظ الألوان والأشكال: ' + error.message)
+            }
+
+            // Trigger refresh and close
+            onProductCreated?.()
+
+            // Success - clear form and close AFTER everything is saved
+            handleClearFields()
+            alert('تم تحديث المنتج بنجاح!')
+            activityLog({ entityType: 'product', actionType: 'update', entityId: editProduct.id, entityName: formData.name })
+          }
         }
       } else {
         // Create new product
@@ -2075,6 +2149,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           const taskId = `sync-${Date.now()}`
           const task: BackgroundProductTask = {
             id: taskId,
+            type: 'create',
             productName: productData.name || '',
             status: 'queued',
             progress: 0,

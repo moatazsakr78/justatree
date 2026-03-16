@@ -6,7 +6,9 @@ import {
   type BackgroundProductSnapshot,
   type BackgroundTaskStatus,
   executeProductCreation,
-  retryProductCreation
+  retryProductCreation,
+  executeProductUpdate,
+  retryProductUpdate
 } from '@/app/lib/services/backgroundProductService'
 
 interface BackgroundProductContextType {
@@ -19,6 +21,11 @@ interface BackgroundProductContextType {
     createProduct: (data: Record<string, any>) => Promise<any>,
     onComplete?: () => void
   ) => void
+  queueProductUpdate: (
+    snapshot: BackgroundProductSnapshot,
+    updateProduct: (productId: string, data: Record<string, any>) => Promise<any>,
+    onComplete?: () => void
+  ) => void
   retryTask: (taskId: string) => void
   dismissTask: (taskId: string) => void
   dismissAllCompleted: () => void
@@ -29,6 +36,7 @@ const BackgroundProductContext = createContext<BackgroundProductContextType | un
 export function BackgroundProductProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<BackgroundProductTask[]>([])
   const createProductFnRef = useRef<Map<string, (data: Record<string, any>) => Promise<any>>>(new Map())
+  const updateProductFnRef = useRef<Map<string, (id: string, data: Record<string, any>) => Promise<any>>>(new Map())
   const onCompleteFnRef = useRef<Map<string, () => void>>(new Map())
 
   const activeTaskCount = tasks.filter(t => t.status !== 'completed' && t.status !== 'failed').length
@@ -78,6 +86,7 @@ export function BackgroundProductProvider({ children }: { children: React.ReactN
       onCompleteFnRef.current.delete(taskId)
     }
     createProductFnRef.current.delete(taskId)
+    updateProductFnRef.current.delete(taskId)
   }, [])
 
   const handleError = useCallback((taskId: string, error: string) => {
@@ -94,6 +103,7 @@ export function BackgroundProductProvider({ children }: { children: React.ReactN
     const taskId = `bg-product-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     const task: BackgroundProductTask = {
       id: taskId,
+      type: 'create',
       productName: snapshot.productData.name || 'منتج جديد',
       status: 'queued',
       progress: 0,
@@ -117,29 +127,67 @@ export function BackgroundProductProvider({ children }: { children: React.ReactN
     executeProductCreation(task, callbacks, createProduct)
   }, [handleStatusChange, handleComplete, handleError])
 
-  const retryTask = useCallback((taskId: string) => {
-    const task = tasks.find(t => t.id === taskId)
-    if (!task || task.status !== 'failed') return
+  const queueProductUpdate = useCallback((
+    snapshot: BackgroundProductSnapshot,
+    updateProduct: (productId: string, data: Record<string, any>) => Promise<any>,
+    onComplete?: () => void
+  ) => {
+    const taskId = `bg-update-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const task: BackgroundProductTask = {
+      id: taskId,
+      type: 'update',
+      productName: snapshot.productData.name || 'تحديث منتج',
+      status: 'queued',
+      progress: 0,
+      snapshot,
+      createdAt: Date.now()
+    }
 
-    const createFn = createProductFnRef.current.get(taskId)
-    if (!createFn) return
+    updateProductFnRef.current.set(taskId, updateProduct)
+    if (onComplete) {
+      onCompleteFnRef.current.set(taskId, onComplete)
+    }
 
-    // Reset error
-    setTasks(prev => prev.map(t =>
-      t.id === taskId ? { ...t, error: undefined, status: 'queued' as const, progress: 0 } : t
-    ))
+    setTasks(prev => [...prev, task])
 
     const callbacks = {
       onStatusChange: handleStatusChange,
       onComplete: handleComplete,
       onError: handleError
     }
-    retryProductCreation(task, callbacks, createFn)
+    executeProductUpdate(task, callbacks, updateProduct)
+  }, [handleStatusChange, handleComplete, handleError])
+
+  const retryTask = useCallback((taskId: string) => {
+    const task = tasks.find(t => t.id === taskId)
+    if (!task || task.status !== 'failed') return
+
+    const callbacks = {
+      onStatusChange: handleStatusChange,
+      onComplete: handleComplete,
+      onError: handleError
+    }
+
+    // Reset error
+    setTasks(prev => prev.map(t =>
+      t.id === taskId ? { ...t, error: undefined, status: 'queued' as const, progress: 0 } : t
+    ))
+
+    if (task.type === 'update') {
+      const updateFn = updateProductFnRef.current.get(taskId)
+      if (!updateFn) return
+      retryProductUpdate(task, callbacks, updateFn)
+    } else {
+      const createFn = createProductFnRef.current.get(taskId)
+      if (!createFn) return
+      retryProductCreation(task, callbacks, createFn)
+    }
   }, [tasks, handleStatusChange, handleComplete, handleError])
 
   const dismissTask = useCallback((taskId: string) => {
     setTasks(prev => prev.filter(t => t.id !== taskId))
     createProductFnRef.current.delete(taskId)
+    updateProductFnRef.current.delete(taskId)
     onCompleteFnRef.current.delete(taskId)
   }, [])
 
@@ -148,6 +196,7 @@ export function BackgroundProductProvider({ children }: { children: React.ReactN
       const toRemove = prev.filter(t => t.status === 'completed')
       toRemove.forEach(t => {
         createProductFnRef.current.delete(t.id)
+        updateProductFnRef.current.delete(t.id)
         onCompleteFnRef.current.delete(t.id)
       })
       return prev.filter(t => t.status !== 'completed')
@@ -160,6 +209,7 @@ export function BackgroundProductProvider({ children }: { children: React.ReactN
     hasActiveTasks,
     hasFailedTasks,
     queueProductCreation,
+    queueProductUpdate,
     retryTask,
     dismissTask,
     dismissAllCompleted

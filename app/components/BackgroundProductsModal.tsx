@@ -31,6 +31,12 @@ function getStatusLabel(status: BackgroundTaskStatus): { text: string, color: st
         color: 'blue',
         icon: <ArrowPathIcon className="h-3 w-3 animate-spin" />
       }
+    case 'updating':
+      return {
+        text: 'جاري التحديث',
+        color: 'blue',
+        icon: <ArrowPathIcon className="h-3 w-3 animate-spin" />
+      }
     case 'uploading-variants':
     case 'uploading-images':
     case 'uploading-videos':
@@ -86,7 +92,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
         <div className="flex items-center justify-between p-4 border-b border-gray-600">
           <div className="flex items-center gap-3">
             <CloudArrowUpIcon className="h-6 w-6 text-blue-400" />
-            <h2 className="text-lg font-semibold text-white">إنشاء المنتجات في الخلفية</h2>
+            <h2 className="text-lg font-semibold text-white">عمليات المنتجات في الخلفية</h2>
             <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-sm rounded-full">
               {tasks.length}
             </span>
@@ -111,7 +117,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
           {tasks.length === 0 ? (
             <div className="text-center py-8 text-gray-400">
               <CloudArrowUpIcon className="h-12 w-12 mx-auto mb-3 opacity-50" />
-              <p>لا توجد عمليات إنشاء في الخلفية</p>
+              <p>لا توجد عمليات في الخلفية</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -133,6 +139,9 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
                       <div className="space-y-2 flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-white font-medium truncate">{task.productName}</span>
+                          <span className={`px-1.5 py-0.5 text-xs rounded ${task.type === 'update' ? 'bg-orange-500/20 text-orange-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                            {task.type === 'update' ? 'تعديل' : 'إنشاء'}
+                          </span>
                           <span className={`flex items-center gap-1 px-2 py-0.5 text-xs rounded-full ${colorClasses[statusInfo.color]}`}>
                             {statusInfo.icon}
                             {statusInfo.text}
