@@ -87,7 +87,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     if (!safe?.id) return allRecordIds
     if (!selectedDrawerFilters || selectedDrawerFilters.size === 0) return allRecordIds
     const ids: string[] = []
-    selectedDrawerFilters.forEach(f => ids.push(f === 'transfers' ? safe.id : f))
+    selectedDrawerFilters.forEach(f => {
+      if (f === 'transfers' || (f === 'safe' && !safe.supports_drawers)) {
+        ids.push(safe.id)
+      } else {
+        ids.push(f)
+      }
+    })
     return Array.from(new Set(ids))
   }, [selectedDrawerFilters, allRecordIds, safe?.id])
 
@@ -294,11 +300,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     roundMoney(filteredReserves.reduce((sum, r) => sum + r.amount, 0))
   , [filteredReserves])
 
-  // Displayed balance: always show full safe balance
-  // Non-drawer safes have no separate "transfers pot" — all money is in the safe
+  // Displayed balance: filter for non-drawer safes based on active filter
   const displayedBalance = useMemo(() => {
+    if (!safe?.supports_drawers && safe?.safe_type !== 'sub') {
+      if (nonDrawerExcludeTransfers) return Math.max(0, safeBalance - nonDrawerTransferBalance)
+      if (nonDrawerTransfersOnly) return nonDrawerTransferBalance
+    }
     return safeBalance
-  }, [safeBalance])
+  }, [safeBalance, nonDrawerTransferBalance, nonDrawerExcludeTransfers, nonDrawerTransfersOnly, safe?.supports_drawers, safe?.safe_type])
 
   // Recalculate statement balances client-side for coherent running total
   const recalculatedStatements = useMemo(() => {
@@ -676,14 +685,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const fetchSales = async () => {
     if (!safe?.id) return
 
-    // Non-drawer safe: transfers don't have sale_ids, skip fetching entirely
-    if (nonDrawerTransfersOnly) {
-      setSales([])
-      setAllSalesData([])
-      setIsLoadingSales(false)
-      return
-    }
-
     try {
       setIsLoadingSales(true)
 
@@ -701,6 +702,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
         if (nonDrawerExcludeTransfers) {
           txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
+        // Non-drawer safe: only transfer types when filtering "التحويلات"
+        if (nonDrawerTransfersOnly) {
+          txQuery = txQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
         }
         txQuery = applyDateFilter(txQuery)
         const { data: txData } = await txQuery
@@ -793,6 +798,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
         if (nonDrawerExcludeTransfers) {
           txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
+        // Non-drawer safe: only transfer types when filtering "التحويلات"
+        if (nonDrawerTransfersOnly) {
+          txQuery = txQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
         }
         const { data: transactions } = await txQuery
 
@@ -1092,14 +1101,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const fetchPurchaseInvoices = async () => {
     if (!safe?.id) return
 
-    // Non-drawer safe: transfers don't have purchase_invoice_ids, skip fetching entirely
-    if (nonDrawerTransfersOnly) {
-      setPurchaseInvoices([])
-      setAllPurchasesData([])
-      setIsLoadingPurchases(false)
-      return
-    }
-
     try {
       setIsLoadingPurchases(true)
 
@@ -1115,6 +1116,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
         if (nonDrawerExcludeTransfers) {
           txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
+        // Non-drawer safe: only transfer types when filtering "التحويلات"
+        if (nonDrawerTransfersOnly) {
+          txQuery = txQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
         }
         txQuery = applyDateFilter(txQuery)
         const { data: txData } = await txQuery
@@ -1205,6 +1210,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
         if (nonDrawerExcludeTransfers) {
           purchaseTxQuery = purchaseTxQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
+        }
+        // Non-drawer safe: only transfer types when filtering "التحويلات"
+        if (nonDrawerTransfersOnly) {
+          purchaseTxQuery = purchaseTxQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
         }
         const { data: transactions } = await purchaseTxQuery
 
