@@ -2254,19 +2254,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         let cashPortion = Math.max(0, safeBalance - nonDrawerTransferBalance)
         let transferPortion = Math.min(nonDrawerTransferBalance, safeBalance)
 
-        // Handle reserves (excluding_reserves mode) - scale portions proportionally
+        // Handle reserves (excluding_reserves mode) - reserves only protect cash, not transfers
         if (withdrawAllMode === 'excluding_reserves') {
           const totalReserves = roundMoney(reserves.reduce((sum, r) => sum + r.amount, 0))
-          const availableTotal = Math.max(0, safeBalance - totalReserves)
+          const cashAfterReserves = Math.max(0, cashPortion - totalReserves)
+          const availableTotal = roundMoney(cashAfterReserves + transferPortion)
           if (availableTotal <= 0) {
             alert('لا يوجد رصيد متاح بعد استثناء المجنب')
             setIsWithdrawing(false)
             return
           }
-          // Scale portions proportionally
-          const ratio = availableTotal / safeBalance
-          cashPortion = roundMoney(cashPortion * ratio)
-          transferPortion = roundMoney(availableTotal - cashPortion)
+          cashPortion = cashAfterReserves
+          // transferPortion stays unchanged - reserves don't apply to transfers
         }
 
         // Get the drawer (non-drawer safes have a single drawer with record_id = safe.id)
@@ -5546,7 +5545,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">اختر المصدر...</option>
-                        <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
+                        {withdrawType !== 'deposit' && (
+                          <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
+                        )}
                         <option value="safe-only">
                           الخزنة ({formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance), 'system')})
                         </option>
@@ -5584,7 +5585,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   <div className="space-y-2">
                     {(() => {
                       const totalReserves = roundMoney(reserves.reduce((sum, r) => sum + r.amount, 0))
-                      const balanceExcludingReserves = Math.max(0, safeBalance - totalReserves)
+                      const isNonDrawerSafe = !safe.supports_drawers && safe.safe_type !== 'sub' && nonDrawerTransferBalance > 0
+                      const balanceExcludingReserves = isNonDrawerSafe
+                        ? roundMoney(Math.max(0, Math.max(0, safeBalance - nonDrawerTransferBalance) - totalReserves) + Math.min(nonDrawerTransferBalance, safeBalance))
+                        : Math.max(0, safeBalance - totalReserves)
                       return (
                         <>
                           <button
