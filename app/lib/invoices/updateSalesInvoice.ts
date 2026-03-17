@@ -78,26 +78,34 @@ export async function updateSalesInvoice({
     if (newRecordId !== undefined && newRecordId !== actualCurrentRecordId) {
       const oldRecordId = actualCurrentRecordId
 
-      // Reverse each transaction from its current drawer
+      // Reverse each transaction from its current drawer (Bug 2 fix - atomic RPC)
+      const completedReversals: { drawerId: string; delta: number }[] = []
       for (const tx of transactions) {
-        if (tx.record_id) {
-          const { data: oldDrawer } = await supabase
-            .from('cash_drawers')
-            .select('*')
-            .eq('record_id', tx.record_id)
-            .single()
+        if (tx.drawer_id) {
+          const delta = -getSignedAmount(tx.amount || 0, tx.transaction_type)
+          try {
+            const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+              'atomic_adjust_drawer_balance' as any,
+              { p_drawer_id: tx.drawer_id, p_change: delta }
+            )
+            if (rpcErr) throw new Error(`Failed to update drawer: ${rpcErr.message}`)
+            completedReversals.push({ drawerId: tx.drawer_id, delta })
 
-          if (oldDrawer) {
-            const newOldBalance = roundMoney((oldDrawer.current_balance || 0) - getSignedAmount(tx.amount || 0, tx.transaction_type))
-            await supabase
-              .from('cash_drawers')
-              .update({
-                current_balance: newOldBalance,
-                updated_at: new Date().toISOString()
-              })
-              .eq('id', oldDrawer.id)
-
+            const newOldBalance = rpcResult?.[0]?.new_balance ?? roundMoney(delta)
             console.log(`✅ خصم ${tx.amount} من الخزنة ${tx.record_id}، الرصيد الجديد: ${newOldBalance}`)
+          } catch (reversalError: any) {
+            // Bug 9 fix - rollback all previously completed reversals
+            console.error(`Error reversing transaction ${tx.id}:`, reversalError)
+            for (const completed of completedReversals) {
+              try {
+                await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+                  p_drawer_id: completed.drawerId, p_change: -completed.delta
+                })
+              } catch (rollbackErr) {
+                console.error(`CRITICAL: Failed to rollback drawer ${completed.drawerId}:`, rollbackErr)
+              }
+            }
+            return { success: false, message: `فشل في عكس معاملات الخزنة القديمة: ${reversalError.message}` }
           }
         }
       }
@@ -125,14 +133,25 @@ export async function updateSalesInvoice({
         }
 
         if (newDrawer) {
-          newBalance = roundMoney((newDrawer.current_balance || 0) + transactionAmount)
-          await supabase
-            .from('cash_drawers')
-            .update({
-              current_balance: newBalance,
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', newDrawer.id)
+          // Bug 2 fix - use atomic RPC instead of read-modify-write
+          const { data: newRpcResult, error: newRpcErr } = await supabase.rpc(
+            'atomic_adjust_drawer_balance' as any,
+            { p_drawer_id: newDrawer.id, p_change: transactionAmount }
+          )
+          if (newRpcErr) {
+            // Rollback the old drawer reversals
+            for (const completed of completedReversals) {
+              try {
+                await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+                  p_drawer_id: completed.drawerId, p_change: -completed.delta
+                })
+              } catch (rollbackErr) {
+                console.error(`CRITICAL: Failed to rollback drawer ${completed.drawerId}:`, rollbackErr)
+              }
+            }
+            return { success: false, message: `فشل في تحديث الخزنة الجديدة: ${newRpcErr.message}` }
+          }
+          newBalance = newRpcResult?.[0]?.new_balance ?? roundMoney((newDrawer.current_balance || 0) + transactionAmount)
 
           console.log(`✅ إضافة ${transactionAmount} للخزنة الجديدة، الرصيد الجديد: ${newBalance}`)
         }
@@ -382,6 +401,28 @@ export async function updateSalesInvoice({
         old_value: sale.payment_method,
         new_value: newPaymentMethod
       })
+
+      // Look up is_physical for the new payment method to determine correct transaction_type
+      let newIsPhysical = true
+      const { data: pmRow } = await supabase
+        .from('payment_methods')
+        .select('is_physical')
+        .eq('name', newPaymentMethod)
+        .maybeSingle()
+      if (pmRow) newIsPhysical = pmRow.is_physical !== false
+
+      const isReturn = sale.invoice_type === 'Sale Return'
+      const newTransactionType = isReturn
+        ? (newIsPhysical ? 'return' : 'transfer_out')
+        : (newIsPhysical ? 'sale' : 'transfer_in')
+
+      // Update transaction_type and payment_method on all related cash_drawer_transactions
+      for (const tx of transactions) {
+        await supabase
+          .from('cash_drawer_transactions')
+          .update({ transaction_type: newTransactionType, payment_method: newPaymentMethod })
+          .eq('id', tx.id)
+      }
     }
 
     // 7. تحديث الفاتورة في جدول sales

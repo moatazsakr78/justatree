@@ -58,6 +58,7 @@ interface SyncResult {
   invoice_number?: string
   invoice_id?: string
   error?: string
+  warning?: string
 }
 
 // POST /api/sync/sales - Sync offline sales to database
@@ -278,14 +279,15 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
       }
 
       if (drawer) {
-        newBalance = roundMoney((drawer.current_balance || 0) + totalToDrawer)
-        await supabase
-          .from('cash_drawers')
-          .update({
-            current_balance: newBalance,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', drawer.id)
+        // Bug 3 fix - use atomic RPC instead of read-modify-write
+        const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+          'atomic_adjust_drawer_balance' as any,
+          { p_drawer_id: drawer.id, p_change: totalToDrawer }
+        )
+        if (rpcErr) {
+          console.error('Failed to atomically update drawer balance:', rpcErr)
+        }
+        newBalance = rpcResult?.[0]?.new_balance ?? roundMoney((drawer.current_balance || 0) + totalToDrawer)
       }
     }
 
@@ -294,7 +296,9 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
     const validPayments = (sale.payment_split_data || []).filter((p: any) => p.amount > 0 && p.paymentMethodId)
 
     if (validPayments.length > 0) {
-      let runningBalance = drawer ? (drawer.current_balance || 0) : 0
+      // Bug 7 fix - derive pre-payment balance from RPC result to handle concurrent updates
+      // newBalance = balance after ALL payments; subtract totalToDrawer to get the balance right before
+      let runningBalance = (newBalance != null) ? roundMoney(newBalance - totalToDrawer) : (drawer ? (drawer.current_balance || 0) : 0)
       for (const payment of validPayments) {
         const methodName = methodMap.get(payment.paymentMethodId) || 'cash'
         const isPhysical = physicalMap.get(payment.paymentMethodId) !== false
@@ -359,8 +363,16 @@ async function processSingleSale(sale: PendingSale): Promise<SyncResult> {
         .from('cash_drawer_transactions')
         .insert(transactionsToInsert)
     }
-  } catch (drawerError) {
-    console.warn('Failed to create cash drawer transaction:', drawerError)
+  } catch (drawerError: any) {
+    // Bug 11 fix - surface drawer errors instead of silently swallowing them
+    console.error('Failed to create cash drawer transaction:', drawerError)
+    return {
+      local_id: sale.local_id,
+      success: true,
+      invoice_number: invoiceNumber,
+      invoice_id: salesData.id,
+      warning: `تم إنشاء الفاتورة لكن فشل تحديث الخزنة: ${drawerError.message || 'خطأ غير معروف'}`
+    }
   }
 
   return {

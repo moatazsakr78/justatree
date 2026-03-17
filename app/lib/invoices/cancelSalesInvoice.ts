@@ -199,29 +199,30 @@ export async function cancelSalesInvoice({
       .eq('sale_id', saleId)
 
     if (!transError && drawerTransactions && drawerTransactions.length > 0) {
+      const completedReversals: { drawerId: string; delta: number }[] = []
+
       for (const transaction of drawerTransactions) {
-        const { data: drawer } = await supabase
-          .from('cash_drawers')
-          .select('id, current_balance')
-          .eq('id', transaction.drawer_id)
-          .single()
+        if (!transaction.drawer_id) continue
 
-        if (drawer) {
-          const newBalance = roundMoney((drawer.current_balance || 0) - getSignedAmount(transaction.amount, transaction.transaction_type))
+        // Calculate reversal delta: negate the signed amount of the original transaction
+        const delta = -getSignedAmount(transaction.amount, transaction.transaction_type)
 
-          await supabase
-            .from('cash_drawers')
-            .update({
-              current_balance: newBalance,
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', drawer.id)
+        try {
+          // Atomic balance update (prevents race conditions - Bug 1 fix)
+          const { data: rpcResult, error: rpcErr } = await supabase.rpc(
+            'atomic_adjust_drawer_balance' as any,
+            { p_drawer_id: transaction.drawer_id, p_change: delta }
+          )
+          if (rpcErr) throw new Error(`Failed to update drawer: ${rpcErr.message}`)
+          const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney(delta)
+
+          completedReversals.push({ drawerId: transaction.drawer_id, delta })
 
           // Add cancellation record
-          await supabase
+          const { error: txInsertError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
-              drawer_id: drawer.id,
+              drawer_id: transaction.drawer_id,
               record_id: transaction.record_id,
               transaction_type: 'invoice_cancel',
               amount: Math.abs(transaction.amount),
@@ -231,7 +232,36 @@ export async function cancelSalesInvoice({
               performed_by: userId || 'system'
             })
 
-          console.log(`✅ Cash drawer reversed for cancel: ${-transaction.amount}, new balance: ${newBalance}`)
+          if (txInsertError) {
+            // Rollback this balance change since transaction record failed
+            await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+              p_drawer_id: transaction.drawer_id, p_change: -delta
+            })
+            completedReversals.pop()
+            throw new Error(`Failed to insert cancellation record: ${txInsertError.message}`)
+          }
+
+          console.log(`✅ Cash drawer reversed for cancel: ${delta}, new balance: ${newBalance}`)
+        } catch (reversalError: any) {
+          // Rollback all previously completed reversals (Bug 8 fix - compensation)
+          console.error(`Error reversing transaction ${transaction.id}:`, reversalError)
+          for (const completed of completedReversals) {
+            try {
+              await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+                p_drawer_id: completed.drawerId, p_change: -completed.delta
+              })
+            } catch (rollbackErr) {
+              console.error(`CRITICAL: Failed to rollback drawer ${completed.drawerId}:`, rollbackErr)
+            }
+          }
+          // Delete any cancellation records already inserted for this sale
+          await supabase
+            .from('cash_drawer_transactions')
+            .delete()
+            .eq('sale_id', saleId)
+            .eq('transaction_type', 'invoice_cancel')
+
+          return { success: false, message: `فشل في إلغاء معاملات الخزنة: ${reversalError.message}` }
         }
       }
 

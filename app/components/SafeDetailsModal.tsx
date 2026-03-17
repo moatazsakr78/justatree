@@ -448,17 +448,26 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         .select('amount, transaction_type')
         .eq('record_id', safe.id)
         .in('transaction_type', ['transfer_in', 'transfer_out'])
-        .or('sale_id.not.is.null,transaction_type.eq.transfer_out')
+        .order('created_at', { ascending: true })
 
       if (error) {
         console.error('Error fetching non-drawer transfer balance:', error)
         return
       }
 
-      setNonDrawerTransferBalance(
-        roundMoney(Math.max(0, (data || []).reduce((sum: number, t: any) =>
-          sum + getSignedAmount(parseFloat(String(t.amount)) || 0, t.transaction_type), 0)))
-      )
+      // Running balance that never goes below 0
+      // Prevents historical over-withdrawals from absorbing future transfer income
+      let runningBalance = 0
+      for (const t of (data || [])) {
+        const amount = parseFloat(String(t.amount)) || 0
+        if (t.transaction_type === 'transfer_in') {
+          runningBalance += amount
+        } else {
+          runningBalance = Math.max(0, runningBalance - amount)
+        }
+      }
+
+      setNonDrawerTransferBalance(roundMoney(runningBalance))
     } catch (e) {
       console.error('Error fetching non-drawer transfer balance:', e)
     }
@@ -2114,8 +2123,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           )
           const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney(source.balance - withdrawFromSource)
 
-          // Create withdrawal/transfer_out transaction
-          await supabase
+          // Create withdrawal/transfer_out transaction (Bug 4 fix - rollback if insert fails)
+          const { error: txError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
               drawer_id: drawer.id,
@@ -2129,6 +2138,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               performed_by: user?.name || 'system',
               ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
             })
+          if (txError) {
+            // Rollback the balance change since transaction record failed
+            await supabase.rpc('atomic_adjust_drawer_balance' as any, { p_drawer_id: drawer.id, p_change: withdrawFromSource })
+            console.error(`Failed to create transaction for source ${source.id}:`, txError)
+            throw new Error(`فشل في تسجيل المعاملة: ${txError.message}`)
+          }
 
           totalTransferred += withdrawFromSource
           // Track cash vs transfer: main safe (source.id === safe.id) is transfers, drawers are cash
@@ -2293,8 +2308,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         let runningBalance = rpcResult?.[0]?.new_balance ?? roundMoney((drawer.current_balance || 0) - totalAmount)
 
         // Create withdrawal transaction for cash portion (doesn't affect nonDrawerTransferBalance)
+        let cashTxId: string | null = null
         if (cashPortion > 0) {
-          const { error: cashTxError } = await supabase
+          const { data: cashTxData, error: cashTxError } = await supabase
             .from('cash_drawer_transactions')
             .insert({
               drawer_id: drawer.id,
@@ -2308,11 +2324,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               performed_by: user?.name || 'system',
               ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
             })
+            .select('id')
+            .single()
           if (cashTxError) {
             // Rollback balance change
             await supabase.rpc('atomic_adjust_drawer_balance' as any, { p_drawer_id: drawer.id, p_change: totalAmount })
             throw new Error(`فشل في تسجيل المعاملة: ${cashTxError.message}`)
           }
+          cashTxId = cashTxData?.id || null
         }
 
         // Create transfer_out transaction for transfer portion (DOES reduce nonDrawerTransferBalance)
@@ -2332,7 +2351,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               ...(withdrawType === 'transfer' ? { related_record_id: targetSafeId } : {})
             })
           if (transferTxError) {
-            // Rollback balance change
+            // Bug 5 fix - rollback full amount AND delete the cash transaction to ensure all-or-nothing
+            if (cashTxId) {
+              await supabase.from('cash_drawer_transactions').delete().eq('id', cashTxId)
+            }
+            // Rollback the full balance change
             await supabase.rpc('atomic_adjust_drawer_balance' as any, { p_drawer_id: drawer.id, p_change: totalAmount })
             throw new Error(`فشل في تسجيل المعاملة: ${transferTxError.message}`)
           }
@@ -3870,7 +3893,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             <div className="border-t border-gray-600 my-1"></div>
                             {/* التحويلات */}
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
-                              <span className="text-blue-400 text-sm">{formatPrice(nonDrawerTransferBalance)}</span>
+                              <span className="text-blue-400 text-sm">{formatPrice(Math.min(nonDrawerTransferBalance, Math.max(0, safeBalance)))}</span>
                               <div className="flex items-center gap-2">
                                 <span className="text-gray-300 text-sm">التحويلات</span>
                                 <input
@@ -4642,7 +4665,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       <div className="border-t border-gray-600 my-1"></div>
                       {/* التحويلات */}
                       <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
-                        <span className="text-blue-400 text-sm">{formatPrice(nonDrawerTransferBalance, 'system')}</span>
+                        <span className="text-blue-400 text-sm">{formatPrice(Math.min(nonDrawerTransferBalance, Math.max(0, safeBalance)), 'system')}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-gray-300 text-sm">التحويلات</span>
                           <input
@@ -5554,7 +5577,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           الخزنة ({formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance), 'system')})
                         </option>
                         <option value="transfers">
-                          التحويلات ({formatPrice(nonDrawerTransferBalance, 'system')})
+                          التحويلات ({formatPrice(Math.min(nonDrawerTransferBalance, Math.max(0, safeBalance)), 'system')})
                         </option>
                       </select>
                     </div>
