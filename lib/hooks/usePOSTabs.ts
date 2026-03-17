@@ -221,16 +221,23 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
     const title = isDefaultCustomer ? 'نقطة البيع' : (customer?.name || 'فاتورة جديدة');
 
-    // Get customer's default record if set
-    let customerRecord = null;
-    if (customer?.default_record_id) {
-      customerRecord = { id: customer.default_record_id };
-    } else if (inheritedSelections?.record) {
-      customerRecord = inheritedSelections.record;
+    // Resolve record: default to inherited, then override for non-default customers with a linked record
+    let customerRecord = inheritedSelections?.record || null;
+    if (customer?.default_record_id && !isDefaultCustomer) {
+      if (inheritedSelections?.record?.id === customer.default_record_id) {
+        // Same record — keep inherited (has full data including name)
+        customerRecord = inheritedSelections?.record || null;
+      } else {
+        // Different record — use customer's default but include name if available
+        customerRecord = {
+          id: customer.default_record_id,
+          name: customer.default_record_name || null,
+        };
+      }
     }
 
     // If customer overrides record, clear subSafe (drawer belongs to original record)
-    const customerSubSafe = (customer?.default_record_id && customer.default_record_id !== inheritedSelections?.record?.id)
+    const customerSubSafe = (customer?.default_record_id && !isDefaultCustomer && customer.default_record_id !== inheritedSelections?.record?.id)
       ? null
       : (inheritedSelections?.subSafe || null);
 
@@ -267,17 +274,24 @@ export function usePOSTabs(): UsePOSTabsReturn {
   const addTabWithCustomerAndCart = useCallback((customer: any, cartItems: any[], title: string, inheritedSelections?: InheritedSelections, editModeOptions?: EditModeOptions): string => {
     const newTabId = `pos-${Date.now()}`;
     const tabTitle = title || customer?.name || 'فاتورة جديدة';
+    const DEFAULT_CUSTOMER_ID = '00000000-0000-0000-0000-000000000001';
+    const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
 
-    // Get customer's default record if set
-    let customerRecord = null;
-    if (customer?.default_record_id) {
-      customerRecord = { id: customer.default_record_id };
-    } else if (inheritedSelections?.record) {
-      customerRecord = inheritedSelections.record;
+    // Resolve record: default to inherited, then override for non-default customers with a linked record
+    let customerRecord = inheritedSelections?.record || null;
+    if (customer?.default_record_id && !isDefaultCustomer) {
+      if (inheritedSelections?.record?.id === customer.default_record_id) {
+        customerRecord = inheritedSelections?.record || null;
+      } else {
+        customerRecord = {
+          id: customer.default_record_id,
+          name: customer.default_record_name || null,
+        };
+      }
     }
 
     // If customer overrides record, clear subSafe (drawer belongs to original record)
-    const customerSubSafe = (customer?.default_record_id && customer.default_record_id !== inheritedSelections?.record?.id)
+    const customerSubSafe = (customer?.default_record_id && !isDefaultCustomer && customer.default_record_id !== inheritedSelections?.record?.id)
       ? null
       : (inheritedSelections?.subSafe || null);
 
@@ -327,16 +341,21 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
     const tabTitle = isDefaultCustomer ? 'نقطة البيع' : (customer?.name || 'فاتورة جديدة');
 
-    // Get customer's default record if set
-    let customerRecord = null;
-    if (customer?.default_record_id) {
-      customerRecord = { id: customer.default_record_id };
-    } else if (inheritedSelections?.record) {
-      customerRecord = inheritedSelections.record;
+    // Resolve record: default to inherited, then override for non-default customers with a linked record
+    let customerRecord = inheritedSelections?.record || null;
+    if (customer?.default_record_id && !isDefaultCustomer) {
+      if (inheritedSelections?.record?.id === customer.default_record_id) {
+        customerRecord = inheritedSelections?.record || null;
+      } else {
+        customerRecord = {
+          id: customer.default_record_id,
+          name: customer.default_record_name || null,
+        };
+      }
     }
 
     // If customer overrides record, clear subSafe (drawer belongs to original record)
-    const customerSubSafe = (customer?.default_record_id && customer.default_record_id !== inheritedSelections?.record?.id)
+    const customerSubSafe = (customer?.default_record_id && !isDefaultCustomer && customer.default_record_id !== inheritedSelections?.record?.id)
       ? null
       : (inheritedSelections?.subSafe || null);
 

@@ -27,6 +27,7 @@ interface Customer {
   group_id: string | null;
   default_record_id: string | null;
   default_price_type: string | null;
+  default_record?: { id: string; name: string } | null;
 }
 
 interface Supplier {
@@ -60,6 +61,7 @@ export interface SelectedParty {
   balance: number;
   default_record_id?: string | null;
   default_price_type?: string | null;
+  default_record_name?: string | null;
 }
 
 interface PartySelectionModalProps {
@@ -112,7 +114,7 @@ export default function PartySelectionModal({
 
       const { data: customersData, error: customersError } = await supabase
         .from("customers")
-        .select("id, name, phone, city, opening_balance, rank, category, loyalty_points, is_active, group_id, default_record_id, default_price_type")
+        .select("id, name, phone, city, opening_balance, rank, category, loyalty_points, is_active, group_id, default_record_id, default_price_type, default_record:records!default_record_id(id, name)")
         .eq("is_active", true)
         .order("name", { ascending: true });
 
@@ -125,17 +127,22 @@ export default function PartySelectionModal({
       // Fetch customer balances
       const { data: balancesData } = await supabase.rpc('calculate_customer_balances' as any);
 
-      const customersWithBalance = (customersData || []).map((customer) => {
+      const customersWithBalance = (customersData || []).map((customer: any) => {
         const balanceRecord = (balancesData || []).find(
           (b: any) => b.customer_id === customer.id
         );
+        // Supabase !inner join returns object, but foreign key join may return array — normalize
+        const defaultRecord = Array.isArray(customer.default_record)
+          ? customer.default_record[0] || null
+          : customer.default_record || null;
         return {
           ...customer,
           calculated_balance: Number(balanceRecord?.calculated_balance) || 0,
+          default_record: defaultRecord,
         };
       });
 
-      setCustomers(customersWithBalance);
+      setCustomers(customersWithBalance as Customer[]);
 
       // Fetch customer groups
       const { data: groupsData } = await supabase
@@ -241,6 +248,7 @@ export default function PartySelectionModal({
       balance: customer.calculated_balance,
       default_record_id: customer.default_record_id,
       default_price_type: customer.default_price_type,
+      default_record_name: (customer.default_record as any)?.name || null,
     });
     onClose();
   };

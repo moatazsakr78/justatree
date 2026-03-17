@@ -26,6 +26,7 @@ interface Customer {
   group_id: string | null;
   default_record_id: string | null;
   default_price_type: string | null;
+  default_record?: { id: string; name: string } | null;
 }
 
 interface CustomerGroup {
@@ -65,7 +66,7 @@ export default function CustomerSelectionModal({
       // Fetch customers with opening_balance and default settings
       const { data: customersData, error: customersError } = await supabase
         .from("customers")
-        .select("id, name, phone, city, opening_balance, rank, category, loyalty_points, is_active, group_id, default_record_id, default_price_type")
+        .select("id, name, phone, city, opening_balance, rank, category, loyalty_points, is_active, group_id, default_record_id, default_price_type, default_record:records!default_record_id(id, name)")
         .eq("is_active", true)
         .order("name", { ascending: true }) as { data: any[] | null; error: any };
 
@@ -88,17 +89,22 @@ export default function CustomerSelectionModal({
       }
 
       // Merge customers with their calculated balances
-      const customersWithBalance = (customersData || []).map((customer) => {
+      const customersWithBalance = (customersData || []).map((customer: any) => {
         const balanceRecord = (balancesData || []).find(
           (b) => b.customer_id === customer.id
         );
+        // Normalize joined default_record (may be array or object depending on Supabase)
+        const defaultRecord = Array.isArray(customer.default_record)
+          ? customer.default_record[0] || null
+          : customer.default_record || null;
         return {
           ...customer,
           calculated_balance: Number(balanceRecord?.calculated_balance) || 0,
+          default_record: defaultRecord,
         };
       });
 
-      setCustomers(customersWithBalance);
+      setCustomers(customersWithBalance as Customer[]);
 
       // Fetch customer groups with customer counts
       const { data: groupsData, error: groupsError } = await supabase

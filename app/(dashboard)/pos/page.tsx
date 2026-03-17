@@ -391,15 +391,21 @@ function POSPageContent() {
     defaultBranch,   // Default branch for the user
   } = usePersistentSelections(contextBranch?.id);
 
-  // Sync branch from context to global selections when context branch changes
+  // Sync branch from context to selections when context branch changes
   useEffect(() => {
     if (contextBranch) {
-      // Only update if the branch is different to avoid loops
+      // Always sync globalSelections (main tab) with context
       if (!globalSelections.branch || globalSelections.branch.id !== contextBranch.id) {
         setGlobalBranch(contextBranch);
       }
+      // Also sync the active tab's branch if it's not the main tab
+      if (activeTabId !== 'main' && !isLoadingTabs && activePOSTab) {
+        if (!activePOSTab.selections.branch || activePOSTab.selections.branch.id !== contextBranch.id) {
+          updateActiveTabSelections({ branch: contextBranch });
+        }
+      }
     }
-  }, [contextBranch, globalSelections.branch, setGlobalBranch]);
+  }, [contextBranch, globalSelections.branch, setGlobalBranch, activeTabId, isLoadingTabs, activePOSTab, updateActiveTabSelections]);
 
   // Get selections from active tab (tab-specific selections)
   const selections = useMemo(() => {
@@ -1311,7 +1317,12 @@ function POSPageContent() {
     setIsRecordsModalOpen(false);
   };
 
-  const handleCustomerSelect = (customer: any) => {
+  const handleCustomerSelect = (customerRaw: any) => {
+    // Enrich customer with default_record_name from joined data
+    const customer = {
+      ...customerRaw,
+      default_record_name: customerRaw.default_record_name || customerRaw.default_record?.name || null,
+    };
     // Default customer UUID
     const DEFAULT_CUSTOMER_ID = '00000000-0000-0000-0000-000000000001';
     const isDefault = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
@@ -1402,10 +1413,15 @@ function POSPageContent() {
   // Handler for creating a new tab with selected customer (from + button)
   const handleNewTabCustomerSelect = (customer: any) => {
     // Always create a new tab with the selected customer
-    addTabWithCustomer(customer, {
+    // Include default_record_name from the joined record data
+    const customerWithRecordName = {
+      ...customer,
+      default_record_name: customer.default_record?.name || null,
+    };
+    addTabWithCustomer(customerWithRecordName, {
       branch: globalSelections.branch,
-      record: globalSelections.record,
-      subSafe: globalSelections.subSafe,
+      record: selections.record,
+      subSafe: selections.subSafe,
       priceType: selectedPriceType,
     });
     setShowNewTabCustomerModal(false);
@@ -1431,6 +1447,7 @@ function POSPageContent() {
         calculated_balance: party.balance,
         default_record_id: party.default_record_id,
         default_price_type: party.default_price_type,
+        default_record_name: party.default_record_name,
       };
       handleCustomerSelect(customer);
       setSelectedPartyType('customer');
@@ -1462,11 +1479,12 @@ function POSPageContent() {
         calculated_balance: party.balance,
         default_record_id: party.default_record_id,
         default_price_type: party.default_price_type,
+        default_record_name: party.default_record_name,
       };
       addTabWithCustomer(customer, {
         branch: globalSelections.branch,
-        record: globalSelections.record,
-        subSafe: globalSelections.subSafe,
+        record: selections.record,
+        subSafe: selections.subSafe,
         priceType: selectedPriceType,
       });
     } else {
@@ -1480,8 +1498,8 @@ function POSPageContent() {
       // Create tab with default customer but set supplier for sale
       addTabWithCustomer(defaultCustomer, {
         branch: globalSelections.branch,
-        record: globalSelections.record,
-        subSafe: globalSelections.subSafe,
+        record: selections.record,
+        subSafe: selections.subSafe,
         priceType: selectedPriceType,
       });
       // Set the supplier for this new tab
@@ -4807,12 +4825,12 @@ function POSPageContent() {
                 className="w-full px-4 py-2 bg-[#374151] border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && newTabName.trim()) {
-                    // Inherit selections from main tab, but ALWAYS use default customer
+                    // Inherit selections from current tab, but ALWAYS use default customer
                     addTab(newTabName.trim(), {
                       customer: defaultCustomer || globalSelections.customer,
                       branch: globalSelections.branch,
-                      record: globalSelections.record,
-                      subSafe: globalSelections.subSafe,
+                      record: selections.record,
+                      subSafe: selections.subSafe,
                       priceType: selectedPriceType,
                     });
                     setNewTabName("");
@@ -4834,12 +4852,12 @@ function POSPageContent() {
                 <button
                   onClick={() => {
                     if (newTabName.trim()) {
-                      // Inherit selections from main tab, but ALWAYS use default customer
+                      // Inherit selections from current tab, but ALWAYS use default customer
                       addTab(newTabName.trim(), {
                         customer: defaultCustomer || globalSelections.customer,
                         branch: globalSelections.branch,
-                        record: globalSelections.record,
-                        subSafe: globalSelections.subSafe,
+                        record: selections.record,
+                        subSafe: selections.subSafe,
                         priceType: selectedPriceType,
                       });
                       setNewTabName("");
@@ -8121,12 +8139,12 @@ function POSPageContent() {
               className="w-full px-4 py-2 bg-[#374151] border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
               onKeyPress={(e) => {
                 if (e.key === 'Enter' && newTabName.trim()) {
-                  // Inherit selections from main tab, but ALWAYS use default customer
+                  // Inherit selections from current tab, but ALWAYS use default customer
                   addTab(newTabName.trim(), {
                     customer: defaultCustomer || globalSelections.customer,
                     branch: globalSelections.branch,
-                    record: globalSelections.record,
-                    subSafe: globalSelections.subSafe,
+                    record: selections.record,
+                    subSafe: selections.subSafe,
                     priceType: selectedPriceType,
                   });
                   setNewTabName("");
@@ -8148,12 +8166,12 @@ function POSPageContent() {
               <button
                 onClick={() => {
                   if (newTabName.trim()) {
-                    // Inherit selections from main tab, but ALWAYS use default customer
+                    // Inherit selections from current tab, but ALWAYS use default customer
                     addTab(newTabName.trim(), {
                       customer: defaultCustomer || globalSelections.customer,
                       branch: globalSelections.branch,
-                      record: globalSelections.record,
-                      subSafe: globalSelections.subSafe,
+                      record: selections.record,
+                      subSafe: selections.subSafe,
                       priceType: selectedPriceType,
                     });
                     setNewTabName("");
