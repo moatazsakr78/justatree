@@ -2094,6 +2094,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
       if (!result.success) {
         console.error('Error cancelling invoice:', result.message)
+        alert(result.message || 'حدث خطأ أثناء إلغاء الفاتورة')
+        setShowDeleteModal(false)
+        setInvoiceToDelete(null)
         return
       }
 
@@ -2109,8 +2112,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         setSelectedTransaction(Math.max(0, sales.length - 2))
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error cancelling invoice:', error)
+      alert(error?.message || 'حدث خطأ أثناء العملية')
+      setShowDeleteModal(false)
+      setInvoiceToDelete(null)
     } finally {
       setIsDeleting(false)
     }

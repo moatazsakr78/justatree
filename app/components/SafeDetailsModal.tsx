@@ -1902,6 +1902,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
         if (!result.success) {
           console.error('Error cancelling sale:', result.message)
+          alert(result.message || 'حدث خطأ أثناء إلغاء الفاتورة')
+          setShowDeleteModal(false)
+          setTransactionToDelete(null)
           return
         }
       } else if (transactionToDelete.transactionType === 'purchase') {
@@ -1941,8 +1944,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         setSelectedTransaction(Math.max(0, allTransactions.length - 2))
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting/cancelling transaction:', error)
+      alert(error?.message || 'حدث خطأ أثناء العملية')
+      setShowDeleteModal(false)
+      setTransactionToDelete(null)
     } finally {
       setIsDeleting(false)
     }
