@@ -448,7 +448,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         .select('amount, transaction_type')
         .eq('record_id', safe.id)
         .in('transaction_type', ['transfer_in', 'transfer_out'])
-        .not('sale_id', 'is', null)
+        .or('sale_id.not.is.null,transaction_type.eq.transfer_out')
 
       if (error) {
         console.error('Error fetching non-drawer transfer balance:', error)
@@ -2546,7 +2546,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
 
     // Check if withdrawal would dip below reserved amount
-    if (withdrawType === 'withdraw' || withdrawType === 'transfer') {
+    // Skip for transfer-source withdrawals on non-drawer safes (reserves only protect cash, not transfers)
+    const isTransferSource = isNonDrawerWithTransfers && withdrawSourceId === 'transfers'
+    if ((withdrawType === 'withdraw' || withdrawType === 'transfer') && !isTransferSource) {
       const sourceReserves = roundMoney(reserves
         .filter(r => r.record_id === sourceRecordId)
         .reduce((sum, r) => sum + r.amount, 0))
