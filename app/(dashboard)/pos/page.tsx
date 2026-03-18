@@ -2636,6 +2636,24 @@ function POSPageContent() {
 
   // Handle invoice creation
   const handleCreateInvoice = async () => {
+    // Freeze selections to prevent mid-execution state changes (race condition protection)
+    const frozenSelections = {
+      record: selections.record,
+      subSafe: selections.subSafe,
+      customer: selections.customer,
+      branch: selections.branch,
+    };
+
+    console.log('🔵 handleCreateInvoice - Selections Snapshot:', {
+      activeTabId,
+      recordId: frozenSelections.record?.id,
+      recordName: frozenSelections.record?.name,
+      subSafeId: frozenSelections.subSafe?.id,
+      isMainTab: activeTabId === 'main',
+      globalRecordId: globalSelections?.record?.id,
+      globalRecordName: globalSelections?.record?.name,
+    });
+
     // Validate based on current mode
     if (isTransferMode) {
       if (!transferFromLocation || !transferToLocation) {
@@ -3026,10 +3044,10 @@ function POSPageContent() {
         const result = await createSalesInvoice({
           cartItems: salesCartItems,
           selections: {
-            customer: selections.customer,
-            branch: selections.branch,
-            record: selections.record,
-            subSafe: selections.subSafe,
+            customer: frozenSelections.customer,
+            branch: frozenSelections.branch,
+            record: frozenSelections.record,
+            subSafe: frozenSelections.subSafe,
           },
           notes: isReturnMode
             ? `مرتجع بيع - ${cartItems.length} منتج`

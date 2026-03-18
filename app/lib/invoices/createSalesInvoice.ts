@@ -145,6 +145,16 @@ export async function createSalesInvoice({
     }
   }
 
+  console.log('🔵 createSalesInvoice - Record Debug:', {
+    recordId: selections.record?.id,
+    recordName: selections.record?.name,
+    subSafeId: selections.subSafe?.id,
+    subSafeName: selections.subSafe?.name,
+    customerId: selections.customer?.id,
+    customerName: selections.customer?.name,
+    timestamp: new Date().toISOString()
+  })
+
   // "No safe" record ID - a special record for transactions without a specific safe
   const NO_SAFE_RECORD_ID = '00000000-0000-0000-0000-000000000000'
 

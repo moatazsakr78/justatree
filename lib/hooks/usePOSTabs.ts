@@ -221,25 +221,10 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
     const title = isDefaultCustomer ? 'نقطة البيع' : (customer?.name || 'فاتورة جديدة');
 
-    // Resolve record: default to inherited, then override for non-default customers with a linked record
+    // Always keep the user's explicitly selected record (safe)
+    // Customer's default_record_id should NOT override the user's selection
     let customerRecord = inheritedSelections?.record || null;
-    if (customer?.default_record_id && !isDefaultCustomer) {
-      if (inheritedSelections?.record?.id === customer.default_record_id) {
-        // Same record — keep inherited (has full data including name)
-        customerRecord = inheritedSelections?.record || null;
-      } else {
-        // Different record — use customer's default but include name if available
-        customerRecord = {
-          id: customer.default_record_id,
-          name: customer.default_record_name || null,
-        };
-      }
-    }
-
-    // If customer overrides record, clear subSafe (drawer belongs to original record)
-    const customerSubSafe = (customer?.default_record_id && !isDefaultCustomer && customer.default_record_id !== inheritedSelections?.record?.id)
-      ? null
-      : (inheritedSelections?.subSafe || null);
+    const customerSubSafe = inheritedSelections?.subSafe || null;
 
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
@@ -277,23 +262,10 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const DEFAULT_CUSTOMER_ID = '00000000-0000-0000-0000-000000000001';
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
 
-    // Resolve record: default to inherited, then override for non-default customers with a linked record
+    // Always keep the user's explicitly selected record (safe)
+    // Customer's default_record_id should NOT override the user's selection
     let customerRecord = inheritedSelections?.record || null;
-    if (customer?.default_record_id && !isDefaultCustomer) {
-      if (inheritedSelections?.record?.id === customer.default_record_id) {
-        customerRecord = inheritedSelections?.record || null;
-      } else {
-        customerRecord = {
-          id: customer.default_record_id,
-          name: customer.default_record_name || null,
-        };
-      }
-    }
-
-    // If customer overrides record, clear subSafe (drawer belongs to original record)
-    const customerSubSafe = (customer?.default_record_id && !isDefaultCustomer && customer.default_record_id !== inheritedSelections?.record?.id)
-      ? null
-      : (inheritedSelections?.subSafe || null);
+    const customerSubSafe = inheritedSelections?.subSafe || null;
 
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
@@ -341,23 +313,10 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
     const tabTitle = isDefaultCustomer ? 'نقطة البيع' : (customer?.name || 'فاتورة جديدة');
 
-    // Resolve record: default to inherited, then override for non-default customers with a linked record
+    // Always keep the user's explicitly selected record (safe)
+    // Customer's default_record_id should NOT override the user's selection
     let customerRecord = inheritedSelections?.record || null;
-    if (customer?.default_record_id && !isDefaultCustomer) {
-      if (inheritedSelections?.record?.id === customer.default_record_id) {
-        customerRecord = inheritedSelections?.record || null;
-      } else {
-        customerRecord = {
-          id: customer.default_record_id,
-          name: customer.default_record_name || null,
-        };
-      }
-    }
-
-    // If customer overrides record, clear subSafe (drawer belongs to original record)
-    const customerSubSafe = (customer?.default_record_id && !isDefaultCustomer && customer.default_record_id !== inheritedSelections?.record?.id)
-      ? null
-      : (inheritedSelections?.subSafe || null);
+    const customerSubSafe = inheritedSelections?.subSafe || null;
 
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
