@@ -26,6 +26,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
   const [safeName, setSafeName] = useState('')
   const [initialBalance, setInitialBalance] = useState<string>('0')
   const [supportsDrawers, setSupportsDrawers] = useState(false)
+  const [showTransfers, setShowTransfers] = useState(true)
   const [balanceDestination, setBalanceDestination] = useState<'safe' | 'transfers'>('safe')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -55,6 +56,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
           parent_id: parentSafe?.id || null,
           safe_type: isSubSafe ? 'sub' : 'main',
           supports_drawers: isSubSafe ? false : supportsDrawers,
+          show_transfers: isSubSafe ? true : (supportsDrawers ? true : showTransfers),
           ...(isTest ? { is_test: true } : {})
         } as any)
         .select('id')
@@ -172,6 +174,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
     setSafeName('')
     setInitialBalance('0')
     setSupportsDrawers(false)
+    setShowTransfers(true)
     setBalanceDestination('safe')
     onClose()
   }
@@ -228,6 +231,23 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
             </div>
           )}
 
+          {/* Show Transfers Toggle - only for non-drawer main safes */}
+          {!isSubSafe && !supportsDrawers && (
+            <div>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showTransfers}
+                  onChange={(e) => setShowTransfers(e.target.checked)}
+                  className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                  disabled={isLoading}
+                />
+                <span className="text-sm font-medium text-gray-300">فصل التحويلات</span>
+              </label>
+              <p className="text-xs text-gray-500 mt-1 mr-8">فصل رصيد التحويلات عن رصيد الخزنة</p>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               الرصيد الافتتاحي
@@ -246,8 +266,8 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe,
             <p className="text-xs text-gray-500 mt-1">يمكنك تركه صفر إذا كانت الخزنة فارغة</p>
           </div>
 
-          {/* Balance Destination - only when balance > 0 */}
-          {(parseFloat(initialBalance) || 0) > 0 && (
+          {/* Balance Destination - only when balance > 0 and transfers are enabled */}
+          {(parseFloat(initialBalance) || 0) > 0 && (supportsDrawers || showTransfers) && (
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 وجهة الرصيد الافتتاحي

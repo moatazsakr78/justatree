@@ -50,6 +50,7 @@ interface Safe {
   parent_id: string | null
   safe_type: string | null
   supports_drawers: boolean | null
+  show_transfers?: boolean | null
   is_test: boolean | null
 }
 
@@ -90,6 +91,7 @@ export default function SafesPage() {
   const [safeToEdit, setSafeToEdit] = useState<Safe | null>(null)
   const [safes, setSafes] = useState<Safe[]>([])
   const [safeBalances, setSafeBalances] = useState<Record<string, number>>({})
+  const [transferBalances, setTransferBalances] = useState<Record<string, number>>({})
   const [activeSafesCount, setActiveSafesCount] = useState(0)
   const [totalBalance, setTotalBalance] = useState(0)
   const [safesSearchTerm, setSafesSearchTerm] = useState('')
@@ -304,6 +306,35 @@ export default function SafesPage() {
         })
         setSafeBalances(balanceMap)
         setTotalBalance(total)
+      }
+
+      // Fetch transfer balances for main safes (to show transfers row on cards)
+      if (data) {
+        const mainSafeIds = data.filter((s: any) => s.safe_type !== 'sub' && s.show_transfers !== false).map((s: any) => s.id)
+        if (mainSafeIds.length > 0) {
+          const { data: txs } = await supabase
+            .from('cash_drawer_transactions')
+            .select('record_id, transaction_type, amount')
+            .in('record_id', mainSafeIds)
+            .in('transaction_type', ['transfer_in', 'transfer_out'])
+            .order('created_at', { ascending: true })
+
+          if (txs) {
+            const tBal: Record<string, number> = {}
+            txs.forEach((t: any) => {
+              const amt = parseFloat(String(t.amount)) || 0
+              if (!tBal[t.record_id]) tBal[t.record_id] = 0
+              if (t.transaction_type === 'transfer_in') {
+                tBal[t.record_id] += amt
+              } else {
+                tBal[t.record_id] = Math.max(0, tBal[t.record_id] - amt)
+              }
+            })
+            // Round values
+            Object.keys(tBal).forEach(k => { tBal[k] = Math.round(tBal[k] * 100) / 100 })
+            setTransferBalances(tBal)
+          }
+        }
       }
 
       // Fetch payment method breakdown from today's transactions
@@ -612,7 +643,8 @@ export default function SafesPage() {
           updated_at: null,
           parent_id: (r as any).parent_id || null,
           safe_type: (r as any).safe_type || 'main',
-          supports_drawers: (r as any).supports_drawers || false
+          supports_drawers: (r as any).supports_drawers || false,
+          show_transfers: (r as any).show_transfers !== false
         }))
         setSafes(offlineSafes)
         setActiveSafesCount(offlineSafes.length)
@@ -1202,10 +1234,33 @@ export default function SafesPage() {
                                       </div>
                                     </div>
                                   ))}
+                                  {/* Transfers row */}
+                                  {ownBalance !== 0 && (
+                                    <div className="bg-blue-600/10 border border-blue-600/30 rounded-lg px-4 py-3 flex items-center justify-between">
+                                      <div>
+                                        <p className="text-blue-300 text-sm font-bold">التحويلات</p>
+                                        <p className="text-white text-base font-bold mt-0.5">{formatPrice(ownBalance)}</p>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               ) : (
                                 <p className="text-xs text-gray-600 italic">بدون أدراج</p>
                               )}
+                            </div>
+                          )}
+
+                          {/* Cash/Transfers breakdown for non-drawer safes */}
+                          {!mainSafe.supports_drawers && mainSafe.show_transfers !== false && (transferBalances[mainSafe.id] || 0) > 0 && (
+                            <div className="px-4 pb-3 space-y-2">
+                              <div className="bg-green-600/10 border border-green-600/30 rounded-lg px-4 py-2">
+                                <p className="text-green-300 text-xs font-bold">في الخزنة</p>
+                                <p className="text-white text-sm font-bold">{formatPrice(ownBalance - (transferBalances[mainSafe.id] || 0))}</p>
+                              </div>
+                              <div className="bg-blue-600/10 border border-blue-600/30 rounded-lg px-4 py-2">
+                                <p className="text-blue-300 text-xs font-bold">التحويلات</p>
+                                <p className="text-white text-sm font-bold">{formatPrice(transferBalances[mainSafe.id] || 0)}</p>
+                              </div>
                             </div>
                           )}
 

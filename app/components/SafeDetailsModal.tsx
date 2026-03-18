@@ -97,16 +97,19 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     return Array.from(new Set(ids))
   }, [selectedDrawerFilters, allRecordIds, safe?.id])
 
+  // Helper: non-drawer safe with transfer separation enabled
+  const isNonDrawerWithTransfers = !safe?.supports_drawers && safe?.show_transfers !== false && safe?.safe_type !== 'sub'
+
   // Non-drawer safe filter flags (filter by transaction_type instead of record_id)
   const nonDrawerExcludeTransfers = useMemo(() => {
-    if (safe?.supports_drawers || !selectedDrawerFilters) return false
+    if (!isNonDrawerWithTransfers || !selectedDrawerFilters) return false
     return selectedDrawerFilters.has('safe') && !selectedDrawerFilters.has('transfers')
-  }, [safe?.supports_drawers, selectedDrawerFilters])
+  }, [isNonDrawerWithTransfers, selectedDrawerFilters])
 
   const nonDrawerTransfersOnly = useMemo(() => {
-    if (safe?.supports_drawers || !selectedDrawerFilters) return false
+    if (!isNonDrawerWithTransfers || !selectedDrawerFilters) return false
     return selectedDrawerFilters.has('transfers') && !selectedDrawerFilters.has('safe')
-  }, [safe?.supports_drawers, selectedDrawerFilters])
+  }, [isNonDrawerWithTransfers, selectedDrawerFilters])
 
   // Display name for combined view
   const displayName = additionalSafeIds.length > 0
@@ -150,7 +153,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [operationsTypeFilter, setOperationsTypeFilter] = useState<string>('all')
 
   // Reserve (تجنيب) state
-  const [reserves, setReserves] = useState<{id: string; record_id: string; amount: number; notes: string; created_at: string}[]>([])
+  const [reserves, setReserves] = useState<{id: string; record_id: string; amount: number; notes: string; created_at: string; source_type?: string}[]>([])
   const [isLoadingReserves, setIsLoadingReserves] = useState(false)
   const [showReserveModal, setShowReserveModal] = useState(false)
   const [reserveModalMode, setReserveModalMode] = useState<'add' | 'edit'>('add')
@@ -158,6 +161,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [reserveAmount, setReserveAmount] = useState<string>('')
   const [reserveNotes, setReserveNotes] = useState<string>('')
   const [reserveSourceId, setReserveSourceId] = useState<string>('')
+  const [reserveSourceType, setReserveSourceType] = useState<'cash' | 'transfers'>('cash')
   const [isSavingReserve, setIsSavingReserve] = useState(false)
   const [showDeleteReserveModal, setShowDeleteReserveModal] = useState(false)
   const [reserveToDelete, setReserveToDelete] = useState<any>(null)
@@ -288,26 +292,51 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // Reserves filtered by current drawer selection
   const filteredReserves = useMemo(() => {
-    if (!safe?.id) return reserves
-    if (!reserves.length) return []
+    if (!safe?.id || !reserves.length) return []
     if (!selectedDrawerFilters) return reserves
-    const selectedIds = new Set<string>()
-    selectedDrawerFilters.forEach(f => selectedIds.add(f === 'transfers' ? safe.id : f))
-    return reserves.filter(r => selectedIds.has(r.record_id))
-  }, [reserves, selectedDrawerFilters, safe?.id])
+
+    if (safe.supports_drawers) {
+      // Drawer safe: filter by record_id (existing working logic)
+      const selectedIds = new Set<string>()
+      selectedDrawerFilters.forEach(f => selectedIds.add(f === 'transfers' ? safe.id : f))
+      return reserves.filter(r => selectedIds.has(r.record_id))
+    } else {
+      if (safe?.show_transfers !== false) {
+        // Non-drawer with transfers: filter by source_type
+        const types = new Set<string>()
+        if (selectedDrawerFilters.has('safe')) types.add('cash')
+        if (selectedDrawerFilters.has('transfers')) types.add('transfers')
+        return reserves.filter(r => types.has(r.source_type || 'cash'))
+      }
+      return reserves // Plain safe: no source_type filtering
+    }
+  }, [reserves, selectedDrawerFilters, safe?.id, safe?.supports_drawers])
 
   const totalReserved = useMemo(() =>
     roundMoney(filteredReserves.reduce((sum, r) => sum + r.amount, 0))
   , [filteredReserves])
 
+  // Sum of ALL reserves (unfiltered) - used for auto-cleanup comparison
+  const totalReservedAll = useMemo(() =>
+    roundMoney(reserves.reduce((sum, r) => sum + r.amount, 0))
+  , [reserves])
+
   // Displayed balance: filter for non-drawer safes based on active filter
   const displayedBalance = useMemo(() => {
-    if (!safe?.supports_drawers && safe?.safe_type !== 'sub') {
+    if (isNonDrawerWithTransfers) {
       if (nonDrawerExcludeTransfers) return Math.max(0, safeBalance - nonDrawerTransferBalance)
       if (nonDrawerTransfersOnly) return nonDrawerTransferBalance
     }
     return safeBalance
-  }, [safeBalance, nonDrawerTransferBalance, nonDrawerExcludeTransfers, nonDrawerTransfersOnly, safe?.supports_drawers, safe?.safe_type])
+  }, [safeBalance, nonDrawerTransferBalance, nonDrawerExcludeTransfers, nonDrawerTransfersOnly, isNonDrawerWithTransfers])
+
+  // Stable total balance (not affected by drawer/transfer filters) - used for auto-cleanup
+  const unfilteredSafeBalance = useMemo(() => {
+    if (safe?.supports_drawers) {
+      return roundMoney(mainSafeOwnBalance + childSafes.reduce((sum, d) => sum + d.balance, 0))
+    }
+    return safeBalance // already unfiltered for non-drawer safes
+  }, [safe?.supports_drawers, mainSafeOwnBalance, childSafes, safeBalance])
 
   // Recalculate statement balances client-side for coherent running total
   const recalculatedStatements = useMemo(() => {
@@ -324,8 +353,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   }, [accountStatementData, displayedBalance])
 
   const availableBalance = useMemo(() =>
-    Math.max(0, safeBalance - totalReserved)
-  , [safeBalance, totalReserved])
+    Math.max(0, displayedBalance - totalReserved)
+  , [displayedBalance, totalReserved])
 
   // Context Menu State for editing invoices
   const [contextMenu, setContextMenu] = useState<{
@@ -438,7 +467,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // Fetch non-drawer transfer balance (extracted from fetchChildSafes for proper error handling)
   const fetchNonDrawerTransferBalance = async () => {
-    if (!safe?.id || safe.supports_drawers || safe.safe_type === 'sub') {
+    if (!safe?.id || safe.supports_drawers || safe.safe_type === 'sub' || safe.show_transfers === false) {
       setNonDrawerTransferBalance(0)
       return
     }
@@ -481,7 +510,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       const ids = allRecordIds.length > 0 ? allRecordIds : [safe.id]
       const { data, error } = await (supabase as any)
         .from('cash_drawer_reserves')
-        .select('id, record_id, amount, notes, created_at')
+        .select('id, record_id, amount, notes, created_at, source_type')
         .in('record_id', ids)
         .order('created_at', { ascending: false })
       if (!error) setReserves(data || [])
@@ -520,17 +549,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }, [isOpen, allRecordIds.join(',')])
 
-  // Auto-cleanup reserves when balance drops below reserved amount
+  // Auto-cleanup reserves when TOTAL balance drops below TOTAL reserved amount
+  // CRITICAL: Uses unfilteredSafeBalance and totalReservedAll to avoid wiping reserves when filter changes
   const isCleaningReserves = useRef(false)
   useEffect(() => {
     const cleanup = async () => {
       if (!safe?.id || isLoadingReserves || cashDrawerBalance === null) return
-      if (reserves.length === 0 || totalReserved <= displayedBalance) return
+      if (reserves.length === 0 || totalReservedAll <= unfilteredSafeBalance) return
       if (isCleaningReserves.current) return
       isCleaningReserves.current = true
 
       try {
-        if (displayedBalance <= 0) {
+        if (unfilteredSafeBalance <= 0) {
           // Delete all reserves
           await (supabase as any).from('cash_drawer_reserves')
             .delete().in('id', reserves.map(r => r.id))
@@ -539,7 +569,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           const sorted = [...reserves].sort((a, b) =>
             new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
           )
-          let excess = totalReserved - displayedBalance
+          let excess = totalReservedAll - unfilteredSafeBalance
           for (const reserve of sorted) {
             if (excess <= 0) break
             if (reserve.amount <= excess) {
@@ -561,7 +591,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       }
     }
     cleanup()
-  }, [cashDrawerBalance, displayedBalance, totalReserved, reserves.length])
+  }, [cashDrawerBalance, unfilteredSafeBalance, totalReservedAll, reserves.length])
 
   // Device detection for mobile layout
   useEffect(() => {
@@ -2789,8 +2819,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     setEditingReserve(null)
     setReserveAmount('')
     setReserveNotes('')
-    // Default to first drawer if safe has drawers, otherwise safe itself
-    setReserveSourceId(childSafes.length > 0 ? childSafes[0].id : safe?.id || '')
+    setReserveSourceType('cash')
+    if (safe?.supports_drawers && childSafes.length > 0) {
+      setReserveSourceId(childSafes[0].id)
+    } else {
+      setReserveSourceId(safe?.id || '')
+    }
     setShowReserveModal(true)
   }
 
@@ -2800,25 +2834,55 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     setReserveAmount(String(reserve.amount))
     setReserveNotes(reserve.notes || '')
     setReserveSourceId(reserve.record_id)
+    setReserveSourceType(reserve.source_type || 'cash')
     setShowReserveModal(true)
   }
 
   const getDrawerAvailableBalance = (recordId: string) => {
-    // Get drawer balance
+    if (recordId === safe?.id && safe?.supports_drawers) {
+      // Transfers bucket for drawer safe
+      const balance = mainSafeOwnBalance
+      const existingReserves = reserves
+        .filter(r => r.record_id === safe.id && r.id !== editingReserve?.id)
+        .reduce((sum, r) => sum + r.amount, 0)
+      return Math.max(0, balance - existingReserves)
+    }
     const drawer = childSafes.find(d => d.id === recordId)
     const balance = drawer ? drawer.balance : (recordId === safe?.id ? (cashDrawerBalance ?? 0) : 0)
-    // Subtract existing reserves for this drawer
     const existingReserves = reserves
       .filter(r => r.record_id === recordId && r.id !== editingReserve?.id)
       .reduce((sum, r) => sum + r.amount, 0)
     return Math.max(0, balance - existingReserves)
   }
 
+  const getNonDrawerAvailableBalance = (sourceType: 'cash' | 'transfers') => {
+    if (sourceType === 'transfers') {
+      const balance = nonDrawerTransferBalance
+      const existingReserves = reserves
+        .filter(r => (r.source_type || 'cash') === 'transfers' && r.id !== editingReserve?.id)
+        .reduce((sum, r) => sum + r.amount, 0)
+      return Math.max(0, balance - existingReserves)
+    } else {
+      const balance = Math.max(0, safeBalance - nonDrawerTransferBalance)
+      const existingReserves = reserves
+        .filter(r => (r.source_type || 'cash') === 'cash' && r.id !== editingReserve?.id)
+        .reduce((sum, r) => sum + r.amount, 0)
+      return Math.max(0, balance - existingReserves)
+    }
+  }
+
   const handleSaveReserve = async () => {
     const amount = parseFloat(reserveAmount)
     if (!amount || amount <= 0) return
 
-    const maxAvailable = getDrawerAvailableBalance(reserveSourceId)
+    const sourceType = safe.supports_drawers
+      ? (reserveSourceId === safe.id ? 'transfers' : 'cash')
+      : (safe.show_transfers !== false ? reserveSourceType : 'cash')
+
+    const maxAvailable = safe.supports_drawers
+      ? getDrawerAvailableBalance(reserveSourceId)
+      : (safe.show_transfers !== false ? getNonDrawerAvailableBalance(reserveSourceType) : getDrawerAvailableBalance(safe.id))
+
     if (amount > maxAvailable) {
       alert(`المبلغ أكبر من المتاح (${formatPrice(maxAvailable, 'system')})`)
       return
@@ -2833,6 +2897,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             record_id: reserveSourceId,
             amount,
             notes: reserveNotes.trim(),
+            source_type: sourceType,
             created_by: user?.name || 'system'
           })
         if (error) throw error
@@ -2842,6 +2907,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           .update({
             amount,
             notes: reserveNotes.trim(),
+            source_type: sourceType,
             updated_at: new Date().toISOString()
           })
           .eq('id', editingReserve.id)
@@ -2878,9 +2944,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }
 
-  const getDrawerNameForReserve = (recordId: string) => {
-    const drawer = childSafes.find(d => d.id === recordId)
-    return drawer?.name || (recordId === safe?.id ? 'التحويلات' : '')
+  const getDrawerNameForReserve = (reserve: any) => {
+    const drawer = childSafes.find(d => d.id === reserve.record_id)
+    if (drawer) return drawer.name
+    if (safe?.supports_drawers && reserve.record_id === safe?.id) return 'التحويلات'
+    if (!safe?.supports_drawers && safe?.show_transfers !== false) return (reserve.source_type || 'cash') === 'transfers' ? 'التحويلات' : 'الخزنة'
+    return ''
   }
 
   if (!safe) return null
@@ -3866,7 +3935,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       )}
 
                       {/* Transaction Filter - For non-drawer safes (Mobile) */}
-                      {!safe.supports_drawers && (
+                      {!safe.supports_drawers && safe.show_transfers !== false && (
                         <div className="bg-[#2B3544] rounded-lg p-3">
                           <h4 className="text-white font-medium mb-2 text-sm text-right">تصفية المعاملات</h4>
                           <div className="space-y-1.5">
@@ -3964,8 +4033,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                   {reserve.notes && (
                                     <p className="text-gray-400 text-xs mt-0.5">{reserve.notes}</p>
                                   )}
-                                  {childSafes.length > 0 && (
-                                    <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve.record_id)}</p>
+                                  {(childSafes.length > 0 || !safe.supports_drawers) && (
+                                    <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve)}</p>
                                   )}
                                 </div>
                               </div>
@@ -4638,7 +4707,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 )}
 
                 {/* Transaction Filter - For non-drawer safes (Desktop) */}
-                {!safe.supports_drawers && (
+                {!safe.supports_drawers && safe.show_transfers !== false && (
                   <div className="p-4 border-b border-gray-600">
                     <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية المعاملات</h4>
                     <div className="space-y-1.5">
@@ -4771,8 +4840,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             {reserve.notes && (
                               <p className="text-gray-400 text-xs mt-0.5">{reserve.notes}</p>
                             )}
-                            {childSafes.length > 0 && (
-                              <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve.record_id)}</p>
+                            {(childSafes.length > 0 || !safe.supports_drawers) && (
+                              <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve)}</p>
                             )}
                           </div>
                         </div>
@@ -5781,10 +5850,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
             {/* Body */}
             <div className="p-4 space-y-4">
-              {/* Drawer selector - only for safes with drawers and in add mode */}
-              {reserveModalMode === 'add' && safe.supports_drawers && childSafes.length > 0 && (
+              {/* Drawer/source selector - for safes with drawers */}
+              {safe.supports_drawers && childSafes.length > 0 && (
                 <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">الدرج</label>
+                  <label className="block text-gray-300 text-sm mb-2 text-right">المصدر</label>
                   <select
                     value={reserveSourceId}
                     onChange={(e) => setReserveSourceId(e.target.value)}
@@ -5795,9 +5864,34 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         {drawer.name} ({formatPrice(drawer.balance, 'system')})
                       </option>
                     ))}
+                    <option value={safe.id}>
+                      التحويلات ({formatPrice(mainSafeOwnBalance, 'system')})
+                    </option>
                   </select>
                   <p className="text-gray-500 text-xs mt-1 text-right">
                     المتاح للتجنيب: {formatPrice(getDrawerAvailableBalance(reserveSourceId), 'system')}
+                  </p>
+                </div>
+              )}
+
+              {/* Source type selector - for non-drawer safes */}
+              {!safe.supports_drawers && safe.show_transfers !== false && (
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2 text-right">المصدر</label>
+                  <select
+                    value={reserveSourceType}
+                    onChange={(e) => setReserveSourceType(e.target.value as 'cash' | 'transfers')}
+                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                  >
+                    <option value="cash">
+                      الخزنة ({formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance), 'system')})
+                    </option>
+                    <option value="transfers">
+                      التحويلات ({formatPrice(nonDrawerTransferBalance, 'system')})
+                    </option>
+                  </select>
+                  <p className="text-gray-500 text-xs mt-1 text-right">
+                    المتاح للتجنيب: {formatPrice(getNonDrawerAvailableBalance(reserveSourceType), 'system')}
                   </p>
                 </div>
               )}

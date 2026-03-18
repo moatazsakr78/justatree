@@ -8,6 +8,8 @@ const MobileProductDetailsModal = dynamic(
   () => import("@/app/components/pos/MobileProductDetailsModal"),
   { ssr: false }
 )
+import POSSearchInput from './pos/POSSearchInput'
+import type { SearchMode } from './pos/POSSearchInput'
 import ResizableTable from './tables/ResizableTable'
 import Sidebar from './layout/Sidebar'
 import TopHeader from './layout/TopHeader'
@@ -32,7 +34,6 @@ import {
   ClipboardDocumentListIcon,
   ChartBarIcon,
   TableCellsIcon,
-  MagnifyingGlassIcon,
   ChevronDownIcon,
   Squares2X2Icon,
   ListBulletIcon,
@@ -121,6 +122,14 @@ export default function InventoryTabletView({
   // Performance: Limit visible products
   const VISIBLE_PRODUCTS_LIMIT = 50
   const [showAllProducts, setShowAllProducts] = useState(false)
+
+  // Search mode state
+  const [searchMode, setSearchMode] = useState<SearchMode>('all')
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
+  const handleSearchChange = useCallback((query: string) => {
+    setDebouncedSearchQuery(query)
+    setSearchQuery(query)
+  }, [setSearchQuery])
 
   // Audit status filters
   const [auditStatusFilters, setAuditStatusFilters] = useState({
@@ -677,22 +686,98 @@ export default function InventoryTabletView({
     return allColumns.filter(col => visibleColumns[col.id] !== false)
   }, [branches, visibleColumns, selectedBranches, calculateTotalQuantity, getStockStatus, handleAuditStatusRightClick])
 
-  // OPTIMIZED: Memoized product filtering
+  // Search index for fast prefix matching
+  const searchIndex = useMemo(() => {
+    const nameIndex = new Map<string, Set<string>>()
+    const codeIndex = new Map<string, Set<string>>()
+    const barcodeIndex = new Map<string, Set<string>>()
+
+    const addToIndex = (index: Map<string, Set<string>>, term: string, productId: string) => {
+      if (!term) return
+      const normalized = term.toLowerCase()
+      for (let i = 1; i <= normalized.length; i++) {
+        const prefix = normalized.slice(0, i)
+        if (!index.has(prefix)) index.set(prefix, new Set())
+        index.get(prefix)!.add(productId)
+      }
+    }
+
+    products.forEach((product) => {
+      const nameWords = product.name.toLowerCase().split(/\s+/)
+      nameWords.forEach(word => addToIndex(nameIndex, word, product.id))
+      addToIndex(nameIndex, product.name, product.id)
+
+      // Include category name in name index for backwards compat
+      if (product.category?.name) {
+        const catWords = product.category.name.toLowerCase().split(/\s+/)
+        catWords.forEach(word => addToIndex(nameIndex, word, product.id))
+      }
+
+      if (product.product_code) addToIndex(codeIndex, product.product_code, product.id)
+      if (product.barcode) addToIndex(barcodeIndex, product.barcode, product.id)
+      if (product.barcodes && Array.isArray(product.barcodes)) {
+        product.barcodes.forEach((bc: string) => { if (bc) addToIndex(barcodeIndex, bc, product.id) })
+      }
+    })
+
+    return { nameIndex, codeIndex, barcodeIndex }
+  }, [products])
+
+  // OPTIMIZED: Memoized product filtering using search index
   const filteredProducts = useMemo(() => {
     if (!products.length) return []
 
-    return products.filter(item => {
-      const matchesSearch = !searchQuery ||
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.barcode?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.category?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    let filtered = products
 
-      if (!matchesSearch) return false
+    if (debouncedSearchQuery) {
+      const query = debouncedSearchQuery.toLowerCase()
 
+      const getMatchesFromIndex = (index: Map<string, Set<string>>) => {
+        const words = query.split(/\s+/).filter(w => w.length > 0)
+        if (words.length === 0) return new Set<string>()
+        if (words.length === 1) return index.get(words[0]) || new Set<string>()
+
+        let result: Set<string> | null = null
+        for (const word of words) {
+          const matches = index.get(word)
+          if (!matches || matches.size === 0) return new Set<string>()
+          if (result === null) {
+            result = new Set(matches)
+          } else {
+            const newResult = new Set<string>()
+            result.forEach(id => { if (matches.has(id)) newResult.add(id) })
+            result = newResult
+          }
+        }
+        return result || new Set<string>()
+      }
+
+      let matchingIds = new Set<string>()
+      switch (searchMode) {
+        case 'all':
+          getMatchesFromIndex(searchIndex.nameIndex).forEach(id => matchingIds.add(id))
+          getMatchesFromIndex(searchIndex.codeIndex).forEach(id => matchingIds.add(id))
+          getMatchesFromIndex(searchIndex.barcodeIndex).forEach(id => matchingIds.add(id))
+          break
+        case 'name':
+          matchingIds = getMatchesFromIndex(searchIndex.nameIndex)
+          break
+        case 'code':
+          matchingIds = getMatchesFromIndex(searchIndex.codeIndex)
+          break
+        case 'barcode':
+          matchingIds = getMatchesFromIndex(searchIndex.barcodeIndex)
+          break
+      }
+
+      filtered = filtered.filter(p => matchingIds.has(p.id))
+    }
+
+    return filtered.filter(item => {
       const stockStatus = getStockStatus(item)
       return stockStatusFilters[stockStatus as keyof typeof stockStatusFilters]
     })
-  }, [products, searchQuery, stockStatusFilters, getStockStatus])
+  }, [products, debouncedSearchQuery, searchMode, searchIndex, stockStatusFilters, getStockStatus])
 
   // PERFORMANCE: Limit visible products to reduce DOM nodes
   const visibleProducts = useMemo(() => {
@@ -1057,23 +1142,13 @@ export default function InventoryTabletView({
           <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide" style={{scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch'}}>
 
             {/* 1. Search Bar */}
-            <div className="relative flex-shrink-0 w-64">
-              <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="اسم المنتج..."
-                className="w-full pl-4 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5DADE2] focus:border-transparent"
-                style={{ fontSize: '16px' }}
-                onFocus={(e) => {
-                  // Prevent zoom on iOS Safari
-                  e.target.style.fontSize = '16px';
-                  e.target.style.transformOrigin = 'left top';
-                  e.target.style.zoom = '1';
-                }}
-              />
-            </div>
+            <POSSearchInput
+              onSearch={handleSearchChange}
+              searchMode={searchMode}
+              onSearchModeChange={setSearchMode}
+              className="flex-shrink-0 w-64"
+              isMobile={true}
+            />
 
             {/* 2. Product Count (Plain Text) */}
             <span className="text-xs text-gray-400 whitespace-nowrap">
@@ -1424,6 +1499,9 @@ export default function InventoryTabletView({
                         <h3 className="text-white font-medium text-xs text-center mb-2 line-clamp-2">
                           {product.name}
                         </h3>
+                        {product.product_code && (
+                          <p className="text-gray-400 text-xs text-center mb-1">{product.product_code}</p>
+                        )}
 
                         {/* Product Details */}
                         <div className="space-y-1 text-xs">

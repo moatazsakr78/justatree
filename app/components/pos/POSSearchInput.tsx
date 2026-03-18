@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, memo, useImperativeHandle, forwardRef } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-type SearchMode = 'all' | 'name' | 'code' | 'barcode';
+export type SearchMode = 'all' | 'name' | 'code' | 'barcode';
 
 export interface POSSearchInputRef {
   clearSearch: () => void;

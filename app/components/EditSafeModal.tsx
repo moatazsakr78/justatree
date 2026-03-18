@@ -23,6 +23,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
   const formatPrice = useFormatPrice()
   const [safeName, setSafeName] = useState('')
   const [supportsDrawers, setSupportsDrawers] = useState(false)
+  const [showTransfers, setShowTransfers] = useState(true)
   const [originalSupportsDrawers, setOriginalSupportsDrawers] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -39,6 +40,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
     if (safe) {
       setSafeName(safe.name || '')
       setSupportsDrawers(safe.supports_drawers || false)
+      setShowTransfers(safe.show_transfers !== false)
       setOriginalSupportsDrawers(safe.supports_drawers || false)
       setFirstDrawerName('درج 1')
       setDisableConfirmText('')
@@ -120,11 +122,12 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
             .eq('id', safe.id)
         }
       } else {
-        // Normal save (name change only, no drawer state change)
+        // Normal save (name change + show_transfers)
         const { error } = await supabase
           .from('records')
           .update({
             name: safeName.trim(),
+            show_transfers: showTransfers,
             updated_at: new Date().toISOString()
           })
           .eq('id', safe.id)
@@ -184,6 +187,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
   const handleClose = () => {
     setSafeName(safe?.name || '')
     setSupportsDrawers(safe?.supports_drawers || false)
+    setShowTransfers(safe?.show_transfers !== false)
     setOriginalSupportsDrawers(safe?.supports_drawers || false)
     setFirstDrawerName('درج 1')
     setDisableConfirmText('')
@@ -348,6 +352,23 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
                 />
                 <span className="text-sm font-medium text-gray-300">تدعم الأدراج</span>
               </label>
+            </div>
+          )}
+
+          {/* Show Transfers Toggle - only for non-drawer main safes */}
+          {safe?.safe_type !== 'sub' && !supportsDrawers && (
+            <div>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showTransfers}
+                  onChange={(e) => setShowTransfers(e.target.checked)}
+                  className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                  disabled={isLoading}
+                />
+                <span className="text-sm font-medium text-gray-300">فصل التحويلات</span>
+              </label>
+              <p className="text-xs text-gray-500 mt-1 mr-8">فصل رصيد التحويلات عن رصيد الخزنة</p>
             </div>
           )}
 
