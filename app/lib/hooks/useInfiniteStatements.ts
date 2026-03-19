@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { supabase } from '../supabase/client'
 import { DateFilter } from '../../components/SimpleDateFilterModal'
 import { getDateRangeFromFilter } from '../utils/dateFilters'
+import { isOutgoingType } from '../utils/transactionTypes'
 
 // Statement item type
 export interface StatementItem {
@@ -90,7 +91,7 @@ export function useInfiniteStatements(
     let typeName = 'دفعة'
     let description = tx.notes || typeName
     let invoiceValue = 0
-    const isPositive = amount >= 0
+    const isPositive = !isOutgoingType(tx.transaction_type)
 
     // Check if this transaction is linked to a sale
     if (tx.sale_id && salesMap.has(tx.sale_id)) {

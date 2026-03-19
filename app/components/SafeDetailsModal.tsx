@@ -16,6 +16,7 @@ import { useAuth } from '@/lib/useAuth'
 import { useInfiniteStatements, type StatementItem } from '../lib/hooks/useInfiniteStatements'
 import { useInfiniteTransactions } from '../lib/hooks/useInfiniteTransactions'
 import { useScrollDetection } from '../lib/hooks/useScrollDetection'
+import { useInfiniteSafeInvoices } from '../lib/hooks/useInfiniteSafeInvoices'
 
 interface SafeDetailsModalProps {
   isOpen: boolean
@@ -50,20 +51,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [isLoadingMobileTransactionItems, setIsLoadingMobileTransactionItems] = useState(false)
   const [showMobileActions, setShowMobileActions] = useState(false)
 
-  // Real-time state for sales and sale items
-  const [sales, setSales] = useState<any[]>([])
-  const [allSalesData, setAllSalesData] = useState<any[]>([]) // Store all loaded sales for client-side filtering
+  // Sale items for selected transaction detail view
   const [saleItems, setSaleItems] = useState<any[]>([])
-  const [saleItemsCache, setSaleItemsCache] = useState<{[saleId: string]: any[]}>({}) // Cache for sale items
-  const [isLoadingSales, setIsLoadingSales] = useState(false)
   const [isLoadingItems, setIsLoadingItems] = useState(false)
 
-  // Real-time state for purchase invoices and purchase invoice items
-  const [purchaseInvoices, setPurchaseInvoices] = useState<any[]>([])
-  const [allPurchasesData, setAllPurchasesData] = useState<any[]>([]) // Store all loaded purchases for client-side filtering
+  // Purchase invoice items for selected transaction detail view
   const [purchaseInvoiceItems, setPurchaseInvoiceItems] = useState<any[]>([])
-  const [purchaseItemsCache, setPurchaseItemsCache] = useState<{[invoiceId: string]: any[]}>({}) // Cache for purchase items
-  const [isLoadingPurchases, setIsLoadingPurchases] = useState(false)
   const [isLoadingPurchaseItems, setIsLoadingPurchaseItems] = useState(false)
 
   // Child safe IDs for main safe aggregation
@@ -129,7 +122,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
   // Search state
   const [searchQuery, setSearchQuery] = useState('')
-  const [highlightedProductId, setHighlightedProductId] = useState<string | null>(null)
   const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null)
 
   // Date filter state
@@ -281,9 +273,64 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     return { deposits, withdrawals, transfersIn, transfersOut }
   }, [operationsTransactions])
 
-  // Paid amounts mapped by sale_id or purchase_invoice_id
-  const [paidAmounts, setPaidAmounts] = useState<Record<string, number>>({})
-  const [paymentBreakdowns, setPaymentBreakdowns] = useState<Record<string, {method: string, amount: number}[]>>({})
+  // Infinite scroll for safe invoices (sales + purchase invoices)
+  const {
+    sales: invoicesSales,
+    purchaseInvoices: invoicesPurchases,
+    paidAmounts,
+    paymentBreakdowns,
+    saleItemsCache,
+    purchaseItemsCache,
+    isLoading: isLoadingInvoices,
+    isLoadingMore: isLoadingMoreInvoices,
+    hasMore: hasMoreInvoices,
+    loadMore: loadMoreInvoices,
+    refresh: refreshInvoices
+  } = useInfiniteSafeInvoices({
+    allRecordIds,
+    filteredRecordIds,
+    dateFilter,
+    enabled: isOpen && activeTab === 'transactions' && !isLoadingPreferences,
+    pageSize: 50,
+    selectedDrawerFilters,
+    nonDrawerExcludeTransfers,
+    nonDrawerTransfersOnly
+  })
+
+  // Client-side search filtering of invoices
+  const [invoiceSearchQuery, setInvoiceSearchQuery] = useState('')
+  const [highlightedProductId, setHighlightedProductId] = useState<string | null>(null)
+
+  const sales = useMemo(() => {
+    if (!invoiceSearchQuery.trim()) return invoicesSales
+    const lowerQuery = invoiceSearchQuery.toLowerCase()
+    return invoicesSales.filter((sale: any) => {
+      const items = saleItemsCache[sale.id] || []
+      return items.some((item: any) =>
+        item.product?.name?.toLowerCase().includes(lowerQuery) ||
+        item.product?.barcode?.toLowerCase().includes(lowerQuery)
+      )
+    })
+  }, [invoicesSales, invoiceSearchQuery, saleItemsCache])
+
+  const purchaseInvoices = useMemo(() => {
+    if (!invoiceSearchQuery.trim()) return invoicesPurchases
+    const lowerQuery = invoiceSearchQuery.toLowerCase()
+    return invoicesPurchases.filter((purchase: any) => {
+      const items = purchaseItemsCache[purchase.id] || []
+      return items.some((item: any) =>
+        item.product?.name?.toLowerCase().includes(lowerQuery) ||
+        item.product?.barcode?.toLowerCase().includes(lowerQuery)
+      )
+    })
+  }, [invoicesPurchases, invoiceSearchQuery, purchaseItemsCache])
+
+  // Scroll detection for invoices infinite scroll
+  const { sentinelRef: invoicesSentinelRef } = useScrollDetection({
+    onLoadMore: loadMoreInvoices,
+    enabled: hasMoreInvoices && !isLoadingMoreInvoices && activeTab === 'transactions' && !invoiceSearchQuery.trim(),
+    isLoading: isLoadingMoreInvoices
+  })
 
   // The safe balance is the actual cash drawer balance (paid amounts, not invoice totals)
   // This is fetched from the cash_drawers table
@@ -648,244 +695,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }, [isDragging, handleMouseMove, handleMouseUp])
 
-  // Helper function to get week start (Saturday) and end (Friday)
-  const getWeekRange = (date: Date, isLastWeek: boolean = false) => {
-    const targetDate = new Date(date)
-    if (isLastWeek) {
-      targetDate.setDate(targetDate.getDate() - 7)
-    }
-    
-    // Find Saturday (start of week in Arabic calendar)
-    const dayOfWeek = targetDate.getDay()
-    const daysToSaturday = dayOfWeek === 6 ? 0 : dayOfWeek + 1
-    
-    const startOfWeek = new Date(targetDate)
-    startOfWeek.setDate(targetDate.getDate() - daysToSaturday)
-    startOfWeek.setHours(0, 0, 0, 0)
-    
-    const endOfWeek = new Date(startOfWeek)
-    endOfWeek.setDate(startOfWeek.getDate() + 6)
-    endOfWeek.setHours(23, 59, 59, 999)
-    
-    return { startOfWeek, endOfWeek }
-  }
-
-  // Apply date filter to query
-  const applyDateFilter = (query: any) => {
-    const now = new Date()
-    
-    switch (dateFilter.type) {
-      case 'today':
-        const startOfDay = new Date(now)
-        startOfDay.setHours(0, 0, 0, 0)
-        const endOfDay = new Date(now)
-        endOfDay.setHours(23, 59, 59, 999)
-        return query.gte('created_at', startOfDay.toISOString()).lte('created_at', endOfDay.toISOString())
-      
-      case 'current_week':
-        const { startOfWeek: currentWeekStart, endOfWeek: currentWeekEnd } = getWeekRange(now)
-        const currentWeekEndDate = now < currentWeekEnd ? now : currentWeekEnd
-        return query.gte('created_at', currentWeekStart.toISOString()).lte('created_at', currentWeekEndDate.toISOString())
-      
-      case 'last_week':
-        const { startOfWeek: lastWeekStart, endOfWeek: lastWeekEnd } = getWeekRange(now, true)
-        return query.gte('created_at', lastWeekStart.toISOString()).lte('created_at', lastWeekEnd.toISOString())
-      
-      case 'current_month':
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)
-        return query.gte('created_at', startOfMonth.toISOString()).lte('created_at', endOfMonth.toISOString())
-      
-      case 'last_month':
-        const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-        const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999)
-        return query.gte('created_at', lastMonthStart.toISOString()).lte('created_at', lastMonthEnd.toISOString())
-      
-      case 'custom':
-        if (dateFilter.startDate) {
-          const startDate = new Date(dateFilter.startDate)
-          startDate.setHours(0, 0, 0, 0)
-          query = query.gte('created_at', startDate.toISOString())
-        }
-        if (dateFilter.endDate) {
-          const endDate = new Date(dateFilter.endDate)
-          endDate.setHours(23, 59, 59, 999)
-          query = query.lte('created_at', endDate.toISOString())
-        }
-        return query
-      
-      case 'all':
-      default:
-        return query
-    }
-  }
-
-  // Fetch sales from Supabase for the specific record
-  const fetchSales = async () => {
-    if (!safe?.id) return
-
-    try {
-      setIsLoadingSales(true)
-
-      let salesData: any[] = []
-
-      // When drawer filter is active, use two-step approach:
-      // 1. Get sale_ids from cash_drawer_transactions for the filtered record_ids
-      // 2. Fetch sales by those sale_ids
-      if (selectedDrawerFilters && selectedDrawerFilters.size > 0) {
-        let txQuery = supabase
-          .from('cash_drawer_transactions')
-          .select('sale_id')
-          .in('record_id', filteredRecordIds)
-          .not('sale_id', 'is', null)
-        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
-        if (nonDrawerExcludeTransfers) {
-          txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
-        }
-        // Non-drawer safe: only transfer types when filtering "التحويلات"
-        if (nonDrawerTransfersOnly) {
-          txQuery = txQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
-        }
-        txQuery = applyDateFilter(txQuery)
-        const { data: txData } = await txQuery
-
-        const saleIds = Array.from(new Set((txData || []).map((t: any) => t.sale_id).filter(Boolean)))
-
-        if (saleIds.length > 0) {
-          const { data, error } = await supabase
-            .from('sales')
-            .select(`
-              id,
-              invoice_number,
-              customer_id,
-              total_amount,
-              payment_method,
-              notes,
-              created_at,
-              time,
-              invoice_type,
-              status,
-              customer:customers(
-                name,
-                phone
-              ),
-              cashier:user_profiles(
-                full_name
-              )
-            `)
-            .in('id', saleIds)
-            .order('created_at', { ascending: false })
-            .limit(50)
-
-          if (error) {
-            console.error('Error fetching sales:', error)
-            return
-          }
-          salesData = data || []
-        }
-      } else {
-        // No filter active - use standard approach
-        let query = supabase
-          .from('sales')
-          .select(`
-            id,
-            invoice_number,
-            customer_id,
-            total_amount,
-            payment_method,
-            notes,
-            created_at,
-            time,
-            invoice_type,
-            status,
-            customer:customers(
-              name,
-              phone
-            ),
-            cashier:user_profiles(
-              full_name
-            )
-          `)
-          .in('record_id', allRecordIds)
-
-        query = applyDateFilter(query)
-
-        const { data, error } = await query
-          .order('created_at', { ascending: false })
-          .limit(50)
-
-        if (error) {
-          console.error('Error fetching sales:', error)
-          return
-        }
-        salesData = data || []
-      }
-
-      setSales(salesData)
-      setAllSalesData(salesData) // Store for client-side filtering
-
-      // Fetch paid amounts and batch load sale items for client-side search
-      if (salesData.length > 0) {
-        const saleIds = salesData.map((s: any) => s.id)
-
-        // Fetch paid amounts (scoped to filteredRecordIds)
-        let txQuery = supabase
-          .from('cash_drawer_transactions')
-          .select('sale_id, amount, payment_method')
-          .in('sale_id', saleIds)
-        txQuery = txQuery.in('record_id', filteredRecordIds)
-        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
-        if (nonDrawerExcludeTransfers) {
-          txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
-        }
-        // Non-drawer safe: only transfer types when filtering "التحويلات"
-        if (nonDrawerTransfersOnly) {
-          txQuery = txQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
-        }
-        const { data: transactions } = await txQuery
-
-        if (transactions) {
-          const amounts: Record<string, number> = {}
-          const breakdowns: Record<string, {method: string, amount: number}[]> = {}
-          transactions.forEach((t: any) => {
-            if (t.sale_id) {
-              amounts[t.sale_id] = (amounts[t.sale_id] || 0) + Math.abs(t.amount || 0)
-              if (!breakdowns[t.sale_id]) breakdowns[t.sale_id] = []
-              breakdowns[t.sale_id].push({ method: t.payment_method || 'نقد', amount: Math.abs(t.amount || 0) })
-            }
-          })
-          setPaidAmounts(prev => ({ ...prev, ...amounts }))
-          setPaymentBreakdowns(prev => ({ ...prev, ...breakdowns }))
-        }
-
-        // Batch load all sale items for client-side search
-        const { data: itemsData } = await supabase
-          .from('sale_items')
-          .select(`
-            id, sale_id, quantity, unit_price, discount, notes,
-            product:products(id, name, barcode, category:categories(name))
-          `)
-          .in('sale_id', saleIds)
-
-        // Build items cache by sale_id
-        const cache: {[saleId: string]: any[]} = {}
-        itemsData?.forEach(item => {
-          if (!cache[item.sale_id]) cache[item.sale_id] = []
-          cache[item.sale_id].push(item)
-        })
-        setSaleItemsCache(cache)
-
-        setSelectedTransaction(0)
-        fetchSaleItems(salesData[0].id)
-      }
-
-    } catch (error) {
-      console.error('Error fetching sales:', error)
-    } finally {
-      setIsLoadingSales(false)
-    }
-  }
-
   // Fetch cash drawer balance from cash_drawers.current_balance (maintained atomically by RPC)
   const fetchCashDrawerBalance = async () => {
     if (!safe?.id) return
@@ -1133,168 +942,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       setSaleItems([])
     } finally {
       setIsLoadingItems(false)
-    }
-  }
-
-  // Fetch purchase invoices from Supabase for the specific record
-  const fetchPurchaseInvoices = async () => {
-    if (!safe?.id) return
-
-    try {
-      setIsLoadingPurchases(true)
-
-      let purchasesData: any[] = []
-
-      // When drawer filter is active, use two-step approach
-      if (selectedDrawerFilters && selectedDrawerFilters.size > 0) {
-        let txQuery = supabase
-          .from('cash_drawer_transactions')
-          .select('purchase_invoice_id')
-          .in('record_id', filteredRecordIds)
-          .not('purchase_invoice_id', 'is', null)
-        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
-        if (nonDrawerExcludeTransfers) {
-          txQuery = txQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
-        }
-        // Non-drawer safe: only transfer types when filtering "التحويلات"
-        if (nonDrawerTransfersOnly) {
-          txQuery = txQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
-        }
-        txQuery = applyDateFilter(txQuery)
-        const { data: txData } = await txQuery
-
-        const purchaseIds = Array.from(new Set((txData || []).map((t: any) => t.purchase_invoice_id).filter(Boolean)))
-
-        if (purchaseIds.length > 0) {
-          const { data, error } = await supabase
-            .from('purchase_invoices')
-            .select(`
-              id,
-              invoice_number,
-              supplier_id,
-              total_amount,
-              payment_status,
-              notes,
-              created_at,
-              time,
-              invoice_type,
-              supplier:suppliers(
-                name,
-                phone
-              ),
-              creator:user_profiles(
-                full_name
-              )
-            `)
-            .in('id', purchaseIds)
-            .order('created_at', { ascending: false })
-            .limit(50)
-
-          if (error) {
-            console.error('Error fetching purchase invoices:', error)
-            return
-          }
-          purchasesData = data || []
-        }
-      } else {
-        // No filter active - use standard approach
-        let query = supabase
-          .from('purchase_invoices')
-          .select(`
-            id,
-            invoice_number,
-            supplier_id,
-            total_amount,
-            payment_status,
-            notes,
-            created_at,
-            time,
-            invoice_type,
-            supplier:suppliers(
-              name,
-              phone
-            ),
-            creator:user_profiles(
-              full_name
-            )
-          `)
-          .in('record_id', allRecordIds)
-
-        query = applyDateFilter(query)
-
-        const { data, error } = await query
-          .order('created_at', { ascending: false })
-          .limit(50)
-
-        if (error) {
-          console.error('Error fetching purchase invoices:', error)
-          return
-        }
-        purchasesData = data || []
-      }
-
-      setPurchaseInvoices(purchasesData)
-      setAllPurchasesData(purchasesData) // Store for client-side filtering
-
-      // Fetch paid amounts and batch load purchase items for client-side search
-      if (purchasesData.length > 0) {
-        const purchaseIds = purchasesData.map((p: any) => p.id)
-
-        // Fetch paid amounts (scoped to filteredRecordIds)
-        let purchaseTxQuery = supabase
-          .from('cash_drawer_transactions')
-          .select('purchase_invoice_id, amount, payment_method')
-          .in('purchase_invoice_id', purchaseIds)
-        purchaseTxQuery = purchaseTxQuery.in('record_id', filteredRecordIds)
-        // Non-drawer safe: exclude transfer types when filtering "في الخزنة"
-        if (nonDrawerExcludeTransfers) {
-          purchaseTxQuery = purchaseTxQuery.not('transaction_type', 'in', '("transfer_in","transfer_out")')
-        }
-        // Non-drawer safe: only transfer types when filtering "التحويلات"
-        if (nonDrawerTransfersOnly) {
-          purchaseTxQuery = purchaseTxQuery.in('transaction_type', ['transfer_in', 'transfer_out'])
-        }
-        const { data: transactions } = await purchaseTxQuery
-
-        if (transactions) {
-          const amounts: Record<string, number> = {}
-          const breakdowns: Record<string, {method: string, amount: number}[]> = {}
-          transactions.forEach((t: any) => {
-            if (t.purchase_invoice_id) {
-              amounts[t.purchase_invoice_id] = (amounts[t.purchase_invoice_id] || 0) + Math.abs(t.amount || 0)
-              if (!breakdowns[t.purchase_invoice_id]) breakdowns[t.purchase_invoice_id] = []
-              breakdowns[t.purchase_invoice_id].push({ method: t.payment_method || 'نقد', amount: Math.abs(t.amount || 0) })
-            }
-          })
-          setPaidAmounts(prev => ({ ...prev, ...amounts }))
-          setPaymentBreakdowns(prev => ({ ...prev, ...breakdowns }))
-        }
-
-        // Batch load all purchase invoice items for client-side search
-        const { data: itemsData } = await supabase
-          .from('purchase_invoice_items')
-          .select(`
-            id, purchase_invoice_id, quantity, unit_purchase_price, notes,
-            product:products(id, name, barcode, category:categories(name))
-          `)
-          .in('purchase_invoice_id', purchaseIds)
-
-        // Build items cache by invoice_id
-        const cache: {[invoiceId: string]: any[]} = {}
-        itemsData?.forEach(item => {
-          const invoiceId = item.purchase_invoice_id
-          if (invoiceId) {
-            if (!cache[invoiceId]) cache[invoiceId] = []
-            cache[invoiceId].push(item)
-          }
-        })
-        setPurchaseItemsCache(cache)
-      }
-
-    } catch (error) {
-      console.error('Error fetching purchase invoices:', error)
-    } finally {
-      setIsLoadingPurchases(false)
     }
   }
 
@@ -1724,63 +1371,33 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   }
 
   // Set up real-time subscriptions and fetch initial data
+  // Sales and purchase invoices are now handled by useInfiniteSafeInvoices hook
   useEffect(() => {
     if (isOpen && safe?.id && !isLoadingPreferences) {
-      fetchSales()
-      fetchPurchaseInvoices()
       fetchCashDrawerBalance()
       fetchPaymentBreakdown()
       fetchNonDrawerTransferBalance()
-      // Account statement and transfers are now handled by infinite scroll hooks
-
     }
   }, [isOpen, safe?.id, dateFilter, isLoadingPreferences, childSafeIds, additionalSafeIds, selectedDrawerFilters])
 
   // Client-side search for product in loaded invoices
   const searchProductInInvoices = (query: string) => {
+    setSearchQuery(query)
+    setInvoiceSearchQuery(query)
+
     if (!query.trim()) {
-      setSearchQuery('')
       setHighlightedProductId(null)
-      // Restore all loaded transactions
-      setSales(allSalesData)
-      setPurchaseInvoices(allPurchasesData)
-      if (allSalesData.length > 0 || allPurchasesData.length > 0) {
-        setSelectedTransaction(0)
-        if (allSalesData.length > 0) {
-          fetchSaleItems(allSalesData[0].id)
-        } else if (allPurchasesData.length > 0) {
-          fetchPurchaseInvoiceItems(allPurchasesData[0].id)
-        }
-      }
+      setSelectedTransaction(0)
       return
     }
 
-    setSearchQuery(query)
     const lowerQuery = query.toLowerCase()
-
-    // Filter sales that contain the searched product (client-side)
-    const matchingSales = allSalesData.filter(sale => {
-      const items = saleItemsCache[sale.id] || []
-      return items.some(item =>
-        item.product?.name?.toLowerCase().includes(lowerQuery) ||
-        item.product?.barcode?.toLowerCase().includes(lowerQuery)
-      )
-    })
-
-    // Filter purchases that contain the searched product (client-side)
-    const matchingPurchases = allPurchasesData.filter(purchase => {
-      const items = purchaseItemsCache[purchase.id] || []
-      return items.some(item =>
-        item.product?.name?.toLowerCase().includes(lowerQuery) ||
-        item.product?.barcode?.toLowerCase().includes(lowerQuery)
-      )
-    })
 
     // Find first matching product for highlighting
     let firstMatchingProductId: string | null = null
-    for (const sale of matchingSales) {
+    for (const sale of sales) {
       const items = saleItemsCache[sale.id] || []
-      const matchingItem = items.find(item =>
+      const matchingItem = items.find((item: any) =>
         item.product?.name?.toLowerCase().includes(lowerQuery) ||
         item.product?.barcode?.toLowerCase().includes(lowerQuery)
       )
@@ -1790,9 +1407,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       }
     }
     if (!firstMatchingProductId) {
-      for (const purchase of matchingPurchases) {
+      for (const purchase of purchaseInvoices) {
         const items = purchaseItemsCache[purchase.id] || []
-        const matchingItem = items.find(item =>
+        const matchingItem = items.find((item: any) =>
           item.product?.name?.toLowerCase().includes(lowerQuery) ||
           item.product?.barcode?.toLowerCase().includes(lowerQuery)
         )
@@ -1803,22 +1420,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       }
     }
 
-    // Update sales and purchases with search results
-    setSales(matchingSales)
-    setPurchaseInvoices(matchingPurchases)
     setHighlightedProductId(firstMatchingProductId)
-
-    // Auto-select first transaction if available
-    if (matchingSales.length > 0 || matchingPurchases.length > 0) {
-      setSelectedTransaction(0)
-
-      // Load items for first transaction
-      if (matchingSales.length > 0) {
-        fetchSaleItems(matchingSales[0].id)
-      } else if (matchingPurchases.length > 0) {
-        fetchPurchaseInvoiceItems(matchingPurchases[0].id)
-      }
-    }
+    setSelectedTransaction(0)
   }
 
   // Create combined transactions array from sales and purchase invoices
@@ -1966,8 +1569,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       setTransactionToDelete(null)
 
       // Refresh data (real-time will handle it but this ensures immediate update)
-      fetchSales()
-      fetchPurchaseInvoices()
+      refreshInvoices()
 
       // Reset selected transaction if needed
       if (selectedTransaction >= allTransactions.length - 1) {
@@ -4077,14 +3679,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   {/* Transactions Tab Content */}
                   {activeTab === 'transactions' && (
                     <div className="p-3 space-y-2">
-                      {isLoadingSales ? (
+                      {isLoadingInvoices ? (
                         <div className="flex items-center justify-center py-8">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                         </div>
                       ) : allTransactions.length === 0 ? (
                         <div className="text-center py-8 text-gray-400">لا توجد فواتير</div>
                       ) : (
-                        allTransactions.map((transaction, index) => {
+                        <>
+                        {allTransactions.map((transaction, index) => {
                           const txnDate = new Date(transaction.created_at)
                           const timeStr = transaction.time || txnDate.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
                           const isSale = transaction.transactionType === 'sale'
@@ -4155,7 +3758,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               </div>
                             </div>
                           )
-                        })
+                        })}
+                        {/* Sentinel for infinite scroll */}
+                        <div ref={invoicesSentinelRef} className="h-4" />
+                        {isLoadingMoreInvoices && (
+                          <div className="flex items-center justify-center py-4">
+                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                            <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                          </div>
+                        )}
+                        </>
                       )}
                     </div>
                   )}
@@ -5205,7 +4817,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         zIndex: viewMode === 'safes-only' ? 20 : viewMode === 'split' ? 10 : 5
                       }}
                     >
-                      {isLoadingSales ? (
+                      {isLoadingInvoices ? (
                         <div className="flex items-center justify-center h-full">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
                           <span className="text-gray-400">جاري تحميل الفواتير...</span>
@@ -5217,13 +4829,23 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <p className="text-gray-500 text-sm">ابحث عن منتج آخر أو امسح البحث</p>
                         </div>
                       ) : (
-                        <ResizableTable
-                          className="h-full w-full"
-                          columns={transactionColumns}
-                          data={allTransactions}
-                          selectedRowId={allTransactions[selectedTransaction]?.id?.toString() || null}
-                          onRowClick={(transaction: any, index: number) => setSelectedTransaction(index)}
-                        />
+                        <div className="h-full overflow-auto scrollbar-hide">
+                          <ResizableTable
+                            className="h-full w-full"
+                            columns={transactionColumns}
+                            data={allTransactions}
+                            selectedRowId={allTransactions[selectedTransaction]?.id?.toString() || null}
+                            onRowClick={(transaction: any, index: number) => setSelectedTransaction(index)}
+                          />
+                          {/* Sentinel for infinite scroll */}
+                          <div ref={invoicesSentinelRef} className="h-4" />
+                          {isLoadingMoreInvoices && (
+                            <div className="flex items-center justify-center py-4">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                              <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
 
