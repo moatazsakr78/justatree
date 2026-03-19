@@ -4806,8 +4806,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 {activeTab === 'transactions' && (
                   <div className="h-full relative">
                     {/* Records Table - Always rendered but z-indexed based on view mode */}
-                    <div 
-                      className={`absolute inset-0 bg-[#2B3544] transition-all duration-300 ${
+                    <div
+                      className={`absolute inset-0 bg-[#2B3544] flex flex-col transition-all duration-300 ${
                         viewMode === 'details-only' ? 'z-0 opacity-20' : 'z-10'
                       } ${
                         viewMode === 'split' ? '' : 'opacity-100'
@@ -4829,7 +4829,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <p className="text-gray-500 text-sm">ابحث عن منتج آخر أو امسح البحث</p>
                         </div>
                       ) : (
-                        <div className="h-full overflow-auto scrollbar-hide">
+                        <div className="flex-1 overflow-auto scrollbar-hide">
                           <ResizableTable
                             className="h-full w-full"
                             columns={transactionColumns}
