@@ -965,7 +965,7 @@ export default function ProductDetailsModal({
       >
 
       {/* Responsive Header */}
-      <header className="border-b border-gray-600 py-0 flex-shrink-0" style={{backgroundColor: 'var(--primary-color)'}}>
+      <header className="border-b border-gray-700 py-0 flex-shrink-0" style={{backgroundColor: 'var(--primary-color)'}}>
         {/* Desktop Header */}
         <div className="hidden lg:block">
           <div className="px-8 flex items-center justify-between" style={{minHeight: '80px'}}>
@@ -1322,7 +1322,7 @@ export default function ProductDetailsModal({
               )}
               {/* Zoom hint - only show for images, not videos */}
               {!isZooming && !selectedVideo && (
-                <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">
                   مرر للتكبير
                 </div>
               )}
@@ -1904,7 +1904,7 @@ export default function ProductDetailsModal({
       {/* Elegant White Video/Image Modal */}
       {showVideoModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
           onClick={() => setShowVideoModal(false)}
         >
           <div

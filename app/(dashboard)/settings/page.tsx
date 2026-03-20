@@ -17,6 +17,7 @@ import {
   ExclamationTriangleIcon,
   ArrowDownTrayIcon,
   BoltIcon,
+  SwatchIcon,
 } from '@heroicons/react/24/outline';
 import { revalidateAll } from '../../../lib/utils/revalidate';
 import BackupSettings from '@/app/components/settings/BackupSettings';
@@ -214,6 +215,12 @@ const settingsCategories: SettingsCategory[] = [
     name: 'الأداء',
     icon: BoltIcon,
     description: 'إعدادات أداء النظام والتحميل'
+  },
+  {
+    id: 'appearance',
+    name: 'مظهر النظام',
+    icon: SwatchIcon,
+    description: 'تخصيص مظهر وألوان النظام'
   },
 ];
 
@@ -2159,6 +2166,106 @@ export default function SettingsPage() {
     );
   };
 
+  const renderAppearanceSettings = () => {
+    const { getSetting, updateSettings: updateSystemSettings } = useSystemSettings();
+    const currentTheme = getSetting<string>('ui.dashboard_theme', 'modern');
+
+    const handleThemeChange = async (theme: 'modern' | 'classic') => {
+      if (theme === currentTheme) return;
+      // Apply immediately
+      if (theme === 'classic') {
+        document.documentElement.setAttribute('data-dash-theme', 'classic');
+      } else {
+        document.documentElement.removeAttribute('data-dash-theme');
+      }
+      // Persist to localStorage
+      localStorage.setItem('dash-theme', theme);
+      // Save to DB
+      try {
+        await updateSystemSettings({ ui: { dashboard_theme: theme } });
+      } catch (error) {
+        console.error('Error updating dashboard theme:', error);
+      }
+    };
+
+    const themes = [
+      {
+        id: 'modern' as const,
+        name: 'حديث',
+        description: 'مظهر داكن عصري بألوان عميقة',
+        colors: ['#0F1419', '#151C25', '#1B2432', '#222D3D', '#2A3648'],
+      },
+      {
+        id: 'classic' as const,
+        name: 'كلاسيك',
+        description: 'المظهر الأصلي بألوان رمادية فاتحة',
+        colors: ['#111827', '#1F2937', '#2B3544', '#374151', '#4B5563'],
+      },
+    ];
+
+    return (
+      <div className="space-y-6 max-w-4xl">
+        <h3 className="text-[var(--dash-text-primary)] font-medium text-lg mb-2">مظهر النظام</h3>
+        <p className="text-sm text-[var(--dash-text-muted)] mb-6">
+          اختر المظهر المناسب لك — كلا المظهرين داكنان
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {themes.map((t) => {
+            const isSelected = currentTheme === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => handleThemeChange(t.id)}
+                className={`relative p-4 rounded-xl border-2 transition-all text-right ${
+                  isSelected
+                    ? 'border-blue-500 bg-blue-500/10'
+                    : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-strong)] bg-[var(--dash-bg-raised)]'
+                }`}
+              >
+                {/* Selected indicator */}
+                {isSelected && (
+                  <div className="absolute top-3 left-3">
+                    <CheckCircleIcon className="w-6 h-6 text-blue-500" />
+                  </div>
+                )}
+
+                {/* Color swatches */}
+                <div className="flex gap-1.5 mb-4">
+                  {t.colors.map((color, i) => (
+                    <div
+                      key={i}
+                      className="h-10 flex-1 rounded-md first:rounded-r-lg last:rounded-l-lg"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+
+                {/* Theme name & description */}
+                <p className="text-[var(--dash-text-primary)] font-medium text-base">{t.name}</p>
+                <p className="text-[var(--dash-text-muted)] text-xs mt-1">{t.description}</p>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-blue-300 text-sm font-medium">ملاحظة</p>
+              <p className="text-[var(--dash-text-muted)] text-xs mt-1">
+                يتم تطبيق المظهر فوراً وحفظه تلقائياً
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderSettingsContent = () => {
     switch (selectedCategory) {
       case 'system':
@@ -2175,6 +2282,8 @@ export default function SettingsPage() {
         return <BackupSettings />;
       case 'performance':
         return renderPerformanceSettings();
+      case 'appearance':
+        return renderAppearanceSettings();
       default:
         return renderPlaceholderContent(selectedCategory);
     }

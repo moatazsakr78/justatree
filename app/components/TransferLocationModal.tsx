@@ -147,20 +147,20 @@ export default function TransferLocationModal({
         {/* Progress Indicator */}
         <div className="px-6 py-4 bg-[var(--dash-bg-surface)]">
           <div className="flex items-center justify-center gap-4">
-            <div className={`flex items-center gap-2 ${currentStep === 'from' ? 'text-green-400' : fromLocation ? 'text-green-400' : 'text-gray-400'}`}>
+            <div className={`flex items-center gap-2 ${currentStep === 'from' ? 'text-green-400' : fromLocation ? 'text-green-400' : 'text-[var(--dash-text-muted)]'}`}>
               <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-                fromLocation ? 'border-green-400 bg-green-400' : currentStep === 'from' ? 'border-green-400' : 'border-gray-400'
+                fromLocation ? 'border-green-400 bg-green-400' : currentStep === 'from' ? 'border-green-400' : 'border-[var(--dash-text-muted)]'
               }`}>
                 {fromLocation ? <CheckIcon className="h-4 w-4 text-white" /> : '1'}
               </div>
               <span className="text-sm font-medium">من</span>
             </div>
             
-            <ArrowsRightLeftIcon className="h-5 w-5 text-gray-400" />
+            <ArrowsRightLeftIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
             
-            <div className={`flex items-center gap-2 ${currentStep === 'to' ? 'text-green-400' : toLocation ? 'text-green-400' : 'text-gray-400'}`}>
+            <div className={`flex items-center gap-2 ${currentStep === 'to' ? 'text-green-400' : toLocation ? 'text-green-400' : 'text-[var(--dash-text-muted)]'}`}>
               <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-                toLocation ? 'border-green-400 bg-green-400' : currentStep === 'to' ? 'border-green-400' : 'border-gray-400'
+                toLocation ? 'border-green-400 bg-green-400' : currentStep === 'to' ? 'border-green-400' : 'border-[var(--dash-text-muted)]'
               }`}>
                 {toLocation ? <CheckIcon className="h-4 w-4 text-white" /> : '2'}
               </div>
@@ -200,13 +200,13 @@ export default function TransferLocationModal({
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mb-4"></div>
-                <p className="text-gray-400">جاري تحميل المواقع...</p>
+                <p className="text-[var(--dash-text-muted)]">جاري تحميل المواقع...</p>
               </div>
             ) : error ? (
               <div className="flex flex-col items-center justify-center p-8">
                 <BuildingOfficeIcon className="h-16 w-16 text-red-500 mb-4" />
                 <p className="text-red-400 text-lg mb-2">خطأ في التحميل</p>
-                <p className="text-gray-500 text-sm mb-4">{error}</p>
+                <p className="text-[var(--dash-text-disabled)] text-sm mb-4">{error}</p>
                 <button
                   onClick={fetchLocations}
                   className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors"
@@ -262,9 +262,9 @@ export default function TransferLocationModal({
               ))
             ) : (
               <div className="flex flex-col items-center justify-center p-8">
-                <BuildingOfficeIcon className="h-16 w-16 text-gray-500 mb-4" />
-                <p className="text-gray-400 text-lg mb-2">لا توجد مواقع متاحة</p>
-                <p className="text-gray-500 text-sm">لا توجد مواقع متاحة للنقل</p>
+                <BuildingOfficeIcon className="h-16 w-16 text-[var(--dash-text-disabled)] mb-4" />
+                <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد مواقع متاحة</p>
+                <p className="text-[var(--dash-text-disabled)] text-sm">لا توجد مواقع متاحة للنقل</p>
               </div>
             )}
           </div>
@@ -294,7 +294,7 @@ export default function TransferLocationModal({
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm transition-colors"
+              className="px-6 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg text-sm transition-colors"
             >
               إلغاء
             </button>

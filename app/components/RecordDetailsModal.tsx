@@ -1417,11 +1417,11 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: 'البيان', 
       accessor: 'description', 
       width: 300,
-      render: (value: string) => <span className="text-white">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)]">{value}</span>
     },
-    { 
-      id: 'type', 
-      header: 'نوع العملية', 
+    {
+      id: 'type',
+      header: 'نوع العملية',
       accessor: 'type', 
       width: 120,
       render: (value: string) => (
@@ -1493,16 +1493,16 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       width: 120,
       render: (value: string) => {
         const date = new Date(value)
-        return <span className="text-white">{date.toLocaleDateString('en-GB')}</span>
+        return <span className="text-[var(--dash-text-primary)]">{date.toLocaleDateString('en-GB')}</span>
       }
     },
-    { 
-      id: 'time', 
-      header: 'الوقت', 
-      accessor: 'time', 
+    {
+      id: 'time',
+      header: 'الوقت',
+      accessor: 'time',
       width: 100,
       render: (value: string) => {
-        if (!value) return <span className="text-gray-400">-</span>
+        if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>
         const timeOnly = value.substring(0, 5)
         return <span className="text-blue-400 font-mono">{timeOnly}</span>
       }
@@ -1514,9 +1514,9 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       width: 150,
       render: (value: string, item: any) => (
         <div>
-          <span className="text-white">{item.client?.name || 'غير محدد'}</span>
+          <span className="text-[var(--dash-text-primary)]">{item.client?.name || 'غير محدد'}</span>
           <br />
-          <span className="text-xs text-gray-400">({item.clientType})</span>
+          <span className="text-xs text-[var(--dash-text-muted)]">({item.clientType})</span>
         </div>
       )
     },
@@ -1525,7 +1525,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: 'الهاتف', 
       accessor: 'client.phone', 
       width: 150,
-      render: (value: string, item: any) => <span className="text-gray-300 font-mono text-sm">{item.client?.phone || '-'}</span>
+      render: (value: string, item: any) => <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{item.client?.phone || '-'}</span>
     },
     { 
       id: 'total_amount', 
@@ -1608,7 +1608,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
         const cleanNotes = value && value.startsWith('[TRANSFER]')
           ? value.replace('[TRANSFER] ', '')
           : value
-        return <span className="text-gray-400">{cleanNotes || '-'}</span>
+        return <span className="text-[var(--dash-text-muted)]">{cleanNotes || '-'}</span>
       }
     }
   ].filter(col => visibleTransactionColumns.includes(col.id))
@@ -1620,18 +1620,18 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       accessor: '#', 
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-gray-400">{item.id}</span>
+        <span className="text-[var(--dash-text-muted)]">{item.id}</span>
       )
     },
-    { 
-      id: 'date', 
-      header: 'التاريخ', 
-      accessor: 'date', 
+    {
+      id: 'date',
+      header: 'التاريخ',
+      accessor: 'date',
       width: 120,
-      render: (value: string) => <span className="text-white">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)]">{value}</span>
     },
-    { 
-      id: 'time', 
+    {
+      id: 'time',
       header: '⏰ الساعة', 
       accessor: 'time', 
       width: 80,
@@ -1649,7 +1649,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: 'البيان',
       accessor: 'notes',
       width: 200,
-      render: (value: string) => <span className="text-gray-400">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value}</span>
     }
   ].filter(col => visiblePaymentsColumns.includes(col.id))
 
@@ -1660,7 +1660,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       accessor: '#',
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-white">{index + 1}</span>
+        <span className="text-[var(--dash-text-primary)]">{index + 1}</span>
       )
     },
     {
@@ -1687,7 +1687,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
         return (
           <div className={`flex items-center gap-2 ${isHighlighted ? 'bg-yellow-500/40 px-2 py-1 rounded' : ''}`}>
             {isHighlighted && <span className="text-yellow-300 text-lg">★</span>}
-            <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-white'}`}>
+            <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-[var(--dash-text-primary)]'}`}>
               {item.product?.name || 'منتج محذوف'}
             </span>
           </div>
@@ -1707,7 +1707,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       accessor: 'product.barcode', 
       width: 150,
       render: (value: string, item: any) => (
-        <span className="text-gray-300 font-mono text-sm">{item.product?.barcode || '-'}</span>
+        <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{item.product?.barcode || '-'}</span>
       )
     },
     { 
@@ -1752,7 +1752,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: 'ملاحظات',
       accessor: 'notes',
       width: 150,
-      render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
     }
   ].filter(col => visibleDetailsColumns.includes(col.id))
 

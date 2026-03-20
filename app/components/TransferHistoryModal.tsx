@@ -405,10 +405,10 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
     { id: 'date', header: 'التاريخ', accessor: 'date', width: 110, minWidth: 80 },
     { id: 'time', header: 'الساعة', accessor: 'time', width: 80, minWidth: 60 },
     { id: 'from', header: 'من', accessor: 'from', width: 120, minWidth: 80,
-      render: (value: string) => <span className="text-white font-medium">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
     },
     { id: 'to', header: 'إلى', accessor: 'to', width: 120, minWidth: 80,
-      render: (value: string) => <span className="text-white font-medium">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
     },
     { id: 'items_count', header: 'عدد الأصناف', accessor: 'items_count', width: 90, minWidth: 70 },
     { id: 'total_qty', header: 'إجمالي القطع', accessor: 'total_qty', width: 100, minWidth: 70,
@@ -512,9 +512,9 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 return (
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm justify-end">
-                      <span className="text-white font-medium">{to}</span>
+                      <span className="text-[var(--dash-text-primary)] font-medium">{to}</span>
                       <span className="text-green-400">←</span>
-                      <span className="text-white font-medium">{from}</span>
+                      <span className="text-[var(--dash-text-primary)] font-medium">{from}</span>
                     </div>
                     <div className="flex flex-wrap gap-3 text-xs text-[var(--dash-text-muted)] justify-end">
                       <span>{formatDate(mobileSelectedTransfer.created_at)}</span>
@@ -645,7 +645,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 onClick={() => setIsMobileInfoExpanded(!isMobileInfoExpanded)}
                 className="w-full px-4 py-2 flex items-center justify-between"
               >
-                <ChevronLeftIcon className={`h-4 w-4 text-gray-400 transition-transform ${isMobileInfoExpanded ? 'rotate-[-90deg]' : ''}`} />
+                <ChevronLeftIcon className={`h-4 w-4 text-[var(--dash-text-muted)] transition-transform ${isMobileInfoExpanded ? 'rotate-[-90deg]' : ''}`} />
                 <span className="text-[var(--dash-text-secondary)] text-sm">ملخص ({filteredTransfers.length} عملية نقل)</span>
               </button>
               {isMobileInfoExpanded && (
@@ -662,9 +662,9 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
             <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3">
               {filteredTransfers.length === 0 && !isLoading ? (
                 <div className="flex flex-col items-center justify-center p-12">
-                  <ArrowsRightLeftIcon className="h-16 w-16 text-gray-500 mb-4" />
-                  <p className="text-gray-400 text-lg mb-2">لا توجد عمليات نقل</p>
-                  <p className="text-gray-500 text-sm">لم يتم العثور على عمليات نقل في الفترة المحددة</p>
+                  <ArrowsRightLeftIcon className="h-16 w-16 text-[var(--dash-text-disabled)] mb-4" />
+                  <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد عمليات نقل</p>
+                  <p className="text-[var(--dash-text-disabled)] text-sm">لم يتم العثور على عمليات نقل في الفترة المحددة</p>
                 </div>
               ) : (
                 filteredTransfers.map((transfer) => {
@@ -686,9 +686,9 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                         <span className="text-green-400 font-medium text-sm">{transfer.invoice_number}</span>
                       </div>
                       <div className="flex items-center gap-2 mb-3 justify-end">
-                        <span className="text-white text-sm font-medium">{to}</span>
+                        <span className="text-[var(--dash-text-primary)] text-sm font-medium">{to}</span>
                         <span className="text-green-400">←</span>
-                        <span className="text-white text-sm font-medium">{from}</span>
+                        <span className="text-[var(--dash-text-primary)] text-sm font-medium">{from}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs font-medium">

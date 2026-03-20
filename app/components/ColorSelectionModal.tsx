@@ -563,7 +563,7 @@ export default function ColorSelectionModal({
                         }
                       }}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] font-bold text-lg text-center rounded-lg px-4 py-3 outline-none border-2 border-transparent focus:border-green-500 hover:bg-[#3D4A5C] transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] font-bold text-lg text-center rounded-lg px-4 py-3 outline-none border-2 border-transparent focus:border-green-500 hover:bg-[var(--dash-bg-overlay)] transition-all"
                       placeholder={product.cost_price ? product.cost_price.toString() : "أدخل سعر الشراء"}
                       min="0"
                       step="0.01"
@@ -938,7 +938,7 @@ export default function ColorSelectionModal({
             <div className="flex gap-3">
               <button 
                 onClick={onClose} 
-                className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-gray-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors duration-150 relative"
+                className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors duration-150 relative"
               >
                 إلغاء
               </button>

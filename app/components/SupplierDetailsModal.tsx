@@ -2758,7 +2758,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             <div
                               key={invoice.id}
                               onClick={() => openMobileInvoiceDetails(invoice)}
-                              className="bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-colors active:bg-[#4B5563]"
+                              className="bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-colors active:bg-[var(--dash-bg-overlay)]"
                             >
                               {/* Header Row - Amount + Invoice# + Type Badge */}
                               <div className="flex justify-between items-center mb-2">
@@ -2919,7 +2919,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                 }
                               }}
                               className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 transition-colors ${
-                                statement.invoiceId ? 'cursor-pointer active:bg-[#4B5563]' : ''
+                                statement.invoiceId ? 'cursor-pointer active:bg-[var(--dash-bg-overlay)]' : ''
                               } ${
                                 statement.type === 'فاتورة شراء'
                                   ? 'border-2 border-blue-700/50'

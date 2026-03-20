@@ -222,6 +222,39 @@
   --dash-radius-xl: 16px;
 }
 
+/* Classic theme — original dashboard colors */
+[data-dash-theme="classic"] {
+  --dash-bg-deepest: #111827;
+  --dash-bg-base: #1F2937;
+  --dash-bg-surface: #2B3544;
+  --dash-bg-raised: #374151;
+  --dash-bg-overlay: #4B5563;
+  --dash-bg-highlight: #6B7280;
+
+  --dash-border-subtle: rgba(75, 85, 99, 0.5);
+  --dash-border-default: rgba(107, 114, 128, 0.5);
+  --dash-border-strong: rgba(156, 163, 175, 0.3);
+
+  --dash-text-primary: #FFFFFF;
+  --dash-text-secondary: #D1D5DB;
+  --dash-text-muted: #9CA3AF;
+  --dash-text-disabled: #6B7280;
+
+  --dash-header-bg: #2B3544;
+  --dash-sidebar-bg: #2B3544;
+  --dash-card-bg: #2B3544;
+  --dash-input-bg: #1F2937;
+  --dash-table-header-bg: #2B3544;
+  --dash-modal-bg: #2B3544;
+  --dash-modal-backdrop: rgba(0, 0, 0, 0.50);
+  --dash-tooltip-bg: #374151;
+
+  --dash-shadow-sm: 0 1px 2px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.1);
+  --dash-shadow-md: 0 4px 6px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+  --dash-shadow-lg: 0 10px 25px rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.2);
+  --dash-shadow-glow-blue: 0 0 20px rgba(59,130,246,0.1), 0 0 6px rgba(59,130,246,0.08);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

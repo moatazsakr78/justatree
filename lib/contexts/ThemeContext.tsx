@@ -22,6 +22,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.style.setProperty('--button-hover-color', theme.button_hover_color);
     };
 
+    // Apply dashboard theme from localStorage immediately (prevents flash)
+    const savedDashTheme = localStorage.getItem('dash-theme');
+    if (savedDashTheme === 'classic') {
+      document.documentElement.setAttribute('data-dash-theme', 'classic');
+    } else {
+      document.documentElement.removeAttribute('data-dash-theme');
+    }
+
     // Set default theme immediately (before fetching from DB)
     setThemeVariables({
       primary_color: '#5d1f1f',
@@ -33,6 +41,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Fetch active theme from database
     const fetchActiveTheme = async () => {
       try {
+        // Fetch store theme
         const { data, error } = await (supabase as any)
           .from('store_theme_colors')
           .select('*')
@@ -41,6 +50,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
         if (data && !error) {
           setThemeVariables(data);
+        }
+
+        // Sync dashboard theme from DB settings
+        const { data: settingsData } = await (supabase as any)
+          .from('system_settings')
+          .select('settings_data')
+          .eq('is_active', true)
+          .single();
+
+        if (settingsData?.settings_data?.ui?.dashboard_theme) {
+          const dbDashTheme = settingsData.settings_data.ui.dashboard_theme;
+          localStorage.setItem('dash-theme', dbDashTheme);
+          if (dbDashTheme === 'classic') {
+            document.documentElement.setAttribute('data-dash-theme', 'classic');
+          } else {
+            document.documentElement.removeAttribute('data-dash-theme');
+          }
         }
       } catch (err) {
         console.error('Error fetching theme:', err);

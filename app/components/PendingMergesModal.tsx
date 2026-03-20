@@ -276,21 +276,21 @@ export default function PendingMergesModal({
               <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)] animate-dash-scale-in">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <ClockIcon className="h-6 w-6 text-yellow-400" />
                     الدمجات المعلقة
                   </Dialog.Title>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={fetchPendingMerges}
-                      className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-700"
+                      className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                       title="تحديث"
                     >
                       <ArrowPathIcon className="h-5 w-5" />
                     </button>
                     <button
                       onClick={onClose}
-                      className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-700"
+                      className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                     >
                       <XMarkIcon className="h-5 w-5" />
                     </button>
@@ -326,13 +326,13 @@ export default function PendingMergesModal({
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
-                      <p className="text-gray-400">جاري التحميل...</p>
+                      <p className="text-[var(--dash-text-muted)]">جاري التحميل...</p>
                     </div>
                   ) : merges.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <CheckCircleIcon className="h-16 w-16 text-green-500 mb-4" />
-                      <p className="text-gray-400 text-lg mb-2">لا توجد دمجات معلقة</p>
-                      <p className="text-gray-500 text-sm">جميع الدمجات السابقة أصبحت نهائية</p>
+                      <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد دمجات معلقة</p>
+                      <p className="text-[var(--dash-text-disabled)] text-sm">جميع الدمجات السابقة أصبحت نهائية</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -346,7 +346,7 @@ export default function PendingMergesModal({
                             className={`p-4 rounded-xl border ${
                               stillCanUndo
                                 ? "bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)]"
-                                : "bg-gray-700/50 border-gray-700"
+                                : "bg-[var(--dash-bg-raised)]/50 border-[var(--dash-border-subtle)]"
                             }`}
                           >
                             <div className="flex items-start justify-between">
@@ -357,26 +357,26 @@ export default function PendingMergesModal({
                                     <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
                                       <UserIcon className="h-4 w-4 text-red-400" />
                                     </div>
-                                    <span className="text-white font-medium">{mergedData?.name || "عميل محذوف"}</span>
+                                    <span className="text-[var(--dash-text-primary)] font-medium">{mergedData?.name || "عميل محذوف"}</span>
                                   </div>
-                                  <span className="text-gray-500">→</span>
+                                  <span className="text-[var(--dash-text-disabled)]">→</span>
                                   <div className="flex items-center gap-2">
                                     <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
                                       <UserIcon className="h-4 w-4 text-green-400" />
                                     </div>
-                                    <span className="text-white font-medium">
+                                    <span className="text-[var(--dash-text-primary)] font-medium">
                                       {merge.primary_customer?.name || "عميل"}
                                     </span>
                                   </div>
                                 </div>
 
                                 {/* Stats */}
-                                <div className="flex items-center gap-4 text-sm text-gray-400 mb-3">
+                                <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)] mb-3">
                                   <span>
-                                    الفواتير: <span className="text-white">{merge.moved_sales_ids?.length || 0}</span>
+                                    الفواتير: <span className="text-[var(--dash-text-primary)]">{merge.moved_sales_ids?.length || 0}</span>
                                   </span>
                                   <span>
-                                    المدفوعات: <span className="text-white">{merge.moved_payments_ids?.length || 0}</span>
+                                    المدفوعات: <span className="text-[var(--dash-text-primary)]">{merge.moved_payments_ids?.length || 0}</span>
                                   </span>
                                   <span>
                                     الرصيد:{" "}
@@ -389,7 +389,7 @@ export default function PendingMergesModal({
                                 {/* Time Info */}
                                 <div className="flex items-center gap-2 text-sm">
                                   <ClockIcon className="h-4 w-4 text-yellow-500" />
-                                  <span className={stillCanUndo ? "text-yellow-400" : "text-gray-500"}>
+                                  <span className={stillCanUndo ? "text-yellow-400" : "text-[var(--dash-text-disabled)]"}>
                                     {stillCanUndo ? (
                                       <>المتبقي: {getTimeRemaining(merge.can_undo_until)}</>
                                     ) : (
@@ -406,7 +406,7 @@ export default function PendingMergesModal({
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                                   stillCanUndo && undoingId !== merge.id
                                     ? "bg-orange-600 hover:bg-orange-700 text-white"
-                                    : "bg-gray-600 text-gray-400 cursor-not-allowed"
+                                    : "bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed"
                                 }`}
                               >
                                 {undoingId === merge.id ? (
@@ -433,7 +433,7 @@ export default function PendingMergesModal({
                 <div className="p-4 border-t border-[var(--dash-border-default)] flex justify-end">
                   <button
                     onClick={onClose}
-                    className="px-6 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-xl transition-colors"
+                    className="px-6 py-2.5 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-xl transition-colors"
                   >
                     إغلاق
                   </button>

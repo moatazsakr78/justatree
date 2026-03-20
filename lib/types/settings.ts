@@ -35,6 +35,7 @@ export interface WebsiteSettings {
 
 // UI/Theme settings
 export interface UISettings {
+  dashboard_theme: 'modern' | 'classic';
   theme: 'dark' | 'light';
   primary_color: string;
   secondary_color: string;
@@ -168,6 +169,7 @@ export const DEFAULT_SETTINGS: SystemSettingsObject = {
     show_product_star_rating: true
   },
   ui: {
+    dashboard_theme: 'modern',
     theme: 'dark',
     primary_color: '#3B82F6',
     secondary_color: '#10B981',
