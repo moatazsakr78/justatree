@@ -17,9 +17,6 @@ import { useCustomerGroups, CustomerGroup } from '../../lib/hooks/useCustomerGro
 import { useCustomers, Customer, DEFAULT_CUSTOMER_ID } from '../../lib/hooks/useCustomers'
 import CustomersGridView from '../../components/CustomersGridView'
 import MergeCustomersModal from '../../components/MergeCustomersModal'
-import TestBadge from '../../components/TestBadge'
-import { generateTestCustomerDefaults, deleteTestEntity } from '../../lib/services/testDataService'
-import type { CustomerFormDefaults } from '../../lib/services/testDataService'
 import {
   ArrowPathIcon,
   FolderPlusIcon,
@@ -72,7 +69,6 @@ const tableColumns = [
         {customer.id === DEFAULT_CUSTOMER_ID && (
           <span className="text-yellow-400">★</span>
         )}
-        {customer.is_test && <TestBadge />}
       </div>
     )
   },
@@ -266,9 +262,6 @@ export default function CustomersPage() {
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid')
   const [isGroupsHidden, setIsGroupsHidden] = useState(true)
   const [isMergeModalOpen, setIsMergeModalOpen] = useState(false)
-  const [isTestMode, setIsTestMode] = useState(false)
-  const [testDefaultValues, setTestDefaultValues] = useState<CustomerFormDefaults | undefined>(undefined)
-
   // Use the real-time hooks for customer groups and customers
   const { groups, isLoading: groupsLoading, error: groupsError, toggleGroup } = useCustomerGroups()
   const { customers, isLoading: customersLoading, error: customersError, isDefaultCustomer, refetch } = useCustomers()
@@ -326,8 +319,6 @@ export default function CustomersPage() {
   }
 
   const toggleAddCustomerModal = () => {
-    setIsTestMode(false)
-    setTestDefaultValues(undefined)
     setIsAddCustomerModalOpen(!isAddCustomerModalOpen)
   }
 
@@ -360,20 +351,15 @@ export default function CustomersPage() {
     setIsDeleting(true)
 
     try {
-      if (selectedCustomer.is_test) {
-        // Test customer: use RPC to cascade delete all related data
-        await deleteTestEntity(supabase, 'customer', selectedCustomer.id)
-      } else {
-        const { error } = await supabase
-          .from('customers')
-          .delete()
-          .eq('id', selectedCustomer.id)
+      const { error } = await supabase
+        .from('customers')
+        .delete()
+        .eq('id', selectedCustomer.id)
 
-        if (error) {
-          console.error('Error deleting customer:', error)
-          alert('حدث خطأ أثناء حذف العميل: ' + error.message)
-          return
-        }
+      if (error) {
+        console.error('Error deleting customer:', error)
+        alert('حدث خطأ أثناء حذف العميل: ' + error.message)
+        return
       }
 
       // Clear selection after successful deletion
@@ -652,18 +638,6 @@ export default function CustomersPage() {
             </button>
 
             <button
-              onClick={() => {
-                setTestDefaultValues(generateTestCustomerDefaults())
-                setIsTestMode(true)
-                setIsAddCustomerModalOpen(true)
-              }}
-              className="flex items-center gap-2 px-3 py-2 text-orange-300 hover:text-orange-200 hover:bg-orange-900/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
-            >
-              <PlusIcon className="h-4 w-4" />
-              <span className="text-sm">بيانات تجريبية</span>
-            </button>
-
-            <button
               onClick={() => selectedCustomer && openEditCustomerModal(selectedCustomer)}
               className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
                 selectedCustomer
@@ -898,9 +872,7 @@ export default function CustomersPage() {
       {/* Add Customer Modal */}
       <AddCustomerModal
         isOpen={isAddCustomerModalOpen}
-        onClose={() => { setIsAddCustomerModalOpen(false); setIsTestMode(false); setTestDefaultValues(undefined) }}
-        defaultValues={testDefaultValues}
-        isTest={isTestMode}
+        onClose={() => setIsAddCustomerModalOpen(false)}
         onCreated={() => refetch()}
       />
 

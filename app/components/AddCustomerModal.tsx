@@ -8,9 +8,6 @@ import { ranks } from '@/app/lib/data/ranks'
 import { egyptianGovernorates } from '@/app/lib/data/governorates'
 import { supabase } from '@/app/lib/supabase/client'
 import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
-import type { CustomerFormDefaults } from '@/app/lib/services/testDataService'
-import TestBadge from './TestBadge'
-
 // Price type options
 const priceTypeOptions = [
   { value: 'price', label: 'سعر البيع' },
@@ -24,12 +21,10 @@ const priceTypeOptions = [
 interface AddCustomerModalProps {
   isOpen: boolean
   onClose: () => void
-  defaultValues?: CustomerFormDefaults
-  isTest?: boolean
   onCreated?: () => void
 }
 
-export default function AddCustomerModal({ isOpen, onClose, defaultValues, isTest, onCreated }: AddCustomerModalProps) {
+export default function AddCustomerModal({ isOpen, onClose, onCreated }: AddCustomerModalProps) {
   const activityLog = useActivityLogger()
   const [activeTab, setActiveTab] = useState('details')
   const [isLoading, setIsLoading] = useState(false)
@@ -53,19 +48,6 @@ export default function AddCustomerModal({ isOpen, onClose, defaultValues, isTes
   })
 
   const { groups, isLoading: groupsLoading } = useCustomerGroups()
-
-  // Populate form with default values when opening in test mode
-  useEffect(() => {
-    if (isOpen && defaultValues) {
-      setFormData(prev => ({
-        ...prev,
-        name: defaultValues.name || '',
-        phone: defaultValues.phone || '',
-        governorate: defaultValues.governorate || '',
-        allowedLimit: defaultValues.allowedLimit || '',
-      }))
-    }
-  }, [isOpen, defaultValues])
 
   // Fetch records for the dropdown
   useEffect(() => {
@@ -185,7 +167,6 @@ export default function AddCustomerModal({ isOpen, onClose, defaultValues, isTes
         is_active: true,
         default_record_id: formData.defaultRecordId || null,
         default_price_type: formData.defaultPriceType || 'price',
-        ...(isTest ? { is_test: true } : {})
       } as any
 
       // Insert customer into database
@@ -266,7 +247,6 @@ export default function AddCustomerModal({ isOpen, onClose, defaultValues, isTes
         {/* Header */}
         <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
           <h2 className="text-white text-lg font-medium flex-1 text-right flex items-center justify-end gap-2">
-            {isTest && <TestBadge />}
             إضافة عميل
           </h2>
           <button

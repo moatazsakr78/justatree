@@ -215,12 +215,6 @@ const settingsCategories: SettingsCategory[] = [
     icon: BoltIcon,
     description: 'إعدادات أداء النظام والتحميل'
   },
-  {
-    id: 'test-data',
-    name: 'بيانات تجريبية',
-    icon: ExclamationTriangleIcon,
-    description: 'إنشاء وإدارة بيانات تجريبية للاختبار'
-  }
 ];
 
 
@@ -2165,122 +2159,6 @@ export default function SettingsPage() {
     );
   };
 
-  const renderTestDataSettings = () => {
-    const [testCounts, setTestCounts] = useState({ customers: 0, suppliers: 0, safes: 0 });
-    const [isLoadingCounts, setIsLoadingCounts] = useState(true);
-    const [isDeletingAll, setIsDeletingAll] = useState(false);
-
-    useEffect(() => {
-      const fetchCounts = async () => {
-        setIsLoadingCounts(true);
-        try {
-          const [customersRes, suppliersRes, safesRes] = await Promise.all([
-            supabase.from('customers').select('id', { count: 'exact', head: true }).eq('is_test', true),
-            supabase.from('suppliers').select('id', { count: 'exact', head: true }).eq('is_test', true),
-            supabase.from('records').select('id', { count: 'exact', head: true }).eq('is_test', true),
-          ]);
-          setTestCounts({
-            customers: customersRes.count || 0,
-            suppliers: suppliersRes.count || 0,
-            safes: safesRes.count || 0,
-          });
-        } catch (err) {
-          console.error('Error fetching test counts:', err);
-        } finally {
-          setIsLoadingCounts(false);
-        }
-      };
-      fetchCounts();
-    }, []);
-
-    const totalCount = testCounts.customers + testCounts.suppliers + testCounts.safes;
-
-    const handleDeleteAll = async () => {
-      if (!window.confirm(`هل أنت متأكد من حذف جميع البيانات التجريبية؟\n\nسيتم حذف:\n- ${testCounts.customers} عميل تجريبي\n- ${testCounts.suppliers} مورد تجريبي\n- ${testCounts.safes} خزنة تجريبية\n\nوجميع البيانات المرتبطة بها (مبيعات، مشتريات، مدفوعات، إلخ)`)) {
-        return;
-      }
-
-      setIsDeletingAll(true);
-      try {
-        const res = await fetch('/api/test-data', { method: 'DELETE' });
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'فشل الحذف');
-        }
-
-        alert(`تم حذف البيانات التجريبية بنجاح!\n\nعملاء: ${data.customers}\nموردين: ${data.suppliers}\nخزائن: ${data.safes}`);
-        activityLog({ entityType: 'setting', actionType: 'delete', description: 'حذف جميع البيانات التجريبية' } as any);
-        setTestCounts({ customers: 0, suppliers: 0, safes: 0 });
-      } catch (err) {
-        console.error('Error deleting all test data:', err);
-        alert('حدث خطأ أثناء حذف البيانات التجريبية');
-      } finally {
-        setIsDeletingAll(false);
-      }
-    };
-
-    return (
-      <div className="space-y-6 max-w-4xl">
-        <h3 className="text-white font-medium text-lg mb-6">بيانات تجريبية</h3>
-        <p className="text-sm text-gray-400 mb-6">
-          إنشاء بيانات وهمية للاختبار وحذفها بسهولة. البيانات التجريبية تظهر بعلامة &quot;تجريبي&quot; برتقالية.
-        </p>
-
-        {/* Test Data Counts */}
-        <div className="space-y-4 p-4 bg-[#374151] rounded-lg border border-gray-600">
-          <h4 className="text-white text-sm font-medium mb-3">عدد البيانات التجريبية الحالية</h4>
-          {isLoadingCounts ? (
-            <p className="text-gray-400 text-sm">جاري التحميل...</p>
-          ) : (
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                <p className="text-2xl font-bold text-blue-400">{testCounts.customers}</p>
-                <p className="text-xs text-gray-400 mt-1">عميل تجريبي</p>
-              </div>
-              <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                <p className="text-2xl font-bold text-green-400">{testCounts.suppliers}</p>
-                <p className="text-xs text-gray-400 mt-1">مورد تجريبي</p>
-              </div>
-              <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                <p className="text-2xl font-bold text-purple-400">{testCounts.safes}</p>
-                <p className="text-xs text-gray-400 mt-1">خزنة تجريبية</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Danger Zone: Delete All */}
-        <div className="mt-8 p-6 bg-red-900/20 rounded-lg border border-red-700">
-          <h4 className="text-red-300 font-medium mb-4 flex items-center gap-2">
-            <ExclamationTriangleIcon className="h-5 w-5" />
-            حذف جميع البيانات التجريبية
-          </h4>
-          <p className="text-gray-400 text-sm mb-4">
-            سيتم حذف جميع العملاء والموردين والخزائن التجريبية وكل البيانات المرتبطة بها (مبيعات، مشتريات، مدفوعات، إلخ). لا يمكن التراجع عن هذا الإجراء.
-          </p>
-          <button
-            onClick={handleDeleteAll}
-            disabled={isDeletingAll || totalCount === 0}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-          >
-            {isDeletingAll ? (
-              <>
-                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                جاري الحذف...
-              </>
-            ) : (
-              `حذف كل البيانات التجريبية (${totalCount})`
-            )}
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   const renderSettingsContent = () => {
     switch (selectedCategory) {
       case 'system':
@@ -2297,8 +2175,6 @@ export default function SettingsPage() {
         return <BackupSettings />;
       case 'performance':
         return renderPerformanceSettings();
-      case 'test-data':
-        return renderTestDataSettings();
       default:
         return renderPlaceholderContent(selectedCategory);
     }

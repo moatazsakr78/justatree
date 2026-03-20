@@ -27,7 +27,6 @@ export interface Supplier {
   total_purchases: number | null
   last_purchase: string | null
   loyalty_points: number | null
-  is_test: boolean | null
 }
 
 // Default supplier ID that should never be deleted

@@ -8,18 +8,13 @@ import { ranks } from '@/app/lib/data/ranks'
 import { egyptianGovernorates } from '@/app/lib/data/governorates'
 import { supabase } from '@/app/lib/supabase/client'
 import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
-import type { SupplierFormDefaults } from '@/app/lib/services/testDataService'
-import TestBadge from './TestBadge'
-
 interface AddSupplierModalProps {
   isOpen: boolean
   onClose: () => void
-  defaultValues?: SupplierFormDefaults
-  isTest?: boolean
   onCreated?: () => void
 }
 
-export default function AddSupplierModal({ isOpen, onClose, defaultValues, isTest, onCreated }: AddSupplierModalProps) {
+export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupplierModalProps) {
   const activityLog = useActivityLogger()
   const [activeTab, setActiveTab] = useState('details')
   const [isLoading, setIsLoading] = useState(false)
@@ -38,19 +33,6 @@ export default function AddSupplierModal({ isOpen, onClose, defaultValues, isTes
   })
 
   const { groups, isLoading: groupsLoading } = useSupplierGroups()
-
-  // Populate form with default values when opening in test mode
-  useEffect(() => {
-    if (isOpen && defaultValues) {
-      setFormData(prev => ({
-        ...prev,
-        name: defaultValues.name || '',
-        phone: defaultValues.phone || '',
-        governorate: defaultValues.governorate || '',
-        allowedLimit: defaultValues.allowedLimit || '',
-      }))
-    }
-  }, [isOpen, defaultValues])
 
   const tabs = [
     { id: 'details', label: 'تفاصيل المورد', active: true }
@@ -129,7 +111,6 @@ export default function AddSupplierModal({ isOpen, onClose, defaultValues, isTes
         opening_balance: formData.openingBalance ? parseFloat(formData.openingBalance) : 0,
         credit_limit: formData.allowedLimit ? parseFloat(formData.allowedLimit) : 5000,
         is_active: true,
-        ...(isTest ? { is_test: true } : {})
       } as any
 
       // Insert supplier into database
@@ -204,7 +185,6 @@ export default function AddSupplierModal({ isOpen, onClose, defaultValues, isTes
         {/* Header */}
         <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
           <h2 className="text-white text-lg font-medium flex-1 text-right flex items-center justify-end gap-2">
-            {isTest && <TestBadge />}
             إضافة مورد
           </h2>
           <button

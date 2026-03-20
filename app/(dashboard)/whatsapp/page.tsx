@@ -626,6 +626,28 @@ export default function WhatsAppPage() {
             setMessages(prev => {
               const exists = prev.some(m => m.message_id === newMsg.message_id)
               if (exists) return prev
+
+              // For outgoing messages: check if there's a pending optimistic message
+              // that this realtime event corresponds to (prevents duplicate display)
+              if (newMsg.message_type === 'outgoing') {
+                const optimisticIdx = prev.findIndex(m =>
+                  m.tempId &&
+                  m.status === 'sending' &&
+                  m.message_type === 'outgoing' &&
+                  cleanPhoneNumber(m.from_number) === cleanPhoneNumber(newMsg.from_number) &&
+                  m.message_text === newMsg.message_text
+                )
+                if (optimisticIdx >= 0) {
+                  const updated = [...prev]
+                  updated[optimisticIdx] = {
+                    ...newMsg,
+                    tempId: prev[optimisticIdx].tempId,
+                    status: prev[optimisticIdx].status,
+                  }
+                  return updated
+                }
+              }
+
               return [...prev, newMsg]
             })
           }
@@ -683,6 +705,28 @@ export default function WhatsAppPage() {
           setMessages(prev => {
             const exists = prev.some(m => m.message_id === newMsg.message_id)
             if (exists) return prev
+
+            // For outgoing messages: check if there's a pending optimistic message
+            // that this broadcast event corresponds to (prevents duplicate display)
+            if (newMsg.message_type === 'outgoing') {
+              const optimisticIdx = prev.findIndex(m =>
+                m.tempId &&
+                m.status === 'sending' &&
+                m.message_type === 'outgoing' &&
+                cleanPhoneNumber(m.from_number) === cleanPhoneNumber(newMsg.from_number) &&
+                m.message_text === newMsg.message_text
+              )
+              if (optimisticIdx >= 0) {
+                const updated = [...prev]
+                updated[optimisticIdx] = {
+                  ...newMsg,
+                  tempId: prev[optimisticIdx].tempId,
+                  status: prev[optimisticIdx].status,
+                }
+                return updated
+              }
+            }
+
             return [...prev, newMsg]
           })
         }
