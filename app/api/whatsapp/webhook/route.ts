@@ -110,6 +110,32 @@ export async function POST(request: NextRequest) {
             }
           }
 
+          // === DEDUP: Check msg_id before inserting to prevent duplicate rows ===
+          // When we send via API, we insert with message_id="sent_xxx" and msg_id=123.
+          // The webhook then fires with message_id="3EBxxx" and the same msg_id=123.
+          // Without this check, both get inserted (different message_id = no conflict).
+          if (isOutgoing && message.msgId) {
+            const { data: existingByMsgId } = await supabase
+              .schema('elfaroukgroup')
+              .from('whatsapp_messages')
+              .select('id, message_id')
+              .eq('msg_id', message.msgId)
+              .limit(1)
+              .single()
+
+            if (existingByMsgId) {
+              // Row already exists from send API — update message_id to canonical WhatsApp ID
+              if (existingByMsgId.message_id !== message.messageId) {
+                await supabase.schema('elfaroukgroup')
+                  .from('whatsapp_messages')
+                  .update({ message_id: message.messageId })
+                  .eq('id', existingByMsgId.id)
+              }
+              console.log('✅ Dedup: updated existing msg_id row, skipping insert')
+              continue // Skip upsert + broadcast
+            }
+          }
+
           // Use upsert to prevent duplicates (atomic operation)
           // Store both incoming and outgoing messages
           // For outgoing messages from real WhatsApp app, customer_name should be the recipient name

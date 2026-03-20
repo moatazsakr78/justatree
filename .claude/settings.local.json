@@ -392,7 +392,8 @@
       "Bash(find /c/Users/pc/Desktop/elfaroukgroup -type f \\\\\\(-name *.sql -o -name *.ts -o -name *.tsx \\\\\\))",
       "Bash(git -C /c/Users/pc/Desktop/elfaroukgroup diff HEAD app/lib/invoices/updateSalesInvoice.ts)",
       "Bash(git -C /c/Users/pc/Desktop/elfaroukgroup diff HEAD app/api/sync/sales/route.ts)",
-      "Bash(find /c/Users/pc/Desktop/elfaroukgroup/app -type f \\\\\\( -path \"*\\(website\\)*\" -o -path \"*\\(orders\\)*\" -o -path \"*\\(invoices\\)*\" \\\\\\) \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\))"
+      "Bash(find /c/Users/pc/Desktop/elfaroukgroup/app -type f \\\\\\( -path \"*\\(website\\)*\" -o -path \"*\\(orders\\)*\" -o -path \"*\\(invoices\\)*\" \\\\\\) \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\))",
+      "Bash(find /c/Users/pc/Desktop/elfaroukgroup/app/api -type f \\\\\\(-name *whatsapp* -o -name *message* \\\\\\))"
     ],
     "deny": [],
     "additionalDirectories": [

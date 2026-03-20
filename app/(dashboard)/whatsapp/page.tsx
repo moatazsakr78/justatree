@@ -629,20 +629,21 @@ export default function WhatsAppPage() {
 
               // For outgoing messages: check if there's a pending optimistic message
               // that this realtime event corresponds to (prevents duplicate display)
+              // Match by msg_id (most reliable) or by text+phone (fallback)
+              // Don't require status === 'sending' because API response may have already changed it to 'sent'
               if (newMsg.message_type === 'outgoing') {
                 const optimisticIdx = prev.findIndex(m =>
                   m.tempId &&
-                  m.status === 'sending' &&
                   m.message_type === 'outgoing' &&
                   cleanPhoneNumber(m.from_number) === cleanPhoneNumber(newMsg.from_number) &&
-                  m.message_text === newMsg.message_text
+                  (m.message_text === newMsg.message_text || (m.msg_id && newMsg.msg_id && m.msg_id === newMsg.msg_id))
                 )
                 if (optimisticIdx >= 0) {
                   const updated = [...prev]
                   updated[optimisticIdx] = {
                     ...newMsg,
-                    tempId: prev[optimisticIdx].tempId,
-                    status: prev[optimisticIdx].status,
+                    tempId: undefined,
+                    status: 'sent' as MessageStatus,
                   }
                   return updated
                 }
@@ -711,17 +712,16 @@ export default function WhatsAppPage() {
             if (newMsg.message_type === 'outgoing') {
               const optimisticIdx = prev.findIndex(m =>
                 m.tempId &&
-                m.status === 'sending' &&
                 m.message_type === 'outgoing' &&
                 cleanPhoneNumber(m.from_number) === cleanPhoneNumber(newMsg.from_number) &&
-                m.message_text === newMsg.message_text
+                (m.message_text === newMsg.message_text || (m.msg_id && newMsg.msg_id && m.msg_id === newMsg.msg_id))
               )
               if (optimisticIdx >= 0) {
                 const updated = [...prev]
                 updated[optimisticIdx] = {
                   ...newMsg,
-                  tempId: prev[optimisticIdx].tempId,
-                  status: prev[optimisticIdx].status,
+                  tempId: undefined,
+                  status: 'sent' as MessageStatus,
                 }
                 return updated
               }

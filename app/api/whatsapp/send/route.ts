@@ -185,6 +185,26 @@ export async function POST(request: NextRequest) {
       // Generate message_id if not provided by WasenderAPI
       const generatedMessageId = result.messageId || `sent_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
+      // === DEDUP: Check if webhook already inserted a row with this msg_id ===
+      // Rare race condition: webhook arrives before this code runs
+      if (result.msgId) {
+        const { data: existingByMsgId } = await supabase
+          .schema('elfaroukgroup')
+          .from('whatsapp_messages')
+          .select('message_id')
+          .eq('msg_id', result.msgId)
+          .limit(1)
+          .single();
+
+        if (existingByMsgId) {
+          return NextResponse.json({
+            success: true,
+            messageId: existingByMsgId.message_id,
+            msgId: result.msgId,
+          });
+        }
+      }
+
       // Store message in database
       const { error: dbError } = await supabase.schema('elfaroukgroup').from('whatsapp_messages').insert({
         message_id: generatedMessageId,
