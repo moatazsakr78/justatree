@@ -35,7 +35,7 @@ export interface WebsiteSettings {
 
 // UI/Theme settings
 export interface UISettings {
-  dashboard_theme: 'modern' | 'classic';
+  dashboard_theme: 'modern' | 'classic' | 'naseem' | 'kahraman';
   theme: 'dark' | 'light';
   primary_color: string;
   secondary_color: string;

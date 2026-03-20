@@ -157,13 +157,13 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-white text-base font-bold">
+                    <span className="text-[var(--dash-text-primary)] text-base font-bold">
                       {session.user.name?.charAt(0)?.toUpperCase() || session.user.email?.charAt(0)?.toUpperCase() || 'M'}
                     </span>
                   )}
                 </div>
                 <div>
-                  <p className="text-base font-medium text-white">
+                  <p className="text-base font-medium text-[var(--dash-text-primary)]">
                     {session.user.name || session.user.email || 'مستخدم'}
                   </p>
                   <p className="text-sm text-[var(--dash-text-muted)]">
@@ -177,7 +177,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
                   <span className="text-[var(--dash-text-primary)] text-base font-bold">?</span>
                 </div>
                 <div>
-                  <p className="text-base font-medium text-white">غير محدد</p>
+                  <p className="text-base font-medium text-[var(--dash-text-primary)]">غير محدد</p>
                   <p className="text-sm text-[var(--dash-text-muted)]">لا توجد بيانات</p>
                 </div>
               </div>

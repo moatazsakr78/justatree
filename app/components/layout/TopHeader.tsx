@@ -113,7 +113,7 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
         <div className="flex items-center gap-2">
           <button
             onClick={onMenuClick}
-            className="p-2 text-white"
+            className="p-2 text-[var(--dash-text-primary)]"
             aria-label={isMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
           >
             <Bars3Icon className="h-6 w-6" />

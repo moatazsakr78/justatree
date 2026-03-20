@@ -2170,11 +2170,11 @@ export default function SettingsPage() {
     const { getSetting, updateSettings: updateSystemSettings } = useSystemSettings();
     const currentTheme = getSetting<string>('ui.dashboard_theme', 'modern');
 
-    const handleThemeChange = async (theme: 'modern' | 'classic') => {
+    const handleThemeChange = async (theme: 'modern' | 'classic' | 'naseem' | 'kahraman') => {
       if (theme === currentTheme) return;
       // Apply immediately
-      if (theme === 'classic') {
-        document.documentElement.setAttribute('data-dash-theme', 'classic');
+      if (theme !== 'modern') {
+        document.documentElement.setAttribute('data-dash-theme', theme);
       } else {
         document.documentElement.removeAttribute('data-dash-theme');
       }
@@ -2201,13 +2201,25 @@ export default function SettingsPage() {
         description: 'المظهر الأصلي بألوان رمادية فاتحة',
         colors: ['#111827', '#1F2937', '#2B3544', '#374151', '#4B5563'],
       },
+      {
+        id: 'naseem' as const,
+        name: 'نسيم',
+        description: 'مظهر داكن أنيق بطابع احترافي',
+        colors: ['#09090B', '#18181B', '#27272A', '#818CF8', '#C084FC'],
+      },
+      {
+        id: 'kahraman' as const,
+        name: 'كهرمان',
+        description: 'مظهر داكن دافئ بلمسات الذهب والعنبر',
+        colors: ['#0C0A09', '#1C1917', '#292524', '#F59E0B', '#FB923C'],
+      },
     ];
 
     return (
       <div className="space-y-6 max-w-4xl">
         <h3 className="text-[var(--dash-text-primary)] font-medium text-lg mb-2">مظهر النظام</h3>
         <p className="text-sm text-[var(--dash-text-muted)] mb-6">
-          اختر المظهر المناسب لك — كلا المظهرين داكنان
+          اختر المظهر المناسب لك
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -2219,14 +2231,14 @@ export default function SettingsPage() {
                 onClick={() => handleThemeChange(t.id)}
                 className={`relative p-4 rounded-xl border-2 transition-all text-right ${
                   isSelected
-                    ? 'border-blue-500 bg-blue-500/10'
+                    ? 'border-[var(--dash-accent-blue)] bg-[var(--dash-accent-blue-subtle)]'
                     : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-strong)] bg-[var(--dash-bg-raised)]'
                 }`}
               >
                 {/* Selected indicator */}
                 {isSelected && (
                   <div className="absolute top-3 left-3">
-                    <CheckCircleIcon className="w-6 h-6 text-blue-500" />
+                    <CheckCircleIcon className="w-6 h-6 text-[var(--dash-accent-blue)]" />
                   </div>
                 )}
 

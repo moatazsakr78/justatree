@@ -49,6 +49,11 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('dash-theme');if(t&&t!=='modern')document.documentElement.setAttribute('data-dash-theme',t)}catch(e){}})()`,
+          }}
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"

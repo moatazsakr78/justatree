@@ -24,8 +24,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Apply dashboard theme from localStorage immediately (prevents flash)
     const savedDashTheme = localStorage.getItem('dash-theme');
-    if (savedDashTheme === 'classic') {
-      document.documentElement.setAttribute('data-dash-theme', 'classic');
+    if (savedDashTheme && savedDashTheme !== 'modern') {
+      document.documentElement.setAttribute('data-dash-theme', savedDashTheme);
     } else {
       document.documentElement.removeAttribute('data-dash-theme');
     }
@@ -62,8 +62,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         if (settingsData?.settings_data?.ui?.dashboard_theme) {
           const dbDashTheme = settingsData.settings_data.ui.dashboard_theme;
           localStorage.setItem('dash-theme', dbDashTheme);
-          if (dbDashTheme === 'classic') {
-            document.documentElement.setAttribute('data-dash-theme', 'classic');
+          if (dbDashTheme && dbDashTheme !== 'modern') {
+            document.documentElement.setAttribute('data-dash-theme', dbDashTheme);
           } else {
             document.documentElement.removeAttribute('data-dash-theme');
           }

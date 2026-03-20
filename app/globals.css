@@ -255,6 +255,90 @@
   --dash-shadow-glow-blue: 0 0 20px rgba(59,130,246,0.1), 0 0 6px rgba(59,130,246,0.08);
 }
 
+/* Naseem theme — premium noir */
+[data-dash-theme="naseem"] {
+  --dash-bg-deepest: #09090B;
+  --dash-bg-base: #0F0F11;
+  --dash-bg-surface: #18181B;
+  --dash-bg-raised: #1F1F23;
+  --dash-bg-overlay: #27272A;
+  --dash-bg-highlight: #3F3F46;
+  --dash-border-subtle: rgba(255, 255, 255, 0.05);
+  --dash-border-default: rgba(255, 255, 255, 0.08);
+  --dash-border-strong: rgba(255, 255, 255, 0.15);
+  --dash-border-focus: #818CF8;
+  --dash-text-primary: #FAFAFA;
+  --dash-text-secondary: #A1A1AA;
+  --dash-text-muted: #71717A;
+  --dash-text-disabled: #3F3F46;
+  --dash-accent-blue: #818CF8;
+  --dash-accent-green: #34D399;
+  --dash-accent-red: #F87171;
+  --dash-accent-orange: #FBBF24;
+  --dash-accent-purple: #C084FC;
+  --dash-accent-cyan: #22D3EE;
+  --dash-accent-blue-subtle: rgba(129, 140, 248, 0.10);
+  --dash-accent-green-subtle: rgba(52, 211, 153, 0.10);
+  --dash-accent-red-subtle: rgba(248, 113, 113, 0.10);
+  --dash-accent-orange-subtle: rgba(251, 191, 36, 0.10);
+  --dash-accent-purple-subtle: rgba(192, 132, 252, 0.10);
+  --dash-accent-cyan-subtle: rgba(34, 211, 238, 0.10);
+  --dash-header-bg: #0F0F11;
+  --dash-sidebar-bg: #09090B;
+  --dash-card-bg: #18181B;
+  --dash-input-bg: #0F0F11;
+  --dash-table-header-bg: #18181B;
+  --dash-modal-bg: #18181B;
+  --dash-modal-backdrop: rgba(0, 0, 0, 0.70);
+  --dash-tooltip-bg: #1F1F23;
+  --dash-shadow-sm: 0 1px 2px rgba(0,0,0,0.40), 0 1px 3px rgba(0,0,0,0.20);
+  --dash-shadow-md: 0 4px 6px rgba(0,0,0,0.40), 0 2px 4px rgba(0,0,0,0.25);
+  --dash-shadow-lg: 0 10px 25px rgba(0,0,0,0.50), 0 6px 10px rgba(0,0,0,0.30);
+  --dash-shadow-glow-blue: 0 0 20px rgba(129,140,248,0.12), 0 0 6px rgba(129,140,248,0.08);
+}
+
+/* Kahraman theme — dark amber */
+[data-dash-theme="kahraman"] {
+  --dash-bg-deepest: #0C0A09;
+  --dash-bg-base: #1C1917;
+  --dash-bg-surface: #292524;
+  --dash-bg-raised: #342E2A;
+  --dash-bg-overlay: #44403C;
+  --dash-bg-highlight: #57534E;
+  --dash-border-subtle: rgba(168, 162, 158, 0.08);
+  --dash-border-default: rgba(168, 162, 158, 0.15);
+  --dash-border-strong: rgba(168, 162, 158, 0.25);
+  --dash-border-focus: #F59E0B;
+  --dash-text-primary: #FAFAF9;
+  --dash-text-secondary: #D6D3D1;
+  --dash-text-muted: #A8A29E;
+  --dash-text-disabled: #57534E;
+  --dash-accent-blue: #F59E0B;
+  --dash-accent-green: #10B981;
+  --dash-accent-red: #EF4444;
+  --dash-accent-orange: #FB923C;
+  --dash-accent-purple: #A78BFA;
+  --dash-accent-cyan: #22D3EE;
+  --dash-accent-blue-subtle: rgba(245, 158, 11, 0.12);
+  --dash-accent-green-subtle: rgba(16, 185, 129, 0.12);
+  --dash-accent-red-subtle: rgba(239, 68, 68, 0.12);
+  --dash-accent-orange-subtle: rgba(251, 146, 60, 0.12);
+  --dash-accent-purple-subtle: rgba(167, 139, 250, 0.12);
+  --dash-accent-cyan-subtle: rgba(34, 211, 238, 0.12);
+  --dash-header-bg: #1C1917;
+  --dash-sidebar-bg: #1C1917;
+  --dash-card-bg: #292524;
+  --dash-input-bg: #1C1917;
+  --dash-table-header-bg: #292524;
+  --dash-modal-bg: #292524;
+  --dash-modal-backdrop: rgba(0, 0, 0, 0.65);
+  --dash-tooltip-bg: #342E2A;
+  --dash-shadow-sm: 0 1px 2px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.18);
+  --dash-shadow-md: 0 4px 6px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.22);
+  --dash-shadow-lg: 0 10px 25px rgba(0,0,0,0.45), 0 6px 10px rgba(0,0,0,0.28);
+  --dash-shadow-glow-blue: 0 0 20px rgba(245,158,11,0.15), 0 0 6px rgba(245,158,11,0.10);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
