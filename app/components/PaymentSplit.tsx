@@ -178,14 +178,14 @@ export default function PaymentSplit({ totalAmount, onPaymentsChange, isDefaultC
                 onFocus={(e) => e.target.select()}
                 onKeyDown={(e) => !(isDefaultCustomer && payments.length === 1) ? handleKeyDown(e, payment.id) : undefined}
                 placeholder={isReturnMode ? "مبلغ المرتجع" : isPurchaseMode ? "المبلغ المدفوع للمورد" : "المبلغ"}
-                className={`w-full px-2 py-1 text-white rounded border focus:outline-none focus:ring-1 text-xs h-[26px] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+                className={`w-full px-2 py-1 text-[var(--dash-text-primary)] rounded border focus:outline-none focus:ring-1 text-xs h-[26px] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
                   isDefaultCustomer && payments.length === 1
-                    ? "bg-gray-800 border-gray-700 cursor-not-allowed opacity-75"
+                    ? "bg-[var(--dash-bg-base)] border-[var(--dash-border-subtle)] cursor-not-allowed opacity-75"
                     : isReturnMode
-                    ? "bg-gray-700 border-red-500 focus:ring-red-500 text-red-400"
+                    ? "bg-[var(--dash-bg-raised)] border-red-500 focus:ring-red-500 text-red-400"
                     : isPurchaseMode
-                    ? "bg-gray-700 border-purple-500 focus:ring-purple-500"
-                    : "bg-gray-700 border-gray-600 focus:ring-blue-500"
+                    ? "bg-[var(--dash-bg-raised)] border-purple-500 focus:ring-purple-500"
+                    : "bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)]"
                 }`}
                 style={{ MozAppearance: 'textfield' }}
                 min="0"
@@ -198,7 +198,7 @@ export default function PaymentSplit({ totalAmount, onPaymentsChange, isDefaultC
               <select
                 value={payment.paymentMethodId}
                 onChange={(e) => handlePaymentMethodChange(payment.id, e.target.value)}
-                className="w-full px-2 py-1 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs h-[26px] appearance-none"
+                className="w-full px-2 py-1 bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded border border-[var(--dash-border-default)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] text-xs h-[26px] appearance-none"
                 style={{ lineHeight: '1' }}
               >
                 {paymentMethods.map((method) => (
@@ -239,14 +239,14 @@ export default function PaymentSplit({ totalAmount, onPaymentsChange, isDefaultC
 
       {/* Compact Summary - Only show if there's credit or multiple payments */}
       {(creditAmount > 0 || payments.length > 1) && (!isDefaultCustomer || payments.length > 1) && (
-        <div className="mt-2 pt-2 border-t border-gray-600 flex items-center justify-between text-xs">
+        <div className="mt-2 pt-2 border-t border-[var(--dash-border-default)] flex items-center justify-between text-xs">
           <div className="flex items-center gap-3">
-            <span className="text-gray-400">
+            <span className="text-[var(--dash-text-muted)]">
               {isPurchaseMode ? "مدفوع للمورد: " : "مدفوع: "}
               <span className={`font-medium ${isPurchaseMode ? "text-purple-400" : "text-green-400"}`}>{totalPaid.toFixed(0)}</span>
             </span>
             {creditAmount > 0 && (
-              <span className="text-gray-400">
+              <span className="text-[var(--dash-text-muted)]">
                 {isPurchaseMode ? "متبقي للمورد: " : "آجل: "}
                 <span className="text-orange-400 font-medium">{creditAmount.toFixed(0)}</span>
               </span>

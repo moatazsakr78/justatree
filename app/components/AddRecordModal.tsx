@@ -50,14 +50,14 @@ export default function AddRecordModal({ isOpen, onClose, onRecordAdded }: AddRe
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" dir="rtl">
-      <div className="bg-pos-darker rounded-lg p-6 w-96 max-w-md mx-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+      <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-96 max-w-md mx-4 shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white">إضافة سجل جديد</h2>
+          <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">إضافة سجل جديد</h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -66,7 +66,7 @@ export default function AddRecordModal({ isOpen, onClose, onRecordAdded }: AddRe
         {/* Form */}
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               اسم السجل
             </label>
             <input
@@ -74,7 +74,7 @@ export default function AddRecordModal({ isOpen, onClose, onRecordAdded }: AddRe
               value={recordName}
               onChange={(e) => setRecordName(e.target.value)}
               placeholder="أدخل اسم السجل..."
-              className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
               disabled={isLoading}
             />
           </div>
@@ -84,7 +84,7 @@ export default function AddRecordModal({ isOpen, onClose, onRecordAdded }: AddRe
         <div className="flex items-center justify-end gap-3 mt-6">
           <button
             onClick={handleClose}
-            className="px-4 py-2 text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+            className="px-4 py-2 text-[var(--dash-text-secondary)] bg-[var(--dash-bg-raised)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
             disabled={isLoading}
           >
             إلغاء
@@ -92,7 +92,7 @@ export default function AddRecordModal({ isOpen, onClose, onRecordAdded }: AddRe
           <button
             onClick={handleSave}
             disabled={!recordName.trim() || isLoading}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'جاري الحفظ...' : 'حفظ'}
           </button>

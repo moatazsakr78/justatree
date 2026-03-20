@@ -123,7 +123,7 @@ export default function OptimizedImage({
       
       {/* Loading overlay */}
       {isLoading && (
-        <div className={`absolute inset-0 flex items-center justify-center bg-gray-800/50`}>
+        <div className={`absolute inset-0 flex items-center justify-center bg-[var(--dash-bg-base)]/50`}>
           <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
@@ -152,7 +152,7 @@ export function ProductGridImage({
       priority={priority}
       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
       className="object-cover"
-      containerClassName="w-full h-40 bg-[#2B3544] rounded-md overflow-hidden relative z-0"
+      containerClassName="w-full h-40 bg-[var(--dash-bg-surface)] rounded-md overflow-hidden relative z-0"
       onError={onError}
       fallbackIcon={<DefaultFallback className="w-16 h-16" />}
     />
@@ -178,7 +178,7 @@ export function ProductModalImage({
       priority={priority}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 40vw"
       className="object-cover"
-      containerClassName="w-full h-64 bg-[#2B3544] rounded-lg border border-gray-600/30 overflow-hidden relative"
+      containerClassName="w-full h-64 bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)]/30 overflow-hidden relative"
       onError={onError}
       fallbackIcon={<DefaultFallback className="w-20 h-20" />}
     />
@@ -202,8 +202,8 @@ export function ProductThumbnail({
   return (
     <button
       onClick={onClick}
-      className={`w-full h-16 bg-[#2B3544] rounded-md overflow-hidden border-2 transition-colors relative ${
-        isSelected ? 'border-blue-500' : 'border-gray-600/50 hover:border-gray-500'
+      className={`w-full h-16 bg-[var(--dash-bg-surface)] rounded-md overflow-hidden border-2 transition-colors relative ${
+        isSelected ? 'border-blue-500' : 'border-[var(--dash-border-default)]/50 hover:border-[var(--dash-border-subtle)]'
       }`}
     >
       <OptimizedImage
@@ -216,8 +216,8 @@ export function ProductThumbnail({
         onError={onError}
         unoptimized={true}
         fallbackIcon={
-          <div className="w-full h-full bg-gray-600 flex items-center justify-center">
-            <span className="text-gray-400 text-xs">🖼️</span>
+          <div className="w-full h-full bg-[var(--dash-bg-overlay)] flex items-center justify-center">
+            <span className="text-[var(--dash-text-muted)] text-xs">🖼️</span>
           </div>
         }
       />

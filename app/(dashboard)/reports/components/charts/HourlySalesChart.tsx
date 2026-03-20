@@ -55,17 +55,17 @@ export default function HourlySalesChart({ dateFilter, height = 300 }: HourlySal
 
   if (loading) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <div className="h-8 bg-gray-600 rounded w-1/3 mb-4"></div>
-        <div className="animate-pulse bg-gray-600 rounded" style={{ height }}></div>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <div className="h-8 bg-[var(--dash-bg-overlay)] rounded w-1/3 mb-4"></div>
+        <div className="animate-pulse bg-[var(--dash-bg-overlay)] rounded" style={{ height }}></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <h3 className="text-white font-semibold mb-4 text-right">المبيعات بالساعة</h3>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">المبيعات بالساعة</h3>
         <div className="flex items-center justify-center text-red-400" style={{ height }}>
           {error}
         </div>
@@ -75,9 +75,9 @@ export default function HourlySalesChart({ dateFilter, height = 300 }: HourlySal
 
   if (data.length === 0) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <h3 className="text-white font-semibold mb-4 text-right">المبيعات بالساعة</h3>
-        <div className="flex items-center justify-center text-gray-400" style={{ height }}>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">المبيعات بالساعة</h3>
+        <div className="flex items-center justify-center text-[var(--dash-text-muted)]" style={{ height }}>
           لا توجد بيانات للفترة المحددة
         </div>
       </div>
@@ -97,10 +97,10 @@ export default function HourlySalesChart({ dateFilter, height = 300 }: HourlySal
             direction: 'rtl',
           }}
         >
-          <p className="text-white font-semibold mb-2">{item.hourLabel}</p>
-          <p className="text-gray-300">الإجمالي: {formatCurrencyAr(item.totalSales)}</p>
-          <p className="text-gray-300">عدد العمليات: {item.saleCount}</p>
-          <p className="text-gray-300">المتوسط: {formatCurrencyAr(item.avgSale)}</p>
+          <p className="text-[var(--dash-text-primary)] font-semibold mb-2">{item.hourLabel}</p>
+          <p className="text-[var(--dash-text-secondary)]">الإجمالي: {formatCurrencyAr(item.totalSales)}</p>
+          <p className="text-[var(--dash-text-secondary)]">عدد العمليات: {item.saleCount}</p>
+          <p className="text-[var(--dash-text-secondary)]">المتوسط: {formatCurrencyAr(item.avgSale)}</p>
           <p className="text-blue-400">النسبة: {item.percentage.toFixed(1)}%</p>
         </div>
       );
@@ -112,15 +112,15 @@ export default function HourlySalesChart({ dateFilter, height = 300 }: HourlySal
   const maxSales = Math.max(...data.map(d => d.totalSales));
 
   return (
-    <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
+    <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
       <div className="flex items-center justify-between mb-4">
         {peakHour && (
           <div className="text-sm">
-            <span className="text-gray-400">ساعة الذروة: </span>
+            <span className="text-[var(--dash-text-muted)]">ساعة الذروة: </span>
             <span className="text-green-400 font-medium">{peakHour.hourLabel}</span>
           </div>
         )}
-        <h3 className="text-white font-semibold text-right">المبيعات بالساعة</h3>
+        <h3 className="text-[var(--dash-text-primary)] font-semibold text-right">المبيعات بالساعة</h3>
       </div>
       <ResponsiveContainer width="100%" height={height}>
         <BarChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>

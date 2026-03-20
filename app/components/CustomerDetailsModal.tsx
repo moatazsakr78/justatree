@@ -2280,7 +2280,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'index',
       width: 50,
       render: (value: number, item: any) => (
-        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-white'}>{value}</span>
+        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'}>{value}</span>
       )
     },
     {
@@ -2289,7 +2289,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'displayDate',
       width: 120,
       render: (value: string, item: any) => (
-        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-white'}>{value}</span>
+        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'}>{value}</span>
       )
     },
     {
@@ -2298,7 +2298,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'displayTime',
       width: 80,
       render: (value: string, item: any) => (
-        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-white'}>{value}</span>
+        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'}>{value}</span>
       )
     },
     {
@@ -2307,7 +2307,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'description',
       width: 250,
       render: (value: string, item: any) => (
-        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-white'}>{value}</span>
+        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'}>{value}</span>
       )
     },
     {
@@ -2319,7 +2319,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         <span className={`px-2 py-1 rounded text-xs font-medium ${
           item.amount >= 0
             ? 'bg-amber-600/20 text-amber-400 border border-amber-600'
-            : 'bg-gray-600/20 text-gray-400 border border-gray-600'
+            : 'bg-[var(--dash-bg-overlay)]/20 text-[var(--dash-text-muted)] border border-[var(--dash-border-default)]'
         }`}>
           {value}
         </span>
@@ -2343,7 +2343,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       width: 130,
       render: (value: number, item: any) => {
         if (value === 0) {
-          return <span className="font-medium text-gray-500">-</span>
+          return <span className="font-medium text-[var(--dash-text-disabled)]">-</span>
         }
         return (
           <span className="font-medium text-red-500">
@@ -2367,7 +2367,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       render: (value: number, item: any) => {
         const netAmount = (item.invoiceValue || 0) - (item.paidAmount || 0);
         if (netAmount === 0) {
-          return <span className="font-medium text-gray-500">-</span>
+          return <span className="font-medium text-[var(--dash-text-disabled)]">-</span>
         }
         const isPositive = netAmount > 0;
         return (
@@ -2389,7 +2389,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'balance',
       width: 140,
       render: (value: number, item: any) => (
-        <span className={`font-medium ${item.amount >= 0 ? 'text-amber-400' : 'text-white'} ${
+        <span className={`font-medium ${item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'} ${
           item.isFirstRow ? 'bg-yellow-500/20 px-2 py-1 rounded' : ''
         }`}>
           {formatPrice(value, 'system')}
@@ -2402,7 +2402,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'safe_name',
       width: 120,
       render: (value: string, item: any) => (
-        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-white'}>{value || '-'}</span>
+        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'}>{value || '-'}</span>
       )
     },
     {
@@ -2411,7 +2411,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'employee_name',
       width: 120,
       render: (value: string, item: any) => (
-        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-white'}>{value || '-'}</span>
+        <span className={item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'}>{value || '-'}</span>
       )
     },
     {
@@ -2420,7 +2420,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'notes',
       width: 150,
       render: (value: string, item: any) => (
-        <span className="text-gray-400 text-sm truncate max-w-[150px]" title={value || ''}>
+        <span className="text-[var(--dash-text-muted)] text-sm truncate max-w-[150px]" title={value || ''}>
           {value || '-'}
         </span>
       )
@@ -2453,7 +2453,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     setEditingNoteValue('')
                   }
                 }}
-                className="flex-1 bg-gray-700 text-white text-sm px-2 py-1 rounded border border-blue-500 focus:outline-none"
+                className="flex-1 bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] text-sm px-2 py-1 rounded border border-blue-500 focus:outline-none"
                 autoFocus
               />
               <button
@@ -2479,16 +2479,16 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
         return (
           <div
-            className="flex items-center gap-1 cursor-pointer hover:bg-gray-700/50 px-2 py-1 rounded group"
+            className="flex items-center gap-1 cursor-pointer hover:bg-[var(--dash-bg-raised)]/50 px-2 py-1 rounded group"
             onClick={() => {
               setEditingNoteId(item.id)
               setEditingNoteValue(value || '')
             }}
           >
-            <span className="text-gray-400 text-sm truncate flex-1" title={value || ''}>
+            <span className="text-[var(--dash-text-muted)] text-sm truncate flex-1" title={value || ''}>
               {value || '-'}
             </span>
-            <PencilSquareIcon className="w-4 h-4 text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <PencilSquareIcon className="w-4 h-4 text-[var(--dash-text-disabled)] opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         )
       }
@@ -2502,7 +2502,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: '#', 
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-gray-400">{index + 1}</span>
+        <span className="text-[var(--dash-text-muted)]">{index + 1}</span>
       )
     },
     {
@@ -2526,7 +2526,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       width: 120,
       render: (value: string) => {
         const date = new Date(value)
-        return <span className="text-white">{date.toLocaleDateString('en-GB')}</span>
+        return <span className="text-[var(--dash-text-primary)]">{date.toLocaleDateString('en-GB')}</span>
       }
     },
     { 
@@ -2535,7 +2535,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'time', 
       width: 100,
       render: (value: string) => {
-        if (!value) return <span className="text-gray-400">-</span>
+        if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>
         const timeOnly = value.substring(0, 5)
         return <span className="text-blue-400 font-mono">{timeOnly}</span>
       }
@@ -2572,7 +2572,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
           switch (invoiceType) {
             case 'Sale Invoice': return 'bg-green-900 text-green-300'
             case 'Sale Return': return 'bg-red-900 text-red-300'
-            default: return 'bg-gray-900 text-gray-300'
+            default: return 'bg-gray-900 text-[var(--dash-text-secondary)]'
           }
         }
 
@@ -2588,14 +2588,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'العميل', 
       accessor: 'customer.name', 
       width: 150,
-      render: (value: string, item: any) => <span className="text-white">{item.customer?.name || 'غير محدد'}</span>
+      render: (value: string, item: any) => <span className="text-[var(--dash-text-primary)]">{item.customer?.name || 'غير محدد'}</span>
     },
     { 
       id: 'customer_phone', 
       header: 'الهاتف', 
       accessor: 'customer.phone', 
       width: 150,
-      render: (value: string, item: any) => <span className="text-gray-300 font-mono text-sm">{item.customer?.phone || '-'}</span>
+      render: (value: string, item: any) => <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{item.customer?.phone || '-'}</span>
     },
     {
       id: 'total_amount',
@@ -2617,7 +2617,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
               <span className="text-green-400 font-medium">{formatPrice(value, 'system')}</span>
             </>
           ) : (
-            <span className="text-gray-500">-</span>
+            <span className="text-[var(--dash-text-disabled)]">-</span>
           )}
         </div>
       )
@@ -2635,7 +2635,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
               <span className="text-red-400 font-medium">{formatPrice(value, 'system')}</span>
             </>
           ) : (
-            <span className="text-gray-500">-</span>
+            <span className="text-[var(--dash-text-disabled)]">-</span>
           )}
         </div>
       )
@@ -2657,7 +2657,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 <span className="text-blue-400 font-medium">{formatPrice(Math.abs(net), 'system')}</span>
               </>
             ) : (
-              <span className="text-gray-500">-</span>
+              <span className="text-[var(--dash-text-disabled)]">-</span>
             )}
           </div>
         )
@@ -2672,7 +2672,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         <span className={`font-medium ${
           index === 0
             ? 'bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded'
-            : 'text-gray-400'
+            : 'text-[var(--dash-text-muted)]'
         }`}>
           {formatPrice(value, 'system')}
         </span>
@@ -2690,7 +2690,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'البيان',
       accessor: 'notes',
       width: 200,
-      render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
     },
     {
       id: 'safe_name',
@@ -2715,7 +2715,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: '#',
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-gray-400">{index + 1}</span>
+        <span className="text-[var(--dash-text-muted)]">{index + 1}</span>
       )
     },
     {
@@ -2725,7 +2725,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       width: 120,
       render: (value: string) => {
         const date = new Date(value)
-        return <span className="text-white">{date.toLocaleDateString('en-GB')}</span>
+        return <span className="text-[var(--dash-text-primary)]">{date.toLocaleDateString('en-GB')}</span>
       }
     },
     {
@@ -2766,7 +2766,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'البيان',
       accessor: 'notes',
       width: 200,
-      render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
     },
     {
       id: 'safe_name',
@@ -2791,7 +2791,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: '#', 
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-white">{index + 1}</span>
+        <span className="text-[var(--dash-text-primary)]">{index + 1}</span>
       )
     },
     { 
@@ -2813,7 +2813,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         return (
           <div className="flex items-center gap-2">
             {isHighlighted && <span className="text-yellow-300 text-lg">★</span>}
-            <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-white'}`}>
+            <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-[var(--dash-text-primary)]'}`}>
               {item.product?.name || 'منتج محذوف'}
             </span>
           </div>
@@ -2825,7 +2825,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'الكمية', 
       accessor: 'quantity', 
       width: 80,
-      render: (value: number) => <span className="text-white font-medium">{value}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
     },
     { 
       id: 'barcode', 
@@ -2865,7 +2865,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'ملاحظات',
       accessor: 'notes',
       width: 150,
-      render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
     }
   ].filter(col => visibleDetailsColumns.includes(col.id))
 
@@ -2874,7 +2874,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           onClick={onClose}
         />
       )}
@@ -2885,31 +2885,31 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       }`}>
         {/* Mobile Layout - Complete redesign for small screens */}
         {isMobileDevice ? (
-          <div className="bg-[#2B3544] h-full w-full flex flex-col">
+          <div className="bg-[var(--dash-bg-surface)] h-full w-full flex flex-col">
             {/* Mobile Invoice Details View */}
             {showMobileInvoiceDetails && mobileSelectedInvoice ? (
               <>
                 {/* Invoice Details Header */}
-                <div className="bg-[#374151] border-b border-gray-600 px-3 py-2 flex items-center gap-3">
+                <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-3 py-2 flex items-center gap-3">
                   <button
                     onClick={() => {
                       setShowMobileInvoiceDetails(false)
                       setMobileSelectedInvoice(null)
                       setMobileInvoiceItems([])
                     }}
-                    className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-600/30 transition-colors"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] p-2 rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                   >
                     <ChevronRightIcon className="h-5 w-5" />
                   </button>
                   <div className="flex-1 text-center">
-                    <span className="text-white font-medium">تفاصيل الفاتورة</span>
+                    <span className="text-[var(--dash-text-primary)] font-medium">تفاصيل الفاتورة</span>
                     <span className="text-blue-400 mr-2">#{mobileSelectedInvoice.invoice_number}</span>
                   </div>
                   <div className="w-9" />
                 </div>
 
                 {/* Invoice Summary Card */}
-                <div className="bg-[#3B4754] border-b border-gray-600 p-3">
+                <div className="bg-[#3B4754] border-b border-[var(--dash-border-default)] p-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                       mobileSelectedInvoice.invoice_type === 'مرتجع شراء'
@@ -2925,19 +2925,19 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                        mobileSelectedInvoice.invoice_type === 'Purchase Invoice' ? 'فاتورة شراء' :
                        mobileSelectedInvoice.invoice_type || 'فاتورة بيع'}
                     </span>
-                    <span className="text-white font-bold text-lg">
+                    <span className="text-[var(--dash-text-primary)] font-bold text-lg">
                       {formatPrice(Math.abs(parseFloat(mobileSelectedInvoice.total_amount)), 'system')}
                     </span>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="bg-[#2B3544] border-b border-gray-600 px-3 py-2">
+                <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-3 py-2">
                   <div className="flex items-center justify-between">
                     {/* زر الإجراءات */}
                     <button
                       onClick={() => setShowMobileActions(!showMobileActions)}
-                      className="flex items-center gap-2 text-gray-400 hover:text-white py-2 px-3 rounded-lg hover:bg-gray-600/30 transition-colors"
+                      className="flex items-center gap-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] py-2 px-3 rounded-lg hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                     >
                       <EllipsisVerticalIcon className="h-5 w-5" />
                       <span className="text-sm">الإجراءات</span>
@@ -2974,7 +2974,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             localStorage.setItem('pos_edit_invoice', JSON.stringify(editData))
                             window.open(`/pos?edit=true&saleId=${mobileSelectedInvoice.id}`, '_blank')
                           }}
-                          className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-sm font-medium transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium transition-colors"
                         >
                           <PencilSquareIcon className="h-4 w-4" />
                           <span>تحرير</span>
@@ -2984,14 +2984,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         onClick={() => {
                           handleDeleteInvoice(mobileSelectedInvoice)
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg py-2 text-sm font-medium transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium transition-colors"
                       >
                         <TrashIcon className="h-4 w-4" />
                         <span>حذف</span>
                       </button>
                       <button
                         onClick={() => setShowColumnManager(true)}
-                        className="flex items-center justify-center gap-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg py-2 px-3 text-sm font-medium transition-colors"
+                        className="flex items-center justify-center gap-1.5 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg py-2 px-3 text-sm font-medium transition-colors"
                       >
                         <TableCellsIcon className="h-4 w-4" />
                       </button>
@@ -3001,23 +3001,23 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                 {/* Invoice Items */}
                 <div className="flex-1 overflow-y-auto scrollbar-hide p-3">
-                  <div className="text-gray-400 text-xs mb-2 text-center">عناصر الفاتورة ({mobileInvoiceItems.length})</div>
+                  <div className="text-[var(--dash-text-muted)] text-xs mb-2 text-center">عناصر الفاتورة ({mobileInvoiceItems.length})</div>
 
                   {isLoadingMobileInvoiceItems ? (
                     <div className="flex items-center justify-center py-8">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                     </div>
                   ) : mobileInvoiceItems.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">لا توجد عناصر</div>
+                    <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد عناصر</div>
                   ) : (
                     <div className="space-y-3">
                       {mobileInvoiceItems.map((item, idx) => {
                         const itemTotal = (item.quantity * item.unit_price) - (item.discount || 0)
                         return (
-                          <div key={item.id || idx} className="bg-[#374151] rounded-lg p-3">
+                          <div key={item.id || idx} className="bg-[var(--dash-bg-raised)] rounded-lg p-3">
                             <div className="flex gap-3">
                               {/* Product Image */}
-                              <div className="w-16 h-16 flex-shrink-0 bg-[#2B3544] rounded-lg overflow-hidden">
+                              <div className="w-16 h-16 flex-shrink-0 bg-[var(--dash-bg-surface)] rounded-lg overflow-hidden">
                                 {item.product?.main_image_url ? (
                                   <img
                                     src={item.product.main_image_url}
@@ -3025,7 +3025,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     className="w-full h-full object-cover"
                                   />
                                 ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-gray-500 text-2xl">
+                                  <div className="w-full h-full flex items-center justify-center text-[var(--dash-text-disabled)] text-2xl">
                                     📦
                                   </div>
                                 )}
@@ -3033,13 +3033,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                               {/* Product Details */}
                               <div className="flex-1 min-w-0">
-                                <div className="text-white font-medium text-sm truncate mb-1">
+                                <div className="text-[var(--dash-text-primary)] font-medium text-sm truncate mb-1">
                                   {item.product?.name || 'منتج غير معروف'}
                                 </div>
-                                <div className="text-gray-400 text-xs mb-1">
+                                <div className="text-[var(--dash-text-muted)] text-xs mb-1">
                                   {item.product?.category?.name || '-'}
                                 </div>
-                                <div className="text-gray-500 text-xs" dir="ltr">
+                                <div className="text-[var(--dash-text-disabled)] text-xs" dir="ltr">
                                   {item.product?.barcode || '-'}
                                 </div>
                               </div>
@@ -3048,25 +3048,25 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             {/* Item Details Grid */}
                             <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
                               <div className="flex justify-between">
-                                <span className="text-gray-400">السعر:</span>
-                                <span className="text-white">{formatPrice(item.unit_price, 'system')}</span>
+                                <span className="text-[var(--dash-text-muted)]">السعر:</span>
+                                <span className="text-[var(--dash-text-primary)]">{formatPrice(item.unit_price, 'system')}</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-400">الكمية:</span>
-                                <span className="text-white">{item.quantity}</span>
+                                <span className="text-[var(--dash-text-muted)]">الكمية:</span>
+                                <span className="text-[var(--dash-text-primary)]">{item.quantity}</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-400">خصم:</span>
+                                <span className="text-[var(--dash-text-muted)]">خصم:</span>
                                 <span className="text-orange-400">{formatPrice(item.discount || 0, 'system')}</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-400">الإجمالي:</span>
+                                <span className="text-[var(--dash-text-muted)]">الإجمالي:</span>
                                 <span className="text-green-400 font-medium">{formatPrice(itemTotal, 'system')}</span>
                               </div>
                             </div>
 
                             {item.notes && (
-                              <div className="mt-2 text-xs text-gray-300 bg-[#2B3544] rounded p-2">
+                              <div className="mt-2 text-xs text-[var(--dash-text-secondary)] bg-[var(--dash-bg-surface)] rounded p-2">
                                 {item.notes}
                               </div>
                             )}
@@ -3080,19 +3080,19 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
             ) : (
               <>
                 {/* Mobile Header - Customer Name */}
-                <div className="bg-[#374151] border-b border-gray-600 px-4 py-2.5 flex items-center justify-between">
+                <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2.5 flex items-center justify-between">
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-600/30 transition-colors"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] w-9 h-9 flex items-center justify-center rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                   >
                     <XMarkIcon className="h-5 w-5" />
                   </button>
-                  <h1 className="text-white font-medium text-base truncate max-w-[60%]">{customer.name || 'العميل'}</h1>
+                  <h1 className="text-[var(--dash-text-primary)] font-medium text-base truncate max-w-[60%]">{customer.name || 'العميل'}</h1>
                   <div className="w-9" />
                 </div>
 
                 {/* Mobile Balance & Customer Info Section */}
-                <div className="bg-[#3B4754] border-b border-gray-600">
+                <div className="bg-[#3B4754] border-b border-[var(--dash-border-default)]">
                   {/* Balance Card with Customer Name - Always visible, clickable to toggle */}
                   <button
                     onClick={() => setIsMobileInfoExpanded(!isMobileInfoExpanded)}
@@ -3100,13 +3100,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   >
                     <div className="flex items-center">
                       {isMobileInfoExpanded ? (
-                        <ChevronUpIcon className="h-4 w-4 text-gray-400" />
+                        <ChevronUpIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                       ) : (
-                        <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                        <ChevronDownIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                       )}
                     </div>
                     <div className="flex-1 bg-blue-600 rounded-lg px-5 py-2 text-center">
-                      <div className="font-bold text-white text-xl">
+                      <div className="font-bold text-[var(--dash-text-primary)] text-xl">
                         {formatPrice(isDefaultCustomer ? displayedInvoicesSum : customerBalance, 'system')}
                       </div>
                       <div className="text-blue-200 text-[10px]">
@@ -3120,7 +3120,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     <div className="px-3 pb-3 space-y-3">
                       {/* Customer Info - Compact Row */}
                       <div className="flex items-center justify-between gap-2 text-sm">
-                        <span className="text-gray-400" dir="ltr">{customer.phone || '-'}</span>
+                        <span className="text-[var(--dash-text-muted)]" dir="ltr">{customer.phone || '-'}</span>
                         <span className="text-yellow-400 flex items-center gap-1 text-xs">
                           <span>{customer.rank || 'عادي'}</span>
                           <span>⭐</span>
@@ -3129,28 +3129,28 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                       {/* Statistics Grid 2x2 - Compact */}
                       <div className="grid grid-cols-4 gap-2">
-                        <div className="bg-[#2B3544] rounded-lg p-2 text-center">
-                          <div className="text-white text-base font-bold">{sales.length}</div>
-                          <div className="text-gray-400 text-[9px]">الفواتير</div>
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
+                          <div className="text-[var(--dash-text-primary)] text-base font-bold">{sales.length}</div>
+                          <div className="text-[var(--dash-text-muted)] text-[9px]">الفواتير</div>
                         </div>
-                        <div className="bg-[#2B3544] rounded-lg p-2 text-center">
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
                           <div className="text-blue-400 text-xs font-bold">{formatPrice(totalInvoicesAmount, 'system')}</div>
-                          <div className="text-gray-400 text-[9px]">الإجمالي</div>
+                          <div className="text-[var(--dash-text-muted)] text-[9px]">الإجمالي</div>
                         </div>
-                        <div className="bg-[#2B3544] rounded-lg p-2 text-center">
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
                           <div className="text-green-400 text-xs font-bold">{formatPrice(totalPayments, 'system')}</div>
-                          <div className="text-gray-400 text-[9px]">الدفعات</div>
+                          <div className="text-[var(--dash-text-muted)] text-[9px]">الدفعات</div>
                         </div>
-                        <div className="bg-[#2B3544] rounded-lg p-2 text-center">
-                          <div className="text-white text-xs font-bold">{formatPrice(averageOrderValue, 'system')}</div>
-                          <div className="text-gray-400 text-[9px]">المتوسط</div>
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
+                          <div className="text-[var(--dash-text-primary)] text-xs font-bold">{formatPrice(averageOrderValue, 'system')}</div>
+                          <div className="text-[var(--dash-text-muted)] text-[9px]">المتوسط</div>
                         </div>
                       </div>
 
                       {/* Date Filter Button - Compact */}
                       <button
                         onClick={() => setShowDateFilter(true)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
                       >
                         <CalendarDaysIcon className="h-4 w-4" />
                         <span>فلتر التاريخ</span>
@@ -3184,7 +3184,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                     </div>
                   ) : salesWithFinancialData.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">لا توجد فواتير</div>
+                    <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد فواتير</div>
                   ) : (
                     salesWithFinancialData.map((sale, index) => {
                       const itemsCount = saleItemsCache[sale.id]?.length || 0
@@ -3196,12 +3196,12 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         <div
                           key={sale.id}
                           onClick={() => openMobileInvoiceDetails(sale)}
-                          className="bg-[#374151] rounded-lg p-3 cursor-pointer transition-colors active:bg-[#4B5563]"
+                          className="bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-colors active:bg-[#4B5563]"
                         >
                           {/* Header Row - Amount + Invoice# + Type Badge */}
                           <div className="flex justify-between items-center mb-2">
                             <span className={`font-bold text-lg ${
-                              parseFloat(sale.total_amount) < 0 ? 'text-orange-400' : 'text-white'
+                              parseFloat(sale.total_amount) < 0 ? 'text-orange-400' : 'text-[var(--dash-text-primary)]'
                             }`}>
                               {formatPrice(Math.abs(parseFloat(sale.total_amount)), 'system')}
                             </span>
@@ -3228,46 +3228,46 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           </div>
 
                           {/* Details Grid */}
-                          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs border-t border-gray-600 pt-2">
+                          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs border-t border-[var(--dash-border-default)] pt-2">
                             <div className="flex justify-between">
-                              <span className="text-gray-500">التاريخ:</span>
-                              <span className="text-gray-300">{saleDate.toLocaleDateString('en-GB')}</span>
+                              <span className="text-[var(--dash-text-disabled)]">التاريخ:</span>
+                              <span className="text-[var(--dash-text-secondary)]">{saleDate.toLocaleDateString('en-GB')}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-500">الوقت:</span>
-                              <span className="text-gray-300">{timeStr}</span>
+                              <span className="text-[var(--dash-text-disabled)]">الوقت:</span>
+                              <span className="text-[var(--dash-text-secondary)]">{timeStr}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-500">العميل:</span>
-                              <span className="text-gray-300 truncate max-w-[80px]">{sale.customer?.name || customer.name || '-'}</span>
+                              <span className="text-[var(--dash-text-disabled)]">العميل:</span>
+                              <span className="text-[var(--dash-text-secondary)] truncate max-w-[80px]">{sale.customer?.name || customer.name || '-'}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-500">الهاتف:</span>
-                              <span className="text-gray-300" dir="ltr">{sale.customer?.phone || customer.phone || '-'}</span>
+                              <span className="text-[var(--dash-text-disabled)]">الهاتف:</span>
+                              <span className="text-[var(--dash-text-secondary)]" dir="ltr">{sale.customer?.phone || customer.phone || '-'}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-500">الدفع:</span>
-                              <span className="text-gray-300">{sale.payment_method?.name || '-'}</span>
+                              <span className="text-[var(--dash-text-disabled)]">الدفع:</span>
+                              <span className="text-[var(--dash-text-secondary)]">{sale.payment_method?.name || '-'}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-500">الخزنة:</span>
-                              <span className="text-gray-300">{sale.record?.name || '-'}</span>
+                              <span className="text-[var(--dash-text-disabled)]">الخزنة:</span>
+                              <span className="text-[var(--dash-text-secondary)]">{sale.record?.name || '-'}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-500">الموظف:</span>
-                              <span className="text-gray-300 truncate max-w-[80px]">{sale.cashier?.full_name || '-'}</span>
+                              <span className="text-[var(--dash-text-disabled)]">الموظف:</span>
+                              <span className="text-[var(--dash-text-secondary)] truncate max-w-[80px]">{sale.cashier?.full_name || '-'}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-500">المنتجات:</span>
+                              <span className="text-[var(--dash-text-disabled)]">المنتجات:</span>
                               <span className="text-blue-400">{itemsCount > 0 ? itemsCount : '...'}</span>
                             </div>
                           </div>
 
                           {/* Financial Fields Row - قيمة الفاتورة | المدفوع | الصافي */}
-                          <div className="grid grid-cols-3 gap-2 text-xs mt-2 border-t border-gray-600 pt-2">
+                          <div className="grid grid-cols-3 gap-2 text-xs mt-2 border-t border-[var(--dash-border-default)] pt-2">
                             {/* قيمة الفاتورة */}
                             <div className="text-center">
-                              <div className="text-gray-500 mb-1">قيمة الفاتورة</div>
+                              <div className="text-[var(--dash-text-disabled)] mb-1">قيمة الفاتورة</div>
                               <div className="flex items-center justify-center gap-1">
                                 {sale.invoiceValue > 0 ? (
                                   <>
@@ -3277,14 +3277,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     </span>
                                   </>
                                 ) : (
-                                  <span className="text-gray-500">-</span>
+                                  <span className="text-[var(--dash-text-disabled)]">-</span>
                                 )}
                               </div>
                             </div>
 
                             {/* المبلغ المدفوع */}
                             <div className="text-center">
-                              <div className="text-gray-500 mb-1">المدفوع</div>
+                              <div className="text-[var(--dash-text-disabled)] mb-1">المدفوع</div>
                               <div className="flex items-center justify-center gap-1">
                                 {sale.paidAmount > 0 ? (
                                   <>
@@ -3294,14 +3294,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     </span>
                                   </>
                                 ) : (
-                                  <span className="text-gray-500">-</span>
+                                  <span className="text-[var(--dash-text-disabled)]">-</span>
                                 )}
                               </div>
                             </div>
 
                             {/* الصافي */}
                             <div className="text-center">
-                              <div className="text-gray-500 mb-1">الصافي</div>
+                              <div className="text-[var(--dash-text-disabled)] mb-1">الصافي</div>
                               <div className="flex items-center justify-center gap-1">
                                 {netAmount !== 0 ? (
                                   <>
@@ -3313,30 +3313,30 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     </span>
                                   </>
                                 ) : (
-                                  <span className="text-gray-500">-</span>
+                                  <span className="text-[var(--dash-text-disabled)]">-</span>
                                 )}
                               </div>
                             </div>
                           </div>
 
                           {/* الرصيد */}
-                          <div className="flex justify-end items-center mt-2 border-t border-gray-600 pt-2">
-                            <span className="text-gray-500 text-xs ml-2">الرصيد:</span>
+                          <div className="flex justify-end items-center mt-2 border-t border-[var(--dash-border-default)] pt-2">
+                            <span className="text-[var(--dash-text-disabled)] text-xs ml-2">الرصيد:</span>
                             <span className={`text-sm font-medium ${
                               index === 0
                                 ? 'bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded'
-                                : 'text-gray-400'
+                                : 'text-[var(--dash-text-muted)]'
                             }`}>
                               {formatPrice(sale.balance, 'system')}
                             </span>
                           </div>
 
                           {/* Notes with tap indicator */}
-                          <div className="mt-2 text-xs bg-[#2B3544] rounded p-2 border-t border-gray-600">
+                          <div className="mt-2 text-xs bg-[var(--dash-bg-surface)] rounded p-2 border-t border-[var(--dash-border-default)]">
                             {sale.notes && (
-                              <div className="text-gray-300 mb-1">{sale.notes}</div>
+                              <div className="text-[var(--dash-text-secondary)] mb-1">{sale.notes}</div>
                             )}
-                            <div className="flex items-center justify-end text-gray-500 text-xs">
+                            <div className="flex items-center justify-end text-[var(--dash-text-disabled)] text-xs">
                               <span>اضغط لعرض التفاصيل</span>
                               <ChevronLeftIcon className="h-3 w-3 mr-1" />
                             </div>
@@ -3356,12 +3356,12 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
                     </div>
                   ) : customerPayments.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">لا توجد دفعات</div>
+                    <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد دفعات</div>
                   ) : (
                     customerPayments.map((payment) => (
                       <div
                         key={payment.id}
-                        className="bg-[#374151] rounded-lg p-4"
+                        className="bg-[var(--dash-bg-raised)] rounded-lg p-4"
                       >
                         <div className="flex justify-between items-start mb-2">
                           <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">
@@ -3371,12 +3371,12 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             {formatPrice(payment.amount || 0, 'system')}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center text-sm text-gray-400">
+                        <div className="flex justify-between items-center text-sm text-[var(--dash-text-muted)]">
                           <span>{payment.payment_date ? new Date(payment.payment_date).toLocaleDateString('en-GB') : '-'}</span>
                           <span>{payment.payment_method || '-'}</span>
                         </div>
                         {payment.notes && (
-                          <div className="mt-2 text-sm text-gray-300 bg-[#2B3544] rounded p-2">
+                          <div className="mt-2 text-sm text-[var(--dash-text-secondary)] bg-[var(--dash-bg-surface)] rounded p-2">
                             {payment.notes}
                           </div>
                         )}
@@ -3390,7 +3390,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         setPaymentType('payment')
                         setShowAddPaymentModal(true)
                       }}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2 transition-colors mt-4"
+                      className="w-full bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] rounded-lg py-3 font-medium flex items-center justify-center gap-2 transition-colors mt-4"
                     >
                       <PlusIcon className="h-5 w-5" />
                       <span>إضافة دفعة</span>
@@ -3407,7 +3407,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                     </div>
                   ) : accountStatements.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">لا توجد حركات</div>
+                    <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد حركات</div>
                   ) : (
                     accountStatements.map((statement, index) => {
                       // حساب الصافي
@@ -3427,7 +3427,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               }
                             }
                           }}
-                          className={`bg-[#374151] rounded-lg p-3 transition-colors ${
+                          className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 transition-colors ${
                             statement.saleId ? 'cursor-pointer active:bg-[#4B5563]' : ''
                           } ${
                             statement.type === 'فاتورة بيع'
@@ -3440,7 +3440,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     ? 'border-2 border-orange-700/50'
                                     : statement.type === 'دفعة'
                                       ? 'border-2 border-emerald-700/50'
-                                      : 'border-2 border-gray-600/50'
+                                      : 'border-2 border-[var(--dash-border-default)]/50'
                           }`}
                         >
                           {/* الصف العلوي: نوع العملية + التاريخ */}
@@ -3456,25 +3456,25 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                       ? 'bg-orange-900 text-orange-300'
                                       : statement.type === 'دفعة'
                                         ? 'bg-emerald-900 text-emerald-300'
-                                        : 'bg-gray-700 text-gray-300'
+                                        : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]'
                             }`}>
                               {statement.type}
                             </span>
-                            <span className="text-gray-400 text-xs">
+                            <span className="text-[var(--dash-text-muted)] text-xs">
                               {new Date(statement.date).toLocaleDateString('en-GB')}
                             </span>
                           </div>
 
                           {/* البيان/الوصف */}
                           {statement.description && (
-                            <div className="text-sm text-gray-300 mb-3">{statement.description}</div>
+                            <div className="text-sm text-[var(--dash-text-secondary)] mb-3">{statement.description}</div>
                           )}
 
                           {/* صف الأرقام: قيمة الفاتورة | المدفوع | الصافي */}
                           <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                             {/* قيمة الفاتورة */}
                             <div className="text-center">
-                              <div className="text-gray-500 mb-1">قيمة الفاتورة</div>
+                              <div className="text-[var(--dash-text-disabled)] mb-1">قيمة الفاتورة</div>
                               <div className="flex items-center justify-center gap-1">
                                 {statement.invoiceValue > 0 ? (
                                   <>
@@ -3484,14 +3484,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     </span>
                                   </>
                                 ) : (
-                                  <span className="text-gray-500">-</span>
+                                  <span className="text-[var(--dash-text-disabled)]">-</span>
                                 )}
                               </div>
                             </div>
 
                             {/* المبلغ المدفوع */}
                             <div className="text-center">
-                              <div className="text-gray-500 mb-1">المدفوع</div>
+                              <div className="text-[var(--dash-text-disabled)] mb-1">المدفوع</div>
                               <div className="flex items-center justify-center gap-1">
                                 {statement.paidAmount > 0 ? (
                                   <>
@@ -3501,14 +3501,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     </span>
                                   </>
                                 ) : (
-                                  <span className="text-gray-500">-</span>
+                                  <span className="text-[var(--dash-text-disabled)]">-</span>
                                 )}
                               </div>
                             </div>
 
                             {/* الصافي */}
                             <div className="text-center">
-                              <div className="text-gray-500 mb-1">الصافي</div>
+                              <div className="text-[var(--dash-text-disabled)] mb-1">الصافي</div>
                               <div className="flex items-center justify-center gap-1">
                                 {netAmount !== 0 ? (
                                   <>
@@ -3520,7 +3520,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     </span>
                                   </>
                                 ) : (
-                                  <span className="text-gray-500">-</span>
+                                  <span className="text-[var(--dash-text-disabled)]">-</span>
                                 )}
                               </div>
                             </div>
@@ -3528,11 +3528,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                           {/* الرصيد */}
                           <div className="flex justify-end items-center">
-                            <span className="text-gray-500 text-xs ml-2">الرصيد:</span>
+                            <span className="text-[var(--dash-text-disabled)] text-xs ml-2">الرصيد:</span>
                             <span className={`text-sm font-medium ${
                               index === 0
                                 ? 'bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded'
-                                : 'text-gray-400'
+                                : 'text-[var(--dash-text-muted)]'
                             }`}>
                               {formatPrice(statement.balance, 'system')}
                             </span>
@@ -3546,13 +3546,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
             </div>
 
             {/* Mobile Bottom Navigation - Compact */}
-            <div className="bg-[#374151] border-t border-gray-600 px-1 py-1 flex items-center justify-around safe-area-bottom">
+            <div className="bg-[var(--dash-bg-raised)] border-t border-[var(--dash-border-default)] px-1 py-1 flex items-center justify-around safe-area-bottom">
               <button
                 onClick={() => setActiveTab('invoices')}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                   activeTab === 'invoices'
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                 }`}
               >
                 <span className="text-sm">📋</span>
@@ -3565,8 +3565,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     onClick={() => setActiveTab('payments')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'payments'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
                     <span className="text-sm">💰</span>
@@ -3577,8 +3577,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     onClick={() => setActiveTab('statement')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'statement'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
                     <span className="text-sm">📊</span>
@@ -3592,10 +3592,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
           </div>
         ) : (
           /* Tablet and Desktop Layout */
-          <div className="bg-[#2B3544] h-full w-full flex flex-col">
+          <div className="bg-[var(--dash-bg-surface)] h-full w-full flex flex-col">
 
           {/* Top Navigation - Responsive Layout */}
-          <div className="bg-[#374151] border-b border-gray-600">
+          <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)]">
             {/* Tablet Layout */}
             {isTabletDevice ? (
               <div className="px-4 py-3">
@@ -3604,7 +3604,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   {/* Close Button - Fixed */}
                   <button
                     onClick={onClose}
-                    className="flex-shrink-0 text-gray-400 hover:text-white w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-600/30 transition-colors"
+                    className="flex-shrink-0 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -3617,8 +3617,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         onClick={() => setActiveTab('invoices')}
                         className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                           activeTab === 'invoices'
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                            ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                            : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                         }`}
                       >
                         فواتير ({sales.length})
@@ -3631,8 +3631,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setActiveTab('payments')}
                             className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                               activeTab === 'payments'
-                                ? 'bg-blue-600 text-white shadow-sm'
-                                : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                           >
                             الدفعات
@@ -3642,8 +3642,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setActiveTab('statement')}
                             className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                               activeTab === 'statement'
-                                ? 'bg-blue-600 text-white shadow-sm'
-                                : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                           >
                             كشف الحساب
@@ -3653,13 +3653,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                       {/* View Mode Toggle Button - Only for invoices tab */}
                       {activeTab === 'invoices' && (
-                        <div className="flex gap-1 bg-gray-600/50 rounded-lg p-1">
+                        <div className="flex gap-1 bg-[var(--dash-bg-overlay)]/50 rounded-lg p-1">
                           <button
                             onClick={() => setViewMode('invoices-only')}
                             className={`px-2.5 py-1.5 text-base rounded transition-all duration-200 ${
                               viewMode === 'invoices-only'
-                                ? 'bg-blue-600 text-white shadow-sm'
-                                : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                             title="فواتير فقط"
                           >
@@ -3669,8 +3669,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setViewMode('split')}
                             className={`px-2.5 py-1.5 text-base rounded transition-all duration-200 ${
                               viewMode === 'split'
-                                ? 'bg-blue-600 text-white shadow-sm'
-                                : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                             title="عرض مقسم"
                           >
@@ -3680,8 +3680,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setViewMode('details-only')}
                             className={`px-2.5 py-1.5 text-base rounded transition-all duration-200 ${
                               viewMode === 'details-only'
-                                ? 'bg-blue-600 text-white shadow-sm'
-                                : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                             title="تفاصيل فقط"
                           >
@@ -3727,7 +3727,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                 window.open(`/pos?edit=true&saleId=${selectedSale.id}`, '_blank')
                               }}
                               disabled={sales.length === 0 || selectedTransaction >= sales.length || isLoadingItems}
-                              className="flex items-center gap-2 px-3 py-2.5 text-sm text-gray-300 hover:text-white disabled:text-gray-500 disabled:cursor-not-allowed hover:bg-gray-600/30 rounded-lg transition-all whitespace-nowrap"
+                              className="flex items-center gap-2 px-3 py-2.5 text-sm text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed hover:bg-[var(--dash-bg-overlay)]/30 rounded-lg transition-all whitespace-nowrap"
                             >
                               <PencilSquareIcon className="h-4 w-4" />
                               <span>تحرير</span>
@@ -3741,13 +3741,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               }
                             }}
                             disabled={sales.length === 0 || selectedTransaction >= sales.length}
-                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-red-400 hover:text-red-300 disabled:text-gray-500 disabled:cursor-not-allowed hover:bg-red-600/10 rounded-lg transition-all whitespace-nowrap"
+                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-red-400 hover:text-red-300 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed hover:bg-red-600/10 rounded-lg transition-all whitespace-nowrap"
                           >
                             <TrashIcon className="h-4 w-4" />
                             <span>حذف</span>
                           </button>
 
-                          <button className="flex items-center gap-2 px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-lg transition-all whitespace-nowrap">
+                          <button className="flex items-center gap-2 px-3 py-2.5 text-sm text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-lg transition-all whitespace-nowrap">
                             <TableCellsIcon className="h-4 w-4" />
                             <span>الأعمدة</span>
                           </button>
@@ -3798,7 +3798,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             window.open(`/pos?edit=true&saleId=${selectedSale.id}`, '_blank')
                           }}
                           disabled={sales.length === 0 || selectedTransaction >= sales.length || isLoadingItems || (sales.length > 0 && selectedTransaction < sales.length && sales[selectedTransaction]?.status === 'cancelled')}
-                          className="flex flex-col items-center p-2 text-gray-300 hover:text-white disabled:text-gray-500 disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
+                          className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
                         >
                           <PencilSquareIcon className="h-5 w-5 mb-1" />
                           <span className="text-sm">تحرير الفاتورة</span>
@@ -3812,7 +3812,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           }
                         }}
                         disabled={sales.length === 0 || selectedTransaction >= sales.length || (sales.length > 0 && selectedTransaction < sales.length && sales[selectedTransaction]?.status === 'cancelled')}
-                        className="flex flex-col items-center p-2 text-orange-400 hover:text-orange-300 disabled:text-gray-500 disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
+                        className="flex flex-col items-center p-2 text-orange-400 hover:text-orange-300 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
                       >
                         <XCircleIcon className="h-5 w-5 mb-1" />
                         <span className="text-sm">إلغاء الفاتورة</span>
@@ -3820,7 +3820,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                       <button
                         onClick={() => setShowColumnManager(true)}
-                        className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px] transition-colors"
+                        className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px] transition-colors"
                       >
                         <TableCellsIcon className="h-5 w-5 mb-1" />
                         <span className="text-sm">إدارة الأعمدة</span>
@@ -3837,7 +3837,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                               activeTab === 'payments'
                                 ? 'text-blue-400 border-blue-400 bg-blue-600/10'
-                                : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                                : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                             }`}
                           >
                             الدفعات
@@ -3847,7 +3847,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                               activeTab === 'statement'
                                 ? 'text-blue-400 border-blue-400 bg-blue-600/10'
-                                : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                                : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                             }`}
                           >
                             كشف الحساب
@@ -3859,7 +3859,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         className={`px-6 py-3 text-base font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
                           activeTab === 'invoices'
                             ? 'text-blue-400 border-blue-400 bg-blue-600/10'
-                            : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                            : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                         }`}
                       >
                         فواتير العميل ({sales.length})
@@ -3868,13 +3868,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                     {/* View Mode Toggle Buttons - Only show for invoices tab */}
                     {activeTab === 'invoices' && (
-                      <div className="flex gap-1 bg-gray-600/50 rounded-lg p-1">
+                      <div className="flex gap-1 bg-[var(--dash-bg-overlay)]/50 rounded-lg p-1">
                         <button
                           onClick={() => setViewMode('invoices-only')}
                           className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                             viewMode === 'invoices-only'
-                              ? 'bg-blue-600 text-white shadow-sm'
-                              : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                              ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                              : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                           }`}
                           title="عرض فواتير العميل فقط"
                         >
@@ -3884,8 +3884,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           onClick={() => setViewMode('split')}
                           className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                             viewMode === 'split'
-                              ? 'bg-blue-600 text-white shadow-sm'
-                              : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                              ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                              : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                           }`}
                           title="عرض مقسم"
                         >
@@ -3895,8 +3895,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           onClick={() => setViewMode('details-only')}
                           className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                             viewMode === 'details-only'
-                              ? 'bg-blue-600 text-white shadow-sm'
-                              : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                              ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                              : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                           }`}
                           title="عرض تفاصيل الفاتورة فقط"
                         >
@@ -3907,7 +3907,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   </div>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-600/30 transition-colors"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                   >
                     ×
                   </button>
@@ -3921,27 +3921,27 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
             <div className="flex">
               <button
                 onClick={() => setShowCustomerDetails(!showCustomerDetails)}
-                className="w-6 bg-[#374151] hover:bg-[#4B5563] border-r border-gray-600 flex items-center justify-center transition-colors duration-200"
+                className="w-6 bg-[var(--dash-bg-raised)] hover:bg-[#4B5563] border-r border-[var(--dash-border-default)] flex items-center justify-center transition-colors duration-200"
                 title={showCustomerDetails ? 'إخفاء تفاصيل العميل' : 'إظهار تفاصيل العميل'}
               >
                 {showCustomerDetails ? (
-                  <ChevronRightIcon className="h-4 w-4 text-gray-300" />
+                  <ChevronRightIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
                 ) : (
-                  <ChevronLeftIcon className="h-4 w-4 text-gray-300" />
+                  <ChevronLeftIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
                 )}
               </button>
             </div>
 
             {/* Right Sidebar - Customer Info (First in RTL) */}
             {showCustomerDetails && (
-              <div className={`bg-[#3B4754] border-l border-gray-600 flex flex-col ${
+              <div className={`bg-[#3B4754] border-l border-[var(--dash-border-default)] flex flex-col ${
                 isTabletDevice ? 'w-64' : 'w-80'
               }`}>
 
                 {/* Customer Balance / Invoices Sum */}
-                <div className={`border-b border-gray-600 ${isTabletDevice ? 'p-3' : 'p-4'}`}>
+                <div className={`border-b border-[var(--dash-border-default)] ${isTabletDevice ? 'p-3' : 'p-4'}`}>
                   <div className={`bg-blue-600 rounded text-center ${isTabletDevice ? 'p-3' : 'p-4'}`}>
-                    <div className={`font-bold text-white ${isTabletDevice ? 'text-xl' : 'text-2xl'}`}>
+                    <div className={`font-bold text-[var(--dash-text-primary)] ${isTabletDevice ? 'text-xl' : 'text-2xl'}`}>
                       {formatPrice(isDefaultCustomer ? displayedInvoicesSum : customerBalance, 'system')}
                     </div>
                     <div className={`text-blue-200 ${isTabletDevice ? 'text-xs' : 'text-sm'}`}>
@@ -3952,39 +3952,39 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                 {/* Customer Details */}
                 <div className={`space-y-3 flex-1 overflow-y-auto scrollbar-hide ${isTabletDevice ? 'p-3' : 'p-4'}`}>
-                  <h3 className={`text-white font-medium text-right ${isTabletDevice ? 'text-base' : 'text-lg'}`}>
+                  <h3 className={`text-[var(--dash-text-primary)] font-medium text-right ${isTabletDevice ? 'text-base' : 'text-lg'}`}>
                     معلومات العميل
                   </h3>
 
                   <div className={isTabletDevice ? 'space-y-2' : 'space-y-3'}>
                     <div className="flex justify-between items-center">
-                      <span className={`text-white ${isTabletDevice ? 'text-sm' : ''}`}>
+                      <span className={`text-[var(--dash-text-primary)] ${isTabletDevice ? 'text-sm' : ''}`}>
                         {customer.name || 'Mazen taps'}
                       </span>
-                      <span className="text-gray-400 text-xs">اسم العميل</span>
+                      <span className="text-[var(--dash-text-muted)] text-xs">اسم العميل</span>
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className={`text-white ${isTabletDevice ? 'text-sm' : ''}`} dir="ltr">
+                      <span className={`text-[var(--dash-text-primary)] ${isTabletDevice ? 'text-sm' : ''}`} dir="ltr">
                         {customer.phone || '-'}
                       </span>
-                      <span className="text-gray-400 text-xs">رقم الهاتف</span>
+                      <span className="text-[var(--dash-text-muted)] text-xs">رقم الهاتف</span>
                     </div>
 
                     {!isTabletDevice && (
                       <>
                         <div className="flex justify-between items-center">
-                          <span className="text-white">{customer.governorate || '-'}</span>
-                          <span className="text-gray-400 text-sm">المحافظة</span>
+                          <span className="text-[var(--dash-text-primary)]">{customer.governorate || '-'}</span>
+                          <span className="text-[var(--dash-text-muted)] text-sm">المحافظة</span>
                         </div>
 
                         <div className="flex justify-between items-center">
-                          <span className="text-white">
+                          <span className="text-[var(--dash-text-primary)]">
                             {customer.created_at
                               ? new Date(customer.created_at).toLocaleDateString('en-GB')
                               : '-'}
                           </span>
-                          <span className="text-gray-400 text-sm">تاريخ التسجيل</span>
+                          <span className="text-[var(--dash-text-muted)] text-sm">تاريخ التسجيل</span>
                         </div>
                       </>
                     )}
@@ -3994,13 +3994,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         <span className={isTabletDevice ? 'text-sm' : ''}>{customer.rank || 'عادي'}</span>
                         <span>⭐</span>
                       </span>
-                      <span className="text-gray-400 text-xs">الرتبة</span>
+                      <span className="text-[var(--dash-text-muted)] text-xs">الرتبة</span>
                     </div>
                   </div>
 
                   {/* Customer Statistics */}
-                  <div className={`border-t border-gray-600 ${isTabletDevice ? 'pt-3 mt-3' : 'pt-4 mt-4'}`}>
-                    <h4 className={`text-white font-medium text-right flex items-center gap-2 ${
+                  <div className={`border-t border-[var(--dash-border-default)] ${isTabletDevice ? 'pt-3 mt-3' : 'pt-4 mt-4'}`}>
+                    <h4 className={`text-[var(--dash-text-primary)] font-medium text-right flex items-center gap-2 ${
                       isTabletDevice ? 'text-sm mb-2' : 'mb-3'
                     }`}>
                       <span>📊</span>
@@ -4008,37 +4008,37 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     </h4>
                     <div className={isTabletDevice ? 'space-y-2' : 'space-y-3'}>
                       <div className="flex justify-between items-center">
-                        <span className={`text-white ${isTabletDevice ? 'text-sm' : ''}`}>
+                        <span className={`text-[var(--dash-text-primary)] ${isTabletDevice ? 'text-sm' : ''}`}>
                           {sales.length}
                         </span>
-                        <span className="text-gray-400 text-xs">عدد الفواتير</span>
+                        <span className="text-[var(--dash-text-muted)] text-xs">عدد الفواتير</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className={`text-blue-400 ${isTabletDevice ? 'text-sm' : ''}`}>
                           {formatPrice(totalInvoicesAmount, 'system')}
                         </span>
-                        <span className="text-gray-400 text-xs">إجمالي الفواتير</span>
+                        <span className="text-[var(--dash-text-muted)] text-xs">إجمالي الفواتير</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className={`text-green-400 ${isTabletDevice ? 'text-sm' : ''}`}>
                           {formatPrice(totalPayments, 'system')}
                         </span>
-                        <span className="text-gray-400 text-xs">إجمالي الدفعات</span>
+                        <span className="text-[var(--dash-text-muted)] text-xs">إجمالي الدفعات</span>
                       </div>
                       {!isTabletDevice && (
                         <>
                           <div className="flex justify-between items-center">
-                            <span className="text-white">{formatPrice(averageOrderValue, 'system')}</span>
-                            <span className="text-gray-400 text-sm">متوسط قيمة الطلبية</span>
+                            <span className="text-[var(--dash-text-primary)]">{formatPrice(averageOrderValue, 'system')}</span>
+                            <span className="text-[var(--dash-text-muted)] text-sm">متوسط قيمة الطلبية</span>
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-white">
+                            <span className="text-[var(--dash-text-primary)]">
                               {sales.length > 0
                                 ? new Date(sales[0].created_at).toLocaleDateString('en-GB')
                                 : '-'
                               }
                             </span>
-                            <span className="text-gray-400 text-sm">آخر فاتورة</span>
+                            <span className="text-[var(--dash-text-muted)] text-sm">آخر فاتورة</span>
                           </div>
                         </>
                       )}
@@ -4047,10 +4047,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 </div>
 
                 {/* Date Filter Button */}
-                <div className={`border-t border-gray-600 ${isTabletDevice ? 'p-3' : 'p-4'}`}>
+                <div className={`border-t border-[var(--dash-border-default)] ${isTabletDevice ? 'p-3' : 'p-4'}`}>
                   <button
                     onClick={() => setShowDateFilter(true)}
-                    className={`w-full bg-blue-600 hover:bg-blue-700 text-white rounded font-medium flex items-center justify-center gap-2 transition-colors ${
+                    className={`w-full bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded font-medium flex items-center justify-center gap-2 transition-colors ${
                       isTabletDevice ? 'px-3 py-2 text-sm' : 'px-4 py-3'
                     }`}
                   >
@@ -4084,9 +4084,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 {activeTab === 'statement' && (
                   <div className="h-full flex flex-col">
                     {showStatementInvoiceDetails ? (
-                      <div className="flex flex-col h-full bg-[#1F2937]">
+                      <div className="flex flex-col h-full bg-[var(--dash-bg-base)]">
                         {/* Top Bar with Back Button and Print Actions */}
-                        <div className="bg-[#2B3544] border-b border-gray-600 px-4 py-2 flex items-center justify-between">
+                        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-4 py-2 flex items-center justify-between">
                           <button
                             onClick={() => {
                               setShowStatementInvoiceDetails(false)
@@ -4102,7 +4102,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             {/* Print Receipt Button */}
                             <button
                               onClick={() => printReceipt(selectedStatementInvoice, statementInvoiceItems)}
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                             >
                               <PrinterIcon className="h-4 w-4" />
@@ -4112,7 +4112,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             {/* Print A4 Invoice Button */}
                             <button
                               onClick={() => printA4Invoice(selectedStatementInvoice, statementInvoiceItems)}
-                              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                             >
                               <DocumentIcon className="h-4 w-4" />
@@ -4123,7 +4123,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             <div className="relative" ref={saveDropdownStatementRef}>
                               <button
                                 onClick={() => setShowSaveDropdownStatement(!showSaveDropdownStatement)}
-                                className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                                className="bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                                 disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                               >
                                 <ArrowDownTrayIcon className="h-4 w-4" />
@@ -4132,17 +4132,17 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                               {/* Dropdown Menu */}
                               {showSaveDropdownStatement && (
-                                <div className="absolute top-full left-0 mt-1 bg-[#374151] border border-gray-600 rounded-lg shadow-xl z-50 min-w-[140px]">
+                                <div className="absolute top-full left-0 mt-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg shadow-xl z-50 min-w-[140px]">
                                   <button
                                     onClick={() => saveDocument(selectedStatementInvoice, statementInvoiceItems, 'pdf')}
-                                    className="w-full px-4 py-2 text-right text-white hover:bg-gray-600 flex items-center gap-2 rounded-t-lg transition-colors"
+                                    className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-t-lg transition-colors"
                                   >
                                     <DocumentArrowDownIcon className="h-4 w-4 text-red-400" />
                                     <span>PDF</span>
                                   </button>
                                   <button
                                     onClick={() => saveDocument(selectedStatementInvoice, statementInvoiceItems, 'png')}
-                                    className="w-full px-4 py-2 text-right text-white hover:bg-gray-600 flex items-center gap-2 rounded-b-lg transition-colors"
+                                    className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-b-lg transition-colors"
                                   >
                                     <DocumentArrowDownIcon className="h-4 w-4 text-blue-400" />
                                     <span>PNG</span>
@@ -4154,27 +4154,27 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         </div>
 
                         {/* Navigation Bar with Invoice Number */}
-                        <div className="bg-[#374151] border-b border-gray-600 px-4 py-3 flex items-center justify-center gap-4">
+                        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex items-center justify-center gap-4">
                           {/* Previous Button */}
                           <button
                             onClick={navigateToPreviousInvoice}
                             disabled={currentInvoiceIndex === 0 || isLoadingStatementInvoiceItems}
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex === 0
-                                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
                             }`}
                           >
                             <ChevronRightIcon className="h-5 w-5" />
                           </button>
 
                           {/* Invoice Number Display */}
-                          <div className="flex items-center gap-3 bg-[#2B3544] px-6 py-2 rounded-lg border border-gray-600">
-                            <span className="text-gray-400 text-sm">فاتورة رقم</span>
-                            <span className="text-white font-bold text-xl">
+                          <div className="flex items-center gap-3 bg-[var(--dash-bg-surface)] px-6 py-2 rounded-lg border border-[var(--dash-border-default)]">
+                            <span className="text-[var(--dash-text-muted)] text-sm">فاتورة رقم</span>
+                            <span className="text-[var(--dash-text-primary)] font-bold text-xl">
                               {selectedStatementInvoice?.invoice_number?.replace('INV-', '').split('-')[0] || '---'}
                             </span>
-                            <span className="text-gray-500 text-xs">
+                            <span className="text-[var(--dash-text-disabled)] text-xs">
                               ({currentInvoiceIndex + 1} من {invoiceStatements.length})
                             </span>
                           </div>
@@ -4185,8 +4185,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             disabled={currentInvoiceIndex >= invoiceStatements.length - 1 || isLoadingStatementInvoiceItems}
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex >= invoiceStatements.length - 1
-                                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
                             }`}
                           >
                             <ChevronLeftIcon className="h-5 w-5" />
@@ -4194,7 +4194,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         </div>
 
                         {/* Invoice Info Header */}
-                        <div className="bg-[#2B3544] border-b border-gray-600 px-4 py-3">
+                        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-4 py-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
                               <span className={`px-3 py-1 rounded text-sm font-medium ${
@@ -4206,7 +4206,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                  selectedStatementInvoice?.invoice_type === 'Sale Invoice' ? 'فاتورة بيع' :
                                  selectedStatementInvoice?.invoice_type || 'فاتورة'}
                               </span>
-                              <span className="text-gray-300 text-sm">
+                              <span className="text-[var(--dash-text-secondary)] text-sm">
                                 {selectedStatementInvoice?.created_at
                                   ? new Date(selectedStatementInvoice.created_at).toLocaleDateString('ar-EG', {
                                       weekday: 'long',
@@ -4217,7 +4217,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                   : '---'}
                               </span>
                             </div>
-                            <div className="text-white font-medium">
+                            <div className="text-[var(--dash-text-primary)] font-medium">
                               {customer?.name || '---'}
                             </div>
                           </div>
@@ -4228,25 +4228,25 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {isLoadingStatementInvoiceItems ? (
                             <div className="flex items-center justify-center h-full">
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                              <span className="text-gray-400">جاري تحميل تفاصيل الفاتورة...</span>
+                              <span className="text-[var(--dash-text-muted)]">جاري تحميل تفاصيل الفاتورة...</span>
                             </div>
                           ) : (
                             <div className="h-full overflow-y-auto scrollbar-hide">
                               <table className="w-full">
-                                <thead className="bg-[#374151] sticky top-0">
+                                <thead className="bg-[var(--dash-bg-raised)] sticky top-0">
                                   <tr>
-                                    <th className="px-4 py-3 text-right text-gray-300 font-medium text-sm border-b border-gray-600 w-12">م</th>
-                                    <th className="px-4 py-3 text-right text-gray-300 font-medium text-sm border-b border-gray-600">الصنف</th>
-                                    <th className="px-4 py-3 text-center text-gray-300 font-medium text-sm border-b border-gray-600 w-24">الكمية</th>
-                                    <th className="px-4 py-3 text-center text-gray-300 font-medium text-sm border-b border-gray-600 w-28">سعر</th>
-                                    <th className="px-4 py-3 text-center text-gray-300 font-medium text-sm border-b border-gray-600 w-28">قيمة</th>
+                                    <th className="px-4 py-3 text-right text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-12">م</th>
+                                    <th className="px-4 py-3 text-right text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)]">الصنف</th>
+                                    <th className="px-4 py-3 text-center text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-24">الكمية</th>
+                                    <th className="px-4 py-3 text-center text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-28">سعر</th>
+                                    <th className="px-4 py-3 text-center text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-28">قيمة</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   {statementInvoiceItems.map((item, index) => {
                                     const isHighlighted = highlightedProductId === item.product?.id
                                     return (
-                                    <tr key={item.id} className={`border-b border-gray-700 ${isHighlighted ? 'bg-yellow-500/30 hover:bg-yellow-500/40' : 'hover:bg-[#374151]/50'}`}>
+                                    <tr key={item.id} className={`border-b border-[var(--dash-border-subtle)] ${isHighlighted ? 'bg-yellow-500/30 hover:bg-yellow-500/40' : 'hover:bg-[var(--dash-bg-raised)]/50'}`}>
                                       <td className="px-4 py-3 text-blue-400 font-medium text-sm">{index + 1}</td>
                                       <td className="px-4 py-3 font-medium text-sm">
                                         <div className="flex items-center gap-2">
@@ -4256,26 +4256,26 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                           </span>
                                         </div>
                                       </td>
-                                      <td className="px-4 py-3 text-center text-white text-sm">
+                                      <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm">
                                         {Math.abs(item.quantity)}
                                       </td>
-                                      <td className="px-4 py-3 text-center text-white text-sm">
+                                      <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm">
                                         {formatPrice(item.unit_price)}
                                       </td>
-                                      <td className="px-4 py-3 text-center text-white text-sm">
+                                      <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm">
                                         {formatPrice(Math.abs(item.quantity) * item.unit_price)}
                                       </td>
                                     </tr>
                                   )})}
                                   {/* Totals Row */}
-                                  <tr className="bg-[#374151] border-t-2 border-blue-500">
+                                  <tr className="bg-[var(--dash-bg-raised)] border-t-2 border-blue-500">
                                     <td colSpan={2} className="px-4 py-3 text-left text-blue-400 font-bold text-sm">
                                       - = اجمالي = -
                                     </td>
                                     <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
                                       {statementInvoiceItems.reduce((sum, item) => sum + Math.abs(item.quantity), 0)}
                                     </td>
-                                    <td className="px-4 py-3 text-center text-white text-sm"></td>
+                                    <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm"></td>
                                     <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
                                       {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                                     </td>
@@ -4287,40 +4287,40 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         </div>
 
                         {/* Invoice Info Footer */}
-                        <div className="bg-[#2B3544] border-t border-gray-600 p-4">
+                        <div className="bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)] p-4">
                           <div className="grid grid-cols-6 gap-4 text-sm">
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">الاجمالي</span>
-                              <span className="text-white font-bold">
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">الاجمالي</span>
+                              <span className="text-[var(--dash-text-primary)] font-bold">
                                 {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">الخصم</span>
-                              <span className="text-white font-bold">
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">الخصم</span>
+                              <span className="text-[var(--dash-text-primary)] font-bold">
                                 {formatPrice(selectedStatementInvoice?.discount_amount || 0)}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">ضريبة</span>
-                              <span className="text-white font-bold">
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">ضريبة</span>
+                              <span className="text-[var(--dash-text-primary)] font-bold">
                                 {formatPrice(selectedStatementInvoice?.tax_amount || 0)}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">المدفوع</span>
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">المدفوع</span>
                               <span className="text-green-400 font-bold">
                                 {formatPrice(selectedStatementInvoice?.paidAmount || 0)}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">آجل</span>
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">آجل</span>
                               <span className="text-orange-400 font-bold">
                                 {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0) - (selectedStatementInvoice?.paidAmount || 0))}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">الرصيد</span>
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">الرصيد</span>
                               <span className={`font-bold ${customerBalance >= 0 ? 'text-red-400' : 'text-green-400'}`}>
                                 {formatPrice(Math.abs(customerBalance))}
                               </span>
@@ -4328,10 +4328,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           </div>
 
                           {/* Notes and Employee Info */}
-                          <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
+                          <div className="mt-3 flex items-center justify-between text-xs text-[var(--dash-text-muted)]">
                             <div className="flex items-center gap-2">
                               <span>الملاحظات:</span>
-                              <span className="text-gray-300">{selectedStatementInvoice?.notes || '---'}</span>
+                              <span className="text-[var(--dash-text-secondary)]">{selectedStatementInvoice?.notes || '---'}</span>
                             </div>
                             <div className="flex items-center gap-4">
                               <span>
@@ -4353,11 +4353,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {isLoadingStatements ? (
                             <div className="flex items-center justify-center h-full">
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                              <span className="text-gray-400">جاري تحميل كشف الحساب...</span>
+                              <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
                             </div>
                           ) : accountStatements.length === 0 ? (
                             <div className="flex items-center justify-center h-full">
-                              <span className="text-gray-400">لا توجد عمليات مسجلة</span>
+                              <span className="text-[var(--dash-text-muted)]">لا توجد عمليات مسجلة</span>
                             </div>
                           ) : (
                             <div className="flex-1 overflow-auto scrollbar-hide">
@@ -4380,7 +4380,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               {isLoadingMoreStatements && (
                                 <div className="flex items-center justify-center py-4">
                                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                                  <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                                  <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                                 </div>
                               )}
                             </div>
@@ -4395,7 +4395,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   <div className="h-full relative">
                     {/* Invoices Table - Always rendered but z-indexed based on view mode */}
                     <div
-                      className={`absolute inset-0 bg-[#2B3544] transition-all duration-300 flex flex-col ${
+                      className={`absolute inset-0 bg-[var(--dash-bg-surface)] transition-all duration-300 flex flex-col ${
                         viewMode === 'details-only' ? 'z-0 opacity-20' : 'z-10'
                       } ${
                         viewMode === 'split' ? '' : 'opacity-100'
@@ -4406,7 +4406,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       }}
                     >
                       {/* Product Search Bar */}
-                      <div className={`bg-[#374151] border-b p-3 flex-shrink-0 transition-colors ${searchQuery ? 'border-blue-500' : 'border-gray-600'}`}>
+                      <div className={`bg-[var(--dash-bg-raised)] border-b p-3 flex-shrink-0 transition-colors ${searchQuery ? 'border-blue-500' : 'border-[var(--dash-border-default)]'}`}>
                         {searchQuery && (
                           <div className="mb-2 text-xs flex items-center justify-between">
                             <div className="flex items-center gap-2 text-blue-400">
@@ -4414,15 +4414,15 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <span>البحث نشط - عرض الفواتير التي تحتوي على المنتج المحدد فقط</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className="text-gray-400">النتائج:</span>
-                              <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-medium">
+                              <span className="text-[var(--dash-text-muted)]">النتائج:</span>
+                              <span className="bg-blue-600 text-[var(--dash-text-primary)] px-2 py-0.5 rounded font-medium">
                                 {sales.length}
                               </span>
                             </div>
                           </div>
                         )}
                         <div className="relative">
-                          <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-blue-400' : 'text-gray-400'}`} />
+                          <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-blue-400' : 'text-[var(--dash-text-muted)]'}`} />
                           <input
                             type="text"
                             placeholder="ابحث عن منتج (اسم المنتج أو الباركود)..."
@@ -4441,18 +4441,18 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                 searchProductInInvoices(searchQuery)
                               }
                             }}
-                            className="w-full pl-24 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            className="w-full pl-24 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] text-sm"
                           />
                           <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex gap-1">
                             <button
                               onClick={() => searchProductInInvoices(searchQuery)}
-                              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors"
+                              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-xs rounded transition-colors"
                             >
                               بحث
                             </button>
                             <button
                               onClick={() => searchProductInInvoices('')}
-                              className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded transition-colors"
+                              className="px-3 py-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] text-xs rounded transition-colors"
                             >
                               مسح
                             </button>
@@ -4465,7 +4465,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         {isLoadingSales ? (
                           <div className="flex items-center justify-center h-full">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                            <span className="text-gray-400">جاري تحميل الفواتير...</span>
+                            <span className="text-[var(--dash-text-muted)]">جاري تحميل الفواتير...</span>
                           </div>
                         ) : (
                           <ResizableTable
@@ -4483,7 +4483,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     {/* Resizable Divider - Only show in split mode */}
                     {viewMode === 'split' && (
                       <div
-                        className="absolute left-0 right-0 h-2 bg-gray-600 hover:bg-blue-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
+                        className="absolute left-0 right-0 h-2 bg-[var(--dash-bg-overlay)] hover:bg-blue-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
                         style={{ top: `${dividerPosition}%`, transform: 'translateY(-50%)' }}
                         onMouseDown={handleMouseDown}
                       >
@@ -4493,7 +4493,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                     {/* Invoice Details - Always rendered but z-indexed based on view mode */}
                     <div 
-                      className={`absolute inset-0 bg-[#2B3544] flex flex-col transition-all duration-300 ${
+                      className={`absolute inset-0 bg-[var(--dash-bg-surface)] flex flex-col transition-all duration-300 ${
                         viewMode === 'invoices-only' ? 'z-0 opacity-20' : 'z-10'
                       }`}
                       style={{
@@ -4502,12 +4502,12 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         zIndex: viewMode === 'details-only' ? 20 : viewMode === 'split' ? 10 : 5
                       }}
                     >
-                      <div className="flex items-center justify-between p-4 pb-2 flex-shrink-0 border-b border-gray-600">
+                      <div className="flex items-center justify-between p-4 pb-2 flex-shrink-0 border-b border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-2">
                           {/* Print Receipt Button */}
                           <button
                             onClick={() => printReceipt(sales[selectedTransaction], saleItems)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                             disabled={isLoadingItems || saleItems.length === 0}
                           >
                             <PrinterIcon className="h-4 w-4" />
@@ -4517,7 +4517,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {/* Print A4 Invoice Button */}
                           <button
                             onClick={() => printA4Invoice(sales[selectedTransaction], saleItems)}
-                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                             disabled={isLoadingItems || saleItems.length === 0}
                           >
                             <DocumentIcon className="h-4 w-4" />
@@ -4528,7 +4528,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           <div className="relative" ref={saveDropdownRef}>
                             <button
                               onClick={() => setShowSaveDropdown(!showSaveDropdown)}
-                              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingItems || saleItems.length === 0}
                             >
                               <ArrowDownTrayIcon className="h-4 w-4" />
@@ -4537,17 +4537,17 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                             {/* Dropdown Menu */}
                             {showSaveDropdown && (
-                              <div className="absolute top-full left-0 mt-1 bg-[#374151] border border-gray-600 rounded-lg shadow-xl z-50 min-w-[140px]">
+                              <div className="absolute top-full left-0 mt-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg shadow-xl z-50 min-w-[140px]">
                                 <button
                                   onClick={() => saveDocument(sales[selectedTransaction], saleItems, 'pdf')}
-                                  className="w-full px-4 py-2 text-right text-white hover:bg-gray-600 flex items-center gap-2 rounded-t-lg transition-colors"
+                                  className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-t-lg transition-colors"
                                 >
                                   <DocumentArrowDownIcon className="h-4 w-4 text-red-400" />
                                   <span>PDF</span>
                                 </button>
                                 <button
                                   onClick={() => saveDocument(sales[selectedTransaction], saleItems, 'png')}
-                                  className="w-full px-4 py-2 text-right text-white hover:bg-gray-600 flex items-center gap-2 rounded-b-lg transition-colors"
+                                  className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-b-lg transition-colors"
                                 >
                                   <DocumentArrowDownIcon className="h-4 w-4 text-blue-400" />
                                   <span>PNG</span>
@@ -4565,7 +4565,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         {isLoadingItems ? (
                           <div className="flex items-center justify-center h-full">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                            <span className="text-gray-400">جاري تحميل العناصر...</span>
+                            <span className="text-[var(--dash-text-muted)]">جاري تحميل العناصر...</span>
                           </div>
                         ) : (
                           <ResizableTable
@@ -4588,7 +4588,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 {activeTab === 'payments' && (
                   <div className="h-full flex flex-col">
                     {/* Payments Header */}
-                    <div className="bg-[#2B3544] border-b border-gray-600 p-4">
+                    <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <button
@@ -4596,15 +4596,15 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               setPaymentType('payment')
                               setShowAddPaymentModal(true)
                             }}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                           >
                             <PlusIcon className="h-4 w-4" />
                             إضافة دفعة
                           </button>
                         </div>
                         <div className="text-right">
-                          <div className="text-white text-lg font-medium">دفعات العميل</div>
-                          <div className="text-gray-400 text-sm mt-1">إجمالي الدفعات: {formatPrice(totalPayments, 'system')}</div>
+                          <div className="text-[var(--dash-text-primary)] text-lg font-medium">دفعات العميل</div>
+                          <div className="text-[var(--dash-text-muted)] text-sm mt-1">إجمالي الدفعات: {formatPrice(totalPayments, 'system')}</div>
                         </div>
                       </div>
                     </div>
@@ -4614,11 +4614,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       {isLoadingPayments ? (
                         <div className="flex items-center justify-center h-full">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                          <span className="text-gray-400">جاري تحميل الدفعات...</span>
+                          <span className="text-[var(--dash-text-muted)]">جاري تحميل الدفعات...</span>
                         </div>
                       ) : customerPayments.length === 0 ? (
                         <div className="flex items-center justify-center h-full">
-                          <span className="text-gray-400">لا توجد دفعات مسجلة</span>
+                          <span className="text-[var(--dash-text-muted)]">لا توجد دفعات مسجلة</span>
                         </div>
                       ) : (
                         <div className="flex-1 overflow-auto scrollbar-hide">
@@ -4637,7 +4637,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {isLoadingMorePayments && (
                             <div className="flex items-center justify-center py-4">
                               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                              <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                              <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
                         </div>
@@ -4646,7 +4646,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       {/* Context Menu for Payment */}
                       {contextMenu && (
                         <div
-                          className="fixed bg-[#2B3544] border border-gray-600 rounded-lg shadow-xl py-1 z-[100]"
+                          className="fixed bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-xl py-1 z-[100]"
                           style={{
                             left: contextMenu.x,
                             top: contextMenu.y,
@@ -4729,34 +4729,34 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         <div className="fixed inset-0 z-[60] flex items-center justify-center">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black bg-opacity-60"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setShowColumnManager(false)}
           />
 
           {/* Modal Content */}
-          <div className="relative bg-[#2B3544] rounded-xl shadow-2xl w-[600px] max-h-[80vh] overflow-hidden border border-gray-600">
+          <div className="relative bg-[var(--dash-bg-surface)] rounded-xl shadow-[var(--dash-shadow-lg)] w-[600px] max-h-[80vh] overflow-hidden border border-[var(--dash-border-default)] animate-dash-scale-in">
             {/* Header */}
-            <div className="bg-[#374151] px-6 py-4 border-b border-gray-600 flex items-center justify-between">
-              <h3 className="text-white text-lg font-semibold flex items-center gap-2">
+            <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
+              <h3 className="text-[var(--dash-text-primary)] text-lg font-semibold flex items-center gap-2">
                 <TableCellsIcon className="h-5 w-5 text-blue-400" />
                 إدارة الأعمدة
               </h3>
               <button
                 onClick={() => setShowColumnManager(false)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
               >
                 <XMarkIcon className="h-6 w-6" />
               </button>
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex border-b border-gray-600 bg-[#374151]/50">
+            <div className="flex border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]/50">
               <button
                 onClick={() => setColumnManagerTab('invoices')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'invoices'
                     ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600/30'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
                 📋 فواتير العميل
@@ -4766,7 +4766,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'details'
                     ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600/30'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
                 📄 تفاصيل الفاتورة
@@ -4776,7 +4776,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'print'
                     ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600/30'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
                 🖨️ طباعة A4
@@ -4786,7 +4786,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'statement'
                     ? 'text-amber-400 border-b-2 border-amber-400 bg-amber-600/10'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600/30'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
                 📊 كشف الحساب
@@ -4796,7 +4796,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'payments'
                     ? 'text-green-400 border-b-2 border-green-400 bg-green-600/10'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600/30'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
                 💰 الدفعات
@@ -4807,7 +4807,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
             <div className="p-6 max-h-[50vh] overflow-y-auto">
               {columnManagerTab === 'invoices' && (
                 <div className="space-y-3">
-                  <p className="text-gray-400 text-sm mb-4">
+                  <p className="text-[var(--dash-text-muted)] text-sm mb-4">
                     اختر الأعمدة التي تريد عرضها في جدول فواتير العميل
                   </p>
                   <div className="grid grid-cols-2 gap-3">
@@ -4817,7 +4817,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visibleInvoiceColumns.includes(col.id)
                             ? 'bg-blue-600/20 border-blue-500'
-                            : 'bg-gray-700/30 border-gray-600 hover:border-gray-500'
+                            : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
                         <input
@@ -4825,9 +4825,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visibleInvoiceColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'invoices')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                         />
-                        <span className={`text-sm ${visibleInvoiceColumns.includes(col.id) ? 'text-white' : 'text-gray-400'}`}>
+                        <span className={`text-sm ${visibleInvoiceColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
@@ -4841,7 +4841,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
               {columnManagerTab === 'details' && (
                 <div className="space-y-3">
-                  <p className="text-gray-400 text-sm mb-4">
+                  <p className="text-[var(--dash-text-muted)] text-sm mb-4">
                     اختر الأعمدة التي تريد عرضها في جدول تفاصيل الفاتورة
                   </p>
                   <div className="grid grid-cols-2 gap-3">
@@ -4851,7 +4851,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visibleDetailsColumns.includes(col.id)
                             ? 'bg-blue-600/20 border-blue-500'
-                            : 'bg-gray-700/30 border-gray-600 hover:border-gray-500'
+                            : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
                         <input
@@ -4859,9 +4859,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visibleDetailsColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'details')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                         />
-                        <span className={`text-sm ${visibleDetailsColumns.includes(col.id) ? 'text-white' : 'text-gray-400'}`}>
+                        <span className={`text-sm ${visibleDetailsColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
@@ -4875,7 +4875,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
               {columnManagerTab === 'print' && (
                 <div className="space-y-3">
-                  <p className="text-gray-400 text-sm mb-4">
+                  <p className="text-[var(--dash-text-muted)] text-sm mb-4">
                     اختر الأعمدة التي تريد طباعتها في فاتورة A4
                   </p>
                   <div className="grid grid-cols-2 gap-3">
@@ -4885,7 +4885,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visiblePrintColumns.includes(col.id)
                             ? 'bg-green-600/20 border-green-500'
-                            : 'bg-gray-700/30 border-gray-600 hover:border-gray-500'
+                            : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
                         <input
@@ -4893,9 +4893,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visiblePrintColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'print')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
                         />
-                        <span className={`text-sm ${visiblePrintColumns.includes(col.id) ? 'text-white' : 'text-gray-400'}`}>
+                        <span className={`text-sm ${visiblePrintColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
@@ -4909,7 +4909,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
               {columnManagerTab === 'statement' && (
                 <div className="space-y-3">
-                  <p className="text-gray-400 text-sm mb-4">
+                  <p className="text-[var(--dash-text-muted)] text-sm mb-4">
                     اختر الأعمدة التي تريد عرضها في جدول كشف الحساب
                   </p>
                   <div className="grid grid-cols-2 gap-3">
@@ -4919,7 +4919,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visibleStatementColumns.includes(col.id)
                             ? 'bg-amber-600/20 border-amber-500'
-                            : 'bg-gray-700/30 border-gray-600 hover:border-gray-500'
+                            : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
                         <input
@@ -4927,9 +4927,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visibleStatementColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'statement')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-amber-500 focus:ring-amber-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-amber-500 focus:ring-amber-500 focus:ring-offset-0"
                         />
-                        <span className={`text-sm ${visibleStatementColumns.includes(col.id) ? 'text-white' : 'text-gray-400'}`}>
+                        <span className={`text-sm ${visibleStatementColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
@@ -4943,7 +4943,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
               {columnManagerTab === 'payments' && (
                 <div className="space-y-3">
-                  <p className="text-gray-400 text-sm mb-4">
+                  <p className="text-[var(--dash-text-muted)] text-sm mb-4">
                     اختر الأعمدة التي تريد عرضها في جدول الدفعات
                   </p>
                   <div className="grid grid-cols-2 gap-3">
@@ -4953,7 +4953,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visiblePaymentsColumns.includes(col.id)
                             ? 'bg-green-600/20 border-green-500'
-                            : 'bg-gray-700/30 border-gray-600 hover:border-gray-500'
+                            : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
                         <input
@@ -4961,9 +4961,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visiblePaymentsColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'payments')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
                         />
-                        <span className={`text-sm ${visiblePaymentsColumns.includes(col.id) ? 'text-white' : 'text-gray-400'}`}>
+                        <span className={`text-sm ${visiblePaymentsColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
@@ -4977,8 +4977,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
             </div>
 
             {/* Footer */}
-            <div className="bg-[#374151]/50 px-6 py-4 border-t border-gray-600 flex justify-between items-center">
-              <div className="text-sm text-gray-400">
+            <div className="bg-[var(--dash-bg-raised)]/50 px-6 py-4 border-t border-[var(--dash-border-default)] flex justify-between items-center">
+              <div className="text-sm text-[var(--dash-text-muted)]">
                 {columnManagerTab === 'invoices' && `${visibleInvoiceColumns.length} من ${allInvoiceColumnDefs.length} أعمدة مفعلة`}
                 {columnManagerTab === 'details' && `${visibleDetailsColumns.length} من ${allDetailsColumnDefs.length} أعمدة مفعلة`}
                 {columnManagerTab === 'print' && `${visiblePrintColumns.length} من ${allPrintColumnDefs.length} أعمدة مفعلة`}
@@ -4987,7 +4987,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
               </div>
               <button
                 onClick={() => setShowColumnManager(false)}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors"
               >
                 تم
               </button>

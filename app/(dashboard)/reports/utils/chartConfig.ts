@@ -32,14 +32,14 @@ export const CATEGORY_COLORS = [
 
 // Dark theme configuration
 export const DARK_THEME = {
-  backgroundColor: 'transparent',
-  textColor: '#E5E7EB',      // Gray-200
-  textColorMuted: '#9CA3AF', // Gray-400
-  gridColor: '#374151',      // Gray-700
-  tooltipBackground: '#1F2937', // Gray-800
-  tooltipBorder: '#4B5563',  // Gray-600
-  cardBackground: '#374151', // Gray-700
-  cardBorder: '#4B5563',     // Gray-600
+  backgroundColor: '#151C25',
+  textColor: '#8B9DB7',
+  textColorMuted: '#8B9DB7',
+  gridColor: 'rgba(148,163,184,0.08)',
+  tooltipBackground: '#151C25',
+  tooltipBorder: 'rgba(148,163,184,0.08)',
+  cardBackground: '#151C25',
+  cardBorder: 'rgba(148,163,184,0.08)',
 };
 
 // Get chart configuration for Recharts components

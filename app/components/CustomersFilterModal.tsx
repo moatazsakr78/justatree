@@ -220,22 +220,22 @@ export default function CustomersFilterModal({
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] max-w-7xl w-full h-[95vh] overflow-hidden flex flex-col">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-7xl w-full h-[95vh] overflow-hidden flex flex-col">
           
           {/* Header */}
-          <div className="bg-[#374151] px-6 py-4 border-b border-[#4A5568] flex items-center justify-between rounded-t-2xl">
+          <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                 <UserIcon className="h-6 w-6 text-white" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">فلترة العملاء</h2>
-                <p className="text-gray-400 text-sm">اختر المجموعات والعملاء المطلوبة للتقرير</p>
+                <p className="text-[var(--dash-text-muted)] text-sm">اختر المجموعات والعملاء المطلوبة للتقرير</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+              className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
@@ -245,21 +245,21 @@ export default function CustomersFilterModal({
           <div className="flex flex-1 min-h-0">
             
             {/* Left Sidebar - Customer Groups */}
-            <div className="w-80 bg-[#374151] border-r border-[#4A5568] flex flex-col min-h-0">
-              <div className="p-4 border-b border-[#4A5568]">
+            <div className="w-80 bg-[var(--dash-bg-raised)] border-r border-[var(--dash-border-default)] flex flex-col min-h-0">
+              <div className="p-4 border-b border-[var(--dash-border-default)]">
                 <h3 className="text-white font-medium mb-3">مجموعات العملاء</h3>
                 
                 {/* Groups List */}
                 <div className="space-y-2 max-h-96 overflow-y-auto scrollbar-hide">
                   {groupsLoading ? (
-                    <div className="text-gray-400 text-center py-4">جاري التحميل...</div>
+                    <div className="text-[var(--dash-text-muted)] text-center py-4">جاري التحميل...</div>
                   ) : groupsError ? (
                     <div className="text-red-400 text-center py-4 text-sm">{groupsError}</div>
                   ) : (
                     allGroups.map(group => (
                       <label
                         key={group.id}
-                        className="flex items-center gap-3 p-3 bg-[#2B3544] hover:bg-[#3A4553] rounded-lg cursor-pointer transition-colors border border-gray-600/30"
+                        className="flex items-center gap-3 p-3 bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded-lg cursor-pointer transition-colors border border-[var(--dash-border-default)]/30"
                       >
                         {/* Group Checkbox */}
                         <div className="relative">
@@ -272,7 +272,7 @@ export default function CustomersFilterModal({
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                             selectedGroups.has(group.id)
                               ? 'bg-blue-600 border-blue-600'
-                              : 'bg-transparent border-gray-400'
+                              : 'bg-transparent border-[var(--dash-text-muted)]'
                           }`}>
                             {selectedGroups.has(group.id) && (
                               <CheckIcon className="h-3 w-3 text-white" />
@@ -319,7 +319,7 @@ export default function CustomersFilterModal({
               </div>
 
               {/* Selection Summary */}
-              <div className="p-4 border-t border-[#4A5568] mt-auto">
+              <div className="p-4 border-t border-[var(--dash-border-default)] mt-auto">
                 <div className="text-center space-y-2">
                   <div className="text-sm text-blue-400">
                     {selectedGroups.size} مجموعة محددة
@@ -335,19 +335,19 @@ export default function CustomersFilterModal({
             <div className="flex-1 flex flex-col">
               
               {/* Customers Toolbar */}
-              <div className="bg-[#374151] border-b border-[#4A5568] px-6 py-3">
+              <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6 py-3">
                 <div className="flex items-center justify-between">
                   
                   {/* Left Side - Controls */}
                   <div className="flex items-center gap-4">
                     {/* View Toggle */}
-                    <div className="flex bg-[#2B3544] rounded-md overflow-hidden">
+                    <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden">
                       <button 
                         onClick={() => setViewMode('grid')}
                         className={`p-2 transition-colors ${
-                          viewMode === 'grid' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                          viewMode === 'grid'
+                            ? 'bg-blue-600 text-white'
+                            : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
                         <Squares2X2Icon className="h-4 w-4" />
@@ -355,9 +355,9 @@ export default function CustomersFilterModal({
                       <button 
                         onClick={() => setViewMode('table')}
                         className={`p-2 transition-colors ${
-                          viewMode === 'table' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                          viewMode === 'table'
+                            ? 'bg-blue-600 text-white'
+                            : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
                         <ListBulletIcon className="h-4 w-4" />
@@ -366,13 +366,13 @@ export default function CustomersFilterModal({
 
                     {/* Search */}
                     <div className="relative">
-                      <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
                       <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="اسم العميل..."
-                        className="w-80 pl-4 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5DADE2] focus:border-transparent text-sm"
+                        className="w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-white placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-sm"
                       />
                     </div>
 
@@ -394,7 +394,7 @@ export default function CustomersFilterModal({
                   </div>
 
                   {/* Right Side - Info */}
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                  <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)]">
                     <span>عرض {filteredCustomers.length} من أصل {customers.length} عميل</span>
                     {selectedGroup && (
                       <span className="text-blue-400">المجموعة: {selectedGroup.name}</span>
@@ -404,7 +404,7 @@ export default function CustomersFilterModal({
               </div>
 
               {/* Customers Content */}
-              <div className="flex-1 overflow-hidden bg-[#2B3544] min-h-0">
+              <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)] min-h-0">
                 {viewMode === 'grid' ? (
                   // Grid View - Customer Cards with Circular Avatars
                   <div className="h-full overflow-y-auto scrollbar-hide p-4">
@@ -412,7 +412,7 @@ export default function CustomersFilterModal({
                       {filteredCustomers.map((customer, index) => (
                         <div
                           key={customer.id}
-                          className={`bg-[#374151] rounded-lg p-4 cursor-pointer transition-all duration-200 border-2 relative group ${
+                          className={`bg-[var(--dash-bg-raised)] rounded-lg p-4 cursor-pointer transition-all duration-200 border-2 relative group ${
                             selectedCustomers.has(customer.id)
                               ? 'border-blue-500 bg-[#434E61]'
                               : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
@@ -499,7 +499,7 @@ export default function CustomersFilterModal({
                   // Table View
                   <div className="h-full overflow-y-auto scrollbar-hide">
                     <table className="w-full">
-                      <thead className="bg-[#374151] sticky top-0">
+                      <thead className="bg-[var(--dash-bg-raised)] sticky top-0">
                         <tr>
                           <th className="px-4 py-3 text-right text-white font-medium">اختيار</th>
                           <th className="px-4 py-3 text-right text-white font-medium">الاسم</th>
@@ -513,7 +513,7 @@ export default function CustomersFilterModal({
                         {filteredCustomers.map((customer) => (
                           <tr 
                             key={customer.id}
-                            className={`border-b border-gray-600 hover:bg-[#374151] ${
+                            className={`border-b border-gray-600 hover:bg-[var(--dash-bg-raised)] ${
                               selectedCustomers.has(customer.id) ? 'bg-blue-500/10' : ''
                             }`}
                           >
@@ -528,7 +528,7 @@ export default function CustomersFilterModal({
                                 <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                                   selectedCustomers.has(customer.id)
                                     ? 'bg-blue-600 border-blue-600'
-                                    : 'bg-transparent border-gray-400'
+                                    : 'bg-transparent border-[var(--dash-text-muted)]'
                                 }`}>
                                   {selectedCustomers.has(customer.id) && (
                                     <CheckIcon className="h-3 w-3 text-white" />
@@ -537,7 +537,7 @@ export default function CustomersFilterModal({
                               </div>
                             </td>
                             <td className="px-4 py-3 text-white">{customer.name}</td>
-                            <td className="px-4 py-3 text-gray-300 font-mono text-sm">{customer.phone || 'غير محدد'}</td>
+                            <td className="px-4 py-3 text-[var(--dash-text-secondary)] font-mono text-sm">{customer.phone || 'غير محدد'}</td>
                             <td className="px-4 py-3 text-blue-400">{(customer.loyalty_points || 0).toLocaleString()}</td>
                             <td className="px-4 py-3">
                               {customer.rank ? (() => {
@@ -559,10 +559,10 @@ export default function CustomersFilterModal({
                                 }
                                 return <span className="text-white font-medium">{customer.rank}</span>
                               })() : (
-                                <span className="text-gray-300">غير محدد</span>
+                                <span className="text-[var(--dash-text-secondary)]">غير محدد</span>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-gray-300">{customer.city || '-'}</td>
+                            <td className="px-4 py-3 text-[var(--dash-text-secondary)]">{customer.city || '-'}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -574,9 +574,9 @@ export default function CustomersFilterModal({
           </div>
 
           {/* Footer Actions */}
-          <div className="bg-[#374151] px-6 py-4 border-t border-[#4A5568] flex items-center justify-between rounded-b-2xl flex-shrink-0">
+          <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-t border-[var(--dash-border-default)] flex items-center justify-between rounded-b-2xl flex-shrink-0">
             <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-[var(--dash-text-muted)]">
                 تم تحديد {selectedGroups.size} مجموعة و {selectedCustomers.size} عميل
               </div>
             </div>
@@ -584,7 +584,7 @@ export default function CustomersFilterModal({
             <div className="flex items-center gap-3">
               <button
                 onClick={onClose}
-                className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+                className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)] rounded transition-colors"
               >
                 إلغاء
               </button>

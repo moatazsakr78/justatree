@@ -54,8 +54,8 @@ export default function ImageViewerModal({
         {images.length > 1 && (
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full">
             <span className="font-semibold">{currentIndex + 1}</span>
-            <span className="text-gray-300 mx-1">/</span>
-            <span className="text-gray-300">{images.length}</span>
+            <span className="text-[var(--dash-text-secondary)] mx-1">/</span>
+            <span className="text-[var(--dash-text-secondary)]">{images.length}</span>
           </div>
         )}
 
@@ -80,7 +80,7 @@ export default function ImageViewerModal({
           <img
             src={images[currentIndex]}
             alt={`إيصال ${currentIndex + 1}`}
-            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-[var(--dash-shadow-lg)]"
           />
         </div>
 

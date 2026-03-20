@@ -79,13 +79,13 @@ export default function ActivityLogFilters({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-[#374151] rounded-xl border border-gray-600 w-full max-w-sm mx-4 max-h-[80vh] flex flex-col">
-        <div className="flex items-center justify-between p-4 border-b border-gray-600">
-          <h3 className="text-lg font-semibold text-white">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-[var(--dash-bg-raised)] rounded-xl border border-[var(--dash-border-default)] w-full max-w-sm mx-4 max-h-[80vh] flex flex-col shadow-[var(--dash-shadow-lg)]">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
+          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
             {mode === 'entity' ? 'نوع العملية' : 'نوع الإجراء'}
           </h3>
-          <button onClick={onClose} className="p-1 text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-1 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]">
             <XMarkIcon className="w-5 h-5" />
           </button>
         </div>
@@ -100,7 +100,7 @@ export default function ActivityLogFilters({
                 className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
                   isSelected
                     ? 'bg-blue-600/20 border border-blue-500/50 text-blue-400'
-                    : 'bg-[#2B3544] text-gray-300 hover:bg-[#323d4d]'
+                    : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 <span className="text-sm">{option.label}</span>
@@ -110,10 +110,10 @@ export default function ActivityLogFilters({
           })}
         </div>
 
-        <div className="flex gap-3 p-4 border-t border-gray-600">
+        <div className="flex gap-3 p-4 border-t border-[var(--dash-border-default)]">
           <button
             onClick={handleClear}
-            className="flex-1 py-2 text-sm text-gray-400 hover:text-white bg-[#2B3544] rounded-lg transition-colors"
+            className="flex-1 py-2 text-sm text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] bg-[var(--dash-bg-surface)] rounded-lg transition-colors"
           >
             مسح الكل
           </button>

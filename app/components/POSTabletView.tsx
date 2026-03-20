@@ -190,7 +190,7 @@ export default function POSTabletView({
       accessor: '#',
       width: 60,
       render: (value: any, item: any, index: number) => (
-        <span className="text-gray-400 font-medium">{index + 1}</span>
+        <span className="text-[var(--dash-text-muted)] font-medium">{index + 1}</span>
       ),
     },
     {
@@ -198,7 +198,7 @@ export default function POSTabletView({
       header: 'اسم المنتج',
       accessor: 'name',
       width: 200,
-      render: (value: string) => <span className="text-white font-medium">{value}</span>,
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>,
     },
     {
       id: 'category',
@@ -206,7 +206,7 @@ export default function POSTabletView({
       accessor: 'category',
       width: 120,
       render: (value: any) => (
-        <span className="text-gray-300">
+        <span className="text-[var(--dash-text-secondary)]">
           {value?.name || 'غير محدد'}
         </span>
       ),
@@ -217,7 +217,7 @@ export default function POSTabletView({
       accessor: 'price',
       width: 120,
       render: (value: number) => (
-        <span className="text-white">{formatPrice(value || 0, 'system')}</span>
+        <span className="text-[var(--dash-text-primary)]">{formatPrice(value || 0, 'system')}</span>
       ),
     },
     {
@@ -226,7 +226,7 @@ export default function POSTabletView({
       accessor: 'barcode',
       width: 150,
       render: (value: string) => (
-        <span className="text-gray-300 font-mono text-sm">{value || '-'}</span>
+        <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{value || '-'}</span>
       ),
     },
     {
@@ -243,7 +243,7 @@ export default function POSTabletView({
   ], [formatPrice])
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden flex flex-col">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden flex flex-col">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
 
@@ -254,13 +254,13 @@ export default function POSTabletView({
       <div className="flex-1 pt-12 overflow-hidden flex flex-col">
 
         {/* POS Tabs Bar - Compact Design */}
-        <div className="bg-[#2B3544] border-b border-gray-600 flex items-center justify-between flex-shrink-0">
+        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] flex items-center justify-between flex-shrink-0">
           {/* Right Side: Selection Display */}
           <div className="flex items-center gap-2 text-xs px-2 py-0.5 overflow-x-auto scrollbar-hide">
             {/* Customer/Supplier */}
-            <span className="text-gray-300 whitespace-nowrap">
+            <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
               {isPurchaseMode ? 'المورد' : 'العميل'}:{' '}
-              <span className="text-white font-medium">
+              <span className="text-[var(--dash-text-primary)] font-medium">
                 {isPurchaseMode
                   ? selectedSupplier
                     ? selectedSupplier.name
@@ -272,9 +272,9 @@ export default function POSTabletView({
             </span>
 
             {/* Branch */}
-            <span className="text-gray-300 whitespace-nowrap">
+            <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
               الفرع:{' '}
-              <span className="text-white font-medium">
+              <span className="text-[var(--dash-text-primary)] font-medium">
                 {selections.branch
                   ? selections.branch.name
                   : 'غير محدد'}
@@ -282,9 +282,9 @@ export default function POSTabletView({
             </span>
 
             {/* Record */}
-            <span className="text-gray-300 whitespace-nowrap">
+            <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
               الخزنة:{' '}
-              <span className="text-white font-medium">
+              <span className="text-[var(--dash-text-primary)] font-medium">
                 {selections.record ? selections.record.name : 'غير محدد'}
               </span>
             </span>
@@ -298,7 +298,7 @@ export default function POSTabletView({
                 onClick={() => {
                   clearSelections()
                 }}
-                className="text-xs text-gray-400 hover:text-red-400 transition-colors px-1.5 py-0.5 rounded whitespace-nowrap"
+                className="text-xs text-[var(--dash-text-muted)] hover:text-red-400 transition-colors px-1.5 py-0.5 rounded whitespace-nowrap"
               >
                 مسح الكل
               </button>
@@ -306,17 +306,17 @@ export default function POSTabletView({
           </div>
 
           {/* Vertical Divider */}
-          <div className="h-5 w-px bg-gray-600"></div>
+          <div className="h-5 w-px bg-[var(--dash-border-default)]"></div>
 
           {/* Left Side: POS Tabs */}
           <div className="flex items-center overflow-x-auto scrollbar-hide flex-1">
             {posTabs.map((tab) => (
               <div
                 key={tab.id}
-                className={`flex items-center border-l border-gray-600 ${
+                className={`flex items-center border-l border-[var(--dash-border-default)] ${
                   tab.active
                     ? 'bg-[#F97316] text-white'
-                    : 'text-gray-300 hover:text-white hover:bg-[#4B5563]'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
                 }`}
               >
                 <button
@@ -344,7 +344,7 @@ export default function POSTabletView({
             {/* Add New Tab Button - Opens customer selection to create new tab */}
             <button
               onClick={() => setShowNewTabCustomerModal(true)}
-              className="px-1.5 py-0.5 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center gap-0.5 border-l border-gray-600"
+              className="px-1.5 py-0.5 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center gap-0.5 border-l border-[var(--dash-border-default)]"
               title="إضافة نافذة بيع جديدة"
             >
               <PlusIcon className="w-3 h-3" />
@@ -353,13 +353,13 @@ export default function POSTabletView({
         </div>
 
         {/* Action Buttons Bar - Horizontal Design */}
-        <div className="bg-[#374151] border-b border-gray-600 px-4 py-2 w-full flex-shrink-0 overflow-x-auto scrollbar-hide">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2 w-full flex-shrink-0 overflow-x-auto scrollbar-hide">
           <div className="flex items-center gap-2 min-w-max">
             {/* First 3 Selection Buttons with Red Dot Indicator */}
             <button
               onClick={() => setIsRecordsModalOpen(true)}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all relative ${
-                selections.record ? 'text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'text-gray-300 hover:text-white hover:bg-gray-600/30'
+                selections.record ? 'text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
               <BanknotesIcon className="h-4 w-4" />
@@ -381,7 +381,7 @@ export default function POSTabletView({
 
             <button
               onClick={() => isPurchaseMode ? setIsSupplierModalOpen(true) : setIsCustomerModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-all relative"
+              className="flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-all relative"
             >
               <UserIcon className="h-4 w-4" />
               <span>{isPurchaseMode ? 'المورد' : 'العميل'}</span>
@@ -393,12 +393,12 @@ export default function POSTabletView({
             </button>
 
             {/* Vertical Divider */}
-            <div className="h-6 w-px bg-gray-600"></div>
+            <div className="h-6 w-px bg-[var(--dash-border-default)]"></div>
 
             {/* Other Action Buttons */}
             <button
               onClick={() => setIsHistoryModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-all"
             >
               <ClockIcon className="h-4 w-4" />
               <span>التاريخ</span>
@@ -406,14 +406,14 @@ export default function POSTabletView({
 
             <button
               onClick={() => setShowQuickAddProductModal(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-all"
             >
               <PlusIcon className="h-4 w-4" />
               <span>إضافة منتج</span>
             </button>
 
             {/* Vertical Divider */}
-            <div className="h-6 w-px bg-gray-600"></div>
+            <div className="h-6 w-px bg-[var(--dash-border-default)]"></div>
 
             {/* Mode Buttons */}
             <button
@@ -427,7 +427,7 @@ export default function POSTabletView({
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 !isPurchaseMode && !isTransferMode && !isReturnMode
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-600/30'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
               <HomeIcon className="h-4 w-4" />
@@ -439,7 +439,7 @@ export default function POSTabletView({
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 isPurchaseMode && !isTransferMode && !isReturnMode
                   ? 'bg-purple-600 text-white'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-600/30'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
               <BuildingOfficeIcon className="h-4 w-4" />
@@ -456,7 +456,7 @@ export default function POSTabletView({
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 isTransferMode && !isReturnMode
                   ? 'bg-green-600 text-white'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-600/30'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
               <ArrowsRightLeftIcon className="h-4 w-4" />
@@ -468,7 +468,7 @@ export default function POSTabletView({
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 isReturnMode
                   ? 'bg-red-600 text-white'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-600/30'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
               <ArrowUturnLeftIcon className="h-4 w-4" />
@@ -478,7 +478,7 @@ export default function POSTabletView({
         </div>
 
         {/* Search and Controls Section */}
-        <div className="bg-[#374151] border-b border-gray-600 px-4 py-3 flex-shrink-0">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex-shrink-0">
           <div className="flex items-center gap-3">
             {/* Search Bar */}
             <POSSearchInput
@@ -490,18 +490,18 @@ export default function POSTabletView({
             />
 
             {/* Product Count */}
-            <span className="text-xs text-gray-400 whitespace-nowrap">
+            <span className="text-xs text-[var(--dash-text-muted)] whitespace-nowrap">
               {filteredProducts.length} منتج
             </span>
 
             {/* View Mode Toggle */}
-            <div className="flex bg-[#2B3544] rounded-md overflow-hidden flex-shrink-0 border border-gray-600">
+            <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden flex-shrink-0 border border-[var(--dash-border-default)]">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
                     ? 'bg-blue-600 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 title="عرض الصور"
               >
@@ -512,7 +512,7 @@ export default function POSTabletView({
                 className={`p-2 transition-colors ${
                   viewMode === 'table'
                     ? 'bg-blue-600 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 title="عرض الجداول"
               >
@@ -523,7 +523,7 @@ export default function POSTabletView({
             {/* Cart Toggle Button */}
             <button
               onClick={() => setIsCartOpen(!isCartOpen)}
-              className="p-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-colors bg-[#2B3544] border border-gray-600 flex-shrink-0"
+              className="p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-colors bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] flex-shrink-0"
               title={isCartOpen ? 'إخفاء السلة' : 'إظهار السلة'}
             >
               <ShoppingBagIcon className="h-4 w-4" />
@@ -537,7 +537,7 @@ export default function POSTabletView({
           <div className={`${isCartOpen ? 'w-1/2' : 'w-full'} transition-all duration-300 overflow-hidden flex flex-col`}>
             {isLoading ? (
               <div className="flex items-center justify-center h-full">
-                <div className="text-white">جاري التحميل...</div>
+                <div className="text-[var(--dash-text-primary)]">جاري التحميل...</div>
               </div>
             ) : error ? (
               <div className="flex items-center justify-center h-full">
@@ -570,14 +570,14 @@ export default function POSTabletView({
                         <div
                           key={product.id}
                           onClick={() => handleProductClick(product)}
-                          className={`bg-[#374151] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 ${
+                          className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 ${
                             selectedProduct?.id === product.id
                               ? 'border-blue-500 bg-[#434E61]'
-                              : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
+                              : 'border-transparent hover:border-[var(--dash-text-disabled)] hover:bg-[#434E61]'
                           }`}
                         >
                           {/* Product Image */}
-                          <div className="w-full h-32 bg-[#2B3544] rounded-md mb-3 flex items-center justify-center overflow-hidden">
+                          <div className="w-full h-32 bg-[var(--dash-bg-surface)] rounded-md mb-3 flex items-center justify-center overflow-hidden">
                             {product.main_image_url ? (
                               <img
                                 src={product.main_image_url}
@@ -596,7 +596,7 @@ export default function POSTabletView({
                           </div>
 
                           {/* Product Name */}
-                          <h3 className="text-white font-medium text-xs text-center mb-2 line-clamp-2">
+                          <h3 className="text-[var(--dash-text-primary)] font-medium text-xs text-center mb-2 line-clamp-2">
                             {product.name}
                           </h3>
 
@@ -617,17 +617,17 @@ export default function POSTabletView({
 
           {/* Cart Panel - Tablet Split View */}
           {isCartOpen && (
-            <div className="w-1/2 bg-[#374151] border-l-2 border-gray-500 flex flex-col">
+            <div className="w-1/2 bg-[var(--dash-bg-raised)] border-l-2 border-[var(--dash-bg-highlight)] flex flex-col">
               {/* Cart Items Area - Fixed scrolling for mobile */}
-              <div className="flex-1 border-t-2 border-gray-500 overflow-y-auto min-h-0">
+              <div className="flex-1 border-t-2 border-[var(--dash-bg-highlight)] overflow-y-auto min-h-0">
                 {cartItems.length === 0 ? (
                   <div className="flex flex-col justify-center items-center h-full p-8">
-                    <ShoppingCartIcon className="h-24 w-24 text-gray-500 mb-8" />
-                    <p className="text-gray-400 text-sm text-center mb-4">
+                    <ShoppingCartIcon className="h-24 w-24 text-[var(--dash-text-disabled)] mb-8" />
+                    <p className="text-[var(--dash-text-muted)] text-sm text-center mb-4">
                       اضغط على المنتجات لإضافتها للسلة
                     </p>
                     <div className="text-center">
-                      <span className="bg-gray-600 px-3 py-1 rounded text-sm text-gray-300">
+                      <span className="bg-[var(--dash-bg-overlay)] px-3 py-1 rounded text-sm text-[var(--dash-text-secondary)]">
                         0 منتج
                       </span>
                     </div>
@@ -635,11 +635,11 @@ export default function POSTabletView({
                 ) : (
                   <div className="h-full flex flex-col">
                     {/* Cart Header */}
-                    <div className="p-4 border-b border-gray-600 flex-shrink-0">
+                    <div className="p-4 border-b border-[var(--dash-border-default)] flex-shrink-0">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
-                          <span className="text-white font-medium text-sm">السلة</span>
-                          <span className="bg-blue-600 px-2 py-1 rounded text-xs text-white">
+                          <span className="text-[var(--dash-text-primary)] font-medium text-sm">السلة</span>
+                          <span className="bg-blue-600 px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]">
                             {cartItems.length}
                           </span>
                         </div>
@@ -660,11 +660,11 @@ export default function POSTabletView({
                       {cartItems.map((item) => (
                         <div
                           key={item.id}
-                          className="bg-[#2B3544] rounded-lg p-3 border border-gray-600"
+                          className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]"
                         >
                           <div className="flex gap-3 mb-2">
                             {/* Product Image */}
-                            <div className="w-12 h-12 bg-[#374151] rounded-lg overflow-hidden flex-shrink-0">
+                            <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
                               {item.product.main_image_url ? (
                                 <img
                                   src={item.product.main_image_url}
@@ -681,7 +681,7 @@ export default function POSTabletView({
                             {/* Product Info */}
                             <div className="flex-1 min-w-0">
                               <div className="flex justify-between items-start mb-1">
-                                <h4 className="font-medium text-white text-xs truncate">
+                                <h4 className="font-medium text-[var(--dash-text-primary)] text-xs truncate">
                                   {item.product.name}
                                 </h4>
                                 <button
@@ -696,7 +696,7 @@ export default function POSTabletView({
                               {/* Quantity and Price Controls */}
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-gray-400 text-xs">الكمية:</span>
+                                  <span className="text-[var(--dash-text-muted)] text-xs">الكمية:</span>
                                   <input
                                     type="number"
                                     min="1"
@@ -720,12 +720,12 @@ export default function POSTabletView({
                                         return newCart
                                       })
                                     }}
-                                    className="w-16 px-2 py-1 bg-[#374151] border border-gray-600 rounded text-white text-xs text-center"
+                                    className="w-16 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
                                   />
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                  <span className="text-gray-400 text-xs">السعر:</span>
+                                  <span className="text-[var(--dash-text-muted)] text-xs">السعر:</span>
                                   <input
                                     type="number"
                                     min="0"
@@ -747,7 +747,7 @@ export default function POSTabletView({
                                         return newCart
                                       })
                                     }}
-                                    className="w-20 px-2 py-1 bg-[#374151] border border-gray-600 rounded text-white text-xs text-center"
+                                    className="w-20 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
                                   />
                                 </div>
                               </div>
@@ -768,7 +768,7 @@ export default function POSTabletView({
               </div>
 
               {/* Cart Footer */}
-              <div className="p-4 border-t border-gray-600 bg-[#2B3544] flex-shrink-0">
+              <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] flex-shrink-0">
                 {/* Payment Split Component - show in sales and return mode */}
                 {!isTransferMode && !isPurchaseMode && (
                   <PaymentSplit
@@ -788,7 +788,7 @@ export default function POSTabletView({
                   <div className="flex-shrink-0">
                     {!isTransferMode ? (
                       <div className="text-right">
-                        <div className="text-white text-xs font-medium">الإجمالي:</div>
+                        <div className="text-[var(--dash-text-primary)] text-xs font-medium">الإجمالي:</div>
                         <div className="text-green-400 font-bold text-lg">
                           {formatPrice(cartTotal, 'system')}
                         </div>
@@ -796,7 +796,7 @@ export default function POSTabletView({
                     ) : (
                       <div className="text-right">
                         <div className="text-green-400 text-xs font-medium">وضع النقل</div>
-                        <div className="text-white font-bold text-lg">
+                        <div className="text-[var(--dash-text-primary)] font-bold text-lg">
                           {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                         </div>
                       </div>
@@ -810,7 +810,7 @@ export default function POSTabletView({
                       !hasAllRequiredSelections() ||
                       isProcessingInvoice
                     }
-                    className={`flex-1 py-2 px-4 rounded-lg font-medium text-xs transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed text-white ${
+                    className={`flex-1 py-2 px-4 rounded-lg font-medium text-xs transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] ${
                       isTransferMode
                         ? 'bg-green-600 hover:bg-green-700'
                         : isReturnMode

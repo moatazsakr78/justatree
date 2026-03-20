@@ -109,21 +109,21 @@ export default function RolePermissionManager({
       {/* Main Content */}
       <div className="flex-1">
         {/* Role Selector */}
-        <div className="bg-[#2B3544] rounded-lg p-4 mb-4">
+        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-gray-400">الدور:</span>
+              <span className="text-[var(--dash-text-muted)]">الدور:</span>
               <div className="relative">
                 <button
                   onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                  className="flex items-center gap-2 bg-[#374151] px-4 py-2 rounded-lg text-white hover:bg-[#4B5563] transition-colors"
+                  className="flex items-center gap-2 bg-[var(--dash-bg-raised)] px-4 py-2 rounded-lg text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] transition-colors"
                 >
                   <span>{selectedRole?.name || 'اختر دورًا'}</span>
                   <ChevronDownIcon className="w-4 h-4" />
                 </button>
 
                 {isRoleDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-[#374151] rounded-lg shadow-lg z-10 overflow-hidden">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--dash-bg-raised)] rounded-lg shadow-lg z-10 overflow-hidden">
                     {roles.map((role) => (
                       <button
                         key={role.id}
@@ -132,8 +132,8 @@ export default function RolePermissionManager({
                           setIsRoleDropdownOpen(false);
                         }}
                         className={`
-                          w-full px-4 py-2 text-right hover:bg-[#4B5563] transition-colors
-                          ${selectedRoleId === role.id ? 'bg-blue-600 text-white' : 'text-gray-300'}
+                          w-full px-4 py-2 text-right hover:bg-[var(--dash-bg-overlay)] transition-colors
+                          ${selectedRoleId === role.id ? 'bg-blue-600 text-white' : 'text-[var(--dash-text-secondary)]'}
                         `}
                       >
                         {role.name}
@@ -149,7 +149,7 @@ export default function RolePermissionManager({
                 {isAdminRole ? (
                   <span className="text-green-400">الأدمن الرئيسي له كل الصلاحيات</span>
                 ) : (
-                  <span className="text-gray-400">
+                  <span className="text-[var(--dash-text-muted)]">
                     عدد القيود: {restrictions.length}
                   </span>
                 )}
@@ -160,7 +160,7 @@ export default function RolePermissionManager({
 
         {/* No Role Selected */}
         {!selectedRoleId && (
-          <div className="flex-1 flex items-center justify-center text-gray-400 min-h-[400px]">
+          <div className="flex-1 flex items-center justify-center text-[var(--dash-text-muted)] min-h-[400px]">
             <div className="text-center">
               <p className="text-lg mb-2">اختر دورًا لإدارة صلاحياته</p>
               <p className="text-sm">حدد دورًا من القائمة أعلاه لعرض وتعديل صلاحياته</p>
@@ -170,10 +170,10 @@ export default function RolePermissionManager({
 
         {/* Admin Role Warning */}
         {selectedRoleId && isAdminRole && (
-          <div className="flex-1 flex items-center justify-center text-gray-400 min-h-[400px]">
+          <div className="flex-1 flex items-center justify-center text-[var(--dash-text-muted)] min-h-[400px]">
             <div className="text-center bg-green-500/10 border border-green-500/30 rounded-lg p-6">
               <p className="text-lg text-green-400 mb-2">الأدمن الرئيسي</p>
-              <p className="text-sm text-gray-300">
+              <p className="text-sm text-[var(--dash-text-secondary)]">
                 هذا الدور له كل الصلاحيات ولا يمكن تعديل قيوده
               </p>
             </div>

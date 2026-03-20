@@ -167,16 +167,16 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" dir="rtl">
-      <div className="bg-pos-darker rounded-lg p-6 w-96 max-w-md mx-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+      <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-96 max-w-md mx-4 shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+          <h2 className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
             {parentSafe ? `إضافة درج في "${parentSafe.name}"` : 'إضافة خزنة جديدة'}
           </h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -185,7 +185,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
         {/* Form */}
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               {isSubSafe ? 'اسم الدرج' : 'اسم الخزنة'}
             </label>
             <input
@@ -193,7 +193,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
               value={safeName}
               onChange={(e) => setSafeName(e.target.value)}
               placeholder={isSubSafe ? 'مثال: كاشير 1...' : 'أدخل اسم الخزنة...'}
-              className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
               disabled={isLoading}
             />
           </div>
@@ -206,12 +206,12 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                   type="checkbox"
                   checked={supportsDrawers}
                   onChange={(e) => setSupportsDrawers(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
-                <span className="text-sm font-medium text-gray-300">تدعم الأدراج</span>
+                <span className="text-sm font-medium text-[var(--dash-text-secondary)]">تدعم الأدراج</span>
               </label>
-              <p className="text-xs text-gray-500 mt-1 mr-8">يمكنك إضافة أدراج داخل الخزنة لاحقاً</p>
+              <p className="text-xs text-[var(--dash-text-disabled)] mt-1 mr-8">يمكنك إضافة أدراج داخل الخزنة لاحقاً</p>
             </div>
           )}
 
@@ -223,17 +223,17 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                   type="checkbox"
                   checked={showTransfers}
                   onChange={(e) => setShowTransfers(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
-                <span className="text-sm font-medium text-gray-300">فصل التحويلات</span>
+                <span className="text-sm font-medium text-[var(--dash-text-secondary)]">فصل التحويلات</span>
               </label>
-              <p className="text-xs text-gray-500 mt-1 mr-8">فصل رصيد التحويلات عن رصيد الخزنة</p>
+              <p className="text-xs text-[var(--dash-text-disabled)] mt-1 mr-8">فصل رصيد التحويلات عن رصيد الخزنة</p>
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               الرصيد الافتتاحي
             </label>
             <input
@@ -243,17 +243,17 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
               placeholder="0"
               min="0"
               step="0.01"
-              className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
+              className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] text-left"
               dir="ltr"
               disabled={isLoading}
             />
-            <p className="text-xs text-gray-500 mt-1">يمكنك تركه صفر إذا كانت الخزنة فارغة</p>
+            <p className="text-xs text-[var(--dash-text-disabled)] mt-1">يمكنك تركه صفر إذا كانت الخزنة فارغة</p>
           </div>
 
           {/* Balance Destination - only when balance > 0 and transfers are enabled */}
           {(parseFloat(initialBalance) || 0) > 0 && (supportsDrawers || showTransfers) && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
                 وجهة الرصيد الافتتاحي
               </label>
               <div className="flex items-center gap-4">
@@ -263,10 +263,10 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                     name="balanceDestination"
                     checked={balanceDestination === 'safe'}
                     onChange={() => setBalanceDestination('safe')}
-                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                     disabled={isLoading}
                   />
-                  <span className="text-sm text-gray-300">
+                  <span className="text-sm text-[var(--dash-text-secondary)]">
                     {supportsDrawers ? 'درج 1' : 'في الخزنة'}
                   </span>
                 </label>
@@ -276,10 +276,10 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                     name="balanceDestination"
                     checked={balanceDestination === 'transfers'}
                     onChange={() => setBalanceDestination('transfers')}
-                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                     disabled={isLoading}
                   />
-                  <span className="text-sm text-gray-300">التحويلات</span>
+                  <span className="text-sm text-[var(--dash-text-secondary)]">التحويلات</span>
                 </label>
               </div>
             </div>
@@ -290,7 +290,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
         <div className="flex items-center justify-end gap-3 mt-6">
           <button
             onClick={handleClose}
-            className="px-4 py-2 text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+            className="px-4 py-2 text-[var(--dash-text-secondary)] bg-[var(--dash-bg-raised)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
             disabled={isLoading}
           >
             إلغاء
@@ -298,7 +298,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
           <button
             onClick={handleSave}
             disabled={!safeName.trim() || isLoading}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'جاري الحفظ...' : 'حفظ'}
           </button>

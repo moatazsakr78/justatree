@@ -92,25 +92,25 @@ export default function PurchaseHistoryModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-600 bg-gradient-to-r from-blue-900/30 to-purple-900/30">
-                  <Dialog.Title className="text-lg font-bold text-white flex items-center gap-2">
+                <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)] bg-gradient-to-r from-blue-900/30 to-purple-900/30">
+                  <Dialog.Title className="text-lg font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <ClockIcon className="h-6 w-6 text-blue-400" />
                     تاريخ أسعار الشراء
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
                 </div>
 
                 {/* Product Name */}
-                <div className="px-4 py-3 bg-[#2B3544] border-b border-gray-600">
-                  <p className="text-gray-400 text-sm">المنتج:</p>
-                  <p className="text-white font-medium">{productName}</p>
+                <div className="px-4 py-3 bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
+                  <p className="text-[var(--dash-text-muted)] text-sm">المنتج:</p>
+                  <p className="text-[var(--dash-text-primary)] font-medium">{productName}</p>
                 </div>
 
                 {/* Content */}
@@ -118,13 +118,13 @@ export default function PurchaseHistoryModal({
                   {isLoading ? (
                     <div className="text-center py-12">
                       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-400 mx-auto"></div>
-                      <p className="mt-4 text-gray-400">جاري التحميل...</p>
+                      <p className="mt-4 text-[var(--dash-text-muted)]">جاري التحميل...</p>
                     </div>
                   ) : history.length === 0 ? (
                     <div className="text-center py-12">
-                      <DocumentTextIcon className="h-16 w-16 mx-auto text-gray-500 mb-4" />
-                      <p className="text-gray-400 text-lg">لا توجد فواتير شراء لهذا المنتج</p>
-                      <p className="text-gray-500 text-sm mt-2">
+                      <DocumentTextIcon className="h-16 w-16 mx-auto text-[var(--dash-text-disabled)] mb-4" />
+                      <p className="text-[var(--dash-text-muted)] text-lg">لا توجد فواتير شراء لهذا المنتج</p>
+                      <p className="text-[var(--dash-text-disabled)] text-sm mt-2">
                         ستظهر هنا جميع عمليات الشراء عند إضافة فواتير شراء
                       </p>
                     </div>
@@ -153,7 +153,7 @@ export default function PurchaseHistoryModal({
                       </div>
 
                       {/* Table Header */}
-                      <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-[#2B3544] rounded-lg text-gray-400 text-sm">
+                      <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-[var(--dash-bg-surface)] rounded-lg text-[var(--dash-text-muted)] text-sm">
                         <div className="col-span-3">التاريخ</div>
                         <div className="col-span-3">المورد</div>
                         <div className="col-span-2 text-center">الكمية</div>
@@ -168,17 +168,17 @@ export default function PurchaseHistoryModal({
                           className={`grid grid-cols-12 gap-2 px-3 py-3 rounded-lg text-sm ${
                             index === 0
                               ? 'bg-green-900/20 border border-green-700/50'
-                              : 'bg-[#2B3544]/50 hover:bg-[#2B3544]'
+                              : 'bg-[var(--dash-bg-surface)]/50 hover:bg-[var(--dash-bg-surface)]'
                           } transition-colors`}
                         >
-                          <div className="col-span-3 text-gray-300 flex items-center gap-1">
+                          <div className="col-span-3 text-[var(--dash-text-secondary)] flex items-center gap-1">
                             {index === 0 && (
                               <span className="text-green-400 text-xs">(آخر)</span>
                             )}
                             {formatDate(item.invoiceDate)}
                           </div>
-                          <div className="col-span-3 text-white flex items-center gap-1">
-                            <TruckIcon className="h-4 w-4 text-gray-500" />
+                          <div className="col-span-3 text-[var(--dash-text-primary)] flex items-center gap-1">
+                            <TruckIcon className="h-4 w-4 text-[var(--dash-text-disabled)]" />
                             {item.supplierName}
                           </div>
                           <div className="col-span-2 text-center text-blue-400 font-medium">
@@ -198,10 +198,10 @@ export default function PurchaseHistoryModal({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-gray-600 bg-[#1a1f2e]">
+                <div className="p-4 border-t border-[var(--dash-border-default)] bg-[#1a1f2e]">
                   <button
                     onClick={onClose}
-                    className="w-full px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium"
+                    className="w-full px-4 py-2.5 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg transition-colors font-medium"
                   >
                     إغلاق
                   </button>

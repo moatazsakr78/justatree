@@ -126,26 +126,26 @@ export default function TransferLocationModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-[#374151] rounded-lg w-[600px] shadow-2xl max-h-[80vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg w-[600px] shadow-[var(--dash-shadow-lg)] max-h-[80vh] overflow-hidden">
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-600">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-2">
             <ArrowsRightLeftIcon className="h-5 w-5 text-green-400" />
-            <h2 className="text-white text-lg font-semibold">
+            <h2 className="text-[var(--dash-text-primary)] text-lg font-semibold">
               {currentStep === 'from' ? 'اختيار مصدر النقل' : 'اختيار وجهة النقل'}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
         {/* Progress Indicator */}
-        <div className="px-6 py-4 bg-[#2B3544]">
+        <div className="px-6 py-4 bg-[var(--dash-bg-surface)]">
           <div className="flex items-center justify-center gap-4">
             <div className={`flex items-center gap-2 ${currentStep === 'from' ? 'text-green-400' : fromLocation ? 'text-green-400' : 'text-gray-400'}`}>
               <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
@@ -170,14 +170,14 @@ export default function TransferLocationModal({
 
           {/* Current Selections */}
           {(fromLocation || toLocation) && (
-            <div className="mt-4 p-3 bg-gray-600/30 rounded-lg">
-              <div className="text-xs text-gray-400 mb-2">التحديدات الحالية:</div>
+            <div className="mt-4 p-3 bg-[var(--dash-bg-overlay)]/30 rounded-lg">
+              <div className="text-xs text-[var(--dash-text-muted)] mb-2">التحديدات الحالية:</div>
               <div className="flex items-center justify-between text-sm">
-                <div className={fromLocation ? 'text-white' : 'text-gray-500'}>
+                <div className={fromLocation ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-disabled)]'}>
                   من: {fromLocation?.name || 'غير محدد'}
                 </div>
-                <ArrowsRightLeftIcon className="h-4 w-4 text-gray-400 mx-2" />
-                <div className={toLocation ? 'text-white' : 'text-gray-500'}>
+                <ArrowsRightLeftIcon className="h-4 w-4 text-[var(--dash-text-muted)] mx-2" />
+                <div className={toLocation ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-disabled)]'}>
                   إلى: {toLocation?.name || 'غير محدد'}
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function TransferLocationModal({
         {/* Modal Content */}
         <div className="p-6">
           {/* Description */}
-          <p className="text-gray-300 text-center mb-6 leading-relaxed">
+          <p className="text-[var(--dash-text-secondary)] text-center mb-6 leading-relaxed">
             {currentStep === 'from' 
               ? 'اختر المصدر الذي ترغب في النقل منه (فرع أو مخزن)'
               : 'اختر الوجهة التي ترغب في النقل إليها (فرع أو مخزن)'
@@ -222,7 +222,7 @@ export default function TransferLocationModal({
                     (currentStep === 'from' && fromLocation?.id === location.id) ||
                     (currentStep === 'to' && toLocation?.id === location.id)
                       ? 'border-green-500 bg-green-500/10'
-                      : 'border-gray-600 bg-[#2B3544]'
+                      : 'border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)]'
                   }`}
                   onClick={() => handleLocationSelect(location)}
                 >
@@ -238,7 +238,7 @@ export default function TransferLocationModal({
                   {/* Location Info */}
                   <div className="pr-10">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-white font-semibold text-lg">
+                      <h3 className="text-[var(--dash-text-primary)] font-semibold text-lg">
                         {location.name}
                       </h3>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -248,12 +248,12 @@ export default function TransferLocationModal({
                       </span>
                     </div>
                     {location.address && (
-                      <p className="text-gray-400 text-sm mb-1">
+                      <p className="text-[var(--dash-text-muted)] text-sm mb-1">
                         {location.address}
                       </p>
                     )}
                     {location.phone && (
-                      <p className="text-gray-500 text-xs">
+                      <p className="text-[var(--dash-text-disabled)] text-xs">
                         الهاتف: {location.phone}
                       </p>
                     )}
@@ -271,12 +271,12 @@ export default function TransferLocationModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="border-t border-gray-600 p-4 flex justify-between gap-3">
+        <div className="border-t border-[var(--dash-border-default)] p-4 flex justify-between gap-3">
           <div className="flex gap-3">
             {currentStep === 'to' && (
               <button
                 onClick={handleBack}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm transition-colors"
+                className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg text-sm transition-colors"
               >
                 السابق
               </button>

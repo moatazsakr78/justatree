@@ -76,21 +76,21 @@ export default function ColumnsControlModal({
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={handleCancel} />
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={handleCancel} />
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-xl shadow-2xl border border-[#4A5568] w-full max-w-md max-h-[80vh] overflow-hidden">
+        <div className="bg-[var(--dash-bg-surface)] rounded-xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] w-full max-w-md max-h-[80vh] overflow-hidden animate-dash-scale-in">
           
           {/* Header */}
-          <div className="px-6 py-4 border-b border-[#4A5568] flex items-center justify-between">
+          <div className="px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
             <div className="text-right">
-              <h3 className="text-lg font-medium text-white">إدارة الأعمدة</h3>
+              <h3 className="text-lg font-medium text-[var(--dash-text-primary)]">إدارة الأعمدة</h3>
               <p className="text-sm text-blue-400 mt-1">🎯 اختر الأعمدة ثم اضغط &quot;تطبيق&quot;</p>
             </div>
             <button
               onClick={handleCancel}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+              className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -109,7 +109,7 @@ export default function ColumnsControlModal({
               </button>
               <button
                 onClick={handleDeselectAll}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md text-sm font-medium transition-colors"
+                className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-md text-sm font-medium transition-colors"
               >
                 إلغاء تحديد الكل
               </button>
@@ -120,15 +120,15 @@ export default function ColumnsControlModal({
               {localColumns.map((column) => (
                 <label
                   key={column.id}
-                  className="flex items-center gap-3 p-3 bg-[#374151] hover:bg-[#434E61] rounded-lg cursor-pointer transition-colors"
+                  className="flex items-center gap-3 p-3 bg-[var(--dash-bg-raised)] hover:bg-[#434E61] rounded-lg cursor-pointer transition-colors"
                 >
                   <input
                     type="checkbox"
                     checked={column.visible}
                     onChange={() => handleColumnToggle(column.id)}
-                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500 focus:ring-2"
                   />
-                  <span className="text-white text-sm font-medium flex-1 text-right">
+                  <span className="text-[var(--dash-text-primary)] text-sm font-medium flex-1 text-right">
                     {column.header}
                   </span>
                 </label>
@@ -136,21 +136,21 @@ export default function ColumnsControlModal({
             </div>
             
             {/* Summary */}
-            <div className="mt-4 p-3 bg-[#374151] rounded-lg">
+            <div className="mt-4 p-3 bg-[var(--dash-bg-raised)] rounded-lg">
               <div className="flex justify-between items-center text-sm">
                 <span className="text-blue-400 font-medium">
                   {localColumns.filter(col => col.visible).length} من أصل {localColumns.length}
                 </span>
-                <span className="text-gray-400">الأعمدة المعروضة</span>
+                <span className="text-[var(--dash-text-muted)]">الأعمدة المعروضة</span>
               </div>
             </div>
           </div>
           
           {/* Footer */}
-          <div className="px-6 py-4 border-t border-[#4A5568] flex gap-3 justify-end">
+          <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
             <button
               onClick={handleCancel}
-              className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+              className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-gray-500 rounded transition-colors"
             >
               إلغاء
             </button>

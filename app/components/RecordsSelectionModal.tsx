@@ -150,16 +150,16 @@ export default function RecordsSelectionModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1F2937] p-6 shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] p-6 shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <BanknotesIcon className="h-6 w-6 text-blue-400" />
                     اختيار الدرج / الخزنة
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -170,22 +170,22 @@ export default function RecordsSelectionModal({
                   {/* "No Safe" Option */}
                   <button
                     onClick={handleNoSafeSelect}
-                    className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[#374151] text-gray-200 border-2 border-dashed border-gray-500 hover:bg-[#4B5563] hover:border-gray-400"
+                    className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-2 border-dashed border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)] hover:border-[var(--dash-border-subtle)]"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#2B3544] flex items-center justify-center">
-                        <XMarkIcon className="h-5 w-5 text-gray-400" />
+                      <div className="w-10 h-10 rounded-full bg-[var(--dash-bg-surface)] flex items-center justify-center">
+                        <XMarkIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold text-gray-300">
+                        <div className="font-semibold text-[var(--dash-text-secondary)]">
                           لا يوجد
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-[var(--dash-text-disabled)]">
                           بدون تأثير على أي خزنة
                         </div>
                       </div>
                     </div>
-                    <span className="text-xs bg-gray-600/50 text-gray-400 px-2 py-1 rounded-lg">
+                    <span className="text-xs bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)] px-2 py-1 rounded-lg">
                       اختياري
                     </span>
                   </button>
@@ -193,7 +193,7 @@ export default function RecordsSelectionModal({
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
-                      <p className="text-gray-400">جاري تحميل الخزن...</p>
+                      <p className="text-[var(--dash-text-muted)]">جاري تحميل الخزن...</p>
                     </div>
                   ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12">
@@ -214,12 +214,12 @@ export default function RecordsSelectionModal({
                         return (
                           <div key={mainRecord.id}>
                             <div className="flex items-center gap-2 px-3 py-2 mt-2">
-                              <div className="h-px flex-1 bg-gray-600"></div>
-                              <span className="text-xs text-gray-400 font-medium flex items-center gap-1">
+                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
+                              <span className="text-xs text-[var(--dash-text-muted)] font-medium flex items-center gap-1">
                                 <BanknotesIcon className="h-3.5 w-3.5" />
                                 {mainRecord.name}
                               </span>
-                              <div className="h-px flex-1 bg-gray-600"></div>
+                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
                             </div>
                             <div className="grid grid-cols-2 gap-2 px-1">
                               {children.map((child) => (
@@ -228,7 +228,7 @@ export default function RecordsSelectionModal({
                                   onClick={() =>
                                     handleSelectSubSafe(mainRecord, child)
                                   }
-                                  className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[#2B3544] text-gray-200 border-2 border-transparent hover:bg-[#374151] hover:border-cyan-500/50"
+                                  className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-cyan-500/50"
                                 >
                                   <div className="w-8 h-8 rounded-full bg-cyan-600/20 flex items-center justify-center flex-shrink-0">
                                     <span className="text-cyan-400 text-xs font-bold">
@@ -252,21 +252,21 @@ export default function RecordsSelectionModal({
                         <>
                           {recordsWithDrawers.length > 0 && (
                             <div className="flex items-center gap-2 px-3 py-2 mt-2">
-                              <div className="h-px flex-1 bg-gray-600"></div>
-                              <span className="text-xs text-gray-400 font-medium">
+                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
+                              <span className="text-xs text-[var(--dash-text-muted)] font-medium">
                                 خزن بدون أدراج
                               </span>
-                              <div className="h-px flex-1 bg-gray-600"></div>
+                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
                             </div>
                           )}
                           {recordsWithoutDrawers.map((record) => (
                             <button
                               key={record.id}
                               onClick={() => handleSelectMainRecord(record)}
-                              className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[#2B3544] text-gray-200 border-2 border-transparent hover:bg-[#374151] hover:border-gray-500"
+                              className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-[var(--dash-border-default)]"
                             >
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-[#374151] flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-full bg-[var(--dash-bg-raised)] flex items-center justify-center">
                                   <BanknotesIcon className="h-5 w-5" />
                                 </div>
                                 <div className="text-right">
@@ -274,7 +274,7 @@ export default function RecordsSelectionModal({
                                     {record.name}
                                   </div>
                                   {record.branch?.name && (
-                                    <div className="text-sm text-gray-400 flex items-center gap-1">
+                                    <div className="text-sm text-[var(--dash-text-muted)] flex items-center gap-1">
                                       <BuildingOfficeIcon className="h-3.5 w-3.5" />
                                       {record.branch.name}
                                     </div>
@@ -288,15 +288,15 @@ export default function RecordsSelectionModal({
                     </>
                   ) : (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <BanknotesIcon className="h-12 w-12 text-gray-500 mb-4" />
-                      <p className="text-gray-400 mb-2">لا توجد خزن نشطة</p>
+                      <BanknotesIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mb-4" />
+                      <p className="text-[var(--dash-text-muted)] mb-2">لا توجد خزن نشطة</p>
                     </div>
                   )}
                 </div>
 
                 {/* Footer */}
-                <div className="mt-6 p-3 bg-[#2B3544] rounded-lg">
-                  <p className="text-sm text-gray-400 text-center">
+                <div className="mt-6 p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+                  <p className="text-sm text-[var(--dash-text-muted)] text-center">
                     اضغط على الدرج أو الخزنة لاختيارها
                   </p>
                 </div>

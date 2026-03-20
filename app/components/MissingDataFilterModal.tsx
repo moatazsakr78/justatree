@@ -111,13 +111,13 @@ export default function MissingDataFilterModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black bg-opacity-50"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={handleCancel}
       />
 
       {/* Modal */}
       <div className={`
-        relative bg-[#1F2937] rounded-lg shadow-xl border border-gray-600
+        relative bg-[var(--dash-bg-base)] rounded-lg shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)]
         ${isMobile
           ? 'w-full h-full max-h-full rounded-none'
           : 'w-full max-w-md max-h-[90vh]'
@@ -125,26 +125,26 @@ export default function MissingDataFilterModal({
         flex flex-col
       `}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-600">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <h2 className="text-lg font-bold text-white">منتجات بدون</h2>
           <button
             onClick={handleCancel}
-            className="p-1 text-gray-400 hover:text-white transition-colors"
+            className="p-1 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
         {/* Filter Mode Toggle */}
-        <div className="px-4 py-3 border-b border-gray-700 bg-[#374151]">
-          <p className="text-sm text-gray-300 mb-2">نوع الفلترة:</p>
+        <div className="px-4 py-3 border-b border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)]">
+          <p className="text-sm text-[var(--dash-text-secondary)] mb-2">نوع الفلترة:</p>
           <div className="flex gap-2">
             <button
               onClick={() => setFilterMode('OR')}
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                 filterMode === 'OR'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                  : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-highlight)]'
               }`}
             >
               أي واحد منهم (OR)
@@ -154,7 +154,7 @@ export default function MissingDataFilterModal({
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                 filterMode === 'AND'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                  : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-highlight)]'
               }`}
             >
               كلهم معاً (AND)
@@ -168,9 +168,9 @@ export default function MissingDataFilterModal({
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {FILTER_SECTIONS.map((section) => (
-            <div key={section.id} className="bg-[#374151] rounded-lg overflow-hidden">
+            <div key={section.id} className="bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden">
               {/* Section Header */}
-              <div className="flex items-center gap-2 px-4 py-2 bg-[#2B3544] border-b border-gray-600">
+              <div className="flex items-center gap-2 px-4 py-2 bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
                 <span>{section.icon}</span>
                 <span className="text-white font-medium">{section.title}</span>
               </div>
@@ -180,13 +180,13 @@ export default function MissingDataFilterModal({
                 {section.fields.map((field) => (
                   <label
                     key={field.id}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#4B5563] cursor-pointer transition-colors"
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--dash-bg-overlay)] cursor-pointer transition-colors"
                   >
                     <input
                       type="checkbox"
                       checked={selectedFilters.has(field.id)}
                       onChange={() => toggleFilter(field.id)}
-                      className="w-5 h-5 rounded border-gray-500 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-gray-700"
+                      className="w-5 h-5 rounded border-[var(--dash-border-default)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
                     />
                     <span className="text-gray-200">{field.label}</span>
                   </label>
@@ -197,9 +197,9 @@ export default function MissingDataFilterModal({
 
           {/* Dynamic Inventory Section - Based on branches */}
           {branches.length > 0 && (
-            <div className="bg-[#374151] rounded-lg overflow-hidden">
+            <div className="bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden">
               {/* Section Header */}
-              <div className="flex items-center gap-2 px-4 py-2 bg-[#2B3544] border-b border-gray-600">
+              <div className="flex items-center gap-2 px-4 py-2 bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
                 <span>📦</span>
                 <span className="text-white font-medium">المخزون</span>
               </div>
@@ -210,26 +210,26 @@ export default function MissingDataFilterModal({
                   <div key={branch.id} className="flex items-center gap-2">
                     {/* Branch Stock (quantity = 0) */}
                     <label
-                      className="flex-1 flex items-center gap-3 p-2 rounded-lg hover:bg-[#4B5563] cursor-pointer transition-colors"
+                      className="flex-1 flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--dash-bg-overlay)] cursor-pointer transition-colors"
                     >
                       <input
                         type="checkbox"
                         checked={selectedFilters.has(`stock_branch_${branch.id}`)}
                         onChange={() => toggleFilter(`stock_branch_${branch.id}`)}
-                        className="w-5 h-5 rounded border-gray-500 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-gray-700"
+                        className="w-5 h-5 rounded border-[var(--dash-border-default)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
                       />
                       <span className="text-gray-200">{branch.name}</span>
                     </label>
 
                     {/* Low Stock (quantity < min_stock) */}
                     <label
-                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#4B5563] cursor-pointer transition-colors bg-[#2B3544]"
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--dash-bg-overlay)] cursor-pointer transition-colors bg-[var(--dash-bg-surface)]"
                     >
                       <input
                         type="checkbox"
                         checked={selectedFilters.has(`lowstock_branch_${branch.id}`)}
                         onChange={() => toggleFilter(`lowstock_branch_${branch.id}`)}
-                        className="w-4 h-4 rounded border-gray-500 text-orange-500 focus:ring-orange-500 focus:ring-offset-0 bg-gray-700"
+                        className="w-4 h-4 rounded border-[var(--dash-border-default)] text-orange-500 focus:ring-orange-500 focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
                       />
                       <span className="text-orange-400 text-sm whitespace-nowrap">منخفض عند</span>
                     </label>
@@ -241,11 +241,11 @@ export default function MissingDataFilterModal({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-600 bg-[#1F2937]">
+        <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-base)]">
           {/* Selection count */}
           {selectedFilters.size > 0 && (
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-gray-400">
+              <span className="text-sm text-[var(--dash-text-muted)]">
                 {selectedFilters.size} فلتر مختار
               </span>
               <button
@@ -261,7 +261,7 @@ export default function MissingDataFilterModal({
           <div className="flex gap-3">
             <button
               onClick={handleCancel}
-              className="flex-1 py-3 px-4 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-500 transition-colors"
+              className="flex-1 py-3 px-4 bg-[var(--dash-bg-overlay)] text-white rounded-lg font-medium hover:bg-[var(--dash-bg-highlight)] transition-colors"
             >
               إلغاء
             </button>
@@ -270,7 +270,7 @@ export default function MissingDataFilterModal({
               className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
                 selectedFilters.size > 0
                   ? 'bg-blue-600 text-white hover:bg-blue-700'
-                  : 'bg-gray-500 text-gray-300'
+                  : 'bg-[var(--dash-bg-highlight)] text-[var(--dash-text-secondary)]'
               }`}
             >
               تطبيق {selectedFilters.size > 0 ? `(${selectedFilters.size})` : ''}

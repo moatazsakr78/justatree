@@ -326,7 +326,7 @@ export default function InventoryPage() {
             toggleProductSelection(item.id)
           }}
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
-          className="w-4 h-4 rounded border-gray-500 bg-[#2B3544] text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer accent-blue-600"
+          className="w-4 h-4 rounded border-gray-500 bg-[var(--dash-bg-surface)] text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer accent-blue-600"
         />
       )
     }] : []),
@@ -336,7 +336,7 @@ export default function InventoryPage() {
       accessor: '#',
       width: 60,
       render: (value: any, item: any, index: number) => (
-        <span className="text-gray-400 font-medium">{index + 1}</span>
+        <span className="text-[var(--dash-text-muted)] font-medium">{index + 1}</span>
       )
     },
     { 
@@ -344,7 +344,7 @@ export default function InventoryPage() {
       header: 'اسم المنتج', 
       accessor: 'name', 
       width: 200,
-      render: (value: string) => <span className="text-white font-medium">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
     },
     { 
       id: 'category', 
@@ -352,7 +352,7 @@ export default function InventoryPage() {
       accessor: 'category', 
       width: 120,
       render: (value: any) => (
-        <span className="text-gray-300">
+        <span className="text-[var(--dash-text-secondary)]">
           {value?.name || 'غير محدد'}
         </span>
       )
@@ -389,56 +389,56 @@ export default function InventoryPage() {
       header: 'سعر الشراء', 
       accessor: 'cost_price', 
       width: 120,
-      render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
     },
     { 
       id: 'price', 
       header: 'سعر البيع', 
       accessor: 'price', 
       width: 120,
-      render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
     },
     { 
       id: 'wholesale_price', 
       header: 'سعر الجملة', 
       accessor: 'wholesale_price', 
       width: 120,
-      render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
     },
     { 
       id: 'price1', 
       header: 'سعر 1', 
       accessor: 'price1', 
       width: 100,
-      render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
     },
     { 
       id: 'price2', 
       header: 'سعر 2', 
       accessor: 'price2', 
       width: 100,
-      render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
     },
     { 
       id: 'price3', 
       header: 'سعر 3', 
       accessor: 'price3', 
       width: 100,
-      render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
     },
     { 
       id: 'price4', 
       header: 'سعر 4', 
       accessor: 'price4', 
       width: 100,
-      render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
     },
     { 
       id: 'barcode', 
       header: 'الباركود', 
       accessor: 'barcode', 
       width: 150,
-      render: (value: string) => <span className="text-gray-300 font-mono text-sm">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{value || '-'}</span>
     }
     ]
 
@@ -576,7 +576,7 @@ export default function InventoryPage() {
           {/* Show unassigned quantity if any */}
           {unassignedQuantity > 0 && (
             <span
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white bg-gray-600 border border-gray-600"
+              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-[var(--dash-text-primary)] bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]"
             >
               غير محدد ({unassignedQuantity})
             </span>
@@ -600,10 +600,10 @@ export default function InventoryPage() {
           
           const getStatusColor = (status: string) => {
             switch(status) {
-              case 'تام الجرد': return 'bg-green-600 text-white'
-              case 'استعد': return 'bg-yellow-600 text-white'
-              case 'غير مجرود': return 'bg-red-600 text-white'
-              default: return 'bg-red-600 text-white'
+              case 'تام الجرد': return 'bg-green-600 text-[var(--dash-text-primary)]'
+              case 'استعد': return 'bg-yellow-600 text-[var(--dash-text-primary)]'
+              case 'غير مجرود': return 'bg-red-600 text-[var(--dash-text-primary)]'
+              default: return 'bg-red-600 text-[var(--dash-text-primary)]'
             }
           }
           
@@ -1342,7 +1342,7 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       
@@ -1353,11 +1353,11 @@ export default function InventoryPage() {
       <div className="h-full pt-12 overflow-hidden flex flex-col">
         
         {/* Top Action Buttons Toolbar - Full Width */}
-        <div className="bg-[#374151] border-b border-gray-600 px-4 py-2 w-full">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2 w-full">
           <div className="flex items-center justify-start gap-1">
             <button
               onClick={handleRefresh}
-              className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
             >
               <ArrowPathIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">تحديث</span>
@@ -1365,7 +1365,7 @@ export default function InventoryPage() {
 
             <button
               onClick={toggleAddBranchModal}
-              className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
             >
               <BuildingStorefrontIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">إضافة فرع</span>
@@ -1373,7 +1373,7 @@ export default function InventoryPage() {
 
             <button
               onClick={toggleAddStorageModal}
-              className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
             >
               <BuildingOffice2Icon className="h-5 w-5 mb-1" />
               <span className="text-sm">إضافة مخزن</span>
@@ -1381,7 +1381,7 @@ export default function InventoryPage() {
 
             <button
               onClick={toggleManagementModal}
-              className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
             >
               <CogIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">إدارة</span>
@@ -1389,7 +1389,7 @@ export default function InventoryPage() {
 
             <button
               onClick={() => setShowPDFExportModal(true)}
-              className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
             >
               <DocumentArrowDownIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">Packing</span>
@@ -1405,7 +1405,7 @@ export default function InventoryPage() {
                 </span>
                 <button
                   onClick={clearSelection}
-                  className="text-blue-300 hover:text-white transition-colors"
+                  className="text-blue-300 hover:text-[var(--dash-text-primary)] transition-colors"
                   title="إلغاء وضع التحديد"
                 >
                   <XMarkIcon className="h-4 w-4" />
@@ -1413,7 +1413,7 @@ export default function InventoryPage() {
               </div>
             )}
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <DocumentTextIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">اكسل</span>
             </button>
@@ -1421,37 +1421,37 @@ export default function InventoryPage() {
             <div className="relative" ref={quantityDropdownRef}>
               <button
                 onClick={() => setShowQuantityDropdown(!showQuantityDropdown)}
-                className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+                className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
               >
                 <CubeIcon className="h-5 w-5 mb-1" />
                 <span className="text-sm">الكمية</span>
               </button>
               {showQuantityDropdown && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#2B3544] border border-[#4A5568] rounded-lg shadow-xl z-50 min-w-[160px] py-1">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-xl z-50 min-w-[160px] py-1">
                   <button
                     onClick={() => handleQuantityAction('add')}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-gray-300 hover:bg-green-600/20 hover:text-green-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-green-600/20 hover:text-green-400 transition-colors"
                   >
                     <PlusIcon className="h-4 w-4 text-green-400" />
                     <span className="text-sm">إضافة</span>
                   </button>
                   <button
                     onClick={() => handleQuantityAction('subtract')}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-gray-300 hover:bg-red-600/20 hover:text-red-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-red-600/20 hover:text-red-400 transition-colors"
                   >
                     <MinusIcon className="h-4 w-4 text-red-400" />
                     <span className="text-sm">خصم</span>
                   </button>
                   <button
                     onClick={() => handleQuantityAction('edit')}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-gray-300 hover:bg-blue-600/20 hover:text-blue-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-blue-600/20 hover:text-blue-400 transition-colors"
                   >
                     <PencilSquareIcon className="h-4 w-4 text-blue-400" />
                     <span className="text-sm">تعديل</span>
                   </button>
                   <button
                     onClick={() => handleTransferAction()}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-gray-300 hover:bg-purple-600/20 hover:text-purple-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-purple-600/20 hover:text-purple-400 transition-colors"
                   >
                     <ArrowsRightLeftIcon className="h-4 w-4 text-purple-400" />
                     <span className="text-sm">تحويل</span>
@@ -1460,14 +1460,14 @@ export default function InventoryPage() {
               )}
             </div>
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <ChartBarIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">تقرير الجرد</span>
             </button>
 
             <button
               onClick={() => setShowColumnsModal(true)}
-              className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
             >
               <TableCellsIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">الأعمدة</span>
@@ -1482,7 +1482,7 @@ export default function InventoryPage() {
             </button>
 
             {/* Separator */}
-            <div className="h-10 w-px bg-gray-500 mx-1"></div>
+            <div className="h-10 w-px bg-[var(--dash-bg-highlight)] mx-1"></div>
 
             {/* Audit Status Filters - inline */}
             <button
@@ -1490,11 +1490,11 @@ export default function InventoryPage() {
               className={`flex flex-col items-center min-w-[70px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 auditStatusFilters['تام الجرد']
                   ? 'bg-green-600/20 text-green-400'
-                  : 'text-gray-500 opacity-50'
+                  : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                auditStatusFilters['تام الجرد'] ? 'bg-green-500' : 'bg-gray-500'
+                auditStatusFilters['تام الجرد'] ? 'bg-green-500' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>تام الجرد</span>
             </button>
@@ -1503,11 +1503,11 @@ export default function InventoryPage() {
               className={`flex flex-col items-center min-w-[70px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 auditStatusFilters['استعد']
                   ? 'bg-yellow-600/20 text-yellow-400'
-                  : 'text-gray-500 opacity-50'
+                  : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                auditStatusFilters['استعد'] ? 'bg-yellow-500' : 'bg-gray-500'
+                auditStatusFilters['استعد'] ? 'bg-yellow-500' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>استعد</span>
             </button>
@@ -1516,11 +1516,11 @@ export default function InventoryPage() {
               className={`flex flex-col items-center min-w-[70px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 auditStatusFilters['غير مجرود']
                   ? 'bg-red-600/20 text-red-400'
-                  : 'text-gray-500 opacity-50'
+                  : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                auditStatusFilters['غير مجرود'] ? 'bg-red-500' : 'bg-gray-500'
+                auditStatusFilters['غير مجرود'] ? 'bg-red-500' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>غير مجرود</span>
             </button>
@@ -1529,7 +1529,7 @@ export default function InventoryPage() {
             <select
               value={selectedAuditBranch}
               onChange={(e) => setSelectedAuditBranch(e.target.value)}
-              className="px-2 py-1.5 bg-[#2B3544] border border-gray-600 rounded-md text-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-2 py-1.5 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">جميع الفروع</option>
               {branches.map(branch => (
@@ -1538,7 +1538,7 @@ export default function InventoryPage() {
             </select>
 
             {/* Separator */}
-            <div className="h-10 w-px bg-gray-500 mx-1"></div>
+            <div className="h-10 w-px bg-[var(--dash-bg-highlight)] mx-1"></div>
 
             {/* Stock Status Filters - inline */}
             <button
@@ -1546,11 +1546,11 @@ export default function InventoryPage() {
               className={`flex flex-col items-center min-w-[60px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 stockStatusFilters.good
                   ? 'text-green-400'
-                  : 'text-gray-500 opacity-50'
+                  : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                stockStatusFilters.good ? 'bg-green-500' : 'bg-gray-500'
+                stockStatusFilters.good ? 'bg-green-500' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>جيد</span>
             </button>
@@ -1559,11 +1559,11 @@ export default function InventoryPage() {
               className={`flex flex-col items-center min-w-[60px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 stockStatusFilters.low
                   ? 'text-yellow-400'
-                  : 'text-gray-500 opacity-50'
+                  : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                stockStatusFilters.low ? 'bg-yellow-500' : 'bg-gray-500'
+                stockStatusFilters.low ? 'bg-yellow-500' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>منخفض</span>
             </button>
@@ -1572,11 +1572,11 @@ export default function InventoryPage() {
               className={`flex flex-col items-center min-w-[60px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 stockStatusFilters.zero
                   ? 'text-red-400'
-                  : 'text-gray-500 opacity-50'
+                  : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                stockStatusFilters.zero ? 'bg-red-500' : 'bg-gray-500'
+                stockStatusFilters.zero ? 'bg-red-500' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>صفر</span>
             </button>
@@ -1597,7 +1597,7 @@ export default function InventoryPage() {
           <div className="flex-1 flex flex-col overflow-hidden">
 
             {/* Second Toolbar - Search and Controls */}
-            <div className="bg-[#374151] border-b border-gray-600 px-6 py-3 flex-shrink-0">
+            <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6 py-3 flex-shrink-0">
               <div className="flex items-center justify-between">
                 {/* Left Side - Search and Controls */}
                 <div className="flex items-center gap-4">
@@ -1605,7 +1605,7 @@ export default function InventoryPage() {
                   <div className="relative branches-dropdown">
                     <button 
                       onClick={() => setShowBranchesDropdown(!showBranchesDropdown)}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white text-sm font-medium transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-[var(--dash-text-primary)] text-sm font-medium transition-colors"
                     >
                       <span>{selectedGroup}</span>
                       <ChevronDownIcon className={`h-4 w-4 transition-transform ${showBranchesDropdown ? 'rotate-180' : ''}`} />
@@ -1613,22 +1613,22 @@ export default function InventoryPage() {
                     
                     {/* Branches Dropdown */}
                     {showBranchesDropdown && (
-                      <div className="absolute top-full right-0 mt-2 w-72 bg-[#2B3544] border-2 border-[#4A5568] rounded-xl shadow-2xl z-[9999] overflow-hidden backdrop-blur-sm">
+                      <div className="absolute top-full right-0 mt-2 w-72 bg-[var(--dash-bg-surface)] border-2 border-[var(--dash-border-default)] rounded-xl shadow-2xl z-[9999] overflow-hidden backdrop-blur-sm">
                         {/* Branches List - Simple and Clean */}
                         <div className="p-3">
                           <div className="space-y-2">
                             {branches.map(branch => (
                               <label
                                 key={branch.id}
-                                className="flex items-center gap-3 p-3 bg-[#374151] hover:bg-[#434E61] rounded-lg cursor-pointer transition-colors border border-gray-600/30"
+                                className="flex items-center gap-3 p-3 bg-[var(--dash-bg-raised)] hover:bg-[#434E61] rounded-lg cursor-pointer transition-colors border border-[var(--dash-border-default)]/30"
                               >
                                 <input
                                   type="checkbox"
                                   checked={selectedBranches[branch.id] || false}
                                   onChange={() => handleBranchToggle(branch.id)}
-                                  className="w-5 h-5 text-blue-600 bg-[#2B3544] border-2 border-blue-500 rounded focus:ring-blue-500 focus:ring-2 accent-blue-600"
+                                  className="w-5 h-5 text-blue-600 bg-[var(--dash-bg-surface)] border-2 border-blue-500 rounded focus:ring-blue-500 focus:ring-2 accent-blue-600"
                                 />
-                                <span className="text-white text-base font-medium flex-1 text-right">
+                                <span className="text-[var(--dash-text-primary)] text-base font-medium flex-1 text-right">
                                   {branch.name}
                                 </span>
                                 <span className="text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30">
@@ -1640,7 +1640,7 @@ export default function InventoryPage() {
                         </div>
                         
                         {/* Simple Summary at Bottom */}
-                        <div className="px-4 py-2 border-t border-[#4A5568] bg-[#374151]">
+                        <div className="px-4 py-2 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]">
                           <div className="text-center">
                             <span className="text-blue-400 font-medium text-sm">
                               {Object.values(selectedBranches).filter(Boolean).length} من أصل {branches.length} محدد
@@ -1652,13 +1652,13 @@ export default function InventoryPage() {
                   </div>
 
                   {/* View Toggle */}
-                  <div className="flex bg-[#2B3544] rounded-md overflow-hidden">
+                  <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden">
                     <button 
                       onClick={() => setViewMode('grid')}
                       className={`p-2 transition-colors ${
                         viewMode === 'grid' 
-                          ? 'bg-blue-600 text-white' 
-                          : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                          ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                          : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <Squares2X2Icon className="h-4 w-4" />
@@ -1667,8 +1667,8 @@ export default function InventoryPage() {
                       onClick={() => setViewMode('table')}
                       className={`p-2 transition-colors ${
                         viewMode === 'table' 
-                          ? 'bg-blue-600 text-white' 
-                          : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                          ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                          : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <ListBulletIcon className="h-4 w-4" />
@@ -1680,8 +1680,8 @@ export default function InventoryPage() {
                     onClick={toggleAuditBadges}
                     className={`p-2 rounded-md transition-colors ${
                       showAuditBadges
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-600 bg-[#2B3544]'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] bg-[var(--dash-bg-surface)]'
                     }`}
                     title="إظهار/إخفاء حالة الجرد"
                   >
@@ -1702,7 +1702,7 @@ export default function InventoryPage() {
                   {/* Total Capital Badge */}
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-600/20 to-emerald-600/20 border border-blue-500/30 rounded-lg">
                     <BanknotesIcon className="h-4 w-4 text-emerald-400" />
-                    <span className="text-xs text-gray-400">رأس المال:</span>
+                    <span className="text-xs text-[var(--dash-text-muted)]">رأس المال:</span>
                     <span className="text-sm font-bold text-emerald-400">
                       {branchCapitals.total.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                     </span>
@@ -1712,9 +1712,9 @@ export default function InventoryPage() {
                   {branchCapitals.branches.map(branch => (
                     <div
                       key={branch.id}
-                      className="flex items-center gap-1.5 px-2 py-1 bg-[#2B3544] border border-gray-600/50 rounded-md"
+                      className="flex items-center gap-1.5 px-2 py-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)]/50 rounded-md"
                     >
-                      <span className="text-xs text-gray-400">{branch.name}:</span>
+                      <span className="text-xs text-[var(--dash-text-muted)]">{branch.name}:</span>
                       <span className="text-xs font-semibold text-blue-300">
                         {branch.capital.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                       </span>
@@ -1725,10 +1725,10 @@ export default function InventoryPage() {
             </div>
 
             {/* Products/Inventory Content Container */}
-            <div className="flex-1 overflow-hidden bg-[#2B3544]">
+            <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)]">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="text-white">جاري التحميل...</div>
+                  <div className="text-[var(--dash-text-primary)]">جاري التحميل...</div>
                 </div>
               ) : error ? (
                 <div className="flex items-center justify-center h-full">
@@ -1769,7 +1769,7 @@ export default function InventoryPage() {
                             }
                           }
                         }}
-                        className={`bg-[#374151] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
+                        className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                           selectedProduct?.id === product.id
                             ? 'border-blue-500 bg-[#434E61]'
                             : selectedProductIds.includes(product.id)
@@ -1788,7 +1788,7 @@ export default function InventoryPage() {
                                 toggleProductSelection(product.id)
                               }}
                               onClick={(e) => e.stopPropagation()}
-                              className="w-4 h-4 rounded border-gray-500 bg-[#2B3544] text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer accent-blue-600"
+                              className="w-4 h-4 rounded border-gray-500 bg-[var(--dash-bg-surface)] text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer accent-blue-600"
                             />
                           </div>
                         )}
@@ -1813,10 +1813,10 @@ export default function InventoryPage() {
                                   (() => {
                                     const status = (product.inventoryData[currentBranch.id] as any)?.audit_status || 'غير مجرود'
                                     switch(status) {
-                                      case 'تام الجرد': return 'bg-green-600 text-white'
-                                      case 'استعد': return 'bg-yellow-600 text-white'
-                                      case 'غير مجرود': return 'bg-red-600 text-white'
-                                      default: return 'bg-red-600 text-white'
+                                      case 'تام الجرد': return 'bg-green-600 text-[var(--dash-text-primary)]'
+                                      case 'استعد': return 'bg-yellow-600 text-[var(--dash-text-primary)]'
+                                      case 'غير مجرود': return 'bg-red-600 text-[var(--dash-text-primary)]'
+                                      default: return 'bg-red-600 text-[var(--dash-text-primary)]'
                                     }
                                   })()
                                 }`}
@@ -1839,7 +1839,7 @@ export default function InventoryPage() {
                                 setShowPurchasePrice(false) // Reset purchase price visibility
                                 setShowProductModal(true)
                               }}
-                              className={`bg-black/50 hover:bg-black/90 text-white p-2 rounded-full opacity-0 ${!isSidebarOpen ? 'group-hover:opacity-100' : 'pointer-events-none'} transition-all duration-200 shadow-lg`}
+                              className={`bg-black/50 hover:bg-black/90 text-[var(--dash-text-primary)] p-2 rounded-full opacity-0 ${!isSidebarOpen ? 'group-hover:opacity-100' : 'pointer-events-none'} transition-all duration-200 shadow-lg`}
                               style={{ zIndex: 9999 }}
                             >
                               <EyeIcon className="h-4 w-4" />
@@ -1848,7 +1848,7 @@ export default function InventoryPage() {
                         </div>
 
                         {/* Product Name */}
-                        <h3 className="text-white font-medium text-sm text-center mb-2 line-clamp-2">
+                        <h3 className="text-[var(--dash-text-primary)] font-medium text-sm text-center mb-2 line-clamp-2">
                           {product.name}
                         </h3>
 
@@ -1873,7 +1873,7 @@ export default function InventoryPage() {
                             }`}>
                               {calculateTotalQuantity(product)}
                             </span>
-                            <span className="text-gray-400">الكمية الإجمالية</span>
+                            <span className="text-[var(--dash-text-muted)]">الكمية الإجمالية</span>
                           </div>
                           
                           {/* Branch/Warehouse Quantities - only selected branches */}
@@ -1899,7 +1899,7 @@ export default function InventoryPage() {
                                 <span className={`${colorClass} font-medium`}>
                                   {quantity}
                                 </span>
-                                <span className="text-gray-400 truncate">
+                                <span className="text-[var(--dash-text-muted)] truncate">
                                   {locationName}
                                 </span>
                               </div>
@@ -1916,7 +1916,7 @@ export default function InventoryPage() {
                     <div className="flex justify-center py-6">
                       <button
                         onClick={() => setShowAllProducts(true)}
-                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-lg"
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors shadow-lg"
                       >
                         تحميل كل المنتجات ({filteredProducts.length - VISIBLE_PRODUCTS_LIMIT} منتج إضافي)
                       </button>
@@ -1963,27 +1963,27 @@ export default function InventoryPage() {
 
             {/* Modal */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] max-w-6xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
+              <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] max-w-6xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
                 {/* Header */}
-                <div className="sticky top-0 bg-[#2B3544] px-8 py-6 border-b border-[#4A5568] flex items-center justify-between rounded-t-2xl">
+                <div className="sticky top-0 bg-[var(--dash-bg-surface)] px-8 py-6 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       {modalProduct.main_image_url ? (
                         <img src={modalProduct.main_image_url} alt={modalProduct.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full bg-blue-600 flex items-center justify-center">
-                          <span className="text-white font-bold text-lg">📦</span>
+                          <span className="text-[var(--dash-text-primary)] font-bold text-lg">📦</span>
                         </div>
                       )}
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">تفاصيل المنتج</h2>
+                      <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">تفاصيل المنتج</h2>
                       <p className="text-blue-400 font-medium">{modalProduct.name}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setShowProductModal(false)}
-                    className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+                    className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -1997,67 +1997,67 @@ export default function InventoryPage() {
                     <div className="space-y-6">
 
                       {/* Basic Info Card */}
-                      <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                      <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
                             <span className="text-blue-400 text-sm">ℹ️</span>
                           </div>
-                          <h3 className="text-lg font-semibold text-white">معلومات المنتج</h3>
+                          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">معلومات المنتج</h3>
                         </div>
                         <div className="space-y-4">
-                          <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                            <span className="text-gray-400">المجموعة</span>
-                            <span className="text-white font-medium">{modalProduct.category?.name || 'غير محدد'}</span>
+                          <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                            <span className="text-[var(--dash-text-muted)]">المجموعة</span>
+                            <span className="text-[var(--dash-text-primary)] font-medium">{modalProduct.category?.name || 'غير محدد'}</span>
                           </div>
-                          <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                            <span className="text-gray-400">الوحدة</span>
-                            <span className="text-white font-medium">{modalProduct.unit || 'قطعة'}</span>
+                          <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                            <span className="text-[var(--dash-text-muted)]">الوحدة</span>
+                            <span className="text-[var(--dash-text-primary)] font-medium">{modalProduct.unit || 'قطعة'}</span>
                           </div>
-                          <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                            <span className="text-gray-400">الحد الأدنى</span>
-                            <span className="text-white font-medium">{modalProduct.min_stock || 0}</span>
+                          <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                            <span className="text-[var(--dash-text-muted)]">الحد الأدنى</span>
+                            <span className="text-[var(--dash-text-primary)] font-medium">{modalProduct.min_stock || 0}</span>
                           </div>
                           <div className="flex justify-between items-center py-2">
-                            <span className="text-gray-400">الباركود</span>
-                            <span className="text-white font-mono text-sm">{modalProduct.barcode || 'غير متوفر'}</span>
+                            <span className="text-[var(--dash-text-muted)]">الباركود</span>
+                            <span className="text-[var(--dash-text-primary)] font-mono text-sm">{modalProduct.barcode || 'غير متوفر'}</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Pricing Card */}
-                      <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                      <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
                             <span className="text-green-400 text-sm">💰</span>
                           </div>
-                          <h3 className="text-lg font-semibold text-white">الأسعار</h3>
+                          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الأسعار</h3>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                            <p className="text-gray-400 text-sm mb-1">سعر البيع</p>
+                          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
+                            <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر البيع</p>
                             <p className="text-green-400 font-bold text-xl">{(modalProduct.price || 0).toFixed(2)}</p>
                           </div>
                           <div
                             onClick={() => setShowPurchasePrice(!showPurchasePrice)}
-                            className="bg-[#2B3544] rounded-lg p-4 text-center cursor-pointer hover:bg-[#374151] transition-colors relative"
+                            className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center cursor-pointer hover:bg-[var(--dash-bg-raised)] transition-colors relative"
                           >
                             {showPurchasePrice ? (
                               <>
-                                <p className="text-gray-400 text-sm mb-1">سعر الشراء</p>
+                                <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر الشراء</p>
                                 <p className="text-orange-400 font-bold text-xl">{(modalProduct.cost_price || 0).toFixed(2)}</p>
                               </>
                             ) : (
                               <div className="flex items-center justify-center h-full min-h-[52px]">
-                                <EyeSlashIcon className="h-6 w-6 text-gray-500" />
+                                <EyeSlashIcon className="h-6 w-6 text-[var(--dash-text-disabled)]" />
                               </div>
                             )}
                           </div>
-                          <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                            <p className="text-gray-400 text-sm mb-1">سعر الجملة</p>
+                          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
+                            <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر الجملة</p>
                             <p className="text-blue-400 font-bold text-lg">{(modalProduct.wholesale_price || 0).toFixed(2)}</p>
                           </div>
-                          <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                            <p className="text-gray-400 text-sm mb-1">سعر 1</p>
+                          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
+                            <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر 1</p>
                             <p className="text-purple-400 font-bold text-lg">{(modalProduct.price1 || 0).toFixed(2)}</p>
                           </div>
                         </div>
@@ -2065,14 +2065,14 @@ export default function InventoryPage() {
 
                       {/* Description Card */}
                       {modalProduct.description && (
-                        <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
                             <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
                               <span className="text-purple-400 text-sm">📝</span>
                             </div>
-                            <h3 className="text-lg font-semibold text-white">وصف المنتج</h3>
+                            <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">وصف المنتج</h3>
                           </div>
-                          <p className="text-gray-300 leading-relaxed">{modalProduct.description}</p>
+                          <p className="text-[var(--dash-text-secondary)] leading-relaxed">{modalProduct.description}</p>
                         </div>
                       )}
                     </div>
@@ -2081,12 +2081,12 @@ export default function InventoryPage() {
                     <div className="space-y-6">
 
                       {/* Total Inventory Card */}
-                      <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                      <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
                             <span className="text-blue-400 text-sm">📊</span>
                           </div>
-                          <h3 className="text-lg font-semibold text-white">المخازن والفروع</h3>
+                          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">المخازن والفروع</h3>
                         </div>
 
                         {/* Total Quantity Display */}
@@ -2106,13 +2106,13 @@ export default function InventoryPage() {
                             const locationName = branch?.name || `موقع ${locationId.slice(0, 8)}`
 
                             return (
-                              <div key={locationId} className="bg-[#2B3544] rounded-lg p-4 border border-gray-600/30">
+                              <div key={locationId} className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)]/30">
                                 <div className="flex justify-between items-center mb-2">
-                                  <span className="text-white font-medium">{locationName}</span>
+                                  <span className="text-[var(--dash-text-primary)] font-medium">{locationName}</span>
                                   <span className="text-blue-400 font-bold text-lg">{inventory?.quantity || 0}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
-                                  <span className="text-gray-400">الحد الأدنى</span>
+                                  <span className="text-[var(--dash-text-muted)]">الحد الأدنى</span>
                                   <span className="text-orange-400">{inventory?.min_stock || 0}</span>
                                 </div>
                               </div>
@@ -2123,12 +2123,12 @@ export default function InventoryPage() {
 
                       {/* Variants Card */}
                       {modalProduct.variantsData && Object.keys(modalProduct.variantsData).length > 0 && (
-                        <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
                             <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
                               <span className="text-purple-400 text-sm">🎨</span>
                             </div>
-                            <h3 className="text-lg font-semibold text-white">الألوان والأشكال</h3>
+                            <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الألوان والأشكال</h3>
                           </div>
                           <div className="space-y-3">
                             {Object.entries(modalProduct.variantsData)
@@ -2163,8 +2163,8 @@ export default function InventoryPage() {
                               const unassignedQuantity = totalInventoryQuantity - assignedQuantity
 
                               return (
-                                <div key={locationId} className="bg-[#2B3544] rounded-lg p-4">
-                                  <p className="text-white font-medium mb-3">{locationName}</p>
+                                <div key={locationId} className="bg-[var(--dash-bg-surface)] rounded-lg p-4">
+                                  <p className="text-[var(--dash-text-primary)] font-medium mb-3">{locationName}</p>
                                   <div className="flex flex-wrap gap-2">
                                     {/* Show specified variants (colors, shapes with names) */}
                                     {variants
@@ -2190,7 +2190,7 @@ export default function InventoryPage() {
 
                                     {/* Show unassigned quantity if any */}
                                     {unassignedQuantity > 0 && (
-                                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white bg-gray-600 border border-gray-600">
+                                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-[var(--dash-text-primary)] bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]">
                                         غير محدد ({unassignedQuantity})
                                       </span>
                                     )}
@@ -2207,12 +2207,12 @@ export default function InventoryPage() {
                     <div className="space-y-6">
 
                       {/* Main Image Preview */}
-                      <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                      <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-8 h-8 bg-indigo-600/20 rounded-lg flex items-center justify-center">
                             <span className="text-indigo-400 text-sm">🖼️</span>
                           </div>
-                          <h3 className="text-lg font-semibold text-white">صور المنتج</h3>
+                          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">صور المنتج</h3>
                         </div>
 
                         {/* Large Image Preview - OPTIMIZED */}
@@ -2245,7 +2245,7 @@ export default function InventoryPage() {
                                   />
                                   {/* Image type indicator */}
                                   {(isMainImage || isSubImage) && (
-                                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs px-1 py-0.5 text-center rounded-b-md">
+                                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-[var(--dash-text-primary)] text-xs px-1 py-0.5 text-center rounded-b-md">
                                       {isMainImage ? 'رئيسية' : 'ثانوية'}
                                     </div>
                                   )}
@@ -2254,8 +2254,8 @@ export default function InventoryPage() {
                             })
                           ) : (
                             /* Fallback when no images available */
-                            <div className="w-full h-16 bg-[#2B3544] rounded-md border border-gray-600/30 flex items-center justify-center col-span-4">
-                              <span className="text-gray-500 text-xs">لا توجد صور متاحة</span>
+                            <div className="w-full h-16 bg-[var(--dash-bg-surface)] rounded-md border border-[var(--dash-border-default)]/30 flex items-center justify-center col-span-4">
+                              <span className="text-[var(--dash-text-disabled)] text-xs">لا توجد صور متاحة</span>
                             </div>
                           )}
                         </div>
@@ -2362,7 +2362,7 @@ export default function InventoryPage() {
       {/* Audit Status Context Menu */}
       {auditContextMenu.show && (
         <div
-          className="fixed bg-[#2B3544] border-2 border-[#4A5568] rounded-xl shadow-2xl py-2 z-[9999]"
+          className="fixed bg-[var(--dash-bg-surface)] border-2 border-[var(--dash-border-default)] rounded-xl shadow-2xl py-2 z-[9999]"
           style={{
             left: auditContextMenu.x,
             top: auditContextMenu.y,
@@ -2384,7 +2384,7 @@ export default function InventoryPage() {
                   case 'تام الجرد': return 'hover:bg-green-600/20 text-green-400'
                   case 'استعد': return 'hover:bg-yellow-600/20 text-yellow-400'
                   case 'غير مجرود': return 'hover:bg-red-600/20 text-red-400'
-                  default: return 'hover:bg-gray-600/20 text-gray-400'
+                  default: return 'hover:bg-[var(--dash-bg-overlay)]/20 text-[var(--dash-text-muted)]'
                 }
               }
 
@@ -2392,7 +2392,7 @@ export default function InventoryPage() {
                 <button
                   key={status}
                   onClick={() => handleAuditContextMenuAction(status)}
-                  className={`w-full text-right px-4 py-3 transition-colors ${getStatusColor(status)} border-b border-gray-600/30 last:border-b-0`}
+                  className={`w-full text-right px-4 py-3 transition-colors ${getStatusColor(status)} border-b border-[var(--dash-border-default)]/30 last:border-b-0`}
                 >
                   <span className="font-medium">{status}</span>
                 </button>

@@ -114,19 +114,19 @@ export default function SuppliersGridView({
             onClick={() => onSupplierClick(supplier)}
             onDoubleClick={() => onSupplierDoubleClick(supplier)}
             className={`
-              relative bg-[#374151] rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg
+              relative bg-[var(--dash-bg-raised)] rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg
               ${isSelected
                 ? 'border-blue-500 ring-2 ring-blue-500 ring-opacity-50'
-                : 'border-gray-600 hover:border-gray-500'
+                : 'border-[var(--dash-border-default)] hover:border-gray-500'
               }
             `}
           >
             {/* Header */}
-            <div className="p-4 border-b border-gray-600">
+            <div className="p-4 border-b border-[var(--dash-border-default)]">
               <div className="flex flex-col items-center text-center">
                 {/* Avatar */}
                 <div className="flex-shrink-0 mb-3">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-blue-600 border-2 border-gray-600">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-blue-600 border-2 border-[var(--dash-border-default)]">
                     {avatarUrl ? (
                       <img
                         src={avatarUrl}
@@ -156,7 +156,7 @@ export default function SuppliersGridView({
                 {/* Name and Default Badge */}
                 <div className="w-full">
                   <div className="flex items-center justify-center gap-2 mb-1">
-                    <h3 className="text-white font-medium text-sm leading-tight">
+                    <h3 className="text-[var(--dash-text-primary)] font-medium text-sm leading-tight">
                       {supplier.name}
                     </h3>
                     {isDefault && (
@@ -165,13 +165,13 @@ export default function SuppliersGridView({
                   </div>
 
                   {/* Company Name */}
-                  <p className="text-gray-400 text-xs">
+                  <p className="text-[var(--dash-text-muted)] text-xs">
                     {supplier.company_name || supplier.category || 'غير محدد'}
                   </p>
 
                   {/* Rank Badge */}
                   {rankInfo && (
-                    <div className="flex items-center justify-center gap-1 bg-gray-700 px-2 py-1 rounded-full mt-2 mx-auto w-fit">
+                    <div className="flex items-center justify-center gap-1 bg-[var(--dash-bg-raised)] px-2 py-1 rounded-full mt-2 mx-auto w-fit">
                       <div className="w-3 h-3 relative">
                         <Image
                           src={rankInfo.icon}
@@ -180,7 +180,7 @@ export default function SuppliersGridView({
                           className="object-contain"
                         />
                       </div>
-                      <span className="text-xs text-white font-medium">
+                      <span className="text-xs text-[var(--dash-text-primary)] font-medium">
                         {rankInfo.name}
                       </span>
                     </div>
@@ -197,7 +197,7 @@ export default function SuppliersGridView({
                   <svg className="h-3 w-3 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
-                  <span className="text-gray-300 text-xs truncate">
+                  <span className="text-[var(--dash-text-secondary)] text-xs truncate">
                     {supplier.email}
                   </span>
                 </div>
@@ -206,7 +206,7 @@ export default function SuppliersGridView({
               {/* Account Balance - Use calculated balance from props */}
               <div className="flex items-center gap-2">
                 <CurrencyDollarIcon className={`h-3 w-3 flex-shrink-0 ${(supplierBalances[supplier.id] || 0) > 0 ? 'text-red-400' : 'text-green-400'}`} />
-                <span className="text-xs text-gray-300">الرصيد:</span>
+                <span className="text-xs text-[var(--dash-text-secondary)]">الرصيد:</span>
                 <span className={`font-medium text-xs ${(supplierBalances[supplier.id] || 0) > 0 ? 'text-red-400' : 'text-green-400'}`}>
                   {formatCurrency(supplierBalances[supplier.id] || 0)} جنيه
                 </span>
@@ -216,7 +216,7 @@ export default function SuppliersGridView({
               {supplier.phone && (
                 <div className="flex items-center gap-2">
                   <PhoneIcon className="h-3 w-3 text-blue-400 flex-shrink-0" />
-                  <span className="text-gray-300 text-xs font-mono truncate">
+                  <span className="text-[var(--dash-text-secondary)] text-xs font-mono truncate">
                     {supplier.phone}
                   </span>
                 </div>
@@ -226,7 +226,7 @@ export default function SuppliersGridView({
               {supplier.contact_person && (
                 <div className="flex items-center gap-2">
                   <UserCircleIcon className="h-3 w-3 text-purple-400 flex-shrink-0" />
-                  <span className="text-gray-300 text-xs truncate">
+                  <span className="text-[var(--dash-text-secondary)] text-xs truncate">
                     {supplier.contact_person}
                   </span>
                 </div>
@@ -236,7 +236,7 @@ export default function SuppliersGridView({
               {supplier.city && (
                 <div className="flex items-center gap-2">
                   <MapPinIcon className="h-3 w-3 text-red-400 flex-shrink-0" />
-                  <span className="text-gray-300 text-xs truncate">
+                  <span className="text-[var(--dash-text-secondary)] text-xs truncate">
                     {supplier.city}
                   </span>
                 </div>
@@ -245,8 +245,8 @@ export default function SuppliersGridView({
               {/* Created Date */}
               <div className="flex items-center gap-2">
                 <CalendarIcon className="h-3 w-3 text-orange-400 flex-shrink-0" />
-                <span className="text-xs text-gray-300">منذ:</span>
-                <span className="text-gray-400 text-xs">
+                <span className="text-xs text-[var(--dash-text-secondary)]">منذ:</span>
+                <span className="text-[var(--dash-text-muted)] text-xs">
                   {formatDate(supplier.created_at)}
                 </span>
               </div>

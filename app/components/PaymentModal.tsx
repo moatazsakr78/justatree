@@ -192,14 +192,14 @@ export default function PaymentModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#2B3544] rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-[var(--dash-bg-surface)] rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-[var(--dash-shadow-lg)]">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-600">
-          <h2 className="text-xl font-bold text-white">رفع إيصال الدفع</h2>
+        <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
+          <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">رفع إيصال الدفع</h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="w-6 h-6" />
           </button>
@@ -208,17 +208,17 @@ export default function PaymentModal({
         {/* Body */}
         <div className="p-6 space-y-6">
           {/* Payment Info */}
-          <div className="bg-[#374151] rounded-lg p-4 space-y-3">
+          <div className="bg-[var(--dash-bg-raised)] rounded-lg p-4 space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-gray-300">المبلغ الإجمالي:</span>
-              <span className="text-white font-bold text-lg">{orderAmount.toFixed(2)} جنيه</span>
+              <span className="text-[var(--dash-text-secondary)]">المبلغ الإجمالي:</span>
+              <span className="text-[var(--dash-text-primary)] font-bold text-lg">{orderAmount.toFixed(2)} جنيه</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-300">المدفوع:</span>
+              <span className="text-[var(--dash-text-secondary)]">المدفوع:</span>
               <span className="text-green-400 font-bold">{currentPaid.toFixed(2)} جنيه</span>
             </div>
-            <div className="flex justify-between items-center border-t border-gray-600 pt-3">
-              <span className="text-gray-300">المتبقي:</span>
+            <div className="flex justify-between items-center border-t border-[var(--dash-border-default)] pt-3">
+              <span className="text-[var(--dash-text-secondary)]">المتبقي:</span>
               <span className="text-orange-400 font-bold text-lg">{remainingAmount.toFixed(2)} جنيه</span>
             </div>
           </div>
@@ -230,11 +230,11 @@ export default function PaymentModal({
             {!previewUrl ? (
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 transition-colors"
+                className="border-2 border-dashed border-[var(--dash-border-default)] rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 transition-colors"
               >
-                <CloudArrowUpIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-300 mb-2">اضغط لاختيار صورة أو اسحبها هنا</p>
-                <p className="text-gray-500 text-sm">PNG, JPG, JPEG (حد أقصى 10MB)</p>
+                <CloudArrowUpIcon className="w-16 h-16 text-[var(--dash-text-muted)] mx-auto mb-4" />
+                <p className="text-[var(--dash-text-secondary)] mb-2">اضغط لاختيار صورة أو اسحبها هنا</p>
+                <p className="text-[var(--dash-text-disabled)] text-sm">PNG, JPG, JPEG (حد أقصى 10MB)</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -262,20 +262,20 @@ export default function PaymentModal({
                 {isAnalyzing && (
                   <div className="text-center py-4">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto mb-2"></div>
-                    <p className="text-gray-300">جاري تحليل الصورة...</p>
+                    <p className="text-[var(--dash-text-secondary)]">جاري تحليل الصورة...</p>
                   </div>
                 )}
 
                 {/* Confirmation Dialog */}
                 {showConfirmation && !isAnalyzing && (
-                  <div className="bg-[#374151] rounded-lg p-5 space-y-5">
+                  <div className="bg-[var(--dash-bg-raised)] rounded-lg p-5 space-y-5">
                     <div className="flex items-center justify-center gap-2 text-blue-400 mb-4">
                       <CheckCircleIcon className="w-6 h-6" />
                       <span className="font-bold text-lg">البيانات المستخرجة</span>
                     </div>
 
                     {/* 1. المبلغ المحول (الأهم) */}
-                    <div className="space-y-2 bg-[#2B3544] p-4 rounded-lg border-2 border-blue-500">
+                    <div className="space-y-2 bg-[var(--dash-bg-surface)] p-4 rounded-lg border-2 border-blue-500">
                       <label className="text-blue-300 font-semibold text-base block">💰 المبلغ المحول (جنيه):</label>
                       <input
                         type="number"
@@ -283,7 +283,7 @@ export default function PaymentModal({
                         value={editableAmount}
                         onChange={(e) => setEditableAmount(e.target.value)}
                         placeholder="أدخل المبلغ"
-                        className="w-full px-4 py-3 bg-[#1F2937] border border-gray-500 rounded-lg text-white text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        className="w-full px-4 py-3 bg-[var(--dash-bg-base)] border border-gray-500 rounded-lg text-[var(--dash-text-primary)] text-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       />
                       {!analyzedAmount && (
                         <p className="text-yellow-400 text-sm flex items-center gap-2">
@@ -298,22 +298,22 @@ export default function PaymentModal({
                     </div>
 
                     {/* 2. الرقم المحول عليه */}
-                    <div className="flex justify-between items-center bg-[#2B3544] p-4 rounded-lg">
-                      <span className="text-gray-300 font-medium">📱 الرقم المحول عليه:</span>
+                    <div className="flex justify-between items-center bg-[var(--dash-bg-surface)] p-4 rounded-lg">
+                      <span className="text-[var(--dash-text-secondary)] font-medium">📱 الرقم المحول عليه:</span>
                       <span className={`font-mono text-lg font-bold ${analyzedAccount ? 'text-green-400' : 'text-gray-500'}`}>
                         {analyzedAccount || 'لم يتم العثور عليه'}
                       </span>
                     </div>
 
                     {/* 3. تاريخ المعاملة */}
-                    <div className="flex justify-between items-center bg-[#2B3544] p-4 rounded-lg">
-                      <span className="text-gray-300 font-medium">📅 تاريخ المعاملة:</span>
-                      <span className={`text-base ${analyzedDate ? 'text-white' : 'text-gray-500'}`}>
+                    <div className="flex justify-between items-center bg-[var(--dash-bg-surface)] p-4 rounded-lg">
+                      <span className="text-[var(--dash-text-secondary)] font-medium">📅 تاريخ المعاملة:</span>
+                      <span className={`text-base ${analyzedDate ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-disabled)]'}`}>
                         {analyzedDate || 'لم يتم العثور عليه'}
                       </span>
                     </div>
 
-                    <div className="pt-3 border-t border-gray-600">
+                    <div className="pt-3 border-t border-[var(--dash-border-default)]">
                       <p className="text-center text-yellow-400 text-sm font-medium">
                         ⚠️ تأكد من صحة المبلغ قبل الحفظ
                       </p>
@@ -350,10 +350,10 @@ export default function PaymentModal({
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 p-6 border-t border-gray-600">
+        <div className="flex gap-3 p-6 border-t border-[var(--dash-border-default)]">
           <button
             onClick={handleClose}
-            className="flex-1 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+            className="flex-1 py-3 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors"
             disabled={isUploading || isAnalyzing}
           >
             إلغاء

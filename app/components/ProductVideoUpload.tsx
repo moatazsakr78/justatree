@@ -171,7 +171,7 @@ export default function ProductVideoUpload({
     <div className="space-y-4">
       {/* Upload Area */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-[var(--dash-text-secondary)]">
           فيديوهات المنتج
         </label>
 
@@ -182,10 +182,10 @@ export default function ProductVideoUpload({
           onClick={() => !disabled && productId && fileInputRef.current?.click()}
           className={`flex items-center justify-center w-full px-4 py-8 border-2 border-dashed rounded-lg transition-all ${
             !productId
-              ? 'border-gray-600 bg-[#2B3544] cursor-not-allowed opacity-60'
+              ? 'border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] cursor-not-allowed opacity-60'
               : isDragOver
               ? 'border-blue-400 bg-blue-900/20 cursor-pointer'
-              : 'border-gray-600 bg-[#2B3544] hover:border-blue-500 hover:bg-blue-900/10 cursor-pointer'
+              : 'border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] hover:border-blue-500 hover:bg-blue-900/10 cursor-pointer'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <div className="text-center">
@@ -196,23 +196,23 @@ export default function ProductVideoUpload({
               </>
             ) : !productId ? (
               <>
-                <svg className="h-8 w-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-8 w-8 text-[var(--dash-text-muted)] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
                 </svg>
-                <span className="text-gray-300 text-sm">
+                <span className="text-[var(--dash-text-secondary)] text-sm">
                   يجب حفظ المنتج أولاً قبل رفع الفيديوهات
                 </span>
-                <p className="text-xs text-gray-400 mt-1">اضغط على &quot;حفظ&quot; أو &quot;إنشاء&quot; أولاً</p>
+                <p className="text-xs text-[var(--dash-text-muted)] mt-1">اضغط على &quot;حفظ&quot; أو &quot;إنشاء&quot; أولاً</p>
               </>
             ) : (
               <>
                 <svg className="h-8 w-8 text-blue-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
-                <span className="text-gray-300 text-sm">
+                <span className="text-[var(--dash-text-secondary)] text-sm">
                   {isDragOver ? 'اتركها هنا' : 'انقر لاختيار فيديوهات المنتج'}
                 </span>
-                <p className="text-xs text-gray-400 mt-1">MP4, WebM, MOV - حتى 100MB لكل ملف</p>
+                <p className="text-xs text-[var(--dash-text-muted)] mt-1">MP4, WebM, MOV - حتى 100MB لكل ملف</p>
               </>
             )}
           </div>
@@ -259,7 +259,7 @@ export default function ProductVideoUpload({
       {/* Videos List */}
       {videos.length > 0 && (
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-gray-700">
+          <h4 className="text-sm font-medium text-[var(--dash-text-secondary)]">
             الفيديوهات المرفوعة ({videos.length})
           </h4>
 
@@ -274,21 +274,21 @@ export default function ProductVideoUpload({
                   onDragOver={handleVideoDragOver}
                   onDrop={(e) => handleVideoDrop(e, video.id)}
                   onDragEnd={handleVideoDragEnd}
-                  className={`flex items-center gap-3 p-3 bg-[#374151] rounded-lg border border-gray-600/30 transition-all ${
+                  className={`flex items-center gap-3 p-3 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]/30 transition-all ${
                     draggedVideo === video.id
                       ? 'opacity-50 scale-95'
-                      : 'hover:bg-[#434E61] hover:border-gray-500/50'
+                      : 'hover:bg-[var(--dash-bg-overlay)] hover:border-[var(--dash-border-subtle)]/50'
                   } ${disabled ? 'opacity-50' : 'cursor-move'}`}
                 >
                   {/* Drag Handle */}
                   <div className="flex-shrink-0">
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[var(--dash-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </div>
 
                   {/* Video Preview */}
-                  <div className="flex-shrink-0 w-20 h-12 bg-[#2B3544] rounded overflow-hidden border border-gray-600/50">
+                  <div className="flex-shrink-0 w-20 h-12 bg-[var(--dash-bg-surface)] rounded overflow-hidden border border-[var(--dash-border-default)]/50">
                     <video
                       src={video.video_url}
                       className="w-full h-full object-cover"
@@ -299,10 +299,10 @@ export default function ProductVideoUpload({
 
                   {/* Video Info */}
                   <div className="flex-1 min-w-0">
-                    <h5 className="font-medium text-white truncate text-sm">
+                    <h5 className="font-medium text-[var(--dash-text-primary)] truncate text-sm">
                       {video.video_name || 'فيديو بدون اسم'}
                     </h5>
-                    <div className="flex items-center gap-4 text-xs text-gray-400 mt-1">
+                    <div className="flex items-center gap-4 text-xs text-[var(--dash-text-muted)] mt-1">
                       {video.video_size && (
                         <span>{(video.video_size / (1024 * 1024)).toFixed(1)} MB</span>
                       )}
@@ -358,7 +358,7 @@ export default function ProductVideoUpload({
       {/* Help Text */}
       {videos.length === 0 && (
         <div className="text-center py-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-[var(--dash-text-disabled)]">
             لم يتم رفع أي فيديوهات بعد. يمكنك رفع عدة فيديوهات لعرض المنتج بشكل أفضل.
           </p>
         </div>

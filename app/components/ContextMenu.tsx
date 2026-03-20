@@ -72,7 +72,7 @@ export default function ContextMenu({ x, y, isOpen, onClose, items }: ContextMen
   return (
     <div
       ref={menuRef}
-      className="fixed z-[9999] bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-1 min-w-[160px]"
+      className="fixed z-[9999] bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-dash-md shadow-dash-lg py-1 min-w-[160px] animate-dash-scale-in backdrop-blur-sm"
       style={{ left: x, top: y }}
     >
       {items.map((item, index) => (
@@ -87,10 +87,10 @@ export default function ContextMenu({ x, y, isOpen, onClose, items }: ContextMen
           disabled={item.disabled}
           className={`w-full px-4 py-2 text-right text-sm flex items-center gap-3 transition-colors ${
             item.disabled
-              ? 'text-gray-500 cursor-not-allowed'
+              ? 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               : item.danger
-              ? 'text-red-400 hover:bg-red-900/30'
-              : 'text-gray-200 hover:bg-gray-700'
+              ? 'text-[var(--dash-accent-red)] hover:bg-[var(--dash-accent-red-subtle)]'
+              : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
           }`}
         >
           {item.icon && <span className="w-4 h-4">{item.icon}</span>}

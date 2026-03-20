@@ -162,7 +162,7 @@ const ImageUploadArea = ({ onImageSelect, images, onImageRemove, label, multiple
 
   return (
     <div className="space-y-3">
-      <label className="block text-gray-300 text-sm font-medium mb-2">
+      <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
         {label}
       </label>
 
@@ -171,23 +171,23 @@ const ImageUploadArea = ({ onImageSelect, images, onImageRemove, label, multiple
         className={`border-2 border-dashed p-8 text-center transition-all duration-200 ${
           isDragOver
             ? 'border-blue-400 bg-blue-400/10'
-            : 'border-gray-600 bg-[#4A5568]/30'
+            : 'border-[var(--dash-border-default)] bg-[#4A5568]/30'
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         <div className="flex flex-col items-center gap-2">
-          <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-8 h-8 text-[var(--dash-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
           </svg>
-          <p className="text-gray-400 text-sm">
+          <p className="text-[var(--dash-text-muted)] text-sm">
             {isDragOver ? 'أفلت الصورة هنا' : 'اسحب وأفلت الصورة هنا أو'}
           </p>
           <button
             type="button"
             onClick={openFileDialog}
-            className="bg-[#4A5568] hover:bg-[#5A6478] text-white px-4 py-2 text-sm border border-gray-600 transition-colors"
+            className="bg-[#4A5568] hover:bg-[#5A6478] text-[var(--dash-text-primary)] px-4 py-2 text-sm border border-[var(--dash-border-default)] transition-colors"
           >
             اختر الصورة
           </button>
@@ -211,18 +211,18 @@ const ImageUploadArea = ({ onImageSelect, images, onImageRemove, label, multiple
               <img
                 src={image.preview}
                 alt="معاينة الصورة"
-                className="w-full h-24 object-cover rounded border border-gray-600"
+                className="w-full h-24 object-cover rounded border border-[var(--dash-border-default)]"
               />
               <button
                 type="button"
                 onClick={() => onImageRemove(image.id)}
-                className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <div className="absolute bottom-1 left-1 right-1 bg-black/70 text-white text-xs p-1 rounded truncate">
+              <div className="absolute bottom-1 left-1 right-1 bg-black/70 text-[var(--dash-text-primary)] text-xs p-1 rounded truncate">
                 {image.file.name}
               </div>
             </div>
@@ -2249,7 +2249,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           <div className="space-y-4">
             {/* Product Name */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 اسم المنتج *
               </label>
               <input
@@ -2257,13 +2257,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 placeholder="أدخل اسم المنتج"
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
               />
             </div>
 
             {/* Product Code */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 الكود
               </label>
               <input
@@ -2271,13 +2271,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 value={formData.code}
                 onChange={(e) => handleInputChange('code', e.target.value)}
                 placeholder="أدخل كود المنتج"
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
               />
             </div>
 
             {/* Barcode */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 الباركود
               </label>
               <div className="flex gap-2">
@@ -2286,7 +2286,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   value={formData.barcode}
                   onChange={(e) => handleInputChange('barcode', e.target.value)}
                   placeholder="أدخل باركود جديد"
-                  className="flex-1 px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                  className="flex-1 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
                 />
                 <button 
                   type="button"
@@ -2294,8 +2294,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   disabled={!formData.barcode.trim()}
                   className={`px-3 py-2 text-sm font-medium transition-colors ${
                     !formData.barcode.trim() 
-                      ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
-                      : 'bg-[#10B981] hover:bg-[#059669] text-white'
+                      ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed' 
+                      : 'bg-[#10B981] hover:bg-[#059669] text-[var(--dash-text-primary)]'
                   }`}
                 >
                   {editingBarcodeIndex !== null ? '✓' : '+'}
@@ -2303,7 +2303,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 <button 
                   type="button"
                   onClick={handleGenerateBarcode}
-                  className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-3 py-2 text-sm font-medium transition-colors"
+                  className="bg-[#3B82F6] hover:bg-[#2563EB] text-[var(--dash-text-primary)] px-3 py-2 text-sm font-medium transition-colors"
                 >
                   ↻
                 </button>
@@ -2311,7 +2311,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   <button 
                     type="button"
                     onClick={cancelBarcodeEdit}
-                    className="bg-[#6B7280] hover:bg-[#4B5563] text-white px-3 py-2 text-sm font-medium transition-colors"
+                    className="bg-[#6B7280] hover:bg-[#4B5563] text-[var(--dash-text-primary)] px-3 py-2 text-sm font-medium transition-colors"
                   >
                     ×
                   </button>
@@ -2321,12 +2321,12 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
               {/* Display added barcodes */}
               {productBarcodes.length > 0 && (
                 <div className="mt-3 space-y-2">
-                  <div className="text-gray-300 text-xs font-medium text-right">
+                  <div className="text-[var(--dash-text-secondary)] text-xs font-medium text-right">
                     الباركودات المضافة ({productBarcodes.length}):
                   </div>
                   <div className="space-y-2 max-h-32 overflow-y-auto scrollbar-hide">
                     {productBarcodes.map((barcode, index) => (
-                      <div key={index} className="bg-[#374151] rounded p-2 flex items-center justify-between">
+                      <div key={index} className="bg-[var(--dash-bg-raised)] rounded p-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleDeleteBarcode(index)}
@@ -2350,7 +2350,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           </button>
                         </div>
                         
-                        <div className="text-white text-sm font-mono">
+                        <div className="text-[var(--dash-text-primary)] text-sm font-mono">
                           {barcode}
                         </div>
                       </div>
@@ -2362,13 +2362,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
             {/* Category */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 المجموعة *
               </label>
               <select
                 value={formData.categoryId}
                 onChange={(e) => handleInputChange('categoryId', e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
               >
                 <option value="">-- اختر المجموعة --</option>
                 {categories.map((category) => (
@@ -2381,7 +2381,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
             {/* Description */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 الوصف
               </label>
               <textarea
@@ -2389,7 +2389,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 placeholder="أدخل وصف المنتج"
                 rows={4}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm resize-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm resize-none"
               />
             </div>
           </div>
@@ -2401,15 +2401,15 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
             {/* Cost Override Confirmation Modal */}
             {showCostOverrideConfirm && (
               <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
-                <div className="bg-[#1F2937] rounded-xl p-6 max-w-md mx-4 border border-gray-600 shadow-xl">
+                <div className="bg-[var(--dash-bg-base)] rounded-xl p-6 max-w-md mx-4 border border-[var(--dash-border-default)] shadow-xl">
                   <div className="text-center">
                     <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-900/30 mb-4">
                       <LockClosedIcon className="h-6 w-6 text-yellow-400" />
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-2">
+                    <h3 className="text-lg font-bold text-[var(--dash-text-primary)] mb-2">
                       هل أنت متأكد أنك تريد تعديل سعر الشراء؟
                     </h3>
-                    <p className="text-gray-400 text-sm mb-6">
+                    <p className="text-[var(--dash-text-muted)] text-sm mb-6">
                       هذا الإجراء لا يجب استخدامه إلا في الضرورة
                     </p>
                     <div className="flex gap-3 justify-center">
@@ -2419,14 +2419,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           setCostOverrideEnabled(true)
                           setShowCostOverrideConfirm(false)
                         }}
-                        className="px-6 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors font-medium"
+                        className="px-6 py-2 bg-yellow-600 hover:bg-yellow-700 text-[var(--dash-text-primary)] rounded-lg transition-colors font-medium"
                       >
                         نعم
                       </button>
                       <button
                         type="button"
                         onClick={() => setShowCostOverrideConfirm(false)}
-                        className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium"
+                        className="px-6 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg transition-colors font-medium"
                       >
                         لا
                       </button>
@@ -2439,7 +2439,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
             {/* Purchase Price */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-white text-sm font-medium text-right">
+                <label className="text-[var(--dash-text-primary)] text-sm font-medium text-right">
                   سعر الشراء *
                 </label>
                 {!purchaseHistory.canEditCost && !costOverrideEnabled && (
@@ -2467,13 +2467,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   disabled={!purchaseHistory.canEditCost && !costOverrideEnabled}
                   className={`w-full px-3 py-2 border rounded text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
                     purchaseHistory.canEditCost || costOverrideEnabled
-                      ? 'bg-[#2B3441] border-[#4A5568] text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2]'
-                      : 'bg-gray-600/30 border-gray-600/50 text-gray-300 cursor-not-allowed'
+                      ? 'bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2]'
+                      : 'bg-[var(--dash-bg-overlay)]/30 border-[var(--dash-border-default)]/50 text-[var(--dash-text-secondary)] cursor-not-allowed'
                   }`}
                 />
                 {!purchaseHistory.canEditCost && !costOverrideEnabled && (
                   <div className="absolute left-2 top-1/2 transform -translate-y-1/2">
-                    <LockClosedIcon className="h-4 w-4 text-gray-400" />
+                    <LockClosedIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                   </div>
                 )}
               </div>
@@ -2482,16 +2482,16 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
             {/* Last Purchase Price - Inline Field */}
             {lastPurchaseInfo && (
               <div className="flex items-center gap-3">
-                <label className="text-gray-400 text-sm whitespace-nowrap">آخر سعر شراء</label>
-                <div className="flex-1 flex items-center gap-2 bg-[#2B3441]/50 border border-[#4A5568]/50 rounded px-3 py-2">
-                  <span className="text-white font-medium text-sm">
+                <label className="text-[var(--dash-text-muted)] text-sm whitespace-nowrap">آخر سعر شراء</label>
+                <div className="flex-1 flex items-center gap-2 bg-[var(--dash-bg-surface)]/50 border border-[var(--dash-border-default)]/50 rounded px-3 py-2">
+                  <span className="text-[var(--dash-text-primary)] font-medium text-sm">
                     {lastPurchaseInfo.unitPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowPurchaseHistoryModal(true)}
-                  className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors"
+                  className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-sm rounded transition-colors"
                 >
                   عرض
                 </button>
@@ -2500,7 +2500,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
             {/* Sale Price */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 سعر البيع *
               </label>
               <input
@@ -2508,13 +2508,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 value={formData.salePrice}
                 onChange={(e) => handleInputChange('salePrice', e.target.value)}
                 placeholder=""
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
 
             {/* Wholesale Price */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 سعر الجملة
               </label>
               <input
@@ -2522,14 +2522,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 value={formData.wholesalePrice}
                 onChange={(e) => handleInputChange('wholesalePrice', e.target.value)}
                 placeholder=""
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
 
             {/* Additional Prices */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-white text-sm font-medium mb-2 text-right">
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                   سعر 1
                 </label>
                 <input
@@ -2537,11 +2537,11 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   value={formData.price1}
                   onChange={(e) => handleInputChange('price1', e.target.value)}
                   placeholder=""
-                  className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
               <div>
-                <label className="block text-white text-sm font-medium mb-2 text-right">
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                   سعر 2
                 </label>
                 <input
@@ -2549,11 +2549,11 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   value={formData.price2}
                   onChange={(e) => handleInputChange('price2', e.target.value)}
                   placeholder=""
-                  className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
               <div>
-                <label className="block text-white text-sm font-medium mb-2 text-right">
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                   سعر 3
                 </label>
                 <input
@@ -2561,11 +2561,11 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   value={formData.price3}
                   onChange={(e) => handleInputChange('price3', e.target.value)}
                   placeholder=""
-                  className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
               <div>
-                <label className="block text-white text-sm font-medium mb-2 text-right">
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                   سعر 4
                 </label>
                 <input
@@ -2573,7 +2573,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   value={formData.price4}
                   onChange={(e) => handleInputChange('price4', e.target.value)}
                   placeholder=""
-                  className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
             </div>
@@ -2603,7 +2603,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
             {/* Product Videos */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-3">
+              <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-3">
                 فيديوهات المنتج
               </label>
 
@@ -2631,28 +2631,28 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
                   <div
                     onClick={() => document.getElementById('video-upload-input')?.click()}
-                    className="flex items-center justify-center w-full px-4 py-8 bg-[#2B3544] border-2 border-dashed border-gray-600 rounded-lg cursor-pointer transition-all hover:border-gray-500 hover:bg-[#374151]"
+                    className="flex items-center justify-center w-full px-4 py-8 bg-[var(--dash-bg-surface)] border-2 border-dashed border-[var(--dash-border-default)] rounded-lg cursor-pointer transition-all hover:border-[var(--dash-bg-highlight)] hover:bg-[var(--dash-bg-raised)]"
                   >
                     <div className="text-center">
-                      <svg className="h-8 w-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-8 w-8 text-[var(--dash-text-muted)] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
-                      <span className="text-gray-300 text-sm">
+                      <span className="text-[var(--dash-text-secondary)] text-sm">
                         انقر لاختيار فيديوهات المنتج
                       </span>
-                      <p className="text-xs text-gray-400 mt-1">MP4, WebM, MOV - حتى 100MB لكل ملف</p>
+                      <p className="text-xs text-[var(--dash-text-muted)] mt-1">MP4, WebM, MOV - حتى 100MB لكل ملف</p>
                     </div>
                   </div>
 
                   {/* Show pending videos */}
                   {pendingVideos.length > 0 && (
                     <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-gray-300">
+                      <h4 className="text-sm font-medium text-[var(--dash-text-secondary)]">
                         الفيديوهات المختارة ({pendingVideos.length})
                       </h4>
 
                       {pendingVideos.map((video, index) => (
-                        <div key={index} className="flex items-center gap-3 p-3 bg-[#374151] rounded-lg border border-gray-600">
+                        <div key={index} className="flex items-center gap-3 p-3 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
                           <div className="flex-shrink-0">
                             <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -2660,10 +2660,10 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <h5 className="font-medium text-white truncate text-sm">
+                            <h5 className="font-medium text-[var(--dash-text-primary)] truncate text-sm">
                               {video.name}
                             </h5>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-[var(--dash-text-muted)]">
                               {(video.size / (1024 * 1024)).toFixed(1)} MB
                             </p>
                           </div>
@@ -2685,7 +2685,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   {/* Video Upload Progress */}
                   {Object.keys(videoUploadProgress).length > 0 && (
                     <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-gray-300">جاري رفع الفيديوهات...</h4>
+                      <h4 className="text-sm font-medium text-[var(--dash-text-secondary)]">جاري رفع الفيديوهات...</h4>
                       {Object.entries(videoUploadProgress).map(([id, progress]) => (
                         <div key={id} className="bg-green-900/20 border border-green-600/30 rounded-lg p-3">
                           <div className="flex items-center justify-between mb-2">
@@ -2705,7 +2705,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
                   {pendingVideos.length === 0 && (
                     <div className="text-center py-4">
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-[var(--dash-text-muted)]">
                         سيتم رفع الفيديوهات تلقائياً بعد إنشاء المنتج
                       </p>
                     </div>
@@ -2720,14 +2720,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
         return (
           <div className="flex flex-col h-full">
             {/* Shape & Color Sub-tabs */}
-            <div className="border-b border-[#4A5568] flex-shrink-0">
+            <div className="border-b border-[var(--dash-border-default)] flex-shrink-0">
               <div className="flex gap-0">
                 <button
                   onClick={() => setActiveShapeColorTab('شكل وصف')}
                   className={`px-6 py-3 text-sm font-medium transition-colors relative ${
                     activeShapeColorTab === 'شكل وصف'
                       ? 'text-[#5DADE2]'
-                      : 'text-gray-300 hover:text-white'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   شكل وصف
@@ -2740,7 +2740,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   className={`px-6 py-3 text-sm font-medium transition-colors relative ${
                     activeShapeColorTab === 'لون المنتج'
                       ? 'text-[#5DADE2]'
-                      : 'text-gray-300 hover:text-white'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   لون المنتج
@@ -2753,7 +2753,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   className={`px-6 py-3 text-sm font-medium transition-colors relative ${
                     activeShapeColorTab === 'الكميه'
                       ? 'text-[#5DADE2]'
-                      : 'text-gray-300 hover:text-white'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   الكميه
@@ -2770,7 +2770,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
               <div className="space-y-4 overflow-y-auto scrollbar-hide max-h-[calc(100vh-280px)] pb-8">
                 {/* Shape Name Section */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2 text-right">
+                  <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                     اسم الشكل
                   </label>
                   <input
@@ -2778,13 +2778,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                     value={shapeName}
                     onChange={(e) => setShapeName(e.target.value)}
                     placeholder="مثال: دائري، مربع، بيضاوي..."
-                    className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                    className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
                   />
                 </div>
 
                 {/* Barcode Section */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2 text-right">
+                  <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                     الباركود
                   </label>
                   <div className="flex gap-2">
@@ -2793,11 +2793,11 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                       value={shapeBarcode}
                       onChange={(e) => setShapeBarcode(e.target.value)}
                       placeholder="الباركود الخاص بالشكل"
-                      className="flex-1 px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                      className="flex-1 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
                     />
                     <button
                       onClick={() => setShapeBarcode(generateBarcode())}
-                      className="bg-[#5DADE2] hover:bg-[#4A9DD5] text-white px-3 py-2 rounded transition-colors flex items-center gap-1"
+                      className="bg-[#5DADE2] hover:bg-[#4A9DD5] text-[var(--dash-text-primary)] px-3 py-2 rounded transition-colors flex items-center gap-1"
                       title="توليد باركود تلقائي"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2809,14 +2809,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
                 {/* Image Upload Section with Drag & Drop */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2 text-right">
+                  <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                     صورة الشكل
                   </label>
                   <div
                     className={`border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 ${
                       shapeImageDragActive
                         ? 'border-[#5DADE2] bg-[#5DADE2]/10'
-                        : 'border-[#4A5568] hover:border-[#5DADE2]/50'
+                        : 'border-[var(--dash-border-default)] hover:border-[#5DADE2]/50'
                     }`}
                     onDragOver={(e) => {
                       e.preventDefault()
@@ -2846,7 +2846,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                         <img
                           src={shapeImagePreview}
                           alt="معاينة"
-                          className="w-24 h-24 object-cover rounded mx-auto border border-[#4A5568]"
+                          className="w-24 h-24 object-cover rounded mx-auto border border-[var(--dash-border-default)]"
                         />
                         <p className="text-green-400 text-xs">{shapeImageFile?.name}</p>
                         <button
@@ -2862,12 +2862,12 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <svg className="w-8 h-8 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-8 h-8 text-[var(--dash-text-muted)] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <p className="text-gray-400 text-sm">اسحب وأفلت الصورة هنا</p>
-                        <p className="text-gray-500 text-xs">أو</p>
-                        <label className="inline-block bg-[#5DADE2] hover:bg-[#4A9DD5] text-white px-4 py-2 rounded cursor-pointer transition-colors text-sm">
+                        <p className="text-[var(--dash-text-muted)] text-sm">اسحب وأفلت الصورة هنا</p>
+                        <p className="text-[var(--dash-text-disabled)] text-xs">أو</p>
+                        <label className="inline-block bg-[#5DADE2] hover:bg-[#4A9DD5] text-[var(--dash-text-primary)] px-4 py-2 rounded cursor-pointer transition-colors text-sm">
                           اختر صورة
                           <input
                             type="file"
@@ -2897,14 +2897,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   {editingShapeId && (
                     <button
                       onClick={cancelShapeEdit}
-                      className="bg-[#6B7280] hover:bg-[#4B5563] text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                      className="bg-[#6B7280] hover:bg-[#4B5563] text-[var(--dash-text-primary)] px-4 py-2 rounded text-sm font-medium transition-colors"
                     >
                       إلغاء
                     </button>
                   )}
                   <button
                     onClick={addShape}
-                    className="bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                    className="bg-[#10B981] hover:bg-[#059669] text-[var(--dash-text-primary)] px-4 py-2 rounded text-sm font-medium transition-colors"
                   >
                     {editingShapeId ? 'تحديث الشكل' : 'إضافة الشكل'}
                   </button>
@@ -2913,7 +2913,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 {/* Added Shapes Display */}
                 {productShapes.length > 0 && (
                   <div className="space-y-3 mt-4">
-                    <h4 className="text-white text-sm font-medium text-right">الأشكال المضافة:</h4>
+                    <h4 className="text-[var(--dash-text-primary)] text-sm font-medium text-right">الأشكال المضافة:</h4>
                     <div className="space-y-2">
                       {productShapes.map((shape) => {
                         console.log('🔶 Rendering shape:', {
@@ -2925,14 +2925,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                         return (
                         <div
                           key={shape.id}
-                          className="bg-[#2B3441] border border-[#4A5568] rounded p-3 flex items-center gap-3"
+                          className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded p-3 flex items-center gap-3"
                         >
                           {/* Shape Image */}
                           {shape.image && (
                             <img
                               src={shape.image}
                               alt={shape.name || 'شكل'}
-                              className="w-12 h-12 object-cover rounded border border-[#4A5568]"
+                              className="w-12 h-12 object-cover rounded border border-[var(--dash-border-default)]"
                               onError={(e) => {
                                 console.error('🔶 Image failed to load:', shape.name, shape.image ? `${shape.image.substring(0, 100)}` : null)
                               }}
@@ -2945,13 +2945,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           {/* Shape Info */}
                           <div className="flex-1 text-right">
                             {shape.name && (
-                              <p className="text-white font-medium text-sm">{shape.name}</p>
+                              <p className="text-[var(--dash-text-primary)] font-medium text-sm">{shape.name}</p>
                             )}
                             {shape.barcode && (
-                              <p className="text-gray-400 text-xs">باركود: {shape.barcode}</p>
+                              <p className="text-[var(--dash-text-muted)] text-xs">باركود: {shape.barcode}</p>
                             )}
                             {!shape.name && !shape.barcode && shape.image && (
-                              <p className="text-gray-400 text-xs">شكل بصورة فقط</p>
+                              <p className="text-[var(--dash-text-muted)] text-xs">شكل بصورة فقط</p>
                             )}
                           </div>
 
@@ -2989,7 +2989,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
               <div className="space-y-4 overflow-y-auto scrollbar-hide max-h-[calc(100vh-280px)] pb-8">
                 {/* Color Name Section */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2 text-right">
+                  <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                     اسم اللون
                   </label>
                   <input
@@ -2997,17 +2997,17 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                     value={colorName}
                     onChange={(e) => setColorName(e.target.value)}
                     placeholder="مثالة: أزرق فاتح"
-                    className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                    className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
                   />
                 </div>
 
                 {/* Color Selection Section */}
                 <div className="flex items-center justify-end gap-3">
-                  <span className="text-white text-sm">اللون</span>
+                  <span className="text-[var(--dash-text-primary)] text-sm">اللون</span>
                   <div className="flex items-center gap-2">
                     <label className="relative cursor-pointer">
                       <div
-                        className="w-8 h-8 border border-[#4A5568] rounded cursor-pointer hover:border-[#5DADE2] transition-colors"
+                        className="w-8 h-8 border border-[var(--dash-border-default)] rounded cursor-pointer hover:border-[#5DADE2] transition-colors"
                         style={{ backgroundColor: selectedColor }}
                       />
                       <input
@@ -3022,7 +3022,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
                 {/* Barcode Section */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2 text-right">
+                  <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                     الباركود
                   </label>
                   <div className="flex gap-2">
@@ -3031,11 +3031,11 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                       value={colorBarcode}
                       onChange={(e) => setColorBarcode(e.target.value)}
                       placeholder="الباركود الخاص باللون"
-                      className="flex-1 px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                      className="flex-1 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
                     />
                     <button
                       onClick={() => setColorBarcode(generateBarcode())}
-                      className="bg-[#5DADE2] hover:bg-[#4A9DD5] text-white px-3 py-2 rounded transition-colors flex items-center gap-1"
+                      className="bg-[#5DADE2] hover:bg-[#4A9DD5] text-[var(--dash-text-primary)] px-3 py-2 rounded transition-colors flex items-center gap-1"
                       title="توليد باركود تلقائي"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3047,14 +3047,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
                 {/* Image Upload Section with Drag & Drop */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2 text-right">
+                  <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                     صورة اللون
                   </label>
                   <div
                     className={`border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 ${
                       colorImageDragActive
                         ? 'border-[#5DADE2] bg-[#5DADE2]/10'
-                        : 'border-[#4A5568] hover:border-[#5DADE2]/50'
+                        : 'border-[var(--dash-border-default)] hover:border-[#5DADE2]/50'
                     }`}
                     onDragOver={(e) => {
                       e.preventDefault()
@@ -3084,7 +3084,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                         <img
                           src={colorImagePreview}
                           alt="معاينة"
-                          className="w-24 h-24 object-cover rounded mx-auto border border-[#4A5568]"
+                          className="w-24 h-24 object-cover rounded mx-auto border border-[var(--dash-border-default)]"
                         />
                         <p className="text-green-400 text-xs">{colorImageFile?.name}</p>
                         <button
@@ -3100,12 +3100,12 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <svg className="w-8 h-8 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-8 h-8 text-[var(--dash-text-muted)] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <p className="text-gray-400 text-sm">اسحب وأفلت الصورة هنا</p>
-                        <p className="text-gray-500 text-xs">أو</p>
-                        <label className="inline-block bg-[#5DADE2] hover:bg-[#4A9DD5] text-white px-4 py-2 rounded cursor-pointer transition-colors text-sm">
+                        <p className="text-[var(--dash-text-muted)] text-sm">اسحب وأفلت الصورة هنا</p>
+                        <p className="text-[var(--dash-text-disabled)] text-xs">أو</p>
+                        <label className="inline-block bg-[#5DADE2] hover:bg-[#4A9DD5] text-[var(--dash-text-primary)] px-4 py-2 rounded cursor-pointer transition-colors text-sm">
                           اختر صورة
                           <input
                             type="file"
@@ -3135,14 +3135,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                   {editingColorId && (
                     <button
                       onClick={cancelEdit}
-                      className="bg-[#6B7280] hover:bg-[#4B5563] text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                      className="bg-[#6B7280] hover:bg-[#4B5563] text-[var(--dash-text-primary)] px-4 py-2 rounded text-sm font-medium transition-colors"
                     >
                       إلغاء
                     </button>
                   )}
                   <button
                     onClick={addColor}
-                    className="bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                    className="bg-[#10B981] hover:bg-[#059669] text-[var(--dash-text-primary)] px-4 py-2 rounded text-sm font-medium transition-colors"
                   >
                     {editingColorId ? 'تحديث اللون' : 'إضافة اللون'}
                   </button>
@@ -3151,33 +3151,33 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 {/* Added Colors Display */}
                 {productColors.length > 0 && (
                   <div className="space-y-3 mt-4">
-                    <h4 className="text-white text-sm font-medium text-right">الألوان المضافة:</h4>
+                    <h4 className="text-[var(--dash-text-primary)] text-sm font-medium text-right">الألوان المضافة:</h4>
                     <div className="space-y-2 max-h-[300px] md:max-h-[350px] overflow-y-auto scrollbar-hide pr-2 pb-2">
                       {productColors.map((color) => (
                         <div
                           key={color.id}
-                          className="bg-[#2B3441] border border-[#4A5568] rounded p-3 flex items-center gap-3"
+                          className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded p-3 flex items-center gap-3"
                         >
                           {/* Color Image */}
                           {color.image && (
                             <img
                               src={color.image}
                               alt={color.name}
-                              className="w-12 h-12 object-cover rounded border border-[#4A5568]"
+                              className="w-12 h-12 object-cover rounded border border-[var(--dash-border-default)]"
                             />
                           )}
 
                           {/* Color Swatch */}
                           <div
-                            className="w-8 h-8 rounded border border-[#4A5568] flex-shrink-0"
+                            className="w-8 h-8 rounded border border-[var(--dash-border-default)] flex-shrink-0"
                             style={{ backgroundColor: color.color || '#000000' }}
                           />
 
                           {/* Color Info */}
                           <div className="flex-1 text-right">
-                            <p className="text-white font-medium text-sm">{color.name}</p>
+                            <p className="text-[var(--dash-text-primary)] font-medium text-sm">{color.name}</p>
                             {color.barcode && (
-                              <p className="text-gray-400 text-xs">باركود: {color.barcode}</p>
+                              <p className="text-[var(--dash-text-muted)] text-xs">باركود: {color.barcode}</p>
                             )}
                           </div>
 
@@ -3215,13 +3215,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 {/* Check if colors or shapes are added */}
                 {productColors.length === 0 && productShapes.length === 0 ? (
                   <div className="text-center py-12">
-                    <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-16 h-16 text-[var(--dash-text-muted)] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                     </svg>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-[var(--dash-text-muted)] text-sm">
                       يرجى إضافة ألوان أو أشكال أولاً من التبويبات السابقة
                     </p>
-                    <p className="text-gray-500 text-xs mt-2">
+                    <p className="text-[var(--dash-text-disabled)] text-xs mt-2">
                       انتقل إلى تبويب "لون المنتج" أو "شكل وصف" لإضافة الألوان والأشكال أولاً
                     </p>
                   </div>
@@ -3230,16 +3230,16 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                     {/* Display branches */}
                     {branches.length === 0 ? (
                       <div className="text-center py-8">
-                        <p className="text-gray-400 text-sm">
+                        <p className="text-[var(--dash-text-muted)] text-sm">
                           لا توجد فروع متاحة. يرجى إضافة فروع أولاً.
                         </p>
                       </div>
                     ) : (
                       <div className="space-y-6">
                         {branches.map((branch) => (
-                          <div key={branch.id} className="bg-[#2B3441] border border-[#4A5568] rounded-lg p-4">
+                          <div key={branch.id} className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg p-4">
                             {/* Branch Header */}
-                            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#4A5568]">
+                            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--dash-border-default)]">
                               <div className="flex items-center gap-3">
                                 <div className="p-2 rounded bg-blue-600/20 text-blue-400">
                                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3247,15 +3247,15 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                   </svg>
                                 </div>
                                 <div>
-                                  <h3 className="text-white font-medium text-lg">{branch.name}</h3>
+                                  <h3 className="text-[var(--dash-text-primary)] font-medium text-lg">{branch.name}</h3>
                                   <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-600/20 text-blue-300 border border-blue-600/30">
                                     فرع
                                   </span>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="text-gray-300 text-sm">
-                                  الكمية الإجمالية: <span className="font-bold text-white">{getBranchTotalQuantity(branch.id)}</span> قطعة
+                                <p className="text-[var(--dash-text-secondary)] text-sm">
+                                  الكمية الإجمالية: <span className="font-bold text-[var(--dash-text-primary)]">{getBranchTotalQuantity(branch.id)}</span> قطعة
                                 </p>
                                 <p className="text-blue-400 text-sm">
                                   المخصص: <span className="font-bold">{getTotalAllocatedQuantity(branch.id)}</span> قطعة
@@ -3269,30 +3269,30 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                             {/* Colors Section */}
                             {productColors.length > 0 && (
                               <div className="mb-4">
-                                <h4 className="text-white text-sm font-medium mb-3 text-right">الألوان:</h4>
+                                <h4 className="text-[var(--dash-text-primary)] text-sm font-medium mb-3 text-right">الألوان:</h4>
                                 <div className="space-y-2 max-h-[300px] md:max-h-[350px] overflow-y-auto scrollbar-hide pr-2 pb-2">
                                   {productColors.map((color) => (
-                                    <div key={color.id} className="bg-[#374151] rounded p-3 flex items-center gap-3">
+                                    <div key={color.id} className="bg-[var(--dash-bg-raised)] rounded p-3 flex items-center gap-3">
                                       {/* Color Image */}
                                       {color.image && (
                                         <img
                                           src={color.image}
                                           alt={color.name}
-                                          className="w-12 h-12 object-cover rounded border border-[#4A5568]"
+                                          className="w-12 h-12 object-cover rounded border border-[var(--dash-border-default)]"
                                         />
                                       )}
 
                                       {/* Color Swatch */}
                                       <div
-                                        className="w-8 h-8 rounded border border-[#4A5568] flex-shrink-0"
+                                        className="w-8 h-8 rounded border border-[var(--dash-border-default)] flex-shrink-0"
                                         style={{ backgroundColor: color.color || '#000000' }}
                                       />
 
                                       {/* Color Name */}
                                       <div className="flex-1 text-right">
-                                        <p className="text-white font-medium text-sm">{color.name}</p>
+                                        <p className="text-[var(--dash-text-primary)] font-medium text-sm">{color.name}</p>
                                         {color.barcode && (
-                                          <p className="text-gray-400 text-xs">باركود: {color.barcode}</p>
+                                          <p className="text-[var(--dash-text-muted)] text-xs">باركود: {color.barcode}</p>
                                         )}
                                       </div>
 
@@ -3304,7 +3304,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                           min="0"
                                           value={getVariantQuantity(branch.id, color.id, 'color') || ''}
                                           onChange={(e) => updateVariantQuantity(branch.id, color.id, 'color', parseInt(e.target.value) || 0)}
-                                          className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                          className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         />
                                       </div>
                                     </div>
@@ -3316,28 +3316,28 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                             {/* Shapes Section */}
                             {productShapes.length > 0 && (
                               <div>
-                                <h4 className="text-white text-sm font-medium mb-3 text-right">الأشكال:</h4>
+                                <h4 className="text-[var(--dash-text-primary)] text-sm font-medium mb-3 text-right">الأشكال:</h4>
                                 <div className="space-y-2">
                                   {productShapes.map((shape) => (
-                                    <div key={shape.id} className="bg-[#374151] rounded p-3 flex items-center gap-3">
+                                    <div key={shape.id} className="bg-[var(--dash-bg-raised)] rounded p-3 flex items-center gap-3">
                                       {/* Shape Image */}
                                       {shape.image && (
                                         <img
                                           src={shape.image}
                                           alt={shape.name || 'شكل'}
-                                          className="w-12 h-12 object-cover rounded border border-[#4A5568]"
+                                          className="w-12 h-12 object-cover rounded border border-[var(--dash-border-default)]"
                                         />
                                       )}
 
                                       {/* Shape Name */}
                                       <div className="flex-1 text-right">
                                         {shape.name ? (
-                                          <p className="text-white font-medium text-sm">{shape.name}</p>
+                                          <p className="text-[var(--dash-text-primary)] font-medium text-sm">{shape.name}</p>
                                         ) : (
-                                          <p className="text-gray-400 text-sm italic">شكل بدون اسم</p>
+                                          <p className="text-[var(--dash-text-muted)] text-sm italic">شكل بدون اسم</p>
                                         )}
                                         {shape.barcode && (
-                                          <p className="text-gray-400 text-xs">باركود: {shape.barcode}</p>
+                                          <p className="text-[var(--dash-text-muted)] text-xs">باركود: {shape.barcode}</p>
                                         )}
                                       </div>
 
@@ -3349,7 +3349,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                           min="0"
                                           value={getVariantQuantity(branch.id, shape.id, 'shape') || ''}
                                           onChange={(e) => updateVariantQuantity(branch.id, shape.id, 'shape', parseInt(e.target.value) || 0)}
-                                          className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                          className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         />
                                       </div>
                                     </div>
@@ -3380,14 +3380,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
               <>
                 {/* Locations and Minimum Stock Thresholds */}
                 <div className="flex-1">
-                  <label className="block text-white text-sm font-medium mb-4 text-right">
+                  <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-4 text-right">
                     إدارة المخزون لكل موقع:
                   </label>
                   
                   {locationThresholds.length > 0 ? (
                     <div className="space-y-4 pb-8">
                       {locationThresholds.map((threshold) => (
-                        <div key={threshold.locationId} className="bg-[#2B3441] border border-[#4A5568] rounded-lg p-4">
+                        <div key={threshold.locationId} className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg p-4">
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">
                               <div className={`p-2 rounded-lg ${
@@ -3406,7 +3406,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                 )}
                               </div>
                               <div>
-                                <h3 className="text-white font-medium">{threshold.locationName}</h3>
+                                <h3 className="text-[var(--dash-text-primary)] font-medium">{threshold.locationName}</h3>
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                   threshold.locationType === 'branch'
                                     ? 'bg-blue-600/20 text-blue-300 border border-blue-600/30'
@@ -3422,7 +3422,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           <div className="grid grid-cols-2 gap-4">
                             {/* Quantity field */}
                             <div>
-                              <label className="block text-gray-300 text-sm font-medium mb-2 text-right">
+                              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
                                 إضافة الكمية
                               </label>
                               <input
@@ -3431,13 +3431,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                 onChange={(e) => handleThresholdChange(threshold.locationId, 'quantity', e.target.value === '' ? undefined : parseInt(e.target.value))}
                                 placeholder=""
                                 min="0"
-                                className="w-full px-3 py-2 bg-[#374151] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                className="w-full px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               />
                             </div>
                             
                             {/* Low stock threshold field */}
                             <div>
-                              <label className="block text-gray-300 text-sm font-medium mb-2 text-right">
+                              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
                                 منخفض عند
                               </label>
                               <input
@@ -3446,7 +3446,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                 onChange={(e) => handleThresholdChange(threshold.locationId, 'minStockThreshold', e.target.value === '' ? undefined : parseInt(e.target.value))}
                                 placeholder=""
                                 min="0"
-                                className="w-full px-3 py-2 bg-[#374151] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                className="w-full px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               />
                             </div>
                           </div>
@@ -3456,7 +3456,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <div className="text-gray-400 text-sm">
+                      <div className="text-[var(--dash-text-muted)] text-sm">
                         لا توجد فروع أو مخازن متاحة. يرجى إضافة فروع أو مخازن أولاً من إدارة الفروع والمخازن.
                       </div>
                     </div>
@@ -3478,42 +3478,42 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           <div className="space-y-4">
             {/* اسم المنتج - مزامن */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 اسم المنتج
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
                 placeholder="اسم المنتج"
               />
             </div>
 
             {/* كود المنتج - مزامن */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 كود المنتج
               </label>
               <input
                 type="text"
                 value={formData.code}
                 onChange={(e) => handleInputChange('code', e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
                 placeholder="كود المنتج"
               />
             </div>
 
             {/* الكمية داخل الكرتونة - إدخال */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 الكمية داخل الكرتونة
               </label>
               <input
                 type="number"
                 value={formData.quantityPerCarton}
                 onChange={(e) => handleInputChange('quantityPerCarton', e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 placeholder="عدد القطع داخل الكرتونة"
                 min="0"
               />
@@ -3521,14 +3521,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
             {/* سعر القطعة - مزامن مع سعر البيع */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 سعر القطعة
               </label>
               <input
                 type="number"
                 value={formData.salePrice}
                 onChange={(e) => handleInputChange('salePrice', e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 placeholder="سعر القطعة"
                 min="0"
                 step="0.01"
@@ -3537,7 +3537,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
             {/* سعر الدستة - محسوب (للقراءة فقط) */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 سعر الدستة (× 12)
               </label>
               <input
@@ -3545,13 +3545,13 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 value={dozenPrice.toFixed(2)}
                 readOnly
                 disabled
-                className="w-full px-3 py-2 bg-gray-600/30 border border-gray-600/50 rounded text-gray-300 text-right text-sm cursor-not-allowed"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-overlay)]/30 border border-[var(--dash-border-default)]/50 rounded text-[var(--dash-text-secondary)] text-right text-sm cursor-not-allowed"
               />
             </div>
 
             {/* سعر الكرتونة - محسوب (للقراءة فقط) */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2 text-right">
                 سعر الكرتونة {qtyPerCarton > 0 ? `(× ${qtyPerCarton})` : ''}
               </label>
               <input
@@ -3559,7 +3559,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 value={qtyPerCarton > 0 ? cartonPrice.toFixed(2) : '---'}
                 readOnly
                 disabled
-                className="w-full px-3 py-2 bg-gray-600/30 border border-gray-600/50 rounded text-gray-300 text-right text-sm cursor-not-allowed"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-overlay)]/30 border border-[var(--dash-border-default)]/50 rounded text-[var(--dash-text-secondary)] text-right text-sm cursor-not-allowed"
               />
             </div>
           </div>
@@ -3570,14 +3570,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           <div className="space-y-4">
             {/* Product Status */}
             <div>
-              <label className="block text-white text-sm font-medium mb-4 text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-4 text-right">
                 حالة المنتج
               </label>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => handleInputChange('isActive', !formData.isActive)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                    formData.isActive ? 'bg-[#3B82F6]' : 'bg-gray-600'
+                    formData.isActive ? 'bg-[#3B82F6]' : 'bg-[var(--dash-bg-overlay)]'
                   }`}
                 >
                   <span
@@ -3586,15 +3586,15 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                     }`}
                   />
                 </button>
-                <span className="text-gray-300 text-sm">
+                <span className="text-[var(--dash-text-secondary)] text-sm">
                   {formData.isActive ? 'نشط' : 'غير نشط'}
                 </span>
               </div>
             </div>
 
             {/* Additional Settings can be added here */}
-            <div className="pt-4 border-t border-gray-600">
-              <p className="text-gray-400 text-sm">
+            <div className="pt-4 border-t border-[var(--dash-border-default)]">
+              <p className="text-[var(--dash-text-muted)] text-sm">
                 إعدادات إضافية للمنتج يمكن إضافتها هنا
               </p>
             </div>
@@ -3617,24 +3617,24 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
       )}
 
       {/* Sidebar - starts below header with exact dark theme colors */}
-      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] ${isMobile ? 'w-full' : 'w-[600px]'} bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] ${isMobile ? 'w-full' : 'w-[600px]'} bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       } shadow-2xl flex flex-col`}>
         {/* Header - dark gray header matching design */}
-        <div className={`bg-[#3A4553] ${isMobile ? 'px-3 py-2' : 'px-4 py-3'} flex items-center justify-start border-b border-[#4A5568]`}>
-          <h2 className={`text-white ${isMobile ? 'text-base' : 'text-lg'} font-medium flex-1 text-right`}>
+        <div className={`bg-[var(--dash-bg-surface)] ${isMobile ? 'px-3 py-2' : 'px-4 py-3'} flex items-center justify-start border-b border-[var(--dash-border-default)]`}>
+          <h2 className={`text-[var(--dash-text-primary)] ${isMobile ? 'text-base' : 'text-lg'} font-medium flex-1 text-right`}>
             {isEditMode ? 'تحرير المنتج' : 'منتج جديد'}
           </h2>
           <button
             onClick={onClose}
-            className={`text-white hover:text-gray-200 transition-colors ${isMobile ? 'ml-2' : 'ml-4'}`}
+            className={`text-[var(--dash-text-primary)] hover:text-gray-200 transition-colors ${isMobile ? 'ml-2' : 'ml-4'}`}
           >
             <ArrowRightIcon className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
           </button>
         </div>
 
         {/* Tab Navigation Bar - matching reference design */}
-        <div className="bg-[#3A4553] border-b border-[#4A5568]">
+        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
           <div
             className={`flex overflow-x-auto ${isMobile ? 'scrollbar-hide' : ''}`}
             style={{
@@ -3654,7 +3654,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 } font-medium transition-colors whitespace-nowrap ${
                   activeTab === tab
                     ? 'text-[#5DADE2]' // Light blue text for selected
-                    : 'text-gray-300 hover:text-white'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                 }`}
               >
                 {tab}
@@ -3673,7 +3673,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
         </div>
 
         {/* Action Buttons - exact design match */}
-        <div className={`absolute bottom-0 left-0 right-0 ${isMobile ? 'p-3' : 'p-4'} bg-[#3A4553] border-t border-[#4A5568]`}>
+        <div className={`absolute bottom-0 left-0 right-0 ${isMobile ? 'p-3' : 'p-4'} bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]`}>
           <div className={`flex ${isMobile ? 'gap-1' : 'gap-2'}`}>
             {/* Clear Fields Button - matching reference design */}
             <button
@@ -3689,7 +3689,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
             <div className={`flex ${isMobile ? 'gap-1' : 'gap-2'}`}>
               <button
                 onClick={handleCancel}
-                className={`bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 ${isMobile ? 'px-2 py-1 text-xs min-w-[60px]' : 'px-4 py-2 text-sm min-w-[80px]'} font-medium transition-all duration-200 flex items-center ${isMobile ? 'gap-1' : 'gap-2'}`}
+                className={`bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)] ${isMobile ? 'px-2 py-1 text-xs min-w-[60px]' : 'px-4 py-2 text-sm min-w-[80px]'} font-medium transition-all duration-200 flex items-center ${isMobile ? 'gap-1' : 'gap-2'}`}
               >
                 <svg className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -3701,8 +3701,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 disabled={isSaving}
                 className={`${isMobile ? 'px-2 py-1 text-xs min-w-[60px]' : 'px-4 py-2 text-sm min-w-[80px]'} font-medium transition-all duration-200 flex items-center ${isMobile ? 'gap-1' : 'gap-2'} ${
                   isSaving
-                    ? 'bg-gray-600/50 text-gray-400 border border-gray-600 cursor-not-allowed'
-                    : 'bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500'
+                    ? 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)] border border-[var(--dash-border-default)] cursor-not-allowed'
+                    : 'bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)]'
                 }`}
               >
                 {isSaving ? (
@@ -3723,7 +3723,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           </div>
 
           {/* Empty spacer area with same height as the tab navigation section - only on mobile/tablet */}
-          <div className="h-14 bg-[#3A4553] md:hidden"></div>
+          <div className="h-14 bg-[var(--dash-bg-surface)] md:hidden"></div>
         </div>
       </div>
 

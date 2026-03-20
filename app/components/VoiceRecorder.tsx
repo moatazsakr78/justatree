@@ -122,7 +122,7 @@ export default function VoiceRecorder({
   // Recording in progress
   if (isRecording) {
     return (
-      <div className="flex items-center gap-3 bg-gray-700 rounded-full px-4 py-2 flex-1">
+      <div className="flex items-center gap-3 bg-[var(--dash-bg-raised)] rounded-full px-4 py-2 flex-1">
         {/* Cancel Button */}
         <button
           onClick={cancelRecording}
@@ -165,7 +165,7 @@ export default function VoiceRecorder({
   // Reviewing recorded audio
   if (isReviewing && audioBlob) {
     return (
-      <div className="flex items-center gap-3 bg-gray-700 rounded-full px-4 py-2 flex-1">
+      <div className="flex items-center gap-3 bg-[var(--dash-bg-raised)] rounded-full px-4 py-2 flex-1">
         {/* Cancel Button */}
         <button
           onClick={cancelRecording}
@@ -201,7 +201,7 @@ export default function VoiceRecorder({
   return (
     <button
       onClick={startRecording}
-      className="p-2 text-gray-400 hover:text-green-400 transition-colors"
+      className="p-2 text-[var(--dash-text-muted)] hover:text-green-400 transition-colors"
       title="تسجيل رسالة صوتية"
     >
       <MicrophoneIcon className="w-6 h-6" />

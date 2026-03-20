@@ -59,15 +59,15 @@ const TreeNodeComponent = ({
           isSelected
             ? 'bg-blue-600 text-white'
             : hasChildren
-              ? 'hover:bg-[#3A4553] text-gray-200'
-              : 'hover:bg-[#2B3544] text-gray-300 hover:text-white'
+              ? 'hover:bg-[var(--dash-bg-surface)] text-gray-200'
+              : 'hover:bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
         }`}
         style={{ paddingRight: `${12 + level * 16}px` }}
         onClick={handleClick}
       >
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
           {hasChildren ? (
-            <button className="text-gray-400 hover:text-white flex-shrink-0 transition-colors">
+            <button className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] flex-shrink-0 transition-colors">
               {node.isExpanded ? (
                 <ChevronDownIcon className="h-4 w-4" />
               ) : (
@@ -79,11 +79,11 @@ const TreeNodeComponent = ({
           )}
 
           {IconComponent ? (
-            <IconComponent className={`h-5 w-5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-gray-400'}`} />
+            <IconComponent className={`h-5 w-5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-[var(--dash-text-muted)]'}`} />
           ) : null}
 
           <span className={`text-sm font-medium truncate ${
-            isSelected ? 'text-white' : hasChildren ? 'text-gray-200' : 'text-gray-300'
+            isSelected ? 'text-white' : hasChildren ? 'text-gray-200' : 'text-[var(--dash-text-secondary)]'
           }`}>
             {node.name}
           </span>
@@ -98,7 +98,7 @@ const TreeNodeComponent = ({
                 ? 'bg-white/20 text-white'
                 : node.count.selected > 0
                   ? 'bg-red-500/20 text-red-400'
-                  : 'bg-gray-600/50 text-gray-400'
+                  : 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)]'
               }
             `}
           >

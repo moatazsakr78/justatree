@@ -51,7 +51,7 @@ export default function DataTable<T extends { id: string | number }>({
   return (
     <div className={`overflow-x-auto ${className}`}>
       <table className="w-full text-sm text-right">
-        <thead className="bg-gray-700 text-gray-300">
+        <thead className="bg-[var(--dash-table-header-bg)] text-[var(--dash-text-secondary)]">
           <tr>
             {showCheckbox && (
               <th className="p-3 text-center">
@@ -59,7 +59,7 @@ export default function DataTable<T extends { id: string | number }>({
                   type="checkbox"
                   checked={isAllSelected}
                   onChange={toggleAllSelection}
-                  className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
                 />
               </th>
             )}
@@ -70,12 +70,12 @@ export default function DataTable<T extends { id: string | number }>({
             ))}
           </tr>
         </thead>
-        <tbody className="bg-pos-darker divide-y divide-gray-700">
+        <tbody className="bg-pos-darker divide-y divide-[var(--dash-border-subtle)]">
           {data.map((item) => (
             <tr 
               key={item.id}
-              className={`hover:bg-gray-700 transition-colors ${
-                isRowSelected(item.id) ? 'bg-blue-900/20' : ''
+              className={`hover:bg-[var(--dash-bg-overlay)] transition-colors ${
+                isRowSelected(item.id) ? 'bg-[var(--dash-accent-blue-subtle)]' : ''
               }`}
             >
               {showCheckbox && (
@@ -84,12 +84,12 @@ export default function DataTable<T extends { id: string | number }>({
                     type="checkbox"
                     checked={isRowSelected(item.id)}
                     onChange={() => toggleRowSelection(item.id)}
-                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
                   />
                 </td>
               )}
               {columns.map((column) => (
-                <td key={column.key} className="p-3 text-white">
+                <td key={column.key} className="p-3 text-[var(--dash-text-primary)]">
                   {column.render 
                     ? column.render(item[column.key as keyof T], item)
                     : String(item[column.key as keyof T] || '-')
@@ -102,7 +102,7 @@ export default function DataTable<T extends { id: string | number }>({
             <tr>
               <td 
                 colSpan={columns.length + (showCheckbox ? 1 : 0)} 
-                className="p-8 text-center text-gray-400"
+                className="p-8 text-center text-[var(--dash-text-muted)]"
               >
                 لا توجد بيانات للعرض
               </td>

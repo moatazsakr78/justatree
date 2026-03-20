@@ -57,19 +57,19 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
   };
 
   return (
-    <div className="bg-[#374151] border-b border-gray-600 px-6 py-4">
+    <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6 py-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         {/* Left: Greeting and Date */}
         <div className="flex flex-col">
-          <h1 className="text-xl md:text-2xl font-bold text-white">
+          <h1 className="text-xl md:text-2xl font-bold text-[var(--dash-text-primary)]">
             {getGreeting()}،{' '}
             <span className="text-blue-400">
               {loading ? '...' : profile?.full_name || 'مستخدم'}
             </span>
           </h1>
-          <p className="text-gray-400 text-sm mt-1">{formatDate()}</p>
+          <p className="text-[var(--dash-text-muted)] text-sm mt-1">{formatDate()}</p>
           {lastUpdated && (
-            <p className="text-gray-500 text-xs mt-1">
+            <p className="text-[var(--dash-text-disabled)] text-xs mt-1">
               آخر تحديث: {formatLastUpdated(lastUpdated)}
             </p>
           )}
@@ -83,8 +83,8 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
             disabled={isRefreshing}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
               isRefreshing
-                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                : 'bg-[#2B3544] text-gray-300 hover:text-white hover:bg-gray-600'
+                ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
+                : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
             }`}
           >
             <ArrowPathIcon className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
@@ -94,7 +94,7 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
           {/* Date Filter Button */}
           <button
             onClick={onDateFilterClick}
-            className="flex items-center gap-2 px-4 py-2 bg-[#2B3544] border border-gray-600 text-gray-300 rounded-lg hover:text-white hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] rounded-lg hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] transition-colors"
           >
             <CalendarDaysIcon className="w-5 h-5 text-blue-400" />
             <span className="hidden sm:inline">{getDateFilterLabel(dateFilter)}</span>
@@ -106,8 +106,8 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
               onClick={onSimpleFilterClick}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors relative ${
                 activeFilterType === 'simple'
-                  ? 'bg-blue-600 text-white border border-blue-500'
-                  : 'bg-[#2B3544] border border-gray-600 text-gray-300 hover:text-white hover:bg-gray-600'
+                  ? 'bg-blue-600 text-[var(--dash-text-primary)] border border-blue-500'
+                  : 'bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               <FunnelIcon className="w-5 h-5" />
@@ -126,8 +126,8 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
               onClick={onMultiFilterClick}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors relative ${
                 activeFilterType === 'multi'
-                  ? 'bg-green-600 text-white border border-green-500'
-                  : 'bg-[#2B3544] border border-gray-600 text-gray-300 hover:text-white hover:bg-gray-600'
+                  ? 'bg-green-600 text-[var(--dash-text-primary)] border border-green-500'
+                  : 'bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               <FunnelIcon className="w-5 h-5" />
@@ -152,7 +152,7 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
           {/* Reports Button */}
           <Link
             href="/reports"
-            className="flex items-center gap-2 px-4 py-2 bg-[#2B3544] text-gray-300 rounded-lg hover:text-white hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] rounded-lg hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] transition-colors"
           >
             <ChartBarIcon className="w-5 h-5" />
             <span className="hidden sm:inline">التقارير</span>

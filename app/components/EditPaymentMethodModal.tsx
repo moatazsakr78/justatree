@@ -114,14 +114,14 @@ export default function EditPaymentMethodModal({
   if (!isOpen || !paymentMethod) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-pos-darker rounded-lg p-6 w-full max-w-md mx-4" dir="rtl">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-full max-w-md mx-4 shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)]" dir="rtl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">تعديل طريقة الدفع</h2>
+          <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">تعديل طريقة الدفع</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -131,7 +131,7 @@ export default function EditPaymentMethodModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Payment Method Name */}
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               اسم طريقة الدفع *
             </label>
             <input
@@ -143,19 +143,19 @@ export default function EditPaymentMethodModal({
               }}
               onFocus={() => setShowSuggestions(name.length > 0)}
               placeholder="أدخل اسم طريقة الدفع..."
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
               required
             />
             
             {/* Suggestions Dropdown */}
             {showSuggestions && filteredSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-gray-700 border border-gray-600 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
                 {filteredSuggestions.map((suggestion, index) => (
                   <button
                     key={index}
                     type="button"
                     onClick={() => handleSuggestionClick(suggestion)}
-                    className="w-full px-3 py-2 text-right text-white hover:bg-gray-600 transition-colors"
+                    className="w-full px-3 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] transition-colors"
                   >
                     {suggestion}
                   </button>
@@ -171,9 +171,9 @@ export default function EditPaymentMethodModal({
                 type="checkbox"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
-                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-[var(--dash-accent-blue)]"
               />
-              <span className="text-sm text-gray-300">نشط</span>
+              <span className="text-sm text-[var(--dash-text-secondary)]">نشط</span>
             </label>
 
             <label className="flex items-center gap-2">
@@ -181,22 +181,22 @@ export default function EditPaymentMethodModal({
                 type="checkbox"
                 checked={isDefault}
                 onChange={(e) => setIsDefault(e.target.checked)}
-                className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+                className="w-4 h-4 text-purple-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-purple-500"
               />
-              <span className="text-sm text-gray-300">جعل افتراضية</span>
+              <span className="text-sm text-[var(--dash-text-secondary)]">جعل افتراضية</span>
             </label>
 
-            <div className="pt-2 border-t border-gray-600">
+            <div className="pt-2 border-t border-[var(--dash-border-subtle)]">
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={isPhysical}
                   onChange={(e) => setIsPhysical(e.target.checked)}
-                  className="w-4 h-4 text-green-600 bg-gray-700 border-gray-600 rounded focus:ring-green-500"
+                  className="w-4 h-4 text-green-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-green-500"
                 />
-                <span className="text-sm text-gray-300">طريقة دفع فعلية</span>
+                <span className="text-sm text-[var(--dash-text-secondary)]">طريقة دفع فعلية</span>
               </label>
-              <p className="text-xs text-gray-500 mt-1 mr-6">
+              <p className="text-xs text-[var(--dash-text-disabled)] mt-1 mr-6">
                 {isPhysical
                   ? 'المدفوعات الفعلية (نقد، فيزا) تذهب للدرج المحدد'
                   : 'المدفوعات الرقمية (تحويل، إنستاباي) تذهب للخزنة الرئيسية مباشرة'}
@@ -205,9 +205,9 @@ export default function EditPaymentMethodModal({
           </div>
 
           {/* Payment Method Info */}
-          <div className="p-3 bg-gray-800 rounded-lg">
-            <p className="text-xs text-gray-400 mb-1">تاريخ الإنشاء</p>
-            <p className="text-sm text-white">
+          <div className="p-3 bg-[var(--dash-bg-raised)] rounded-lg">
+            <p className="text-xs text-[var(--dash-text-muted)] mb-1">تاريخ الإنشاء</p>
+            <p className="text-sm text-[var(--dash-text-primary)]">
               {paymentMethod.created_at ? new Date(paymentMethod.created_at).toLocaleDateString('en-GB') : '-'}
             </p>
           </div>
@@ -224,7 +224,7 @@ export default function EditPaymentMethodModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors"
+              className="flex-1 px-4 py-2 bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg font-medium hover:bg-[var(--dash-bg-overlay)] transition-colors"
             >
               إلغاء
             </button>
@@ -233,8 +233,8 @@ export default function EditPaymentMethodModal({
 
         {/* Suggestions Help */}
         {!showSuggestions && (
-          <div className="mt-4 p-3 bg-gray-800 rounded-lg">
-            <p className="text-xs text-gray-400 mb-2">اقتراحات شائعة:</p>
+          <div className="mt-4 p-3 bg-[var(--dash-bg-raised)] rounded-lg">
+            <p className="text-xs text-[var(--dash-text-muted)] mb-2">اقتراحات شائعة:</p>
             <div className="flex flex-wrap gap-1">
               {suggestedMethods.slice(0, 6).map((method, index) => (
                 <button

@@ -47,15 +47,15 @@ export default function ActivityLogsHeader({
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white">سجل النشاط</h1>
-          <p className="text-sm text-gray-400 mt-0.5">
+          <h1 className="text-xl font-bold text-[var(--dash-text-primary)]">سجل النشاط</h1>
+          <p className="text-sm text-[var(--dash-text-muted)] mt-0.5">
             {total > 0 ? `${total} سجل` : 'لا توجد سجلات'}
           </p>
         </div>
         <button
           onClick={onRefresh}
           disabled={loading}
-          className="p-2 text-gray-400 hover:text-white hover:bg-gray-600 rounded-lg transition-colors"
+          className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] rounded-lg transition-colors"
         >
           <ArrowPathIcon className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
         </button>
@@ -65,7 +65,7 @@ export default function ActivityLogsHeader({
       <div className="flex flex-wrap items-center gap-2">
         {/* Search */}
         <div className="flex-1 min-w-[200px] relative">
-          <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dash-text-muted)]" />
           <input
             type="text"
             value={searchValue}
@@ -73,7 +73,7 @@ export default function ActivityLogsHeader({
             onKeyDown={handleSearchKeyDown}
             onBlur={handleSearchSubmit}
             placeholder="بحث في سجل النشاط..."
-            className="w-full pr-10 pl-3 py-2 bg-[#2B3544] border border-gray-600 rounded-lg text-white text-sm placeholder-gray-400 focus:outline-none focus:border-blue-500"
+            className="w-full pr-10 pl-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-blue-500"
           />
         </div>
 
@@ -83,7 +83,7 @@ export default function ActivityLogsHeader({
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors ${
             hasDateFilter
               ? 'bg-blue-600/20 text-blue-400 border border-blue-500/50'
-              : 'bg-[#2B3544] text-gray-300 hover:bg-[#323d4d] border border-gray-600'
+              : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]'
           }`}
         >
           <CalendarDaysIcon className="w-4 h-4" />
@@ -96,7 +96,7 @@ export default function ActivityLogsHeader({
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors ${
             filters.entityTypes.length > 0
               ? 'bg-blue-600/20 text-blue-400 border border-blue-500/50'
-              : 'bg-[#2B3544] text-gray-300 hover:bg-[#323d4d] border border-gray-600'
+              : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]'
           }`}
         >
           <FunnelIcon className="w-4 h-4" />
@@ -112,7 +112,7 @@ export default function ActivityLogsHeader({
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors ${
             filters.actionTypes.length > 0
               ? 'bg-blue-600/20 text-blue-400 border border-blue-500/50'
-              : 'bg-[#2B3544] text-gray-300 hover:bg-[#323d4d] border border-gray-600'
+              : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]'
           }`}
         >
           <AdjustmentsHorizontalIcon className="w-4 h-4" />

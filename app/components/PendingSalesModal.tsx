@@ -126,10 +126,10 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-[#2B3544] rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-3xl max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-600">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-3">
             <CloudArrowUpIcon className="h-6 w-6 text-orange-400" />
             <h2 className="text-lg font-semibold text-white">الفواتير المعلقة</h2>
@@ -141,12 +141,12 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
             <button
               onClick={handleSync}
               disabled={isSyncing || !navigator.onLine}
-              className="flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm rounded-lg transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-white text-sm rounded-lg transition-colors"
             >
               <ArrowPathIcon className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
               {isSyncing ? 'جاري المزامنة...' : 'مزامنة الآن'}
             </button>
-            <button onClick={onClose} className="p-2 text-gray-400 hover:text-white">
+            <button onClick={onClose} className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]">
               <XMarkIcon className="h-5 w-5" />
             </button>
           </div>
@@ -159,7 +159,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
               <ArrowPathIcon className="h-8 w-8 text-gray-400 animate-spin" />
             </div>
           ) : sales.length === 0 ? (
-            <div className="text-center py-8 text-gray-400">
+            <div className="text-center py-8 text-[var(--dash-text-muted)]">
               <CloudArrowUpIcon className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p>لا توجد فواتير معلقة</p>
             </div>
@@ -170,8 +170,8 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                   key={sale.local_id}
                   className={`p-4 rounded-lg border transition-colors cursor-pointer ${
                     selectedSale?.local_id === sale.local_id
-                      ? 'bg-[#374151] border-blue-500'
-                      : 'bg-[#1F2937] border-gray-600 hover:border-gray-500'
+                      ? 'bg-[var(--dash-bg-raised)] border-blue-500'
+                      : 'bg-[var(--dash-bg-base)] border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)]'
                   }`}
                   onClick={() => setSelectedSale(
                     selectedSale?.local_id === sale.local_id ? null : sale
@@ -190,7 +190,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                         )}
                         {getStatusBadge(sale.sync_status)}
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-400">
+                      <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)]">
                         <span>{sale.branch_name}</span>
                         <span>{sale.customer_name}</span>
                         <span>{formatDate(sale.created_at)}</span>
@@ -202,7 +202,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                       }`}>
                         {Math.abs(sale.total_amount).toFixed(2)}
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-[var(--dash-text-muted)]">
                         {sale.invoice_type === 'Sale Return' ? 'مرتجع' : 'بيع'}
                       </p>
                     </div>
@@ -210,13 +210,13 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
 
                   {/* Expanded details */}
                   {selectedSale?.local_id === sale.local_id && (
-                    <div className="mt-4 pt-4 border-t border-gray-600">
+                    <div className="mt-4 pt-4 border-t border-[var(--dash-border-default)]">
                       <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-gray-300">المنتجات:</h4>
+                        <h4 className="text-sm font-medium text-[var(--dash-text-secondary)]">المنتجات:</h4>
                         <div className="space-y-1">
                           {sale.items.map((item: PendingSaleItem, idx: number) => (
                             <div key={idx} className="flex justify-between text-sm">
-                              <span className="text-gray-400">
+                              <span className="text-[var(--dash-text-muted)]">
                                 {item.product_name} x {Math.abs(item.quantity)}
                               </span>
                               <span className="text-white">
@@ -256,8 +256,8 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-600 bg-[#1F2937]">
-          <div className="flex items-center justify-between text-sm text-gray-400">
+        <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-base)]">
+          <div className="flex items-center justify-between text-sm text-[var(--dash-text-muted)]">
             <span>
               {!navigator.onLine && (
                 <span className="text-red-400">غير متصل - المزامنة ستتم تلقائياً عند عودة الاتصال</span>

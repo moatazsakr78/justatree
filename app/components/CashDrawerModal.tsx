@@ -285,16 +285,16 @@ export default function CashDrawerModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-600">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <BanknotesIcon className="h-6 w-6 text-green-400" />
                     الدرج - {record?.name || "غير محدد"}
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -305,7 +305,7 @@ export default function CashDrawerModal({
                   {isLoading ? (
                     <div className="text-center py-8">
                       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-400 mx-auto"></div>
-                      <p className="mt-4 text-gray-400">جاري التحميل...</p>
+                      <p className="mt-4 text-[var(--dash-text-muted)]">جاري التحميل...</p>
                     </div>
                   ) : (
                     <>
@@ -313,7 +313,7 @@ export default function CashDrawerModal({
                       <div className="bg-gradient-to-r from-green-900/40 to-green-800/20 rounded-xl p-6 mb-6 border border-green-700/50">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-gray-400 text-sm mb-1">الرصيد الحالي</p>
+                            <p className="text-[var(--dash-text-muted)] text-sm mb-1">الرصيد الحالي</p>
                             <p className="text-3xl font-bold text-green-400">
                               {currentBalance.toFixed(2)}
                             </p>
@@ -343,37 +343,37 @@ export default function CashDrawerModal({
 
                       {/* Withdraw Form */}
                       {showWithdrawForm && (
-                        <div className="bg-[#2B3544] rounded-xl p-4 mb-6 border border-gray-600">
-                          <h4 className="text-white font-medium mb-3">سحب نقدي</h4>
+                        <div className="bg-[var(--dash-bg-surface)] rounded-xl p-4 mb-6 border border-[var(--dash-border-default)]">
+                          <h4 className="text-[var(--dash-text-primary)] font-medium mb-3">سحب نقدي</h4>
                           <div className="space-y-3">
                             <div>
-                              <label className="text-gray-400 text-sm block mb-1">المبلغ</label>
+                              <label className="text-[var(--dash-text-muted)] text-sm block mb-1">المبلغ</label>
                               <input
                                 type="number"
                                 value={withdrawAmount}
                                 onChange={(e) => setWithdrawAmount(e.target.value)}
                                 placeholder="أدخل المبلغ"
-                                className="w-full bg-[#1F2937] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                                className="w-full bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:border-orange-500"
                                 max={currentBalance}
                                 min={0}
                                 step="0.01"
                               />
                             </div>
                             <div>
-                              <label className="text-gray-400 text-sm block mb-1">ملاحظات (اختياري)</label>
+                              <label className="text-[var(--dash-text-muted)] text-sm block mb-1">ملاحظات (اختياري)</label>
                               <input
                                 type="text"
                                 value={withdrawNotes}
                                 onChange={(e) => setWithdrawNotes(e.target.value)}
                                 placeholder="سبب السحب"
-                                className="w-full bg-[#1F2937] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                                className="w-full bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:border-orange-500"
                               />
                             </div>
                             <div className="flex gap-2">
                               <button
                                 onClick={handleWithdraw}
                                 disabled={isProcessing || !withdrawAmount}
-                                className="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                                className="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors"
                               >
                                 {isProcessing ? "جاري المعالجة..." : "تأكيد السحب"}
                               </button>
@@ -383,7 +383,7 @@ export default function CashDrawerModal({
                                   setWithdrawAmount("");
                                   setWithdrawNotes("");
                                 }}
-                                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                                className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg transition-colors"
                               >
                                 إلغاء
                               </button>
@@ -394,12 +394,12 @@ export default function CashDrawerModal({
 
                       {/* Recent Transactions */}
                       <div>
-                        <h4 className="text-white font-medium mb-3 flex items-center gap-2">
-                          <ClockIcon className="h-5 w-5 text-gray-400" />
+                        <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 flex items-center gap-2">
+                          <ClockIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
                           آخر الحركات
                         </h4>
                         {transactions.length === 0 ? (
-                          <div className="text-center py-6 text-gray-400">
+                          <div className="text-center py-6 text-[var(--dash-text-muted)]">
                             <DocumentTextIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
                             <p>لا توجد حركات بعد</p>
                           </div>
@@ -410,13 +410,13 @@ export default function CashDrawerModal({
                               return (
                                 <div
                                   key={txn.id}
-                                  className="flex items-center justify-between bg-[#2B3544] rounded-lg px-4 py-3"
+                                  className="flex items-center justify-between bg-[var(--dash-bg-surface)] rounded-lg px-4 py-3"
                                 >
                                   <div className="flex items-center gap-3">
                                     <span className={`text-sm font-medium ${typeInfo.color}`}>
                                       {typeInfo.text}
                                     </span>
-                                    <span className="text-gray-400 text-xs">
+                                    <span className="text-[var(--dash-text-muted)] text-xs">
                                       {txn.created_at ? formatDate(txn.created_at) : "-"}
                                     </span>
                                   </div>
@@ -441,10 +441,10 @@ export default function CashDrawerModal({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-gray-600 bg-[#1a1f2e]">
+                <div className="p-4 border-t border-[var(--dash-border-default)] bg-[#1a1f2e]">
                   <button
                     onClick={onClose}
-                    className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                    className="w-full px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg transition-colors"
                   >
                     إغلاق
                   </button>

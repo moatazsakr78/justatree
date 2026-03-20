@@ -64,25 +64,25 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={onClose} />
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-md">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] w-full max-w-md animate-dash-scale-in">
 
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isTransferMode ? 'bg-orange-600' : 'bg-blue-600'}`}>
-                <ShoppingCartIcon className="h-5 w-5 text-white" />
+                <ShoppingCartIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
               </div>
-              <h2 className="text-lg font-bold text-white">
+              <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">
                 {isTransferMode ? 'إضافة للنقل' : 'إضافة للسلة'}
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+              className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -93,7 +93,7 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
 
             {/* Product Info */}
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-[#374151] rounded-lg flex items-center justify-center overflow-hidden">
+              <div className="w-16 h-16 bg-[var(--dash-bg-raised)] rounded-lg flex items-center justify-center overflow-hidden">
                 {product.main_image_url ? (
                   <img
                     src={product.main_image_url}
@@ -107,7 +107,7 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
                 )}
               </div>
               <div className="flex-1">
-                <h3 className="text-white font-medium text-sm">{product.name}</h3>
+                <h3 className="text-[var(--dash-text-primary)] font-medium text-sm">{product.name}</h3>
                 {!isTransferMode && (
                   <p className="text-blue-400 font-bold text-lg">{formatPrice(product.price || 0, 'system')}</p>
                 )}
@@ -119,13 +119,13 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
 
             {/* Quantity Selector */}
             <div className="space-y-3">
-              <label className="text-gray-300 text-sm">الكمية</label>
+              <label className="text-[var(--dash-text-secondary)] text-sm">الكمية</label>
               <div className="flex items-center justify-center gap-4">
                 <button
                   onClick={() => handleQuantityChange(-1)}
-                  className="w-10 h-10 bg-[#374151] hover:bg-[#4B5563] rounded-full flex items-center justify-center transition-colors"
+                  className="w-10 h-10 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded-full flex items-center justify-center transition-colors"
                 >
-                  <MinusIcon className="h-4 w-4 text-white" />
+                  <MinusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                 </button>
                 <input
                   type="text"
@@ -144,21 +144,21 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
                     console.log('تم النقر على حقل الكمية')
                     e.target.select()
                   }}
-                  className="bg-red-600 text-white font-bold text-xl text-center rounded-lg px-6 py-3 min-w-[80px] outline-none border-4 border-yellow-400 focus:border-green-500 hover:bg-red-700 transition-all"
+                  className="bg-red-600 text-[var(--dash-text-primary)] font-bold text-xl text-center rounded-lg px-6 py-3 min-w-[80px] outline-none border-4 border-yellow-400 focus:border-green-500 hover:bg-red-700 transition-all"
                   placeholder="اكتب هنا"
                 />
                 <button
                   onClick={() => handleQuantityChange(1)}
-                  className="w-10 h-10 bg-[#374151] hover:bg-[#4B5563] rounded-full flex items-center justify-center transition-colors"
+                  className="w-10 h-10 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded-full flex items-center justify-center transition-colors"
                 >
-                  <PlusIcon className="h-4 w-4 text-white" />
+                  <PlusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                 </button>
               </div>
             </div>
 
             {/* Color Selection */}
             <div className="space-y-3">
-              <label className="text-gray-300 text-sm">اللون</label>
+              <label className="text-[var(--dash-text-secondary)] text-sm">اللون</label>
               <div className="grid grid-cols-3 gap-3">
                 {colors.map((color) => (
                   <button
@@ -167,15 +167,15 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
                     className={`p-3 rounded-lg border-2 transition-all ${
                       selectedColor === color.name
                         ? 'border-blue-500 bg-blue-500/10'
-                        : 'border-[#4A5568] hover:border-gray-500'
+                        : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-4 h-4 rounded-full border border-gray-600"
+                        className="w-4 h-4 rounded-full border border-[var(--dash-border-default)]"
                         style={{ backgroundColor: color.color }}
                       />
-                      <span className="text-white text-xs">{color.name}</span>
+                      <span className="text-[var(--dash-text-primary)] text-xs">{color.name}</span>
                     </div>
                   </button>
                 ))}
@@ -185,18 +185,18 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-[#4A5568] space-y-3">
+          <div className="p-6 border-t border-[var(--dash-border-default)] space-y-3">
             {!isTransferMode && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">المجموع</span>
-                <span className="text-white font-bold text-xl">
+                <span className="text-[var(--dash-text-muted)]">المجموع</span>
+                <span className="text-[var(--dash-text-primary)] font-bold text-xl">
                   {formatPrice((product.price || 0) * quantity, 'system')}
                 </span>
               </div>
             )}
             <button
               onClick={handleAddToCart}
-              className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 text-white ${
+              className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 text-[var(--dash-text-primary)] ${
                 isTransferMode
                   ? 'bg-orange-600 hover:bg-orange-700'
                   : 'bg-blue-600 hover:bg-blue-700'

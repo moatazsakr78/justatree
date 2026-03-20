@@ -91,19 +91,19 @@ export default function PostponedInvoicesModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-600">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <ClockIcon className="h-6 w-6 text-orange-400" />
                     الفواتير المؤجلة
                     {isRefreshing && (
-                      <ArrowPathIcon className="h-4 w-4 text-gray-400 animate-spin" />
+                      <ArrowPathIcon className="h-4 w-4 text-[var(--dash-text-muted)] animate-spin" />
                     )}
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -113,9 +113,9 @@ export default function PostponedInvoicesModal({
                 <div className="p-6 max-h-[60vh] overflow-y-auto scrollbar-hide">
                   {postponedTabs.length === 0 ? (
                     <div className="text-center py-12">
-                      <ClockIcon className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                      <p className="text-gray-400 text-lg">لا توجد فواتير مؤجلة</p>
-                      <p className="text-gray-500 text-sm mt-2">
+                      <ClockIcon className="h-16 w-16 text-[var(--dash-text-disabled)] mx-auto mb-4" />
+                      <p className="text-[var(--dash-text-muted)] text-lg">لا توجد فواتير مؤجلة</p>
+                      <p className="text-[var(--dash-text-disabled)] text-sm mt-2">
                         اضغط كليك يمين على أي فاتورة مفتوحة لتأجيلها
                       </p>
                     </div>
@@ -124,20 +124,20 @@ export default function PostponedInvoicesModal({
                       {postponedTabs.map((tab) => (
                         <div
                           key={tab.id}
-                          className="bg-[#2B3544] rounded-xl border border-gray-600 overflow-hidden hover:border-orange-500/50 transition-colors"
+                          className="bg-[var(--dash-bg-surface)] rounded-xl border border-[var(--dash-border-default)] overflow-hidden hover:border-orange-500/50 transition-colors"
                         >
                           {/* Invoice Header */}
-                          <div className="p-4 border-b border-gray-600 bg-[#374151]/50">
+                          <div className="p-4 border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]/50">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
                                   <ShoppingCartIcon className="h-5 w-5 text-orange-400" />
                                 </div>
                                 <div>
-                                  <h3 className="text-white font-semibold">
+                                  <h3 className="text-[var(--dash-text-primary)] font-semibold">
                                     {tab.title}
                                   </h3>
-                                  <p className="text-gray-400 text-sm flex items-center gap-1">
+                                  <p className="text-[var(--dash-text-muted)] text-sm flex items-center gap-1">
                                     <ClockIcon className="h-3 w-3" />
                                     {formatDate(tab.postponedAt)}
                                   </p>
@@ -147,7 +147,7 @@ export default function PostponedInvoicesModal({
                                 <p className="text-orange-400 font-bold text-lg">
                                   {calculateTotal(tab.cartItems).toFixed(2)} ج.م
                                 </p>
-                                <p className="text-gray-400 text-sm">
+                                <p className="text-[var(--dash-text-muted)] text-sm">
                                   {tab.cartItems.length} صنف
                                 </p>
                               </div>
@@ -159,13 +159,13 @@ export default function PostponedInvoicesModal({
                             {/* Customer & Branch Info */}
                             <div className="flex flex-wrap gap-4 text-sm">
                               {tab.selections?.customer && (
-                                <div className="flex items-center gap-2 text-gray-300">
+                                <div className="flex items-center gap-2 text-[var(--dash-text-secondary)]">
                                   <UserIcon className="h-4 w-4 text-blue-400" />
                                   <span>{tab.selections.customer.name}</span>
                                 </div>
                               )}
                               {tab.selections?.branch && (
-                                <div className="flex items-center gap-2 text-gray-300">
+                                <div className="flex items-center gap-2 text-[var(--dash-text-secondary)]">
                                   <BuildingOfficeIcon className="h-4 w-4 text-green-400" />
                                   <span>{tab.selections.branch.name}</span>
                                 </div>
@@ -173,25 +173,25 @@ export default function PostponedInvoicesModal({
                             </div>
 
                             {/* Cart Items Preview */}
-                            <div className="bg-[#1F2937] rounded-lg p-3 max-h-32 overflow-y-auto scrollbar-hide">
+                            <div className="bg-[var(--dash-bg-base)] rounded-lg p-3 max-h-32 overflow-y-auto scrollbar-hide">
                               {tab.cartItems.slice(0, 5).map((item, index) => (
                                 <div
                                   key={item.id || index}
                                   className="flex items-center justify-between py-1 text-sm"
                                 >
-                                  <span className="text-gray-300 truncate flex-1">
+                                  <span className="text-[var(--dash-text-secondary)] truncate flex-1">
                                     {item.product?.name || item.name || "منتج"}
                                   </span>
-                                  <span className="text-gray-400 mx-2">
+                                  <span className="text-[var(--dash-text-muted)] mx-2">
                                     x{item.quantity}
                                   </span>
-                                  <span className="text-white">
+                                  <span className="text-[var(--dash-text-primary)]">
                                     {((item.price || item.product?.price || 0) * item.quantity).toFixed(2)} ج.م
                                   </span>
                                 </div>
                               ))}
                               {tab.cartItems.length > 5 && (
-                                <p className="text-gray-500 text-xs text-center mt-2">
+                                <p className="text-[var(--dash-text-disabled)] text-xs text-center mt-2">
                                   و {tab.cartItems.length - 5} أصناف أخرى...
                                 </p>
                               )}
@@ -222,8 +222,8 @@ export default function PostponedInvoicesModal({
 
                 {/* Footer */}
                 {postponedTabs.length > 0 && (
-                  <div className="p-4 border-t border-gray-600 bg-[#374151]/30">
-                    <p className="text-center text-gray-400 text-sm">
+                  <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]/30">
+                    <p className="text-center text-[var(--dash-text-muted)] text-sm">
                       إجمالي الفواتير المؤجلة: {postponedTabs.length} فاتورة
                     </p>
                   </div>

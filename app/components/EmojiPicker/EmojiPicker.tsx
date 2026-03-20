@@ -11,8 +11,8 @@ const Picker = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-[350px] max-md:w-[calc(100vw-2rem)] h-[400px] max-md:h-[350px] bg-[#2B3544] rounded-lg animate-pulse flex items-center justify-center">
-        <span className="text-gray-400">جاري التحميل...</span>
+      <div className="w-[350px] max-md:w-[calc(100vw-2rem)] h-[400px] max-md:h-[350px] bg-[var(--dash-bg-surface)] rounded-lg animate-pulse flex items-center justify-center">
+        <span className="text-[var(--dash-text-muted)]">جاري التحميل...</span>
       </div>
     )
   }
@@ -81,7 +81,7 @@ export default function EmojiPicker({ isOpen, onClose, onEmojiSelect }: EmojiPic
   return (
     <div
       ref={pickerRef}
-      className={`absolute bottom-12 z-50 shadow-2xl rounded-lg overflow-hidden ${
+      className={`absolute bottom-12 z-50 shadow-[var(--dash-shadow-lg)] rounded-lg overflow-hidden ${
         isMobile ? 'right-[-40px] left-[-40px]' : 'right-0'
       }`}
     >

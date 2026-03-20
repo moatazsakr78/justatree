@@ -33,13 +33,13 @@ export default function Toast({
   const getToastStyles = () => {
     switch (type) {
       case 'success':
-        return 'bg-green-600 border-green-500 text-white'
+        return 'bg-[var(--dash-bg-raised)] border-[var(--dash-accent-green)] text-[var(--dash-text-primary)]'
       case 'error':
-        return 'bg-red-600 border-red-500 text-white'
+        return 'bg-[var(--dash-bg-raised)] border-[var(--dash-accent-red)] text-[var(--dash-text-primary)]'
       case 'info':
-        return 'bg-blue-600 border-blue-500 text-white'
+        return 'bg-[var(--dash-bg-raised)] border-[var(--dash-accent-blue)] text-[var(--dash-text-primary)]'
       default:
-        return 'bg-green-600 border-green-500 text-white'
+        return 'bg-[var(--dash-bg-raised)] border-[var(--dash-accent-green)] text-[var(--dash-text-primary)]'
     }
   }
 
@@ -59,7 +59,7 @@ export default function Toast({
   return (
     <div className="fixed top-4 right-4 z-[100]">
       <div className={`
-        flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg
+        flex items-center gap-3 px-4 py-3 rounded-dash-md border-r-[3px] border-y-0 border-l-0 shadow-dash-lg backdrop-blur-sm
         transform transition-all duration-300 ease-in-out
         ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
         ${getToastStyles()}

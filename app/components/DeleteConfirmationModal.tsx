@@ -28,25 +28,25 @@ export default function DeleteConfirmationModal({
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-50"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#3A4553] rounded-lg shadow-2xl max-w-md w-full mx-4">
+        <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] max-w-md w-full mx-4 animate-dash-scale-in">
           
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-red-600/20 rounded-lg">
                 <ExclamationTriangleIcon className="h-6 w-6 text-red-400" />
               </div>
-              <h3 className="text-lg font-medium text-white">{title}</h3>
+              <h3 className="text-lg font-medium text-[var(--dash-text-primary)]">{title}</h3>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
               disabled={isDeleting}
             >
               <XMarkIcon className="h-5 w-5" />
@@ -55,11 +55,11 @@ export default function DeleteConfirmationModal({
 
           {/* Content */}
           <div className="p-6">
-            <p className="text-gray-300 text-right mb-4">
+            <p className="text-[var(--dash-text-secondary)] text-right mb-4">
               {message}
             </p>
-            <div className="bg-[#2B3441] rounded-lg p-3 border border-[#4A5568]">
-              <p className="text-white font-medium text-right">{itemName}</p>
+            <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+              <p className="text-[var(--dash-text-primary)] font-medium text-right">{itemName}</p>
             </div>
             <p className="text-red-400 text-sm text-right mt-3">
               تحذير: هذا الإجراء لا يمكن التراجع عنه!
@@ -67,18 +67,18 @@ export default function DeleteConfirmationModal({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 p-6 border-t border-[#4A5568]">
+          <div className="flex justify-end gap-3 p-6 border-t border-[var(--dash-border-default)]">
             <button
               onClick={onClose}
               disabled={isDeleting}
-              className="px-4 py-2 text-gray-300 border border-gray-600 hover:border-gray-500 hover:bg-gray-600/10 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500 hover:bg-[var(--dash-bg-overlay)]/10 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               إلغاء
             </button>
             <button
               onClick={onConfirm}
               disabled={isDeleting}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isDeleting ? (
                 <>

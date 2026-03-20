@@ -97,22 +97,22 @@ export default function SimpleFilterModal({
       />
 
       {/* Modal */}
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#2B3544] border border-gray-600 rounded-lg shadow-xl z-50 w-[600px] max-h-[90vh] overflow-hidden">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-[var(--dash-shadow-lg)] z-50 w-[600px] max-h-[90vh] overflow-hidden">
 
         {/* Header */}
-        <div className="bg-[#374151] px-6 py-4 border-b border-gray-600 flex items-center justify-between">
+        <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
               <FunnelIcon className="h-5 w-5 text-white" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">فلتر بسيط</h2>
-              <p className="text-gray-400 text-sm">اختر فلتر واحد من كل فئة</p>
+              <p className="text-[var(--dash-text-muted)] text-sm">اختر فلتر واحد من كل فئة</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+            className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -123,7 +123,7 @@ export default function SimpleFilterModal({
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
-              <span className="mr-3 text-gray-300">جاري التحميل...</span>
+              <span className="mr-3 text-[var(--dash-text-secondary)]">جاري التحميل...</span>
             </div>
           ) : error ? (
             <div className="text-red-400 text-center py-10">{error}</div>
@@ -208,9 +208,9 @@ export default function SimpleFilterModal({
         </div>
 
         {/* Footer */}
-        <div className="bg-[#374151] px-6 py-4 border-t border-gray-600 flex items-center justify-between">
+        <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-t border-[var(--dash-border-default)] flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <span className="text-gray-400 text-sm">
+            <span className="text-[var(--dash-text-muted)] text-sm">
               {activeFiltersCount} فلتر نشط
             </span>
             {activeFiltersCount > 0 && (
@@ -225,7 +225,7 @@ export default function SimpleFilterModal({
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 rounded transition-colors"
+              className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] rounded transition-colors"
             >
               إلغاء
             </button>
@@ -314,7 +314,7 @@ function SearchableSelect({
 
   return (
     <div className="flex items-center gap-4">
-      <div className="w-36 flex items-center gap-2 text-gray-300 flex-shrink-0">
+      <div className="w-36 flex items-center gap-2 text-[var(--dash-text-secondary)] flex-shrink-0">
         {icon}
         <span className="text-sm font-medium">{label}</span>
       </div>
@@ -324,17 +324,17 @@ function SearchableSelect({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full bg-[#374151] border rounded-md px-4 py-2.5 text-right flex items-center justify-between cursor-pointer transition-colors ${
+          className={`w-full bg-[var(--dash-bg-raised)] border rounded-md px-4 py-2.5 text-right flex items-center justify-between cursor-pointer transition-colors ${
             isOpen
               ? 'border-blue-500 ring-2 ring-blue-500/20'
-              : 'border-gray-600 hover:border-gray-500'
+              : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)]'
           }`}
         >
-          <span className={value ? 'text-white' : 'text-gray-400'}>
+          <span className={value ? 'text-white' : 'text-[var(--dash-text-muted)]'}>
             {displayValue}
           </span>
           <ChevronDownIcon
-            className={`h-5 w-5 text-gray-400 transition-transform ${
+            className={`h-5 w-5 text-[var(--dash-text-muted)] transition-transform ${
               isOpen ? 'rotate-180' : ''
             }`}
           />
@@ -342,18 +342,18 @@ function SearchableSelect({
 
         {/* القائمة المنسدلة */}
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-[#374151] border border-gray-600 rounded-md shadow-lg z-10 overflow-hidden">
+          <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-md shadow-lg z-10 overflow-hidden">
             {/* حقل البحث */}
-            <div className="p-2 border-b border-gray-600">
+            <div className="p-2 border-b border-[var(--dash-border-default)]">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="ابحث..."
-                  className="w-full bg-[#2B3544] border border-gray-600 rounded px-9 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded px-9 py-2 text-white text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -366,7 +366,7 @@ function SearchableSelect({
                 className={`px-4 py-2.5 cursor-pointer transition-colors ${
                   !value
                     ? 'bg-blue-600/20 text-blue-400'
-                    : 'text-gray-300 hover:bg-gray-600/30'
+                    : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
                 {placeholder}
@@ -381,19 +381,19 @@ function SearchableSelect({
                     className={`px-4 py-2.5 cursor-pointer transition-colors ${
                       value === option.id
                         ? 'bg-blue-600/20 text-blue-400'
-                        : 'text-gray-300 hover:bg-gray-600/30'
+                        : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/30'
                     }`}
                   >
                     <span>{option.name}</span>
                     {option.secondaryText && (
-                      <span className="text-gray-500 text-sm mr-2">
+                      <span className="text-[var(--dash-text-disabled)] text-sm mr-2">
                         ({option.secondaryText})
                       </span>
                     )}
                   </div>
                 ))
               ) : (
-                <div className="px-4 py-3 text-gray-500 text-center text-sm">
+                <div className="px-4 py-3 text-[var(--dash-text-disabled)] text-center text-sm">
                   لا توجد نتائج
                 </div>
               )}

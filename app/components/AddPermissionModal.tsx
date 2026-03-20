@@ -57,19 +57,19 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" dir="rtl">
-      <div className="bg-[#374151] rounded-lg p-6 w-[500px] max-w-md mx-4 border border-gray-600">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg p-6 w-[500px] max-w-md mx-4 border border-[var(--dash-border-default)] shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-600 rounded-lg">
               <KeyIcon className="h-5 w-5 text-white" />
             </div>
-            <h2 className="text-xl font-bold text-white">إضافة صلاحية جديدة</h2>
+            <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">إضافة صلاحية جديدة</h2>
           </div>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -79,7 +79,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
         <div className="space-y-6">
           {/* Permission Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               اسم الصلاحية <span className="text-red-400">*</span>
             </label>
             <input
@@ -87,14 +87,14 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
               value={permissionName}
               onChange={(e) => setPermissionName(e.target.value)}
               placeholder="أدخل اسم الصلاحية..."
-              className="w-full bg-[#2B3544] text-white placeholder-gray-500 px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-4 py-3 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent"
               disabled={isLoading}
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               الوصف <span className="text-red-400">*</span>
             </label>
             <textarea
@@ -102,14 +102,14 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
               onChange={(e) => setDescription(e.target.value)}
               placeholder="أدخل وصف الصلاحية..."
               rows={3}
-              className="w-full bg-[#2B3544] text-white placeholder-gray-500 px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-4 py-3 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent resize-none"
               disabled={isLoading}
             />
           </div>
 
           {/* Access Level */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               مستوى الوصول
             </label>
             <div className="space-y-2">
@@ -127,7 +127,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
                   <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ml-3 ${
                     accessLevel === level.value 
                       ? 'border-blue-500 bg-blue-500' 
-                      : 'border-gray-600'
+                      : 'border-[var(--dash-border-default)]'
                   }`}>
                     {accessLevel === level.value && (
                       <div className="w-2 h-2 rounded-full bg-white"></div>
@@ -146,7 +146,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
         <div className="flex items-center justify-end gap-3 mt-8">
           <button
             onClick={handleClose}
-            className="px-6 py-2 text-gray-300 bg-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+            className="px-6 py-2 text-[var(--dash-text-secondary)] bg-[var(--dash-bg-overlay)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
             disabled={isLoading}
           >
             إلغاء

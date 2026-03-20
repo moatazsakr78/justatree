@@ -87,9 +87,9 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
   return (
     <>
       {/* Backdrop - only covers area below top header */}
-      <div 
-        className={`fixed right-0 left-0 top-12 bottom-0 bg-black z-40 transition-opacity duration-300 ease-in-out ${
-          isOpen ? 'opacity-50 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      <div
+        className={`fixed right-0 left-0 top-12 bottom-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ease-in-out ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onToggle}
       />
@@ -97,16 +97,16 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
       {/* Sidebar */}
       <div 
         id="sidebar"
-        className={`fixed right-0 top-12 h-[calc(100vh-3rem)] w-80 bg-[#374151] flex flex-col z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-12 h-[calc(100vh-3rem)] w-80 bg-[var(--dash-sidebar-bg)] flex flex-col z-50 transform transition-transform duration-300 ease-in-out shadow-dash-lg ${
           isOpen ? 'translate-x-0 pointer-events-auto' : 'translate-x-full pointer-events-none'
         }`}
       >
         {/* Header with close button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-600">
-          <h2 className="text-white text-lg font-semibold">القائمة</h2>
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
+          <h2 className="text-[var(--dash-text-primary)] text-lg font-semibold">القائمة</h2>
           <button
             onClick={onToggle}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-600 rounded-lg transition-colors"
+            className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] rounded-lg transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -125,8 +125,8 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
                 onClick={onToggle}
                 className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-[#5DADE2] text-white border-r-4 border-[#4A9BD1]'
-                    : 'text-gray-200 hover:bg-gray-600 hover:text-white hover:border-r-4 hover:border-gray-400'
+                    ? 'bg-[var(--dash-accent-blue-subtle)] text-[var(--dash-accent-blue)] border-r-[3px] border-[var(--dash-accent-blue)]'
+                    : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)] hover:border-r-[3px] hover:border-[var(--dash-bg-highlight)]'
                 }`}
               >
                 <Icon className="h-6 w-6 flex-shrink-0" />
@@ -137,14 +137,14 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
         </nav>
 
         {/* Footer - User Profile */}
-        <div className="border-t border-gray-600">
-          <div className="px-6 py-4 bg-gray-700">
+        <div className="border-t border-[var(--dash-border-default)]">
+          <div className="px-6 py-4 bg-[var(--dash-bg-surface)]">
             {loading ? (
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-400 rounded-full animate-pulse"></div>
+                <div className="w-10 h-10 bg-[var(--dash-bg-highlight)] rounded-full animate-pulse"></div>
                 <div>
-                  <div className="h-4 bg-gray-400 rounded w-16 animate-pulse mb-1"></div>
-                  <div className="h-3 bg-gray-400 rounded w-20 animate-pulse"></div>
+                  <div className="h-4 bg-[var(--dash-bg-highlight)] rounded w-16 animate-pulse mb-1"></div>
+                  <div className="h-3 bg-[var(--dash-bg-highlight)] rounded w-20 animate-pulse"></div>
                 </div>
               </div>
             ) : session?.user ? (
@@ -166,19 +166,19 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
                   <p className="text-base font-medium text-white">
                     {session.user.name || session.user.email || 'مستخدم'}
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-[var(--dash-text-muted)]">
                     {session.user.role || 'مستخدم عادي'}
                   </p>
                 </div>
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
-                  <span className="text-white text-base font-bold">?</span>
+                <div className="w-10 h-10 bg-[var(--dash-bg-highlight)] rounded-full flex items-center justify-center">
+                  <span className="text-[var(--dash-text-primary)] text-base font-bold">?</span>
                 </div>
                 <div>
                   <p className="text-base font-medium text-white">غير محدد</p>
-                  <p className="text-sm text-gray-400">لا توجد بيانات</p>
+                  <p className="text-sm text-[var(--dash-text-muted)]">لا توجد بيانات</p>
                 </div>
               </div>
             )}

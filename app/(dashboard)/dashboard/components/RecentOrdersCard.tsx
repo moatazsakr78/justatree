@@ -16,7 +16,7 @@ const statusConfig: Record<string, { label: string; bg: string; text: string }> 
   processing: { label: 'جاري التجهيز', bg: 'bg-blue-500/20', text: 'text-blue-400' },
   ready: { label: 'جاهز', bg: 'bg-green-500/20', text: 'text-green-400' },
   shipped: { label: 'تم الشحن', bg: 'bg-purple-500/20', text: 'text-purple-400' },
-  delivered: { label: 'تم التسليم', bg: 'bg-gray-500/20', text: 'text-gray-400' },
+  delivered: { label: 'تم التسليم', bg: 'bg-[var(--dash-bg-highlight)]/20', text: 'text-[var(--dash-text-muted)]' },
   cancelled: { label: 'ملغي', bg: 'bg-red-500/20', text: 'text-red-400' },
 };
 
@@ -42,19 +42,19 @@ const formatRelativeTime = (dateString: string) => {
 export default function RecentOrdersCard({ orders, loading = false }: RecentOrdersCardProps) {
   if (loading) {
     return (
-      <div className="bg-[#374151] rounded-xl border border-gray-600 p-5">
+      <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">آخر الطلبات</h3>
-          <ClipboardDocumentListIcon className="w-5 h-5 text-gray-400" />
+          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">آخر الطلبات</h3>
+          <ClipboardDocumentListIcon className="w-5 h-5 text-[var(--dash-text-muted)]" />
         </div>
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="animate-pulse flex items-center gap-3 p-3 bg-[#2B3544] rounded-lg">
+            <div key={i} className="animate-pulse flex items-center gap-3 p-3 bg-[var(--dash-bg-surface)] rounded-lg">
               <div className="flex-1">
-                <div className="h-4 bg-gray-600 rounded w-1/2 mb-2"></div>
-                <div className="h-3 bg-gray-600 rounded w-1/3"></div>
+                <div className="h-4 bg-[var(--dash-bg-overlay)] rounded w-1/2 mb-2"></div>
+                <div className="h-3 bg-[var(--dash-bg-overlay)] rounded w-1/3"></div>
               </div>
-              <div className="h-6 bg-gray-600 rounded w-16"></div>
+              <div className="h-6 bg-[var(--dash-bg-overlay)] rounded w-16"></div>
             </div>
           ))}
         </div>
@@ -64,12 +64,12 @@ export default function RecentOrdersCard({ orders, loading = false }: RecentOrde
 
   if (orders.length === 0) {
     return (
-      <div className="bg-[#374151] rounded-xl border border-gray-600 p-5">
+      <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">آخر الطلبات</h3>
-          <ClipboardDocumentListIcon className="w-5 h-5 text-gray-400" />
+          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">آخر الطلبات</h3>
+          <ClipboardDocumentListIcon className="w-5 h-5 text-[var(--dash-text-muted)]" />
         </div>
-        <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+        <div className="flex flex-col items-center justify-center py-8 text-[var(--dash-text-muted)]">
           <ClipboardDocumentListIcon className="w-12 h-12 mb-3 opacity-50" />
           <p>لا توجد طلبات حديثة</p>
         </div>
@@ -78,10 +78,10 @@ export default function RecentOrdersCard({ orders, loading = false }: RecentOrde
   }
 
   return (
-    <div className="bg-[#374151] rounded-xl border border-gray-600 p-5">
+    <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm p-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white">آخر الطلبات</h3>
-        <ClipboardDocumentListIcon className="w-5 h-5 text-gray-400" />
+        <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">آخر الطلبات</h3>
+        <ClipboardDocumentListIcon className="w-5 h-5 text-[var(--dash-text-muted)]" />
       </div>
 
       <div className="space-y-2">
@@ -91,18 +91,18 @@ export default function RecentOrdersCard({ orders, loading = false }: RecentOrde
           return (
             <div
               key={order.id}
-              className="flex items-center justify-between p-3 bg-[#2B3544] rounded-lg hover:bg-[#323d4d] transition-colors"
+              className="flex items-center justify-between p-3 bg-[var(--dash-bg-surface)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-white font-medium text-sm truncate">
+                  <span className="text-[var(--dash-text-primary)] font-medium text-sm truncate">
                     {order.order_number}
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-xs ${status.bg} ${status.text}`}>
                     {status.label}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-gray-400">
+                <div className="flex items-center gap-2 text-xs text-[var(--dash-text-muted)]">
                   <span className="truncate">{order.customer_name}</span>
                   <span>•</span>
                   <span className="whitespace-nowrap">{formatRelativeTime(order.created_at)}</span>

@@ -2715,7 +2715,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: 'index',
       width: 50,
       render: (value: number) => (
-        <span className="text-gray-400">{value}</span>
+        <span className="text-[var(--dash-text-muted)]">{value}</span>
       )
     },
     {
@@ -2723,7 +2723,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       header: 'التاريخ',
       accessor: 'date',
       width: 120,
-      render: (value: string) => <span className="text-white">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)]">{value}</span>
     },
     {
       id: 'time',
@@ -2737,7 +2737,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       header: 'البيان',
       accessor: 'description',
       width: 250,
-      render: (value: string) => <span className="text-white">{value}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)]">{value}</span>
     },
     {
       id: 'type',
@@ -2762,7 +2762,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             ? 'bg-green-600/20 text-green-400 border border-green-600'
             : value === 'مصروفات'
             ? 'bg-red-600/20 text-red-400 border border-red-600'
-            : 'bg-gray-600/20 text-gray-400 border border-gray-600'
+            : 'bg-[var(--dash-bg-overlay)]/20 text-[var(--dash-text-muted)] border border-[var(--dash-border-default)]'
         }`}>
           {value}
         </span>
@@ -2774,7 +2774,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: 'invoiceValue',
       width: 130,
       render: (value: number, item: any) => (
-        <span className="text-gray-300 font-medium">
+        <span className="text-[var(--dash-text-secondary)] font-medium">
           {value > 0 ? formatPrice(value, 'system') : '-'}
         </span>
       )
@@ -2837,7 +2837,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: '#', 
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-gray-400">{index + 1}</span>
+        <span className="text-[var(--dash-text-muted)]">{index + 1}</span>
       )
     },
     {
@@ -2861,7 +2861,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       width: 120,
       render: (value: string) => {
         const date = new Date(value)
-        return <span className="text-white">{date.toLocaleDateString('en-GB')}</span>
+        return <span className="text-[var(--dash-text-primary)]">{date.toLocaleDateString('en-GB')}</span>
       }
     },
     { 
@@ -2870,7 +2870,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: 'time', 
       width: 100,
       render: (value: string) => {
-        if (!value) return <span className="text-gray-400">-</span>
+        if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>
         const timeOnly = value.substring(0, 5)
         return <span className="text-blue-400 font-mono">{timeOnly}</span>
       }
@@ -2882,9 +2882,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       width: 150,
       render: (value: string, item: any) => (
         <div>
-          <span className="text-white">{item.client?.name || 'غير محدد'}</span>
+          <span className="text-[var(--dash-text-primary)]">{item.client?.name || 'غير محدد'}</span>
           <br />
-          <span className="text-xs text-gray-400">({item.clientType})</span>
+          <span className="text-xs text-[var(--dash-text-muted)]">({item.clientType})</span>
         </div>
       )
     },
@@ -2893,7 +2893,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       header: 'الهاتف', 
       accessor: 'client.phone', 
       width: 150,
-      render: (value: string, item: any) => <span className="text-gray-300 font-mono text-sm">{item.client?.phone || '-'}</span>
+      render: (value: string, item: any) => <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{item.client?.phone || '-'}</span>
     },
     {
       id: 'total_amount',
@@ -2901,7 +2901,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: 'total_amount',
       width: 130,
       render: (value: number) => (
-        <span className="text-gray-300 font-medium">
+        <span className="text-[var(--dash-text-secondary)] font-medium">
           {formatPrice(Math.abs(value), 'system')}
         </span>
       )
@@ -2938,7 +2938,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               {item.paymentBreakdown.map((b: {method: string, amount: number}, i: number) => (
                 <span key={i}>
                   <span className={getMethodColor(b.method)}>{b.method}: {formatPrice(b.amount, 'system')}</span>
-                  {i < item.paymentBreakdown.length - 1 && <span className="text-gray-500"> , </span>}
+                  {i < item.paymentBreakdown.length - 1 && <span className="text-[var(--dash-text-disabled)]"> , </span>}
                 </span>
               ))}
             </span>
@@ -3014,7 +3014,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         const cleanNotes = value && value.startsWith('[TRANSFER]')
           ? value.replace('[TRANSFER] ', '')
           : value
-        return <span className="text-gray-400">{cleanNotes || '-'}</span>
+        return <span className="text-[var(--dash-text-muted)]">{cleanNotes || '-'}</span>
       }
     },
     {
@@ -3033,7 +3033,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: '#',
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-gray-400">{index + 1}</span>
+        <span className="text-[var(--dash-text-muted)]">{index + 1}</span>
       )
     },
     {
@@ -3043,7 +3043,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       width: 120,
       render: (value: string) => {
         const date = value ? new Date(value) : new Date()
-        return <span className="text-white">{date.toLocaleDateString('en-GB')}</span>
+        return <span className="text-[var(--dash-text-primary)]">{date.toLocaleDateString('en-GB')}</span>
       }
     },
     {
@@ -3071,7 +3071,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-600/20 border-orange-600' },
           'transfer': { text: 'تحويل', color: 'text-blue-400', bg: 'bg-blue-600/20 border-blue-600' }
         }
-        const typeInfo = typeMap[value] || { text: value || '-', color: 'text-gray-400', bg: 'bg-gray-600/20 border-gray-600' }
+        const typeInfo = typeMap[value] || { text: value || '-', color: 'text-[var(--dash-text-muted)]', bg: 'bg-[var(--dash-bg-overlay)]/20 border-[var(--dash-border-default)]' }
         return (
           <span className={`px-2 py-1 rounded text-xs font-medium border ${typeInfo.bg} ${typeInfo.color}`}>
             {typeInfo.text}
@@ -3106,7 +3106,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       header: 'البيان',
       accessor: 'notes',
       width: 250,
-      render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
     },
     {
       id: 'employee_name',
@@ -3124,7 +3124,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: '#',
       width: 50,
       render: (value: any, item: any, index: number) => (
-        <span className="text-white">{index + 1}</span>
+        <span className="text-[var(--dash-text-primary)]">{index + 1}</span>
       )
     },
     {
@@ -3151,7 +3151,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         return (
           <div className="flex items-center gap-2">
             {isHighlighted && <span className="text-yellow-300 text-lg">★</span>}
-            <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-white'}`}>
+            <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-[var(--dash-text-primary)]'}`}>
               {item.product?.name || 'منتج محذوف'}
             </span>
           </div>
@@ -3171,7 +3171,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: 'product.barcode', 
       width: 150,
       render: (value: string, item: any) => (
-        <span className="text-gray-300 font-mono text-sm">{item.product?.barcode || '-'}</span>
+        <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{item.product?.barcode || '-'}</span>
       )
     },
     { 
@@ -3216,7 +3216,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       header: 'ملاحظات', 
       accessor: 'notes', 
       width: 150,
-      render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
     }
   ]
 
@@ -3225,7 +3225,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           onClick={onClose}
         />
       )}
@@ -3236,31 +3236,31 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       }`}>
         {/* Mobile Layout - Complete redesign for small screens */}
         {isMobileDevice ? (
-          <div className="bg-[#2B3544] h-full w-full flex flex-col">
+          <div className="bg-[var(--dash-bg-surface)] h-full w-full flex flex-col">
             {/* Mobile Transaction Details View */}
             {showMobileTransactionDetails && mobileSelectedTransaction ? (
               <>
                 {/* Transaction Details Header */}
-                <div className="bg-[#374151] border-b border-gray-600 px-3 py-2 flex items-center gap-3">
+                <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-3 py-2 flex items-center gap-3">
                   <button
                     onClick={() => {
                       setShowMobileTransactionDetails(false)
                       setMobileSelectedTransaction(null)
                       setMobileTransactionItems([])
                     }}
-                    className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-600/30 transition-colors"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] p-2 rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                   >
                     <ChevronRightIcon className="h-5 w-5" />
                   </button>
                   <div className="flex-1 text-center">
-                    <span className="text-white font-medium">تفاصيل الفاتورة</span>
+                    <span className="text-[var(--dash-text-primary)] font-medium">تفاصيل الفاتورة</span>
                     <span className="text-blue-400 mr-2">#{mobileSelectedTransaction.invoice_number}</span>
                   </div>
                   <div className="w-9" />
                 </div>
 
                 {/* Transaction Summary Card */}
-                <div className="bg-[#3B4754] border-b border-gray-600 p-3">
+                <div className="bg-[#3B4754] border-b border-[var(--dash-border-default)] p-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                       mobileSelectedTransaction.transactionType === 'purchase'
@@ -3275,18 +3275,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           mobileSelectedTransaction.invoice_type === 'Sale Return' ? 'مرتجع بيع' :
                           mobileSelectedTransaction.invoice_type || 'فاتورة بيع'}
                     </span>
-                    <span className="text-white font-bold text-lg">
+                    <span className="text-[var(--dash-text-primary)] font-bold text-lg">
                       {formatPrice(Math.abs(parseFloat(mobileSelectedTransaction.total_amount || mobileSelectedTransaction.amount)))}
                     </span>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="bg-[#2B3544] border-b border-gray-600 px-3 py-2">
+                <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-3 py-2">
                   <div className="flex items-center justify-between">
                     <button
                       onClick={() => setShowMobileActions(!showMobileActions)}
-                      className="flex items-center gap-2 text-gray-400 hover:text-white py-2 px-3 rounded-lg hover:bg-gray-600/30 transition-colors"
+                      className="flex items-center gap-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] py-2 px-3 rounded-lg hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                     >
                       <EllipsisVerticalIcon className="h-5 w-5" />
                       <span className="text-sm">الإجراءات</span>
@@ -3302,7 +3302,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     <div className="flex gap-2 mt-2 animate-fadeIn">
                       <button
                         onClick={() => handleDeleteTransaction(mobileSelectedTransaction)}
-                        className="flex-1 flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg py-2 text-sm font-medium transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium transition-colors"
                       >
                         <TrashIcon className="h-4 w-4" />
                         <span>حذف</span>
@@ -3312,7 +3312,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           const items = mobileTransactionItems
                           printReceipt(mobileSelectedTransaction, items)
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-sm font-medium transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium transition-colors"
                       >
                         <PrinterIcon className="h-4 w-4" />
                         <span>طباعة</span>
@@ -3323,23 +3323,23 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                 {/* Transaction Items */}
                 <div className="flex-1 overflow-y-auto scrollbar-hide p-3">
-                  <div className="text-gray-400 text-xs mb-2 text-center">عناصر الفاتورة ({mobileTransactionItems.length})</div>
+                  <div className="text-[var(--dash-text-muted)] text-xs mb-2 text-center">عناصر الفاتورة ({mobileTransactionItems.length})</div>
 
                   {isLoadingMobileTransactionItems ? (
                     <div className="flex items-center justify-center py-8">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                     </div>
                   ) : mobileTransactionItems.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">لا توجد عناصر</div>
+                    <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد عناصر</div>
                   ) : (
                     <div className="space-y-3">
                       {mobileTransactionItems.map((item, idx) => {
                         const itemTotal = (item.quantity * item.unit_price) - (item.discount || 0)
                         return (
-                          <div key={item.id || idx} className="bg-[#374151] rounded-lg p-3">
+                          <div key={item.id || idx} className="bg-[var(--dash-bg-raised)] rounded-lg p-3">
                             <div className="flex gap-3">
                               {/* Product Image */}
-                              <div className="w-16 h-16 flex-shrink-0 bg-[#2B3544] rounded-lg overflow-hidden">
+                              <div className="w-16 h-16 flex-shrink-0 bg-[var(--dash-bg-surface)] rounded-lg overflow-hidden">
                                 {item.product?.main_image_url ? (
                                   <img
                                     src={item.product.main_image_url}
@@ -3347,7 +3347,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                     className="w-full h-full object-cover"
                                   />
                                 ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-gray-500 text-2xl">
+                                  <div className="w-full h-full flex items-center justify-center text-[var(--dash-text-disabled)] text-2xl">
                                     {mobileSelectedTransaction.transactionType === 'purchase' ? '📦' : '🛒'}
                                   </div>
                                 )}
@@ -3355,13 +3355,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                               {/* Product Details */}
                               <div className="flex-1 min-w-0">
-                                <div className="text-white font-medium text-sm truncate mb-1">
+                                <div className="text-[var(--dash-text-primary)] font-medium text-sm truncate mb-1">
                                   {item.product?.name || 'منتج غير معروف'}
                                 </div>
-                                <div className="text-gray-400 text-xs mb-1">
+                                <div className="text-[var(--dash-text-muted)] text-xs mb-1">
                                   {item.product?.category?.name || '-'}
                                 </div>
-                                <div className="text-gray-500 text-xs" dir="ltr">
+                                <div className="text-[var(--dash-text-disabled)] text-xs" dir="ltr">
                                   {item.product?.barcode || '-'}
                                 </div>
                               </div>
@@ -3370,25 +3370,25 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             {/* Item Details Grid */}
                             <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
                               <div className="flex justify-between">
-                                <span className="text-gray-400">السعر:</span>
-                                <span className="text-white">{formatPrice(item.unit_price)}</span>
+                                <span className="text-[var(--dash-text-muted)]">السعر:</span>
+                                <span className="text-[var(--dash-text-primary)]">{formatPrice(item.unit_price)}</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-400">الكمية:</span>
-                                <span className="text-white">{Math.abs(item.quantity)}</span>
+                                <span className="text-[var(--dash-text-muted)]">الكمية:</span>
+                                <span className="text-[var(--dash-text-primary)]">{Math.abs(item.quantity)}</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-400">خصم:</span>
+                                <span className="text-[var(--dash-text-muted)]">خصم:</span>
                                 <span className="text-orange-400">{formatPrice(item.discount || 0)}</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-400">الإجمالي:</span>
+                                <span className="text-[var(--dash-text-muted)]">الإجمالي:</span>
                                 <span className="text-green-400 font-medium">{formatPrice(Math.abs(itemTotal))}</span>
                               </div>
                             </div>
 
                             {item.notes && (
-                              <div className="mt-2 text-xs text-gray-300 bg-[#2B3544] rounded p-2">
+                              <div className="mt-2 text-xs text-[var(--dash-text-secondary)] bg-[var(--dash-bg-surface)] rounded p-2">
                                 {item.notes}
                               </div>
                             )}
@@ -3402,19 +3402,19 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             ) : (
               <>
                 {/* Mobile Header - Safe Name */}
-                <div className="bg-[#374151] border-b border-gray-600 px-4 py-2.5 flex items-center justify-between">
+                <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2.5 flex items-center justify-between">
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-600/30 transition-colors"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] w-9 h-9 flex items-center justify-center rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
                   >
                     <XMarkIcon className="h-5 w-5" />
                   </button>
-                  <h1 className="text-white font-medium text-base truncate max-w-[60%]">{displayName}</h1>
+                  <h1 className="text-[var(--dash-text-primary)] font-medium text-base truncate max-w-[60%]">{displayName}</h1>
                   <div className="w-9" />
                 </div>
 
                 {/* Mobile Balance & Safe Info Section */}
-                <div className="bg-[#3B4754] border-b border-gray-600">
+                <div className="bg-[#3B4754] border-b border-[var(--dash-border-default)]">
                   {/* Balance Card with Withdraw Button */}
                   <div className="w-full px-3 py-3 flex items-center gap-2">
                     {/* Toggle Button */}
@@ -3423,9 +3423,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       className="flex items-center"
                     >
                       {isMobileInfoExpanded ? (
-                        <ChevronUpIcon className="h-4 w-4 text-gray-400" />
+                        <ChevronUpIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                       ) : (
-                        <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                        <ChevronDownIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                       )}
                     </button>
 
@@ -3434,7 +3434,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       onClick={() => setIsMobileInfoExpanded(!isMobileInfoExpanded)}
                       className="flex-1 bg-purple-600 rounded-lg px-4 py-2 text-center"
                     >
-                      <div className="font-bold text-white text-xl">
+                      <div className="font-bold text-[var(--dash-text-primary)] text-xl">
                         {formatPrice(displayedBalance)}
                       </div>
                       <div className="text-purple-200 text-[10px]">
@@ -3445,7 +3445,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     {/* Withdraw Button */}
                     <button
                       onClick={openWithdrawModal}
-                      className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-3 py-2 flex flex-col items-center justify-center transition-colors"
+                      className="bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] rounded-lg px-3 py-2 flex flex-col items-center justify-center transition-colors"
                     >
                       <span className="text-base">💰</span>
                       <span className="text-[10px] font-medium">سحب</span>
@@ -3456,16 +3456,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   {isMobileInfoExpanded && (
                     <div className="px-3 pb-3 space-y-3">
                       {/* Safe Info */}
-                      <div className="bg-[#2B3544] rounded-lg p-3">
-                        <h3 className="text-white font-medium mb-2 text-sm">معلومات الخزنة</h3>
+                      <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3">
+                        <h3 className="text-[var(--dash-text-primary)] font-medium mb-2 text-sm">معلومات الخزنة</h3>
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between">
-                            <span className="text-white">{displayName}</span>
-                            <span className="text-gray-400">اسم الخزنة</span>
+                            <span className="text-[var(--dash-text-primary)]">{displayName}</span>
+                            <span className="text-[var(--dash-text-muted)]">اسم الخزنة</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-white">جميع الفروع</span>
-                            <span className="text-gray-400">الفرع</span>
+                            <span className="text-[var(--dash-text-primary)]">جميع الفروع</span>
+                            <span className="text-[var(--dash-text-muted)]">الفرع</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-blue-400">
@@ -3477,31 +3477,31 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               {dateFilter.type === 'custom' && 'فترة مخصصة'}
                               {dateFilter.type === 'all' && 'جميع الفترات'}
                             </span>
-                            <span className="text-gray-400">الفترة الزمنية</span>
+                            <span className="text-[var(--dash-text-muted)]">الفترة الزمنية</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-white">{new Date().toLocaleDateString('en-GB')}</span>
-                            <span className="text-gray-400">التاريخ الحالي</span>
+                            <span className="text-[var(--dash-text-primary)]">{new Date().toLocaleDateString('en-GB')}</span>
+                            <span className="text-[var(--dash-text-muted)]">التاريخ الحالي</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Drawer Filter - Only for safes with drawers */}
                       {safe.supports_drawers && childSafes.length > 0 && (
-                        <div className="bg-[#2B3544] rounded-lg p-3">
-                          <h4 className="text-white font-medium mb-2 text-sm text-right">تصفية حسب الدرج</h4>
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3">
+                          <h4 className="text-[var(--dash-text-primary)] font-medium mb-2 text-sm text-right">تصفية حسب الدرج</h4>
                           <div className="space-y-1.5">
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
-                              <span className="text-white text-sm font-medium">{formatPrice(
+                              <span className="text-[var(--dash-text-primary)] text-sm font-medium">{formatPrice(
                                 childSafes.reduce((sum, c) => sum + c.balance, 0) + mainSafeOwnBalance
                               )}</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-300 text-sm">الكل</span>
+                                <span className="text-[var(--dash-text-secondary)] text-sm">الكل</span>
                                 <input
                                   type="checkbox"
                                   checked={!selectedDrawerFilters}
                                   onChange={handleSelectAllDrawers}
-                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                                 />
                               </div>
                             </label>
@@ -3509,26 +3509,26 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               <label key={drawer.id} className="flex items-center justify-between cursor-pointer px-1 py-1">
                                 <span className="text-green-400 text-sm">{formatPrice(drawer.balance)}</span>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-gray-300 text-sm truncate max-w-[100px]">{drawer.name}</span>
+                                  <span className="text-[var(--dash-text-secondary)] text-sm truncate max-w-[100px]">{drawer.name}</span>
                                   <input
                                     type="checkbox"
                                     checked={!selectedDrawerFilters || selectedDrawerFilters.has(drawer.id)}
                                     onChange={() => handleDrawerFilterToggle(drawer.id)}
-                                    className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                    className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                                   />
                                 </div>
                               </label>
                             ))}
-                            <div className="border-t border-gray-600 my-1"></div>
+                            <div className="border-t border-[var(--dash-border-default)] my-1"></div>
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
                               <span className="text-blue-400 text-sm">{formatPrice(mainSafeOwnBalance)}</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-300 text-sm">التحويلات</span>
+                                <span className="text-[var(--dash-text-secondary)] text-sm">التحويلات</span>
                                 <input
                                   type="checkbox"
                                   checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
                                   onChange={() => handleDrawerFilterToggle('transfers')}
-                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                                 />
                               </div>
                             </label>
@@ -3538,19 +3538,19 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                       {/* Transaction Filter - For non-drawer safes (Mobile) */}
                       {!safe.supports_drawers && safe.show_transfers !== false && (
-                        <div className="bg-[#2B3544] rounded-lg p-3">
-                          <h4 className="text-white font-medium mb-2 text-sm text-right">تصفية المعاملات</h4>
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3">
+                          <h4 className="text-[var(--dash-text-primary)] font-medium mb-2 text-sm text-right">تصفية المعاملات</h4>
                           <div className="space-y-1.5">
                             {/* الكل */}
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
-                              <span className="text-white text-sm font-medium">{formatPrice(safeBalance)}</span>
+                              <span className="text-[var(--dash-text-primary)] text-sm font-medium">{formatPrice(safeBalance)}</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-300 text-sm">الكل</span>
+                                <span className="text-[var(--dash-text-secondary)] text-sm">الكل</span>
                                 <input
                                   type="checkbox"
                                   checked={!selectedDrawerFilters}
                                   onChange={handleSelectAllDrawers}
-                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                                 />
                               </div>
                             </label>
@@ -3558,26 +3558,26 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
                               <span className="text-green-400 text-sm">{formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance))}</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-300 text-sm">في الخزنة</span>
+                                <span className="text-[var(--dash-text-secondary)] text-sm">في الخزنة</span>
                                 <input
                                   type="checkbox"
                                   checked={!selectedDrawerFilters || selectedDrawerFilters.has('safe')}
                                   onChange={() => handleDrawerFilterToggle('safe')}
-                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                                 />
                               </div>
                             </label>
-                            <div className="border-t border-gray-600 my-1"></div>
+                            <div className="border-t border-[var(--dash-border-default)] my-1"></div>
                             {/* التحويلات */}
                             <label className="flex items-center justify-between cursor-pointer px-1 py-1">
                               <span className="text-blue-400 text-sm">{formatPrice(Math.min(nonDrawerTransferBalance, Math.max(0, safeBalance)))}</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-300 text-sm">التحويلات</span>
+                                <span className="text-[var(--dash-text-secondary)] text-sm">التحويلات</span>
                                 <input
                                   type="checkbox"
                                   checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
                                   onChange={() => handleDrawerFilterToggle('transfers')}
-                                  className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                                 />
                               </div>
                             </label>
@@ -3586,7 +3586,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       )}
 
                       {/* Reserve (تجنيب) Section - Mobile */}
-                      <div className="bg-[#2B3544] rounded-lg p-3">
+                      <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3">
                         <div className="flex items-center justify-between mb-2">
                           {displayedBalance > 0 ? (
                             <button
@@ -3596,25 +3596,25 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               <PlusIcon className="h-4 w-4" />
                             </button>
                           ) : <div />}
-                          <h4 className="text-white font-medium text-sm">التجنيب</h4>
+                          <h4 className="text-[var(--dash-text-primary)] font-medium text-sm">التجنيب</h4>
                         </div>
 
                         {filteredReserves.length > 0 && (
                           <div className="space-y-1 mb-2">
                             <div className="flex justify-between items-center">
                               <span className="text-green-400 text-sm font-medium">{formatPrice(availableBalance)}</span>
-                              <span className="text-gray-400 text-xs">المتاح / اليومي</span>
+                              <span className="text-[var(--dash-text-muted)] text-xs">المتاح / اليومي</span>
                             </div>
                             <div className="flex justify-between items-center">
                               <span className="text-orange-400 text-sm font-medium">{formatPrice(totalReserved)}</span>
-                              <span className="text-gray-400 text-xs">المُجنّب</span>
+                              <span className="text-[var(--dash-text-muted)] text-xs">المُجنّب</span>
                             </div>
                           </div>
                         )}
 
                         <div className="space-y-2">
                           {filteredReserves.length > 0 ? filteredReserves.map(reserve => (
-                            <div key={reserve.id} className="bg-[#374151] rounded p-2 relative">
+                            <div key={reserve.id} className="bg-[var(--dash-bg-raised)] rounded p-2 relative">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
                                   <button
@@ -3633,16 +3633,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 <div className="text-right">
                                   <span className="text-orange-400 text-sm font-medium">{formatPrice(reserve.amount)}</span>
                                   {reserve.notes && (
-                                    <p className="text-gray-400 text-xs mt-0.5">{reserve.notes}</p>
+                                    <p className="text-[var(--dash-text-muted)] text-xs mt-0.5">{reserve.notes}</p>
                                   )}
                                   {(childSafes.length > 0 || !safe.supports_drawers) && (
-                                    <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve)}</p>
+                                    <p className="text-[var(--dash-text-disabled)] text-xs mt-0.5">{getDrawerNameForReserve(reserve)}</p>
                                   )}
                                 </div>
                               </div>
                             </div>
                           )) : (
-                            <p className="text-gray-500 text-xs text-center py-1">لا يوجد مبالغ مُجنّبة</p>
+                            <p className="text-[var(--dash-text-disabled)] text-xs text-center py-1">لا يوجد مبالغ مُجنّبة</p>
                           )}
                         </div>
                       </div>
@@ -3650,7 +3650,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {/* Date Filter Button */}
                       <button
                         onClick={() => setShowDateFilter(true)}
-                        className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+                        className="w-full bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
                       >
                         <CalendarDaysIcon className="h-4 w-4" />
                         <span>التاريخ</span>
@@ -3684,7 +3684,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                         </div>
                       ) : allTransactions.length === 0 ? (
-                        <div className="text-center py-8 text-gray-400">لا توجد فواتير</div>
+                        <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد فواتير</div>
                       ) : (
                         <>
                         {allTransactions.map((transaction, index) => {
@@ -3697,13 +3697,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             <div
                               key={transaction.id}
                               onClick={() => openMobileTransactionDetails(transaction)}
-                              className="bg-[#374151] rounded-lg p-3 cursor-pointer transition-colors active:bg-[#4B5563]"
+                              className="bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-colors active:bg-[#4B5563]"
                             >
                               {/* Header Row - Amount + Invoice# + Type Badge */}
                               <div className="flex justify-between items-center mb-2">
                                 <span className={`font-bold text-lg ${
                                   parseFloat(transaction.amount) < 0 ? 'text-orange-400' :
-                                  isPurchase ? 'text-red-400' : 'text-white'
+                                  isPurchase ? 'text-red-400' : 'text-[var(--dash-text-primary)]'
                                 }`}>
                                   {formatPrice(Math.abs(parseFloat(transaction.amount)))}
                                 </span>
@@ -3727,31 +3727,31 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               </div>
 
                               {/* Details Grid */}
-                              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs border-t border-gray-600 pt-2">
+                              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs border-t border-[var(--dash-border-default)] pt-2">
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">التاريخ:</span>
-                                  <span className="text-gray-300">{txnDate.toLocaleDateString('en-GB')}</span>
+                                  <span className="text-[var(--dash-text-disabled)]">التاريخ:</span>
+                                  <span className="text-[var(--dash-text-secondary)]">{txnDate.toLocaleDateString('en-GB')}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">الوقت:</span>
-                                  <span className="text-gray-300">{timeStr}</span>
+                                  <span className="text-[var(--dash-text-disabled)]">الوقت:</span>
+                                  <span className="text-[var(--dash-text-secondary)]">{timeStr}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">{isPurchase ? 'المورد:' : 'العميل:'}</span>
-                                  <span className="text-gray-300 truncate max-w-[80px]">{transaction.client?.name || '-'}</span>
+                                  <span className="text-[var(--dash-text-disabled)]">{isPurchase ? 'المورد:' : 'العميل:'}</span>
+                                  <span className="text-[var(--dash-text-secondary)] truncate max-w-[80px]">{transaction.client?.name || '-'}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">المدفوع:</span>
+                                  <span className="text-[var(--dash-text-disabled)]">المدفوع:</span>
                                   <span className="text-green-400">{formatPrice(transaction.paid_amount || 0)}</span>
                                 </div>
                               </div>
 
                               {/* Notes with tap indicator */}
-                              <div className="mt-2 text-xs bg-[#2B3544] rounded p-2 border-t border-gray-600">
+                              <div className="mt-2 text-xs bg-[var(--dash-bg-surface)] rounded p-2 border-t border-[var(--dash-border-default)]">
                                 {transaction.notes && (
-                                  <div className="text-gray-300 mb-1">{transaction.notes}</div>
+                                  <div className="text-[var(--dash-text-secondary)] mb-1">{transaction.notes}</div>
                                 )}
-                                <div className="flex items-center justify-end text-gray-500 text-xs">
+                                <div className="flex items-center justify-end text-[var(--dash-text-disabled)] text-xs">
                                   <span>اضغط لعرض التفاصيل</span>
                                   <ChevronLeftIcon className="h-3 w-3 mr-1" />
                                 </div>
@@ -3764,7 +3764,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         {isLoadingMoreInvoices && (
                           <div className="flex items-center justify-center py-4">
                             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                            <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                            <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                           </div>
                         )}
                         </>
@@ -3780,12 +3780,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
                         </div>
                       ) : transfers.length === 0 ? (
-                        <div className="text-center py-8 text-gray-400">لا توجد تحويلات</div>
+                        <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد تحويلات</div>
                       ) : (
                         transfers.map((transfer) => (
                           <div
                             key={transfer.id}
-                            className="bg-[#374151] rounded-lg p-4"
+                            className="bg-[var(--dash-bg-raised)] rounded-lg p-4"
                           >
                             <div className="flex justify-between items-start mb-2">
                               <span className={`px-2 py-0.5 rounded text-xs font-medium ${
@@ -3801,12 +3801,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 {formatPrice(Math.abs(transfer.amount || 0))}
                               </span>
                             </div>
-                            <div className="flex justify-between items-center text-sm text-gray-400">
+                            <div className="flex justify-between items-center text-sm text-[var(--dash-text-muted)]">
                               <span>{transfer.created_at ? new Date(transfer.created_at).toLocaleDateString('en-GB') : '-'}</span>
                               <span>{transfer.transaction_type || '-'}</span>
                             </div>
                             {transfer.notes && (
-                              <div className="mt-2 text-sm text-gray-300 bg-[#2B3544] rounded p-2">
+                              <div className="mt-2 text-sm text-[var(--dash-text-secondary)] bg-[var(--dash-bg-surface)] rounded p-2">
                                 {transfer.notes}
                               </div>
                             )}
@@ -3821,21 +3821,21 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     <div className="p-3 space-y-3">
                       {/* Summary Cards */}
                       <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-2.5 text-center">
                           <div className="text-green-400 text-sm font-bold">{formatPrice(operationsSummary.deposits, 'system')}</div>
-                          <div className="text-gray-400 text-[10px] mt-0.5">إيداعات ↑</div>
+                          <div className="text-[var(--dash-text-muted)] text-[10px] mt-0.5">إيداعات ↑</div>
                         </div>
-                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-2.5 text-center">
                           <div className="text-red-400 text-sm font-bold">{formatPrice(operationsSummary.withdrawals, 'system')}</div>
-                          <div className="text-gray-400 text-[10px] mt-0.5">سحوبات ↓</div>
+                          <div className="text-[var(--dash-text-muted)] text-[10px] mt-0.5">سحوبات ↓</div>
                         </div>
-                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-2.5 text-center">
                           <div className="text-blue-400 text-sm font-bold">{formatPrice(operationsSummary.transfersIn, 'system')}</div>
-                          <div className="text-gray-400 text-[10px] mt-0.5">تحويلات واردة ←</div>
+                          <div className="text-[var(--dash-text-muted)] text-[10px] mt-0.5">تحويلات واردة ←</div>
                         </div>
-                        <div className="bg-gray-700 rounded-lg p-2.5 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-2.5 text-center">
                           <div className="text-orange-400 text-sm font-bold">{formatPrice(operationsSummary.transfersOut, 'system')}</div>
-                          <div className="text-gray-400 text-[10px] mt-0.5">تحويلات صادرة →</div>
+                          <div className="text-[var(--dash-text-muted)] text-[10px] mt-0.5">تحويلات صادرة →</div>
                         </div>
                       </div>
 
@@ -3854,8 +3854,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             onClick={() => setOperationsTypeFilter(f.key)}
                             className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                               operationsTypeFilter === f.key
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-700 text-gray-300'
+                                ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                                : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]'
                             }`}
                           >
                             {f.label}
@@ -3869,7 +3869,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                         </div>
                       ) : filteredOperations.length === 0 ? (
-                        <div className="text-center py-8 text-gray-400">لا توجد معاملات</div>
+                        <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد معاملات</div>
                       ) : (
                         filteredOperations.map((op) => {
                           const typeMap: { [key: string]: { text: string; color: string; bg: string } } = {
@@ -3879,10 +3879,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-500/20' },
                             'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-500/20' }
                           }
-                          const typeInfo = typeMap[op.transaction_type || ''] || { text: op.transaction_type || '-', color: 'text-gray-400', bg: 'bg-gray-500/20' }
+                          const typeInfo = typeMap[op.transaction_type || ''] || { text: op.transaction_type || '-', color: 'text-[var(--dash-text-muted)]', bg: 'bg-[var(--dash-bg-highlight)]/20' }
                           const isPositive = (op.amount || 0) >= 0
                           return (
-                            <div key={op.id} className="bg-[#374151] rounded-lg p-3">
+                            <div key={op.id} className="bg-[var(--dash-bg-raised)] rounded-lg p-3">
                               <div className="flex justify-between items-start mb-2">
                                 <span className={`px-2 py-0.5 rounded text-xs font-medium ${typeInfo.bg} ${typeInfo.color}`}>
                                   {typeInfo.text}
@@ -3891,36 +3891,36 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                   {isPositive ? '+' : ''}{formatPrice(op.amount || 0, 'system')}
                                 </span>
                               </div>
-                              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs border-t border-gray-600 pt-2">
+                              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs border-t border-[var(--dash-border-default)] pt-2">
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">التاريخ:</span>
-                                  <span className="text-gray-300">{op.created_at ? new Date(op.created_at).toLocaleDateString('en-GB') : '-'}</span>
+                                  <span className="text-[var(--dash-text-disabled)]">التاريخ:</span>
+                                  <span className="text-[var(--dash-text-secondary)]">{op.created_at ? new Date(op.created_at).toLocaleDateString('en-GB') : '-'}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">الساعة:</span>
-                                  <span className="text-gray-300">{op.created_at ? new Date(op.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : '-'}</span>
+                                  <span className="text-[var(--dash-text-disabled)]">الساعة:</span>
+                                  <span className="text-[var(--dash-text-secondary)]">{op.created_at ? new Date(op.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : '-'}</span>
                                 </div>
                                 {op.safe_name && (
                                   <div className="flex justify-between">
-                                    <span className="text-gray-500">الدرج:</span>
+                                    <span className="text-[var(--dash-text-disabled)]">الدرج:</span>
                                     <span className="text-purple-400">{op.safe_name}</span>
                                   </div>
                                 )}
                                 {(op.transaction_type === 'transfer_in' || op.transaction_type === 'transfer_out') && (
                                   <div className="flex justify-between">
-                                    <span className="text-gray-500">من/إلى:</span>
+                                    <span className="text-[var(--dash-text-disabled)]">من/إلى:</span>
                                     <span className="text-cyan-400">{op.related_safe_name || '-'}</span>
                                   </div>
                                 )}
                                 {op.performed_by && (
                                   <div className="flex justify-between">
-                                    <span className="text-gray-500">الموظف:</span>
+                                    <span className="text-[var(--dash-text-disabled)]">الموظف:</span>
                                     <span className="text-yellow-400">{op.performed_by}</span>
                                   </div>
                                 )}
                               </div>
                               {op.notes && (
-                                <div className="mt-2 text-xs text-gray-300 bg-[#2B3544] rounded p-2">
+                                <div className="mt-2 text-xs text-[var(--dash-text-secondary)] bg-[var(--dash-bg-surface)] rounded p-2">
                                   {op.notes}
                                 </div>
                               )}
@@ -3933,7 +3933,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {isLoadingMoreOperations && (
                         <div className="flex items-center justify-center py-4">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                          <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                          <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                         </div>
                       )}
                     </div>
@@ -3947,7 +3947,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                         </div>
                       ) : recalculatedStatements.length === 0 ? (
-                        <div className="text-center py-8 text-gray-400">لا توجد حركات</div>
+                        <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد حركات</div>
                       ) : (
                         recalculatedStatements.map((statement, index) => (
                           <div
@@ -3969,7 +3969,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 openMobileTransactionDetails(transaction)
                               }
                             }}
-                            className={`bg-[#374151] rounded-lg p-3 transition-colors ${
+                            className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 transition-colors ${
                               statement.sale_id ? 'cursor-pointer active:bg-[#4B5563]' : ''
                             } ${
                               statement.type === 'فاتورة بيع'
@@ -3982,7 +3982,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                       ? 'border-2 border-green-700/50'
                                       : statement.type === 'مصروفات'
                                         ? 'border-2 border-red-700/50'
-                                        : 'border-2 border-gray-600/50'
+                                        : 'border-2 border-[var(--dash-border-default)]/50'
                             }`}
                           >
                             {/* الصف العلوي: نوع العملية + التاريخ */}
@@ -4000,24 +4000,24 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                           ? 'bg-red-900 text-red-300'
                                           : statement.type === 'سحب'
                                             ? 'bg-orange-900 text-orange-300'
-                                            : 'bg-gray-700 text-gray-300'
+                                            : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]'
                               }`}>
                                 {statement.type}
                               </span>
-                              <span className="text-gray-400 text-xs">
+                              <span className="text-[var(--dash-text-muted)] text-xs">
                                 {new Date(statement.date).toLocaleDateString('en-GB')}
                               </span>
                             </div>
 
                             {/* البيان/الوصف */}
                             {statement.description && (
-                              <div className="text-sm text-gray-300 mb-3">{statement.description}</div>
+                              <div className="text-sm text-[var(--dash-text-secondary)] mb-3">{statement.description}</div>
                             )}
 
                             {/* صف الأرقام */}
                             <div className="grid grid-cols-2 gap-2 text-xs mb-2">
                               <div className="text-center">
-                                <div className="text-gray-500 mb-1">المبلغ</div>
+                                <div className="text-[var(--dash-text-disabled)] mb-1">المبلغ</div>
                                 <span className={`font-medium ${
                                   statement.amount >= 0 ? 'text-green-400' : 'text-red-400'
                                 }`}>
@@ -4025,11 +4025,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 </span>
                               </div>
                               <div className="text-center">
-                                <div className="text-gray-500 mb-1">الرصيد</div>
+                                <div className="text-[var(--dash-text-disabled)] mb-1">الرصيد</div>
                                 <span className={`font-medium ${
                                   index === 0
                                     ? 'bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded'
-                                    : 'text-gray-400'
+                                    : 'text-[var(--dash-text-muted)]'
                                 }`}>
                                   {formatPrice(statement.balance || 0)}
                                 </span>
@@ -4038,7 +4038,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                             {/* مؤشر "اضغط لعرض التفاصيل" للفواتير فقط */}
                             {statement.sale_id && (
-                              <div className="mt-2 flex items-center justify-end text-gray-500 text-xs">
+                              <div className="mt-2 flex items-center justify-end text-[var(--dash-text-disabled)] text-xs">
                                 <span>اضغط لعرض التفاصيل</span>
                                 <ChevronLeftIcon className="h-3 w-3 mr-1" />
                               </div>
@@ -4051,13 +4051,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 </div>
 
                 {/* Mobile Bottom Navigation */}
-                <div className="bg-[#374151] border-t border-gray-600 px-1 py-1 flex items-center justify-around safe-area-bottom">
+                <div className="bg-[var(--dash-bg-raised)] border-t border-[var(--dash-border-default)] px-1 py-1 flex items-center justify-around safe-area-bottom">
                   <button
                     onClick={() => setActiveTab('transactions')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'transactions'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
                     <span className="text-sm">📋</span>
@@ -4068,8 +4068,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     onClick={() => setActiveTab('payments')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'payments'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
                     <span className="text-sm">💸</span>
@@ -4080,8 +4080,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     onClick={() => setActiveTab('statement')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'statement'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
                     <span className="text-sm">📊</span>
@@ -4092,8 +4092,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     onClick={() => setActiveTab('operations')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'operations'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
                     <span className="text-sm">🔄</span>
@@ -4104,10 +4104,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             )}
           </div>
         ) : (
-        <div className="bg-[#2B3544] h-full w-full flex flex-col">
+        <div className="bg-[var(--dash-bg-surface)] h-full w-full flex flex-col">
 
           {/* Top Navigation - All buttons in one row */}
-          <div className="bg-[#374151] border-b border-gray-600 px-6 py-4">
+          <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-8">
                 {/* Action Buttons - Same style as customer list */}
@@ -4119,7 +4119,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       }
                     }}
                     disabled={allTransactions.length === 0 || selectedTransaction >= allTransactions.length || (allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' && allTransactions[selectedTransaction]?.status === 'cancelled')}
-                    className={`flex flex-col items-center p-2 disabled:text-gray-500 disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors ${allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' ? 'text-orange-400 hover:text-orange-300' : 'text-red-400 hover:text-red-300'}`}
+                    className={`flex flex-col items-center p-2 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors ${allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' ? 'text-orange-400 hover:text-orange-300' : 'text-red-400 hover:text-red-300'}`}
                   >
                     {allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' ? (
                       <XCircleIcon className="h-5 w-5 mb-1" />
@@ -4148,7 +4148,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'payments'
                         ? 'text-blue-400 border-blue-400 bg-blue-600/10'
-                        : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
                     التحويلات
@@ -4158,7 +4158,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'statement'
                         ? 'text-blue-400 border-blue-400 bg-blue-600/10'
-                        : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
                     كشف الحساب
@@ -4168,7 +4168,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     className={`px-5 py-2.5 text-sm font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'transactions'
                         ? 'text-blue-400 border-blue-400 bg-blue-600/10'
-                        : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
                     فواتير الخزنة ({allTransactions.length})
@@ -4178,7 +4178,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'operations'
                         ? 'text-blue-400 border-blue-400 bg-blue-600/10'
-                        : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
                     المعاملات
@@ -4187,13 +4187,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                 {/* View Mode Toggle Buttons - Only show for transactions tab */}
                 {activeTab === 'transactions' && (
-                  <div className="flex gap-1 bg-gray-600/50 rounded-lg p-1">
+                  <div className="flex gap-1 bg-[var(--dash-bg-overlay)]/50 rounded-lg p-1">
                     <button
                       onClick={() => setViewMode('safes-only')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'safes-only'
-                          ? 'bg-blue-600 text-white shadow-sm'
-                          : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                          ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                          : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض فواتير الخزنة فقط"
                     >
@@ -4203,8 +4203,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       onClick={() => setViewMode('split')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'split'
-                          ? 'bg-blue-600 text-white shadow-sm'
-                          : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                          ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                          : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض مقسم"
                     >
@@ -4214,8 +4214,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       onClick={() => setViewMode('details-only')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'details-only'
-                          ? 'bg-blue-600 text-white shadow-sm'
-                          : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                          ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                          : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض تفاصيل الفاتورة فقط"
                     >
@@ -4226,7 +4226,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               </div>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-white text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-600/30 transition-colors"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
               >
                 ×
               </button>
@@ -4238,79 +4238,79 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             <div className="flex">
               <button
                 onClick={() => setShowSafeDetails(!showSafeDetails)}
-                className="w-6 bg-[#374151] hover:bg-[#4B5563] border-r border-gray-600 flex items-center justify-center transition-colors duration-200"
+                className="w-6 bg-[var(--dash-bg-raised)] hover:bg-[#4B5563] border-r border-[var(--dash-border-default)] flex items-center justify-center transition-colors duration-200"
                 title={showSafeDetails ? 'إخفاء تفاصيل الخزنة' : 'إظهار تفاصيل الخزنة'}
               >
                 {showSafeDetails ? (
-                  <ChevronRightIcon className="h-4 w-4 text-gray-300" />
+                  <ChevronRightIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
                 ) : (
-                  <ChevronLeftIcon className="h-4 w-4 text-gray-300" />
+                  <ChevronLeftIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
                 )}
               </button>
             </div>
 
             {/* Right Sidebar - Record Info (First in RTL) */}
             {showSafeDetails && (
-              <div className="w-80 bg-[#3B4754] border-l border-gray-600 flex flex-col overflow-y-auto scrollbar-hide">
+              <div className="w-80 bg-[#3B4754] border-l border-[var(--dash-border-default)] flex flex-col overflow-y-auto scrollbar-hide">
 
                 {/* Record Balance */}
-                <div className="p-4 border-b border-gray-600">
+                <div className="p-4 border-b border-[var(--dash-border-default)]">
                   <div className="bg-purple-600 rounded p-4 text-center">
-                    <div className="text-2xl font-bold text-white">{formatPrice(displayedBalance, 'system')}</div>
+                    <div className="text-2xl font-bold text-[var(--dash-text-primary)]">{formatPrice(displayedBalance, 'system')}</div>
                     <div className="text-purple-200 text-sm">رصيد الخزنة</div>
                   </div>
                 </div>
 
                 {/* Drawer Filter Section - Only for safes with drawers */}
                 {safe.supports_drawers && childSafes.length > 0 && (
-                  <div className="p-4 border-b border-gray-600">
-                    <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية حسب الدرج</h4>
+                  <div className="p-4 border-b border-[var(--dash-border-default)]">
+                    <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 text-sm text-right">تصفية حسب الدرج</h4>
                     <div className="space-y-1.5">
                       {/* All checkbox */}
-                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
-                        <span className="text-white font-medium text-sm">{formatPrice(
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
+                        <span className="text-[var(--dash-text-primary)] font-medium text-sm">{formatPrice(
                           childSafes.reduce((sum, c) => sum + c.balance, 0) + mainSafeOwnBalance, 'system'
                         )}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-300 text-sm">الكل</span>
+                          <span className="text-[var(--dash-text-secondary)] text-sm">الكل</span>
                           <input
                             type="checkbox"
                             checked={!selectedDrawerFilters}
                             onChange={handleSelectAllDrawers}
-                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                            className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 cursor-pointer"
                           />
                         </div>
                       </label>
 
                       {/* Individual drawer checkboxes */}
                       {childSafes.map(drawer => (
-                        <label key={drawer.id} className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                        <label key={drawer.id} className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
                           <span className="text-green-400 text-sm">{formatPrice(drawer.balance, 'system')}</span>
                           <div className="flex items-center gap-2">
-                            <span className="text-gray-300 text-sm truncate max-w-[120px]">{drawer.name}</span>
+                            <span className="text-[var(--dash-text-secondary)] text-sm truncate max-w-[120px]">{drawer.name}</span>
                             <input
                               type="checkbox"
                               checked={!selectedDrawerFilters || selectedDrawerFilters.has(drawer.id)}
                               onChange={() => handleDrawerFilterToggle(drawer.id)}
-                              className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                              className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 cursor-pointer"
                             />
                           </div>
                         </label>
                       ))}
 
                       {/* Separator */}
-                      <div className="border-t border-gray-600 my-1"></div>
+                      <div className="border-t border-[var(--dash-border-default)] my-1"></div>
 
                       {/* Transfers checkbox (non-physical payments routed to main safe) */}
-                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
                         <span className="text-blue-400 text-sm">{formatPrice(mainSafeOwnBalance, 'system')}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-300 text-sm">التحويلات</span>
+                          <span className="text-[var(--dash-text-secondary)] text-sm">التحويلات</span>
                           <input
                             type="checkbox"
                             checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
                             onChange={() => handleDrawerFilterToggle('transfers')}
-                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                            className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 cursor-pointer"
                           />
                         </div>
                       </label>
@@ -4320,46 +4320,46 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                 {/* Transaction Filter - For non-drawer safes (Desktop) */}
                 {!safe.supports_drawers && safe.show_transfers !== false && (
-                  <div className="p-4 border-b border-gray-600">
-                    <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية المعاملات</h4>
+                  <div className="p-4 border-b border-[var(--dash-border-default)]">
+                    <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 text-sm text-right">تصفية المعاملات</h4>
                     <div className="space-y-1.5">
                       {/* الكل */}
-                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
-                        <span className="text-white font-medium text-sm">{formatPrice(safeBalance, 'system')}</span>
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
+                        <span className="text-[var(--dash-text-primary)] font-medium text-sm">{formatPrice(safeBalance, 'system')}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-300 text-sm">الكل</span>
+                          <span className="text-[var(--dash-text-secondary)] text-sm">الكل</span>
                           <input
                             type="checkbox"
                             checked={!selectedDrawerFilters}
                             onChange={handleSelectAllDrawers}
-                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                            className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 cursor-pointer"
                           />
                         </div>
                       </label>
                       {/* في الخزنة */}
-                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
                         <span className="text-green-400 text-sm">{formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance), 'system')}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-300 text-sm">في الخزنة</span>
+                          <span className="text-[var(--dash-text-secondary)] text-sm">في الخزنة</span>
                           <input
                             type="checkbox"
                             checked={!selectedDrawerFilters || selectedDrawerFilters.has('safe')}
                             onChange={() => handleDrawerFilterToggle('safe')}
-                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                            className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 cursor-pointer"
                           />
                         </div>
                       </label>
-                      <div className="border-t border-gray-600 my-1"></div>
+                      <div className="border-t border-[var(--dash-border-default)] my-1"></div>
                       {/* التحويلات */}
-                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                      <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
                         <span className="text-blue-400 text-sm">{formatPrice(Math.min(nonDrawerTransferBalance, Math.max(0, safeBalance)), 'system')}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-300 text-sm">التحويلات</span>
+                          <span className="text-[var(--dash-text-secondary)] text-sm">التحويلات</span>
                           <input
                             type="checkbox"
                             checked={!selectedDrawerFilters || selectedDrawerFilters.has('transfers')}
                             onChange={() => handleDrawerFilterToggle('transfers')}
-                            className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                            className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 cursor-pointer"
                           />
                         </div>
                       </label>
@@ -4371,8 +4371,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 <div className="p-4 space-y-3 flex-1">
                   <div className="space-y-2.5">
                     <div className="flex justify-between items-center">
-                      <span className="text-white text-sm">{displayName}</span>
-                      <span className="text-gray-400 text-xs">اسم الخزنة</span>
+                      <span className="text-[var(--dash-text-primary)] text-sm">{displayName}</span>
+                      <span className="text-[var(--dash-text-muted)] text-xs">اسم الخزنة</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-blue-400 text-sm">
@@ -4384,25 +4384,25 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         {dateFilter.type === 'custom' && 'فترة مخصصة'}
                         {dateFilter.type === 'all' && 'جميع الفترات'}
                       </span>
-                      <span className="text-gray-400 text-xs">الفترة</span>
+                      <span className="text-[var(--dash-text-muted)] text-xs">الفترة</span>
                     </div>
                     {dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate && (
                       <div className="flex justify-between items-center">
-                        <span className="text-white text-xs">
+                        <span className="text-[var(--dash-text-primary)] text-xs">
                           {dateFilter.startDate.toLocaleDateString('en-GB')} - {dateFilter.endDate.toLocaleDateString('en-GB')}
                         </span>
-                        <span className="text-gray-400 text-xs">من - إلى</span>
+                        <span className="text-[var(--dash-text-muted)] text-xs">من - إلى</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center">
-                      <span className="text-white text-sm">{new Date().toLocaleDateString('en-GB')}</span>
-                      <span className="text-gray-400 text-xs">التاريخ</span>
+                      <span className="text-[var(--dash-text-primary)] text-sm">{new Date().toLocaleDateString('en-GB')}</span>
+                      <span className="text-[var(--dash-text-muted)] text-xs">التاريخ</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Reserve (تجنيب) Section */}
-                <div className="p-4 border-t border-gray-600">
+                <div className="p-4 border-t border-[var(--dash-border-default)]">
                   <div className="flex items-center justify-between mb-3">
                     {displayedBalance > 0 ? (
                       <button
@@ -4413,25 +4413,25 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         <PlusIcon className="h-4 w-4" />
                       </button>
                     ) : <div />}
-                    <h4 className="text-white font-medium text-sm">التجنيب</h4>
+                    <h4 className="text-[var(--dash-text-primary)] font-medium text-sm">التجنيب</h4>
                   </div>
 
                   {filteredReserves.length > 0 && (
                     <div className="space-y-1.5 mb-3">
                       <div className="flex justify-between items-center px-1">
                         <span className="text-green-400 text-sm font-medium">{formatPrice(availableBalance, 'system')}</span>
-                        <span className="text-gray-400 text-xs">المتاح / اليومي</span>
+                        <span className="text-[var(--dash-text-muted)] text-xs">المتاح / اليومي</span>
                       </div>
                       <div className="flex justify-between items-center px-1">
                         <span className="text-orange-400 text-sm font-medium">{formatPrice(totalReserved, 'system')}</span>
-                        <span className="text-gray-400 text-xs">المُجنّب</span>
+                        <span className="text-[var(--dash-text-muted)] text-xs">المُجنّب</span>
                       </div>
                     </div>
                   )}
 
                   <div className="space-y-2 max-h-[200px] overflow-y-auto scrollbar-hide">
                     {filteredReserves.length > 0 ? filteredReserves.map(reserve => (
-                      <div key={reserve.id} className="group bg-[#2B3544] rounded p-2.5 relative">
+                      <div key={reserve.id} className="group bg-[var(--dash-bg-surface)] rounded p-2.5 relative">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
@@ -4450,25 +4450,25 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <div className="text-right">
                             <span className="text-orange-400 text-sm font-medium">{formatPrice(reserve.amount, 'system')}</span>
                             {reserve.notes && (
-                              <p className="text-gray-400 text-xs mt-0.5">{reserve.notes}</p>
+                              <p className="text-[var(--dash-text-muted)] text-xs mt-0.5">{reserve.notes}</p>
                             )}
                             {(childSafes.length > 0 || !safe.supports_drawers) && (
-                              <p className="text-gray-500 text-xs mt-0.5">{getDrawerNameForReserve(reserve)}</p>
+                              <p className="text-[var(--dash-text-disabled)] text-xs mt-0.5">{getDrawerNameForReserve(reserve)}</p>
                             )}
                           </div>
                         </div>
                       </div>
                     )) : (
-                      <p className="text-gray-500 text-xs text-center py-2">لا يوجد مبالغ مُجنّبة</p>
+                      <p className="text-[var(--dash-text-disabled)] text-xs text-center py-2">لا يوجد مبالغ مُجنّبة</p>
                     )}
                   </div>
                 </div>
 
                 {/* Date Filter Button */}
-                <div className="p-4 border-t border-gray-600">
+                <div className="p-4 border-t border-[var(--dash-border-default)]">
                   <button
                     onClick={() => setShowDateFilter(true)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
                   >
                     <CalendarDaysIcon className="h-5 w-5" />
                     <span>التاريخ</span>
@@ -4495,7 +4495,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             <div className="flex-1 flex flex-col min-w-0 relative">
               
               {/* Search Bar */}
-              <div className={`bg-[#374151] border-b p-4 transition-colors ${searchQuery ? 'border-blue-500' : 'border-gray-600'}`}>
+              <div className={`bg-[var(--dash-bg-raised)] border-b p-4 transition-colors ${searchQuery ? 'border-blue-500' : 'border-[var(--dash-border-default)]'}`}>
                 {searchQuery && (
                   <div className="mb-2 text-xs flex items-center justify-between">
                     <div className="flex items-center gap-2 text-blue-400">
@@ -4503,15 +4503,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       <span>البحث نشط - عرض الفواتير التي تحتوي على المنتج المحدد فقط</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-400">النتائج:</span>
-                      <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-medium">
+                      <span className="text-[var(--dash-text-muted)]">النتائج:</span>
+                      <span className="bg-blue-600 text-[var(--dash-text-primary)] px-2 py-0.5 rounded font-medium">
                         {allTransactions.length}
                       </span>
                     </div>
                   </div>
                 )}
                 <div className="relative">
-                  <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-blue-400' : 'text-gray-400'}`} />
+                  <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-blue-400' : 'text-[var(--dash-text-muted)]'}`} />
                   <input
                     type="text"
                     placeholder="ابحث عن منتج (اسم المنتج أو الباركود)..."
@@ -4540,18 +4540,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         searchProductInInvoices(searchQuery)
                       }
                     }}
-                    className="w-full pl-24 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full pl-24 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] text-sm"
                   />
                   <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex gap-1">
                     <button
                       onClick={() => searchProductInInvoices(searchQuery)}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors"
+                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-xs rounded transition-colors"
                     >
                       بحث
                     </button>
                     <button
                       onClick={() => searchProductInInvoices('')}
-                      className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded transition-colors"
+                      className="px-3 py-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] text-xs rounded transition-colors"
                     >
                       مسح
                     </button>
@@ -4564,9 +4564,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 {activeTab === 'statement' && (
                   <div className="h-full flex flex-col">
                     {showStatementInvoiceDetails ? (
-                      <div className="flex flex-col h-full bg-[#1F2937]">
+                      <div className="flex flex-col h-full bg-[var(--dash-bg-base)]">
                         {/* Top Bar with Back Button and Print Actions */}
-                        <div className="bg-[#2B3544] border-b border-gray-600 px-4 py-2 flex items-center justify-between">
+                        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-4 py-2 flex items-center justify-between">
                           <button
                             onClick={() => {
                               setShowStatementInvoiceDetails(false)
@@ -4581,7 +4581,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <div className="flex items-center gap-2">
                             {/* Print Receipt Button */}
                             <button
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                             >
                               <PrinterIcon className="h-4 w-4" />
@@ -4591,27 +4591,27 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         </div>
 
                         {/* Navigation Bar with Invoice Number */}
-                        <div className="bg-[#374151] border-b border-gray-600 px-4 py-3 flex items-center justify-center gap-4">
+                        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex items-center justify-center gap-4">
                           {/* Previous Button */}
                           <button
                             onClick={navigateToPreviousInvoice}
                             disabled={currentInvoiceIndex === 0 || isLoadingStatementInvoiceItems}
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex === 0
-                                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
                             }`}
                           >
                             <ChevronRightIcon className="h-5 w-5" />
                           </button>
 
                           {/* Invoice Number Display */}
-                          <div className="flex items-center gap-3 bg-[#2B3544] px-6 py-2 rounded-lg border border-gray-600">
-                            <span className="text-gray-400 text-sm">فاتورة رقم</span>
-                            <span className="text-white font-bold text-xl">
+                          <div className="flex items-center gap-3 bg-[var(--dash-bg-surface)] px-6 py-2 rounded-lg border border-[var(--dash-border-default)]">
+                            <span className="text-[var(--dash-text-muted)] text-sm">فاتورة رقم</span>
+                            <span className="text-[var(--dash-text-primary)] font-bold text-xl">
                               {selectedStatementInvoice?.invoice_number?.replace('INV-', '').split('-')[0] || '---'}
                             </span>
-                            <span className="text-gray-500 text-xs">
+                            <span className="text-[var(--dash-text-disabled)] text-xs">
                               ({currentInvoiceIndex + 1} من {invoiceStatements.length})
                             </span>
                           </div>
@@ -4622,8 +4622,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             disabled={currentInvoiceIndex >= invoiceStatements.length - 1 || isLoadingStatementInvoiceItems}
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex >= invoiceStatements.length - 1
-                                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
                             }`}
                           >
                             <ChevronLeftIcon className="h-5 w-5" />
@@ -4631,7 +4631,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         </div>
 
                         {/* Invoice Info Header */}
-                        <div className="bg-[#2B3544] border-b border-gray-600 px-4 py-3">
+                        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-4 py-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
                               <span className={`px-3 py-1 rounded text-sm font-medium ${
@@ -4641,7 +4641,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               }`}>
                                 {selectedStatementInvoice?.invoice_type === 'Sale Return' ? 'مرتجع بيع' : 'فاتورة بيع'}
                               </span>
-                              <span className="text-gray-300 text-sm">
+                              <span className="text-[var(--dash-text-secondary)] text-sm">
                                 {selectedStatementInvoice?.created_at
                                   ? new Date(selectedStatementInvoice.created_at).toLocaleDateString('ar-EG', {
                                       weekday: 'long',
@@ -4652,7 +4652,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                   : '---'}
                               </span>
                             </div>
-                            <div className="text-white font-medium">
+                            <div className="text-[var(--dash-text-primary)] font-medium">
                               {displayName}
                             </div>
                           </div>
@@ -4663,47 +4663,47 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           {isLoadingStatementInvoiceItems ? (
                             <div className="flex items-center justify-center h-full">
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                              <span className="text-gray-400">جاري تحميل تفاصيل الفاتورة...</span>
+                              <span className="text-[var(--dash-text-muted)]">جاري تحميل تفاصيل الفاتورة...</span>
                             </div>
                           ) : (
                             <div className="h-full overflow-y-auto scrollbar-hide">
                               <table className="w-full">
-                                <thead className="bg-[#374151] sticky top-0">
+                                <thead className="bg-[var(--dash-bg-raised)] sticky top-0">
                                   <tr>
-                                    <th className="px-4 py-3 text-right text-gray-300 font-medium text-sm border-b border-gray-600 w-12">م</th>
-                                    <th className="px-4 py-3 text-right text-gray-300 font-medium text-sm border-b border-gray-600">الصنف</th>
-                                    <th className="px-4 py-3 text-center text-gray-300 font-medium text-sm border-b border-gray-600 w-24">الكمية</th>
-                                    <th className="px-4 py-3 text-center text-gray-300 font-medium text-sm border-b border-gray-600 w-28">سعر</th>
-                                    <th className="px-4 py-3 text-center text-gray-300 font-medium text-sm border-b border-gray-600 w-28">قيمة</th>
+                                    <th className="px-4 py-3 text-right text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-12">م</th>
+                                    <th className="px-4 py-3 text-right text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)]">الصنف</th>
+                                    <th className="px-4 py-3 text-center text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-24">الكمية</th>
+                                    <th className="px-4 py-3 text-center text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-28">سعر</th>
+                                    <th className="px-4 py-3 text-center text-[var(--dash-text-secondary)] font-medium text-sm border-b border-[var(--dash-border-default)] w-28">قيمة</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   {statementInvoiceItems.map((item, index) => (
-                                    <tr key={item.id} className="border-b border-gray-700 hover:bg-[#374151]/50">
+                                    <tr key={item.id} className="border-b border-[var(--dash-border-subtle)] hover:bg-[var(--dash-bg-raised)]/50">
                                       <td className="px-4 py-3 text-blue-400 font-medium text-sm">{index + 1}</td>
                                       <td className="px-4 py-3 text-blue-400 font-medium text-sm">
                                         {item.product?.name || 'منتج غير معروف'}
                                       </td>
-                                      <td className="px-4 py-3 text-center text-white text-sm">
+                                      <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm">
                                         {Math.abs(item.quantity)}
                                       </td>
-                                      <td className="px-4 py-3 text-center text-white text-sm">
+                                      <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm">
                                         {formatPrice(item.unit_price)}
                                       </td>
-                                      <td className="px-4 py-3 text-center text-white text-sm">
+                                      <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm">
                                         {formatPrice(Math.abs(item.quantity) * item.unit_price)}
                                       </td>
                                     </tr>
                                   ))}
                                   {/* Totals Row */}
-                                  <tr className="bg-[#374151] border-t-2 border-blue-500">
+                                  <tr className="bg-[var(--dash-bg-raised)] border-t-2 border-blue-500">
                                     <td colSpan={2} className="px-4 py-3 text-left text-blue-400 font-bold text-sm">
                                       - = اجمالي = -
                                     </td>
                                     <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
                                       {statementInvoiceItems.reduce((sum, item) => sum + Math.abs(item.quantity), 0)}
                                     </td>
-                                    <td className="px-4 py-3 text-center text-white text-sm"></td>
+                                    <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm"></td>
                                     <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
                                       {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                                     </td>
@@ -4715,28 +4715,28 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         </div>
 
                         {/* Invoice Info Footer */}
-                        <div className="bg-[#2B3544] border-t border-gray-600 p-4">
+                        <div className="bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)] p-4">
                           <div className="grid grid-cols-4 gap-4 text-sm">
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">الاجمالي</span>
-                              <span className="text-white font-bold">
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">الاجمالي</span>
+                              <span className="text-[var(--dash-text-primary)] font-bold">
                                 {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">الخصم</span>
-                              <span className="text-white font-bold">
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">الخصم</span>
+                              <span className="text-[var(--dash-text-primary)] font-bold">
                                 {formatPrice(selectedStatementInvoice?.discount_amount || 0)}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">المدفوع</span>
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">المدفوع</span>
                               <span className="text-green-400 font-bold">
                                 {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                               </span>
                             </div>
-                            <div className="flex flex-col items-center bg-[#374151] rounded-lg p-3 border border-gray-600">
-                              <span className="text-gray-400 mb-1">رصيد الخزنة</span>
+                            <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <span className="text-[var(--dash-text-muted)] mb-1">رصيد الخزنة</span>
                               <span className="text-blue-400 font-bold">
                                 {formatPrice(displayedBalance)}
                               </span>
@@ -4744,10 +4744,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           </div>
 
                           {/* Notes and Employee Info */}
-                          <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
+                          <div className="mt-3 flex items-center justify-between text-xs text-[var(--dash-text-muted)]">
                             <div className="flex items-center gap-2">
                               <span>الملاحظات:</span>
-                              <span className="text-gray-300">{selectedStatementInvoice?.notes || '---'}</span>
+                              <span className="text-[var(--dash-text-secondary)]">{selectedStatementInvoice?.notes || '---'}</span>
                             </div>
                             <div className="flex items-center gap-4">
                               <span>
@@ -4769,13 +4769,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           {isLoadingStatement ? (
                             <div className="flex items-center justify-center h-full">
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                              <span className="text-gray-400">جاري تحميل كشف الحساب...</span>
+                              <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
                             </div>
                           ) : recalculatedStatements.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full p-8">
                               <div className="text-6xl mb-4">📊</div>
-                              <p className="text-gray-400 text-lg mb-2">لا توجد عمليات في كشف الحساب</p>
-                              <p className="text-gray-500 text-sm">سيتم عرض العمليات هنا عند إجرائها</p>
+                              <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد عمليات في كشف الحساب</p>
+                              <p className="text-[var(--dash-text-disabled)] text-sm">سيتم عرض العمليات هنا عند إجرائها</p>
                             </div>
                           ) : (
                             <div className="flex-1 overflow-auto scrollbar-hide">
@@ -4792,7 +4792,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               {isLoadingMoreStatements && (
                                 <div className="flex items-center justify-center py-4">
                                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                                  <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                                  <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                                 </div>
                               )}
                             </div>
@@ -4807,7 +4807,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   <div className="h-full relative">
                     {/* Records Table - Always rendered but z-indexed based on view mode */}
                     <div
-                      className={`absolute inset-0 bg-[#2B3544] flex flex-col transition-all duration-300 ${
+                      className={`absolute inset-0 bg-[var(--dash-bg-surface)] flex flex-col transition-all duration-300 ${
                         viewMode === 'details-only' ? 'z-0 opacity-20' : 'z-10'
                       } ${
                         viewMode === 'split' ? '' : 'opacity-100'
@@ -4820,13 +4820,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {isLoadingInvoices ? (
                         <div className="flex items-center justify-center h-full">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                          <span className="text-gray-400">جاري تحميل الفواتير...</span>
+                          <span className="text-[var(--dash-text-muted)]">جاري تحميل الفواتير...</span>
                         </div>
                       ) : allTransactions.length === 0 && searchQuery ? (
                         <div className="flex flex-col items-center justify-center h-full p-8">
                           <div className="text-6xl mb-4">🔍</div>
-                          <p className="text-gray-400 text-lg mb-2">لا توجد فواتير تحتوي على هذا المنتج</p>
-                          <p className="text-gray-500 text-sm">ابحث عن منتج آخر أو امسح البحث</p>
+                          <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد فواتير تحتوي على هذا المنتج</p>
+                          <p className="text-[var(--dash-text-disabled)] text-sm">ابحث عن منتج آخر أو امسح البحث</p>
                         </div>
                       ) : (
                         <div className="flex-1 overflow-auto scrollbar-hide">
@@ -4842,7 +4842,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           {isLoadingMoreInvoices && (
                             <div className="flex items-center justify-center py-4">
                               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                              <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                              <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
                         </div>
@@ -4852,7 +4852,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     {/* Resizable Divider - Only show in split mode */}
                     {viewMode === 'split' && (
                       <div
-                        className="absolute left-0 right-0 h-2 bg-gray-600 hover:bg-blue-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
+                        className="absolute left-0 right-0 h-2 bg-[var(--dash-bg-overlay)] hover:bg-blue-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
                         style={{ top: `${dividerPosition}%`, transform: 'translateY(-50%)' }}
                         onMouseDown={handleMouseDown}
                       >
@@ -4862,7 +4862,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                     {/* Transaction Details - Always rendered but z-indexed based on view mode */}
                     <div 
-                      className={`absolute inset-0 bg-[#2B3544] flex flex-col transition-all duration-300 ${
+                      className={`absolute inset-0 bg-[var(--dash-bg-surface)] flex flex-col transition-all duration-300 ${
                         viewMode === 'safes-only' ? 'z-0 opacity-20' : 'z-10'
                       }`}
                       style={{
@@ -4871,14 +4871,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         zIndex: viewMode === 'details-only' ? 20 : viewMode === 'split' ? 10 : 5
                       }}
                     >
-                      <div className="flex items-center justify-between p-4 pb-2 flex-shrink-0 border-b border-gray-600">
+                      <div className="flex items-center justify-between p-4 pb-2 flex-shrink-0 border-b border-[var(--dash-border-default)]">
                         <button
                           onClick={() => {
                             const currentTransaction = allTransactions[selectedTransaction]
                             const items = currentTransaction?.transactionType === 'sale' ? saleItems : purchaseInvoiceItems
                             printReceipt(currentTransaction, items)
                           }}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                          className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                           disabled={isLoadingItems || (saleItems.length === 0 && purchaseInvoiceItems.length === 0)}
                         >
                           <PrinterIcon className="h-4 w-4" />
@@ -4893,7 +4893,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         {isLoadingItems ? (
                           <div className="flex items-center justify-center h-full">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                            <span className="text-gray-400">جاري تحميل العناصر...</span>
+                            <span className="text-[var(--dash-text-muted)]">جاري تحميل العناصر...</span>
                           </div>
                         ) : (
                           <ResizableTable
@@ -4915,11 +4915,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 {activeTab === 'payments' && (
                   <div className="h-full flex flex-col">
                     {/* Payments Header */}
-                    <div className="bg-[#2B3544] border-b border-gray-600 p-4">
+                    <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] p-4">
                       <div className="flex items-center justify-end">
                         <div className="text-right">
-                          <div className="text-white text-lg font-medium">تحويلات الخزنة</div>
-                          <div className="text-gray-400 text-sm mt-1">
+                          <div className="text-[var(--dash-text-primary)] text-lg font-medium">تحويلات الخزنة</div>
+                          <div className="text-[var(--dash-text-muted)] text-sm mt-1">
                             إجمالي التحويلات: {formatPrice(transfers.reduce((sum, t) => sum + Math.abs(t.amount || 0), 0), 'system')}
                           </div>
                         </div>
@@ -4931,13 +4931,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {isLoadingTransfers ? (
                         <div className="flex items-center justify-center h-full">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                          <span className="text-gray-400">جاري تحميل التحويلات...</span>
+                          <span className="text-[var(--dash-text-muted)]">جاري تحميل التحويلات...</span>
                         </div>
                       ) : transfers.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full p-8">
                           <div className="text-6xl mb-4">💸</div>
-                          <p className="text-gray-400 text-lg mb-2">لا توجد تحويلات مسجلة</p>
-                          <p className="text-gray-500 text-sm">الإيداعات والسحوبات ستظهر هنا</p>
+                          <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد تحويلات مسجلة</p>
+                          <p className="text-[var(--dash-text-disabled)] text-sm">الإيداعات والسحوبات ستظهر هنا</p>
                         </div>
                       ) : (
                         <div className="flex-1 overflow-auto scrollbar-hide">
@@ -4952,7 +4952,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           {isLoadingMoreTransfers && (
                             <div className="flex items-center justify-center py-4">
                               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                              <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                              <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
                         </div>
@@ -4964,23 +4964,23 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 {activeTab === 'operations' && (
                   <div className="h-full flex flex-col">
                     {/* Operations Header - Summary Cards */}
-                    <div className="bg-[#2B3544] border-b border-gray-600 p-4">
+                    <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] p-4">
                       <div className="grid grid-cols-4 gap-3 mb-4">
-                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-3 text-center">
                           <div className="text-green-400 text-lg font-bold">{formatPrice(operationsSummary.deposits, 'system')}</div>
-                          <div className="text-gray-400 text-xs mt-1">إيداعات ↑</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs mt-1">إيداعات ↑</div>
                         </div>
-                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-3 text-center">
                           <div className="text-red-400 text-lg font-bold">{formatPrice(operationsSummary.withdrawals, 'system')}</div>
-                          <div className="text-gray-400 text-xs mt-1">سحوبات ↓</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs mt-1">سحوبات ↓</div>
                         </div>
-                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-3 text-center">
                           <div className="text-blue-400 text-lg font-bold">{formatPrice(operationsSummary.transfersIn, 'system')}</div>
-                          <div className="text-gray-400 text-xs mt-1">تحويلات واردة ←</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs mt-1">تحويلات واردة ←</div>
                         </div>
-                        <div className="bg-gray-700 rounded-lg p-3 text-center">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-3 text-center">
                           <div className="text-orange-400 text-lg font-bold">{formatPrice(operationsSummary.transfersOut, 'system')}</div>
-                          <div className="text-gray-400 text-xs mt-1">تحويلات صادرة →</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs mt-1">تحويلات صادرة →</div>
                         </div>
                       </div>
 
@@ -4999,8 +4999,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             onClick={() => setOperationsTypeFilter(f.key)}
                             className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                               operationsTypeFilter === f.key
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                                : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                             }`}
                           >
                             {f.label}
@@ -5014,13 +5014,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {isLoadingOperations ? (
                         <div className="flex items-center justify-center h-full">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
-                          <span className="text-gray-400">جاري تحميل المعاملات...</span>
+                          <span className="text-[var(--dash-text-muted)]">جاري تحميل المعاملات...</span>
                         </div>
                       ) : filteredOperations.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full p-8">
                           <div className="text-6xl mb-4">🔄</div>
-                          <p className="text-gray-400 text-lg mb-2">لا توجد معاملات</p>
-                          <p className="text-gray-500 text-sm">الإيداعات والسحوبات والتحويلات ستظهر هنا</p>
+                          <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد معاملات</p>
+                          <p className="text-[var(--dash-text-disabled)] text-sm">الإيداعات والسحوبات والتحويلات ستظهر هنا</p>
                         </div>
                       ) : (
                         <div className="flex-1 overflow-auto scrollbar-hide">
@@ -5032,14 +5032,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 header: '#',
                                 accessor: '#',
                                 width: 50,
-                                render: (_v: any, _item: any, index: number) => <span className="text-gray-400">{index + 1}</span>
+                                render: (_v: any, _item: any, index: number) => <span className="text-[var(--dash-text-muted)]">{index + 1}</span>
                               },
                               {
                                 id: 'date',
                                 header: 'التاريخ',
                                 accessor: 'created_at',
                                 width: 100,
-                                render: (value: string) => <span className="text-white">{value ? new Date(value).toLocaleDateString('en-GB') : '-'}</span>
+                                render: (value: string) => <span className="text-[var(--dash-text-primary)]">{value ? new Date(value).toLocaleDateString('en-GB') : '-'}</span>
                               },
                               {
                                 id: 'time',
@@ -5061,7 +5061,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                     'transfer_in': { text: 'تحويل وارد', color: 'text-blue-400', bg: 'bg-blue-600/20 border-blue-600' },
                                     'transfer_out': { text: 'تحويل صادر', color: 'text-orange-400', bg: 'bg-orange-600/20 border-orange-600' }
                                   }
-                                  const typeInfo = typeMap[value] || { text: value || '-', color: 'text-gray-400', bg: 'bg-gray-600/20 border-gray-600' }
+                                  const typeInfo = typeMap[value] || { text: value || '-', color: 'text-[var(--dash-text-muted)]', bg: 'bg-[var(--dash-bg-overlay)]/20 border-[var(--dash-border-default)]' }
                                   return <span className={`px-2 py-1 rounded text-xs font-medium border ${typeInfo.bg} ${typeInfo.color}`}>{typeInfo.text}</span>
                                 }
                               },
@@ -5088,7 +5088,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 accessor: 'related_safe_name',
                                 width: 120,
                                 render: (value: string, item: any) => {
-                                  if (item.transaction_type !== 'transfer_in' && item.transaction_type !== 'transfer_out') return <span className="text-gray-500">-</span>
+                                  if (item.transaction_type !== 'transfer_in' && item.transaction_type !== 'transfer_out') return <span className="text-[var(--dash-text-disabled)]">-</span>
                                   return <span className="text-cyan-400">{value || '-'}</span>
                                 }
                               },
@@ -5097,7 +5097,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                                 header: 'البيان',
                                 accessor: 'notes',
                                 width: 200,
-                                render: (value: string) => <span className="text-gray-400">{value || '-'}</span>
+                                render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
                               },
                               {
                                 id: 'employee',
@@ -5114,7 +5114,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           {isLoadingMoreOperations && (
                             <div className="flex items-center justify-center py-4">
                               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
-                              <span className="text-gray-400 text-sm">جاري تحميل المزيد...</span>
+                              <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
                         </div>
@@ -5154,17 +5154,17 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
       {/* Withdraw Modal */}
       {showWithdrawModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60]">
-          <div className="bg-[#2B3544] rounded-lg w-full max-w-md mx-4 shadow-xl">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60]">
+          <div className="bg-[var(--dash-bg-surface)] rounded-lg w-full max-w-md mx-4 shadow-xl animate-dash-scale-in">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-600">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
               <button
                 onClick={() => setShowWithdrawModal(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
               >
                 <XMarkIcon className="h-5 w-5" />
               </button>
-              <h3 className="text-white font-medium text-lg">
+              <h3 className="text-[var(--dash-text-primary)] font-medium text-lg">
                 {withdrawType === 'deposit' ? 'إيداع في الخزنة' : withdrawType === 'transfer' ? 'تحويل من الخزنة' : 'سحب من الخزنة'}
               </h3>
             </div>
@@ -5180,7 +5180,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       ? (withdrawSourceId === 'safe-only' ? 'رصيد الخزنة' : withdrawSourceId === 'transfers' ? 'رصيد التحويلات' : withdrawSourceId === 'all' ? 'الرصيد الإجمالي' : 'الرصيد الحالي')
                       : 'الرصيد الحالي'}
                 </div>
-                <div className="text-white text-xl font-bold">{formatPrice(
+                <div className="text-[var(--dash-text-primary)] text-xl font-bold">{formatPrice(
                   safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
                     ? (withdrawSourceId === 'all' ? safeBalance : withdrawSourceId === 'transfers'
                       ? mainSafeOwnBalance
@@ -5193,14 +5193,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
               {/* Operation Type */}
               <div>
-                <label className="block text-gray-300 text-sm mb-2 text-right">نوع العملية</label>
+                <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">نوع العملية</label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => { setWithdrawType('withdraw'); setShowWithdrawSuggestions(false) }}
                     className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
                       withdrawType === 'withdraw'
-                        ? 'bg-red-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        ? 'bg-red-600 text-[var(--dash-text-primary)]'
+                        : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                   >
                     سحب
@@ -5209,8 +5209,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     onClick={() => { setWithdrawType('deposit'); setShowWithdrawSuggestions(false) }}
                     className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
                       withdrawType === 'deposit'
-                        ? 'bg-green-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        ? 'bg-green-600 text-[var(--dash-text-primary)]'
+                        : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                   >
                     إيداع
@@ -5219,8 +5219,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     onClick={() => { setWithdrawType('transfer'); setShowWithdrawSuggestions(false) }}
                     className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
                       withdrawType === 'transfer'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                   >
                     تحويل
@@ -5234,13 +5234,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 if (safe.supports_drawers && childSafes.length > 0) {
                   return (
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 text-right">
+                      <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">
                         {withdrawType === 'deposit' ? 'الإيداع في' : 'السحب من'}
                       </label>
                       <select
                         value={withdrawSourceId}
                         onChange={(e) => { setWithdrawSourceId(e.target.value); setShowWithdrawSuggestions(false); setWithdrawAllMode(null); setWithdrawAmount('') }}
-                        className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       >
                         <option value="">اختر المصدر...</option>
                         <option value="all">الكل ({formatPrice(safeBalance, 'system')})</option>
@@ -5258,13 +5258,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 } else if (isNonDrawerWithTransfers) {
                   return (
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 text-right">
+                      <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">
                         {withdrawType === 'deposit' ? 'الإيداع في' : 'السحب من'}
                       </label>
                       <select
                         value={withdrawSourceId}
                         onChange={(e) => { setWithdrawSourceId(e.target.value); setShowWithdrawSuggestions(false); setWithdrawAllMode(null); setWithdrawAmount('') }}
-                        className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       >
                         <option value="">اختر المصدر...</option>
                         {withdrawType !== 'deposit' && (
@@ -5286,11 +5286,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               {/* Target Safe (if transfer) */}
               {withdrawType === 'transfer' && (
                 <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">الخزنة المستهدفة</label>
+                  <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">الخزنة المستهدفة</label>
                   <select
                     value={targetSafeId}
                     onChange={(e) => setTargetSafeId(e.target.value)}
-                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                   >
                     <option value="">اختر الخزنة...</option>
                     {allSafes.map((s) => (
@@ -5303,7 +5303,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               {/* Amount - different UI when "الكل" is selected */}
               {withdrawSourceId === 'all' && (withdrawType === 'withdraw' || withdrawType === 'transfer') ? (
                 <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">{withdrawType === 'withdraw' ? 'اختر طريقة السحب' : 'اختر طريقة التحويل'}</label>
+                  <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">{withdrawType === 'withdraw' ? 'اختر طريقة السحب' : 'اختر طريقة التحويل'}</label>
                   <div className="space-y-2">
                     {(() => {
                       const totalReserves = roundMoney(reserves.reduce((sum, r) => sum + r.amount, 0))
@@ -5321,7 +5321,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             className={`w-full text-right px-4 py-3 rounded-lg text-sm font-medium transition-colors border ${
                               withdrawAllMode === 'full'
                                 ? 'bg-red-600/30 border-red-500 text-red-300'
-                                : 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
+                                : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] text-gray-200 hover:bg-[var(--dash-bg-overlay)]'
                             }`}
                           >
                             {withdrawType === 'withdraw' ? 'سحب' : 'تحويل'} الرصيد بالكامل ({formatPrice(safeBalance, 'system')})
@@ -5335,7 +5335,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               className={`w-full text-right px-4 py-3 rounded-lg text-sm font-medium transition-colors border ${
                                 withdrawAllMode === 'excluding_reserves'
                                   ? 'bg-orange-600/30 border-orange-500 text-orange-300'
-                                  : 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
+                                  : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] text-gray-200 hover:bg-[var(--dash-bg-overlay)]'
                               }`}
                             >
                               {withdrawType === 'withdraw' ? 'سحب' : 'تحويل'} الرصيد بدون المجنب ({formatPrice(balanceExcludingReserves, 'system')})
@@ -5354,13 +5354,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 </div>
               ) : (
                 <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">المبلغ</label>
+                  <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">المبلغ</label>
                   <input
                     type="number"
                     value={withdrawAmount}
                     onChange={(e) => setWithdrawAmount(e.target.value)}
                     placeholder="أدخل المبلغ"
-                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                    className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] text-right"
                     min="0"
                     max={withdrawType === 'deposit' ? undefined : (
                       safe.supports_drawers && childSafes.length > 0 && withdrawSourceId
@@ -5393,17 +5393,17 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <svg className={`w-3 h-3 transition-transform ${showWithdrawSuggestions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                         </button>
                         {showWithdrawSuggestions && (
-                          <div className="mt-1 bg-gray-700 border border-gray-600 rounded-lg overflow-hidden">
+                          <div className="mt-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
                             <button
                               onClick={() => { setWithdrawAmount(roundMoney(sourceBalanceForButton).toString()); setShowWithdrawSuggestions(false) }}
-                              className="w-full text-right text-xs text-gray-200 hover:bg-gray-600 px-3 py-2 transition-colors"
+                              className="w-full text-right text-xs text-gray-200 hover:bg-[var(--dash-bg-overlay)] px-3 py-2 transition-colors"
                             >
                               سحب الرصيد بالكامل ({formatPrice(sourceBalanceForButton, 'system')})
                             </button>
                             {sourceReserves > 0 && (
                               <button
                                 onClick={() => { setWithdrawAmount(roundMoney(balanceExcludingReserves).toString()); setShowWithdrawSuggestions(false) }}
-                                className="w-full text-right text-xs text-gray-200 hover:bg-gray-600 px-3 py-2 border-t border-gray-600 transition-colors"
+                                className="w-full text-right text-xs text-gray-200 hover:bg-[var(--dash-bg-overlay)] px-3 py-2 border-t border-[var(--dash-border-default)] transition-colors"
                               >
                                 سحب الرصيد بدون المجنب ({formatPrice(balanceExcludingReserves, 'system')})
                               </button>
@@ -5418,22 +5418,22 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
               {/* Notes */}
               <div>
-                <label className="block text-gray-300 text-sm mb-2 text-right">ملاحظات (اختياري)</label>
+                <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">ملاحظات (اختياري)</label>
                 <input
                   type="text"
                   value={withdrawNotes}
                   onChange={(e) => setWithdrawNotes(e.target.value)}
                   placeholder="ملاحظات إضافية..."
-                  className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                  className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] text-right"
                 />
               </div>
             </div>
 
             {/* Footer */}
-            <div className="flex gap-2 p-4 border-t border-gray-600">
+            <div className="flex gap-2 p-4 border-t border-[var(--dash-border-default)]">
               <button
                 onClick={() => setShowWithdrawModal(false)}
-                className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded text-sm font-medium transition-colors"
+                className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-highlight)] text-[var(--dash-text-primary)] py-2 px-4 rounded text-sm font-medium transition-colors"
               >
                 إلغاء
               </button>
@@ -5442,10 +5442,10 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 disabled={isWithdrawing || !withdrawAmount || parseFloat(withdrawAmount) <= 0 || (withdrawSourceId === 'all' && withdrawType !== 'deposit' && !withdrawAllMode)}
                 className={`flex-1 py-2 px-4 rounded text-sm font-medium transition-colors ${
                   withdrawType === 'deposit'
-                    ? 'bg-green-600 hover:bg-green-700 text-white disabled:bg-green-800 disabled:cursor-not-allowed'
+                    ? 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] disabled:bg-green-800 disabled:cursor-not-allowed'
                     : withdrawType === 'transfer'
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-800 disabled:cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-white disabled:bg-red-800 disabled:cursor-not-allowed'
+                      ? 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] disabled:bg-blue-800 disabled:cursor-not-allowed'
+                      : 'bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] disabled:bg-red-800 disabled:cursor-not-allowed'
                 }`}
               >
                 {isWithdrawing ? 'جاري...' : withdrawType === 'deposit' ? 'إيداع' : withdrawType === 'transfer' ? 'تحويل' : 'سحب'}
@@ -5458,14 +5458,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       {/* Reserve Add/Edit Modal */}
       {showReserveModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setShowReserveModal(false)} />
-          <div className="relative bg-[#1F2937] rounded-lg shadow-xl w-full max-w-md mx-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowReserveModal(false)} />
+          <div className="relative bg-[var(--dash-bg-base)] rounded-lg shadow-xl w-full max-w-md mx-4 animate-dash-scale-in">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-600">
-              <button onClick={() => setShowReserveModal(false)} className="text-gray-400 hover:text-white">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
+              <button onClick={() => setShowReserveModal(false)} className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]">
                 <XMarkIcon className="h-5 w-5" />
               </button>
-              <h3 className="text-white font-bold text-lg">
+              <h3 className="text-[var(--dash-text-primary)] font-bold text-lg">
                 {reserveModalMode === 'add' ? 'تجنيب مبلغ' : 'تعديل التجنيب'}
               </h3>
             </div>
@@ -5475,11 +5475,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               {/* Drawer/source selector - for safes with drawers */}
               {safe.supports_drawers && childSafes.length > 0 && (
                 <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">المصدر</label>
+                  <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">المصدر</label>
                   <select
                     value={reserveSourceId}
                     onChange={(e) => setReserveSourceId(e.target.value)}
-                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                    className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
                   >
                     {childSafes.map(drawer => (
                       <option key={drawer.id} value={drawer.id}>
@@ -5490,7 +5490,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       التحويلات ({formatPrice(mainSafeOwnBalance, 'system')})
                     </option>
                   </select>
-                  <p className="text-gray-500 text-xs mt-1 text-right">
+                  <p className="text-[var(--dash-text-disabled)] text-xs mt-1 text-right">
                     المتاح للتجنيب: {formatPrice(getDrawerAvailableBalance(reserveSourceId), 'system')}
                   </p>
                 </div>
@@ -5499,11 +5499,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               {/* Source type selector - for non-drawer safes */}
               {!safe.supports_drawers && safe.show_transfers !== false && (
                 <div>
-                  <label className="block text-gray-300 text-sm mb-2 text-right">المصدر</label>
+                  <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">المصدر</label>
                   <select
                     value={reserveSourceType}
                     onChange={(e) => setReserveSourceType(e.target.value as 'cash' | 'transfers')}
-                    className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                    className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
                   >
                     <option value="cash">
                       الخزنة ({formatPrice(Math.max(0, safeBalance - nonDrawerTransferBalance), 'system')})
@@ -5512,7 +5512,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       التحويلات ({formatPrice(nonDrawerTransferBalance, 'system')})
                     </option>
                   </select>
-                  <p className="text-gray-500 text-xs mt-1 text-right">
+                  <p className="text-[var(--dash-text-disabled)] text-xs mt-1 text-right">
                     المتاح للتجنيب: {formatPrice(getNonDrawerAvailableBalance(reserveSourceType), 'system')}
                   </p>
                 </div>
@@ -5520,13 +5520,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
               {/* Amount input */}
               <div>
-                <label className="block text-gray-300 text-sm mb-2 text-right">المبلغ</label>
+                <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">المبلغ</label>
                 <input
                   type="number"
                   value={reserveAmount}
                   onChange={(e) => setReserveAmount(e.target.value)}
                   placeholder="أدخل المبلغ..."
-                  className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                  className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
                   min="0"
                   step="0.01"
                   autoFocus
@@ -5535,29 +5535,29 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
               {/* Notes input */}
               <div>
-                <label className="block text-gray-300 text-sm mb-2 text-right">ملاحظات (اختياري)</label>
+                <label className="block text-[var(--dash-text-secondary)] text-sm mb-2 text-right">ملاحظات (اختياري)</label>
                 <input
                   type="text"
                   value={reserveNotes}
                   onChange={(e) => setReserveNotes(e.target.value)}
                   placeholder="مثال: فكة لبكرة..."
-                  className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
+                  className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded px-3 py-2 text-sm border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
                 />
               </div>
             </div>
 
             {/* Footer */}
-            <div className="flex gap-2 p-4 border-t border-gray-600">
+            <div className="flex gap-2 p-4 border-t border-[var(--dash-border-default)]">
               <button
                 onClick={() => setShowReserveModal(false)}
-                className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded text-sm font-medium transition-colors"
+                className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-highlight)] text-[var(--dash-text-primary)] py-2 px-4 rounded text-sm font-medium transition-colors"
               >
                 إلغاء
               </button>
               <button
                 onClick={handleSaveReserve}
                 disabled={isSavingReserve || !reserveAmount || parseFloat(reserveAmount) <= 0}
-                className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded text-sm font-medium transition-colors disabled:bg-orange-800 disabled:cursor-not-allowed"
+                className="flex-1 bg-orange-600 hover:bg-orange-700 text-[var(--dash-text-primary)] py-2 px-4 rounded text-sm font-medium transition-colors disabled:bg-orange-800 disabled:cursor-not-allowed"
               >
                 {isSavingReserve ? 'جاري...' : reserveModalMode === 'add' ? 'تجنيب' : 'حفظ'}
               </button>

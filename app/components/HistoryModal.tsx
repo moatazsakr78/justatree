@@ -170,32 +170,32 @@ export default function HistoryModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-[#374151] rounded-lg w-[1000px] h-[700px] flex flex-col shadow-2xl">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg w-[1000px] h-[700px] flex flex-col shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-600">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-2">
             <ClockIcon className="h-5 w-5 text-blue-400" />
-            <h2 className="text-white text-lg font-semibold">تاريخ المبيعات</h2>
+            <h2 className="text-[var(--dash-text-primary)] text-lg font-semibold">تاريخ المبيعات</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
         {/* Search Bar */}
-        <div className="p-4 border-b border-gray-600 bg-[#2B3544]">
+        <div className="p-4 border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)]">
           <div className="relative">
-            <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="البحث في رقم الفاتورة، العميل، أو المبلغ..."
-              className="w-full pl-4 pr-10 py-2 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-4 pr-10 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-white placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
             />
           </div>
         </div>
@@ -205,8 +205,8 @@ export default function HistoryModal({
           {/* Sales List */}
           <div className="flex-1 flex flex-col">
             {/* Table Header */}
-            <div className="bg-[#2B3544] border-b border-gray-600">
-              <div className="grid grid-cols-8 gap-4 p-3 text-gray-300 text-sm font-medium">
+            <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
+              <div className="grid grid-cols-8 gap-4 p-3 text-[var(--dash-text-secondary)] text-sm font-medium">
                 <div className="text-center">رقم الفاتورة</div>
                 <div className="text-center">العميل</div>
                 <div className="text-center">المبلغ الإجمالي</div>
@@ -223,13 +223,13 @@ export default function HistoryModal({
               {isLoading ? (
                 <div className="flex-1 flex flex-col items-center justify-center p-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
-                  <p className="text-gray-400 text-lg">جاري تحميل تاريخ المبيعات...</p>
+                  <p className="text-[var(--dash-text-muted)] text-lg">جاري تحميل تاريخ المبيعات...</p>
                 </div>
               ) : error ? (
                 <div className="flex-1 flex flex-col items-center justify-center p-8">
                   <DocumentTextIcon className="h-16 w-16 text-red-500 mb-4" />
                   <p className="text-red-400 text-lg mb-2">خطأ في التحميل</p>
-                  <p className="text-gray-500 text-sm mb-4">{error}</p>
+                  <p className="text-[var(--dash-text-disabled)] text-sm mb-4">{error}</p>
                   <button
                     onClick={fetchSalesHistory}
                     className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
@@ -238,25 +238,25 @@ export default function HistoryModal({
                   </button>
                 </div>
               ) : filteredSales.length > 0 ? (
-                <div className="divide-y divide-gray-600">
+                <div className="divide-y divide-[var(--dash-border-default)]">
                   {filteredSales.map((sale) => (
                     <div key={sale.id}>
                       <div
-                        className={`grid grid-cols-8 gap-4 p-3 hover:bg-[#2B3544] cursor-pointer transition-colors ${
+                        className={`grid grid-cols-8 gap-4 p-3 hover:bg-[var(--dash-bg-surface)] cursor-pointer transition-colors ${
                           selectedSale?.id === sale.id ? 'bg-blue-600/20 border-l-4 border-blue-500' : ''
                         }`}
                         onClick={() => handleSaleSelect(sale)}
                       >
-                        <div className="text-center text-white font-medium">
+                        <div className="text-center text-[var(--dash-text-primary)] font-medium">
                           {sale.invoice_number}
                         </div>
-                        <div className="text-center text-gray-300">
+                        <div className="text-center text-[var(--dash-text-secondary)]">
                           {sale.customer?.name || 'عميل مجهول'}
                         </div>
                         <div className="text-center text-green-400 font-medium">
                           {sale.total_amount.toFixed(2)}
                         </div>
-                        <div className="text-center text-gray-300">
+                        <div className="text-center text-[var(--dash-text-secondary)]">
                           {getPaymentMethodText(sale.payment_method)}
                         </div>
                         <div className="text-center">
@@ -268,7 +268,7 @@ export default function HistoryModal({
                             {sale.is_updated ? 'نعم' : 'لا'}
                           </span>
                         </div>
-                        <div className="text-center text-gray-400 text-sm">
+                        <div className="text-center text-[var(--dash-text-muted)] text-sm">
                           {formatDate(sale.created_at)}
                         </div>
                         <div className="text-center text-blue-400">
@@ -299,21 +299,21 @@ export default function HistoryModal({
                       
                       {/* Sale Details - Expandable */}
                       {selectedSale?.id === sale.id && sale.sale_items && (
-                        <div className="bg-[#2B3544] border-l-4 border-blue-500 p-4">
-                          <h4 className="text-white font-medium mb-3">تفاصيل الفاتورة:</h4>
+                        <div className="bg-[var(--dash-bg-surface)] border-l-4 border-blue-500 p-4">
+                          <h4 className="text-[var(--dash-text-primary)] font-medium mb-3">تفاصيل الفاتورة:</h4>
                           <div className="space-y-2">
                             {sale.sale_items.map((item, index) => (
-                              <div key={item.id} className="flex justify-between items-center p-2 bg-[#374151] rounded">
+                              <div key={item.id} className="flex justify-between items-center p-2 bg-[var(--dash-bg-raised)] rounded">
                                 <div className="flex items-center gap-3">
-                                  <span className="text-gray-400 text-sm">{index + 1}.</span>
-                                  <span className="text-white">{item.product.name}</span>
+                                  <span className="text-[var(--dash-text-muted)] text-sm">{index + 1}.</span>
+                                  <span className="text-[var(--dash-text-primary)]">{item.product.name}</span>
                                   {item.product.barcode && (
-                                    <span className="text-gray-500 text-xs">({item.product.barcode})</span>
+                                    <span className="text-[var(--dash-text-disabled)] text-xs">({item.product.barcode})</span>
                                   )}
                                 </div>
                                 <div className="flex items-center gap-4 text-sm">
-                                  <span className="text-gray-300">الكمية: {item.quantity}</span>
-                                  <span className="text-gray-300">السعر: {item.unit_price.toFixed(2)}</span>
+                                  <span className="text-[var(--dash-text-secondary)]">الكمية: {item.quantity}</span>
+                                  <span className="text-[var(--dash-text-secondary)]">السعر: {item.unit_price.toFixed(2)}</span>
                                   <span className="text-green-400 font-medium">
                                     الإجمالي: {(item.quantity * item.unit_price).toFixed(2)}
                                   </span>
@@ -323,7 +323,7 @@ export default function HistoryModal({
                           </div>
                           
                           {/* Sale Summary */}
-                          <div className="mt-4 p-3 bg-[#1F2937] rounded-lg">
+                          <div className="mt-4 p-3 bg-[var(--dash-bg-base)] rounded-lg">
                             <div className="flex justify-between items-center text-sm mb-2">
                               <div className="space-y-1">
                                 {sale.discount_amount && sale.discount_amount > 0 && (
@@ -341,9 +341,9 @@ export default function HistoryModal({
                             </div>
                             
                             {/* Update Status Info */}
-                            <div className="border-t border-gray-600 pt-2 mt-2">
+                            <div className="border-t border-[var(--dash-border-default)] pt-2 mt-2">
                               <div className="flex items-center justify-between text-xs">
-                                <span className="text-gray-400">حالة التحديث:</span>
+                                <span className="text-[var(--dash-text-muted)]">حالة التحديث:</span>
                                 <span className={`px-2 py-1 rounded-full font-medium ${
                                   sale.is_updated 
                                     ? 'bg-orange-900 text-orange-300' 
@@ -361,16 +361,16 @@ export default function HistoryModal({
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center p-8">
-                  <DocumentTextIcon className="h-16 w-16 text-gray-500 mb-4" />
-                  <p className="text-gray-400 text-lg mb-2">لا توجد مبيعات</p>
-                  <p className="text-gray-500 text-sm">لا توجد مبيعات مسجلة في قاعدة البيانات</p>
+                  <DocumentTextIcon className="h-16 w-16 text-[var(--dash-text-disabled)] mb-4" />
+                  <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد مبيعات</p>
+                  <p className="text-[var(--dash-text-disabled)] text-sm">لا توجد مبيعات مسجلة في قاعدة البيانات</p>
                 </div>
               )}
             </div>
 
             {/* Footer Stats */}
-            <div className="border-t border-gray-600 p-3 bg-[#2B3544]">
-              <div className="flex justify-between items-center text-sm text-gray-400">
+            <div className="border-t border-[var(--dash-border-default)] p-3 bg-[var(--dash-bg-surface)]">
+              <div className="flex justify-between items-center text-sm text-[var(--dash-text-muted)]">
                 <span>إجمالي المبيعات: {filteredSales.length}</span>
                 <span>إجمالي المبلغ: {filteredSales.reduce((sum, sale) => sum + sale.total_amount, 0).toFixed(2)}</span>
               </div>
@@ -379,10 +379,10 @@ export default function HistoryModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="border-t border-gray-600 p-4 flex justify-end">
+        <div className="border-t border-[var(--dash-border-default)] p-4 flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm transition-colors"
+            className="px-6 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg text-sm transition-colors"
           >
             إغلاق
           </button>

@@ -48,14 +48,14 @@ export default function CustomerTable({ showActions = false }: CustomerTableProp
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-right">
-        <thead className="bg-gray-700 text-gray-300">
+        <thead className="bg-[var(--dash-table-header-bg)] text-[var(--dash-text-secondary)]">
           <tr>
             <th className="p-3 text-center">
               <input
                 type="checkbox"
                 checked={selectedRows.length === mockCustomers.length}
                 onChange={toggleAllSelection}
-                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
               />
             </th>
             <th className="p-3 text-right font-medium">#</th>
@@ -69,12 +69,12 @@ export default function CustomerTable({ showActions = false }: CustomerTableProp
             <th className="p-3 text-right font-medium">تاريخ الإنشاء</th>
           </tr>
         </thead>
-        <tbody className="bg-pos-darker divide-y divide-gray-700">
+        <tbody className="bg-pos-darker divide-y divide-[var(--dash-border-subtle)]">
           {mockCustomers.map((customer) => (
             <tr 
               key={customer.id}
-              className={`hover:bg-gray-700 transition-colors ${
-                selectedRows.includes(customer.id) ? 'bg-blue-900/20' : ''
+              className={`hover:bg-[var(--dash-bg-overlay)] transition-colors ${
+                selectedRows.includes(customer.id) ? 'bg-[var(--dash-accent-blue-subtle)]' : ''
               }`}
             >
               <td className="p-3 text-center">
@@ -82,18 +82,18 @@ export default function CustomerTable({ showActions = false }: CustomerTableProp
                   type="checkbox"
                   checked={selectedRows.includes(customer.id)}
                   onChange={() => toggleRowSelection(customer.id)}
-                  className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
                 />
               </td>
-              <td className="p-3 text-white font-medium">{customer.id}</td>
-              <td className="p-3 text-white font-medium">{customer.name}</td>
-              <td className="p-3 text-white">{customer.email || 'عميل'}</td>
-              <td className="p-3 text-white">{customer.accountBalance}</td>
-              <td className="p-3 text-white">{customer.city}</td>
-              <td className="p-3 text-white">{customer.phone || '-'}</td>
-              <td className="p-3 text-white">{customer.city}</td>
-              <td className="p-3 text-white">{customer.address || '-'}</td>
-              <td className="p-3 text-gray-400">{customer.createdAt}</td>
+              <td className="p-3 text-[var(--dash-text-primary)] font-medium">{customer.id}</td>
+              <td className="p-3 text-[var(--dash-text-primary)] font-medium">{customer.name}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{customer.email || 'عميل'}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{customer.accountBalance}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{customer.city}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{customer.phone || '-'}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{customer.city}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{customer.address || '-'}</td>
+              <td className="p-3 text-[var(--dash-text-muted)]">{customer.createdAt}</td>
             </tr>
           ))}
         </tbody>

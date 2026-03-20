@@ -32,8 +32,8 @@ export default function AuthErrorPage() {
   }, [searchParams])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1F2937] via-[#2B3544] to-[#1F2937] flex items-center justify-center p-4">
-      <div className="bg-[#2B3544] rounded-lg shadow-xl p-8 w-full max-w-md text-center">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--dash-bg-base)] via-[var(--dash-bg-surface)] to-[var(--dash-bg-base)] flex items-center justify-center p-4">
+      <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] p-8 w-full max-w-md text-center">
         {/* Error Icon */}
         <div className="mb-6">
           <div className="mx-auto w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center">
@@ -54,12 +54,12 @@ export default function AuthErrorPage() {
         </div>
 
         {/* Error Title */}
-        <h1 className="text-2xl font-bold text-white mb-4">
+        <h1 className="text-2xl font-bold text-[var(--dash-text-primary)] mb-4">
           فشل تسجيل الدخول
         </h1>
 
         {/* Error Message */}
-        <p className="text-gray-300 mb-8">
+        <p className="text-[var(--dash-text-secondary)] mb-8">
           {error}
         </p>
 
@@ -74,14 +74,14 @@ export default function AuthErrorPage() {
 
           <button
             onClick={() => router.push('/')}
-            className="w-full px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors"
+            className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] font-medium rounded-lg transition-colors"
           >
             العودة للصفحة الرئيسية
           </button>
         </div>
 
         {/* Help Text */}
-        <p className="mt-6 text-sm text-gray-400">
+        <p className="mt-6 text-sm text-[var(--dash-text-muted)]">
           إذا استمرت المشكلة، يرجى المحاولة مرة أخرى لاحقاً
         </p>
       </div>

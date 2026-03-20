@@ -194,8 +194,8 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
   if (isLoading) {
     return (
       <div className={`p-4 ${className}`}>
-        <div className="flex items-center gap-2 text-gray-400">
-          <div className="animate-spin h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full"></div>
+        <div className="flex items-center gap-2 text-[var(--dash-text-muted)]">
+          <div className="animate-spin h-4 w-4 border-2 border-[var(--dash-text-muted)] border-t-transparent rounded-full"></div>
           <span>جاري تحميل الفروع...</span>
         </div>
       </div>
@@ -208,7 +208,7 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <BuildingStorefrontIcon className="h-5 w-5 text-blue-400" />
-          <h3 className="text-white font-medium">الفروع المخصصة</h3>
+          <h3 className="text-[var(--dash-text-primary)] font-medium">الفروع المخصصة</h3>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -217,10 +217,10 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
           >
             تحديد الكل
           </button>
-          <span className="text-gray-600">|</span>
+          <span className="text-[var(--dash-text-disabled)]">|</span>
           <button
             onClick={clearAll}
-            className="text-xs text-gray-400 hover:text-gray-300 transition-colors"
+            className="text-xs text-[var(--dash-text-muted)] hover:text-[var(--dash-text-secondary)] transition-colors"
           >
             إلغاء الكل
           </button>
@@ -246,21 +246,21 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
               className={`flex items-center gap-3 p-3 rounded-lg border transition-colors cursor-pointer ${
                 isSelected
                   ? 'bg-blue-500/10 border-blue-500/50'
-                  : 'bg-gray-800/50 border-gray-700 hover:border-gray-600'
+                  : 'bg-[var(--dash-bg-base)]/50 border-[var(--dash-border-subtle)] hover:border-[var(--dash-border-default)]'
               }`}
               onClick={() => toggleBranch(branch.id)}
             >
               {/* Checkbox */}
               <div
                 className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${
-                  isSelected ? 'bg-blue-500' : 'border border-gray-600'
+                  isSelected ? 'bg-blue-500' : 'border border-[var(--dash-border-default)]'
                 }`}
               >
                 {isSelected && <CheckIcon className="h-3 w-3 text-white" />}
               </div>
 
               {/* Branch name */}
-              <span className={`flex-grow ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+              <span className={`flex-grow ${isSelected ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                 {branch.name}
               </span>
 
@@ -274,7 +274,7 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
                   className={`p-1 rounded transition-colors ${
                     isDefault
                       ? 'text-yellow-400'
-                      : 'text-gray-500 hover:text-yellow-400'
+                      : 'text-[var(--dash-text-disabled)] hover:text-yellow-400'
                   }`}
                   title={isDefault ? 'الفرع الافتراضي' : 'تعيين كفرع افتراضي'}
                 >
@@ -292,20 +292,20 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
 
       {/* Selected count and save button */}
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-sm text-gray-400">
+        <span className="text-sm text-[var(--dash-text-muted)]">
           {selectedBranchIds.size} فرع محدد
         </span>
         <button
           onClick={saveAssignments}
           disabled={isSaving}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
         >
           {isSaving ? 'جاري الحفظ...' : 'حفظ'}
         </button>
       </div>
 
       {/* Help text */}
-      <p className="mt-2 text-xs text-gray-500">
+      <p className="mt-2 text-xs text-[var(--dash-text-disabled)]">
         النجمة تحدد الفرع الافتراضي الذي سيظهر عند تسجيل الدخول
       </p>
     </div>

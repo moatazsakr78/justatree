@@ -122,7 +122,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
 

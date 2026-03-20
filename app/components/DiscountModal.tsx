@@ -115,16 +115,16 @@ export default function DiscountModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-600">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
                     <ReceiptPercentIcon className="h-6 w-6 text-orange-400" />
                     إضافة خصم
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-raised)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -132,13 +132,13 @@ export default function DiscountModal({
 
                 {/* Tabs */}
                 <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-                  <Tab.List className="flex border-b border-gray-600">
+                  <Tab.List className="flex border-b border-[var(--dash-border-default)]">
                     <Tab
                       className={({ selected }) =>
                         `flex-1 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                           selected
                             ? "text-orange-400 border-b-2 border-orange-400 bg-orange-400/10"
-                            : "text-gray-400 hover:text-white hover:bg-gray-700/50"
+                            : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-raised)]/50"
                         }`
                       }
                     >
@@ -150,7 +150,7 @@ export default function DiscountModal({
                         `flex-1 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                           selected
                             ? "text-orange-400 border-b-2 border-orange-400 bg-orange-400/10"
-                            : "text-gray-400 hover:text-white hover:bg-gray-700/50"
+                            : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-raised)]/50"
                         }`
                       }
                     >
@@ -164,19 +164,19 @@ export default function DiscountModal({
                     <Tab.Panel className="space-y-4">
                       {cartItems.length === 0 ? (
                         <div className="text-center py-8">
-                          <CubeIcon className="h-12 w-12 text-gray-500 mx-auto mb-3" />
-                          <p className="text-gray-400">السلة فارغة</p>
-                          <p className="text-gray-500 text-sm">أضف منتجات للسلة أولاً</p>
+                          <CubeIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mx-auto mb-3" />
+                          <p className="text-[var(--dash-text-muted)]">السلة فارغة</p>
+                          <p className="text-[var(--dash-text-disabled)] text-sm">أضف منتجات للسلة أولاً</p>
                         </div>
                       ) : (
                         <>
                           {/* Select Item */}
                           <div>
-                            <label className="block text-sm text-gray-400 mb-2">اختر المنتج</label>
+                            <label className="block text-sm text-[var(--dash-text-muted)] mb-2">اختر المنتج</label>
                             <select
                               value={selectedItemId || ""}
                               onChange={(e) => setSelectedItemId(e.target.value)}
-                              className="w-full p-3 bg-[#2B3544] border border-gray-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              className="w-full p-3 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                             >
                               {cartItems.map((item) => (
                                 <option key={item.id} value={item.id}>
@@ -189,18 +189,18 @@ export default function DiscountModal({
 
                           {/* Current Item Info */}
                           {selectedItem && (
-                            <div className="p-3 bg-[#2B3544] rounded-xl">
+                            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-xl">
                               <div className="flex justify-between items-center text-sm">
-                                <span className="text-gray-400">السعر:</span>
+                                <span className="text-[var(--dash-text-muted)]">السعر:</span>
                                 <span className="text-white">{selectedItem.price.toFixed(2)} ج.م</span>
                               </div>
                               <div className="flex justify-between items-center text-sm mt-1">
-                                <span className="text-gray-400">الكمية:</span>
+                                <span className="text-[var(--dash-text-muted)]">الكمية:</span>
                                 <span className="text-white">{selectedItem.quantity}</span>
                               </div>
                               {selectedItem.discount && (
                                 <div className="flex justify-between items-center text-sm mt-1">
-                                  <span className="text-gray-400">الخصم الحالي:</span>
+                                  <span className="text-[var(--dash-text-muted)]">الخصم الحالي:</span>
                                   <span className="text-orange-400">
                                     {selectedItem.discount}{selectedItem.discountType === "percentage" ? "%" : " ج.م"}
                                   </span>
@@ -216,27 +216,27 @@ export default function DiscountModal({
                     <Tab.Panel className="space-y-4">
                       {cartItems.length === 0 ? (
                         <div className="text-center py-8">
-                          <ShoppingCartIcon className="h-12 w-12 text-gray-500 mx-auto mb-3" />
-                          <p className="text-gray-400">السلة فارغة</p>
-                          <p className="text-gray-500 text-sm">أضف منتجات للسلة أولاً</p>
+                          <ShoppingCartIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mx-auto mb-3" />
+                          <p className="text-[var(--dash-text-muted)]">السلة فارغة</p>
+                          <p className="text-[var(--dash-text-disabled)] text-sm">أضف منتجات للسلة أولاً</p>
                         </div>
                       ) : (
                         <>
                           {/* Cart Summary */}
                           <div className="p-3 bg-[#2B3544] rounded-xl">
                             <div className="flex justify-between items-center text-sm">
-                              <span className="text-gray-400">عدد الأصناف:</span>
+                              <span className="text-[var(--dash-text-muted)]">عدد الأصناف:</span>
                               <span className="text-white">{cartItems.length}</span>
                             </div>
                             <div className="flex justify-between items-center text-sm mt-1">
-                              <span className="text-gray-400">إجمالي السلة:</span>
+                              <span className="text-[var(--dash-text-muted)]">إجمالي السلة:</span>
                               <span className="text-white">
                                 {cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)} ج.م
                               </span>
                             </div>
                             {cartDiscount > 0 && (
                               <div className="flex justify-between items-center text-sm mt-1">
-                                <span className="text-gray-400">الخصم الحالي:</span>
+                                <span className="text-[var(--dash-text-muted)]">الخصم الحالي:</span>
                                 <span className="text-orange-400">
                                   {cartDiscount}{cartDiscountType === "percentage" ? "%" : " ج.م"}
                                 </span>
@@ -254,14 +254,14 @@ export default function DiscountModal({
                   <div className="px-6 pb-6 space-y-4">
                     {/* Discount Type Toggle */}
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">نوع الخصم</label>
-                      <div className="flex bg-[#2B3544] rounded-xl p-1">
+                      <label className="block text-sm text-[var(--dash-text-muted)] mb-2">نوع الخصم</label>
+                      <div className="flex bg-[var(--dash-bg-surface)] rounded-xl p-1">
                         <button
                           onClick={() => setDiscountType("percentage")}
                           className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
                             discountType === "percentage"
                               ? "bg-orange-500 text-white"
-                              : "text-gray-400 hover:text-white"
+                              : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
                           نسبة %
@@ -271,7 +271,7 @@ export default function DiscountModal({
                           className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
                             discountType === "fixed"
                               ? "bg-orange-500 text-white"
-                              : "text-gray-400 hover:text-white"
+                              : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
                           مبلغ ج.م
@@ -281,14 +281,14 @@ export default function DiscountModal({
 
                     {/* Discount Value Input */}
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">قيمة الخصم</label>
+                      <label className="block text-sm text-[var(--dash-text-muted)] mb-2">قيمة الخصم</label>
                       <div className="relative">
                         <input
                           type="number"
                           value={discountValue}
                           onChange={(e) => setDiscountValue(e.target.value)}
                           placeholder={discountType === "percentage" ? "مثال: 10" : "مثال: 50"}
-                          className="w-full p-3 pl-16 bg-[#2B3544] border border-gray-600 rounded-xl text-white text-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          className="w-full p-3 pl-16 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-xl text-white text-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                           autoFocus
                           min="0"
                           max={discountType === "percentage" ? "100" : undefined}
@@ -326,8 +326,8 @@ export default function DiscountModal({
 
                 {/* Footer Note */}
                 <div className="px-6 pb-6">
-                  <div className="p-3 bg-[#2B3544] rounded-lg">
-                    <p className="text-sm text-gray-400 text-center">
+                  <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+                    <p className="text-sm text-[var(--dash-text-muted)] text-center">
                       {selectedTab === 0
                         ? "الخصم سيُطبق على المنتج المحدد فقط"
                         : "الخصم سيُطبق على إجمالي السلة"}

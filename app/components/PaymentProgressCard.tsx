@@ -21,12 +21,12 @@ export default function PaymentProgressCard({
   const progressPercentage = Math.min(paymentProgress, 100);
 
   return (
-    <div className="bg-[#2B3544] rounded-lg border border-gray-600 p-6">
+    <div className="bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)] p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <CreditCardIcon className="w-6 h-6 text-blue-400" />
-          <h3 className="text-lg font-bold text-white">حالة الدفع</h3>
+          <h3 className="text-lg font-bold text-[var(--dash-text-primary)]">حالة الدفع</h3>
         </div>
         {fullyPaid ? (
           <div className="flex items-center gap-2 bg-green-500/20 px-3 py-1 rounded-full">
@@ -44,16 +44,16 @@ export default function PaymentProgressCard({
       {/* Payment Details */}
       <div className="space-y-3 mb-6">
         <div className="flex justify-between items-center">
-          <span className="text-gray-300">المبلغ الإجمالي:</span>
-          <span className="text-white font-bold text-lg">{orderAmount.toFixed(2)} جنيه</span>
+          <span className="text-[var(--dash-text-secondary)]">المبلغ الإجمالي:</span>
+          <span className="text-[var(--dash-text-primary)] font-bold text-lg">{orderAmount.toFixed(2)} جنيه</span>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-gray-300">المدفوع:</span>
+          <span className="text-[var(--dash-text-secondary)]">المدفوع:</span>
           <span className="text-green-400 font-bold">{totalPaid.toFixed(2)} جنيه</span>
         </div>
         {!fullyPaid && (
-          <div className="flex justify-between items-center border-t border-gray-600 pt-3">
-            <span className="text-gray-300">المتبقي:</span>
+          <div className="flex justify-between items-center border-t border-[var(--dash-border-default)] pt-3">
+            <span className="text-[var(--dash-text-secondary)]">المتبقي:</span>
             <span className="text-orange-400 font-bold text-lg">{remainingAmount.toFixed(2)} جنيه</span>
           </div>
         )}
@@ -62,10 +62,10 @@ export default function PaymentProgressCard({
       {/* Progress Bar */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-gray-300 text-sm">نسبة الإنجاز</span>
-          <span className="text-white font-bold">{progressPercentage.toFixed(0)}%</span>
+          <span className="text-[var(--dash-text-secondary)] text-sm">نسبة الإنجاز</span>
+          <span className="text-[var(--dash-text-primary)] font-bold">{progressPercentage.toFixed(0)}%</span>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+        <div className="w-full bg-[var(--dash-bg-raised)] rounded-full h-3 overflow-hidden">
           <div
             className={`h-full transition-all duration-500 ${
               fullyPaid ? 'bg-green-500' : 'bg-blue-500'

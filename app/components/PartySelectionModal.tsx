@@ -351,10 +351,10 @@ export default function PartySelectionModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-600">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     {selectedTab === "customer" ? (
                       <UserIcon className="h-6 w-6 text-blue-400" />
                     ) : (
@@ -364,7 +364,7 @@ export default function PartySelectionModal({
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -372,7 +372,7 @@ export default function PartySelectionModal({
 
                 {/* Tabs */}
                 <div className="px-6 pt-4">
-                  <div className="flex bg-[#2B3544] rounded-xl p-1">
+                  <div className="flex bg-[var(--dash-bg-surface)] rounded-xl p-1">
                     <button
                       onClick={() => {
                         setSelectedTab("customer");
@@ -382,7 +382,7 @@ export default function PartySelectionModal({
                       className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
                         selectedTab === "customer"
                           ? "bg-blue-600 text-white shadow-lg"
-                          : "text-gray-400 hover:text-white hover:bg-gray-600/30"
+                          : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30"
                       }`}
                     >
                       <UserIcon className="h-4 w-4" />
@@ -397,7 +397,7 @@ export default function PartySelectionModal({
                       className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
                         selectedTab === "supplier"
                           ? "bg-amber-600 text-white shadow-lg"
-                          : "text-gray-400 hover:text-white hover:bg-gray-600/30"
+                          : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30"
                       }`}
                     >
                       <TruckIcon className="h-4 w-4" />
@@ -407,15 +407,15 @@ export default function PartySelectionModal({
                 </div>
 
                 {/* Search */}
-                <div className="p-4 border-b border-gray-600">
+                <div className="p-4 border-b border-[var(--dash-border-default)]">
                   <div className="relative">
-                    <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[var(--dash-text-muted)]" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder={selectedTab === "customer" ? "البحث عن عميل بالاسم أو الهاتف..." : "البحث عن مورد بالاسم أو الهاتف..."}
-                      className="w-full pl-4 pr-12 py-3 bg-[#2B3544] border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-4 pr-12 py-3 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-xl text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent"
                       autoFocus
                     />
                   </div>
@@ -432,7 +432,7 @@ export default function PartySelectionModal({
                               ? selectedTab === "customer"
                                 ? "bg-blue-600 text-white"
                                 : "bg-amber-600 text-white"
-                              : "bg-[#2B3544] text-gray-300 hover:bg-[#374151]"
+                              : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-raised)]"
                           }`}
                         >
                           <UsersIcon className="h-3.5 w-3.5" />
@@ -443,7 +443,7 @@ export default function PartySelectionModal({
                                 ? selectedTab === "customer"
                                   ? "bg-blue-700"
                                   : "bg-amber-700"
-                                : "bg-gray-600"
+                                : "bg-[var(--dash-bg-overlay)]"
                             }`}
                           >
                             {group.count}
@@ -461,7 +461,7 @@ export default function PartySelectionModal({
                       <div className={`animate-spin rounded-full h-10 w-10 border-b-2 ${
                         selectedTab === "customer" ? "border-blue-500" : "border-amber-500"
                       } mb-4`}></div>
-                      <p className="text-gray-400">
+                      <p className="text-[var(--dash-text-muted)]">
                         {selectedTab === "customer" ? "جاري تحميل العملاء..." : "جاري تحميل الموردين..."}
                       </p>
                     </div>
@@ -469,15 +469,15 @@ export default function PartySelectionModal({
                     /* Customers List */
                     filteredCustomers.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-12">
-                        <UserIcon className="h-12 w-12 text-gray-500 mb-4" />
-                        <p className="text-gray-400">لا يوجد عملاء</p>
+                        <UserIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mb-4" />
+                        <p className="text-[var(--dash-text-muted)]">لا يوجد عملاء</p>
                       </div>
                     ) : (
                       filteredCustomers.map((customer) => (
                         <button
                           key={customer.id}
                           onClick={() => handleSelectCustomer(customer)}
-                          className={`w-full p-4 flex items-center gap-4 hover:bg-[#2B3544] transition-colors border-b border-gray-700/50 ${
+                          className={`w-full p-4 flex items-center gap-4 hover:bg-[var(--dash-bg-surface)] transition-colors border-b border-[var(--dash-border-subtle)]/50 ${
                             currentSelection?.id === customer.id && currentSelection?.type === "customer"
                               ? "bg-blue-600/20 border-l-4 border-l-blue-500"
                               : ""
@@ -492,7 +492,7 @@ export default function PartySelectionModal({
                           </div>
                           <div className="flex-1 text-right">
                             <div className="flex items-center gap-2">
-                              <span className="text-white font-medium">{customer.name}</span>
+                              <span className="text-[var(--dash-text-primary)] font-medium">{customer.name}</span>
                               {isDefaultCustomer(customer) && (
                                 <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded">
                                   افتراضي
@@ -503,7 +503,7 @@ export default function PartySelectionModal({
                               )}
                             </div>
                             {customer.phone && (
-                              <p className="text-gray-400 text-sm">{customer.phone}</p>
+                              <p className="text-[var(--dash-text-muted)] text-sm">{customer.phone}</p>
                             )}
                           </div>
                           <div className="text-left">
@@ -523,15 +523,15 @@ export default function PartySelectionModal({
                     /* Suppliers List */
                     filteredSuppliers.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-12">
-                        <TruckIcon className="h-12 w-12 text-gray-500 mb-4" />
-                        <p className="text-gray-400">لا يوجد موردين</p>
+                        <TruckIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mb-4" />
+                        <p className="text-[var(--dash-text-muted)]">لا يوجد موردين</p>
                       </div>
                     ) : (
                       filteredSuppliers.map((supplier) => (
                         <button
                           key={supplier.id}
                           onClick={() => handleSelectSupplier(supplier)}
-                          className={`w-full p-4 flex items-center gap-4 hover:bg-[#2B3544] transition-colors border-b border-gray-700/50 ${
+                          className={`w-full p-4 flex items-center gap-4 hover:bg-[var(--dash-bg-surface)] transition-colors border-b border-[var(--dash-border-subtle)]/50 ${
                             currentSelection?.id === supplier.id && currentSelection?.type === "supplier"
                               ? "bg-amber-600/20 border-l-4 border-l-amber-500"
                               : ""
@@ -546,7 +546,7 @@ export default function PartySelectionModal({
                           </div>
                           <div className="flex-1 text-right">
                             <div className="flex items-center gap-2">
-                              <span className="text-white font-medium">{supplier.name}</span>
+                              <span className="text-[var(--dash-text-primary)] font-medium">{supplier.name}</span>
                               {isDefaultSupplier(supplier) && (
                                 <span className="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded">
                                   افتراضي
@@ -554,7 +554,7 @@ export default function PartySelectionModal({
                               )}
                             </div>
                             {supplier.phone && (
-                              <p className="text-gray-400 text-sm">{supplier.phone}</p>
+                              <p className="text-[var(--dash-text-muted)] text-sm">{supplier.phone}</p>
                             )}
                           </div>
                           <div className="text-left">
@@ -571,8 +571,8 @@ export default function PartySelectionModal({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-gray-600 bg-[#1F2937]">
-                  <p className="text-gray-500 text-sm text-center">
+                <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-base)]">
+                  <p className="text-[var(--dash-text-disabled)] text-sm text-center">
                     {selectedTab === "customer"
                       ? `اضغط على العميل لاختياره - إجمالي العملاء: ${filteredCustomers.length}`
                       : `اضغط على المورد لاختياره - إجمالي الموردين: ${filteredSuppliers.length}`}

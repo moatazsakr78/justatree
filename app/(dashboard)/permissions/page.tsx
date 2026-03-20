@@ -1039,7 +1039,7 @@ export default function PermissionsPage() {
       render: (value: any, role: Role) => (
         <div className="flex items-center gap-2">
           <ShieldCheckIcon className="h-4 w-4 text-blue-400" />
-          <span className="font-medium text-white">{value}</span>
+          <span className="font-medium text-[var(--dash-text-primary)]">{value}</span>
         </div>
       )
     },
@@ -1049,7 +1049,7 @@ export default function PermissionsPage() {
       accessor: 'description' as keyof Role,
       width: 350,
       render: (value: any) => (
-        <span className="text-gray-300 text-sm">{value}</span>
+        <span className="text-[var(--dash-text-secondary)] text-sm">{value}</span>
       )
     },
     {
@@ -1059,8 +1059,8 @@ export default function PermissionsPage() {
       width: 120,
       render: (value: any) => (
         <div className="flex items-center gap-2">
-          <UsersIcon className="h-4 w-4 text-gray-400" />
-          <span className="text-white">{value}</span>
+          <UsersIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
+          <span className="text-[var(--dash-text-primary)]">{value}</span>
         </div>
       )
     },
@@ -1087,7 +1087,7 @@ export default function PermissionsPage() {
       accessor: 'lastModified' as keyof Role,
       width: 120,
       render: (value: any) => (
-        <span className="text-gray-400 text-sm">{value}</span>
+        <span className="text-[var(--dash-text-muted)] text-sm">{value}</span>
       )
     }
   ];
@@ -1102,7 +1102,7 @@ export default function PermissionsPage() {
       render: (value: any, item: PermissionTemplate) => (
         <div className="flex items-center gap-2">
           <KeyIcon className="h-4 w-4 text-blue-400" />
-          <span className="font-medium text-white">{value}</span>
+          <span className="font-medium text-[var(--dash-text-primary)]">{value}</span>
           {value === 'عام' && (
             <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-500/20 text-green-400">افتراضي</span>
           )}
@@ -1115,7 +1115,7 @@ export default function PermissionsPage() {
       accessor: 'description' as keyof PermissionTemplate,
       width: 400,
       render: (value: any) => (
-        <span className="text-gray-300 text-sm">{value || 'بدون وصف'}</span>
+        <span className="text-[var(--dash-text-secondary)] text-sm">{value || 'بدون وصف'}</span>
       )
     },
     {
@@ -1124,7 +1124,7 @@ export default function PermissionsPage() {
       accessor: 'created_at' as keyof PermissionTemplate,
       width: 150,
       render: (value: any) => (
-        <span className="text-gray-400 text-sm">
+        <span className="text-[var(--dash-text-muted)] text-sm">
           {value ? new Date(value).toLocaleDateString('ar-EG') : '-'}
         </span>
       )
@@ -1135,7 +1135,7 @@ export default function PermissionsPage() {
       accessor: 'updated_at' as keyof PermissionTemplate,
       width: 150,
       render: (value: any) => (
-        <span className="text-gray-400 text-sm">
+        <span className="text-[var(--dash-text-muted)] text-sm">
           {value ? new Date(value).toLocaleDateString('ar-EG') : '-'}
         </span>
       )
@@ -1161,17 +1161,17 @@ export default function PermissionsPage() {
                   e.currentTarget.style.display = 'none';
                   const parentDiv = e.currentTarget.parentNode as HTMLElement;
                   if (parentDiv) {
-                    parentDiv.innerHTML = `<span class="text-white text-sm font-medium">${value?.charAt(0) || 'U'}</span>`;
+                    parentDiv.innerHTML = `<span class="text-[var(--dash-text-primary)] text-sm font-medium">${value?.charAt(0) || 'U'}</span>`;
                   }
                 }}
               />
             ) : (
-              <span className="text-white text-sm font-medium">{value?.charAt(0) || 'U'}</span>
+              <span className="text-[var(--dash-text-primary)] text-sm font-medium">{value?.charAt(0) || 'U'}</span>
             )}
           </div>
           <div>
-            <div className="text-white font-medium">{value || 'غير محدد'}</div>
-            <div className="text-gray-400 text-xs">{user.email || 'لا يوجد إيميل'}</div>
+            <div className="text-[var(--dash-text-primary)] font-medium">{value || 'غير محدد'}</div>
+            <div className="text-[var(--dash-text-muted)] text-xs">{user.email || 'لا يوجد إيميل'}</div>
           </div>
         </div>
       )
@@ -1186,7 +1186,7 @@ export default function PermissionsPage() {
           {editingUserId === user.id ? (
             <div className="flex items-center gap-2 w-full">
               <select
-                className="bg-[#2B3544] border border-gray-600 rounded-md px-2 py-1 text-white text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md px-2 py-1 text-[var(--dash-text-primary)] text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={value || 'عميل'}
                 onChange={(e) => updateUserRole(user.id, e.target.value)}
                 disabled={updatingRole || user.is_admin}
@@ -1200,7 +1200,7 @@ export default function PermissionsPage() {
               )}
               <button
                 onClick={() => setEditingUserId(null)}
-                className="text-gray-400 hover:text-gray-300 text-xs"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-secondary)] text-xs"
                 disabled={updatingRole}
               >
                 ✕
@@ -1208,11 +1208,11 @@ export default function PermissionsPage() {
             </div>
           ) : (
             <div className="flex items-center gap-2 w-full">
-              <span className={`px-2 py-1 text-white text-xs rounded-full ${
+              <span className={`px-2 py-1 text-[var(--dash-text-primary)] text-xs rounded-full ${
                 value === 'عميل' ? 'bg-green-600' :
                 value === 'جملة' ? 'bg-blue-600' :
                 value === 'موظف' ? 'bg-blue-600' :
-                value === 'أدمن رئيسي' ? 'bg-purple-600' : 'bg-gray-600'
+                value === 'أدمن رئيسي' ? 'bg-purple-600' : 'bg-[var(--dash-bg-overlay)]'
               }`}>
                 {value || 'غير محدد'}
               </span>
@@ -1227,7 +1227,7 @@ export default function PermissionsPage() {
                 className={`text-xs ${
                   user.is_admin
                     ? 'text-gray-600 cursor-not-allowed'
-                    : 'text-gray-400 hover:text-blue-400'
+                    : 'text-[var(--dash-text-muted)] hover:text-blue-400'
                 }`}
                 disabled={user.is_admin}
                 title={user.is_admin ? 'لا يمكن تغيير رتبة هذا المستخدم - محمي (is_admin=true)' : ''}
@@ -1245,7 +1245,7 @@ export default function PermissionsPage() {
       accessor: 'lastLogin' as keyof User,
       width: 150,
       render: (value: any) => (
-        <span className="text-gray-400 text-sm">{value || 'غير متوفر'}</span>
+        <span className="text-[var(--dash-text-muted)] text-sm">{value || 'غير متوفر'}</span>
       )
     },
     {
@@ -1254,7 +1254,7 @@ export default function PermissionsPage() {
       accessor: 'createdAt' as keyof User,
       width: 120,
       render: (value: any) => (
-        <span className="text-gray-400 text-sm">{value || 'غير متوفر'}</span>
+        <span className="text-[var(--dash-text-muted)] text-sm">{value || 'غير متوفر'}</span>
       )
     },
     {
@@ -1275,7 +1275,7 @@ export default function PermissionsPage() {
             {editingPermissionUserId === user.id ? (
               <div className="flex items-center gap-2 w-full">
                 <select
-                  className="bg-[#2B3544] border border-gray-600 rounded-md px-2 py-1 text-white text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md px-2 py-1 text-[var(--dash-text-primary)] text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={value || ''}
                   onChange={(e) => updateUserPermission(user.id, e.target.value || null)}
                   disabled={updatingPermission}
@@ -1290,7 +1290,7 @@ export default function PermissionsPage() {
                 )}
                 <button
                   onClick={() => setEditingPermissionUserId(null)}
-                  className="text-gray-400 hover:text-gray-300 text-xs"
+                  className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-secondary)] text-xs"
                   disabled={updatingPermission}
                 >
                   ✕
@@ -1298,16 +1298,16 @@ export default function PermissionsPage() {
               </div>
             ) : (
               <div className="flex items-center gap-2 w-full">
-                <span className={`px-2 py-1 text-white text-xs rounded-full ${
+                <span className={`px-2 py-1 text-[var(--dash-text-primary)] text-xs rounded-full ${
                   user.permission_name && user.permission_name !== 'عام'
                     ? 'bg-cyan-600'
-                    : 'bg-gray-600'
+                    : 'bg-[var(--dash-bg-overlay)]'
                 }`}>
                   {user.permission_name || 'عام'}
                 </span>
                 <button
                   onClick={() => setEditingPermissionUserId(user.id)}
-                  className="text-xs text-gray-400 hover:text-blue-400"
+                  className="text-xs text-[var(--dash-text-muted)] hover:text-blue-400"
                 >
                   <PencilIcon className="h-3 w-3" />
                 </button>
@@ -1327,14 +1327,14 @@ export default function PermissionsPage() {
           {editingBranchUserId === user.id ? (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setEditingBranchUserId(null)}>
               <div
-                className="bg-[#2B3544] rounded-lg p-4 w-[400px] max-h-[80vh] overflow-y-auto shadow-xl"
+                className="bg-[var(--dash-bg-surface)] rounded-lg p-4 w-[400px] max-h-[80vh] overflow-y-auto shadow-xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-medium">تعيين الفروع - {user.name}</h3>
+                  <h3 className="text-[var(--dash-text-primary)] font-medium">تعيين الفروع - {user.name}</h3>
                   <button
                     onClick={() => setEditingBranchUserId(null)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                   >
                     <XMarkIcon className="h-5 w-5" />
                   </button>
@@ -1507,13 +1507,13 @@ export default function PermissionsPage() {
   };
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
       
       <div className="h-full pt-12 overflow-hidden flex flex-col">
         {/* Top Action Buttons Toolbar */}
-        <div className="bg-[#374151] border-b border-gray-600 px-4 py-2 w-full">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2 w-full">
           <div className="flex items-center justify-start gap-1">
             {getActionButtons().map((button, index) => (
               <button
@@ -1523,7 +1523,7 @@ export default function PermissionsPage() {
                 className={`flex flex-col items-center p-2 min-w-[80px] transition-colors ${
                   button.disabled 
                     ? 'text-gray-600 cursor-not-allowed' 
-                    : 'text-gray-300 hover:text-white cursor-pointer'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer'
                 }`}
                 title={button.disabled ? 'الأدوار الأساسية لا يمكن تعديلها' : ''}
               >
@@ -1536,17 +1536,17 @@ export default function PermissionsPage() {
 
         <div className="flex-1 flex overflow-hidden">
           {/* Left Sidebar - View Selector and Tree */}
-          <div className="w-64 bg-[#374151] border-l border-gray-700 flex flex-col">
+          <div className="w-64 bg-[var(--dash-bg-raised)] border-l border-[var(--dash-border-subtle)] flex flex-col">
             {/* View Selector */}
-            <div className="p-4 border-b border-gray-600">
-              <h3 className="text-white font-medium mb-3">إدارة الصلاحيات</h3>
+            <div className="p-4 border-b border-[var(--dash-border-default)]">
+              <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">إدارة الصلاحيات</h3>
               <div className="space-y-2">
                 <button
                   onClick={() => setActiveView('roles')}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
                     activeView === 'roles' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'text-gray-300 hover:bg-gray-600 hover:text-white'
+                      ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                      : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   <ShieldCheckIcon className="h-4 w-4" />
@@ -1556,8 +1556,8 @@ export default function PermissionsPage() {
                   onClick={() => setActiveView('users')}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
                     activeView === 'users' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'text-gray-300 hover:bg-gray-600 hover:text-white'
+                      ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                      : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   <UsersIcon className="h-4 w-4" />
@@ -1567,8 +1567,8 @@ export default function PermissionsPage() {
                   onClick={() => setActiveView('permissions')}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
                     activeView === 'permissions' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'text-gray-300 hover:bg-gray-600 hover:text-white'
+                      ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                      : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   <KeyIcon className="h-4 w-4" />
@@ -1583,19 +1583,19 @@ export default function PermissionsPage() {
                 <div className="p-4">
                   {/* عنوان القالب المحدد */}
                   <div className="mb-4 p-3 bg-blue-600/20 border border-blue-500/30 rounded-lg">
-                    <span className="text-gray-400 text-xs">تعديل صلاحيات:</span>
-                    <h3 className="text-white font-bold">{selectedTemplate?.name || 'غير محدد'}</h3>
+                    <span className="text-[var(--dash-text-muted)] text-xs">تعديل صلاحيات:</span>
+                    <h3 className="text-[var(--dash-text-primary)] font-bold">{selectedTemplate?.name || 'غير محدد'}</h3>
                   </div>
 
                   {/* زر حفظ التغييرات */}
                   <button
                     onClick={handleSaveTemplatePermissions}
-                    className="w-full mb-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
+                    className="w-full mb-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
                   >
                     حفظ التغييرات
                   </button>
 
-                  <h4 className="text-gray-300 text-sm font-medium mb-3">شجرة الصلاحيات</h4>
+                  <h4 className="text-[var(--dash-text-secondary)] text-sm font-medium mb-3">شجرة الصلاحيات</h4>
 
                   {/* Custom TreeView with Page Access Checkboxes */}
                   <div className="w-full">
@@ -1605,17 +1605,17 @@ export default function PermissionsPage() {
                         <div key={section.id}>
                           {/* Section Header (صفحات الإدارة / صفحات المتجر) */}
                           <div
-                            className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-[#3A4553] rounded-lg mx-1 my-0.5"
+                            className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-[var(--dash-bg-surface)] rounded-lg mx-1 my-0.5"
                             onClick={() => toggleTreeNode(section.id)}
                           >
-                            <button className="text-gray-400 hover:text-white flex-shrink-0 transition-colors">
+                            <button className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] flex-shrink-0 transition-colors">
                               {section.isExpanded ? (
                                 <ChevronDownIcon className="h-4 w-4" />
                               ) : (
                                 <ChevronLeftIcon className="h-4 w-4" />
                               )}
                             </button>
-                            {SectionIcon && <SectionIcon className="h-5 w-5 text-gray-400" />}
+                            {SectionIcon && <SectionIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />}
                             <span className="text-sm font-medium text-gray-200">{section.name}</span>
                           </div>
 
@@ -1633,7 +1633,7 @@ export default function PermissionsPage() {
                                     ? 'bg-blue-600'
                                     : isPageHidden
                                       ? 'bg-red-500/10 opacity-60'
-                                      : 'hover:bg-[#2B3544]'
+                                      : 'hover:bg-[var(--dash-bg-surface)]'
                                 }`}
                                 style={{ paddingRight: '28px' }}
                               >
@@ -1658,16 +1658,16 @@ export default function PermissionsPage() {
                                   title={isPageHidden ? 'الصفحة مخفية - اضغط للإظهار' : 'الصفحة ظاهرة - اضغط للإخفاء'}
                                 >
                                   {isPageHidden ? (
-                                    <XMarkIcon className="w-3 h-3 text-white" />
+                                    <XMarkIcon className="w-3 h-3 text-[var(--dash-text-primary)]" />
                                   ) : (
-                                    <CheckIcon className="w-3 h-3 text-white" />
+                                    <CheckIcon className="w-3 h-3 text-[var(--dash-text-primary)]" />
                                   )}
                                 </div>
 
                                 {/* Page Icon */}
                                 {PageIcon && (
                                   <PageIcon className={`h-4 w-4 flex-shrink-0 ${
-                                    isSelected ? 'text-white' : isPageHidden ? 'text-gray-500' : 'text-gray-400'
+                                    isSelected ? 'text-[var(--dash-text-primary)]' : isPageHidden ? 'text-[var(--dash-text-disabled)]' : 'text-[var(--dash-text-muted)]'
                                   }`} />
                                 )}
 
@@ -1675,10 +1675,10 @@ export default function PermissionsPage() {
                                 <span
                                   className={`text-sm font-medium flex-1 truncate ${
                                     isSelected
-                                      ? 'text-white cursor-pointer'
+                                      ? 'text-[var(--dash-text-primary)] cursor-pointer'
                                       : isPageHidden
-                                        ? 'text-gray-500 cursor-not-allowed line-through'
-                                        : 'text-gray-300 hover:text-white cursor-pointer'
+                                        ? 'text-[var(--dash-text-disabled)] cursor-not-allowed line-through'
+                                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer'
                                   }`}
                                   onClick={() => {
                                     if (!isPageHidden) {
@@ -1699,10 +1699,10 @@ export default function PermissionsPage() {
                                     className={`
                                       text-xs px-2 py-0.5 rounded-full flex-shrink-0 font-medium
                                       ${isSelected
-                                        ? 'bg-white/20 text-white'
+                                        ? 'bg-white/20 text-[var(--dash-text-primary)]'
                                         : page.count.selected > 0
                                           ? 'bg-red-500/20 text-red-400'
-                                          : 'bg-gray-600/50 text-gray-400'
+                                          : 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)]'
                                       }
                                     `}
                                   >
@@ -1728,26 +1728,26 @@ export default function PermissionsPage() {
             {/* Permissions Stats - Only show when viewing permissions but not editing */}
             {activeView === 'permissions' && !isEditingTemplatePermissions && (
               <div className="p-4">
-                <h4 className="text-gray-300 text-sm font-medium mb-3">إرشادات</h4>
-                <div className="space-y-2 text-sm text-gray-400">
+                <h4 className="text-[var(--dash-text-secondary)] text-sm font-medium mb-3">إرشادات</h4>
+                <div className="space-y-2 text-sm text-[var(--dash-text-muted)]">
                   <p>1. اضغط على "صلاحية جديدة" لإنشاء قالب</p>
                   <p>2. اختر قالباً من الجدول</p>
                   <p>3. اضغط على "إعدادات" لتعديل صلاحياته</p>
                 </div>
                 <div className="mt-4 p-3 bg-blue-600/10 border border-blue-500/30 rounded-lg">
                   <span className="text-blue-400 text-xs">معلومة:</span>
-                  <p className="text-gray-300 text-xs mt-1">كل قالب يحدد الصلاحيات الممنوعة، وكل ما عداها يكون مسموحاً</p>
+                  <p className="text-[var(--dash-text-secondary)] text-xs mt-1">كل قالب يحدد الصلاحيات الممنوعة، وكل ما عداها يكون مسموحاً</p>
                 </div>
                 {/* إحصائيات الصلاحيات */}
                 <div className="mt-4">
-                  <h4 className="text-gray-300 text-sm font-medium mb-3">إحصائيات</h4>
+                  <h4 className="text-[var(--dash-text-secondary)] text-sm font-medium mb-3">إحصائيات</h4>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">إجمالي الصلاحيات:</span>
-                      <span className="text-white font-medium">{templates.length}</span>
+                      <span className="text-[var(--dash-text-muted)]">إجمالي الصلاحيات:</span>
+                      <span className="text-[var(--dash-text-primary)] font-medium">{templates.length}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">صلاحيات {selectedRoleType}:</span>
+                      <span className="text-[var(--dash-text-muted)]">صلاحيات {selectedRoleType}:</span>
                       <span className={`font-medium ${ROLE_TYPE_COLORS[selectedRoleType].split(' ')[1]}`}>{filteredTemplates.length}</span>
                     </div>
                   </div>
@@ -1758,20 +1758,20 @@ export default function PermissionsPage() {
             {/* Role Statistics - Only show when viewing roles */}
             {activeView === 'roles' && (
               <div className="p-4">
-                <h4 className="text-gray-300 text-sm font-medium mb-3">إحصائيات الأدوار</h4>
+                <h4 className="text-[var(--dash-text-secondary)] text-sm font-medium mb-3">إحصائيات الأدوار</h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">إجمالي الأدوار:</span>
-                    <span className="text-white font-medium">{roles.length}</span>
+                    <span className="text-[var(--dash-text-muted)]">إجمالي الأدوار:</span>
+                    <span className="text-[var(--dash-text-primary)] font-medium">{roles.length}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">الأدوار الرئيسية:</span>
+                    <span className="text-[var(--dash-text-muted)]">الأدوار الرئيسية:</span>
                     <span className="text-green-400 font-medium">
                       {roles.filter(r => r.roleType === 'حقل رئيسي').length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">إجمالي المستخدمين:</span>
+                    <span className="text-[var(--dash-text-muted)]">إجمالي المستخدمين:</span>
                     <span className="text-blue-400 font-medium">
                       {roles.reduce((sum, role) => sum + role.userCount, 0)}
                     </span>
@@ -1783,20 +1783,20 @@ export default function PermissionsPage() {
             {/* User Statistics - Only show when viewing users */}
             {activeView === 'users' && (
               <div className="p-4">
-                <h4 className="text-gray-300 text-sm font-medium mb-3">إحصائيات المستخدمين</h4>
+                <h4 className="text-[var(--dash-text-secondary)] text-sm font-medium mb-3">إحصائيات المستخدمين</h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">إجمالي المستخدمين:</span>
-                    <span className="text-white font-medium">{realUsers.length}</span>
+                    <span className="text-[var(--dash-text-muted)]">إجمالي المستخدمين:</span>
+                    <span className="text-[var(--dash-text-primary)] font-medium">{realUsers.length}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">لديهم أدوار:</span>
+                    <span className="text-[var(--dash-text-muted)]">لديهم أدوار:</span>
                     <span className="text-blue-400 font-medium">
                       {realUsers.filter(u => u.role && u.role !== 'غير محدد').length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">بدون أدوار:</span>
+                    <span className="text-[var(--dash-text-muted)]">بدون أدوار:</span>
                     <span className="text-orange-400 font-medium">
                       {realUsers.filter(u => !u.role || u.role === 'غير محدد').length}
                     </span>
@@ -1804,7 +1804,7 @@ export default function PermissionsPage() {
                   {usersLoading && (
                     <div className="flex items-center justify-center py-2">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
-                      <span className="mr-2 text-gray-400 text-xs">جاري التحميل...</span>
+                      <span className="mr-2 text-[var(--dash-text-muted)] text-xs">جاري التحميل...</span>
                     </div>
                   )}
                 </div>
@@ -1815,17 +1815,17 @@ export default function PermissionsPage() {
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Secondary Toolbar - Search and Controls */}
-            <div className="bg-[#374151] border-b border-gray-600 px-6 py-3 flex-shrink-0">
+            <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6 py-3 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   {/* Search Input */}
                   <div className="relative">
-                    <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
                     <input
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-80 pl-4 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                      className="w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       placeholder={`البحث في ${
                         activeView === 'roles' ? 'الأدوار' : 
                         activeView === 'users' ? 'المستخدمين' : 'الصلاحيات'
@@ -1834,11 +1834,11 @@ export default function PermissionsPage() {
                   </div>
 
                   {/* View Toggle */}
-                  <div className="flex bg-[#2B3544] rounded-md overflow-hidden">
+                  <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden">
                     <button 
                       onClick={() => setViewMode('list')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                        viewMode === 'list' ? 'bg-blue-600 text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <ListBulletIcon className="h-4 w-4" />
@@ -1846,7 +1846,7 @@ export default function PermissionsPage() {
                     <button 
                       onClick={() => setViewMode('grid')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                        viewMode === 'grid' ? 'bg-blue-600 text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <Squares2X2Icon className="h-4 w-4" />
@@ -1856,11 +1856,11 @@ export default function PermissionsPage() {
 
                 {/* Current View Title */}
                 <div className="flex items-center gap-2">
-                  <h2 className="text-white font-medium">
+                  <h2 className="text-[var(--dash-text-primary)] font-medium">
                     {activeView === 'roles' ? 'إدارة الأدوار' : 
                      activeView === 'users' ? 'إدارة المستخدمين' : 'إدارة الصلاحيات'}
                   </h2>
-                  <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs">
+                  <span className="bg-blue-600 text-[var(--dash-text-primary)] px-2 py-1 rounded-full text-xs">
                     {getCurrentData().length}
                   </span>
                 </div>
@@ -1868,7 +1868,7 @@ export default function PermissionsPage() {
             </div>
 
             {/* Data Table Container */}
-            <div className="flex-1 overflow-hidden bg-[#2B3544]">
+            <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)]">
               {activeView === 'permissions' ? (
                 isEditingTemplatePermissions ? (
                   /* وضع تعديل صلاحيات القالب */
@@ -1878,8 +1878,8 @@ export default function PermissionsPage() {
                         {/* Header with category name */}
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3">
-                            <h2 className="text-xl font-bold text-white">{editingTemplateCategoryName}</h2>
-                            <span className="text-gray-400 text-sm">
+                            <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">{editingTemplateCategoryName}</h2>
+                            <span className="text-[var(--dash-text-muted)] text-sm">
                               ({editingTemplateCategoryPermissions.length} صلاحية)
                             </span>
                           </div>
@@ -1890,7 +1890,7 @@ export default function PermissionsPage() {
                                 const codes = editingTemplateCategoryPermissions.map(p => p.code);
                                 restrictAllTemplateCategory(codes);
                               }}
-                              className="px-3 py-1.5 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors"
+                              className="px-3 py-1.5 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] transition-colors"
                             >
                               منع الكل
                             </button>
@@ -1899,7 +1899,7 @@ export default function PermissionsPage() {
                                 const codes = editingTemplateCategoryPermissions.map(p => p.code);
                                 unrestrictAllTemplateCategory(codes);
                               }}
-                              className="px-3 py-1.5 text-sm rounded-lg bg-green-600 hover:bg-green-700 text-white transition-colors"
+                              className="px-3 py-1.5 text-sm rounded-lg bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] transition-colors"
                             >
                               السماح بالكل
                             </button>
@@ -1907,18 +1907,18 @@ export default function PermissionsPage() {
                         </div>
 
                         {/* Stats Bar */}
-                        <div className="bg-[#374151] rounded-lg p-3 mb-4 flex-shrink-0">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-3 mb-4 flex-shrink-0">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
                               <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-red-500" />
-                                <span className="text-gray-300 text-sm">
+                                <span className="text-[var(--dash-text-secondary)] text-sm">
                                   ممنوع: {editingTemplateCategoryPermissions.filter(p => editingTemplateRestrictions.includes(p.code)).length}
                                 </span>
                               </div>
                               <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-green-500" />
-                                <span className="text-gray-300 text-sm">
+                                <span className="text-[var(--dash-text-secondary)] text-sm">
                                   مسموح: {editingTemplateCategoryPermissions.filter(p => !editingTemplateRestrictions.includes(p.code)).length}
                                 </span>
                               </div>
@@ -1939,7 +1939,7 @@ export default function PermissionsPage() {
                                     relative flex flex-col p-4 rounded-xl border transition-all duration-200 cursor-pointer hover:scale-[1.02]
                                     ${isRestricted
                                       ? 'bg-red-500/10 border-red-500/40 hover:border-red-500'
-                                      : 'bg-[#374151] border-gray-600/50 hover:border-green-500/50'
+                                      : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)]/50 hover:border-green-500/50'
                                     }
                                   `}
                                 >
@@ -1957,11 +1957,11 @@ export default function PermissionsPage() {
                                       }
                                     `}>
                                       {isRestricted ? (
-                                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-4 h-4 text-[var(--dash-text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                       ) : (
-                                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-4 h-4 text-[var(--dash-text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                         </svg>
                                       )}
@@ -1970,7 +1970,7 @@ export default function PermissionsPage() {
                                     {/* Content */}
                                     <div className="flex-1 min-w-0">
                                       <div className="flex items-center gap-2 flex-wrap">
-                                        <h4 className="text-white font-medium text-sm leading-tight">{permission.name}</h4>
+                                        <h4 className="text-[var(--dash-text-primary)] font-medium text-sm leading-tight">{permission.name}</h4>
                                         <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
                                           permission.permission_type === 'button' ? 'bg-blue-500/20 text-blue-400' :
                                           permission.permission_type === 'feature' ? 'bg-green-500/20 text-green-400' :
@@ -1985,7 +1985,7 @@ export default function PermissionsPage() {
 
                                   {/* Description */}
                                   {permission.description && (
-                                    <p className="text-gray-400 text-xs mt-2 mr-9 line-clamp-2">{permission.description}</p>
+                                    <p className="text-[var(--dash-text-muted)] text-xs mt-2 mr-9 line-clamp-2">{permission.description}</p>
                                   )}
 
                                   {/* Status Text */}
@@ -2001,7 +2001,7 @@ export default function PermissionsPage() {
                             })}
                           </div>
                         ) : (
-                          <div className="flex-1 flex items-center justify-center text-gray-400">
+                          <div className="flex-1 flex items-center justify-center text-[var(--dash-text-muted)]">
                             <div className="text-center">
                               <p className="text-lg mb-2">لا توجد صلاحيات في هذا التصنيف</p>
                             </div>
@@ -2009,7 +2009,7 @@ export default function PermissionsPage() {
                         )}
                       </div>
                     ) : (
-                      <div className="h-full flex items-center justify-center text-gray-400">
+                      <div className="h-full flex items-center justify-center text-[var(--dash-text-muted)]">
                         <div className="text-center">
                           <KeyIcon className="h-16 w-16 mx-auto mb-4 text-gray-600" />
                           <p className="text-lg mb-2">اختر صفحة من شجرة الصلاحيات</p>
@@ -2022,7 +2022,7 @@ export default function PermissionsPage() {
                   /* وضع عرض جدول الصلاحيات مع تابات الأدوار */
                   <div className="h-full flex flex-col">
                     {/* تابات الأدوار */}
-                    <div className="flex items-center gap-2 p-4 border-b border-gray-700 bg-[#374151]">
+                    <div className="flex items-center gap-2 p-4 border-b border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)]">
                       {ROLE_TYPES.map((roleType) => (
                         <button
                           key={roleType}
@@ -2030,11 +2030,11 @@ export default function PermissionsPage() {
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                             selectedRoleType === roleType
                               ? `${ROLE_TYPE_COLORS[roleType]} border border-current`
-                              : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                              : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                           }`}
                         >
                           {roleType}
-                          <span className="mr-2 px-1.5 py-0.5 rounded-full text-xs bg-gray-600/50">
+                          <span className="mr-2 px-1.5 py-0.5 rounded-full text-xs bg-[var(--dash-bg-overlay)]/50">
                             {getTemplatesByRole(roleType).length}
                           </span>
                         </button>
@@ -2058,13 +2058,13 @@ export default function PermissionsPage() {
                         />
                       ) : (
                         <div className="h-full flex items-center justify-center">
-                          <div className="text-center text-gray-400">
+                          <div className="text-center text-[var(--dash-text-muted)]">
                             <KeyIcon className="h-16 w-16 mx-auto mb-4 text-gray-600" />
                             <p className="text-lg mb-2">لا توجد صلاحيات لدور {selectedRoleType}</p>
                             <p className="text-sm mb-4">قم بإنشاء صلاحية جديدة للبدء</p>
                             <button
                               onClick={handleOpenAddTemplateModal}
-                              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg transition-colors"
                             >
                               صلاحية جديدة
                             </button>
@@ -2118,27 +2118,27 @@ export default function PermissionsPage() {
         )}
 
         {/* Sidebar */}
-        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
           isAddRoleModalOpen ? 'translate-x-0' : 'translate-x-full'
         } shadow-2xl`}>
           
           {/* Header */}
-          <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-            <h2 className="text-white text-lg font-medium flex-1 text-right">إضافة دور جديد</h2>
+          <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+            <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right">إضافة دور جديد</h2>
             <button
               onClick={() => setIsAddRoleModalOpen(false)}
-              className="text-white hover:text-gray-200 transition-colors ml-4"
+              className="text-[var(--dash-text-primary)] hover:text-gray-200 transition-colors ml-4"
             >
               <ArrowRightIcon className="h-5 w-5" />
             </button>
           </div>
 
           {/* Tab Navigation Bar */}
-          <div className="bg-[#3A4553] border-b border-[#4A5568]">
+          <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
             <div className="flex">
               <button className="relative px-6 py-3 text-sm font-medium text-[#5DADE2]">
                 تفاصيل الدور
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#5DADE2]"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--dash-accent-blue)]"></div>
               </button>
             </div>
           </div>
@@ -2148,7 +2148,7 @@ export default function PermissionsPage() {
             
             {/* Role Name */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 اسم الدور *
               </label>
               <input
@@ -2156,39 +2156,39 @@ export default function PermissionsPage() {
                 value={newRoleName}
                 onChange={(e) => setNewRoleName(e.target.value)}
                 placeholder="أدخل اسم الدور"
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm"
               />
             </div>
 
             {/* Price Level */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 مستوى السعر *
               </label>
               <select
                 value={newRolePriceLevel}
                 onChange={(e) => setNewRolePriceLevel(Number(e.target.value))}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm"
               >
                 <option value={1}>سعر 1</option>
                 <option value={2}>سعر 2</option>
                 <option value={3}>سعر 3</option>
                 <option value={4}>سعر 4</option>
               </select>
-              <p className="text-gray-400 text-xs text-right">
+              <p className="text-[var(--dash-text-muted)] text-xs text-right">
                 حدد مستوى السعر الذي سيربط بهذا الدور
               </p>
             </div>
 
             {/* Permission Template Selection */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 قالب الصلاحيات
               </label>
               <select
                 value={selectedRoleTemplateId || ''}
                 onChange={(e) => setSelectedRoleTemplateId(e.target.value || null)}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm"
               >
                 <option value="">-- بدون قالب --</option>
                 {templates.map((template) => (
@@ -2197,14 +2197,14 @@ export default function PermissionsPage() {
                   </option>
                 ))}
               </select>
-              <p className="text-gray-400 text-xs text-right">
+              <p className="text-[var(--dash-text-muted)] text-xs text-right">
                 اختر قالب صلاحيات لربطه بهذا الدور (اختياري)
               </p>
             </div>
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 وصف الدور *
               </label>
               <textarea
@@ -2212,7 +2212,7 @@ export default function PermissionsPage() {
                 onChange={(e) => setNewRoleDescription(e.target.value)}
                 placeholder="أدخل وصف مفصل للدور"
                 rows={4}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm resize-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm resize-none"
               />
             </div>
 
@@ -2225,11 +2225,11 @@ export default function PermissionsPage() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-blue-300">فرعي</span>
-                  <span className="text-gray-300">نوع الدور:</span>
+                  <span className="text-[var(--dash-text-secondary)]">نوع الدور:</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-blue-300">جملة</span>
-                  <span className="text-gray-300">مشتق من:</span>
+                  <span className="text-[var(--dash-text-secondary)]">مشتق من:</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-blue-300">
@@ -2237,14 +2237,14 @@ export default function PermissionsPage() {
                       ? templates.find(t => t.id === selectedRoleTemplateId)?.name || 'قالب محدد'
                       : 'نفس صلاحيات الجملة'}
                   </span>
-                  <span className="text-gray-300">الصلاحيات:</span>
+                  <span className="text-[var(--dash-text-secondary)]">الصلاحيات:</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#3A4553] border-t border-[#4A5568]">
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]">
             <div className="flex gap-2">
               <div className="flex-1"></div>
 
@@ -2255,7 +2255,7 @@ export default function PermissionsPage() {
                     setIsAddRoleModalOpen(false);
                     setSelectedRoleTemplateId(null);
                   }}
-                  className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
+                  className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2267,8 +2267,8 @@ export default function PermissionsPage() {
                   disabled={!newRoleName.trim() || !newRoleDescription.trim()}
                   className={`bg-transparent border px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2 ${
                     !newRoleName.trim() || !newRoleDescription.trim()
-                      ? 'border-gray-600 text-gray-500 cursor-not-allowed'
-                      : 'hover:bg-gray-600/10 text-gray-300 border-gray-600 hover:border-gray-500'
+                      ? 'border-[var(--dash-border-default)] text-[var(--dash-text-disabled)] cursor-not-allowed'
+                      : 'hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:border-gray-500'
                   }`}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2293,27 +2293,27 @@ export default function PermissionsPage() {
         )}
 
         {/* Sidebar */}
-        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
           isEditRoleModalOpen ? 'translate-x-0' : 'translate-x-full'
         } shadow-2xl`}>
           
           {/* Header */}
-          <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-            <h2 className="text-white text-lg font-medium flex-1 text-right">تعديل الدور</h2>
+          <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+            <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right">تعديل الدور</h2>
             <button
               onClick={() => handleCancelEditRole()}
-              className="text-white hover:text-gray-200 transition-colors ml-4"
+              className="text-[var(--dash-text-primary)] hover:text-gray-200 transition-colors ml-4"
             >
               <ArrowRightIcon className="h-5 w-5" />
             </button>
           </div>
 
           {/* Tab Navigation Bar */}
-          <div className="bg-[#3A4553] border-b border-[#4A5568]">
+          <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
             <div className="flex">
               <button className="relative px-6 py-3 text-sm font-medium text-[#5DADE2]">
                 تفاصيل الدور
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#5DADE2]"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--dash-accent-blue)]"></div>
               </button>
             </div>
           </div>
@@ -2323,7 +2323,7 @@ export default function PermissionsPage() {
             
             {/* Role Name */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 اسم الدور *
               </label>
               <input
@@ -2331,33 +2331,33 @@ export default function PermissionsPage() {
                 value={newRoleName}
                 onChange={(e) => setNewRoleName(e.target.value)}
                 placeholder="أدخل اسم الدور"
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm"
               />
             </div>
 
             {/* Price Level */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 مستوى السعر *
               </label>
               <select
                 value={newRolePriceLevel}
                 onChange={(e) => setNewRolePriceLevel(Number(e.target.value))}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm"
               >
                 <option value={1}>سعر 1</option>
                 <option value={2}>سعر 2</option>
                 <option value={3}>سعر 3</option>
                 <option value={4}>سعر 4</option>
               </select>
-              <p className="text-gray-400 text-xs text-right">
+              <p className="text-[var(--dash-text-muted)] text-xs text-right">
                 حدد مستوى السعر الذي سيربط بهذا الدور
               </p>
             </div>
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 وصف الدور *
               </label>
               <textarea
@@ -2365,7 +2365,7 @@ export default function PermissionsPage() {
                 onChange={(e) => setNewRoleDescription(e.target.value)}
                 placeholder="أدخل وصف مفصل للدور"
                 rows={4}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm resize-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm resize-none"
               />
             </div>
 
@@ -2378,22 +2378,22 @@ export default function PermissionsPage() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-blue-300">فرعي</span>
-                  <span className="text-gray-300">نوع الدور:</span>
+                  <span className="text-[var(--dash-text-secondary)]">نوع الدور:</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-blue-300">جملة</span>
-                  <span className="text-gray-300">مشتق من:</span>
+                  <span className="text-[var(--dash-text-secondary)]">مشتق من:</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-blue-300">نفس صلاحيات الجملة</span>
-                  <span className="text-gray-300">الصلاحيات:</span>
+                  <span className="text-[var(--dash-text-secondary)]">الصلاحيات:</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#3A4553] border-t border-[#4A5568]">
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]">
             <div className="flex gap-2">
               <div className="flex-1"></div>
               
@@ -2401,7 +2401,7 @@ export default function PermissionsPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleCancelEditRole()}
-                  className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
+                  className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2413,8 +2413,8 @@ export default function PermissionsPage() {
                   disabled={!newRoleName.trim() || !newRoleDescription.trim()}
                   className={`bg-transparent border px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2 ${
                     !newRoleName.trim() || !newRoleDescription.trim()
-                      ? 'border-gray-600 text-gray-500 cursor-not-allowed' 
-                      : 'hover:bg-gray-600/10 text-gray-300 border-gray-600 hover:border-gray-500'
+                      ? 'border-[var(--dash-border-default)] text-[var(--dash-text-disabled)] cursor-not-allowed' 
+                      : 'hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:border-gray-500'
                   }`}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2439,16 +2439,16 @@ export default function PermissionsPage() {
         )}
 
         {/* Sidebar */}
-        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
           isAddTemplateModalOpen ? 'translate-x-0' : 'translate-x-full'
         } shadow-2xl`}>
 
           {/* Header */}
-          <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-            <h2 className="text-white text-lg font-medium flex-1 text-right">إضافة صلاحية جديدة</h2>
+          <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+            <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right">إضافة صلاحية جديدة</h2>
             <button
               onClick={() => setIsAddTemplateModalOpen(false)}
-              className="text-gray-400 hover:text-white"
+              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
@@ -2458,8 +2458,8 @@ export default function PermissionsPage() {
           <div className="flex-1 overflow-y-auto scrollbar-hide p-6 space-y-4">
 
             {/* Role Type Badge */}
-            <div className="flex items-center justify-end gap-2 p-3 bg-[#2B3441] rounded-lg border border-[#4A5568]">
-              <span className="text-gray-400 text-sm">صلاحية لدور:</span>
+            <div className="flex items-center justify-end gap-2 p-3 bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)]">
+              <span className="text-[var(--dash-text-muted)] text-sm">صلاحية لدور:</span>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${ROLE_TYPE_COLORS[selectedRoleType]}`}>
                 {selectedRoleType}
               </span>
@@ -2467,7 +2467,7 @@ export default function PermissionsPage() {
 
             {/* Template Name */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 اسم الصلاحية *
               </label>
               <input
@@ -2475,13 +2475,13 @@ export default function PermissionsPage() {
                 value={newTemplateName}
                 onChange={(e) => setNewTemplateName(e.target.value)}
                 placeholder="مثال: محدود، بدون تقارير، كاشير..."
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm"
               />
             </div>
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 الوصف
               </label>
               <textarea
@@ -2489,7 +2489,7 @@ export default function PermissionsPage() {
                 onChange={(e) => setNewTemplateDescription(e.target.value)}
                 placeholder="وصف اختياري للصلاحية"
                 rows={4}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm resize-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm resize-none"
               />
             </div>
 
@@ -2499,7 +2499,7 @@ export default function PermissionsPage() {
                 <span>معلومات</span>
                 <KeyIcon className="h-4 w-4" />
               </h4>
-              <div className="space-y-2 text-sm text-gray-300">
+              <div className="space-y-2 text-sm text-[var(--dash-text-secondary)]">
                 <p className="text-right">بعد إنشاء الصلاحية، سيتم فتح شاشة تحديد القيود (الأزرار والميزات الممنوعة).</p>
                 <p className="text-right">صلاحية "عام" تعني أن الدور يعمل بالكامل بدون قيود.</p>
               </div>
@@ -2507,11 +2507,11 @@ export default function PermissionsPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#3A4553] border-t border-[#4A5568]">
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]">
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setIsAddTemplateModalOpen(false)}
-                className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2"
+                className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2"
               >
                 <XMarkIcon className="w-4 h-4" />
                 إلغاء
@@ -2521,8 +2521,8 @@ export default function PermissionsPage() {
                 disabled={!newTemplateName.trim() || isCreatingTemplate}
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2 rounded ${
                   !newTemplateName.trim() || isCreatingTemplate
-                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
                 }`}
               >
                 {isCreatingTemplate ? (
@@ -2556,16 +2556,16 @@ export default function PermissionsPage() {
         )}
 
         {/* Sidebar */}
-        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+        <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
           isEditTemplateModalOpen ? 'translate-x-0' : 'translate-x-full'
         } shadow-2xl`}>
 
           {/* Header */}
-          <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-            <h2 className="text-white text-lg font-medium flex-1 text-right">تعديل قالب الصلاحيات</h2>
+          <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+            <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right">تعديل قالب الصلاحيات</h2>
             <button
               onClick={() => setIsEditTemplateModalOpen(false)}
-              className="text-gray-400 hover:text-white"
+              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
@@ -2576,7 +2576,7 @@ export default function PermissionsPage() {
 
             {/* Template Name */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 اسم القالب *
               </label>
               <input
@@ -2584,13 +2584,13 @@ export default function PermissionsPage() {
                 value={newTemplateName}
                 onChange={(e) => setNewTemplateName(e.target.value)}
                 placeholder="مثال: صلاحيات كاشير"
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm"
               />
             </div>
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="block text-white text-sm font-medium text-right">
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
                 وصف القالب
               </label>
               <textarea
@@ -2598,17 +2598,17 @@ export default function PermissionsPage() {
                 onChange={(e) => setNewTemplateDescription(e.target.value)}
                 placeholder="وصف اختياري للقالب"
                 rows={4}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm resize-none"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[var(--dash-accent-blue)] text-right text-sm resize-none"
               />
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#3A4553] border-t border-[#4A5568]">
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]">
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setIsEditTemplateModalOpen(false)}
-                className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2"
+                className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2"
               >
                 <XMarkIcon className="w-4 h-4" />
                 إلغاء
@@ -2618,8 +2618,8 @@ export default function PermissionsPage() {
                 disabled={!newTemplateName.trim()}
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2 rounded ${
                   !newTemplateName.trim()
-                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
                 }`}
               >
                 <CheckIcon className="w-4 h-4" />

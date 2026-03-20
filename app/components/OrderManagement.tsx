@@ -229,15 +229,15 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
   return (
     <div className={`flex flex-col h-full ${className}`} dir="rtl">
       {/* Search Bar */}
-      <div className="p-4 border-b border-gray-600 bg-[#2B3544]">
+      <div className="p-4 border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)]">
         <div className="relative">
-          <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="البحث في رقم الطلب، اسم العميل، أو رقم الهاتف..."
-            className="w-full pl-4 pr-10 py-2 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-4 pr-10 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
           />
         </div>
       </div>
@@ -247,13 +247,13 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
         {isLoading ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
-            <p className="text-gray-400 text-lg">جاري تحميل الطلبات...</p>
+            <p className="text-[var(--dash-text-muted)] text-lg">جاري تحميل الطلبات...</p>
           </div>
         ) : error ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8">
             <DocumentTextIcon className="h-16 w-16 text-red-500 mb-4" />
             <p className="text-red-400 text-lg mb-2">خطأ في التحميل</p>
-            <p className="text-gray-500 text-sm mb-4">{error}</p>
+            <p className="text-[var(--dash-text-disabled)] text-sm mb-4">{error}</p>
             <button
               onClick={fetchOrders}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
@@ -266,24 +266,24 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
             {filteredOrders.map((order, index) => (
               <div
                 key={order.id}
-                className={`bg-[#374151] rounded-lg overflow-hidden cursor-pointer transition-all ${
-                  selectedOrder?.id === order.id ? 'ring-2 ring-blue-500 bg-blue-600/10' : 'hover:bg-[#4B5563]'
+                className={`bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden cursor-pointer transition-all ${
+                  selectedOrder?.id === order.id ? 'ring-2 ring-blue-500 bg-blue-600/10' : 'hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 onClick={() => handleOrderSelect(order)}
               >
                 {/* Order Header */}
-                <div className="flex justify-between items-center p-4 border-b border-gray-600">
+                <div className="flex justify-between items-center p-4 border-b border-[var(--dash-border-default)]">
                   <div className="flex items-center gap-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-white">طلب رقم: {order.order_number}</h3>
-                      <p className="text-gray-400 text-sm">العميل: {order.customer_name} - {order.customer_phone}</p>
-                      <p className="text-gray-400 text-sm">التاريخ: {formatDate(order.created_at)}</p>
+                      <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">طلب رقم: {order.order_number}</h3>
+                      <p className="text-[var(--dash-text-muted)] text-sm">العميل: {order.customer_name} - {order.customer_phone}</p>
+                      <p className="text-[var(--dash-text-muted)] text-sm">التاريخ: {formatDate(order.created_at)}</p>
                     </div>
                   </div>
                   
                   <div className="text-right">
                     <p className="text-xl font-bold text-green-400">EGP {order.total_amount.toFixed(2)}</p>
-                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-white mt-2 ${getInvoiceTypeColor(order.invoice_type)}`}>
+                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-[var(--dash-text-primary)] mt-2 ${getInvoiceTypeColor(order.invoice_type)}`}>
                       {getInvoiceTypeText(order.invoice_type)}
                     </span>
                   </div>
@@ -294,13 +294,13 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
                   <div className="p-4">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-3"></div>
-                      <p className="text-gray-400">جاري تحميل عناصر الطلب...</p>
+                      <p className="text-[var(--dash-text-muted)]">جاري تحميل عناصر الطلب...</p>
                     </div>
                   </div>
                 ) : selectedOrder?.id === order.id && orderItems.length > 0 ? (
                   <div className="p-4">
                     {/* Table Header */}
-                    <div className="grid grid-cols-7 gap-4 p-3 bg-gray-800 rounded-lg font-semibold text-gray-300 text-sm mb-3">
+                    <div className="grid grid-cols-7 gap-4 p-3 bg-[var(--dash-bg-base)] rounded-lg font-semibold text-[var(--dash-text-secondary)] text-sm mb-3">
                       <div className="text-right">المنتج</div>
                       <div className="text-center">السعر</div>
                       <div className="text-center">الكمية</div>
@@ -315,14 +315,14 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
                       {orderItems.map((item, index) => {
                         const itemTotal = (item.quantity * item.unit_price) - (item.discount || 0)
                         return (
-                          <div key={item.id} className="grid grid-cols-7 gap-4 p-3 bg-gray-700 rounded-lg items-center">
+                          <div key={item.id} className="grid grid-cols-7 gap-4 p-3 bg-[var(--dash-bg-raised)] rounded-lg items-center">
                             {/* Product Image and Name */}
                             <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <span className="text-gray-300 text-xl">📦</span>
+                              <div className="w-12 h-12 bg-[var(--dash-bg-overlay)] rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span className="text-[var(--dash-text-secondary)] text-xl">📦</span>
                               </div>
                               <div className="flex-1 min-w-0">
-                                <div className="text-white font-medium text-sm">
+                                <div className="text-[var(--dash-text-primary)] font-medium text-sm">
                                   {item.product?.name || 'منتج محذوف'}
                                 </div>
                               </div>
@@ -335,7 +335,7 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
 
                             {/* Quantity */}
                             <div className="text-center">
-                              <p className="font-medium text-white">{item.quantity}</p>
+                              <p className="font-medium text-[var(--dash-text-primary)]">{item.quantity}</p>
                             </div>
 
                             {/* Total */}
@@ -345,19 +345,19 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
 
                             {/* Notes */}
                             <div className="text-center">
-                              <p className="text-gray-400 text-sm">
+                              <p className="text-[var(--dash-text-muted)] text-sm">
                                 {item.notes || '-'}
                               </p>
                             </div>
 
                             {/* Colors */}
                             <div className="text-center">
-                              <p className="text-gray-400 text-sm">-</p>
+                              <p className="text-[var(--dash-text-muted)] text-sm">-</p>
                             </div>
 
                             {/* Product Code */}
                             <div className="text-center">
-                              <p className="text-gray-300 text-xs font-mono">{item.product?.barcode || '-'}</p>
+                              <p className="text-[var(--dash-text-secondary)] text-xs font-mono">{item.product?.barcode || '-'}</p>
                             </div>
                           </div>
                         )
@@ -370,15 +370,15 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
           </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-8">
-            <DocumentTextIcon className="h-16 w-16 text-gray-500 mb-4" />
-            <p className="text-gray-400 text-lg mb-2">لا توجد طلبات</p>
-            <p className="text-gray-500 text-sm">لا توجد طلبات مسجلة في قاعدة البيانات</p>
+            <DocumentTextIcon className="h-16 w-16 text-[var(--dash-text-disabled)] mb-4" />
+            <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد طلبات</p>
+            <p className="text-[var(--dash-text-disabled)] text-sm">لا توجد طلبات مسجلة في قاعدة البيانات</p>
           </div>
         )}
 
         {/* Footer Stats */}
-        <div className="mt-4 p-4 bg-[#2B3544] rounded-lg">
-          <div className="flex justify-between items-center text-sm text-gray-400">
+        <div className="mt-4 p-4 bg-[var(--dash-bg-surface)] rounded-lg">
+          <div className="flex justify-between items-center text-sm text-[var(--dash-text-muted)]">
             <span>إجمالي الطلبات: {filteredOrders.length}</span>
             <span>إجمالي المبلغ: EGP {filteredOrders.reduce((sum, order) => sum + order.total_amount, 0).toFixed(2)}</span>
           </div>

@@ -198,30 +198,30 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
     <>
       {/* Backdrop */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-25 z-40"
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           onClick={onClose}
         />
       )}
 
       {/* Modal - wider than other modals to accommodate table */}
-      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[800px] bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[800px] bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
-      } shadow-2xl flex flex-col`}>
-        
+      } shadow-[var(--dash-shadow-lg)] flex flex-col`}>
+
         {/* Header - dark gray header matching design */}
-        <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-          <h2 className="text-white text-lg font-medium flex-1 text-right">إدارة</h2>
+        <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+          <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right">إدارة</h2>
           <button
             onClick={onClose}
-            className="text-white hover:text-gray-200 transition-colors ml-4"
+            className="text-[var(--dash-text-primary)] hover:text-gray-200 transition-colors ml-4"
           >
             <ArrowRightIcon className="h-5 w-5" />
           </button>
         </div>
 
         {/* Tab Navigation Bar - matching reference design */}
-        <div className="bg-[#3A4553] border-b border-[#4A5568]">
+        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
           <div className="flex">
             {tabs.map((tab) => (
               <button
@@ -229,14 +229,14 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'text-[#5DADE2]' // Light blue text for selected
-                    : 'text-gray-300 hover:text-white'
+                    ? 'text-[var(--dash-accent-blue)]'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                 }`}
               >
                 {tab.label}
                 {/* Light blue underline for active tab */}
                 {activeTab === tab.id && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#5DADE2]"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--dash-accent-blue)]"></div>
                 )}
               </button>
             ))}
@@ -244,7 +244,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
         </div>
 
         {/* Content Area - Card Grid Layout */}
-        <div className="flex-1 bg-[#2B3544] overflow-y-auto overflow-x-hidden p-6 scrollbar-hide">
+        <div className="flex-1 bg-[var(--dash-bg-base)] overflow-y-auto overflow-x-hidden p-6 scrollbar-hide">
             {loading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5DADE2]"></div>
@@ -255,7 +255,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                 {branches.map((branch) => (
                   <div
                     key={branch.id}
-                    className="bg-[#374151] border border-[#4A5568] rounded-lg p-6 hover:border-[#5DADE2] transition-all duration-300 hover:shadow-lg relative group"
+                    className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg p-6 hover:border-[var(--dash-accent-blue)] transition-all duration-300 hover:shadow-lg relative group"
                   >
                     {/* Card Header with Icon and Type */}
                     <div className="flex items-center justify-between mb-4">
@@ -264,7 +264,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                           <BuildingStorefrontIcon className="h-6 w-6" />
                         </div>
                         <div>
-                          <h3 className="text-white text-lg font-semibold">{branch.name}</h3>
+                          <h3 className="text-[var(--dash-text-primary)] text-lg font-semibold">{branch.name}</h3>
                           <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-600/20 text-blue-300 border border-blue-600/30">
                             فرع
                           </span>
@@ -294,27 +294,27 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                     <div className="space-y-3">
                       {/* Address */}
                       <div className="flex items-start gap-3">
-                        <MapPinIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <MapPinIcon className="h-5 w-5 text-[var(--dash-text-muted)] mt-0.5 flex-shrink-0" />
                         <div>
-                          <div className="text-gray-400 text-xs font-medium mb-1">العنوان</div>
-                          <div className="text-gray-200 text-sm">{branch.address}</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs font-medium mb-1">العنوان</div>
+                          <div className="text-[var(--dash-text-secondary)] text-sm">{branch.address}</div>
                         </div>
                       </div>
 
                       {/* Phone */}
                       <div className="flex items-center gap-3">
-                        <PhoneIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                        <PhoneIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
                         <div>
-                          <div className="text-gray-400 text-xs font-medium mb-1">الهاتف</div>
-                          <div className="text-gray-200 text-sm font-mono">{branch.phone}</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs font-medium mb-1">الهاتف</div>
+                          <div className="text-[var(--dash-text-secondary)] text-sm font-mono">{branch.phone}</div>
                         </div>
                       </div>
 
                       {/* Shapes & Colors Permission */}
                       <div className="flex items-center gap-3">
-                        <SwatchIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                        <SwatchIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
                         <div>
-                          <div className="text-gray-400 text-xs font-medium mb-1">الأشكال والألوان</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs font-medium mb-1">الأشكال والألوان</div>
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             branch.allow_variants 
                               ? 'bg-green-600/20 text-green-300 border border-green-600/30' 
@@ -327,7 +327,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                     </div>
 
                     {/* Subtle border glow effect on hover */}
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#5DADE2]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[var(--dash-accent-blue)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                   </div>
                 ))}
                 
@@ -335,7 +335,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                 {warehouses.map((warehouse) => (
                   <div
                     key={warehouse.id}
-                    className="bg-[#374151] border border-[#4A5568] rounded-lg p-6 hover:border-[#5DADE2] transition-all duration-300 hover:shadow-lg relative group"
+                    className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg p-6 hover:border-[var(--dash-accent-blue)] transition-all duration-300 hover:shadow-lg relative group"
                   >
                     {/* Card Header with Icon and Type */}
                     <div className="flex items-center justify-between mb-4">
@@ -374,7 +374,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                     <div className="space-y-3">
                       {/* Address */}
                       <div className="flex items-start gap-3">
-                        <MapPinIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <MapPinIcon className="h-5 w-5 text-[var(--dash-text-muted)] mt-0.5 flex-shrink-0" />
                         <div>
                           <div className="text-gray-400 text-xs font-medium mb-1">العنوان</div>
                           <div className="text-gray-200 text-sm">{warehouse.address}</div>
@@ -383,7 +383,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
 
                       {/* Phone */}
                       <div className="flex items-center gap-3">
-                        <PhoneIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                        <PhoneIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
                         <div>
                           <div className="text-gray-400 text-xs font-medium mb-1">الهاتف</div>
                           <div className="text-gray-200 text-sm font-mono">{warehouse.phone}</div>
@@ -392,9 +392,9 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
 
                       {/* Shapes & Colors Permission */}
                       <div className="flex items-center gap-3">
-                        <SwatchIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                        <SwatchIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
                         <div>
-                          <div className="text-gray-400 text-xs font-medium mb-1">الأشكال والألوان</div>
+                          <div className="text-[var(--dash-text-muted)] text-xs font-medium mb-1">الأشكال والألوان</div>
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             warehouse.allow_variants 
                               ? 'bg-green-600/20 text-green-300 border border-green-600/30' 
@@ -407,7 +407,7 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                     </div>
 
                     {/* Subtle border glow effect on hover */}
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#5DADE2]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[var(--dash-accent-blue)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                   </div>
                 ))}
               </div>
@@ -415,11 +415,11 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
               /* Empty state */
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-[#374151] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <BuildingStorefrontIcon className="h-8 w-8 text-gray-400" />
+                  <div className="w-16 h-16 bg-[var(--dash-bg-raised)] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <BuildingStorefrontIcon className="h-8 w-8 text-[var(--dash-text-muted)]" />
                   </div>
-                  <div className="text-gray-300 text-lg font-medium mb-2">لا توجد فروع أو مخازن</div>
-                  <div className="text-gray-500 text-sm max-w-md">
+                  <div className="text-[var(--dash-text-secondary)] text-lg font-medium mb-2">لا توجد فروع أو مخازن</div>
+                  <div className="text-[var(--dash-text-disabled)] text-sm max-w-md">
                     استخدم أزرار &quot;إضافة فرع&quot; أو &quot;إضافة مخزن&quot; لإضافة موقع جديد وإدارة عملياتك التجارية
                   </div>
                 </div>
@@ -428,11 +428,11 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
         </div>
 
         {/* Action Buttons - Close only */}
-        <div className="p-4 bg-[#3A4553] border-t border-[#4A5568] flex-shrink-0">
+        <div className="p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)] flex-shrink-0">
           <div className="flex justify-end">
             <button
               onClick={onClose}
-              className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
+              className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

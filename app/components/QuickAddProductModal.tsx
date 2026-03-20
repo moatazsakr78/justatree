@@ -285,18 +285,18 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300"
         onClick={handleClose}
       />
 
       {/* Side Panel */}
-      <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-[#1F2937] z-50 shadow-2xl transform transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-[var(--dash-bg-base)] z-50 shadow-[var(--dash-shadow-lg)] transform transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
 
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-[#374151] bg-[#1F2937]">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-subtle)] bg-[var(--dash-bg-base)]">
           <button
             onClick={handleClose}
-            className="p-2 text-gray-400 hover:text-white hover:bg-[#374151] rounded-lg transition-colors"
+            className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-raised)] rounded-lg transition-colors"
             disabled={isProcessing}
           >
             <ArrowLeftIcon className="h-5 w-5" />
@@ -310,14 +310,14 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Product Name */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               اسم المنتج <span className="text-red-400">*</span>
             </label>
             <input
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               placeholder="أدخل اسم المنتج"
               disabled={isProcessing}
               autoFocus
@@ -326,29 +326,29 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Category Selection */}
           <div ref={categoryDropdownRef} className="relative">
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               الفئة
             </label>
             <button
               type="button"
               onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
               disabled={isProcessing || isLoadingCategories}
-              className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all flex items-center justify-between"
+              className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all flex items-center justify-between"
             >
-              <span className={selectedCategoryId ? 'text-white' : 'text-gray-500'}>
+              <span className={selectedCategoryId ? 'text-white' : 'text-[var(--dash-text-disabled)]'}>
                 {isLoadingCategories ? 'جاري التحميل...' : getSelectedCategoryName()}
               </span>
-              <ChevronDownIcon className={`h-5 w-5 text-gray-400 transition-transform ${isCategoryDropdownOpen ? 'transform rotate-180' : ''}`} />
+              <ChevronDownIcon className={`h-5 w-5 text-[var(--dash-text-muted)] transition-transform ${isCategoryDropdownOpen ? 'transform rotate-180' : ''}`} />
             </button>
 
             {/* Dropdown Menu */}
             {isCategoryDropdownOpen && (
-              <div className="absolute z-50 w-full mt-1 bg-[#374151] border border-[#4A5568] rounded-lg shadow-xl max-h-60 overflow-y-auto scrollbar-hide">
+              <div className="absolute z-50 w-full mt-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg shadow-[var(--dash-shadow-lg)] max-h-60 overflow-y-auto scrollbar-hide">
                 {/* Clear Selection Option */}
                 <button
                   type="button"
                   onClick={() => handleCategoryChange(null)}
-                  className="w-full px-4 py-3 text-right text-gray-400 hover:bg-[#4A5568] hover:text-white transition-colors border-b border-[#4A5568]"
+                  className="w-full px-4 py-3 text-right text-[var(--dash-text-muted)] hover:bg-[var(--dash-border-default)] hover:text-white transition-colors border-b border-[var(--dash-border-default)]"
                 >
                   بدون فئة
                 </button>
@@ -362,7 +362,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                     className={`w-full px-4 py-3 text-right transition-colors ${
                       selectedCategoryId === category.id
                         ? 'bg-green-600 text-white'
-                        : 'text-white hover:bg-[#4A5568]'
+                        : 'text-white hover:bg-[var(--dash-border-default)]'
                     }`}
                   >
                     {category.name}
@@ -370,7 +370,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 ))}
 
                 {categories.length === 0 && !isLoadingCategories && (
-                  <div className="px-4 py-3 text-gray-400 text-center">
+                  <div className="px-4 py-3 text-[var(--dash-text-muted)] text-center">
                     لا توجد فئات متاحة
                   </div>
                 )}
@@ -380,7 +380,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Quantity */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               الكمية <span className="text-red-400">*</span>
             </label>
             <input
@@ -388,7 +388,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
               min="1"
               value={productQuantity}
               onChange={(e) => setProductQuantity(e.target.value)}
-              className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               placeholder="1"
               disabled={isProcessing}
             />
@@ -396,7 +396,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Purchase Price (Cost Price) */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               سعر الشراء <span className="text-red-400">*</span>
             </label>
             <input
@@ -405,7 +405,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
               min="0"
               value={productCostPrice}
               onChange={(e) => setProductCostPrice(e.target.value)}
-              className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               placeholder="0.00"
               disabled={isProcessing}
             />
@@ -414,7 +414,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
           {/* Selling Prices - Row 1: سعر البيع + سعر الجملة */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
                 سعر البيع
               </label>
               <input
@@ -423,13 +423,13 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 min="0"
                 value={productPrice}
                 onChange={(e) => setProductPrice(e.target.value)}
-                className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="0.00"
                 disabled={isProcessing}
               />
             </div>
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
                 سعر الجملة
               </label>
               <input
@@ -438,7 +438,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 min="0"
                 value={wholesalePrice}
                 onChange={(e) => setWholesalePrice(e.target.value)}
-                className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="0.00"
                 disabled={isProcessing}
               />
@@ -448,7 +448,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
           {/* Prices - Row 2: سعر 1 + سعر 2 */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
                 سعر 1
               </label>
               <input
@@ -457,13 +457,13 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 min="0"
                 value={price1}
                 onChange={(e) => setPrice1(e.target.value)}
-                className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="0.00"
                 disabled={isProcessing}
               />
             </div>
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
                 سعر 2
               </label>
               <input
@@ -472,7 +472,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 min="0"
                 value={price2}
                 onChange={(e) => setPrice2(e.target.value)}
-                className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="0.00"
                 disabled={isProcessing}
               />
@@ -482,7 +482,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
           {/* Prices - Row 3: سعر 3 + سعر 4 */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
                 سعر 3
               </label>
               <input
@@ -491,13 +491,13 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 min="0"
                 value={price3}
                 onChange={(e) => setPrice3(e.target.value)}
-                className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="0.00"
                 disabled={isProcessing}
               />
             </div>
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
                 سعر 4
               </label>
               <input
@@ -506,7 +506,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 min="0"
                 value={price4}
                 onChange={(e) => setPrice4(e.target.value)}
-                className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="0.00"
                 disabled={isProcessing}
               />
@@ -515,7 +515,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Barcode with Generate Button */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               الباركود
             </label>
             <div className="flex gap-2">
@@ -523,7 +523,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 type="text"
                 value={productBarcode}
                 onChange={(e) => setProductBarcode(e.target.value)}
-                className="flex-1 bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="flex-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="أدخل باركود جديد"
                 disabled={isProcessing}
               />
@@ -531,7 +531,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 type="button"
                 onClick={generateBarcode}
                 disabled={isProcessing}
-                className="px-4 py-3 bg-[#374151] hover:bg-[#4A5568] border border-[#4A5568] text-gray-300 rounded-lg transition-colors flex items-center gap-2"
+                className="px-4 py-3 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-border-default)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] rounded-lg transition-colors flex items-center gap-2"
                 title="توليد باركود"
               >
                 <ArrowPathIcon className="h-5 w-5" />
@@ -541,14 +541,14 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Product Code */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               كود المنتج
             </label>
             <input
               type="text"
               value={productCode}
               onChange={(e) => setProductCode(e.target.value)}
-              className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               placeholder="أدخل كود المنتج"
               disabled={isProcessing}
             />
@@ -556,7 +556,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Main Image Upload */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               الصورة الرئيسية
             </label>
             <input
@@ -585,7 +585,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute top-2 right-2 p-1.5 bg-[#374151] hover:bg-[#4A5568] text-white rounded-full transition-colors"
+                  className="absolute top-2 right-2 p-1.5 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-border-default)] text-white rounded-full transition-colors"
                 >
                   <ArrowPathIcon className="h-4 w-4" />
                 </button>
@@ -595,7 +595,7 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isProcessing}
-                className="w-full h-32 border-2 border-dashed border-[#4A5568] rounded-lg flex flex-col items-center justify-center gap-2 text-gray-400 hover:border-green-500 hover:text-green-400 transition-colors"
+                className="w-full h-32 border-2 border-dashed border-[var(--dash-border-default)] rounded-lg flex flex-col items-center justify-center gap-2 text-[var(--dash-text-muted)] hover:border-green-500 hover:text-green-400 transition-colors"
               >
                 <PhotoIcon className="h-8 w-8" />
                 <span className="text-sm">اضغط لاختيار صورة</span>
@@ -605,14 +605,14 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
 
           {/* Description */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">
+            <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2">
               الوصف
             </label>
             <textarea
               value={productDescription}
               onChange={(e) => setProductDescription(e.target.value)}
               rows={3}
-              className="w-full bg-[#374151] border border-[#4A5568] rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none transition-all"
+              className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-white placeholder-[var(--dash-text-disabled)] focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none transition-all"
               placeholder="أدخل وصف المنتج"
               disabled={isProcessing}
             />
@@ -621,12 +621,12 @@ export default function QuickAddProductModal({ isOpen, onClose, onAddToCart, edi
         </div>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#374151] bg-[#1F2937]">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[var(--dash-border-subtle)] bg-[var(--dash-bg-base)]">
           <div className="flex gap-3">
             <button
               onClick={handleClose}
               disabled={isProcessing}
-              className="flex-1 bg-[#374151] hover:bg-[#4A5568] disabled:opacity-50 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+              className="flex-1 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-border-default)] disabled:opacity-50 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
             >
               <XMarkIcon className="h-5 w-5" />
               إلغاء

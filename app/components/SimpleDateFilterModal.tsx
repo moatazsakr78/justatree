@@ -206,21 +206,21 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
   return (
     <>
       {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-50"
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
         onClick={handleCancel}
       />
 
       {/* Modal */}
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#2B3544] border border-gray-600 rounded-lg shadow-xl z-50 w-[95vw] max-w-[580px] max-h-[90vh] overflow-y-auto">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-[var(--dash-shadow-lg)] z-50 w-[95vw] max-w-[580px] max-h-[90vh] overflow-y-auto">
 
         {/* Header */}
-        <div className="bg-[#374151] border-b border-gray-600 px-3 sm:px-6 py-3 sm:py-4 rounded-t-lg">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-3 sm:px-6 py-3 sm:py-4 rounded-t-lg">
           <div className="flex items-center justify-between">
             <h3 className="text-white font-medium text-lg">التاريخ</h3>
             <button
               onClick={handleCancel}
-              className="text-gray-400 hover:text-white text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-600/30 transition-colors"
+              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
             >
               ×
             </button>
@@ -240,7 +240,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'today'
                   ? 'bg-blue-600 text-white border-blue-500'
-                  : 'bg-[#374151] text-gray-300 border-gray-600 hover:bg-gray-600'
+                  : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               اليوم
@@ -251,7 +251,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'current_week'
                   ? 'bg-blue-600 text-white border-blue-500'
-                  : 'bg-[#374151] text-gray-300 border-gray-600 hover:bg-gray-600'
+                  : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               الأسبوع الحالي
@@ -262,7 +262,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'current_month'
                   ? 'bg-blue-600 text-white border-blue-500'
-                  : 'bg-[#374151] text-gray-300 border-gray-600 hover:bg-gray-600'
+                  : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               الشهر الحالي
@@ -273,7 +273,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'last_week'
                   ? 'bg-blue-600 text-white border-blue-500'
-                  : 'bg-[#374151] text-gray-300 border-gray-600 hover:bg-gray-600'
+                  : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               الأسبوع الماضي
@@ -284,7 +284,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'last_month'
                   ? 'bg-blue-600 text-white border-blue-500'
-                  : 'bg-[#374151] text-gray-300 border-gray-600 hover:bg-gray-600'
+                  : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               الشهر الماضي
@@ -295,7 +295,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'custom'
                   ? 'bg-blue-600 text-white border-blue-500'
-                  : 'bg-[#374151] text-gray-300 border-gray-600 hover:bg-gray-600'
+                  : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               فترة مخصصة
@@ -307,32 +307,32 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
             <h5 className="text-white font-medium text-center">التاريخ</h5>
             
             {/* Calendar */}
-            <div className="bg-[#374151] border border-gray-600 rounded p-4">
+            <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded p-4">
               {/* Calendar Header */}
               <div className="flex items-center justify-between mb-4">
-                <button 
+                <button
                   onClick={() => navigateMonth('next')}
-                  className="p-1 hover:bg-gray-600 rounded transition-colors"
+                  className="p-1 hover:bg-[var(--dash-bg-overlay)] rounded transition-colors"
                 >
-                  <ChevronRightIcon className="h-5 w-5 text-gray-400" />
+                  <ChevronRightIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
                 </button>
-                
+
                 <h6 className="text-white font-medium">
                   {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                 </h6>
-                
-                <button 
+
+                <button
                   onClick={() => navigateMonth('prev')}
-                  className="p-1 hover:bg-gray-600 rounded transition-colors"
+                  className="p-1 hover:bg-[var(--dash-bg-overlay)] rounded transition-colors"
                 >
-                  <ChevronLeftIcon className="h-5 w-5 text-gray-400" />
+                  <ChevronLeftIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
                 </button>
               </div>
 
               {/* Day Headers */}
               <div className="grid grid-cols-7 gap-1 mb-2">
                 {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-                  <div key={day} className="text-center text-gray-400 text-sm py-2 font-medium">
+                  <div key={day} className="text-center text-[var(--dash-text-muted)] text-sm py-2 font-medium">
                     {day}
                   </div>
                 ))}
@@ -352,15 +352,15 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
                       onClick={() => handleDateClick(date)}
                       className={`
                         p-2 text-sm rounded transition-all duration-150 min-h-[36px]
-                        ${!isCurrentMonth 
-                          ? 'text-gray-500 hover:text-gray-400' 
+                        ${!isCurrentMonth
+                          ? 'text-[var(--dash-text-disabled)] hover:text-[var(--dash-text-muted)]'
                           : isSelected
                           ? 'bg-blue-600 text-white font-bold'
                           : isInRange
                           ? 'bg-blue-600/30 text-blue-300'
                           : isToday
                           ? 'text-yellow-400 font-bold'
-                          : 'text-white hover:bg-gray-600'
+                          : 'text-white hover:bg-[var(--dash-bg-overlay)]'
                         }
                       `}
                     >
@@ -372,7 +372,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
             </div>
 
             {/* Selection Instructions */}
-            <div className="text-center text-gray-400 text-sm">
+            <div className="text-center text-[var(--dash-text-muted)] text-sm">
               {!customStartDate && 'اضغط على تاريخ لتحديده'}
               {customStartDate && !customEndDate && 'اضغط على تاريخ آخر لتحديد فترة، أو اضغط على نفس التاريخ لإلغائه'}
               {customStartDate && customEndDate && 'اضغط على أي تاريخ محدد لإلغائه، أو اضغط على تاريخ جديد لبدء تحديد جديد'}
@@ -381,7 +381,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
         </div>
 
         {/* Footer Buttons */}
-        <div className="bg-[#374151] border-t border-gray-600 px-3 sm:px-6 py-3 sm:py-4 rounded-b-lg">
+        <div className="bg-[var(--dash-bg-raised)] border-t border-[var(--dash-border-default)] px-3 sm:px-6 py-3 sm:py-4 rounded-b-lg">
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between">
             {/* Clear All Button */}
             <button
@@ -394,7 +394,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
             <div className="flex gap-2 sm:gap-3">
               <button
                 onClick={handleCancel}
-                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded transition-colors text-sm sm:text-base"
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-highlight)] text-white rounded transition-colors text-sm sm:text-base"
               >
                 إلغاء
               </button>

@@ -39,29 +39,29 @@ export default function ConfirmDeleteModal({
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-[60]"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-[70] flex items-center justify-center">
-        <div className="bg-[#2B3544] border border-gray-600 rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-md mx-4 animate-dash-scale-in">
           {/* Header */}
-          <div className="flex items-center gap-3 p-6 border-b border-gray-600">
+          <div className="flex items-center gap-3 p-6 border-b border-[var(--dash-border-default)]">
             <ExclamationTriangleIcon className={`h-6 w-6 flex-shrink-0 ${isCancel ? 'text-orange-400' : 'text-red-400'}`} />
-            <h3 className="text-lg font-medium text-white text-right flex-1">
+            <h3 className="text-lg font-medium text-[var(--dash-text-primary)] text-right flex-1">
               {title}
             </h3>
           </div>
 
           {/* Content */}
           <div className="p-6">
-            <p className="text-gray-300 text-right leading-6">
+            <p className="text-[var(--dash-text-secondary)] text-right leading-6">
               {message}
             </p>
             {itemName && (
-              <div className={`mt-3 p-3 bg-gray-700/50 rounded border-r-4 ${isCancel ? 'border-orange-500' : 'border-red-500'}`}>
-                <p className="text-white text-sm text-right font-medium">
+              <div className={`mt-3 p-3 bg-[var(--dash-bg-raised)]/50 rounded border-r-4 ${isCancel ? 'border-orange-500' : 'border-red-500'}`}>
+                <p className="text-[var(--dash-text-primary)] text-sm text-right font-medium">
                   {itemName}
                 </p>
               </div>
@@ -72,12 +72,12 @@ export default function ConfirmDeleteModal({
           </div>
 
           {/* Footer */}
-          <div className="flex gap-3 p-6 border-t border-gray-600">
+          <div className="flex gap-3 p-6 border-t border-[var(--dash-border-default)]">
             {/* Cancel Button */}
             <button
               onClick={onClose}
               disabled={isDeleting}
-              className="flex-1 px-4 py-2 text-gray-300 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2 text-[var(--dash-text-secondary)] bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)] rounded transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               إلغاء
             </button>
@@ -86,7 +86,7 @@ export default function ConfirmDeleteModal({
             <button
               onClick={onConfirm}
               disabled={isDeleting}
-              className={`flex-1 px-4 py-2 text-white rounded transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${isCancel ? 'bg-orange-600 hover:bg-orange-700' : 'bg-red-600 hover:bg-red-700'}`}
+              className={`flex-1 px-4 py-2 text-[var(--dash-text-primary)] rounded transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${isCancel ? 'bg-orange-600 hover:bg-orange-700' : 'bg-red-600 hover:bg-red-700'}`}
             >
               {isDeleting ? (
                 <>

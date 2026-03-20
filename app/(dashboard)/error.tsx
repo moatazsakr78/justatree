@@ -14,11 +14,11 @@ export default function DashboardError({
   }, [error])
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#1F2937]" dir="rtl">
-      <div className="text-center p-8 rounded-xl bg-[#2B3544] max-w-md w-full mx-4">
+    <div className="flex items-center justify-center min-h-screen bg-[var(--dash-bg-base)]" dir="rtl">
+      <div className="text-center p-8 rounded-xl bg-[var(--dash-bg-surface)] max-w-md w-full mx-4">
         <div className="text-red-400 text-5xl mb-4">⚠</div>
-        <h2 className="text-xl font-bold text-white mb-2">حدث خطأ غير متوقع</h2>
-        <p className="text-gray-400 mb-6 text-sm">
+        <h2 className="text-xl font-bold text-[var(--dash-text-primary)] mb-2">حدث خطأ غير متوقع</h2>
+        <p className="text-[var(--dash-text-muted)] mb-6 text-sm">
           نعتذر عن هذا الخطأ. يمكنك المحاولة مرة أخرى.
         </p>
         <button

@@ -89,10 +89,10 @@ const ProductCard = memo(function ProductCard({
   return (
     <div
       onClick={handleClick}
-      className={`bg-[#374151] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group h-full ${
+      className={`bg-[var(--dash-bg-raised)] rounded-dash-md p-3 cursor-pointer transition-all duration-200 border-2 relative group h-full ${
         isSelected
-          ? "border-blue-500 bg-[#434E61]"
-          : "border-transparent hover:border-gray-500 hover:bg-[#434E61]"
+          ? "border-[var(--dash-accent-blue)] bg-[var(--dash-bg-overlay)]"
+          : "border-transparent hover:border-[var(--dash-bg-highlight)] hover:bg-[var(--dash-bg-overlay)]"
       }`}
     >
       {/* Product Image */}
@@ -117,7 +117,7 @@ const ProductCard = memo(function ProductCard({
       </div>
 
       {/* Product Name */}
-      <h3 className="text-white font-medium text-sm text-center mb-2 line-clamp-2">
+      <h3 className="text-[var(--dash-text-primary)] font-medium text-sm text-center mb-2 line-clamp-2">
         {product.name}
       </h3>
 
@@ -133,7 +133,7 @@ const ProductCard = memo(function ProductCard({
         {/* Total Quantity */}
         <div className="flex justify-between items-center">
           <span className="text-blue-400 font-medium">{totalQuantity}</span>
-          <span className="text-gray-400">الكمية الإجمالية</span>
+          <span className="text-[var(--dash-text-muted)]">الكمية الإجمالية</span>
         </div>
 
         {/* Branch Quantities - Using memoized data */}
@@ -142,8 +142,8 @@ const ProductCard = memo(function ProductCard({
             key={locationId}
             className="flex justify-between items-center"
           >
-            <span className="text-white">{quantity}</span>
-            <span className="text-gray-400 truncate">{locationName}</span>
+            <span className="text-[var(--dash-text-primary)]">{quantity}</span>
+            <span className="text-[var(--dash-text-muted)] truncate">{locationName}</span>
           </div>
         ))}
       </div>
@@ -256,7 +256,7 @@ export function VirtualizedProductGrid({
   if (products.length === 0) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-gray-400 text-center">
+        <div className="text-[var(--dash-text-muted)] text-center">
           <p className="text-lg mb-2">لا توجد منتجات</p>
           <p className="text-sm">جرب البحث بكلمات مختلفة</p>
         </div>

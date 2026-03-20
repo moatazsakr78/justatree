@@ -159,23 +159,23 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
       )}
 
       {/* Sidebar - starts below header with exact dark theme colors */}
-      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-96 bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-96 bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       } shadow-2xl`}>
         
         {/* Header - dark gray header matching design */}
-        <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-          <h2 className="text-white text-lg font-medium flex-1 text-right">{isEditing ? 'تعديل المجموعة' : 'مجموعة جديدة'}</h2>
+        <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+          <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right">{isEditing ? 'تعديل المجموعة' : 'مجموعة جديدة'}</h2>
           <button
             onClick={onClose}
-            className="text-white hover:text-gray-200 transition-colors ml-4"
+            className="text-[var(--dash-text-primary)] hover:text-gray-200 transition-colors ml-4"
           >
             <ArrowRightIcon className="h-5 w-5" />
           </button>
         </div>
 
         {/* Tab Navigation Bar - matching reference design */}
-        <div className="bg-[#3A4553] border-b border-[#4A5568]">
+        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
           <div className="flex">
             {tabs.map((tab) => (
               <button
@@ -184,7 +184,7 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
                 className={`relative px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'text-[#5DADE2]' // Light blue text for selected
-                    : 'text-gray-300 hover:text-white'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                 }`}
               >
                 {tab.label}
@@ -202,7 +202,7 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
           
           {/* Group Name Field */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               اسم المجموعة *
             </label>
             <input
@@ -211,23 +211,23 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
               value={formData.name}
               onChange={handleInputChange}
               placeholder="أدخل اسم المجموعة"
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] text-right text-sm"
             />
           </div>
 
           {/* Parent Group Field - Dropdown */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               المجموعة *
             </label>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white text-right text-sm focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] flex items-center justify-between"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right text-sm focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-[#5DADE2] flex items-center justify-between"
               >
-                <ChevronDownIcon className={`h-4 w-4 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                <span className={formData.parentId ? 'text-white' : 'text-gray-400'}>
+                <ChevronDownIcon className={`h-4 w-4 text-[var(--dash-text-muted)] transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                <span className={formData.parentId ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}>
                   {formData.parentId 
                     ? customerGroups.find(group => group.id === formData.parentId)?.name || '-- اختر المجموعة الرئيسية (مطلوب) --'
                     : '-- اختر المجموعة الرئيسية (مطلوب) --'
@@ -236,7 +236,7 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
               </button>
               
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-[#2B3441] border border-[#4A5568] rounded shadow-lg z-10 max-h-48 overflow-y-auto scrollbar-hide">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded shadow-lg z-10 max-h-48 overflow-y-auto scrollbar-hide">
                   {customerGroups
                     .filter(group => group.is_active)
                     .map(group => {
@@ -246,10 +246,10 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
                           key={group.id}
                           type="button"
                           onClick={() => handleParentSelect(group.id, group.name)}
-                          className={`w-full px-3 py-2 text-right hover:bg-[#374151] transition-colors ${
+                          className={`w-full px-3 py-2 text-right hover:bg-[var(--dash-bg-raised)] transition-colors ${
                             isRootCustomers 
                               ? 'font-medium text-blue-400 cursor-default' 
-                              : 'text-white'
+                              : 'text-[var(--dash-text-primary)]'
                           }`}
                           disabled={false}
                         >
@@ -265,7 +265,7 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
         </div>
 
         {/* Action Buttons - exact design match */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#3A4553] border-t border-[#4A5568]">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]">
           <div className="flex gap-2">
             {/* Clear Cells Button - matching reference design */}
             <button
@@ -281,7 +281,7 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
             <div className="flex gap-2">
               <button
                 onClick={handleCancel}
-                className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
+                className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)] px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -293,8 +293,8 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
                 disabled={!formData.name.trim() || !formData.parentId || isSaving}
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2 ${
                   !formData.name.trim() || !formData.parentId || isSaving
-                    ? 'bg-gray-600 text-gray-400 border border-gray-600 cursor-not-allowed'
-                    : 'bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500'
+                    ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] border border-[var(--dash-border-default)] cursor-not-allowed'
+                    : 'bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)]'
                 }`}
               >
                 {isSaving ? (

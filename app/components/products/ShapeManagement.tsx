@@ -53,7 +53,7 @@ export function ShapeManagement({ productShapes = [], setProductShapes, isEditMo
   if (loading) {
     return (
       <div className="flex items-center justify-center h-32">
-        <div className="text-gray-400">جاري التحميل...</div>
+        <div className="text-[var(--dash-text-muted)]">جاري التحميل...</div>
       </div>
     )
   }
@@ -74,18 +74,18 @@ export function ShapeManagement({ productShapes = [], setProductShapes, isEditMo
 
       <div className="grid grid-cols-1 gap-2">
         {displayShapes.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div className="text-center py-8 text-[var(--dash-text-muted)]">
             {isEditMode ? 'لا توجد أشكال مرتبطة بهذا المنتج' : 'لا توجد أشكال مضافة بعد'}
           </div>
         ) : (
           displayShapes.map((shape) => (
             <div
               key={shape.id}
-              className="bg-[#374151] rounded-lg p-3 flex items-center justify-between hover:bg-[#4B5563] transition-colors"
+              className="bg-[var(--dash-bg-raised)] rounded-lg p-3 flex items-center justify-between hover:bg-[var(--dash-bg-overlay)] transition-colors"
             >
               <div className="flex items-center gap-3">
                 {shape.image_url && (
-                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#2B3544] flex-shrink-0">
+                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-[var(--dash-bg-surface)] flex-shrink-0">
                     <img
                       src={shape.image_url}
                       alt={shape.name}
@@ -93,7 +93,7 @@ export function ShapeManagement({ productShapes = [], setProductShapes, isEditMo
                     />
                   </div>
                 )}
-                <span className="text-white font-medium">{shape.name}</span>
+                <span className="text-[var(--dash-text-primary)] font-medium">{shape.name}</span>
               </div>
 
               <div className="flex items-center gap-2">

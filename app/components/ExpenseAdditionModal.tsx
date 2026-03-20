@@ -188,16 +188,16 @@ export default function ExpenseAdditionModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-600">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <BanknotesIcon className="h-6 w-6 text-yellow-400" />
                     مصروفات / إضافة - {record?.name || "غير محدد"}
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -208,7 +208,7 @@ export default function ExpenseAdditionModal({
                   {isLoading ? (
                     <div className="text-center py-8">
                       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-yellow-400 mx-auto"></div>
-                      <p className="mt-4 text-gray-400">جاري التحميل...</p>
+                      <p className="mt-4 text-[var(--dash-text-muted)]">جاري التحميل...</p>
                     </div>
                   ) : (
                     <>
@@ -216,7 +216,7 @@ export default function ExpenseAdditionModal({
                       <div className="bg-gradient-to-r from-blue-900/40 to-blue-800/20 rounded-xl p-4 mb-6 border border-blue-700/50">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-gray-400 text-sm mb-1">الرصيد الحالي</p>
+                            <p className="text-[var(--dash-text-muted)] text-sm mb-1">الرصيد الحالي</p>
                             <p className="text-2xl font-bold text-blue-400">
                               {currentBalance.toFixed(2)}
                             </p>
@@ -232,7 +232,7 @@ export default function ExpenseAdditionModal({
                           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${
                             operationType === "expense"
                               ? "bg-red-600 text-white"
-                              : "bg-[#2B3544] text-gray-400 hover:text-white"
+                              : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
                           <MinusCircleIcon className="h-5 w-5" />
@@ -243,7 +243,7 @@ export default function ExpenseAdditionModal({
                           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${
                             operationType === "deposit"
                               ? "bg-green-600 text-white"
-                              : "bg-[#2B3544] text-gray-400 hover:text-white"
+                              : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
                           <PlusCircleIcon className="h-5 w-5" />
@@ -253,13 +253,13 @@ export default function ExpenseAdditionModal({
 
                       {/* Amount Field */}
                       <div className="mb-4">
-                        <label className="text-gray-400 text-sm block mb-1">المبلغ *</label>
+                        <label className="text-[var(--dash-text-muted)] text-sm block mb-1">المبلغ *</label>
                         <input
                           type="number"
                           value={amount}
                           onChange={(e) => setAmount(e.target.value)}
                           placeholder="أدخل المبلغ"
-                          className="w-full bg-[#2B3544] border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-yellow-500"
+                          className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-[var(--dash-text-primary)] text-lg focus:outline-none focus:border-yellow-500"
                           min={0}
                           step="0.01"
                         />
@@ -270,7 +270,7 @@ export default function ExpenseAdditionModal({
 
                       {/* Notes Field (Required) */}
                       <div className="mb-6">
-                        <label className="text-gray-400 text-sm block mb-1">السبب / ملاحظات *</label>
+                        <label className="text-[var(--dash-text-muted)] text-sm block mb-1">السبب / ملاحظات *</label>
                         <textarea
                           value={notes}
                           onChange={(e) => {
@@ -279,8 +279,8 @@ export default function ExpenseAdditionModal({
                           }}
                           placeholder={operationType === "expense" ? "سبب المصروف..." : "سبب الإضافة..."}
                           rows={3}
-                          className={`w-full bg-[#2B3544] border rounded-lg px-4 py-3 text-white focus:outline-none resize-none ${
-                            notesError ? "border-red-500" : "border-gray-600 focus:border-yellow-500"
+                          className={`w-full bg-[var(--dash-bg-surface)] border rounded-lg px-4 py-3 text-[var(--dash-text-primary)] focus:outline-none resize-none ${
+                            notesError ? "border-red-500" : "border-[var(--dash-border-default)] focus:border-yellow-500"
                           }`}
                         />
                         {notesError && (
@@ -292,7 +292,7 @@ export default function ExpenseAdditionModal({
                       <button
                         onClick={handleSubmit}
                         disabled={isProcessing || !amount || !notes.trim()}
-                        className={`w-full px-4 py-3 rounded-lg font-medium text-white transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed ${
+                        className={`w-full px-4 py-3 rounded-lg font-medium text-white transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed ${
                           operationType === "expense"
                             ? "bg-red-600 hover:bg-red-700"
                             : "bg-green-600 hover:bg-green-700"
@@ -309,10 +309,10 @@ export default function ExpenseAdditionModal({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-gray-600 bg-[#1a1f2e]">
+                <div className="p-4 border-t border-[var(--dash-border-subtle)] bg-[var(--dash-bg-base)]">
                   <button
                     onClick={onClose}
-                    className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                    className="w-full px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg transition-colors"
                   >
                     إغلاق
                   </button>

@@ -77,7 +77,7 @@ const CopiesControl = memo(({ itemKey, initialCount, onUpdate, size = 'normal' }
       <div className="flex items-center gap-1 flex-shrink-0">
         <button
           onClick={decrement}
-          className="w-7 h-7 flex items-center justify-center rounded bg-[#374151] border border-[#4A5568] text-gray-300 hover:bg-red-600/30 hover:border-red-500 hover:text-red-300 transition-colors"
+          className="w-7 h-7 flex items-center justify-center rounded bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:bg-red-600/30 hover:border-red-500 hover:text-red-300 transition-colors"
         >
           <MinusIcon className="h-3.5 w-3.5" />
         </button>
@@ -86,15 +86,15 @@ const CopiesControl = memo(({ itemKey, initialCount, onUpdate, size = 'normal' }
           min="0"
           value={count}
           onChange={handleChange}
-          className={`w-14 border rounded px-1.5 py-1 text-center font-bold text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          className={`w-14 border rounded px-1.5 py-1 text-center font-bold text-xs focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] ${
             hasQuantity
-              ? 'bg-blue-600 border-blue-400 text-white'
-              : 'bg-[#2B3544] border-gray-600 text-white'
+              ? 'bg-blue-600 border-blue-400 text-[var(--dash-text-primary)]'
+              : 'bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] text-[var(--dash-text-primary)]'
           }`}
         />
         <button
           onClick={increment}
-          className="w-7 h-7 flex items-center justify-center rounded bg-[#374151] border border-[#4A5568] text-gray-300 hover:bg-green-600/30 hover:border-green-500 hover:text-green-300 transition-colors"
+          className="w-7 h-7 flex items-center justify-center rounded bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:bg-green-600/30 hover:border-green-500 hover:text-green-300 transition-colors"
         >
           <PlusIcon className="h-3.5 w-3.5" />
         </button>
@@ -106,7 +106,7 @@ const CopiesControl = memo(({ itemKey, initialCount, onUpdate, size = 'normal' }
     <div className="flex items-center gap-1.5 flex-shrink-0">
       <button
         onClick={decrement}
-        className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#374151] border border-[#4A5568] text-gray-300 hover:bg-red-600/30 hover:border-red-500 hover:text-red-300 transition-colors"
+        className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:bg-red-600/30 hover:border-red-500 hover:text-red-300 transition-colors"
       >
         <MinusIcon className="h-4 w-4" />
       </button>
@@ -115,15 +115,15 @@ const CopiesControl = memo(({ itemKey, initialCount, onUpdate, size = 'normal' }
         min="0"
         value={count}
         onChange={handleChange}
-        className={`w-16 border rounded-lg px-2 py-1.5 text-center font-bold text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+        className={`w-16 border rounded-lg px-2 py-1.5 text-center font-bold text-sm focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] ${
           hasQuantity
-            ? 'bg-blue-600 border-blue-400 text-white'
-            : 'bg-[#2B3544] border-gray-600 text-white'
+            ? 'bg-blue-600 border-blue-400 text-[var(--dash-text-primary)]'
+            : 'bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] text-[var(--dash-text-primary)]'
         }`}
       />
       <button
         onClick={increment}
-        className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#374151] border border-[#4A5568] text-gray-300 hover:bg-green-600/30 hover:border-green-500 hover:text-green-300 transition-colors"
+        className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:bg-green-600/30 hover:border-green-500 hover:text-green-300 transition-colors"
       >
         <PlusIcon className="h-4 w-4" />
       </button>
@@ -656,7 +656,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 no-print">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] max-w-7xl w-full max-h-[95vh] overflow-hidden flex flex-col">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-7xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-dash-scale-in">
 
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex items-center justify-between">
@@ -680,7 +680,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
           <div className="flex-1 flex overflow-hidden">
 
             {/* Settings Panel */}
-            <div className="w-80 bg-[#374151] border-l border-[#4A5568] p-6 overflow-y-auto scrollbar-hide">
+            <div className="w-80 bg-[var(--dash-bg-raised)] border-l border-[var(--dash-border-default)] p-6 overflow-y-auto scrollbar-hide">
               <div className="space-y-6">
 
                 {/* Info Banner */}
@@ -699,7 +699,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Cog6ToothIcon className="h-5 w-5 text-blue-400" />
-                    <h3 className="text-white font-semibold">حجم الملصق</h3>
+                    <h3 className="text-[var(--dash-text-primary)] font-semibold">حجم الملصق</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <button
@@ -707,7 +707,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                       className={`py-3 px-4 rounded-lg border-2 transition-all ${
                         labelSize === 'small'
                           ? 'bg-blue-600 border-blue-400 text-white'
-                          : 'bg-[#2B3544] border-gray-600 text-gray-300 hover:border-blue-500'
+                          : 'bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:border-blue-500'
                       }`}
                     >
                       <div className="text-center">
@@ -720,12 +720,12 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                       className={`py-3 px-4 rounded-lg border-2 transition-all ${
                         labelSize === 'large'
                           ? 'bg-blue-600 border-blue-400 text-white'
-                          : 'bg-[#2B3544] border-gray-600 text-gray-300 hover:border-blue-500'
+                          : 'bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:border-blue-500'
                       }`}
                       disabled
                     >
                       <div className="text-center">
-                        <div className="font-bold mb-1 text-gray-500">كبير</div>
+                        <div className="font-bold mb-1 text-[var(--dash-text-disabled)]">كبير</div>
                         <div className="text-xs opacity-50">50x25 مم</div>
                       </div>
                     </button>
@@ -734,11 +734,11 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
 
                 {/* Branch Selection */}
                 <div>
-                  <label className="block text-white font-semibold mb-2">الفرع</label>
+                  <label className="block text-[var(--dash-text-primary)] font-semibold mb-2">الفرع</label>
                   <select
                     value={selectedBranch}
                     onChange={(e) => setSelectedBranch(e.target.value)}
-                    className="w-full bg-[#2B3544] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                   >
                     {branches.map(branch => (
                       <option key={branch.id} value={branch.id}>{branch.name}</option>
@@ -748,11 +748,11 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
 
                 {/* Price Type Selection */}
                 <div>
-                  <label className="block text-white font-semibold mb-2">نوع السعر</label>
+                  <label className="block text-[var(--dash-text-primary)] font-semibold mb-2">نوع السعر</label>
                   <select
                     value={labelSettings.priceType}
                     onChange={(e) => setLabelSettings(prev => ({ ...prev, priceType: e.target.value as any }))}
-                    className="w-full bg-[#2B3544] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                   >
                     <option value="price">سعر البيع</option>
                     <option value="wholesale_price">سعر الجملة</option>
@@ -765,52 +765,52 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
 
                 {/* Label Content Settings */}
                 <div>
-                  <h3 className="text-white font-semibold mb-3">محتوى الملصق</h3>
+                  <h3 className="text-[var(--dash-text-primary)] font-semibold mb-3">محتوى الملصق</h3>
                   <div className="space-y-2">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
                         checked={labelSettings.showCompanyName}
                         onChange={(e) => setLabelSettings(prev => ({ ...prev, showCompanyName: e.target.checked }))}
-                        className="w-5 h-5 rounded border-2 border-gray-600 bg-[#2B3544] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-blue-500"
+                        className="w-5 h-5 rounded border-2 border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       />
-                      <span className="text-gray-300 group-hover:text-white">اسم الشركة</span>
+                      <span className="text-[var(--dash-text-secondary)] group-hover:text-[var(--dash-text-primary)]">اسم الشركة</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
                         checked={labelSettings.showProductName}
                         onChange={(e) => setLabelSettings(prev => ({ ...prev, showProductName: e.target.checked }))}
-                        className="w-5 h-5 rounded border-2 border-gray-600 bg-[#2B3544] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-blue-500"
+                        className="w-5 h-5 rounded border-2 border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       />
-                      <span className="text-gray-300 group-hover:text-white">اسم المنتج</span>
+                      <span className="text-[var(--dash-text-secondary)] group-hover:text-[var(--dash-text-primary)]">اسم المنتج</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
                         checked={labelSettings.showBranch}
                         onChange={(e) => setLabelSettings(prev => ({ ...prev, showBranch: e.target.checked }))}
-                        className="w-5 h-5 rounded border-2 border-gray-600 bg-[#2B3544] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-blue-500"
+                        className="w-5 h-5 rounded border-2 border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       />
-                      <span className="text-gray-300 group-hover:text-white">اسم الفرع</span>
+                      <span className="text-[var(--dash-text-secondary)] group-hover:text-[var(--dash-text-primary)]">اسم الفرع</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
                         checked={labelSettings.showPrice}
                         onChange={(e) => setLabelSettings(prev => ({ ...prev, showPrice: e.target.checked }))}
-                        className="w-5 h-5 rounded border-2 border-gray-600 bg-[#2B3544] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-blue-500"
+                        className="w-5 h-5 rounded border-2 border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       />
-                      <span className="text-gray-300 group-hover:text-white">السعر</span>
+                      <span className="text-[var(--dash-text-secondary)] group-hover:text-[var(--dash-text-primary)]">السعر</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
                         checked={labelSettings.showBarcode}
                         onChange={(e) => setLabelSettings(prev => ({ ...prev, showBarcode: e.target.checked }))}
-                        className="w-5 h-5 rounded border-2 border-gray-600 bg-[#2B3544] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-blue-500"
+                        className="w-5 h-5 rounded border-2 border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] checked:bg-blue-600 checked:border-blue-600 focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                       />
-                      <span className="text-gray-300 group-hover:text-white">الباركود</span>
+                      <span className="text-[var(--dash-text-secondary)] group-hover:text-[var(--dash-text-primary)]">الباركود</span>
                     </label>
                   </div>
                 </div>
@@ -836,20 +836,20 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
             </div>
 
             {/* Preview Panel */}
-            <div className="flex-1 bg-[#2B3544] flex flex-col overflow-hidden">
+            <div className="flex-1 bg-[var(--dash-bg-surface)] flex flex-col overflow-hidden">
 
               {/* Search Bar */}
-              <div className="p-4 border-b border-[#4A5568]">
-                <h3 className="text-white text-lg font-semibold mb-3 text-center">معاينة الملصقات</h3>
-                <p className="text-gray-400 text-sm mb-3 text-center">حدد عدد النسخ لكل منتج أو متغير</p>
+              <div className="p-4 border-b border-[var(--dash-border-default)]">
+                <h3 className="text-[var(--dash-text-primary)] text-lg font-semibold mb-3 text-center">معاينة الملصقات</h3>
+                <p className="text-[var(--dash-text-muted)] text-sm mb-3 text-center">حدد عدد النسخ لكل منتج أو متغير</p>
                 <div className="relative">
-                  <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[var(--dash-text-muted)]" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="ابحث عن منتج أو لون أو شكل بالاسم أو الباركود..."
-                    className="w-full pl-4 pr-10 py-3 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-4 pr-10 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                   />
                 </div>
               </div>
@@ -870,12 +870,12 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                       return (
                         <div
                           key={group.productId}
-                          className={`flex items-center gap-3 px-4 py-3 border-b border-[#4A5568] transition-colors ${
+                          className={`flex items-center gap-3 px-4 py-3 border-b border-[var(--dash-border-default)] transition-colors ${
                             hasQuantity ? 'bg-blue-900/20' : ''
                           }`}
                         >
                           {/* Product Image */}
-                          <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden relative bg-[#374151]">
+                          <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden relative bg-[var(--dash-bg-raised)]">
                             <OptimizedImage
                               src={item.imageUrl || item.product.main_image_url}
                               alt={item.productName}
@@ -887,10 +887,10 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                           </div>
                           {/* Product Info */}
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-white text-sm font-bold truncate">
+                            <h4 className="text-[var(--dash-text-primary)] text-sm font-bold truncate">
                               {item.productName || 'بدون اسم'}
                             </h4>
-                            <p className="text-gray-400 text-xs font-mono truncate">{item.barcode || 'بدون باركود'}</p>
+                            <p className="text-[var(--dash-text-muted)] text-xs font-mono truncate">{item.barcode || 'بدون باركود'}</p>
                           </div>
                           {/* Copies Controls */}
                           <CopiesControl
@@ -908,12 +908,12 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                         <div
                           key={group.productId}
                           onClick={() => toggleExpanded(group.productId)}
-                          className={`flex items-center gap-3 px-4 py-3 border-b border-[#4A5568] cursor-pointer hover:bg-[#374151]/50 transition-colors ${
+                          className={`flex items-center gap-3 px-4 py-3 border-b border-[var(--dash-border-default)] cursor-pointer hover:bg-[var(--dash-bg-raised)]/50 transition-colors ${
                             totalCopies > 0 ? 'bg-blue-900/20' : ''
                           }`}
                         >
                           {/* Product Image */}
-                          <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden relative bg-[#374151]">
+                          <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden relative bg-[var(--dash-bg-raised)]">
                             <OptimizedImage
                               src={group.imageUrl || group.product.main_image_url}
                               alt={group.productName}
@@ -925,7 +925,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                           </div>
                           {/* Product Info + Badges */}
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-white text-sm font-bold truncate">
+                            <h4 className="text-[var(--dash-text-primary)] text-sm font-bold truncate">
                               {group.productName || 'بدون اسم'}
                             </h4>
                             <div className="flex flex-wrap gap-1.5 mt-1">
@@ -953,7 +953,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                             </span>
                           )}
                           {/* Chevron */}
-                          <ChevronDownIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                          <ChevronDownIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
                         </div>
                       )
                     }
@@ -961,14 +961,14 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                     // Products WITH variants — expanded
                     if (group.hasVariants && isExpanded) {
                       return (
-                        <div key={group.productId} className="border-b border-[#4A5568]">
+                        <div key={group.productId} className="border-b border-[var(--dash-border-default)]">
                           {/* Parent row (clickable to collapse) */}
                           <div
                             onClick={() => toggleExpanded(group.productId)}
-                            className="flex items-center gap-3 px-4 py-3 cursor-pointer bg-[#374151]/50 hover:bg-[#374151]/70 transition-colors"
+                            className="flex items-center gap-3 px-4 py-3 cursor-pointer bg-[var(--dash-bg-raised)]/50 hover:bg-[var(--dash-bg-raised)]/70 transition-colors"
                           >
                             {/* Product Image */}
-                            <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden relative bg-[#374151]">
+                            <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden relative bg-[var(--dash-bg-raised)]">
                               <OptimizedImage
                                 src={group.imageUrl || group.product.main_image_url}
                                 alt={group.productName}
@@ -980,7 +980,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                             </div>
                             {/* Product Info + Badges */}
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-white text-sm font-bold truncate">{group.productName}</h4>
+                              <h4 className="text-[var(--dash-text-primary)] text-sm font-bold truncate">{group.productName}</h4>
                               <div className="flex flex-wrap gap-1.5 mt-1">
                                 {colorCount > 0 && (
                                   <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-purple-900/50 text-purple-300 border border-purple-700/50">
@@ -995,23 +995,23 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                               </div>
                             </div>
                             {/* Chevron */}
-                            <ChevronUpIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                            <ChevronUpIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
                           </div>
 
                           {/* Sub-rows */}
-                          <div className="bg-[#2B3544]/50">
+                          <div className="bg-[var(--dash-bg-surface)]/50">
                             {/* Main product barcode sub-row */}
                             {group.mainItem && (() => {
                               const mainItem = group.mainItem!
                               const hasQuantity = (copiesRef.current[mainItem.key] || 0) > 0
                               return (
-                                <div className={`flex items-center gap-3 pr-8 pl-4 py-2.5 border-t border-[#4A5568]/50 mr-4 transition-colors ${
+                                <div className={`flex items-center gap-3 pr-8 pl-4 py-2.5 border-t border-[var(--dash-border-default)]/50 mr-4 transition-colors ${
                                   hasQuantity ? 'bg-blue-900/15' : ''
                                 }`}>
                                   <span className="text-[11px] px-2 py-0.5 rounded-full bg-green-900/50 text-green-300 border border-green-700/50 flex-shrink-0">
                                     رئيسي
                                   </span>
-                                  <p className="text-gray-400 text-xs font-mono truncate flex-1">{mainItem.barcode}</p>
+                                  <p className="text-[var(--dash-text-muted)] text-xs font-mono truncate flex-1">{mainItem.barcode}</p>
                                   <CopiesControl
                                     itemKey={mainItem.key}
                                     initialCount={copiesRef.current[mainItem.key] || 0}
@@ -1028,7 +1028,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                               return (
                                 <div
                                   key={item.key}
-                                  className={`flex items-center gap-3 pr-8 pl-4 py-2.5 border-t border-[#4A5568]/50 mr-4 transition-colors ${
+                                  className={`flex items-center gap-3 pr-8 pl-4 py-2.5 border-t border-[var(--dash-border-default)]/50 mr-4 transition-colors ${
                                     hasQuantity ? 'bg-blue-900/15' : ''
                                   }`}
                                 >
@@ -1036,7 +1036,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                                   <div className="flex items-center gap-1.5 flex-shrink-0">
                                     {item.variantType === 'color' && item.colorHex && (
                                       <span
-                                        className="w-3.5 h-3.5 rounded-full border border-gray-500 flex-shrink-0"
+                                        className="w-3.5 h-3.5 rounded-full border border-[var(--dash-border-default)] flex-shrink-0"
                                         style={{ backgroundColor: item.colorHex }}
                                       />
                                     )}
@@ -1048,7 +1048,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                                       {item.variantType === 'color' ? `لون: ${item.variantName}` : `شكل: ${item.variantName}`}
                                     </span>
                                   </div>
-                                  <p className="text-gray-400 text-xs font-mono truncate flex-1">{item.barcode || 'بدون باركود'}</p>
+                                  <p className="text-[var(--dash-text-muted)] text-xs font-mono truncate flex-1">{item.barcode || 'بدون باركود'}</p>
                                   <CopiesControl
                                     itemKey={item.key}
                                     initialCount={copiesRef.current[item.key] || 0}
@@ -1303,7 +1303,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
                         printContainer.style.left = '0'
                       }
                     }}
-                    className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-lg transition-colors"
+                    className="px-6 py-2 bg-[var(--dash-bg-highlight)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] font-bold rounded-lg transition-colors"
                   >
                     إلغاء
                   </button>

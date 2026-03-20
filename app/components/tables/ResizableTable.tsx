@@ -119,12 +119,12 @@ function SortableHeader({ column, width, onResize, onResizeStateChange, onResize
     <th
       ref={setNodeRef}
       style={style}
-      className="relative px-4 py-3 text-right font-medium bg-[#374151] border-b border-r border-gray-600 select-none"
+      className="relative px-4 py-3 text-right font-medium bg-[var(--dash-table-header-bg)] border-b border-r border-[var(--dash-border-default)] select-none"
       {...attributes}
     >
       {/* Resize areas - completely separate from draggable content */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize z-20 hover:bg-blue-400/50"
+        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize z-20 hover:bg-[var(--dash-accent-blue)]"
         onMouseDown={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -147,7 +147,7 @@ function SortableHeader({ column, width, onResize, onResizeStateChange, onResize
         className="flex items-center justify-between relative z-0"
         {...(isResizing ? {} : listeners)}
       >
-        <span className="text-gray-200 truncate">{column.header}</span>
+        <span className="text-[var(--dash-text-secondary)] truncate">{column.header}</span>
       </div>
     </th>
   )
@@ -685,7 +685,7 @@ export default function ResizableTable({
           onDragEnd={isAnyColumnResizing || isInitializing.current ? emptyDragEnd : handleDragEnd}
         >
           <table className="text-sm w-full" style={{ minWidth: `${totalWidth}px`, tableLayout: 'fixed' }}>
-          <thead className="bg-[#374151] border-b border-gray-600 sticky top-0">
+          <thead className="bg-[var(--dash-table-header-bg)] border-b border-[var(--dash-border-default)] sticky top-0">
             <SortableContext items={columns.map(col => col.id)} strategy={horizontalListSortingStrategy}>
               <tr>
                 {columns.map((column) => (
@@ -701,16 +701,16 @@ export default function ResizableTable({
               </tr>
             </SortableContext>
           </thead>
-          <tbody className="bg-[#2B3544]">
+          <tbody className="bg-[var(--dash-bg-surface)]">
             {data.map((item, rowIndex) => {
               const customRowClass = getRowClassName ? getRowClassName(item, rowIndex) : ''
               return (
               <tr
                 key={item.id || rowIndex}
-                className={`border-b border-gray-700 cursor-pointer transition-colors ${
+                className={`border-b border-[var(--dash-border-subtle)] cursor-pointer transition-colors ${
                   selectedRowId === item.id
-                    ? 'bg-blue-600 hover:bg-blue-700'
-                    : customRowClass || 'hover:bg-[#374151]'
+                    ? 'bg-[var(--dash-accent-blue-subtle)] hover:bg-[var(--dash-accent-blue-subtle)]'
+                    : customRowClass || 'dash-row-hover'
                 }`}
                 onClick={() => onRowClick?.(item, rowIndex)}
                 onDoubleClick={() => onRowDoubleClick?.(item, rowIndex)}
@@ -719,7 +719,7 @@ export default function ResizableTable({
                 {columns.map((column) => (
                   <td
                     key={column.id}
-                    className="px-4 py-3 text-gray-300 border-r border-gray-700"
+                    className="px-4 py-3 text-[var(--dash-text-secondary)] border-r border-[var(--dash-border-subtle)]"
                     style={{
                       width: `${column.width}px`,
                       minWidth: `${column.width}px`,

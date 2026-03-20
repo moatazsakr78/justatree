@@ -55,7 +55,7 @@ const tableColumns = [
     accessor: '#', 
     width: 60,
     render: (value: any, item: any, index: number) => (
-      <span className="text-gray-400 font-medium">{index + 1}</span>
+      <span className="text-[var(--dash-text-muted)] font-medium">{index + 1}</span>
     )
   },
   { 
@@ -65,7 +65,7 @@ const tableColumns = [
     width: 200,
     render: (value: string, customer: Customer) => (
       <div className="flex items-center gap-2">
-        <span className="text-white font-medium">{value}</span>
+        <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
         {customer.id === DEFAULT_CUSTOMER_ID && (
           <span className="text-yellow-400">★</span>
         )}
@@ -77,15 +77,15 @@ const tableColumns = [
     header: 'الفئة', 
     accessor: 'category', 
     width: 100,
-    render: (value: string | null) => <span className="text-gray-300">{value || 'غير محدد'}</span>
+    render: (value: string | null) => <span className="text-[var(--dash-text-secondary)]">{value || 'غير محدد'}</span>
   },
-  { 
-    id: 'points', 
-    header: 'النقاط', 
-    accessor: 'loyalty_points', 
+  {
+    id: 'points',
+    header: 'النقاط',
+    accessor: 'loyalty_points',
     width: 120,
     render: (value: number | null) => (
-      <span className="text-white font-medium">{(value || 0).toLocaleString()}</span>
+      <span className="text-[var(--dash-text-primary)] font-medium">{(value || 0).toLocaleString()}</span>
     )
   },
   { 
@@ -95,17 +95,17 @@ const tableColumns = [
     width: 150,
     render: (value: string | null) => {
       if (!value) {
-        return <span className="text-gray-300">غير محدد</span>
+        return <span className="text-[var(--dash-text-secondary)]">غير محدد</span>
       }
-      
+
       const rank = ranks.find(r => r.id === value)
       if (!rank) {
-        return <span className="text-white font-medium">{value}</span>
+        return <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
       }
       
       return (
         <div className="flex items-center gap-2">
-          <span className="text-white font-medium">{rank.name}</span>
+          <span className="text-[var(--dash-text-primary)] font-medium">{rank.name}</span>
           <div className="w-5 h-5 relative">
             <Image
               src={rank.icon}
@@ -123,14 +123,14 @@ const tableColumns = [
     header: 'رقم الهاتف',
     accessor: 'phone',
     width: 150,
-    render: (value: string | null) => <span className="text-gray-300 font-mono text-sm">{value || 'غير محدد'}</span>
+    render: (value: string | null) => <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{value || 'غير محدد'}</span>
   },
   {
     id: 'backup_phone',
     header: 'رقم الهاتف الاحتياطي',
     accessor: 'backup_phone',
     width: 150,
-    render: (value: string | null) => <span className="text-gray-300 font-mono text-sm">{value || '-'}</span>
+    render: (value: string | null) => <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{value || '-'}</span>
   },
   { 
     id: 'created_at', 
@@ -138,9 +138,9 @@ const tableColumns = [
     accessor: 'created_at', 
     width: 120,
     render: (value: string | null) => {
-      if (!value) return <span className="text-gray-300 text-sm">-</span>
+      if (!value) return <span className="text-[var(--dash-text-secondary)] text-sm">-</span>
       const date = new Date(value)
-      return <span className="text-gray-300 text-sm">{date.toLocaleDateString('en-US')}</span>
+      return <span className="text-[var(--dash-text-secondary)] text-sm">{date.toLocaleDateString('en-US')}</span>
     }
   },
   { 
@@ -148,7 +148,7 @@ const tableColumns = [
     header: 'المدينة', 
     accessor: 'city', 
     width: 120,
-    render: (value: string | null) => <span className="text-gray-300">{value || '-'}</span>
+    render: (value: string | null) => <span className="text-[var(--dash-text-secondary)]">{value || '-'}</span>
   }
 ]
 
@@ -191,8 +191,8 @@ const TreeView = ({
       <div 
         className={`flex items-center cursor-pointer transition-colors ${
           selectedGroupId === node.id 
-            ? 'bg-blue-600 text-white' 
-            : 'hover:bg-[#2B3544] text-gray-300 hover:text-white'
+            ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+            : 'hover:bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
         }`}
         style={{ paddingRight: `${16 + level * 24}px`, paddingLeft: '12px', paddingTop: '8px', paddingBottom: '8px' }}
         onClick={handleGroupClick}
@@ -202,7 +202,7 @@ const TreeView = ({
           <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
             {hasChildren ? (
               <button 
-                className="text-gray-400 hover:text-white w-4 h-4 flex items-center justify-center rounded hover:bg-gray-600/20"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] w-4 h-4 flex items-center justify-center rounded hover:bg-[var(--dash-bg-overlay)]/20"
                 onClick={handleToggleClick}
               >
                 {node.isExpanded ? (
@@ -214,9 +214,9 @@ const TreeView = ({
             ) : null}
           </div>
           
-          <FolderIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
-          
-          <span className="text-base text-gray-300 truncate">
+          <FolderIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
+
+          <span className="text-base text-[var(--dash-text-secondary)] truncate">
             {node.name}
           </span>
         </div>
@@ -577,7 +577,7 @@ export default function CustomersPage() {
   })
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       
@@ -588,16 +588,16 @@ export default function CustomersPage() {
       <div className="h-full pt-12 overflow-hidden flex flex-col">
         
         {/* Top Action Buttons Toolbar - Full Width with Horizontal Scroll */}
-        <div className="bg-[#374151] border-b border-gray-600 px-4 py-2 w-full">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2 w-full">
           <div className="flex items-center justify-start gap-2 overflow-x-auto scrollbar-hide">
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
               <ArrowPathIcon className="h-4 w-4" />
               <span className="text-sm">تحديث</span>
             </button>
 
             <button
               onClick={toggleGroupSidebar}
-              className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
             >
               <FolderPlusIcon className="h-4 w-4" />
               <span className="text-sm">مجموعة جديدة</span>
@@ -607,8 +607,8 @@ export default function CustomersPage() {
               onClick={() => selectedCustomerGroup && handleEditGroup(selectedCustomerGroup)}
               className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
                 selectedCustomerGroup && !selectedCustomerGroup.isDefault
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-600/30'
-                  : 'text-gray-500 cursor-not-allowed'
+                  ? 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedCustomerGroup || selectedCustomerGroup.isDefault}
             >
@@ -621,7 +621,7 @@ export default function CustomersPage() {
               className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
                 selectedCustomerGroup && !selectedCustomerGroup.isDefault
                   ? 'text-red-400 hover:text-red-300 hover:bg-red-600/10'
-                  : 'text-gray-500 cursor-not-allowed'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedCustomerGroup || selectedCustomerGroup.isDefault}
             >
@@ -631,7 +631,7 @@ export default function CustomersPage() {
 
             <button
               onClick={toggleAddCustomerModal}
-              className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
             >
               <UserPlusIcon className="h-4 w-4" />
               <span className="text-sm">إضافة عميل</span>
@@ -641,8 +641,8 @@ export default function CustomersPage() {
               onClick={() => selectedCustomer && openEditCustomerModal(selectedCustomer)}
               className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
                 selectedCustomer
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-600/30'
-                  : 'text-gray-500 cursor-not-allowed'
+                  ? 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedCustomer}
             >
@@ -654,11 +654,11 @@ export default function CustomersPage() {
               onClick={handleDeleteCustomer}
               className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
                 !selectedCustomer
-                  ? 'text-gray-500 cursor-not-allowed'
+                  ? 'text-[var(--dash-text-disabled)] cursor-not-allowed'
                   : selectedCustomer && isDefaultCustomer(selectedCustomer.id)
-                  ? 'text-gray-500 cursor-not-allowed'
+                  ? 'text-[var(--dash-text-disabled)] cursor-not-allowed'
                   : isDeleting
-                  ? 'text-gray-500 cursor-not-allowed'
+                  ? 'text-[var(--dash-text-disabled)] cursor-not-allowed'
                   : 'text-red-400 hover:text-red-300 hover:bg-red-600/10'
               }`}
               disabled={!selectedCustomer || (selectedCustomer && isDefaultCustomer(selectedCustomer.id)) || isDeleting}
@@ -676,34 +676,34 @@ export default function CustomersPage() {
               <span className="text-sm">{isDeleting ? 'جاري الحذف...' : 'حذف العميل'}</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
               <PrinterIcon className="h-4 w-4" />
               <span className="text-sm">طباعة</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
               <DocumentArrowDownIcon className="h-4 w-4" />
               <span className="text-sm">حفظ كـ PDF</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
               <ArrowDownTrayIcon className="h-4 w-4" />
               <span className="text-sm">استيراد</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
               <ArrowUpTrayIcon className="h-4 w-4" />
               <span className="text-sm">تصدير</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors">
               <ArrowsUpDownIcon className="h-4 w-4" />
               <span className="text-sm">ترتيب</span>
             </button>
 
             <button
               onClick={() => setIsMergeModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
             >
               <ArrowsRightLeftIcon className="h-4 w-4" />
               <span className="text-sm">دمج العملاء</span>
@@ -712,7 +712,7 @@ export default function CustomersPage() {
             {viewMode === 'table' && (
               <button
                 onClick={() => setShowColumnsModal(true)}
-                className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md cursor-pointer whitespace-nowrap transition-colors"
               >
                 <TableCellsIcon className="h-4 w-4" />
                 <span className="text-sm">الأعمدة</span>
@@ -722,29 +722,29 @@ export default function CustomersPage() {
         </div>
 
         {/* Second Toolbar - Search and Controls - Full Width */}
-        <div className="bg-[#374151] border-b border-gray-600 px-2 py-3 w-full flex-shrink-0">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-2 py-3 w-full flex-shrink-0">
           <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide">
             {/* Search - First - Increased width slightly */}
             <div className="relative flex-shrink-0">
-              <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="اسم العميل..."
-                className="w-56 sm:w-64 md:w-80 pl-4 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-56 sm:w-64 md:w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
             {/* Customer Count Display - Second */}
             <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-sm text-gray-400 whitespace-nowrap">{filteredCustomers.length} من {customers.length} عميل</span>
+              <span className="text-sm text-[var(--dash-text-muted)] whitespace-nowrap">{filteredCustomers.length} من {customers.length} عميل</span>
             </div>
 
             {/* Groups Toggle Button - Third */}
             <button
               onClick={toggleGroupsVisibility}
-              className="p-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-colors bg-[#2B3544] border border-gray-600 flex-shrink-0"
+              className="p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-colors bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] flex-shrink-0"
               title={isGroupsHidden ? 'إظهار المجموعات' : 'إخفاء المجموعات'}
             >
               {isGroupsHidden ? (
@@ -755,13 +755,13 @@ export default function CustomersPage() {
             </button>
 
             {/* View Toggle - Fourth */}
-            <div className="flex bg-[#2B3544] rounded-md overflow-hidden flex-shrink-0">
+            <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden flex-shrink-0">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 <Squares2X2Icon className="h-4 w-4" />
@@ -770,8 +770,8 @@ export default function CustomersPage() {
                 onClick={() => setViewMode('table')}
                 className={`p-2 transition-colors ${
                   viewMode === 'table'
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 <ListBulletIcon className="h-4 w-4" />
@@ -785,12 +785,12 @@ export default function CustomersPage() {
 
           {/* Customer Groups Tree Sidebar - Conditional */}
           {!isGroupsHidden && (
-            <div className="w-64 bg-[#374151] border-l border-gray-700 flex flex-col">
+            <div className="w-64 bg-[var(--dash-bg-raised)] border-l border-[var(--dash-border-subtle)] flex flex-col">
               {/* Tree View */}
               <div className="flex-1 overflow-y-auto scrollbar-hide py-2">
                 {groupsLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="text-gray-400">جاري التحميل...</div>
+                    <div className="text-[var(--dash-text-muted)]">جاري التحميل...</div>
                   </div>
                 ) : groupsError ? (
                   <div className="flex items-center justify-center py-8">
@@ -798,7 +798,7 @@ export default function CustomersPage() {
                   </div>
                 ) : groups.length === 0 ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="text-gray-400 text-sm">لا توجد مجموعات</div>
+                    <div className="text-[var(--dash-text-muted)] text-sm">لا توجد مجموعات</div>
                   </div>
                 ) : (
                   groups.map((group) => (
@@ -819,10 +819,10 @@ export default function CustomersPage() {
           <div className="flex-1 flex flex-col overflow-hidden">
 
             {/* Customers Content Container */}
-            <div className="flex-1 overflow-hidden bg-[#2B3544]">
+            <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)]">
               {customersLoading ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="text-gray-400">جاري تحميل العملاء...</div>
+                  <div className="text-[var(--dash-text-muted)]">جاري تحميل العملاء...</div>
                 </div>
               ) : customersError ? (
                 <div className="flex items-center justify-center h-full">
@@ -921,15 +921,15 @@ export default function CustomersPage() {
           
           {/* Modal */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-[#3A4553] rounded-lg shadow-2xl border border-[#4A5568] max-w-md w-full">
+            <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-2xl border border-[var(--dash-border-default)] max-w-md w-full">
               {/* Header */}
-              <div className="px-6 py-4 border-b border-[#4A5568]">
-                <h3 className="text-lg font-medium text-white text-right">تأكيد الحذف</h3>
+              <div className="px-6 py-4 border-b border-[var(--dash-border-default)]">
+                <h3 className="text-lg font-medium text-[var(--dash-text-primary)] text-right">تأكيد الحذف</h3>
               </div>
-              
+
               {/* Content */}
               <div className="px-6 py-4">
-                <p className="text-gray-300 text-right mb-2">
+                <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من أنك تريد حذف هذه المجموعة؟
                 </p>
                 <p className="text-blue-400 font-medium text-right">
@@ -938,10 +938,10 @@ export default function CustomersPage() {
               </div>
               
               {/* Actions */}
-              <div className="px-6 py-4 border-t border-[#4A5568] flex gap-3 justify-end">
+              <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
                 <button
                   onClick={cancelDeleteGroup}
-                  className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-gray-500 rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -951,7 +951,7 @@ export default function CustomersPage() {
                   className={`px-4 py-2 rounded transition-colors ${
                     isDeleting
                       ? 'bg-red-600/50 text-red-300 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-white'
+                      : 'bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)]'
                   }`}
                 >
                   {isDeleting ? 'جاري الحذف...' : 'نعم، احذف'}
@@ -981,24 +981,24 @@ export default function CustomersPage() {
         /* Custom scrollbar for table and tree view */
         .table-container, .tree-container {
           scrollbar-width: thin;
-          scrollbar-color: #6B7280 #374151;
+          scrollbar-color: var(--dash-bg-highlight) var(--dash-bg-raised);
         }
-        
+
         .table-container::-webkit-scrollbar,
         .tree-container::-webkit-scrollbar {
           height: 8px;
           width: 8px;
         }
-        
+
         .table-container::-webkit-scrollbar-track,
         .tree-container::-webkit-scrollbar-track {
-          background: #374151;
+          background: var(--dash-bg-raised);
           border-radius: 4px;
         }
-        
+
         .table-container::-webkit-scrollbar-thumb,
         .tree-container::-webkit-scrollbar-thumb {
-          background: #6B7280;
+          background: var(--dash-bg-highlight);
           border-radius: 4px;
         }
         

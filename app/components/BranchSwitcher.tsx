@@ -38,9 +38,9 @@ export default function BranchSwitcher() {
   // Show loading state or not mounted (prevent hydration mismatch)
   if (!mounted || isLoading) {
     return (
-      <div className="flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-lg animate-pulse">
-        <BuildingStorefrontIcon className="h-4 w-4 text-gray-400" />
-        <span className="text-xs text-gray-400">جاري التحميل...</span>
+      <div className="flex items-center gap-1 px-2 py-1 bg-[var(--dash-bg-overlay)] rounded-lg animate-pulse">
+        <BuildingStorefrontIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
+        <span className="text-xs text-[var(--dash-text-muted)]">جاري التحميل...</span>
       </div>
     );
   }
@@ -80,18 +80,18 @@ export default function BranchSwitcher() {
 
       {/* Dropdown menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-1 w-56 bg-[#2B3544] border border-gray-600 rounded-lg shadow-lg z-50 overflow-hidden">
+        <div className="absolute right-0 mt-1 w-56 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-dash-md shadow-dash-lg z-50 overflow-hidden animate-dash-slide-up">
           <div className="py-1 max-h-64 overflow-y-auto">
             {userBranches.map((branch) => (
               <button
                 key={branch.id}
                 onClick={() => handleBranchSelect(branch)}
-                className={`w-full flex items-center gap-2 px-4 py-2 text-right hover:bg-gray-700/50 transition-colors ${
-                  branch.id === currentBranch.id ? 'bg-blue-500/20' : ''
+                className={`w-full flex items-center gap-2 px-4 py-2 text-right hover:bg-[var(--dash-bg-overlay)] transition-colors ${
+                  branch.id === currentBranch.id ? 'bg-[var(--dash-accent-blue-subtle)]' : ''
                 }`}
               >
-                <BuildingStorefrontIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                <span className={`text-sm flex-grow ${branch.id === currentBranch.id ? 'text-blue-300' : 'text-gray-300'}`}>
+                <BuildingStorefrontIcon className="h-4 w-4 text-[var(--dash-text-muted)] flex-shrink-0" />
+                <span className={`text-sm flex-grow ${branch.id === currentBranch.id ? 'text-[var(--dash-accent-blue)]' : 'text-[var(--dash-text-secondary)]'}`}>
                   {branch.name}
                 </span>
                 {branch.id === currentBranch.id && (

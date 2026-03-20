@@ -43,7 +43,7 @@ export default function DropdownMenu({ isOpen, onClose }: DropdownMenuProps) {
   return (
     <div 
       ref={menuRef}
-      className="fixed top-12 left-4 z-50 bg-[#374151] border border-gray-600 rounded-lg shadow-lg min-w-[200px] overflow-hidden"
+      className="fixed top-12 left-4 z-50 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg shadow-lg min-w-[200px] overflow-hidden"
     >
       <div className="py-2">
         <button
@@ -51,7 +51,7 @@ export default function DropdownMenu({ isOpen, onClose }: DropdownMenuProps) {
             // Handle Orders List navigation
             onClose();
           }}
-          className="flex items-center gap-3 w-full px-4 py-3 text-white hover:bg-[#4B5563] transition-colors text-right"
+          className="flex items-center gap-3 w-full px-4 py-3 text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] transition-colors text-right"
         >
           <ClipboardDocumentListIcon className="h-5 w-5 flex-shrink-0" />
           <span className="text-sm font-medium">قائمة الطلبات</span>
@@ -62,7 +62,7 @@ export default function DropdownMenu({ isOpen, onClose }: DropdownMenuProps) {
             // Handle Profile navigation
             onClose();
           }}
-          className="flex items-center gap-3 w-full px-4 py-3 text-white hover:bg-[#4B5563] transition-colors text-right"
+          className="flex items-center gap-3 w-full px-4 py-3 text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] transition-colors text-right"
         >
           <UserIcon className="h-5 w-5 flex-shrink-0" />
           <span className="text-sm font-medium">الملف الشخصي</span>

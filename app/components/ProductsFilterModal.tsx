@@ -154,22 +154,22 @@ export default function ProductsFilterModal({
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] max-w-7xl w-full h-[95vh] overflow-hidden flex flex-col">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-7xl w-full h-[95vh] overflow-hidden flex flex-col animate-dash-scale-in">
           
           {/* Header */}
-          <div className="bg-[#374151] px-6 py-4 border-b border-[#4A5568] flex items-center justify-between rounded-t-2xl">
+          <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-lg">🏷️</span>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">فلترة المنتجات</h2>
-                <p className="text-gray-400 text-sm">اختر المجموعات والمنتجات المطلوبة للتقرير</p>
+                <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">فلترة المنتجات</h2>
+                <p className="text-[var(--dash-text-muted)] text-sm">اختر المجموعات والمنتجات المطلوبة للتقرير</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+              className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
@@ -179,16 +179,16 @@ export default function ProductsFilterModal({
           <div className="flex flex-1 min-h-0">
             
             {/* Left Sidebar - Categories */}
-            <div className="w-80 bg-[#374151] border-r border-[#4A5568] flex flex-col min-h-0">
-              <div className="p-4 border-b border-[#4A5568]">
-                <h3 className="text-white font-medium mb-3">المجموعات</h3>
+            <div className="w-80 bg-[var(--dash-bg-raised)] border-r border-[var(--dash-border-default)] flex flex-col min-h-0">
+              <div className="p-4 border-b border-[var(--dash-border-default)]">
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">المجموعات</h3>
                 
                 {/* Categories List */}
                 <div className="space-y-2 max-h-96 overflow-y-auto scrollbar-hide">
                   {categories.map(category => (
                     <label
                       key={category.id}
-                      className="flex items-center gap-3 p-3 bg-[#2B3544] hover:bg-[#3A4553] rounded-lg cursor-pointer transition-colors border border-gray-600/30"
+                      className="flex items-center gap-3 p-3 bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-surface)] rounded-lg cursor-pointer transition-colors border border-[var(--dash-border-default)]/30"
                     >
                       {/* Category Checkbox */}
                       <div className="relative">
@@ -211,7 +211,7 @@ export default function ProductsFilterModal({
                       
                       {/* Category Name */}
                       <span 
-                        className="text-white text-base font-medium flex-1 text-right"
+                        className="text-[var(--dash-text-primary)] text-base font-medium flex-1 text-right"
                         onClick={(e) => {
                           e.preventDefault()
                           setSelectedCategory(category.id === selectedCategory?.id ? null : category)
@@ -230,7 +230,7 @@ export default function ProductsFilterModal({
               </div>
 
               {/* Selection Summary */}
-              <div className="p-4 border-t border-[#4A5568] mt-auto">
+              <div className="p-4 border-t border-[var(--dash-border-default)] mt-auto">
                 <div className="text-center space-y-2">
                   <div className="text-sm text-blue-400">
                     {selectedCategories.size} مجموعة محددة
@@ -246,19 +246,19 @@ export default function ProductsFilterModal({
             <div className="flex-1 flex flex-col">
               
               {/* Products Toolbar */}
-              <div className="bg-[#374151] border-b border-[#4A5568] px-6 py-3">
+              <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6 py-3">
                 <div className="flex items-center justify-between">
                   
                   {/* Left Side - Controls */}
                   <div className="flex items-center gap-4">
                     {/* View Toggle */}
-                    <div className="flex bg-[#2B3544] rounded-md overflow-hidden">
+                    <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden">
                       <button 
                         onClick={() => setViewMode('grid')}
                         className={`p-2 transition-colors ${
                           viewMode === 'grid' 
                             ? 'bg-blue-600 text-white' 
-                            : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                            : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
                         <Squares2X2Icon className="h-4 w-4" />
@@ -268,7 +268,7 @@ export default function ProductsFilterModal({
                         className={`p-2 transition-colors ${
                           viewMode === 'table' 
                             ? 'bg-blue-600 text-white' 
-                            : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                            : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
                         <ListBulletIcon className="h-4 w-4" />
@@ -277,13 +277,13 @@ export default function ProductsFilterModal({
 
                     {/* Search */}
                     <div className="relative">
-                      <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
                       <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="اسم المنتج..."
-                        className="w-80 pl-4 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5DADE2] focus:border-transparent text-sm"
+                        className="w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-white placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-sm"
                       />
                     </div>
 
@@ -305,7 +305,7 @@ export default function ProductsFilterModal({
                   </div>
 
                   {/* Right Side - Info */}
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                  <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)]">
                     <span>عرض {filteredProducts.length} من أصل {products.length} منتج</span>
                     {selectedCategory && (
                       <span className="text-blue-400">المجموعة: {selectedCategory.name}</span>
@@ -315,7 +315,7 @@ export default function ProductsFilterModal({
               </div>
 
               {/* Products Content */}
-              <div className="flex-1 overflow-hidden bg-[#2B3544] min-h-0">
+              <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)] min-h-0">
                 {viewMode === 'grid' ? (
                   // Grid View
                   <div className="h-full overflow-y-auto scrollbar-hide p-4">
@@ -323,7 +323,7 @@ export default function ProductsFilterModal({
                       {filteredProducts.map((product, index) => (
                         <div
                           key={product.id}
-                          className={`bg-[#374151] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
+                          className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                             selectedProducts.has(product.id)
                               ? 'border-blue-500 bg-[#434E61]'
                               : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
@@ -360,7 +360,7 @@ export default function ProductsFilterModal({
                           </div>
 
                           {/* Product Name */}
-                          <h3 className="text-white font-medium text-sm text-center mb-2 line-clamp-2">
+                          <h3 className="text-[var(--dash-text-primary)] font-medium text-sm text-center mb-2 line-clamp-2">
                             {product.name}
                           </h3>
 
@@ -378,7 +378,7 @@ export default function ProductsFilterModal({
                               <span className="text-blue-400 font-medium">
                                 {(product.inventoryData && Object.values(product.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0)) || 0}
                               </span>
-                              <span className="text-gray-400">الكمية</span>
+                              <span className="text-[var(--dash-text-muted)]">الكمية</span>
                             </div>
                           </div>
                         </div>
@@ -389,20 +389,20 @@ export default function ProductsFilterModal({
                   // Table View
                   <div className="h-full overflow-y-auto scrollbar-hide">
                     <table className="w-full">
-                      <thead className="bg-[#374151] sticky top-0">
+                      <thead className="bg-[var(--dash-bg-raised)] sticky top-0">
                         <tr>
-                          <th className="px-4 py-3 text-right text-white font-medium">اختيار</th>
-                          <th className="px-4 py-3 text-right text-white font-medium">اسم المنتج</th>
-                          <th className="px-4 py-3 text-right text-white font-medium">المجموعة</th>
-                          <th className="px-4 py-3 text-right text-white font-medium">السعر</th>
-                          <th className="px-4 py-3 text-right text-white font-medium">الكمية</th>
+                          <th className="px-4 py-3 text-right text-[var(--dash-text-primary)] font-medium">اختيار</th>
+                          <th className="px-4 py-3 text-right text-[var(--dash-text-primary)] font-medium">اسم المنتج</th>
+                          <th className="px-4 py-3 text-right text-[var(--dash-text-primary)] font-medium">المجموعة</th>
+                          <th className="px-4 py-3 text-right text-[var(--dash-text-primary)] font-medium">السعر</th>
+                          <th className="px-4 py-3 text-right text-[var(--dash-text-primary)] font-medium">الكمية</th>
                         </tr>
                       </thead>
                       <tbody>
                         {filteredProducts.map((product) => (
                           <tr 
                             key={product.id}
-                            className={`border-b border-gray-600 hover:bg-[#374151] ${
+                            className={`border-b border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-raised)] ${
                               selectedProducts.has(product.id) ? 'bg-blue-500/10' : ''
                             }`}
                           >
@@ -425,8 +425,8 @@ export default function ProductsFilterModal({
                                 </div>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-white">{product.name}</td>
-                            <td className="px-4 py-3 text-gray-300">{product.category?.name || 'غير محدد'}</td>
+                            <td className="px-4 py-3 text-[var(--dash-text-primary)]">{product.name}</td>
+                            <td className="px-4 py-3 text-[var(--dash-text-secondary)]">{product.category?.name || 'غير محدد'}</td>
                             <td className="px-4 py-3 text-blue-400">{(product.price || 0).toFixed(2)}</td>
                             <td className="px-4 py-3 text-blue-400">
                               {(product.inventoryData && Object.values(product.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0)) || 0}
@@ -442,9 +442,9 @@ export default function ProductsFilterModal({
           </div>
 
           {/* Footer Actions */}
-          <div className="bg-[#374151] px-6 py-4 border-t border-[#4A5568] flex items-center justify-between rounded-b-2xl flex-shrink-0">
+          <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-t border-[var(--dash-border-default)] flex items-center justify-between rounded-b-2xl flex-shrink-0">
             <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-[var(--dash-text-muted)]">
                 تم تحديد {selectedCategories.size} مجموعة و {selectedProducts.size} منتج
               </div>
             </div>
@@ -452,7 +452,7 @@ export default function ProductsFilterModal({
             <div className="flex items-center gap-3">
               <button
                 onClick={onClose}
-                className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+                className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-gray-500 rounded transition-colors"
               >
                 إلغاء
               </button>

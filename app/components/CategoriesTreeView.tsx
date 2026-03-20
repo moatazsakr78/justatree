@@ -74,8 +74,8 @@ const TreeView = ({
       <div 
         className={`flex items-center cursor-pointer transition-colors ${
           selectedCategoryId === node.id 
-            ? 'bg-blue-600 text-white' 
-            : 'hover:bg-[#2B3544] text-gray-300 hover:text-white'
+            ? 'bg-blue-600 text-white'
+            : 'hover:bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
         }`}
         style={{ paddingRight: `${16 + level * 24}px`, paddingLeft: '12px', paddingTop: '8px', paddingBottom: '8px' }}
         onClick={handleCategoryClick}
@@ -85,7 +85,7 @@ const TreeView = ({
           <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
             {hasChildren ? (
               <button 
-                className="text-gray-400 hover:text-white w-4 h-4 flex items-center justify-center rounded hover:bg-gray-600/20"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] w-4 h-4 flex items-center justify-center rounded hover:bg-[var(--dash-bg-overlay)]/20"
                 onClick={handleToggleClick}
               >
                 {node.isExpanded ? (
@@ -97,9 +97,9 @@ const TreeView = ({
             ) : null}
           </div>
           
-          <FolderIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+          <FolderIcon className="h-5 w-5 text-[var(--dash-text-muted)] flex-shrink-0" />
           
-          <span className="text-base text-gray-300 truncate">
+          <span className="text-base text-[var(--dash-text-secondary)] truncate">
             {node.name}
           </span>
         </div>
@@ -246,7 +246,7 @@ export default function CategoriesTreeView({
   }
 
   return (
-    <div className="w-64 bg-[#374151] border-l border-gray-700 flex flex-col">
+    <div className="w-64 bg-[var(--dash-bg-raised)] border-l border-[var(--dash-border-subtle)] flex flex-col">
       {/* Tree View */}
       <div className="flex-1 overflow-y-auto scrollbar-hide py-2">
         <TreeView 

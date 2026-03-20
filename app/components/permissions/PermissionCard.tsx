@@ -34,7 +34,7 @@ export default function PermissionCard({
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-[1.02]'}
         ${isRestricted
           ? 'bg-red-500/10 border-red-500/40 hover:border-red-500'
-          : 'bg-[#374151] border-gray-600/50 hover:border-blue-500/50'
+          : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)]/50 hover:border-blue-500/50'
         }
       `}
     >
@@ -55,7 +55,7 @@ export default function PermissionCard({
             transition-colors duration-200
             ${isRestricted
               ? 'bg-red-500 border-red-500'
-              : 'border-gray-500 bg-transparent hover:border-gray-400'
+              : 'border-[var(--dash-text-disabled)] bg-transparent hover:border-[var(--dash-text-muted)]'
             }
           `}
         >
@@ -65,7 +65,7 @@ export default function PermissionCard({
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h4 className="text-white font-medium text-sm leading-tight">{permission.name}</h4>
+            <h4 className="text-[var(--dash-text-primary)] font-medium text-sm leading-tight">{permission.name}</h4>
             <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${typeColor}`}>
               {typeLabel}
             </span>
@@ -75,7 +75,7 @@ export default function PermissionCard({
 
       {/* Description */}
       {permission.description && (
-        <p className="text-gray-400 text-xs mt-2 mr-9 line-clamp-2">{permission.description}</p>
+        <p className="text-[var(--dash-text-muted)] text-xs mt-2 mr-9 line-clamp-2">{permission.description}</p>
       )}
 
       {/* Status Text */}

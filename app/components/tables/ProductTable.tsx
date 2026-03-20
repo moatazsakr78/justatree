@@ -167,34 +167,34 @@ export default function ProductTable({ showActions = false, showQuantityColumn =
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-700">
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">#</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">المجموعة</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">اسم المنتج</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">الكمية الكلية</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">الحالة</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">سعر الفرد</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">سعر البيع</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">سعر الجملة</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">سعر 1</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">سعر 2</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">سعر 3</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">سعر 4</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">الموقع</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">الكود</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">الباركود</th>
+          <tr className="border-b border-[var(--dash-border-subtle)]">
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">#</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">المجموعة</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">اسم المنتج</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">الكمية الكلية</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">الحالة</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">سعر الفرد</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">سعر البيع</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">سعر الجملة</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">سعر 1</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">سعر 2</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">سعر 3</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">سعر 4</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">الموقع</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">الكود</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">الباركود</th>
             {showQuantityColumn && (
-              <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">عدد الأطباق</th>
+              <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">عدد الأطباق</th>
             )}
-            <th className="text-right py-3 px-4 text-sm font-medium text-gray-300">العدد الأدنى</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-[var(--dash-text-secondary)]">العدد الأدنى</th>
           </tr>
         </thead>
         <tbody>
           {sampleProducts.map((product) => (
-            <tr key={product.id} className="border-b border-gray-700 hover:bg-gray-800">
-              <td className="py-3 px-4 text-sm text-white">{product.id}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.category}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.name}</td>
+            <tr key={product.id} className="border-b border-[var(--dash-border-subtle)] hover:bg-[var(--dash-bg-base)]">
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.id}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.category}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.name}</td>
               <td className="py-3 px-4 text-sm">
                 <span className={`px-2 py-1 rounded text-xs ${
                   product.status === 'active' 
@@ -216,16 +216,16 @@ export default function ProductTable({ showActions = false, showQuantityColumn =
                   </span>
                 </div>
               </td>
-              <td className="py-3 px-4 text-sm text-white">{product.price.toFixed(2)}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.total.toFixed(2)}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.wholesalePrice.toFixed(2)}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.salePrice1.toFixed(2)}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.salePrice2.toFixed(2)}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.salePrice3.toFixed(2)}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.salePrice4.toFixed(2)}</td>
-              <td className="py-3 px-4 text-sm text-gray-400">{product.location || '-'}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.code || '-'}</td>
-              <td className="py-3 px-4 text-sm text-white">{product.barcode || '-'}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.price.toFixed(2)}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.total.toFixed(2)}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.wholesalePrice.toFixed(2)}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.salePrice1.toFixed(2)}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.salePrice2.toFixed(2)}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.salePrice3.toFixed(2)}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.salePrice4.toFixed(2)}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-muted)]">{product.location || '-'}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.code || '-'}</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.barcode || '-'}</td>
               {showQuantityColumn && (
                 <td className="py-3 px-4 text-sm">
                   <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">
@@ -233,7 +233,7 @@ export default function ProductTable({ showActions = false, showQuantityColumn =
                   </span>
                 </td>
               )}
-              <td className="py-3 px-4 text-sm text-white">0</td>
+              <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">0</td>
             </tr>
           ))}
         </tbody>

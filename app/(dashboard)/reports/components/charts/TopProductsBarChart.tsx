@@ -56,17 +56,17 @@ export default function TopProductsBarChart({ dateFilter, height = 300, limit = 
 
   if (loading) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <div className="h-8 bg-gray-600 rounded w-1/3 mb-4"></div>
-        <div className="animate-pulse bg-gray-600 rounded" style={{ height }}></div>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <div className="h-8 bg-[var(--dash-bg-overlay)] rounded w-1/3 mb-4"></div>
+        <div className="animate-pulse bg-[var(--dash-bg-overlay)] rounded" style={{ height }}></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <h3 className="text-white font-semibold mb-4 text-right">أفضل 10 منتجات</h3>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">أفضل 10 منتجات</h3>
         <div className="flex items-center justify-center text-red-400" style={{ height }}>
           {error}
         </div>
@@ -76,9 +76,9 @@ export default function TopProductsBarChart({ dateFilter, height = 300, limit = 
 
   if (data.length === 0) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <h3 className="text-white font-semibold mb-4 text-right">أفضل 10 منتجات</h3>
-        <div className="flex items-center justify-center text-gray-400" style={{ height }}>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">أفضل 10 منتجات</h3>
+        <div className="flex items-center justify-center text-[var(--dash-text-muted)]" style={{ height }}>
           لا توجد بيانات للفترة المحددة
         </div>
       </div>
@@ -101,10 +101,10 @@ export default function TopProductsBarChart({ dateFilter, height = 300, limit = 
             direction: 'rtl',
           }}
         >
-          <p className="text-white font-semibold mb-2">{item.productName}</p>
-          <p className="text-gray-400 text-xs mb-2">{item.categoryName}</p>
-          <p className="text-gray-300">الإجمالي: {formatCurrencyAr(item.totalRevenue)}</p>
-          <p className="text-gray-300">الكمية: {item.totalQuantity}</p>
+          <p className="text-[var(--dash-text-primary)] font-semibold mb-2">{item.productName}</p>
+          <p className="text-[var(--dash-text-muted)] text-xs mb-2">{item.categoryName}</p>
+          <p className="text-[var(--dash-text-secondary)]">الإجمالي: {formatCurrencyAr(item.totalRevenue)}</p>
+          <p className="text-[var(--dash-text-secondary)]">الكمية: {item.totalQuantity}</p>
           <p className="text-green-400">الربح: {formatCurrencyAr(item.totalProfit)}</p>
           <p className="text-blue-400">هامش الربح: {item.profitMargin.toFixed(1)}%</p>
         </div>
@@ -114,8 +114,8 @@ export default function TopProductsBarChart({ dateFilter, height = 300, limit = 
   };
 
   return (
-    <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-      <h3 className="text-white font-semibold mb-4 text-right">أفضل 10 منتجات</h3>
+    <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+      <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">أفضل 10 منتجات</h3>
       <ResponsiveContainer width="100%" height={height}>
         <BarChart
           data={chartData}

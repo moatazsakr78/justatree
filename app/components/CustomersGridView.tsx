@@ -136,19 +136,19 @@ export default function CustomersGridView({
             onClick={() => onCustomerClick(customer)}
             onDoubleClick={() => onCustomerDoubleClick(customer)}
             className={`
-              relative bg-[#374151] rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg
+              relative bg-[var(--dash-bg-raised)] rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg
               ${isSelected
                 ? 'border-blue-500 ring-2 ring-blue-500 ring-opacity-50'
-                : 'border-gray-600 hover:border-gray-500'
+                : 'border-[var(--dash-border-default)] hover:border-gray-500'
               }
             `}
           >
             {/* Header */}
-            <div className="p-4 border-b border-gray-600">
+            <div className="p-4 border-b border-[var(--dash-border-default)]">
               <div className="flex flex-col items-center text-center">
                 {/* Avatar */}
                 <div className="flex-shrink-0 mb-3">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-blue-600 border-2 border-gray-600">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-blue-600 border-2 border-[var(--dash-border-default)]">
                     {avatarUrl ? (
                       <img
                         src={avatarUrl}
@@ -178,7 +178,7 @@ export default function CustomersGridView({
                 {/* Name and Default Badge */}
                 <div className="w-full">
                   <div className="flex items-center justify-center gap-2 mb-1">
-                    <h3 className="text-white font-medium text-sm leading-tight">
+                    <h3 className="text-[var(--dash-text-primary)] font-medium text-sm leading-tight">
                       {customer.name}
                     </h3>
                     {isDefault && (
@@ -187,13 +187,13 @@ export default function CustomersGridView({
                   </div>
 
                   {/* Category */}
-                  <p className="text-gray-400 text-xs">
+                  <p className="text-[var(--dash-text-muted)] text-xs">
                     {customer.category || 'غير محدد'}
                   </p>
 
                   {/* Rank Badge */}
                   {rankInfo && (
-                    <div className="flex items-center justify-center gap-1 bg-gray-700 px-2 py-1 rounded-full mt-2 mx-auto w-fit">
+                    <div className="flex items-center justify-center gap-1 bg-[var(--dash-bg-raised)] px-2 py-1 rounded-full mt-2 mx-auto w-fit">
                       <div className="w-3 h-3 relative">
                         <Image
                           src={rankInfo.icon}
@@ -202,7 +202,7 @@ export default function CustomersGridView({
                           className="object-contain"
                         />
                       </div>
-                      <span className="text-xs text-white font-medium">
+                      <span className="text-xs text-[var(--dash-text-primary)] font-medium">
                         {rankInfo.name}
                       </span>
                     </div>
@@ -219,7 +219,7 @@ export default function CustomersGridView({
                   <svg className="h-3 w-3 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
-                  <span className="text-gray-300 text-xs truncate">
+                  <span className="text-[var(--dash-text-secondary)] text-xs truncate">
                     {customer.email}
                   </span>
                 </div>
@@ -228,8 +228,8 @@ export default function CustomersGridView({
               {/* Loyalty Points */}
               <div className="flex items-center gap-2">
                 <TrophyIcon className="h-3 w-3 text-blue-400 flex-shrink-0" />
-                <span className="text-xs text-gray-300">النقاط:</span>
-                <span className="text-white font-medium text-xs">
+                <span className="text-xs text-[var(--dash-text-secondary)]">النقاط:</span>
+                <span className="text-[var(--dash-text-primary)] font-medium text-xs">
                   {(customer.loyalty_points || 0).toLocaleString()}
                 </span>
               </div>
@@ -238,7 +238,7 @@ export default function CustomersGridView({
               {customer.phone && (
                 <div className="flex items-center gap-2">
                   <PhoneIcon className="h-3 w-3 text-green-400 flex-shrink-0" />
-                  <span className="text-gray-300 text-xs font-mono truncate">
+                  <span className="text-[var(--dash-text-secondary)] text-xs font-mono truncate">
                     {customer.phone}
                   </span>
                 </div>
@@ -248,7 +248,7 @@ export default function CustomersGridView({
               {customer.city && (
                 <div className="flex items-center gap-2">
                   <MapPinIcon className="h-3 w-3 text-red-400 flex-shrink-0" />
-                  <span className="text-gray-300 text-xs truncate">
+                  <span className="text-[var(--dash-text-secondary)] text-xs truncate">
                     {customer.city}
                   </span>
                 </div>
@@ -257,8 +257,8 @@ export default function CustomersGridView({
               {/* Created Date */}
               <div className="flex items-center gap-2">
                 <CalendarIcon className="h-3 w-3 text-purple-400 flex-shrink-0" />
-                <span className="text-xs text-gray-300">منذ:</span>
-                <span className="text-gray-400 text-xs">
+                <span className="text-xs text-[var(--dash-text-secondary)]">منذ:</span>
+                <span className="text-[var(--dash-text-muted)] text-xs">
                   {formatDate(customer.created_at)}
                 </span>
               </div>

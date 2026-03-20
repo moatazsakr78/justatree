@@ -68,9 +68,9 @@ const CurrencyDropdownWithDelete = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-right flex items-center justify-between"
+        className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-right flex items-center justify-between"
       >
-        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 text-[var(--dash-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
         <span>{isCustom ? 'كتابة مخصصة...' : value || 'اختر العملة'}</span>
@@ -78,12 +78,12 @@ const CurrencyDropdownWithDelete = ({
 
       {/* Custom dropdown menu */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-[#2B3544] border border-gray-600 rounded shadow-lg z-50 max-h-60 overflow-y-auto scrollbar-hide">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded shadow-lg z-50 max-h-60 overflow-y-auto scrollbar-hide">
           {/* Currency options */}
           {arabicCurrencies.map((currency, index) => (
             <div
               key={currency}
-              className="flex items-center justify-between p-2 hover:bg-[#374151] group"
+              className="flex items-center justify-between p-2 hover:bg-[var(--dash-bg-raised)] group"
             >
               <button
                 onClick={() => {
@@ -91,7 +91,7 @@ const CurrencyDropdownWithDelete = ({
                   onChange(currency);
                   setIsOpen(false);
                 }}
-                className="flex-1 text-right text-white text-sm py-1 px-2 hover:bg-[#374151] rounded"
+                className="flex-1 text-right text-[var(--dash-text-primary)] text-sm py-1 px-2 hover:bg-[var(--dash-bg-raised)] rounded"
               >
                 {currency}
               </button>
@@ -116,13 +116,13 @@ const CurrencyDropdownWithDelete = ({
 
           {/* Custom option - only show if allowed */}
           {allowCustomInput && (
-            <div className="border-t border-gray-600 p-2">
+            <div className="border-t border-[var(--dash-border-default)] p-2">
               <button
                 onClick={() => {
                   onCustomToggle(true);
                   setIsOpen(false);
                 }}
-                className="w-full text-right text-white text-sm py-1 px-2 hover:bg-[#374151] rounded"
+                className="w-full text-right text-[var(--dash-text-primary)] text-sm py-1 px-2 hover:bg-[var(--dash-bg-raised)] rounded"
               >
                 كتابة مخصصة...
               </button>
@@ -138,7 +138,7 @@ const CurrencyDropdownWithDelete = ({
           value={customValue}
           onChange={(e) => onCustomChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full mt-2 px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-right"
+          className="w-full mt-2 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-right"
         />
       )}
 
@@ -480,11 +480,11 @@ export default function SettingsPage() {
           <div className="space-y-6">
             {/* Language Settings */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2">اللغة</label>
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">اللغة</label>
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="Arabic">Arabic</option>
                 <option value="English">English</option>
@@ -493,11 +493,11 @@ export default function SettingsPage() {
 
             {/* Direction */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2">اتجاه المحتوى</label>
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">اتجاه المحتوى</label>
               <select
                 value={direction}
                 onChange={(e) => setDirection(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="rtl">من اليمين إلى اليسار</option>
                 <option value="ltr">من اليسار إلى اليمين</option>
@@ -506,11 +506,11 @@ export default function SettingsPage() {
 
             {/* Theme */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2">نظام الألوان</label>
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">نظام الألوان</label>
               <select
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="dark">داكن عالي</option>
                 <option value="light">فاتح ليالي</option>
@@ -519,11 +519,11 @@ export default function SettingsPage() {
 
             {/* Text Size */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2">حجم النص / صف صغير</label>
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">حجم النص / صف صغير</label>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setFontSize(Math.max(50, fontSize - 10))}
-                  className="px-2 py-1 bg-[#374151] hover:bg-gray-600 rounded text-white"
+                  className="px-2 py-1 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded text-[var(--dash-text-primary)]"
                 >
                   -
                 </button>
@@ -537,21 +537,21 @@ export default function SettingsPage() {
                 />
                 <button
                   onClick={() => setFontSize(Math.min(150, fontSize + 10))}
-                  className="px-2 py-1 bg-[#374151] hover:bg-gray-600 rounded text-white"
+                  className="px-2 py-1 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded text-[var(--dash-text-primary)]"
                 >
                   +
                 </button>
               </div>
-              <div className="text-center text-white text-sm mt-1">{fontSize}%</div>
+              <div className="text-center text-[var(--dash-text-primary)] text-sm mt-1">{fontSize}%</div>
             </div>
 
             {/* Rows per page */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2">عدد الصفوف / لصفحة</label>
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">عدد الصفوف / لصفحة</label>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setRowsPerPage(Math.max(1, rowsPerPage - 1))}
-                  className="px-2 py-1 bg-[#374151] hover:bg-gray-600 rounded text-white"
+                  className="px-2 py-1 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded text-[var(--dash-text-primary)]"
                 >
                   -
                 </button>
@@ -559,11 +559,11 @@ export default function SettingsPage() {
                   type="number"
                   value={rowsPerPage}
                   onChange={(e) => setRowsPerPage(Number(e.target.value))}
-                  className="w-20 px-2 py-1 bg-[#2B3544] border border-gray-600 rounded text-white text-center"
+                  className="w-20 px-2 py-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-center"
                 />
                 <button
                   onClick={() => setRowsPerPage(rowsPerPage + 1)}
-                  className="px-2 py-1 bg-[#374151] hover:bg-gray-600 rounded text-white"
+                  className="px-2 py-1 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded text-[var(--dash-text-primary)]"
                 >
                   +
                 </button>
@@ -572,11 +572,11 @@ export default function SettingsPage() {
 
             {/* Position */}
             <div>
-              <label className="block text-white text-sm font-medium mb-2">موقع الإشعار</label>
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">موقع الإشعار</label>
               <select
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="top">أعلى</option>
                 <option value="bottom">أسفل</option>
@@ -588,7 +588,7 @@ export default function SettingsPage() {
           <div className="space-y-6">
             {/* Animations Toggle */}
             <div className="flex justify-between items-center">
-              <label className="text-white text-sm font-medium">إظهار الرسوم</label>
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">إظهار الرسوم</label>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -596,13 +596,13 @@ export default function SettingsPage() {
                   onChange={(e) => setEnableAnimations(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div className="w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
               </label>
             </div>
 
             {/* Sounds Toggle */}
             <div className="flex justify-between items-center">
-              <label className="text-white text-sm font-medium">تبريج</label>
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">تبريج</label>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -610,13 +610,13 @@ export default function SettingsPage() {
                   onChange={(e) => setEnableSounds(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div className="w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
               </label>
             </div>
 
             {/* Show Line Numbers Toggle */}
             <div className="flex justify-between items-center">
-              <label className="text-white text-sm font-medium">عرض الرقم عند بلن نظام</label>
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">عرض الرقم عند بلن نظام</label>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -624,13 +624,13 @@ export default function SettingsPage() {
                   onChange={(e) => setShowLineNumbers(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div className="w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
               </label>
             </div>
 
             {/* Show Today Toggle */}
             <div className="flex justify-between items-center">
-              <label className="text-white text-sm font-medium">تحديد رقم يوم على بين نظام</label>
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">تحديد رقم يوم على بين نظام</label>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -638,14 +638,14 @@ export default function SettingsPage() {
                   onChange={(e) => setShowToday(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div className="w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
               </label>
             </div>
 
             {/* Columns Selection */}
             <div>
-              <h4 className="text-white text-sm font-medium mb-3">الأعمدة في نهاية البيع</h4>
-              <div className="text-xs text-gray-400 mb-3">اختر المرور عرضها في جهة اليسر &quot;ولاية اليسار&quot; جدي</div>
+              <h4 className="text-[var(--dash-text-primary)] text-sm font-medium mb-3">الأعمدة في نهاية البيع</h4>
+              <div className="text-xs text-[var(--dash-text-muted)] mb-3">اختر المرور عرضها في جهة اليسر &quot;ولاية اليسار&quot; جدي</div>
               <div className="grid grid-cols-2 gap-2">
                 {Object.entries({
                   product: 'بين *',
@@ -660,9 +660,9 @@ export default function SettingsPage() {
                       id={key}
                       checked={selectedColumns[key as keyof typeof selectedColumns]}
                       onChange={(e) => handleCheckboxChange(key, e.target.checked)}
-                      className="w-4 h-4 text-blue-600 bg-[#2B3544] border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                      className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] rounded focus:ring-blue-500 focus:ring-2"
                     />
-                    <label htmlFor={key} className="text-white text-sm cursor-pointer">
+                    <label htmlFor={key} className="text-[var(--dash-text-primary)] text-sm cursor-pointer">
                       {label}
                     </label>
                   </div>
@@ -686,11 +686,11 @@ export default function SettingsPage() {
 
     return (
       <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center">
-        <Icon className="h-24 w-24 text-gray-500 mb-6" />
-        <h2 className="text-2xl font-medium text-white mb-3">{category.name}</h2>
-        <p className="text-gray-400 mb-8 max-w-md">{category.description}</p>
-        <div className="bg-[#374151] rounded-lg p-6 border border-gray-600">
-          <p className="text-gray-300 text-sm">
+        <Icon className="h-24 w-24 text-[var(--dash-text-disabled)] mb-6" />
+        <h2 className="text-2xl font-medium text-[var(--dash-text-primary)] mb-3">{category.name}</h2>
+        <p className="text-[var(--dash-text-muted)] mb-8 max-w-md">{category.description}</p>
+        <div className="bg-[var(--dash-bg-raised)] rounded-lg p-6 border border-[var(--dash-border-default)]">
+          <p className="text-[var(--dash-text-secondary)] text-sm">
             هذا القسم قيد التطوير. سيتم إضافة المزيد من الإعدادات قريباً.
           </p>
         </div>
@@ -903,11 +903,11 @@ export default function SettingsPage() {
       <div className="space-y-6 max-w-6xl">
         {/* Currency Settings */}
         <div className="space-y-6">
-          <h3 className="text-white font-medium text-lg">إعدادات العملة</h3>
+          <h3 className="text-[var(--dash-text-primary)] font-medium text-lg">إعدادات العملة</h3>
 
           {/* Currency Mode Selection */}
           <div className="space-y-3">
-            <label className="block text-white text-sm font-medium">نطاق العملة</label>
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium">نطاق العملة</label>
             <div className="flex gap-6">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -916,9 +916,9 @@ export default function SettingsPage() {
                   value={CURRENCY_MODES.SEPARATE}
                   checked={pendingCurrencyMode === CURRENCY_MODES.SEPARATE}
                   onChange={(e) => setPendingCurrencyMode(e.target.value as 'separate' | 'unified')}
-                  className="w-4 h-4 text-blue-600 bg-[#2B3544] border-gray-600 focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] focus:ring-blue-500 focus:ring-2"
                 />
-                <span className="text-white text-sm">منفصل</span>
+                <span className="text-[var(--dash-text-primary)] text-sm">منفصل</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -927,9 +927,9 @@ export default function SettingsPage() {
                   value={CURRENCY_MODES.UNIFIED}
                   checked={pendingCurrencyMode === CURRENCY_MODES.UNIFIED}
                   onChange={(e) => setPendingCurrencyMode(e.target.value as 'separate' | 'unified')}
-                  className="w-4 h-4 text-blue-600 bg-[#2B3544] border-gray-600 focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] focus:ring-blue-500 focus:ring-2"
                 />
-                <span className="text-white text-sm">كلاهما</span>
+                <span className="text-[var(--dash-text-primary)] text-sm">كلاهما</span>
               </label>
             </div>
           </div>
@@ -937,7 +937,7 @@ export default function SettingsPage() {
           {/* Currency Fields - Horizontal Layout */}
           {pendingCurrencyMode === CURRENCY_MODES.UNIFIED && (
             <div className="space-y-3">
-              <label className="block text-white text-sm font-medium">عملة النظام و الموقع</label>
+              <label className="block text-[var(--dash-text-primary)] text-sm font-medium">عملة النظام و الموقع</label>
               <CurrencyDropdownWithDelete
                 value={pendingUnifiedCurrency}
                 onChange={setPendingUnifiedCurrency}
@@ -956,7 +956,7 @@ export default function SettingsPage() {
             <div className="grid grid-cols-2 gap-6">
               {/* System Currency */}
               <div className="space-y-3">
-                <label className="block text-white text-sm font-medium">عملة النظام</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium">عملة النظام</label>
                 <CurrencyDropdownWithDelete
                   value={pendingSystemCurrency}
                   onChange={setPendingSystemCurrency}
@@ -974,7 +974,7 @@ export default function SettingsPage() {
 
               {/* Website Currency */}
               <div className="space-y-3">
-                <label className="block text-white text-sm font-medium">عملة الموقع</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium">عملة الموقع</label>
                 <CurrencyDropdownWithDelete
                   value={pendingWebsiteCurrency}
                   onChange={setPendingWebsiteCurrency}
@@ -994,9 +994,9 @@ export default function SettingsPage() {
 
           {/* Ratings Settings */}
           <div className="space-y-3 mt-6">
-            <h3 className="text-white font-medium text-lg">إعدادات التقييمات</h3>
+            <h3 className="text-[var(--dash-text-primary)] font-medium text-lg">إعدادات التقييمات</h3>
             <div className="flex justify-between items-center">
-              <label className="text-white text-sm font-medium">إظهار تقييمات المنتجات (النجوم)</label>
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">إظهار تقييمات المنتجات (النجوم)</label>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -1011,19 +1011,19 @@ export default function SettingsPage() {
                   disabled={isRatingsLoading}
                   className="sr-only peer"
                 />
-                <div className={`w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 ${isRatingsLoading ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+                <div className={`w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 ${isRatingsLoading ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
               </label>
             </div>
           </div>
 
           {/* Product Display Settings */}
-          <div className="space-y-4 mt-6 p-4 bg-[#374151] rounded-lg border border-gray-600">
-            <h3 className="text-white font-medium text-lg">إعدادات ظهور المنتجات في المتجر</h3>
-            <p className="text-sm text-gray-400">طريقة عرض المنتجات</p>
+          <div className="space-y-4 mt-6 p-4 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
+            <h3 className="text-[var(--dash-text-primary)] font-medium text-lg">إعدادات ظهور المنتجات في المتجر</h3>
+            <p className="text-sm text-[var(--dash-text-muted)]">طريقة عرض المنتجات</p>
 
             <div className="space-y-3">
               {/* Option 1: Show All */}
-              <div className="p-4 bg-[#2B3544] rounded-lg border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
+              <div className="p-4 bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)] hover:border-blue-500 transition-colors cursor-pointer">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="radio"
@@ -1032,11 +1032,11 @@ export default function SettingsPage() {
                     checked={productDisplayMode === 'show_all'}
                     onChange={(e) => setProductDisplayMode(e.target.value as any)}
                     disabled={isLoadingDisplayMode}
-                    className="mt-1 w-5 h-5 text-blue-600 bg-[#2B3544] border-gray-600 focus:ring-blue-500 focus:ring-2"
+                    className="mt-1 w-5 h-5 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] focus:ring-blue-500 focus:ring-2"
                   />
                   <div className="flex-1">
-                    <span className="text-white font-medium">ظهور كلي</span>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <span className="text-[var(--dash-text-primary)] font-medium">ظهور كلي</span>
+                    <p className="text-xs text-[var(--dash-text-muted)] mt-1">
                       تظهر جميع المنتجات في المتجر حتى إن كانت كميتها في المخزون تساوي صفر
                     </p>
                   </div>
@@ -1044,7 +1044,7 @@ export default function SettingsPage() {
               </div>
 
               {/* Option 2: Show In Stock */}
-              <div className="p-4 bg-[#2B3544] rounded-lg border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
+              <div className="p-4 bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)] hover:border-blue-500 transition-colors cursor-pointer">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="radio"
@@ -1053,11 +1053,11 @@ export default function SettingsPage() {
                     checked={productDisplayMode === 'show_with_stock'}
                     onChange={(e) => setProductDisplayMode(e.target.value as any)}
                     disabled={isLoadingDisplayMode}
-                    className="mt-1 w-5 h-5 text-blue-600 bg-[#2B3544] border-gray-600 focus:ring-blue-500 focus:ring-2"
+                    className="mt-1 w-5 h-5 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] focus:ring-blue-500 focus:ring-2"
                   />
                   <div className="flex-1">
-                    <span className="text-white font-medium">ظهور بالمخزون</span>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <span className="text-[var(--dash-text-primary)] font-medium">ظهور بالمخزون</span>
+                    <p className="text-xs text-[var(--dash-text-muted)] mt-1">
                       تظهر فقط المنتجات المتوفرة في المخزون. المنتجات المنتهية لن تظهر
                     </p>
                   </div>
@@ -1065,7 +1065,7 @@ export default function SettingsPage() {
               </div>
 
               {/* Option 3: Show In Stock with Voting */}
-              <div className="p-4 bg-[#2B3544] rounded-lg border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
+              <div className="p-4 bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)] hover:border-blue-500 transition-colors cursor-pointer">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="radio"
@@ -1074,11 +1074,11 @@ export default function SettingsPage() {
                     checked={productDisplayMode === 'show_with_stock_and_vote'}
                     onChange={(e) => setProductDisplayMode(e.target.value as any)}
                     disabled={isLoadingDisplayMode}
-                    className="mt-1 w-5 h-5 text-blue-600 bg-[#2B3544] border-gray-600 focus:ring-blue-500 focus:ring-2"
+                    className="mt-1 w-5 h-5 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] focus:ring-blue-500 focus:ring-2"
                   />
                   <div className="flex-1">
-                    <span className="text-white font-medium">ظهور بالمخزون مع التصويت</span>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <span className="text-[var(--dash-text-primary)] font-medium">ظهور بالمخزون مع التصويت</span>
+                    <p className="text-xs text-[var(--dash-text-muted)] mt-1">
                       المنتجات المتوفرة تظهر عادي، والمنتجات المنتهية تظهر مع إمكانية التصويت لإعادة توفيرها
                     </p>
                   </div>
@@ -1088,14 +1088,14 @@ export default function SettingsPage() {
 
             {/* Branches Selection - Show when "show_with_stock" or "show_with_stock_and_vote" is selected */}
             {(productDisplayMode === 'show_with_stock' || productDisplayMode === 'show_with_stock_and_vote') && (
-              <div className="mt-4 p-4 bg-[#2B3544] rounded-lg border border-gray-600">
+              <div className="mt-4 p-4 bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)]">
                 <div className="flex items-start gap-2 mb-3">
                   <svg className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div>
                     <p className="text-blue-300 text-sm font-medium">إتمام المخازن والفروع لحساب المخزون</p>
-                    <p className="text-gray-400 text-xs mt-1">
+                    <p className="text-[var(--dash-text-muted)] text-xs mt-1">
                       حدد الفروع/المخازن المطلوب احتساب الكمية الكلية منها لتحديد ما سيتم إظهاره في المتجر
                     </p>
                   </div>
@@ -1103,15 +1103,15 @@ export default function SettingsPage() {
 
                 {/* Branches Checkboxes */}
                 <div className="space-y-2 mt-4">
-                  <p className="text-white text-sm font-medium mb-2">الفروع</p>
+                  <p className="text-[var(--dash-text-primary)] text-sm font-medium mb-2">الفروع</p>
                   {availableBranches.length === 0 ? (
-                    <p className="text-gray-400 text-xs">لا توجد فروع متاحة</p>
+                    <p className="text-[var(--dash-text-muted)] text-xs">لا توجد فروع متاحة</p>
                   ) : (
                     <div className="grid grid-cols-2 gap-3">
                       {availableBranches.map((branch) => (
                         <label
                           key={branch.id}
-                          className="flex items-center gap-2 p-3 bg-[#374151] rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
+                          className="flex items-center gap-2 p-3 bg-[var(--dash-bg-raised)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors cursor-pointer"
                         >
                           <input
                             type="checkbox"
@@ -1123,9 +1123,9 @@ export default function SettingsPage() {
                                 setSelectedBranches(selectedBranches.filter(id => id !== branch.id));
                               }
                             }}
-                            className="w-4 h-4 text-blue-600 bg-[#2B3544] border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                            className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] rounded focus:ring-blue-500 focus:ring-2"
                           />
-                          <span className="text-white text-sm">{branch.name}</span>
+                          <span className="text-[var(--dash-text-primary)] text-sm">{branch.name}</span>
                         </label>
                       ))}
                     </div>
@@ -1136,13 +1136,13 @@ export default function SettingsPage() {
                     <div className="flex gap-2 mt-3">
                       <button
                         onClick={() => setSelectedBranches(availableBranches.map(b => b.id))}
-                        className="px-3 py-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                        className="px-3 py-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
                       >
                         تحديد الكل
                       </button>
                       <button
                         onClick={() => setSelectedBranches([])}
-                        className="px-3 py-1.5 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                        className="px-3 py-1.5 text-xs bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded transition-colors"
                       >
                         إلغاء التحديد
                       </button>
@@ -1154,9 +1154,9 @@ export default function SettingsPage() {
           </div>
 
           {/* Store Colors Settings */}
-          <div className="space-y-4 mt-8 p-4 bg-[#374151] rounded-lg border border-gray-600">
-            <h3 className="text-white font-medium text-lg">لون المتجر (الشريط الرئيسي)</h3>
-            <p className="text-sm text-gray-400">تخصيص ألوان الشريط الرئيسي والأزرار في المتجر</p>
+          <div className="space-y-4 mt-8 p-4 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
+            <h3 className="text-[var(--dash-text-primary)] font-medium text-lg">لون المتجر (الشريط الرئيسي)</h3>
+            <p className="text-sm text-[var(--dash-text-muted)]">تخصيص ألوان الشريط الرئيسي والأزرار في المتجر</p>
 
             {/* Current Active Theme */}
             {!isThemesLoading && storeThemes.length > 0 && (
@@ -1164,10 +1164,10 @@ export default function SettingsPage() {
                 {storeThemes.map((theme: any) => (
                   <div
                     key={theme.id}
-                    className={`p-4 bg-[#2B3544] rounded-lg border-2 transition-all ${
+                    className={`p-4 bg-[var(--dash-bg-surface)] rounded-lg border-2 transition-all ${
                       theme.is_active
                         ? 'border-blue-500 shadow-lg'
-                        : 'border-gray-600 hover:border-gray-500'
+                        : 'border-[var(--dash-border-default)] hover:border-gray-500'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -1176,14 +1176,14 @@ export default function SettingsPage() {
                         {/* Theme Name and Status */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <h4 className="text-white font-medium">{theme.name}</h4>
+                            <h4 className="text-[var(--dash-text-primary)] font-medium">{theme.name}</h4>
                             {theme.is_active && (
-                              <span className="px-2 py-0.5 bg-green-600 text-white text-xs rounded-full">
+                              <span className="px-2 py-0.5 bg-green-600 text-[var(--dash-text-primary)] text-xs rounded-full">
                                 نشط
                               </span>
                             )}
                             {theme.is_default && (
-                              <span className="px-2 py-0.5 bg-gray-600 text-white text-xs rounded-full">
+                              <span className="px-2 py-0.5 bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] text-xs rounded-full">
                                 افتراضي
                               </span>
                             )}
@@ -1193,15 +1193,15 @@ export default function SettingsPage() {
                         {/* Color Preview */}
                         <div className="flex items-center gap-2">
                           <div className="flex flex-col gap-1">
-                            <span className="text-xs text-gray-400">اللون الرئيسي</span>
+                            <span className="text-xs text-[var(--dash-text-muted)]">اللون الرئيسي</span>
                             <div className="flex gap-1">
                               <div
-                                className="w-12 h-8 rounded border-2 border-gray-600"
+                                className="w-12 h-8 rounded border-2 border-[var(--dash-border-default)]"
                                 style={{ backgroundColor: theme.primary_color }}
                                 title={theme.primary_color}
                               ></div>
                               <div
-                                className="w-12 h-8 rounded border-2 border-gray-600"
+                                className="w-12 h-8 rounded border-2 border-[var(--dash-border-default)]"
                                 style={{ backgroundColor: theme.primary_hover_color }}
                                 title={`Hover: ${theme.primary_hover_color}`}
                               ></div>
@@ -1224,7 +1224,7 @@ export default function SettingsPage() {
                                 alert('حدث خطأ أثناء تفعيل الثيم');
                               }
                             }}
-                            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors"
+                            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-sm rounded transition-colors"
                           >
                             تفعيل
                           </button>
@@ -1242,7 +1242,7 @@ export default function SettingsPage() {
                             setNewButtonHoverColor(theme.button_hover_color || theme.primary_hover_color);
                             setIsEditThemeModalOpen(true);
                           }}
-                          className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded transition-colors"
+                          className="px-3 py-1.5 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] text-sm rounded transition-colors"
                         >
                           تعديل
                         </button>
@@ -1262,7 +1262,7 @@ export default function SettingsPage() {
                                 alert('حدث خطأ أثناء حذف الثيم');
                               }
                             }}
-                            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded transition-colors"
+                            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] text-sm rounded transition-colors"
                           >
                             حذف
                           </button>
@@ -1285,7 +1285,7 @@ export default function SettingsPage() {
                 setNewButtonHoverColor('#4A1616');
                 setIsAddThemeModalOpen(true);
               }}
-              className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+              className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1295,15 +1295,15 @@ export default function SettingsPage() {
           </div>
 
           {/* Rebuild Store Section */}
-          <div className="bg-[#1F2937] rounded-lg p-4 border border-gray-600">
-            <h4 className="text-white text-sm font-medium mb-3">تحديث المتجر</h4>
-            <p className="text-gray-400 text-xs mb-3">
+          <div className="bg-[var(--dash-bg-base)] rounded-lg p-4 border border-[var(--dash-border-default)]">
+            <h4 className="text-[var(--dash-text-primary)] text-sm font-medium mb-3">تحديث المتجر</h4>
+            <p className="text-[var(--dash-text-muted)] text-xs mb-3">
               اضغط لتحديث صفحات المتجر فوراً بعد إضافة منتجات أو تعديل الإعدادات
             </p>
             <button
               onClick={handleRebuildStore}
               disabled={isRebuilding}
-              className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-800 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+              className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-800 disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
               {isRebuilding ? (
                 <>
@@ -1366,37 +1366,37 @@ export default function SettingsPage() {
   const renderCompanySettings = () => {
     return (
       <div className="space-y-6 max-w-4xl">
-        <h3 className="text-white font-medium text-lg mb-6">إعدادات الشركة</h3>
+        <h3 className="text-[var(--dash-text-primary)] font-medium text-lg mb-6">إعدادات الشركة</h3>
 
         {/* Company Name */}
         <div>
-          <label className="block text-white text-sm font-medium mb-2">اسم الشركة</label>
+          <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">اسم الشركة</label>
           <input
             type="text"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             placeholder="اسم شركتك"
-            className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-right"
+            className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-right"
           />
         </div>
 
         {/* Logo Upload */}
         <div>
-          <label className="block text-white text-sm font-medium mb-2">شعار الشركة (Logo)</label>
+          <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">شعار الشركة (Logo)</label>
           <div className="flex items-start gap-4">
             {/* Logo Preview */}
-            <div className="w-32 h-32 bg-[#374151] rounded-lg flex items-center justify-center overflow-hidden border-2 border-gray-600">
+            <div className="w-32 h-32 bg-[var(--dash-bg-raised)] rounded-lg flex items-center justify-center overflow-hidden border-2 border-[var(--dash-border-default)]">
               {logoUrl ? (
                 <img src={logoUrl} alt="Company Logo" className="w-full h-full object-contain" />
               ) : (
-                <PhotoIcon className="w-16 h-16 text-gray-500" />
+                <PhotoIcon className="w-16 h-16 text-[var(--dash-text-disabled)]" />
               )}
             </div>
 
             {/* Upload Button */}
             <div className="flex-1">
               <label className="cursor-pointer">
-                <div className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 w-fit">
+                <div className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors flex items-center gap-2 w-fit">
                   <PhotoIcon className="w-5 h-5" />
                   اختر صورة
                 </div>
@@ -1407,7 +1407,7 @@ export default function SettingsPage() {
                   className="hidden"
                 />
               </label>
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-[var(--dash-text-muted)] mt-2">
                 الحد الأقصى: 2 ميجابايت • الأنواع المدعومة: JPG, PNG, GIF, WebP
               </p>
               {logoUrl && (
@@ -1424,7 +1424,7 @@ export default function SettingsPage() {
 
         {/* Social Media */}
         <div>
-          <label className="block text-white text-sm font-medium mb-3">وسائل التواصل الاجتماعي</label>
+          <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-3">وسائل التواصل الاجتماعي</label>
           <div className="space-y-3">
             {socialMedia.map((social, index) => {
               const getPlatformIcon = (platform: string) => {
@@ -1443,7 +1443,7 @@ export default function SettingsPage() {
               };
 
               return (
-                <div key={index} className="flex gap-3 items-center p-3 bg-[#374151] rounded-lg">
+                <div key={index} className="flex gap-3 items-center p-3 bg-[var(--dash-bg-raised)] rounded-lg">
                   <select
                     value={social.platform}
                     onChange={(e) => {
@@ -1451,7 +1451,7 @@ export default function SettingsPage() {
                       newSocialMedia[index].platform = e.target.value;
                       setSocialMedia(newSocialMedia);
                     }}
-                    className="w-48 px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-48 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     style={{ direction: 'ltr', textAlign: 'left' }}
                   >
                     <option value="">Select Platform</option>
@@ -1479,7 +1479,7 @@ export default function SettingsPage() {
                       setSocialMedia(newSocialMedia);
                     }}
                     placeholder="https://..."
-                    className="flex-1 px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="flex-1 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     style={{ direction: 'ltr', textAlign: 'left' }}
                   />
 
@@ -1489,7 +1489,7 @@ export default function SettingsPage() {
                         setSocialMedia(socialMedia.filter((_, i) => i !== index));
                       }
                     }}
-                    className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm transition-colors"
+                    className="px-3 py-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded text-sm transition-colors"
                   >
                     حذف
                   </button>
@@ -1498,7 +1498,7 @@ export default function SettingsPage() {
             })}
             <button
               onClick={() => setSocialMedia([...socialMedia, { platform: '', link: '' }])}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm transition-colors"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded text-sm transition-colors"
             >
               + إضافة وسيلة تواصل
             </button>
@@ -1507,15 +1507,15 @@ export default function SettingsPage() {
 
         {/* Branches */}
         <div>
-          <label className="block text-white text-sm font-medium mb-3">الفروع والعناوين</label>
-          <p className="text-sm text-gray-400 mb-4">
+          <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-3">الفروع والعناوين</label>
+          <p className="text-sm text-[var(--dash-text-muted)] mb-4">
             يمكنك إضافة رابط الموقع على الخريطة لكل فرع من فروعك المسجلة في النظام
           </p>
 
           {dbBranchesFromDB.length === 0 ? (
-            <div className="p-6 bg-[#374151] rounded-lg text-center">
-              <p className="text-gray-400">لا توجد فروع مسجلة في النظام</p>
-              <p className="text-sm text-gray-500 mt-2">قم بإضافة فروع من قسم إدارة الفروع أولاً</p>
+            <div className="p-6 bg-[var(--dash-bg-raised)] rounded-lg text-center">
+              <p className="text-[var(--dash-text-muted)]">لا توجد فروع مسجلة في النظام</p>
+              <p className="text-sm text-[var(--dash-text-disabled)] mt-2">قم بإضافة فروع من قسم إدارة الفروع أولاً</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -1525,33 +1525,33 @@ export default function SettingsPage() {
                 const locationLink = existingBranch?.locationLink || '';
 
                 return (
-                  <div key={branch.id} className="p-4 bg-[#374151] rounded-lg space-y-3">
+                  <div key={branch.id} className="p-4 bg-[var(--dash-bg-raised)] rounded-lg space-y-3">
                     {/* Branch Info (Read-only) */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs text-gray-400 mb-1">اسم الفرع</label>
-                        <div className="px-3 py-2 bg-[#2B3544] border border-gray-700 rounded text-white text-sm">
+                        <label className="block text-xs text-[var(--dash-text-muted)] mb-1">اسم الفرع</label>
+                        <div className="px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-subtle)] rounded text-[var(--dash-text-primary)] text-sm">
                           {branch.name}
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-400 mb-1">رقم الهاتف</label>
-                        <div className="px-3 py-2 bg-[#2B3544] border border-gray-700 rounded text-white text-sm">
+                        <label className="block text-xs text-[var(--dash-text-muted)] mb-1">رقم الهاتف</label>
+                        <div className="px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-subtle)] rounded text-[var(--dash-text-primary)] text-sm">
                           {branch.phone || '-'}
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs text-gray-400 mb-1">العنوان</label>
-                      <div className="px-3 py-2 bg-[#2B3544] border border-gray-700 rounded text-white text-sm">
+                      <label className="block text-xs text-[var(--dash-text-muted)] mb-1">العنوان</label>
+                      <div className="px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-subtle)] rounded text-[var(--dash-text-primary)] text-sm">
                         {branch.address || '-'}
                       </div>
                     </div>
 
                     {/* Location Link (Editable) */}
                     <div>
-                      <label className="block text-xs text-gray-400 mb-1">
+                      <label className="block text-xs text-[var(--dash-text-muted)] mb-1">
                         رابط الموقع على الخريطة (Google Maps / Apple Maps)
                       </label>
                       <input
@@ -1575,7 +1575,7 @@ export default function SettingsPage() {
                           setBranches(newBranches);
                         }}
                         placeholder="https://maps.google.com/..."
-                        className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                         style={{ direction: 'ltr', textAlign: 'left' }}
                       />
                     </div>
@@ -1604,17 +1604,17 @@ export default function SettingsPage() {
   const renderStoreSettings = () => {
     return (
       <div className="space-y-6 max-w-4xl">
-        <h3 className="text-white font-medium text-lg mb-6">إعدادات المتجر</h3>
-        <p className="text-sm text-gray-400 mb-6">
+        <h3 className="text-[var(--dash-text-primary)] font-medium text-lg mb-6">إعدادات المتجر</h3>
+        <p className="text-sm text-[var(--dash-text-muted)] mb-6">
           تحكم في ما يظهر للعملاء في متجرك الإلكتروني
         </p>
 
-        <div className="space-y-4 p-4 bg-[#374151] rounded-lg border border-gray-600">
+        <div className="space-y-4 p-4 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
           {/* Show Quantity in Store Toggle */}
-          <div className="flex justify-between items-center p-3 bg-[#2B3544] rounded-lg">
+          <div className="flex justify-between items-center p-3 bg-[var(--dash-bg-surface)] rounded-lg">
             <div className="flex-1">
-              <label className="text-white text-sm font-medium">ظهور الكمية في المتجر</label>
-              <p className="text-xs text-gray-400 mt-1">
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">ظهور الكمية في المتجر</label>
+              <p className="text-xs text-[var(--dash-text-muted)] mt-1">
                 عند التفعيل، سيظهر للعميل عدد القطع المتبقية من كل منتج
               </p>
             </div>
@@ -1626,15 +1626,15 @@ export default function SettingsPage() {
                 disabled={isLoadingStoreSettings}
                 className="sr-only peer"
               />
-              <div className={`w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 ${isLoadingStoreSettings ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+              <div className={`w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 ${isLoadingStoreSettings ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
             </label>
           </div>
 
           {/* Show Product Star Rating Toggle */}
-          <div className="flex justify-between items-center p-3 bg-[#2B3544] rounded-lg">
+          <div className="flex justify-between items-center p-3 bg-[var(--dash-bg-surface)] rounded-lg">
             <div className="flex-1">
-              <label className="text-white text-sm font-medium">ظهور نجمة المنتج</label>
-              <p className="text-xs text-gray-400 mt-1">
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">ظهور نجمة المنتج</label>
+              <p className="text-xs text-[var(--dash-text-muted)] mt-1">
                 عند التفعيل، ستظهر تقييمات النجوم على المنتجات للعملاء
               </p>
             </div>
@@ -1646,7 +1646,7 @@ export default function SettingsPage() {
                 disabled={isLoadingStoreSettings}
                 className="sr-only peer"
               />
-              <div className={`w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 ${isLoadingStoreSettings ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+              <div className={`w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 ${isLoadingStoreSettings ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
             </label>
           </div>
         </div>
@@ -1659,7 +1659,7 @@ export default function SettingsPage() {
             </svg>
             <div>
               <p className="text-blue-300 text-sm font-medium">ملاحظة</p>
-              <p className="text-gray-400 text-xs mt-1">
+              <p className="text-[var(--dash-text-muted)] text-xs mt-1">
                 التغييرات يتم حفظها تلقائياً عند تبديل أي خيار
               </p>
             </div>
@@ -1796,22 +1796,22 @@ export default function SettingsPage() {
   const renderSecuritySettings = () => {
     return (
       <div className="space-y-6 max-w-4xl">
-        <h3 className="text-white font-medium text-lg mb-6">إعدادات الأمان</h3>
+        <h3 className="text-[var(--dash-text-primary)] font-medium text-lg mb-6">إعدادات الأمان</h3>
 
         {/* WasenderAPI Token Section */}
-        <div className="p-6 bg-[#374151] rounded-lg border border-gray-600">
+        <div className="p-6 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-[#2B3544] rounded-lg">
+            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
               <KeyIcon className="h-8 w-8 text-blue-400" />
             </div>
             <div className="flex-1">
-              <h4 className="text-white font-medium text-lg">WasenderAPI Token</h4>
-              <p className="text-gray-400 text-sm mt-1">
+              <h4 className="text-[var(--dash-text-primary)] font-medium text-lg">WasenderAPI Token</h4>
+              <p className="text-[var(--dash-text-muted)] text-sm mt-1">
                 مفتاح API للاتصال بخدمة WasenderAPI لإرسال رسائل الواتساب
               </p>
 
               {isLoadingSecuritySettings ? (
-                <div className="mt-4 flex items-center gap-2 text-gray-400">
+                <div className="mt-4 flex items-center gap-2 text-[var(--dash-text-muted)]">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
                   جاري التحميل...
                 </div>
@@ -1823,7 +1823,7 @@ export default function SettingsPage() {
                     <div className="flex-1">
                       <p className="text-green-300 font-medium">Token مُعد بنجاح</p>
                       {wasenderTokenLastUpdated && (
-                        <p className="text-gray-400 text-xs mt-1">
+                        <p className="text-[var(--dash-text-muted)] text-xs mt-1">
                           آخر تحديث: {new Date(wasenderTokenLastUpdated).toLocaleDateString('ar-EG', {
                             year: 'numeric',
                             month: 'long',
@@ -1846,14 +1846,14 @@ export default function SettingsPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setShowTokenInput(true)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                     >
                       <KeyIcon className="h-4 w-4" />
                       تغيير Token
                     </button>
                     <button
                       onClick={handleDeleteToken}
-                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors"
                     >
                       حذف Token
                     </button>
@@ -1872,7 +1872,7 @@ export default function SettingsPage() {
                   )}
 
                   <div className="space-y-2">
-                    <label className="block text-white text-sm font-medium">
+                    <label className="block text-[var(--dash-text-primary)] text-sm font-medium">
                       {wasenderTokenConfigured ? 'Token جديد' : 'أدخل الـ Token'}
                     </label>
                     <div className="relative">
@@ -1881,13 +1881,13 @@ export default function SettingsPage() {
                         value={newToken}
                         onChange={(e) => setNewToken(e.target.value)}
                         placeholder="الصق الـ Token هنا..."
-                        className="w-full px-4 py-3 bg-[#2B3544] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pr-12"
+                        className="w-full px-4 py-3 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pr-12"
                         style={{ direction: 'ltr', textAlign: 'left' }}
                       />
                       <button
                         type="button"
                         onClick={() => setShowTokenValue(!showTokenValue)}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
                       >
                         {showTokenValue ? (
                           <EyeSlashIcon className="h-5 w-5" />
@@ -1896,7 +1896,7 @@ export default function SettingsPage() {
                         )}
                       </button>
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[var(--dash-text-disabled)]">
                       احصل على الـ Token من لوحة تحكم WasenderAPI
                     </p>
                   </div>
@@ -1907,8 +1907,8 @@ export default function SettingsPage() {
                       disabled={isSavingToken || !newToken.trim()}
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                         isSavingToken || !newToken.trim()
-                          ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                          : 'bg-green-600 hover:bg-green-700 text-white'
+                          ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
+                          : 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
                       }`}
                     >
                       {isSavingToken ? (
@@ -1929,7 +1929,7 @@ export default function SettingsPage() {
                           setShowTokenInput(false);
                           setNewToken('');
                         }}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors"
+                        className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors"
                       >
                         إلغاء
                       </button>
@@ -1942,19 +1942,19 @@ export default function SettingsPage() {
         </div>
 
         {/* Gemini API Key Section */}
-        <div className="p-6 bg-[#374151] rounded-lg border border-gray-600">
+        <div className="p-6 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-[#2B3544] rounded-lg">
+            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
               <BoltIcon className="h-8 w-8 text-purple-400" />
             </div>
             <div className="flex-1">
-              <h4 className="text-white font-medium text-lg">Gemini API Key</h4>
-              <p className="text-gray-400 text-sm mt-1">
+              <h4 className="text-[var(--dash-text-primary)] font-medium text-lg">Gemini API Key</h4>
+              <p className="text-[var(--dash-text-muted)] text-sm mt-1">
                 مفتاح API لتحسين صور المنتجات بالذكاء الاصطناعي (Google Gemini)
               </p>
 
               {isLoadingSecuritySettings ? (
-                <div className="mt-4 flex items-center gap-2 text-gray-400">
+                <div className="mt-4 flex items-center gap-2 text-[var(--dash-text-muted)]">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
                   جاري التحميل...
                 </div>
@@ -1965,7 +1965,7 @@ export default function SettingsPage() {
                     <div className="flex-1">
                       <p className="text-green-300 font-medium">المفتاح مُعد بنجاح</p>
                       {geminiKeyLastUpdated && (
-                        <p className="text-gray-400 text-xs mt-1">
+                        <p className="text-[var(--dash-text-muted)] text-xs mt-1">
                           آخر تحديث: {new Date(geminiKeyLastUpdated).toLocaleDateString('ar-EG', {
                             year: 'numeric',
                             month: 'long',
@@ -1988,14 +1988,14 @@ export default function SettingsPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setShowGeminiKeyInput(true)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                     >
                       <KeyIcon className="h-4 w-4" />
                       تغيير المفتاح
                     </button>
                     <button
                       onClick={handleDeleteGeminiKey}
-                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors"
                     >
                       حذف المفتاح
                     </button>
@@ -2013,7 +2013,7 @@ export default function SettingsPage() {
                   )}
 
                   <div className="space-y-2">
-                    <label className="block text-white text-sm font-medium">
+                    <label className="block text-[var(--dash-text-primary)] text-sm font-medium">
                       {geminiKeyConfigured ? 'مفتاح جديد' : 'أدخل مفتاح Gemini API'}
                     </label>
                     <div className="relative">
@@ -2022,13 +2022,13 @@ export default function SettingsPage() {
                         value={newGeminiKey}
                         onChange={(e) => setNewGeminiKey(e.target.value)}
                         placeholder="الصق مفتاح API هنا..."
-                        className="w-full px-4 py-3 bg-[#2B3544] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pr-12"
+                        className="w-full px-4 py-3 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pr-12"
                         style={{ direction: 'ltr', textAlign: 'left' }}
                       />
                       <button
                         type="button"
                         onClick={() => setShowGeminiKeyValue(!showGeminiKeyValue)}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
                       >
                         {showGeminiKeyValue ? (
                           <EyeSlashIcon className="h-5 w-5" />
@@ -2037,7 +2037,7 @@ export default function SettingsPage() {
                         )}
                       </button>
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[var(--dash-text-disabled)]">
                       احصل على المفتاح من Google AI Studio (aistudio.google.com/apikey)
                     </p>
                   </div>
@@ -2048,8 +2048,8 @@ export default function SettingsPage() {
                       disabled={isSavingGeminiKey || !newGeminiKey.trim()}
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                         isSavingGeminiKey || !newGeminiKey.trim()
-                          ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                          : 'bg-green-600 hover:bg-green-700 text-white'
+                          ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
+                          : 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
                       }`}
                     >
                       {isSavingGeminiKey ? (
@@ -2070,7 +2070,7 @@ export default function SettingsPage() {
                           setShowGeminiKeyInput(false);
                           setNewGeminiKey('');
                         }}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors"
+                        className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg text-sm font-medium transition-colors"
                       >
                         إلغاء
                       </button>
@@ -2088,7 +2088,7 @@ export default function SettingsPage() {
             <ShieldCheckIcon className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-blue-300 text-sm font-medium">معلومات الأمان</p>
-              <ul className="text-gray-400 text-xs mt-2 space-y-1 list-disc list-inside">
+              <ul className="text-[var(--dash-text-muted)] text-xs mt-2 space-y-1 list-disc list-inside">
                 <li>جميع الـ API Keys يتم تشفيرها قبل حفظها في قاعدة البيانات</li>
                 <li>لا يتم عرض أو إرسال الـ Token بعد الحفظ لأسباب أمنية</li>
                 <li>يمكنك تغيير أو حذف الـ Token في أي وقت</li>
@@ -2117,16 +2117,16 @@ export default function SettingsPage() {
 
     return (
       <div className="space-y-6 max-w-4xl">
-        <h3 className="text-white font-medium text-lg mb-6">إعدادات الأداء</h3>
-        <p className="text-sm text-gray-400 mb-6">
+        <h3 className="text-[var(--dash-text-primary)] font-medium text-lg mb-6">إعدادات الأداء</h3>
+        <p className="text-sm text-[var(--dash-text-muted)] mb-6">
           تحكم في طريقة عمل النظام وسرعة الأداء
         </p>
 
-        <div className="space-y-4 p-4 bg-[#374151] rounded-lg border border-gray-600">
-          <div className="flex justify-between items-center p-3 bg-[#2B3544] rounded-lg">
+        <div className="space-y-4 p-4 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
+          <div className="flex justify-between items-center p-3 bg-[var(--dash-bg-surface)] rounded-lg">
             <div className="flex-1">
-              <label className="text-white text-sm font-medium">تسجيل المنتج مباشره</label>
-              <p className="text-xs text-gray-400 mt-1">
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">تسجيل المنتج مباشره</label>
+              <p className="text-xs text-[var(--dash-text-muted)] mt-1">
                 عند التفعيل، يتم حفظ المنتج في الخلفية ويمكنك متابعة العمل فوراً. عند الإيقاف، ينتظر النظام حتى يكتمل الحفظ بالكامل.
               </p>
             </div>
@@ -2137,7 +2137,7 @@ export default function SettingsPage() {
                 onChange={(e) => handleToggle(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+              <div className="w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
             </label>
           </div>
         </div>
@@ -2149,7 +2149,7 @@ export default function SettingsPage() {
             </svg>
             <div>
               <p className="text-blue-300 text-sm font-medium">ملاحظة</p>
-              <p className="text-gray-400 text-xs mt-1">
+              <p className="text-[var(--dash-text-muted)] text-xs mt-1">
                 التغييرات يتم حفظها تلقائياً عند تبديل أي خيار
               </p>
             </div>
@@ -2194,37 +2194,37 @@ export default function SettingsPage() {
       {/* Add Theme Modal */}
       {isAddThemeModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
-          <div className="bg-[#2B3544] rounded-lg p-6 w-full max-w-lg border border-gray-600">
-            <h3 className="text-white text-xl font-bold mb-6">إضافة لون جديد للمتجر</h3>
+          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-full max-w-lg border border-[var(--dash-border-default)]">
+            <h3 className="text-[var(--dash-text-primary)] text-xl font-bold mb-6">إضافة لون جديد للمتجر</h3>
 
             <div className="space-y-4">
               {/* Theme Name */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">اسم اللون</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">اسم اللون</label>
                 <input
                   type="text"
                   value={newThemeName}
                   onChange={(e) => setNewThemeName(e.target.value)}
                   placeholder="مثال: أزرق سماوي"
-                  className="w-full px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-right"
+                  className="w-full px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-right"
                 />
               </div>
 
               {/* Primary Color */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">اللون الرئيسي (الشريط)</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">اللون الرئيسي (الشريط)</label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="color"
                     value={newPrimaryColor}
                     onChange={(e) => setNewPrimaryColor(e.target.value)}
-                    className="w-20 h-10 rounded border border-gray-600 cursor-pointer"
+                    className="w-20 h-10 rounded border border-[var(--dash-border-default)] cursor-pointer"
                   />
                   <input
                     type="text"
                     value={newPrimaryColor}
                     onChange={(e) => setNewPrimaryColor(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     style={{ direction: 'ltr' }}
                   />
                 </div>
@@ -2232,19 +2232,19 @@ export default function SettingsPage() {
 
               {/* Primary Hover Color */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">لون Hover للشريط (أغمق قليلاً)</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">لون Hover للشريط (أغمق قليلاً)</label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="color"
                     value={newPrimaryHoverColor}
                     onChange={(e) => setNewPrimaryHoverColor(e.target.value)}
-                    className="w-20 h-10 rounded border border-gray-600 cursor-pointer"
+                    className="w-20 h-10 rounded border border-[var(--dash-border-default)] cursor-pointer"
                   />
                   <input
                     type="text"
                     value={newPrimaryHoverColor}
                     onChange={(e) => setNewPrimaryHoverColor(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     style={{ direction: 'ltr' }}
                   />
                 </div>
@@ -2252,29 +2252,29 @@ export default function SettingsPage() {
 
               {/* Interactive Color */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">لون التفاعل (الأزرار والأيقونات)</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">لون التفاعل (الأزرار والأيقونات)</label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="color"
                     value={newInteractiveColor}
                     onChange={(e) => setNewInteractiveColor(e.target.value)}
-                    className="w-20 h-10 rounded border border-gray-600 cursor-pointer"
+                    className="w-20 h-10 rounded border border-[var(--dash-border-default)] cursor-pointer"
                   />
                   <input
                     type="text"
                     value={newInteractiveColor}
                     onChange={(e) => setNewInteractiveColor(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     style={{ direction: 'ltr' }}
                   />
                 </div>
               </div>
 
               {/* Preview */}
-              <div className="mt-6 p-4 bg-[#374151] rounded-lg border border-gray-600">
-                <p className="text-white text-sm mb-3">معاينة اللون:</p>
+              <div className="mt-6 p-4 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
+                <p className="text-[var(--dash-text-primary)] text-sm mb-3">معاينة اللون:</p>
                 <div
-                  className="w-full h-16 rounded-lg flex items-center justify-center text-white font-bold transition-all"
+                  className="w-full h-16 rounded-lg flex items-center justify-center text-[var(--dash-text-primary)] font-bold transition-all"
                   style={{ backgroundColor: newPrimaryColor }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = newPrimaryHoverColor}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = newPrimaryColor}
@@ -2288,7 +2288,7 @@ export default function SettingsPage() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setIsAddThemeModalOpen(false)}
-                className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                className="flex-1 px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded transition-colors"
               >
                 إلغاء
               </button>
@@ -2308,7 +2308,7 @@ export default function SettingsPage() {
                     alert('حدث خطأ أثناء إضافة اللون');
                   }
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
               >
                 إضافة
               </button>
@@ -2320,37 +2320,37 @@ export default function SettingsPage() {
       {/* Edit Theme Modal */}
       {isEditThemeModalOpen && editingTheme && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
-          <div className="bg-[#2B3544] rounded-lg p-6 w-full max-w-lg border border-gray-600">
-            <h3 className="text-white text-xl font-bold mb-6">تعديل لون المتجر</h3>
+          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-full max-w-lg border border-[var(--dash-border-default)]">
+            <h3 className="text-[var(--dash-text-primary)] text-xl font-bold mb-6">تعديل لون المتجر</h3>
 
             <div className="space-y-4">
               {/* Theme Name - Read Only for default theme */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">اسم اللون</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">اسم اللون</label>
                 <input
                   type="text"
                   value={newThemeName}
                   onChange={(e) => setNewThemeName(e.target.value)}
                   disabled={editingTheme.is_default}
-                  className="w-full px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-right disabled:opacity-50"
+                  className="w-full px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-right disabled:opacity-50"
                 />
               </div>
 
               {/* Primary Color */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">اللون الرئيسي (الشريط)</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">اللون الرئيسي (الشريط)</label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="color"
                     value={newPrimaryColor}
                     onChange={(e) => setNewPrimaryColor(e.target.value)}
-                    className="w-20 h-10 rounded border border-gray-600 cursor-pointer"
+                    className="w-20 h-10 rounded border border-[var(--dash-border-default)] cursor-pointer"
                   />
                   <input
                     type="text"
                     value={newPrimaryColor}
                     onChange={(e) => setNewPrimaryColor(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     style={{ direction: 'ltr' }}
                   />
                 </div>
@@ -2358,19 +2358,19 @@ export default function SettingsPage() {
 
               {/* Primary Hover Color */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">لون Hover للشريط (أغمق قليلاً)</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">لون Hover للشريط (أغمق قليلاً)</label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="color"
                     value={newPrimaryHoverColor}
                     onChange={(e) => setNewPrimaryHoverColor(e.target.value)}
-                    className="w-20 h-10 rounded border border-gray-600 cursor-pointer"
+                    className="w-20 h-10 rounded border border-[var(--dash-border-default)] cursor-pointer"
                   />
                   <input
                     type="text"
                     value={newPrimaryHoverColor}
                     onChange={(e) => setNewPrimaryHoverColor(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     style={{ direction: 'ltr' }}
                   />
                 </div>
@@ -2378,29 +2378,29 @@ export default function SettingsPage() {
 
               {/* Interactive Color */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">لون التفاعل (الأزرار والأيقونات)</label>
+                <label className="block text-[var(--dash-text-primary)] text-sm font-medium mb-2">لون التفاعل (الأزرار والأيقونات)</label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="color"
                     value={newInteractiveColor}
                     onChange={(e) => setNewInteractiveColor(e.target.value)}
-                    className="w-20 h-10 rounded border border-gray-600 cursor-pointer"
+                    className="w-20 h-10 rounded border border-[var(--dash-border-default)] cursor-pointer"
                   />
                   <input
                     type="text"
                     value={newInteractiveColor}
                     onChange={(e) => setNewInteractiveColor(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-[#374151] border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 px-3 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     style={{ direction: 'ltr' }}
                   />
                 </div>
               </div>
 
               {/* Preview */}
-              <div className="mt-6 p-4 bg-[#374151] rounded-lg border border-gray-600">
-                <p className="text-white text-sm mb-3">معاينة اللون:</p>
+              <div className="mt-6 p-4 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
+                <p className="text-[var(--dash-text-primary)] text-sm mb-3">معاينة اللون:</p>
                 <div
-                  className="w-full h-16 rounded-lg flex items-center justify-center text-white font-bold transition-all"
+                  className="w-full h-16 rounded-lg flex items-center justify-center text-[var(--dash-text-primary)] font-bold transition-all"
                   style={{ backgroundColor: newPrimaryColor }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = newPrimaryHoverColor}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = newPrimaryColor}
@@ -2417,7 +2417,7 @@ export default function SettingsPage() {
                   setIsEditThemeModalOpen(false);
                   setEditingTheme(null);
                 }}
-                className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                className="flex-1 px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded transition-colors"
               >
                 إلغاء
               </button>
@@ -2433,7 +2433,7 @@ export default function SettingsPage() {
                     alert('حدث خطأ أثناء تحديث اللون');
                   }
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
               >
                 حفظ التعديلات
               </button>
@@ -2442,7 +2442,7 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <div className="h-screen bg-[#2B3544] overflow-hidden relative">
+      <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden relative">
         <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
         <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
 
@@ -2450,9 +2450,9 @@ export default function SettingsPage() {
 
           <div className="flex-1 flex overflow-hidden">
             {/* Left Sidebar - Settings Categories */}
-            <div className="w-64 bg-[#374151] border-l border-gray-700 flex flex-col">
-              <div className="p-4 border-b border-gray-600">
-                <h3 className="text-white font-medium mb-3">إعدادات النظام</h3>
+            <div className="w-64 bg-[var(--dash-bg-raised)] border-l border-[var(--dash-border-subtle)] flex flex-col">
+              <div className="p-4 border-b border-[var(--dash-border-default)]">
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">إعدادات النظام</h3>
                 <div className="space-y-2">
                 {settingsCategories.map((category) => {
                   const Icon = category.icon;
@@ -2462,8 +2462,8 @@ export default function SettingsPage() {
                       onClick={() => setSelectedCategory(category.id)}
                       className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
                         selectedCategory === category.id
-                          ? 'bg-blue-600 text-white'
-                          : 'text-gray-300 hover:bg-gray-600 hover:text-white'
+                          ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                          : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
                       }`}
                     >
                       <Icon className="h-4 w-4" />
@@ -2476,19 +2476,19 @@ export default function SettingsPage() {
 
             {/* Settings Stats */}
             <div className="p-4">
-              <h4 className="text-gray-300 text-sm font-medium mb-3">معلومات الإعدادات</h4>
+              <h4 className="text-[var(--dash-text-secondary)] text-sm font-medium mb-3">معلومات الإعدادات</h4>
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white font-medium">{settingsCategories.length}</span>
-                  <span className="text-gray-400">أقسام الإعدادات:</span>
+                  <span className="text-[var(--dash-text-primary)] font-medium">{settingsCategories.length}</span>
+                  <span className="text-[var(--dash-text-muted)]">أقسام الإعدادات:</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-blue-400 font-medium">1</span>
-                  <span className="text-gray-400">الأقسام المكتملة:</span>
+                  <span className="text-[var(--dash-text-muted)]">الأقسام المكتملة:</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-orange-400 font-medium">{settingsCategories.length - 1}</span>
-                  <span className="text-gray-400">قيد التطوير:</span>
+                  <span className="text-[var(--dash-text-muted)]">قيد التطوير:</span>
                 </div>
               </div>
             </div>
@@ -2498,17 +2498,17 @@ export default function SettingsPage() {
           <div className="flex-1 flex flex-col overflow-hidden relative">
 
             {/* Settings Content Container */}
-            <div className="flex-1 overflow-y-auto scrollbar-hide bg-[#2B3544] p-6 pb-20">
+            <div className="flex-1 overflow-y-auto scrollbar-hide bg-[var(--dash-bg-surface)] p-6 pb-20">
               {renderSettingsContent()}
             </div>
 
             {/* Settings Action Bar - Limited to main content area width */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#2B3544] border-t border-gray-600/30">
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]/30">
               <div className="flex gap-2 justify-end">
                 {/* Cancel and Save buttons - exact styling from ProductSidebar */}
                 <button
                   onClick={handleCancelSettings}
-                  className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
+                  className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2520,8 +2520,8 @@ export default function SettingsPage() {
                   disabled={isSaving}
                   className={`px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2 ${
                     isSaving
-                      ? 'bg-gray-600/50 text-gray-400 border border-gray-600 cursor-not-allowed'
-                      : 'bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500'
+                      ? 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)] border border-[var(--dash-border-default)] cursor-not-allowed'
+                      : 'bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-gray-500'
                   }`}
                 >
                   {isSaving ? (

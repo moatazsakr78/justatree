@@ -146,31 +146,31 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-25 z-40"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar - starts below header with exact dark theme colors */}
-      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-96 bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out ${
+      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-96 bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
-      } shadow-2xl`}>
+      } shadow-[var(--dash-shadow-lg)] animate-dash-scale-in`}>
         
         {/* Header - dark gray header matching design */}
-        <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-          <h2 className="text-white text-lg font-medium flex-1 text-right">
+        <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+          <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right">
             {isEditing ? 'تعديل المخزن' : 'إضافة مخزن'}
           </h2>
           <button
             onClick={onClose}
-            className="text-white hover:text-gray-200 transition-colors ml-4"
+            className="text-[var(--dash-text-primary)] hover:text-gray-200 transition-colors ml-4"
           >
             <ArrowRightIcon className="h-5 w-5" />
           </button>
         </div>
 
         {/* Tab Navigation Bar - matching reference design */}
-        <div className="bg-[#3A4553] border-b border-[#4A5568]">
+        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
           <div className="flex">
             {tabs.map((tab) => (
               <button
@@ -179,7 +179,7 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
                 className={`relative px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'text-[#5DADE2]' // Light blue text for selected
-                    : 'text-gray-300 hover:text-white'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                 }`}
               >
                 {tab.label}
@@ -197,7 +197,7 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
           
           {/* Storage Name Field */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               اسم المخزن *
             </label>
             <input
@@ -206,13 +206,13 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
               value={formData.name}
               onChange={handleInputChange}
               placeholder="أدخل اسم المخزن"
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm"
             />
           </div>
 
           {/* Address Field */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               العنوان *
             </label>
             <textarea
@@ -221,13 +221,13 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
               onChange={handleInputChange}
               placeholder="أدخل عنوان المخزن"
               rows={3}
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm resize-none"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm resize-none"
             />
           </div>
 
           {/* Phone Number Field */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               رقم الهاتف *
             </label>
             <input
@@ -236,7 +236,7 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="أدخل رقم الهاتف"
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm"
             />
           </div>
 
@@ -246,13 +246,13 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
               السماح بإضافة الأشكال والألوان للمنتج
             </label>
             <div className="flex items-center gap-3 justify-end">
-              <span className="text-gray-300 text-sm">
+              <span className="text-[var(--dash-text-secondary)] text-sm">
                 {formData.allowShapeColors ? 'مسموح' : 'غير مسموح'}
               </span>
               <button
                 onClick={() => setFormData(prev => ({ ...prev, allowShapeColors: !prev.allowShapeColors }))}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                  formData.allowShapeColors ? 'bg-[#3B82F6]' : 'bg-gray-600'
+                  formData.allowShapeColors ? 'bg-[#3B82F6]' : 'bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 <span
@@ -266,7 +266,7 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
         </div>
 
         {/* Action Buttons - exact design match */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#3A4553] border-t border-[#4A5568]">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]">
           <div className="flex gap-2">
             {/* Clear Cells Button - matching reference design */}
             <button
@@ -282,7 +282,7 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
             <div className="flex gap-2">
               <button
                 onClick={handleCancel}
-                className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
+                className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)] px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -292,7 +292,7 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
               <button
                 onClick={handleSave}
                 disabled={isSaving || !formData.name.trim() || !formData.address.trim() || !formData.phone.trim()}
-                className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)] px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaving ? (
                   <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">

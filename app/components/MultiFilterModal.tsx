@@ -142,22 +142,22 @@ export default function MultiFilterModal({
       />
 
       {/* Modal */}
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#2B3544] border border-gray-600 rounded-lg shadow-xl z-50 w-[700px] max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-[var(--dash-shadow-lg)] z-50 w-[700px] max-h-[90vh] overflow-hidden flex flex-col">
 
         {/* Header */}
-        <div className="bg-[#374151] px-6 py-4 border-b border-gray-600 flex items-center justify-between flex-shrink-0">
+        <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
               <FunnelIcon className="h-5 w-5 text-white" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">فلتر متعدد</h2>
-              <p className="text-gray-400 text-sm">اختر عناصر متعددة من كل فئة</p>
+              <p className="text-[var(--dash-text-muted)] text-sm">اختر عناصر متعددة من كل فئة</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+            className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -168,7 +168,7 @@ export default function MultiFilterModal({
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-400"></div>
-              <span className="mr-3 text-gray-300">جاري التحميل...</span>
+              <span className="mr-3 text-[var(--dash-text-secondary)]">جاري التحميل...</span>
             </div>
           ) : error ? (
             <div className="text-red-400 text-center py-10">{error}</div>
@@ -305,9 +305,9 @@ export default function MultiFilterModal({
         </div>
 
         {/* Footer */}
-        <div className="bg-[#374151] px-6 py-4 border-t border-gray-600 flex items-center justify-between flex-shrink-0">
+        <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-t border-[var(--dash-border-default)] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-4">
-            <span className="text-gray-400 text-sm">
+            <span className="text-[var(--dash-text-muted)] text-sm">
               {totalSelectedCount} عنصر محدد
             </span>
             {totalSelectedCount > 0 && (
@@ -322,7 +322,7 @@ export default function MultiFilterModal({
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 rounded transition-colors"
+              className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] rounded transition-colors"
             >
               إلغاء
             </button>
@@ -376,14 +376,14 @@ function FilterSection({
   const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds])
 
   return (
-    <div className="bg-[#374151] rounded-lg border border-gray-600 overflow-hidden">
+    <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] overflow-hidden">
       {/* Header */}
       <button
         onClick={onToggleExpand}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-600/30 transition-colors"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
       >
         <div className="flex items-center gap-3">
-          <span className="text-gray-300">{icon}</span>
+          <span className="text-[var(--dash-text-secondary)]">{icon}</span>
           <span className="text-white font-medium">{label}</span>
           {selectedCount > 0 && (
             <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded">
@@ -392,28 +392,28 @@ function FilterSection({
           )}
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-400 text-sm">{totalCount}</span>
+          <span className="text-[var(--dash-text-muted)] text-sm">{totalCount}</span>
           {isExpanded ? (
-            <ChevronUpIcon className="h-5 w-5 text-gray-400" />
+            <ChevronUpIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
           ) : (
-            <ChevronDownIcon className="h-5 w-5 text-gray-400" />
+            <ChevronDownIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
           )}
         </div>
       </button>
 
       {/* Content */}
       {isExpanded && (
-        <div className="border-t border-gray-600 p-3">
+        <div className="border-t border-[var(--dash-border-default)] p-3">
           {/* Search & Actions */}
           <div className="flex items-center gap-2 mb-3">
             <div className="relative flex-1">
-              <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder="بحث..."
-                className="w-full pl-3 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full pl-3 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-white text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
             <button
@@ -440,7 +440,7 @@ function FilterSection({
                     className={`flex items-center gap-2 p-2 rounded cursor-pointer transition-colors ${
                       selectedSet.has(option.id)
                         ? 'bg-green-600/20 border border-green-500/50'
-                        : 'bg-[#2B3544] border border-transparent hover:border-gray-500'
+                        : 'bg-[var(--dash-bg-surface)] border border-transparent hover:border-[var(--dash-border-subtle)]'
                     }`}
                   >
                     <div className="relative flex-shrink-0">
@@ -453,7 +453,7 @@ function FilterSection({
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                         selectedSet.has(option.id)
                           ? 'bg-green-600 border-green-600'
-                          : 'bg-transparent border-gray-400'
+                          : 'bg-transparent border-[var(--dash-text-muted)]'
                       }`}>
                         {selectedSet.has(option.id) && (
                           <CheckIcon className="h-3 w-3 text-white" />
@@ -465,7 +465,7 @@ function FilterSection({
                 ))}
               </div>
             ) : (
-              <div className="text-center text-gray-400 py-4 text-sm">
+              <div className="text-center text-[var(--dash-text-muted)] py-4 text-sm">
                 لا توجد نتائج
               </div>
             )}

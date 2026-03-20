@@ -139,21 +139,21 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
   const enabledCount = permissions.filter(p => p.enabled).length
 
   return (
-    <div className={`bg-[#2B3544] rounded-lg border overflow-hidden transition-all ${
-      isSelected ? 'border-blue-500 shadow-lg shadow-blue-500/20' : 'border-gray-600'
+    <div className={`bg-[var(--dash-bg-surface)] rounded-lg border overflow-hidden transition-all ${
+      isSelected ? 'border-blue-500 shadow-lg shadow-blue-500/20' : 'border-[var(--dash-border-default)]'
     }`}>
       {/* Header */}
-      <div className="bg-[#374151] px-6 py-4 border-b border-gray-600">
+      <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)]">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-white">{pageName}</h3>
-            <p className="text-sm text-gray-400 mt-1">
+            <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">{pageName}</h3>
+            <p className="text-sm text-[var(--dash-text-muted)] mt-1">
               إدارة صلاحيات هذه الصفحة ({enabledCount} من {permissions.length} مفعلة)
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -164,8 +164,8 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
       <div className="p-6">
         {permissions.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-400">لا توجد صلاحيات محددة لهذه الصفحة حالياً</p>
-            <p className="text-gray-500 text-sm mt-2">سيتم إضافة الصلاحيات عند تطوير الصفحة</p>
+            <p className="text-[var(--dash-text-muted)]">لا توجد صلاحيات محددة لهذه الصفحة حالياً</p>
+            <p className="text-[var(--dash-text-disabled)] text-sm mt-2">سيتم إضافة الصلاحيات عند تطوير الصفحة</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -174,8 +174,8 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
                 key={permission.id}
                 className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${
                   permission.enabled
-                    ? 'bg-[#374151] border-blue-500/30 shadow-sm'
-                    : 'bg-gray-700/30 border-gray-600'
+                    ? 'bg-[var(--dash-bg-raised)] border-blue-500/30 shadow-sm'
+                    : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)]'
                 }`}
               >
                 {/* Checkbox */}
@@ -184,7 +184,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
                   className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                     permission.enabled
                       ? 'bg-blue-600 border-blue-600'
-                      : 'border-gray-500 hover:border-gray-400'
+                      : 'border-[var(--dash-text-disabled)] hover:border-[var(--dash-text-muted)]'
                   }`}
                 >
                   {permission.enabled && (
@@ -197,7 +197,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-sm">{getCategoryIcon(permission.category)}</span>
                     <h4 className={`font-medium ${
-                      permission.enabled ? 'text-white' : 'text-gray-400'
+                      permission.enabled ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'
                     }`}>
                       {permission.name}
                     </h4>
@@ -207,7 +207,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
                     </span>
                   </div>
                   <p className={`text-sm ${
-                    permission.enabled ? 'text-gray-300' : 'text-gray-500'
+                    permission.enabled ? 'text-[var(--dash-text-secondary)]' : 'text-[var(--dash-text-disabled)]'
                   }`}>
                     {permission.description}
                   </p>
@@ -215,7 +215,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
 
                 {/* Status Indicator */}
                 <div className={`w-2 h-2 rounded-full ${
-                  permission.enabled ? 'bg-green-500' : 'bg-gray-500'
+                  permission.enabled ? 'bg-green-500' : 'bg-[var(--dash-bg-highlight)]'
                 }`}></div>
               </div>
             ))}
@@ -224,18 +224,18 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
       </div>
 
       {/* Footer */}
-      <div className="bg-[#374151] px-6 py-4 border-t border-gray-600">
+      <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-t border-[var(--dash-border-default)]">
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-[var(--dash-text-muted)]">
             <span className="text-green-400 font-medium">{enabledCount}</span> مفعلة من أصل{' '}
-            <span className="text-white font-medium">{permissions.length}</span> صلاحية
+            <span className="text-[var(--dash-text-primary)] font-medium">{permissions.length}</span> صلاحية
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => {
                 setPermissions(prev => prev.map(p => ({ ...p, enabled: true })))
               }}
-              className="text-sm px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="text-sm px-3 py-1 bg-green-600 text-[var(--dash-text-primary)] rounded-md hover:bg-green-700 transition-colors"
             >
               تفعيل الكل
             </button>
@@ -243,7 +243,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
               onClick={() => {
                 setPermissions(prev => prev.map(p => ({ ...p, enabled: false })))
               }}
-              className="text-sm px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              className="text-sm px-3 py-1 bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-md hover:bg-[var(--dash-bg-overlay)] transition-colors"
             >
               إلغاء الكل
             </button>

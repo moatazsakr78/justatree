@@ -408,31 +408,31 @@ export default function ColorAssignmentModalNew({
   const selectedBranch = branches.find(b => b.id === selectedBranchId)
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#2B3544] rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col animate-dash-scale-in">
         {/* Header */}
-        <div className="bg-[#3B4555] text-white px-6 py-4 flex items-center justify-between border-b border-gray-600">
+        <div className="bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] px-6 py-4 flex items-center justify-between border-b border-[var(--dash-border-default)]">
           <div>
             <h2 className="text-xl font-bold">إدارة الألوان والأشكال</h2>
-            <p className="text-sm text-gray-300">{product.name}</p>
+            <p className="text-sm text-[var(--dash-text-secondary)]">{product.name}</p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-300 hover:text-white transition-colors"
+            className="text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="bg-[#374151] border-b border-gray-600 px-6">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6">
           <div className="flex gap-2">
             <button
               onClick={() => { setActiveTab('colors'); setIsAdding(false); setEditingId(null); }}
               className={`px-6 py-3 font-medium transition-colors ${
                 activeTab === 'colors'
                   ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-gray-400 hover:text-gray-200'
+                  : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               الألوان
@@ -442,7 +442,7 @@ export default function ColorAssignmentModalNew({
               className={`px-6 py-3 font-medium transition-colors ${
                 activeTab === 'shapes'
                   ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-gray-400 hover:text-gray-200'
+                  : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               الأشكال
@@ -452,7 +452,7 @@ export default function ColorAssignmentModalNew({
               className={`px-6 py-3 font-medium transition-colors ${
                 activeTab === 'quantities'
                   ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-gray-400 hover:text-gray-200'
+                  : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               الكميات
@@ -465,17 +465,17 @@ export default function ColorAssignmentModalNew({
           {isLoading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="text-gray-400 mt-4">جاري التحميل...</p>
+              <p className="text-[var(--dash-text-muted)] mt-4">جاري التحميل...</p>
             </div>
           ) : activeTab === 'quantities' ? (
             // Quantities Tab
             <div>
-              <div className="mb-6 bg-[#374151] p-4 rounded-lg border border-gray-600">
-                <label className="block text-gray-300 font-medium mb-2">اختر الفرع:</label>
+              <div className="mb-6 bg-[var(--dash-bg-raised)] p-4 rounded-lg border border-[var(--dash-border-default)]">
+                <label className="block text-[var(--dash-text-secondary)] font-medium mb-2">اختر الفرع:</label>
                 <select
                   value={selectedBranchId}
                   onChange={(e) => setSelectedBranchId(e.target.value)}
-                  className="w-full px-4 py-2 bg-[#2B3544] text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] border border-[var(--dash-border-default)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {branches.map(branch => (
                     <option key={branch.id} value={branch.id}>
@@ -486,7 +486,7 @@ export default function ColorAssignmentModalNew({
               </div>
 
               {definitions.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-[var(--dash-text-muted)]">
                   <p className="font-medium">لا توجد ألوان أو أشكال محددة</p>
                   <p className="text-sm mt-2">يجب أولاً إضافة ألوان أو أشكال من التبويبات السابقة</p>
                 </div>
@@ -495,10 +495,10 @@ export default function ColorAssignmentModalNew({
                   {definitions.map((def) => (
                     <div
                       key={def.id}
-                      className="bg-[#374151] border border-gray-600 rounded-lg p-4 hover:border-blue-500 transition-colors"
+                      className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg p-4 hover:border-blue-500 transition-colors"
                     >
                       {def.image_url && (
-                        <div className="relative w-full h-32 mb-3 bg-gray-700 rounded-lg overflow-hidden">
+                        <div className="relative w-full h-32 mb-3 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden">
                           <Image
                             src={def.image_url}
                             alt={def.name || 'Variant'}
@@ -513,24 +513,24 @@ export default function ColorAssignmentModalNew({
 
                       <div className="mb-3">
                         {def.name && (
-                          <h4 className="font-bold text-white text-center mb-1">{def.name}</h4>
+                          <h4 className="font-bold text-[var(--dash-text-primary)] text-center mb-1">{def.name}</h4>
                         )}
                         {def.color_hex && (
                           <div className="flex items-center justify-center gap-2">
                             <div
-                              className="w-6 h-6 rounded border border-gray-500"
+                              className="w-6 h-6 rounded border border-[var(--dash-border-default)]"
                               style={{ backgroundColor: def.color_hex }}
                             ></div>
-                            <span className="text-xs text-gray-400">{def.color_hex}</span>
+                            <span className="text-xs text-[var(--dash-text-muted)]">{def.color_hex}</span>
                           </div>
                         )}
-                        <p className="text-xs text-gray-400 text-center mt-1">
+                        <p className="text-xs text-[var(--dash-text-muted)] text-center mt-1">
                           {def.variant_type === 'color' ? 'لون' : 'شكل'}
                         </p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1 text-center">
+                        <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-1 text-center">
                           الكمية
                         </label>
                         <input
@@ -538,7 +538,7 @@ export default function ColorAssignmentModalNew({
                           min="0"
                           value={quantities[def.id]?.[selectedBranchId] || 0}
                           onChange={(e) => handleQuantityChange(def.id, selectedBranchId, e.target.value)}
-                          className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded-lg text-center text-lg font-bold text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-center text-lg font-bold text-[var(--dash-text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                       </div>
                     </div>
@@ -554,7 +554,7 @@ export default function ColorAssignmentModalNew({
                   <div className="mb-6">
                     <button
                       onClick={() => setIsAdding(true)}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+                      className="bg-blue-600 text-[var(--dash-text-primary)] px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
                     >
                       <PlusIcon className="w-5 h-5" />
                       إضافة {activeTab === 'colors' ? 'لون' : 'شكل'} جديد
@@ -565,10 +565,10 @@ export default function ColorAssignmentModalNew({
                     {definitions.map((def) => (
                       <div
                         key={def.id}
-                        className="bg-[#374151] border border-gray-600 rounded-lg p-4 relative group hover:border-blue-500 transition-colors"
+                        className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg p-4 relative group hover:border-blue-500 transition-colors"
                       >
                         {def.image_url && (
-                          <div className="relative w-full h-32 mb-3 bg-gray-700 rounded-lg overflow-hidden">
+                          <div className="relative w-full h-32 mb-3 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden">
                             <Image
                               src={def.image_url}
                               alt={def.name || 'Variant'}
@@ -583,32 +583,32 @@ export default function ColorAssignmentModalNew({
 
                         <div className="text-center">
                           {def.name && (
-                            <h4 className="font-bold text-white mb-2">{def.name}</h4>
+                            <h4 className="font-bold text-[var(--dash-text-primary)] mb-2">{def.name}</h4>
                           )}
                           {def.color_hex && (
                             <div className="flex items-center justify-center gap-2 mb-2">
                               <div
-                                className="w-6 h-6 rounded border border-gray-500"
+                                className="w-6 h-6 rounded border border-[var(--dash-border-default)]"
                                 style={{ backgroundColor: def.color_hex }}
                               ></div>
-                              <span className="text-xs text-gray-400">{def.color_hex}</span>
+                              <span className="text-xs text-[var(--dash-text-muted)]">{def.color_hex}</span>
                             </div>
                           )}
                           {def.barcode && (
-                            <p className="text-xs text-gray-400 font-mono">{def.barcode}</p>
+                            <p className="text-xs text-[var(--dash-text-muted)] font-mono">{def.barcode}</p>
                           )}
                         </div>
 
                         <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                           <button
                             onClick={() => handleEdit(def)}
-                            className="bg-yellow-600 hover:bg-yellow-700 text-white p-2 rounded-full"
+                            className="bg-yellow-600 hover:bg-yellow-700 text-[var(--dash-text-primary)] p-2 rounded-full"
                           >
                             <PencilIcon className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(def.id)}
-                            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full"
+                            className="bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] p-2 rounded-full"
                           >
                             <TrashIcon className="w-4 h-4" />
                           </button>
@@ -618,7 +618,7 @@ export default function ColorAssignmentModalNew({
                   </div>
 
                   {definitions.length === 0 && (
-                    <div className="text-center py-8 text-gray-400">
+                    <div className="text-center py-8 text-[var(--dash-text-muted)]">
                       <p className="font-medium">لا توجد {activeTab === 'colors' ? 'ألوان' : 'أشكال'} محددة</p>
                       <p className="text-sm mt-2">اضغط على "إضافة {activeTab === 'colors' ? 'لون' : 'شكل'} جديد" للبدء</p>
                     </div>
@@ -626,24 +626,24 @@ export default function ColorAssignmentModalNew({
                 </>
               ) : (
                 // Add/Edit Form
-                <div className="max-w-2xl mx-auto bg-[#374151] p-6 rounded-lg border border-gray-600">
-                  <h3 className="text-xl font-bold text-white mb-6">
+                <div className="max-w-2xl mx-auto bg-[var(--dash-bg-raised)] p-6 rounded-lg border border-[var(--dash-border-default)]">
+                  <h3 className="text-xl font-bold text-[var(--dash-text-primary)] mb-6">
                     {editingId ? 'تحرير' : 'إضافة'} {activeTab === 'colors' ? 'لون' : 'شكل'}
                   </h3>
 
                   <div className="space-y-4">
                     {/* Name */}
                     <div>
-                      <label className="block text-gray-300 font-medium mb-2">
+                      <label className="block text-[var(--dash-text-secondary)] font-medium mb-2">
                         اسم ال{activeTab === 'colors' ? 'لون' : 'شكل'}
                         {activeTab === 'colors' && <span className="text-red-400"> *</span>}
-                        {activeTab === 'shapes' && <span className="text-gray-500 text-sm"> (اختياري)</span>}
+                        {activeTab === 'shapes' && <span className="text-[var(--dash-text-disabled)] text-sm"> (اختياري)</span>}
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-4 py-2 bg-[#2B3544] text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] border border-[var(--dash-border-default)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder={`أدخل اسم ال${activeTab === 'colors' ? 'لون' : 'شكل'}`}
                       />
                     </div>
@@ -651,19 +651,19 @@ export default function ColorAssignmentModalNew({
                     {/* Color Hex - Only for colors */}
                     {activeTab === 'colors' && (
                       <div>
-                        <label className="block text-gray-300 font-medium mb-2">كود اللون (Hex)</label>
+                        <label className="block text-[var(--dash-text-secondary)] font-medium mb-2">كود اللون (Hex)</label>
                         <div className="flex gap-2">
                           <input
                             type="color"
                             value={formData.color_hex}
                             onChange={(e) => setFormData(prev => ({ ...prev, color_hex: e.target.value }))}
-                            className="w-20 h-12 rounded-lg cursor-pointer bg-[#2B3544] border border-gray-600"
+                            className="w-20 h-12 rounded-lg cursor-pointer bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)]"
                           />
                           <input
                             type="text"
                             value={formData.color_hex}
                             onChange={(e) => setFormData(prev => ({ ...prev, color_hex: e.target.value }))}
-                            className="flex-1 px-4 py-2 bg-[#2B3544] text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+                            className="flex-1 px-4 py-2 bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] border border-[var(--dash-border-default)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
                           />
                         </div>
                       </div>
@@ -671,7 +671,7 @@ export default function ColorAssignmentModalNew({
 
                     {/* Image Upload */}
                     <div>
-                      <label className="block text-gray-300 font-medium mb-2">صورة ال{activeTab === 'colors' ? 'لون' : 'شكل'}</label>
+                      <label className="block text-[var(--dash-text-secondary)] font-medium mb-2">صورة ال{activeTab === 'colors' ? 'لون' : 'شكل'}</label>
 
                       {!formData.image_preview ? (
                         <div
@@ -681,13 +681,13 @@ export default function ColorAssignmentModalNew({
                           className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
                             isDragging
                               ? 'border-blue-500 bg-blue-500/10'
-                              : 'border-gray-600 hover:border-gray-500'
+                              : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                           }`}
                           onClick={() => document.getElementById('image-upload')?.click()}
                         >
-                          <PhotoIcon className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                          <p className="text-gray-300 mb-1">اسحب الصورة هنا أو اضغط للاختيار</p>
-                          <p className="text-sm text-gray-500">PNG, JPG, WEBP (حتى 5MB)</p>
+                          <PhotoIcon className="w-12 h-12 mx-auto mb-2 text-[var(--dash-text-muted)]" />
+                          <p className="text-[var(--dash-text-secondary)] mb-1">اسحب الصورة هنا أو اضغط للاختيار</p>
+                          <p className="text-sm text-[var(--dash-text-disabled)]">PNG, JPG, WEBP (حتى 5MB)</p>
                           <input
                             id="image-upload"
                             type="file"
@@ -701,12 +701,12 @@ export default function ColorAssignmentModalNew({
                           <img
                             src={formData.image_preview}
                             alt="Preview"
-                            className="w-full h-64 object-cover rounded-lg border border-gray-600"
+                            className="w-full h-64 object-cover rounded-lg border border-[var(--dash-border-default)]"
                           />
                           <button
                             type="button"
                             onClick={() => setFormData(prev => ({ ...prev, image_file: null, image_preview: '' }))}
-                            className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full"
+                            className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] p-2 rounded-full"
                           >
                             <XMarkIcon className="w-5 h-5" />
                           </button>
@@ -715,13 +715,13 @@ export default function ColorAssignmentModalNew({
 
                       {uploadProgress > 0 && uploadProgress < 100 && (
                         <div className="mt-2">
-                          <div className="bg-gray-700 rounded-full h-2 overflow-hidden">
+                          <div className="bg-[var(--dash-bg-raised)] rounded-full h-2 overflow-hidden">
                             <div
                               className="bg-blue-600 h-full transition-all duration-300"
                               style={{ width: `${uploadProgress}%` }}
                             ></div>
                           </div>
-                          <p className="text-sm text-gray-400 text-center mt-1">جاري الرفع... {uploadProgress}%</p>
+                          <p className="text-sm text-[var(--dash-text-muted)] text-center mt-1">جاري الرفع... {uploadProgress}%</p>
                         </div>
                       )}
                     </div>
@@ -729,12 +729,12 @@ export default function ColorAssignmentModalNew({
                     {/* Barcode - Only for colors */}
                     {activeTab === 'colors' && (
                       <div>
-                        <label className="block text-gray-300 font-medium mb-2">الباركود <span className="text-gray-500 text-sm">(اختياري)</span></label>
+                        <label className="block text-[var(--dash-text-secondary)] font-medium mb-2">الباركود <span className="text-[var(--dash-text-disabled)] text-sm">(اختياري)</span></label>
                         <input
                           type="text"
                           value={formData.barcode}
                           onChange={(e) => setFormData(prev => ({ ...prev, barcode: e.target.value }))}
-                          className="w-full px-4 py-2 bg-[#2B3544] text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+                          className="w-full px-4 py-2 bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] border border-[var(--dash-border-default)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
                           placeholder="أدخل الباركود"
                         />
                       </div>
@@ -746,7 +746,7 @@ export default function ColorAssignmentModalNew({
                     <button
                       onClick={handleSave}
                       disabled={isSaving || uploadProgress > 0}
-                      className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 flex items-center justify-center gap-2 font-medium"
+                      className="flex-1 bg-blue-600 text-[var(--dash-text-primary)] px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-[var(--dash-bg-overlay)] flex items-center justify-center gap-2 font-medium"
                     >
                       {isSaving ? (
                         <>
@@ -773,7 +773,7 @@ export default function ColorAssignmentModalNew({
                         })
                       }}
                       disabled={isSaving}
-                      className="px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3 border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
                     >
                       إلغاء
                     </button>
@@ -786,11 +786,11 @@ export default function ColorAssignmentModalNew({
 
         {/* Footer */}
         {activeTab === 'quantities' && !isLoading && definitions.length > 0 && (
-          <div className="border-t border-gray-600 px-6 py-4 bg-[#374151] flex gap-3">
+          <div className="border-t border-[var(--dash-border-default)] px-6 py-4 bg-[var(--dash-bg-raised)] flex gap-3">
             <button
               onClick={handleSaveQuantities}
               disabled={isSaving}
-              className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 flex items-center justify-center gap-2 font-medium"
+              className="flex-1 bg-blue-600 text-[var(--dash-text-primary)] px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-[var(--dash-bg-overlay)] flex items-center justify-center gap-2 font-medium"
             >
               {isSaving ? (
                 <>
@@ -807,7 +807,7 @@ export default function ColorAssignmentModalNew({
             <button
               onClick={onClose}
               disabled={isSaving}
-              className="px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors"
+              className="px-6 py-3 border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
             >
               إغلاق
             </button>

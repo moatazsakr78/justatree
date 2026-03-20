@@ -60,37 +60,37 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-2xl max-h-[80vh] overflow-hidden">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] w-full max-w-2xl max-h-[80vh] overflow-hidden">
           
           {/* Header */}
-          <div className={`flex items-center justify-between p-6 border-b ${isPurchaseMode ? 'border-blue-600/50 bg-gradient-to-r from-blue-900/30 to-blue-800/20' : 'border-[#4A5568]'}`}>
+          <div className={`flex items-center justify-between p-6 border-b ${isPurchaseMode ? 'border-blue-600/50 bg-gradient-to-r from-blue-900/30 to-blue-800/20' : 'border-[var(--dash-border-default)]'}`}>
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isPurchaseMode ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 'bg-gradient-to-r from-green-500 to-blue-500'}`}>
                 <TruckIcon className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">{isPurchaseMode ? 'اختيار مورد للشراء' : 'اختيار المورد'}</h2>
-                <p className="text-gray-400 text-sm">{isPurchaseMode ? 'اختر المورد لبدء فاتورة شراء جديدة' : 'اختر المورد للفاتورة'}</p>
+                <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">{isPurchaseMode ? 'اختيار مورد للشراء' : 'اختيار المورد'}</h2>
+                <p className="text-[var(--dash-text-muted)] text-sm">{isPurchaseMode ? 'اختر المورد لبدء فاتورة شراء جديدة' : 'اختر المورد للفاتورة'}</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+              className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
           </div>
 
           {/* Search */}
-          <div className="p-6 border-b border-[#4A5568]">
+          <div className="p-6 border-b border-[var(--dash-border-default)]">
             <div className="relative">
-              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--dash-text-muted)]" />
               <input
                 type="text"
                 placeholder="البحث في الموردين..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-[#374151] border border-[#4A5568] rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg pl-10 pr-4 py-3 text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent"
               />
             </div>
           </div>
@@ -100,12 +100,12 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
             {loading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                <span className="text-gray-400 mr-3">جاري التحميل...</span>
+                <span className="text-[var(--dash-text-muted)] mr-3">جاري التحميل...</span>
               </div>
             ) : filteredSuppliers.length === 0 ? (
               <div className="text-center py-8">
                 <TruckIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-400">لا توجد موردين</p>
+                <p className="text-[var(--dash-text-muted)]">لا توجد موردين</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -113,10 +113,10 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
                   <div
                     key={supplier.id}
                     onClick={() => handleSupplierSelect(supplier)}
-                    className={`bg-[#374151] rounded-xl p-4 border cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-500/5 ${
+                    className={`bg-[var(--dash-bg-raised)] rounded-xl p-4 border cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-500/5 ${
                       selectedSupplier?.id === supplier.id
                         ? 'border-blue-500 bg-blue-500/10'
-                        : 'border-[#4A5568]'
+                        : 'border-[var(--dash-border-default)]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -125,8 +125,8 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
                           <TruckIcon className="h-6 w-6 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-white font-medium">{supplier.name}</h3>
-                          <div className="flex items-center gap-4 text-sm text-gray-400 mt-1">
+                          <h3 className="text-[var(--dash-text-primary)] font-medium">{supplier.name}</h3>
+                          <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)] mt-1">
                             {supplier.phone && (
                               <span>{supplier.phone}</span>
                             )}
@@ -140,7 +140,7 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
                         <div className="text-blue-400 font-bold">
                           {supplier.account_balance ? `${parseFloat(supplier.account_balance).toFixed(2)} جنيه` : '0.00 جنيه'}
                         </div>
-                        <div className="text-xs text-gray-400">الرصيد</div>
+                        <div className="text-xs text-[var(--dash-text-muted)]">الرصيد</div>
                       </div>
                     </div>
                   </div>
@@ -150,10 +150,10 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-[#4A5568]">
+          <div className="p-6 border-t border-[var(--dash-border-default)]">
             <button
               onClick={onClose}
-              className="w-full bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition-colors"
+              className="w-full bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
             >
               إغلاق
             </button>

@@ -351,22 +351,22 @@ export default function AddPaymentModal({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-[60]"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-lg shadow-xl w-full max-w-md">
+        <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-md">
 
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-600">
-            <h2 className="text-xl font-bold text-white">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
+            <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">
               {paymentType === 'loan' ? 'إضافة سلفة' : paymentType === 'discount' ? 'إضافة خصم' : 'إضافة دفعة'} - {entityName}
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
@@ -376,14 +376,14 @@ export default function AddPaymentModal({
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
 
             {/* Payment Type Toggle - 3 أزرار متساوية */}
-            <div className="flex gap-2 p-1 bg-[#1F2937] rounded-lg border border-gray-600">
+            <div className="flex gap-2 p-1 bg-[var(--dash-bg-base)] rounded-lg border border-[var(--dash-border-default)]">
               <button
                 type="button"
                 onClick={() => setPaymentType('payment')}
                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
                   paymentType === 'payment'
                     ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 دفعة
@@ -394,7 +394,7 @@ export default function AddPaymentModal({
                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
                   paymentType === 'discount'
                     ? 'bg-purple-600 text-white shadow-sm'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 خصم
@@ -405,7 +405,7 @@ export default function AddPaymentModal({
                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
                   paymentType === 'loan'
                     ? 'bg-orange-600 text-white shadow-sm'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                    : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 إضافة
@@ -425,7 +425,7 @@ export default function AddPaymentModal({
               }`}>
                 الرصيد الحالي
               </div>
-              <div className="text-2xl font-bold text-white">{formatPrice(currentBalance)}</div>
+              <div className="text-2xl font-bold text-[var(--dash-text-primary)]">{formatPrice(currentBalance)}</div>
               {paymentType === 'loan' && (
                 <div className="text-xs text-orange-300 mt-1">
                   السلفة ستزيد الرصيد المستحق على العميل
@@ -440,7 +440,7 @@ export default function AddPaymentModal({
 
             {/* Amount Input */}
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
                 {paymentType === 'loan' ? 'مبلغ السلفة' : paymentType === 'discount' ? 'مبلغ الخصم' : 'مبلغ الدفعة'} <span className="text-red-400">*</span>
               </label>
               <input
@@ -449,8 +449,8 @@ export default function AddPaymentModal({
                 min="0"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className={`w-full px-4 py-2 bg-[#1F2937] border border-gray-600 rounded text-white text-right focus:outline-none focus:ring-2 ${
-                  paymentType === 'loan' ? 'focus:ring-orange-500' : paymentType === 'discount' ? 'focus:ring-purple-500' : 'focus:ring-blue-500'
+                className={`w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 ${
+                  paymentType === 'loan' ? 'focus:ring-orange-500' : paymentType === 'discount' ? 'focus:ring-purple-500' : 'focus:ring-[var(--dash-accent-blue)]'
                 }`}
                 placeholder={paymentType === 'loan' ? 'أدخل مبلغ السلفة' : paymentType === 'discount' ? 'أدخل مبلغ الخصم' : 'أدخل مبلغ الدفعة'}
                 required
@@ -467,7 +467,7 @@ export default function AddPaymentModal({
                 <div className="text-sm mb-1" style={{ color: remainingBalance < 0 ? '#FCA5A5' : '#86EFAC' }}>
                   الرصيد المتبقي
                 </div>
-                <div className="text-xl font-bold text-white">
+                <div className="text-xl font-bold text-[var(--dash-text-primary)]">
                   {formatPrice(Math.abs(remainingBalance))}
                   {remainingBalance < 0 && ' (دفع زائد)'}
                 </div>
@@ -480,7 +480,7 @@ export default function AddPaymentModal({
                 <div className="text-sm mb-1 text-orange-300">
                   الرصيد الجديد بعد السلفة
                 </div>
-                <div className="text-xl font-bold text-white">
+                <div className="text-xl font-bold text-[var(--dash-text-primary)]">
                   {formatPrice(currentBalance + parseFloat(amount))}
                 </div>
               </div>
@@ -492,7 +492,7 @@ export default function AddPaymentModal({
                 <div className="text-sm mb-1 text-purple-300">
                   الرصيد الجديد بعد الخصم
                 </div>
-                <div className="text-xl font-bold text-white">
+                <div className="text-xl font-bold text-[var(--dash-text-primary)]">
                   {formatPrice(currentBalance - parseFloat(amount))}
                 </div>
               </div>
@@ -502,16 +502,16 @@ export default function AddPaymentModal({
             <div className="flex gap-4">
               {/* Record Selection - الخزنة */}
               <div className="flex-1">
-                <label className="block text-gray-300 text-sm font-medium mb-2 text-right">
+                <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
                   الخزنة
                 </label>
                 {isLoadingRecords ? (
-                  <div className="text-gray-400 text-sm text-center py-2">جاري تحميل الخزنات...</div>
+                  <div className="text-[var(--dash-text-muted)] text-sm text-center py-2">جاري تحميل الخزنات...</div>
                 ) : (
                   <select
                     value={recordId}
                     onChange={(e) => setRecordId(e.target.value)}
-                    className="w-full px-4 py-2 bg-[#1F2937] border border-gray-600 rounded text-white text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                   >
                     <option value="">لا يوجد</option>
                     {records.map((record) => (
@@ -525,16 +525,16 @@ export default function AddPaymentModal({
 
               {/* Payment Method - طريقة الدفع */}
               <div className="flex-1">
-                <label className="block text-gray-300 text-sm font-medium mb-2 text-right">
+                <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
                   طريقة الدفع
                 </label>
                 {isLoadingPaymentMethods ? (
-                  <div className="text-gray-400 text-sm text-center py-2">جاري تحميل طرق الدفع...</div>
+                  <div className="text-[var(--dash-text-muted)] text-sm text-center py-2">جاري تحميل طرق الدفع...</div>
                 ) : (
                   <select
                     value={paymentMethod}
                     onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-full px-4 py-2 bg-[#1F2937] border border-gray-600 rounded text-white text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
                   >
                     {paymentMethods.map((method) => (
                       <option key={method.id} value={method.name}>
@@ -548,15 +548,15 @@ export default function AddPaymentModal({
 
             {/* البيان */}
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2 text-right">
+              <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
                 البيان {(paymentType === 'loan' || paymentType === 'discount') && <span className="text-red-400">*</span>}
               </label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                className={`w-full px-4 py-2 bg-[#1F2937] border border-gray-600 rounded text-white text-right focus:outline-none focus:ring-2 resize-none ${
-                  paymentType === 'loan' ? 'focus:ring-orange-500' : paymentType === 'discount' ? 'focus:ring-purple-500' : 'focus:ring-blue-500'
+                className={`w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 resize-none ${
+                  paymentType === 'loan' ? 'focus:ring-orange-500' : paymentType === 'discount' ? 'focus:ring-purple-500' : 'focus:ring-[var(--dash-accent-blue)]'
                 }`}
                 placeholder="أدخل البيان"
                 required={paymentType === 'loan' || paymentType === 'discount'}
@@ -568,7 +568,7 @@ export default function AddPaymentModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium transition-colors"
+                className="flex-1 px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded font-medium transition-colors"
                 disabled={isSubmitting}
               >
                 إلغاء
@@ -576,7 +576,7 @@ export default function AddPaymentModal({
               <button
                 type="submit"
                 disabled={isSubmitting || !amount || parseFloat(amount) <= 0 || ((paymentType === 'loan' || paymentType === 'discount') && (!notes || notes.trim() === ''))}
-                className={`flex-1 px-4 py-2 text-white rounded font-medium transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed ${
+                className={`flex-1 px-4 py-2 text-white rounded font-medium transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed ${
                   paymentType === 'loan'
                     ? 'bg-orange-600 hover:bg-orange-700'
                     : paymentType === 'discount'

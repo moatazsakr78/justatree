@@ -101,16 +101,16 @@ export default function BranchSelectionModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1F2937] p-6 shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] p-6 shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)] animate-dash-scale-in">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <BuildingOfficeIcon className="h-6 w-6 text-blue-400" />
                     اختيار فرع البيع
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -121,7 +121,7 @@ export default function BranchSelectionModal({
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
-                      <p className="text-gray-400">جاري تحميل الفروع...</p>
+                      <p className="text-[var(--dash-text-muted)]">جاري تحميل الفروع...</p>
                     </div>
                   ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12">
@@ -129,7 +129,7 @@ export default function BranchSelectionModal({
                       <p className="text-red-400 mb-2">{error}</p>
                       <button
                         onClick={fetchBranches}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg text-sm transition-colors"
                       >
                         إعادة المحاولة
                       </button>
@@ -139,16 +139,16 @@ export default function BranchSelectionModal({
                       <button
                         key={branch.id}
                         onClick={() => handleSelect(branch)}
-                        className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[#2B3544] text-gray-200 border-2 border-transparent hover:bg-[#374151] hover:border-gray-500"
+                        className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-gray-200 border-2 border-transparent hover:bg-[var(--dash-bg-overlay)] hover:border-[var(--dash-border-default)]"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-[#374151] flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-full bg-[var(--dash-bg-raised)] flex items-center justify-center">
                             <BuildingOfficeIcon className="h-5 w-5" />
                           </div>
                           <div className="text-right">
                             <div className="font-semibold">{branch.name}</div>
                             {branch.address && (
-                              <div className="text-sm text-gray-400 flex items-center gap-1">
+                              <div className="text-sm text-[var(--dash-text-muted)] flex items-center gap-1">
                                 <MapPinIcon className="h-3.5 w-3.5" />
                                 {branch.address}
                               </div>
@@ -156,7 +156,7 @@ export default function BranchSelectionModal({
                           </div>
                         </div>
                         {branch.phone && (
-                          <div className="text-sm text-gray-400 flex items-center gap-1">
+                          <div className="text-sm text-[var(--dash-text-muted)] flex items-center gap-1">
                             <PhoneIcon className="h-4 w-4" />
                             {branch.phone}
                           </div>
@@ -165,9 +165,9 @@ export default function BranchSelectionModal({
                     ))
                   ) : (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <BuildingOfficeIcon className="h-12 w-12 text-gray-500 mb-4" />
-                      <p className="text-gray-400 mb-2">لا توجد فروع نشطة</p>
-                      <p className="text-gray-500 text-sm">
+                      <BuildingOfficeIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mb-4" />
+                      <p className="text-[var(--dash-text-muted)] mb-2">لا توجد فروع نشطة</p>
+                      <p className="text-[var(--dash-text-disabled)] text-sm">
                         لا توجد فروع متاحة في قاعدة البيانات
                       </p>
                     </div>
@@ -175,8 +175,8 @@ export default function BranchSelectionModal({
                 </div>
 
                 {/* Footer Note */}
-                <div className="mt-6 p-3 bg-[#2B3544] rounded-lg">
-                  <p className="text-sm text-gray-400 text-center">
+                <div className="mt-6 p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+                  <p className="text-sm text-[var(--dash-text-muted)] text-center">
                     اضغط على الفرع لاختياره للبيع منه
                   </p>
                 </div>

@@ -454,22 +454,22 @@ export default function ColorAssignmentModal({
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide animate-dash-scale-in">
           
           {/* Header */}
-          <div className="sticky top-0 bg-[#2B3544] px-8 py-6 border-b border-[#4A5568] flex items-center justify-between rounded-t-2xl">
+          <div className="sticky top-0 bg-[var(--dash-bg-surface)] px-8 py-6 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
-                <TagIcon className="h-6 w-6 text-white" />
+                <TagIcon className="h-6 w-6 text-[var(--dash-text-primary)]" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">تحديد ألوان المنتج</h2>
+                <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">تحديد ألوان المنتج</h2>
                 <p className="text-blue-400 font-medium">{product.name}</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+              className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
@@ -484,16 +484,16 @@ export default function ColorAssignmentModal({
                   <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
                     <BuildingStorefrontIcon className="h-5 w-5 text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">اختر الفرع المراد تحديد ألوانه</h3>
+                  <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">اختر الفرع المراد تحديد ألوانه</h3>
                 </div>
 
                 {branchesWithUnassigned.length === 0 ? (
                   <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-gray-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Squares2X2Icon className="h-8 w-8 text-gray-400" />
+                    <div className="w-16 h-16 bg-[var(--dash-bg-overlay)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Squares2X2Icon className="h-8 w-8 text-[var(--dash-text-muted)]" />
                     </div>
-                    <p className="text-gray-400 text-lg mb-2">لا توجد كميات غير محددة الألوان</p>
-                    <p className="text-gray-500 text-sm">جميع الكميات في الفروع تم تحديد ألوانها مسبقاً</p>
+                    <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد كميات غير محددة الألوان</p>
+                    <p className="text-[var(--dash-text-disabled)] text-sm">جميع الكميات في الفروع تم تحديد ألوانها مسبقاً</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-4">
@@ -501,40 +501,40 @@ export default function ColorAssignmentModal({
                       <button
                         key={branchData.branchId}
                         onClick={() => handleBranchSelect(branchData)}
-                        className="bg-[#374151] hover:bg-[#434E61] border border-[#4A5568] rounded-xl p-6 text-right transition-colors group"
+                        className="bg-[var(--dash-bg-raised)] hover:bg-[#434E61] border border-[var(--dash-border-default)] rounded-xl p-6 text-right transition-colors group"
                       >
                         <div className="flex items-center justify-between mb-4">
                           <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
                             <BuildingStorefrontIcon className="h-6 w-6 text-blue-400" />
                           </div>
-                          <h4 className="text-white font-semibold text-lg">{branchData.branchName}</h4>
+                          <h4 className="text-[var(--dash-text-primary)] font-semibold text-lg">{branchData.branchName}</h4>
                         </div>
                         
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
                             <span className="text-blue-400 font-bold text-xl">{branchData.totalQuantity}</span>
-                            <span className="text-gray-400">الكمية الإجمالية</span>
+                            <span className="text-[var(--dash-text-muted)]">الكمية الإجمالية</span>
                           </div>
                           
                           <div className="flex justify-between items-center">
                             <span className="text-green-400 font-medium">{branchData.assignedQuantity}</span>
-                            <span className="text-gray-400">محدد الألوان</span>
+                            <span className="text-[var(--dash-text-muted)]">محدد الألوان</span>
                           </div>
                           
                           <div className="flex justify-between items-center">
                             <span className="text-orange-400 font-bold text-lg">{branchData.unassignedQuantity}</span>
-                            <span className="text-gray-400">غير محدد الألوان</span>
+                            <span className="text-[var(--dash-text-muted)]">غير محدد الألوان</span>
                           </div>
 
                           {/* Existing specified color variants */}
                           {branchData.variants.length > 0 && (
-                            <div className="pt-2 border-t border-gray-600/50">
-                              <p className="text-gray-400 text-sm mb-2">الألوان المحددة:</p>
+                            <div className="pt-2 border-t border-[var(--dash-border-default)]/50">
+                              <p className="text-[var(--dash-text-muted)] text-sm mb-2">الألوان المحددة:</p>
                               <div className="flex flex-wrap gap-1">
                                 {branchData.variants.map((variant, index) => (
                                   <span
                                     key={index}
-                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-600 text-white"
+                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-600 text-[var(--dash-text-primary)]"
                                   >
                                     {variant.name} ({variant.quantity})
                                   </span>
@@ -545,10 +545,10 @@ export default function ColorAssignmentModal({
                           
                           {/* Show total unspecified quantity */}
                           {branchData.unassignedQuantity > 0 && (
-                            <div className="pt-2 border-t border-gray-600/50">
-                              <p className="text-gray-400 text-sm mb-2">غير المحدد الكلي:</p>
+                            <div className="pt-2 border-t border-[var(--dash-border-default)]/50">
+                              <p className="text-[var(--dash-text-muted)] text-sm mb-2">غير المحدد الكلي:</p>
                               <div className="flex flex-wrap gap-1">
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-600 text-white">
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)]">
                                   غير محدد الكلي ({branchData.unassignedQuantity})
                                 </span>
                               </div>
@@ -569,8 +569,8 @@ export default function ColorAssignmentModal({
                       <TagIcon className="h-5 w-5 text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white">تحديد كميات الألوان</h3>
-                      <p className="text-gray-400 text-sm">الفرع: {selectedBranch.branchName}</p>
+                      <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">تحديد كميات الألوان</h3>
+                      <p className="text-[var(--dash-text-muted)] text-sm">الفرع: {selectedBranch.branchName}</p>
                     </div>
                   </div>
                   
@@ -580,7 +580,7 @@ export default function ColorAssignmentModal({
                       setSelectedBranch(null)
                       setColorAssignments({})
                     }}
-                    className="px-4 py-2 text-gray-400 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+                    className="px-4 py-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)] rounded transition-colors"
                   >
                     تغيير الفرع
                   </button>
@@ -622,7 +622,7 @@ export default function ColorAssignmentModal({
                     }`}>
                       {getRemainingQuantity()}
                     </div>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-[var(--dash-text-secondary)] text-sm">
                       من أصل {selectedBranch.unassignedQuantity} غير محدد
                     </p>
                     
@@ -636,11 +636,11 @@ export default function ColorAssignmentModal({
                         ⚠️ كمية قليلة متبقية
                       </div>
                     ) : (
-                      <div className="mt-2 text-gray-400 text-sm">
+                      <div className="mt-2 text-[var(--dash-text-muted)] text-sm">
                         💡 حدد الألوان للكميات المتبقية
                       </div>
                     )}
-                    <div className="mt-3 space-y-1 text-xs text-gray-400">
+                    <div className="mt-3 space-y-1 text-xs text-[var(--dash-text-muted)]">
                       <div className="flex items-center justify-center gap-4">
                         <div className="flex items-center gap-1">
                           <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
@@ -659,11 +659,11 @@ export default function ColorAssignmentModal({
                   
                   {/* Progress Bar */}
                   <div className="mt-4">
-                    <div className="flex justify-between items-center text-xs text-gray-400 mb-1">
+                    <div className="flex justify-between items-center text-xs text-[var(--dash-text-muted)] mb-1">
                       <span>محدد حالياً: {getTotalAssigned()}</span>
                       <span>متبقي: {selectedBranch.unassignedQuantity - getTotalAssigned()}</span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-[var(--dash-bg-raised)] rounded-full h-2">
                       <div 
                         className={`h-2 rounded-full transition-all duration-500 ${
                           getRemainingQuantity() === 0 
@@ -683,18 +683,18 @@ export default function ColorAssignmentModal({
                 {/* Color Assignment Form */}
                 {productColors.length === 0 ? (
                   <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-gray-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <TagIcon className="h-8 w-8 text-gray-400" />
+                    <div className="w-16 h-16 bg-[var(--dash-bg-overlay)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <TagIcon className="h-8 w-8 text-[var(--dash-text-muted)]" />
                     </div>
-                    <p className="text-gray-400 text-lg mb-2">لا توجد ألوان محددة لهذا المنتج</p>
-                    <p className="text-gray-500 text-sm">يجب إضافة الألوان أولاً في صفحة تحرير المنتج</p>
+                    <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد ألوان محددة لهذا المنتج</p>
+                    <p className="text-[var(--dash-text-disabled)] text-sm">يجب إضافة الألوان أولاً في صفحة تحرير المنتج</p>
                     
                     {/* Debug Info */}
-                    <div className="mt-6 bg-gray-800/50 rounded-lg p-4 text-xs text-left">
-                      <p className="text-gray-300 mb-2">Debug Info:</p>
-                      <p className="text-gray-400">Product ID: {product.id}</p>
-                      <p className="text-gray-400">Description: {product.description || 'null'}</p>
-                      <p className="text-gray-400">ProductColors: {JSON.stringify(product.productColors)}</p>
+                    <div className="mt-6 bg-[var(--dash-bg-base)]/50 rounded-lg p-4 text-xs text-left">
+                      <p className="text-[var(--dash-text-secondary)] mb-2">Debug Info:</p>
+                      <p className="text-[var(--dash-text-muted)]">Product ID: {product.id}</p>
+                      <p className="text-[var(--dash-text-muted)]">Description: {product.description || 'null'}</p>
+                      <p className="text-[var(--dash-text-muted)]">ProductColors: {JSON.stringify(product.productColors)}</p>
                     </div>
 
                     {/* Add Default Colors Button for Testing */}
@@ -711,35 +711,35 @@ export default function ColorAssignmentModal({
                         console.log('Setting test colors:', defaultTestColors);
                         setTestColors(defaultTestColors);
                       }}
-                      className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                      className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
                     >
                       استخدام ألوان تجريبية (للاختبار)
                     </button>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <h4 className="text-white font-medium">ألوان المنتج المتاحة:</h4>
+                    <h4 className="text-[var(--dash-text-primary)] font-medium">ألوان المنتج المتاحة:</h4>
                     
                     {productColors.map((color: ProductColor) => (
-                      <div key={color.name} className="bg-[#374151] rounded-lg p-4 border border-[#4A5568]">
+                      <div key={color.name} className="bg-[var(--dash-bg-raised)] rounded-lg p-4 border border-[var(--dash-border-default)]">
                         <div className="space-y-4">
                           {/* Color Info and Quantity Controls */}
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
                                 <div 
-                                  className="w-8 h-8 rounded-full border border-gray-500"
+                                  className="w-8 h-8 rounded-full border border-[var(--dash-border-default)]"
                                   style={{ backgroundColor: color.color }}
                                 />
                                 <div>
-                                  <span className="text-white font-medium">{color.name}</span>
+                                  <span className="text-[var(--dash-text-primary)] font-medium">{color.name}</span>
                                   {(colorAssignments[color.name] || 0) > 0 && (
                                     <div className="space-y-1">
                                       <div className="flex items-center gap-2 text-xs">
                                         <span className="text-blue-400">
                                           سيُضاف: {colorAssignments[color.name] || 0}
                                         </span>
-                                        <span className="text-gray-500">•</span>
+                                        <span className="text-[var(--dash-text-disabled)]">•</span>
                                         <span className="text-orange-400">
                                           متبقي: {getRemainingQuantity()}
                                         </span>
@@ -782,7 +782,7 @@ export default function ColorAssignmentModal({
                               <div className="flex items-center gap-2">
                                 <button
                                   onClick={() => handleColorQuantityChange(color.name, (colorAssignments[color.name] || 0) - 1)}
-                                  className="w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-colors"
+                                  className="w-8 h-8 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center transition-colors"
                                   disabled={colorAssignments[color.name] <= 0}
                                 >
                                   -
@@ -792,14 +792,14 @@ export default function ColorAssignmentModal({
                                   type="number"
                                   value={colorAssignments[color.name] || 0}
                                   onChange={(e) => handleColorQuantityChange(color.name, parseInt(e.target.value) || 0)}
-                                  className="w-20 px-2 py-1 bg-[#2B3544] border border-gray-600 rounded text-white text-center"
+                                  className="w-20 px-2 py-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-center"
                                   min="0"
                                   max={getRemainingQuantity() + (colorAssignments[color.name] || 0)}
                                 />
                                 
                                 <button
                                   onClick={() => handleColorQuantityChange(color.name, (colorAssignments[color.name] || 0) + 1)}
-                                  className="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center transition-colors"
+                                  className="w-8 h-8 bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center transition-colors"
                                   disabled={getRemainingQuantity() <= 0}
                                 >
                                   +
@@ -809,7 +809,7 @@ export default function ColorAssignmentModal({
                             
                             {/* Progress Bar for this Color */}
                             {(colorAssignments[color.name] || 0) > 0 && (
-                              <div className="bg-gray-700/50 rounded-full h-1">
+                              <div className="bg-[var(--dash-bg-raised)]/50 rounded-full h-1">
                                 <div 
                                   className="h-1 rounded-full transition-all duration-300"
                                   style={{ 
@@ -823,13 +823,13 @@ export default function ColorAssignmentModal({
 
                           {/* Image Section - Only show if quantity > 0 */}
                           {colorAssignments[color.name] > 0 && (
-                            <div className="border-t border-gray-600/50 pt-3">
+                            <div className="border-t border-[var(--dash-border-default)]/50 pt-3">
                               <div className="flex items-center justify-between">
-                                <span className="text-gray-300 text-sm">صورة اللون:</span>
+                                <span className="text-[var(--dash-text-secondary)] text-sm">صورة اللون:</span>
                                 
                                 {hasColorImage(color) ? (
                                   <div className="flex items-center gap-2">
-                                    <div className="w-12 h-12 bg-[#2B3544] rounded-lg overflow-hidden border border-gray-600">
+                                    <div className="w-12 h-12 bg-[var(--dash-bg-surface)] rounded-lg overflow-hidden border border-[var(--dash-border-default)]">
                                       <img
                                         src={getColorImage(color)}
                                         alt={color.name}
@@ -841,7 +841,7 @@ export default function ColorAssignmentModal({
                                         }}
                                       />
                                       <div className="hidden w-full h-full flex items-center justify-center">
-                                        <PhotoIcon className="h-6 w-6 text-gray-500" />
+                                        <PhotoIcon className="h-6 w-6 text-[var(--dash-text-disabled)]" />
                                       </div>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -856,7 +856,7 @@ export default function ColorAssignmentModal({
                                             input.onchange = (e) => handleImageUpload(color.name, e as any)
                                             input.click()
                                           }}
-                                          className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors"
+                                          className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-xs rounded transition-colors"
                                         >
                                           تغيير
                                         </button>
@@ -873,7 +873,7 @@ export default function ColorAssignmentModal({
                                       input.onchange = (e) => handleImageUpload(color.name, e as any)
                                       input.click()
                                     }}
-                                    className="flex items-center gap-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded transition-colors animate-pulse"
+                                    className="flex items-center gap-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] text-xs rounded transition-colors animate-pulse"
                                   >
                                     <PlusIcon className="h-3 w-3" />
                                     إضافة صورة (مطلوبة)
@@ -922,8 +922,8 @@ export default function ColorAssignmentModal({
                         </div>
                         
                         <div className="flex justify-between items-center text-sm">
-                          <span className="text-gray-400">إجمالي الكمية:</span>
-                          <span className="text-gray-300">
+                          <span className="text-[var(--dash-text-muted)]">إجمالي الكمية:</span>
+                          <span className="text-[var(--dash-text-secondary)]">
                             {selectedBranch.unassignedQuantity}
                           </span>
                         </div>
@@ -987,10 +987,10 @@ export default function ColorAssignmentModal({
 
                 {/* Action Buttons */}
                 {productColors.length > 0 && (
-                  <div className="flex gap-3 justify-end mt-8 pt-6 border-t border-[#4A5568]">
+                  <div className="flex gap-3 justify-end mt-8 pt-6 border-t border-[var(--dash-border-default)]">
                     <button
                       onClick={onClose}
-                      className="px-6 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+                      className="px-6 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)] rounded transition-colors"
                     >
                       إلغاء
                     </button>
@@ -999,8 +999,8 @@ export default function ColorAssignmentModal({
                       disabled={!canSave() || isSaving}
                       className={`px-6 py-2 rounded transition-colors flex items-center gap-2 ${
                         canSave() && !isSaving
-                          ? 'bg-green-600 hover:bg-green-700 text-white'
-                          : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
+                          ? 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
+                          : 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)] cursor-not-allowed'
                       }`}
                     >
                       {isSaving ? (

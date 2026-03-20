@@ -106,7 +106,7 @@ const POSSearchInput = memo(forwardRef<POSSearchInputRef, POSSearchInputProps>(f
       >
         {getModeLabel()}
       </div>
-      <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+      <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
       <input
         ref={inputRef}
         type="text"
@@ -115,8 +115,8 @@ const POSSearchInput = memo(forwardRef<POSSearchInputRef, POSSearchInputProps>(f
         onKeyDown={handleKeyDown}
         placeholder={getPlaceholder()}
         className={isMobile
-          ? "w-full pl-16 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5DADE2] focus:border-transparent"
-          : "w-full pl-16 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ? "w-full pl-16 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent"
+          : "w-full pl-16 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500"
         }
         style={isMobile ? { fontSize: "16px" } : undefined}
       />

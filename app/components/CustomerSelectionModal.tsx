@@ -234,31 +234,31 @@ export default function CustomerSelectionModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)]">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-600">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <UserIcon className="h-6 w-6 text-blue-400" />
                     اختيار عميل
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
                 </div>
 
                 {/* Search */}
-                <div className="p-4 border-b border-gray-600">
+                <div className="p-4 border-b border-[var(--dash-border-default)]">
                   <div className="relative">
-                    <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[var(--dash-text-muted)]" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="البحث عن عميل بالاسم أو الهاتف..."
-                      className="w-full pl-4 pr-12 py-3 bg-[#2B3544] border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-4 pr-12 py-3 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-xl text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent"
                       autoFocus
                     />
                   </div>
@@ -273,7 +273,7 @@ export default function CustomerSelectionModal({
                           className={`px-3 py-1.5 rounded-lg text-sm transition-all flex items-center gap-1 ${
                             selectedGroup === group.id
                               ? "bg-blue-600 text-white"
-                              : "bg-[#2B3544] text-gray-300 hover:bg-[#374151]"
+                              : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-raised)]"
                           }`}
                         >
                           <UsersIcon className="h-3.5 w-3.5" />
@@ -282,7 +282,7 @@ export default function CustomerSelectionModal({
                             className={`text-xs px-1.5 py-0.5 rounded-full ${
                               selectedGroup === group.id
                                 ? "bg-blue-700"
-                                : "bg-gray-600"
+                                : "bg-[var(--dash-bg-overlay)]"
                             }`}
                           >
                             {group.count}
@@ -298,7 +298,7 @@ export default function CustomerSelectionModal({
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
-                      <p className="text-gray-400">جاري تحميل العملاء...</p>
+                      <p className="text-[var(--dash-text-muted)]">جاري تحميل العملاء...</p>
                     </div>
                   ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12">
@@ -317,15 +317,15 @@ export default function CustomerSelectionModal({
                         <button
                           key={customer.id}
                           onClick={() => handleSelect(customer)}
-                          className={`w-full flex items-center justify-between p-4 rounded-xl transition-all border-2 hover:border-gray-500 ${
+                          className={`w-full flex items-center justify-between p-4 rounded-xl transition-all border-2 hover:border-[var(--dash-border-default)] ${
                             isDefaultCustomer(customer)
                               ? "bg-green-500/10 border-green-500/30 hover:bg-green-500/20"
-                              : "bg-[#2B3544] border-transparent hover:bg-[#374151]"
-                          } text-gray-200`}
+                              : "bg-[var(--dash-bg-surface)] border-transparent hover:bg-[var(--dash-bg-raised)]"
+                          } text-[var(--dash-text-secondary)]`}
                         >
                           <div className="flex items-center gap-3">
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              isDefaultCustomer(customer) ? "bg-green-500/20" : "bg-[#374151]"
+                              isDefaultCustomer(customer) ? "bg-green-500/20" : "bg-[var(--dash-bg-raised)]"
                             }`}>
                               <UserIcon className={`h-5 w-5 ${isDefaultCustomer(customer) ? "text-green-400" : ""}`} />
                             </div>
@@ -343,10 +343,10 @@ export default function CustomerSelectionModal({
                                   />
                                 )}
                               </div>
-                              <div className="text-sm text-gray-400 flex items-center gap-3">
+                              <div className="text-sm text-[var(--dash-text-muted)] flex items-center gap-3">
                                 {customer.phone && <span>{customer.phone}</span>}
                                 {customer.city && (
-                                  <span className="text-gray-500">
+                                  <span className="text-[var(--dash-text-disabled)]">
                                     {customer.city}
                                   </span>
                                 )}
@@ -360,7 +360,7 @@ export default function CustomerSelectionModal({
                                   ? "text-green-400"
                                   : customer.calculated_balance < 0
                                   ? "text-red-400"
-                                  : "text-gray-400"
+                                  : "text-[var(--dash-text-muted)]"
                               }`}
                             >
                               {customer.calculated_balance.toLocaleString()}{" "}
@@ -377,9 +377,9 @@ export default function CustomerSelectionModal({
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <UserIcon className="h-12 w-12 text-gray-500 mb-4" />
-                      <p className="text-gray-400 mb-2">لا توجد عملاء</p>
-                      <p className="text-gray-500 text-sm">
+                      <UserIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mb-4" />
+                      <p className="text-[var(--dash-text-muted)] mb-2">لا توجد عملاء</p>
+                      <p className="text-[var(--dash-text-disabled)] text-sm">
                         جرب تغيير معايير البحث
                       </p>
                     </div>
@@ -387,8 +387,8 @@ export default function CustomerSelectionModal({
                 </div>
 
                 {/* Footer Note */}
-                <div className="p-4 border-t border-gray-600 bg-[#2B3544]">
-                  <p className="text-sm text-gray-400 text-center">
+                <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)]">
+                  <p className="text-sm text-[var(--dash-text-muted)] text-center">
                     اضغط على العميل لاختياره • إجمالي العملاء:{" "}
                     {filteredCustomers.length}
                   </p>

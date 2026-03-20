@@ -469,13 +469,13 @@ export default function BackupSettings() {
   return (
     <div className="space-y-6">
       {/* Section A: Export */}
-      <div className="bg-[#1F2937] rounded-lg p-6 border border-gray-700">
+      <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 border border-[var(--dash-border-subtle)]">
         <div className="flex items-center gap-3 mb-4">
           <ArrowDownTrayIcon className="w-6 h-6 text-blue-400" />
-          <h3 className="text-white text-lg font-bold">تصدير نسخة احتياطية</h3>
+          <h3 className="text-[var(--dash-text-primary)] text-lg font-bold">تصدير نسخة احتياطية</h3>
         </div>
 
-        <p className="text-gray-400 text-sm mb-4">
+        <p className="text-[var(--dash-text-muted)] text-sm mb-4">
           إنشاء نسخة احتياطية كاملة من قاعدة البيانات. سيتم تحميل ملف JSON يحتوي على جميع البيانات.
         </p>
 
@@ -486,18 +486,18 @@ export default function BackupSettings() {
               type="checkbox"
               checked={includeWhatsapp}
               onChange={(e) => setIncludeWhatsapp(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-600 bg-[#2B3544] text-blue-500 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] text-blue-500 focus:ring-blue-500"
             />
-            <span className="text-gray-300 text-sm">تضمين رسائل WhatsApp</span>
+            <span className="text-[var(--dash-text-secondary)] text-sm">تضمين رسائل WhatsApp</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={includeAuth}
               onChange={(e) => setIncludeAuth(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-600 bg-[#2B3544] text-blue-500 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] text-blue-500 focus:ring-blue-500"
             />
-            <span className="text-gray-300 text-sm">تضمين جلسات المصادقة (sessions)</span>
+            <span className="text-[var(--dash-text-secondary)] text-sm">تضمين جلسات المصادقة (sessions)</span>
           </label>
         </div>
 
@@ -505,7 +505,7 @@ export default function BackupSettings() {
         <button
           onClick={handleExport}
           disabled={isOperationRunning}
-          className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
         >
           {isExporting ? (
             <>
@@ -533,19 +533,19 @@ export default function BackupSettings() {
 
       {/* Progress bar (shared for export and import) */}
       {showProgress && (
-        <div className="bg-[#1F2937] rounded-lg p-4 border border-gray-700">
+        <div className="bg-[var(--dash-bg-base)] rounded-lg p-4 border border-[var(--dash-border-subtle)]">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-300 text-sm">{progress.phase}</span>
+            <span className="text-[var(--dash-text-secondary)] text-sm">{progress.phase}</span>
             <span className="text-blue-400 text-sm font-mono">{progress.progress}%</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-2.5">
+          <div className="w-full bg-[var(--dash-bg-raised)] rounded-full h-2.5">
             <div
               className="bg-blue-500 h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${progress.progress}%` }}
             />
           </div>
           {progress.currentTable && (
-            <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
+            <div className="mt-2 flex items-center justify-between text-xs text-[var(--dash-text-disabled)]">
               <span>{progress.currentTable}</span>
               <span>{progress.tablesCompleted} / {progress.tablesTotal} جدول</span>
             </div>
@@ -554,10 +554,10 @@ export default function BackupSettings() {
       )}
 
       {/* Section B: Import */}
-      <div className="bg-[#1F2937] rounded-lg p-6 border border-gray-700">
+      <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 border border-[var(--dash-border-subtle)]">
         <div className="flex items-center gap-3 mb-4">
           <ArrowUpTrayIcon className="w-6 h-6 text-green-400" />
-          <h3 className="text-white text-lg font-bold">استيراد نسخة احتياطية</h3>
+          <h3 className="text-[var(--dash-text-primary)] text-lg font-bold">استيراد نسخة احتياطية</h3>
         </div>
 
         {/* Warning */}
@@ -577,20 +577,20 @@ export default function BackupSettings() {
           className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
             isDragging
               ? 'border-blue-400 bg-blue-900/20'
-              : 'border-gray-600 hover:border-gray-500 hover:bg-[#2B3544]/50'
+              : 'border-[var(--dash-border-default)] hover:border-gray-500 hover:bg-[var(--dash-bg-surface)]/50'
           }`}
         >
-          <DocumentTextIcon className="w-10 h-10 text-gray-500 mx-auto mb-3" />
+          <DocumentTextIcon className="w-10 h-10 text-[var(--dash-text-disabled)] mx-auto mb-3" />
           {selectedFile ? (
             <div>
-              <p className="text-white text-sm font-medium">{selectedFile.name}</p>
-              <p className="text-gray-500 text-xs mt-1">
+              <p className="text-[var(--dash-text-primary)] text-sm font-medium">{selectedFile.name}</p>
+              <p className="text-[var(--dash-text-disabled)] text-xs mt-1">
                 {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
               </p>
             </div>
           ) : (
             <div>
-              <p className="text-gray-400 text-sm">اسحب ملف النسخة الاحتياطية هنا</p>
+              <p className="text-[var(--dash-text-muted)] text-sm">اسحب ملف النسخة الاحتياطية هنا</p>
               <p className="text-gray-600 text-xs mt-1">أو اضغط لاختيار ملف (.json)</p>
             </div>
           )}
@@ -608,7 +608,7 @@ export default function BackupSettings() {
 
         {/* Validation loading */}
         {isValidating && (
-          <div className="mt-4 flex items-center gap-2 text-gray-400 text-sm">
+          <div className="mt-4 flex items-center gap-2 text-[var(--dash-text-muted)] text-sm">
             <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -622,15 +622,15 @@ export default function BackupSettings() {
           <div className="mt-4 space-y-3">
             {/* Summary */}
             {validation.summary && (
-              <div className="p-3 bg-[#2B3544] rounded-lg space-y-1">
+              <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg space-y-1">
                 <div className="flex items-center gap-2 text-sm">
                   <InformationCircleIcon className="w-4 h-4 text-blue-400" />
-                  <span className="text-gray-300">تاريخ النسخة: {formatDate(validation.summary.created_at)}</span>
+                  <span className="text-[var(--dash-text-secondary)]">تاريخ النسخة: {formatDate(validation.summary.created_at)}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="text-gray-400 mr-6">المنشئ: {validation.summary.created_by}</span>
+                  <span className="text-[var(--dash-text-muted)] mr-6">المنشئ: {validation.summary.created_by}</span>
                 </div>
-                <div className="flex items-center gap-4 text-sm text-gray-400 mr-6">
+                <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)] mr-6">
                   <span>{validation.summary.table_count} جدول</span>
                   <span>{validation.summary.total_rows.toLocaleString('ar-EG')} صف</span>
                 </div>
@@ -666,7 +666,7 @@ export default function BackupSettings() {
               <button
                 onClick={() => setShowConfirm(true)}
                 disabled={isOperationRunning}
-                className="mt-2 flex items-center gap-2 px-6 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors text-sm font-medium"
+                className="mt-2 flex items-center gap-2 px-6 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
               >
                 <ArrowUpTrayIcon className="w-4 h-4" />
                 استعادة النسخة
@@ -683,7 +683,7 @@ export default function BackupSettings() {
                   </span>
                 </div>
                 <div>
-                  <label className="text-gray-400 text-xs block mb-1">
+                  <label className="text-[var(--dash-text-muted)] text-xs block mb-1">
                     اكتب &quot;تأكيد&quot; للمتابعة
                   </label>
                   <input
@@ -691,7 +691,7 @@ export default function BackupSettings() {
                     value={confirmText}
                     onChange={(e) => setConfirmText(e.target.value)}
                     placeholder='تأكيد'
-                    className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm text-right"
+                    className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm text-right"
                     dir="rtl"
                   />
                 </div>
@@ -699,13 +699,13 @@ export default function BackupSettings() {
                   <button
                     onClick={handleImport}
                     disabled={confirmText !== 'تأكيد'}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded transition-colors text-sm"
                   >
                     تأكيد الاستعادة
                   </button>
                   <button
                     onClick={() => { setShowConfirm(false); setConfirmText(''); }}
-                    className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors text-sm"
+                    className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded transition-colors text-sm"
                   >
                     إلغاء
                   </button>
@@ -736,8 +736,8 @@ export default function BackupSettings() {
 
             {/* Failed tables */}
             {importResult.results.filter((r) => r.status !== 'ok').length > 0 && (
-              <div className="p-3 bg-[#2B3544] rounded-lg space-y-1 max-h-40 overflow-y-auto scrollbar-hide">
-                <p className="text-gray-400 text-xs font-medium mb-2">تفاصيل المشاكل:</p>
+              <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg space-y-1 max-h-40 overflow-y-auto scrollbar-hide">
+                <p className="text-[var(--dash-text-muted)] text-xs font-medium mb-2">تفاصيل المشاكل:</p>
                 {importResult.results
                   .filter((r) => r.status !== 'ok')
                   .map((r) => (
@@ -745,18 +745,18 @@ export default function BackupSettings() {
                       <span className={r.status === 'error' ? 'text-red-400' : 'text-yellow-400'}>
                         {r.table}
                       </span>
-                      <span className="text-gray-500">
+                      <span className="text-[var(--dash-text-disabled)]">
                         ({r.inserted}/{r.expected})
                       </span>
-                      {r.error && <span className="text-gray-600 truncate">{r.error}</span>}
+                      {r.error && <span className="text-[var(--dash-text-disabled)] truncate">{r.error}</span>}
                     </div>
                   ))}
               </div>
             )}
 
             {/* Verification summary */}
-            <div className="p-3 bg-[#2B3544] rounded-lg">
-              <p className="text-gray-400 text-xs font-medium mb-2">نتائج التحقق:</p>
+            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+              <p className="text-[var(--dash-text-muted)] text-xs font-medium mb-2">نتائج التحقق:</p>
               <div className="flex items-center gap-4 text-sm">
                 <span className="text-green-400">
                   ✓ {importResult.verification.filter((v) => v.match).length} متطابق
@@ -773,12 +773,12 @@ export default function BackupSettings() {
       </div>
 
       {/* Section C: Info */}
-      <div className="bg-[#1F2937] rounded-lg p-6 border border-gray-700">
+      <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 border border-[var(--dash-border-subtle)]">
         <div className="flex items-center gap-3 mb-3">
-          <InformationCircleIcon className="w-6 h-6 text-gray-400" />
-          <h3 className="text-white text-lg font-bold">معلومات</h3>
+          <InformationCircleIcon className="w-6 h-6 text-[var(--dash-text-muted)]" />
+          <h3 className="text-[var(--dash-text-primary)] text-lg font-bold">معلومات</h3>
         </div>
-        <ul className="space-y-2 text-sm text-gray-400">
+        <ul className="space-y-2 text-sm text-[var(--dash-text-muted)]">
           <li>• النسخة الاحتياطية تشمل جميع جداول قاعدة البيانات (81 جدول)</li>
           <li>• الصور والفيديوهات لا يتم تضمينها - فقط روابطها (URLs)</li>
           <li>• حجم النسخة المتوقع: 5-15 ميجابايت</li>

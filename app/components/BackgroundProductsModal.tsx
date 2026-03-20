@@ -86,10 +86,10 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
   const completedCount = tasks.filter(t => t.status === 'completed').length
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-[#2B3544] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-2xl max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-600">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-3">
             <CloudArrowUpIcon className="h-6 w-6 text-blue-400" />
             <h2 className="text-lg font-semibold text-white">عمليات المنتجات في الخلفية</h2>
@@ -101,12 +101,12 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
             {completedCount > 0 && (
               <button
                 onClick={dismissAllCompleted}
-                className="px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
+                className="px-3 py-1.5 text-sm text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-raised)] rounded-lg transition-colors"
               >
                 مسح المكتملة
               </button>
             )}
-            <button onClick={onClose} className="p-2 text-gray-400 hover:text-white">
+            <button onClick={onClose} className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]">
               <XMarkIcon className="h-5 w-5" />
             </button>
           </div>
@@ -115,7 +115,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
         {/* Content */}
         <div className="p-4 overflow-y-auto max-h-[60vh]">
           {tasks.length === 0 ? (
-            <div className="text-center py-8 text-gray-400">
+            <div className="text-center py-8 text-[var(--dash-text-muted)]">
               <CloudArrowUpIcon className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p>لا توجد عمليات في الخلفية</p>
             </div>
@@ -133,7 +133,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
                 return (
                   <div
                     key={task.id}
-                    className="p-4 rounded-lg bg-[#1F2937] border border-gray-600"
+                    className="p-4 rounded-lg bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)]"
                   >
                     <div className="flex items-start justify-between">
                       <div className="space-y-2 flex-1 min-w-0">
@@ -150,7 +150,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
 
                         {/* Progress bar for active tasks */}
                         {task.status !== 'completed' && task.status !== 'failed' && task.status !== 'queued' && (
-                          <div className="w-full bg-gray-700 rounded-full h-1.5">
+                          <div className="w-full bg-[var(--dash-bg-raised)] rounded-full h-1.5">
                             <div
                               className="bg-blue-500 h-1.5 rounded-full transition-all duration-500"
                               style={{ width: `${task.progress}%` }}
@@ -178,7 +178,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
                         {(task.status === 'completed' || task.status === 'failed') && (
                           <button
                             onClick={() => dismissTask(task.id)}
-                            className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                            className="p-1.5 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-raised)] rounded transition-colors"
                             title="إزالة"
                           >
                             <TrashIcon className="h-4 w-4" />
@@ -194,8 +194,8 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-600 bg-[#1F2937]">
-          <div className="flex items-center justify-between text-sm text-gray-400">
+        <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-base)]">
+          <div className="flex items-center justify-between text-sm text-[var(--dash-text-muted)]">
             <span>
               {tasks.some(t => t.status !== 'completed' && t.status !== 'failed') && (
                 <span className="text-blue-400">جاري العمل... لا تغلق المتصفح</span>

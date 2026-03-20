@@ -38,8 +38,8 @@ export default function DashboardLayout({
   // This prevents content flash during hydration
   if (status === 'loading') {
     return (
-      <div className="h-screen bg-[#2B3544] flex items-center justify-center">
-        <div className="text-white text-xl">جاري التحميل...</div>
+      <div className="h-screen bg-dash-base flex items-center justify-center">
+        <div className="text-[var(--dash-text-primary)] text-xl">جاري التحميل...</div>
       </div>
     );
   }

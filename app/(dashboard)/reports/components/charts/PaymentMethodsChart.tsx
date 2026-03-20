@@ -43,17 +43,17 @@ export default function PaymentMethodsChart({ dateFilter, height = 300 }: Paymen
 
   if (loading) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <div className="h-8 bg-gray-600 rounded w-1/3 mb-4"></div>
-        <div className="animate-pulse bg-gray-600 rounded" style={{ height }}></div>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <div className="h-8 bg-[var(--dash-bg-overlay)] rounded w-1/3 mb-4"></div>
+        <div className="animate-pulse bg-[var(--dash-bg-overlay)] rounded" style={{ height }}></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <h3 className="text-white font-semibold mb-4 text-right">طرق الدفع</h3>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">طرق الدفع</h3>
         <div className="flex items-center justify-center text-red-400" style={{ height }}>
           {error}
         </div>
@@ -63,9 +63,9 @@ export default function PaymentMethodsChart({ dateFilter, height = 300 }: Paymen
 
   if (data.length === 0) {
     return (
-      <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-        <h3 className="text-white font-semibold mb-4 text-right">طرق الدفع</h3>
-        <div className="flex items-center justify-center text-gray-400" style={{ height }}>
+      <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+        <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">طرق الدفع</h3>
+        <div className="flex items-center justify-center text-[var(--dash-text-muted)]" style={{ height }}>
           لا توجد بيانات للفترة المحددة
         </div>
       </div>
@@ -85,10 +85,10 @@ export default function PaymentMethodsChart({ dateFilter, height = 300 }: Paymen
             direction: 'rtl',
           }}
         >
-          <p className="text-white font-semibold mb-2">{item.methodAr}</p>
-          <p className="text-gray-300">الإجمالي: {formatCurrencyAr(item.totalAmount)}</p>
-          <p className="text-gray-300">عدد العمليات: {item.count}</p>
-          <p className="text-gray-300">النسبة: {formatPercentage(item.percentage)}</p>
+          <p className="text-[var(--dash-text-primary)] font-semibold mb-2">{item.methodAr}</p>
+          <p className="text-[var(--dash-text-secondary)]">الإجمالي: {formatCurrencyAr(item.totalAmount)}</p>
+          <p className="text-[var(--dash-text-secondary)]">عدد العمليات: {item.count}</p>
+          <p className="text-[var(--dash-text-secondary)]">النسبة: {formatPercentage(item.percentage)}</p>
         </div>
       );
     }
@@ -105,7 +105,7 @@ export default function PaymentMethodsChart({ dateFilter, height = 300 }: Paymen
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-gray-300 text-sm">{entry.value}</span>
+            <span className="text-[var(--dash-text-secondary)] text-sm">{entry.value}</span>
           </div>
         ))}
       </div>
@@ -116,10 +116,10 @@ export default function PaymentMethodsChart({ dateFilter, height = 300 }: Paymen
   const total = data.reduce((sum, d) => sum + d.totalAmount, 0);
 
   return (
-    <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
+    <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-gray-400 text-sm">الإجمالي: {formatCurrencyAr(total)}</span>
-        <h3 className="text-white font-semibold text-right">طرق الدفع</h3>
+        <span className="text-[var(--dash-text-muted)] text-sm">الإجمالي: {formatCurrencyAr(total)}</span>
+        <h3 className="text-[var(--dash-text-primary)] font-semibold text-right">طرق الدفع</h3>
       </div>
       <ResponsiveContainer width="100%" height={height}>
         <PieChart>

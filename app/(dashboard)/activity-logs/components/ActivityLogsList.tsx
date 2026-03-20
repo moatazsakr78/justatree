@@ -75,13 +75,13 @@ export default function ActivityLogsList({
     return (
       <div className="space-y-2">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="animate-pulse flex items-center gap-3 p-3 bg-[#2B3544] rounded-lg">
-            <div className="w-9 h-9 bg-gray-600 rounded-full flex-shrink-0"></div>
+          <div key={i} className="animate-pulse flex items-center gap-3 p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+            <div className="w-9 h-9 bg-[var(--dash-bg-overlay)] rounded-full flex-shrink-0"></div>
             <div className="flex-1">
-              <div className="h-4 bg-gray-600 rounded w-3/4 mb-2"></div>
-              <div className="h-3 bg-gray-600 rounded w-1/3"></div>
+              <div className="h-4 bg-[var(--dash-bg-overlay)] rounded w-3/4 mb-2"></div>
+              <div className="h-3 bg-[var(--dash-bg-overlay)] rounded w-1/3"></div>
             </div>
-            <div className="h-5 bg-gray-600 rounded w-16"></div>
+            <div className="h-5 bg-[var(--dash-bg-overlay)] rounded w-16"></div>
           </div>
         ))}
       </div>
@@ -90,7 +90,7 @@ export default function ActivityLogsList({
 
   if (logs.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+      <div className="flex flex-col items-center justify-center py-16 text-[var(--dash-text-muted)]">
         <PencilSquareIcon className="w-16 h-16 mb-4 opacity-30" />
         <p className="text-lg">لا توجد سجلات نشاط</p>
         <p className="text-sm mt-1">لم يتم تسجيل أي نشاط بعد</p>
@@ -109,14 +109,14 @@ export default function ActivityLogsList({
           return (
             <div
               key={log.id}
-              className="flex items-center gap-3 p-3 bg-[#2B3544] rounded-lg hover:bg-[#323d4d] transition-colors"
+              className="flex items-center gap-3 p-3 bg-[var(--dash-bg-surface)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
             >
               <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${config.bg}`}>
                 <Icon className={`w-5 h-5 ${config.color}`} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white text-sm truncate">{log.description}</p>
-                <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
+                <p className="text-[var(--dash-text-primary)] text-sm truncate">{log.description}</p>
+                <div className="flex items-center gap-2 text-xs text-[var(--dash-text-muted)] mt-0.5">
                   <span className="truncate">{log.user_name}</span>
                   <span>•</span>
                   <span className="whitespace-nowrap">{formatRelativeTime(log.created_at)}</span>
@@ -136,7 +136,7 @@ export default function ActivityLogsList({
           <button
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronRightIcon className="w-5 h-5" />
           </button>
@@ -160,8 +160,8 @@ export default function ActivityLogsList({
                   onClick={() => onPageChange(pageNum)}
                   className={`w-8 h-8 text-sm rounded-lg transition-colors ${
                     page === pageNum
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                      ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                      : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                   }`}
                 >
                   {pageNum}
@@ -173,7 +173,7 @@ export default function ActivityLogsList({
           <button
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronLeftIcon className="w-5 h-5" />
           </button>

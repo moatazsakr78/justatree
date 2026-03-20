@@ -137,7 +137,7 @@ export default function PaymentMethodsPage() {
   )
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       
@@ -145,13 +145,13 @@ export default function PaymentMethodsPage() {
       <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
       
       {/* Main Content Container */}
-      <div className="h-full pt-12 overflow-y-auto scrollbar-hide bg-pos-dark text-white" dir="rtl">
+      <div className="h-full pt-12 overflow-y-auto scrollbar-hide bg-pos-dark text-[var(--dash-text-primary)]" dir="rtl">
         {/* Header */}
-        <div className="bg-pos-darker p-4 flex items-center justify-between border-b border-gray-700">
+        <div className="bg-pos-darker p-4 flex items-center justify-between border-b border-[var(--dash-border-subtle)]">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => router.push('/safes')}
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-purple-700 transition-colors"
+              className="px-4 py-2 bg-purple-600 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-purple-700 transition-colors"
             >
               <CreditCardIcon className="h-4 w-4" />
               الخزن
@@ -159,7 +159,7 @@ export default function PaymentMethodsPage() {
           </div>
           
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-medium text-gray-300">
+            <h1 className="text-xl font-medium text-[var(--dash-text-secondary)]">
               إدارة وعرض جميع طرق الدفع المتاحة
             </h1>
             <h1 className="text-xl font-bold">طرق الدفع</h1>
@@ -173,8 +173,8 @@ export default function PaymentMethodsPage() {
           <div className="bg-pos-darker rounded-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">إجمالي طرق الدفع</p>
-                <p className="text-2xl font-bold text-white mt-1">{paymentMethods.length}</p>
+                <p className="text-[var(--dash-text-muted)] text-sm">إجمالي طرق الدفع</p>
+                <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">{paymentMethods.length}</p>
               </div>
               <div className="text-blue-500 text-3xl">💳</div>
             </div>
@@ -184,8 +184,8 @@ export default function PaymentMethodsPage() {
           <div className="bg-pos-darker rounded-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">طرق الدفع النشطة</p>
-                <p className="text-2xl font-bold text-white mt-1">
+                <p className="text-[var(--dash-text-muted)] text-sm">طرق الدفع النشطة</p>
+                <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">
                   {paymentMethods.filter(method => method.is_active === true).length}
                 </p>
               </div>
@@ -197,8 +197,8 @@ export default function PaymentMethodsPage() {
           <div className="bg-pos-darker rounded-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">الطريقة الافتراضية</p>
-                <p className="text-lg font-bold text-white mt-1">
+                <p className="text-[var(--dash-text-muted)] text-sm">الطريقة الافتراضية</p>
+                <p className="text-lg font-bold text-[var(--dash-text-primary)] mt-1">
                   {paymentMethods.find(method => method.is_default === true)?.name || 'غير محدد'}
                 </p>
               </div>
@@ -213,7 +213,7 @@ export default function PaymentMethodsPage() {
             <div className="flex items-center gap-4">
               <button 
                 onClick={openAddModal}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-green-700 transition-colors"
+                className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-green-700 transition-colors"
               >
                 <PlusIcon className="h-4 w-4" />
                 إضافة طريقة دفع جديدة
@@ -226,9 +226,9 @@ export default function PaymentMethodsPage() {
                 placeholder="البحث في طرق الدفع..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-gray-700 text-white placeholder-gray-400 pl-10 pr-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-80"
+                className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 w-80"
               />
-              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--dash-text-muted)]" />
             </div>
           </div>
         </div>
@@ -236,7 +236,7 @@ export default function PaymentMethodsPage() {
         {/* Payment Methods Table */}
         <div className="mx-6 bg-pos-darker rounded-lg overflow-hidden">
           <table className="w-full text-sm text-right">
-            <thead className="bg-gray-700 text-gray-300">
+            <thead className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]">
               <tr>
                 <th className="p-3 text-right font-medium">#</th>
                 <th className="p-3 text-right font-medium">اسم طريقة الدفع</th>
@@ -251,15 +251,15 @@ export default function PaymentMethodsPage() {
                 filteredPaymentMethods.map((method, index) => (
                   <tr 
                     key={method.id}
-                    className="hover:bg-gray-700 transition-colors"
+                    className="hover:bg-[var(--dash-bg-overlay)] transition-colors"
                   >
-                    <td className="p-3 text-white font-medium">{index + 1}</td>
+                    <td className="p-3 text-[var(--dash-text-primary)] font-medium">{index + 1}</td>
                     <td className="p-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-sm">
+                        <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-[var(--dash-text-primary)] text-sm">
                           💳
                         </div>
-                        <span className="text-white font-medium">{method.name}</span>
+                        <span className="text-[var(--dash-text-primary)] font-medium">{method.name}</span>
                         {method.is_default === true && (
                           <span className="px-2 py-1 bg-purple-900 text-purple-300 rounded-full text-xs mr-2">
                             افتراضية
@@ -285,17 +285,17 @@ export default function PaymentMethodsPage() {
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         method.is_default === true 
                           ? 'bg-purple-900 text-purple-300' 
-                          : 'bg-gray-700 text-gray-400'
+                          : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-muted)]'
                       }`}>
                         {method.is_default === true ? 'نعم' : 'لا'}
                       </span>
                     </td>
-                    <td className="p-3 text-gray-400">{formatDate(method.created_at)}</td>
+                    <td className="p-3 text-[var(--dash-text-muted)]">{formatDate(method.created_at)}</td>
                     <td className="p-3">
                       <div className="flex items-center gap-2">
                         <button 
                           onClick={() => openEditModal(method)}
-                          className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-1"
+                          className="px-3 py-1 text-xs bg-blue-600 text-[var(--dash-text-primary)] rounded hover:bg-blue-700 transition-colors flex items-center gap-1"
                         >
                           <PencilIcon className="h-3 w-3" />
                           تعديل
@@ -303,7 +303,7 @@ export default function PaymentMethodsPage() {
                         {method.name.toLowerCase() !== 'cash' && (
                           <button 
                             onClick={() => handleDeletePaymentMethod(method)}
-                            className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center gap-1"
+                            className="px-3 py-1 text-xs bg-red-600 text-[var(--dash-text-primary)] rounded hover:bg-red-700 transition-colors flex items-center gap-1"
                           >
                             <TrashIcon className="h-3 w-3" />
                             حذف
@@ -315,7 +315,7 @@ export default function PaymentMethodsPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-gray-400">
+                  <td colSpan={6} className="p-8 text-center text-[var(--dash-text-muted)]">
                     لا توجد طرق دفع متاحة
                   </td>
                 </tr>

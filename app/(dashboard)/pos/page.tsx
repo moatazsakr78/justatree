@@ -935,7 +935,7 @@ function POSPageContent() {
         accessor: "#",
         width: 60,
         render: (value: any, item: any, index: number) => (
-          <span className="text-gray-400 font-medium">{index + 1}</span>
+          <span className="text-[var(--dash-text-muted)] font-medium">{index + 1}</span>
         ),
       },
       {
@@ -944,7 +944,7 @@ function POSPageContent() {
         accessor: "name",
         width: 200,
         render: (value: string) => (
-          <span className="text-white font-medium">{value}</span>
+          <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
         ),
       },
       {
@@ -953,7 +953,7 @@ function POSPageContent() {
         accessor: "category",
         width: 100,
         render: (value: any) => (
-          <span className="text-gray-300">{value?.name || "غير محدد"}</span>
+          <span className="text-[var(--dash-text-secondary)]">{value?.name || "غير محدد"}</span>
         ),
       },
       {
@@ -971,7 +971,7 @@ function POSPageContent() {
         accessor: "cost_price",
         width: 120,
         render: (value: number) => (
-          <span className="text-white">{(value || 0).toFixed(2)}</span>
+          <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
         ),
       },
       {
@@ -980,7 +980,7 @@ function POSPageContent() {
         accessor: "price",
         width: 120,
         render: (value: number) => (
-          <span className="text-white">{(value || 0).toFixed(2)}</span>
+          <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
         ),
       },
       {
@@ -989,7 +989,7 @@ function POSPageContent() {
         accessor: "wholesale_price",
         width: 120,
         render: (value: number) => (
-          <span className="text-white">{(value || 0).toFixed(2)}</span>
+          <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
         ),
       },
       {
@@ -998,7 +998,7 @@ function POSPageContent() {
         accessor: "price1",
         width: 100,
         render: (value: number) => (
-          <span className="text-white">{(value || 0).toFixed(2)}</span>
+          <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
         ),
       },
       {
@@ -1007,7 +1007,7 @@ function POSPageContent() {
         accessor: "price2",
         width: 100,
         render: (value: number) => (
-          <span className="text-white">{(value || 0).toFixed(2)}</span>
+          <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
         ),
       },
       {
@@ -1016,7 +1016,7 @@ function POSPageContent() {
         accessor: "price3",
         width: 100,
         render: (value: number) => (
-          <span className="text-white">{(value || 0).toFixed(2)}</span>
+          <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
         ),
       },
       {
@@ -1025,7 +1025,7 @@ function POSPageContent() {
         accessor: "price4",
         width: 100,
         render: (value: number) => (
-          <span className="text-white">{(value || 0).toFixed(2)}</span>
+          <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
         ),
       },
       {
@@ -1034,7 +1034,7 @@ function POSPageContent() {
         accessor: "location",
         width: 100,
         render: (value: string) => (
-          <span className="text-gray-300">{value || "-"}</span>
+          <span className="text-[var(--dash-text-secondary)]">{value || "-"}</span>
         ),
       },
       {
@@ -1043,7 +1043,7 @@ function POSPageContent() {
         accessor: "barcode",
         width: 150,
         render: (value: string) => (
-          <span className="text-gray-300 font-mono text-sm">
+          <span className="text-[var(--dash-text-secondary)] font-mono text-sm">
             {value || "-"}
           </span>
         ),
@@ -1205,7 +1205,7 @@ function POSPageContent() {
 
             {/* Show unassigned quantity if any */}
             {unassignedQuantity > 0 && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white bg-gray-600 border border-gray-600">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-[var(--dash-text-primary)] bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]">
                 غير محدد ({unassignedQuantity})
               </span>
             )}
@@ -4833,14 +4833,14 @@ function POSPageContent() {
         {/* Add Tab Modal */}
         {showAddTabModal && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setShowAddTabModal(false)}>
-            <div className="bg-[#2B3544] rounded-lg p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-white text-lg font-medium mb-4">إضافة نافذة بيع جديدة</h3>
+            <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+              <h3 className="text-[var(--dash-text-primary)] text-lg font-medium mb-4">إضافة نافذة بيع جديدة</h3>
               <input
                 type="text"
                 value={newTabName}
                 onChange={(e) => setNewTabName(e.target.value)}
                 placeholder="اسم النافذة..."
-                className="w-full px-4 py-2 bg-[#374151] border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                className="w-full px-4 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && newTabName.trim()) {
                     // Inherit selections from current tab, but ALWAYS use default customer
@@ -4863,7 +4863,7 @@ function POSPageContent() {
                     setNewTabName("");
                     setShowAddTabModal(false);
                   }}
-                  className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                  className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -4882,7 +4882,7 @@ function POSPageContent() {
                       setShowAddTabModal(false);
                     }
                   }}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
                   disabled={!newTabName.trim()}
                 >
                   موافق
@@ -4900,13 +4900,13 @@ function POSPageContent() {
               onClick={() => setShowPurchaseModeConfirm(false)}
             />
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-md">
-                <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+              <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-md">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <div>
-                    <h2 className="text-lg font-bold text-white">
+                    <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">
                       تفعيل وضع الشراء
                     </h2>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-[var(--dash-text-muted)] text-sm">
                       {isPurchaseMode
                         ? "إيقاف وضع الشراء والعودة لوضع البيع"
                         : "تفعيل وضع الشراء من الموردين"}
@@ -4915,7 +4915,7 @@ function POSPageContent() {
                 </div>
 
                 <div className="p-6">
-                  <p className="text-white mb-4">
+                  <p className="text-[var(--dash-text-primary)] mb-4">
                     {isPurchaseMode
                       ? "هل تريد إيقاف وضع الشراء والعودة لوضع البيع؟"
                       : "هل تريد تفعيل وضع الشراء من الموردين؟"}
@@ -4930,11 +4930,11 @@ function POSPageContent() {
                   )}
                 </div>
 
-                <div className="p-6 border-t border-[#4A5568]">
+                <div className="p-6 border-t border-[var(--dash-border-default)]">
                   <div className="flex gap-3">
                     <button
                       onClick={() => setShowPurchaseModeConfirm(false)}
-                      className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition-colors"
+                      className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
                     >
                       إلغاء
                     </button>
@@ -4946,7 +4946,7 @@ function POSPageContent() {
                         }
                         setShowPurchaseModeConfirm(false);
                       }}
-                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-medium transition-colors"
+                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
                     >
                       {isPurchaseMode ? "إيقاف وضع الشراء" : "تفعيل وضع الشراء"}
                     </button>
@@ -4965,17 +4965,17 @@ function POSPageContent() {
               onClick={() => setShowPrintReceiptModal(false)}
             />
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-md">
-                <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+              <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-md">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
-                      <PrinterIcon className="h-5 w-5 text-white" />
+                      <PrinterIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold text-white">
+                      <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">
                         طباعة الفاتورة
                       </h2>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-[var(--dash-text-muted)] text-sm">
                         تم إنشاء الفاتورة بنجاح
                       </p>
                     </div>
@@ -4989,7 +4989,7 @@ function POSPageContent() {
                       تم إنشاء{" "}
                       {lastInvoiceData?.isReturn ? "المرتجع" : "الفاتورة"} بنجاح
                     </p>
-                    <div className="text-white text-sm space-y-1">
+                    <div className="text-[var(--dash-text-primary)] text-sm space-y-1">
                       <p>
                         رقم الفاتورة:{" "}
                         <span className="font-bold">
@@ -5014,16 +5014,16 @@ function POSPageContent() {
                     </div>
                   </div>
 
-                  <p className="text-white font-medium text-center mb-4">
+                  <p className="text-[var(--dash-text-primary)] font-medium text-center mb-4">
                     هل تريد طباعة الفاتورة؟
                   </p>
                 </div>
 
-                <div className="p-6 border-t border-[#4A5568]">
+                <div className="p-6 border-t border-[var(--dash-border-default)]">
                   <div className="flex gap-3">
                     <button
                       onClick={() => setShowPrintReceiptModal(false)}
-                      className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition-colors"
+                      className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
                     >
                       لا، شكراً
                     </button>
@@ -5032,7 +5032,7 @@ function POSPageContent() {
                         printReceipt(lastInvoiceData);
                         setShowPrintReceiptModal(false);
                       }}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                     >
                       <PrinterIcon className="h-5 w-5" />
                       نعم، اطبع الفاتورة
@@ -5048,7 +5048,7 @@ function POSPageContent() {
   }
 
   return (
-    <div className="flex h-screen bg-[#2B3544]">
+    <div className="flex h-screen bg-[var(--dash-bg-surface)]">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} pageTitle={isPurchaseMode ? 'نقطة الشراء' : 'نقطة البيع'} />
 
@@ -5060,14 +5060,14 @@ function POSPageContent() {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out">
           {/* Action Buttons Bar - Desktop Version (hidden on mobile) */}
-          <div className="hidden md:block bg-[#374151] border-b border-gray-600 px-4 py-2 w-full mt-12">
+          <div className="hidden md:block bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2 w-full mt-12">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 {/* Selection Buttons - First three buttons grouped together */}
                 <button
                   onClick={toggleRecordsModal}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
-                    selections.record ? 'text-green-400 hover:text-green-300' : 'text-gray-300 hover:text-white'
+                    selections.record ? 'text-green-400 hover:text-green-300' : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   <BanknotesIcon className="h-5 w-5 mb-1" />
@@ -5094,7 +5094,7 @@ function POSPageContent() {
                     className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
                       selectedPartyType === 'supplier'
                         ? "text-amber-400 hover:text-amber-300"
-                        : "text-gray-300 hover:text-white"
+                        : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                     title={selectedPartyType === 'customer'
                       ? `العميل: ${selections.customer?.name || 'غير محدد'}`
@@ -5129,7 +5129,7 @@ function POSPageContent() {
                     className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
                       selectedPriceType !== "price"
                         ? "text-blue-400 hover:text-blue-300"
-                        : "text-gray-300 hover:text-white"
+                        : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
                     <CurrencyDollarIcon className="h-5 w-5 mb-1" />
@@ -5141,13 +5141,13 @@ function POSPageContent() {
                 )}
 
                 {/* Separator */}
-                <div className="h-8 w-px bg-gray-600 mx-2"></div>
+                <div className="h-8 w-px bg-[var(--dash-bg-overlay)] mx-2"></div>
 
                 {/* Other Action Buttons */}
                 {/* زر الأعمدة مخفي مؤقتاً لتوفير المساحة
                 <button
                   onClick={() => setShowColumnsModal(true)}
-                  className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+                  className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
                 >
                   <TableCellsIcon className="h-5 w-5 mb-1" />
                   <span className="text-sm">الأعمدة</span>
@@ -5156,7 +5156,7 @@ function POSPageContent() {
 
                 <button
                   onClick={toggleHistoryModal}
-                  className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+                  className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
                 >
                   <ClockIcon className="h-5 w-5 mb-1" />
                   <span className="text-sm">التاريخ</span>
@@ -5167,7 +5167,7 @@ function POSPageContent() {
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     isTransferMode
                       ? "text-green-400 hover:text-green-300"
-                      : "text-gray-300 hover:text-white"
+                      : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
                   <ArrowsRightLeftIcon className="h-5 w-5 mb-1" />
@@ -5179,7 +5179,7 @@ function POSPageContent() {
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
                     selectedCategoryId
                       ? "text-blue-400 hover:text-blue-300"
-                      : "text-gray-300 hover:text-white"
+                      : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
                   <div className="relative">
@@ -5198,7 +5198,7 @@ function POSPageContent() {
                     className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                       cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)
                         ? "text-orange-400 hover:text-orange-300"
-                        : "text-gray-300 hover:text-white"
+                        : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
                     <ReceiptPercentIcon className="h-5 w-5 mb-1" />
@@ -5215,13 +5215,13 @@ function POSPageContent() {
                   className={`relative flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     postponedTabs.length > 0
                       ? "text-orange-400 hover:text-orange-300"
-                      : "text-gray-300 hover:text-white"
+                      : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
                   <ClockIcon className="h-5 w-5 mb-1" />
                   <span className="text-sm">الفواتير</span>
                   {postponedTabs.length > 0 && (
-                    <div className="absolute top-0 right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
+                    <div className="absolute top-0 right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center text-xs text-[var(--dash-text-primary)] font-bold">
                       {postponedTabs.length}
                     </div>
                   )}
@@ -5234,7 +5234,7 @@ function POSPageContent() {
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     selections.record
                       ? "text-green-400 hover:text-green-300"
-                      : "text-gray-500 cursor-not-allowed"
+                      : "text-[var(--dash-text-disabled)] cursor-not-allowed"
                   }`}
                   title={selections.record ? `درج ${selections.record.name}` : "يجب اختيار سجل أولاً"}
                 >
@@ -5248,8 +5248,8 @@ function POSPageContent() {
                   disabled={!selections.record}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     selections.record
-                      ? "text-gray-300 hover:text-white"
-                      : "text-gray-500 cursor-not-allowed"
+                      ? "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
+                      : "text-[var(--dash-text-disabled)] cursor-not-allowed"
                   }`}
                   title={selections.record ? `مصروفات/إضافة - ${selections.record.name}` : "يجب اختيار سجل أولاً"}
                 >
@@ -5262,8 +5262,8 @@ function POSPageContent() {
                   disabled={cartItems.length === 0}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     cartItems.length === 0
-                      ? "text-gray-500 cursor-not-allowed"
-                      : "text-gray-300 hover:text-white"
+                      ? "text-[var(--dash-text-disabled)] cursor-not-allowed"
+                      : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                   title="طباعة مراجعة للطلب الحالي"
                 >
@@ -5276,7 +5276,7 @@ function POSPageContent() {
                   disabled={cartItems.length === 0}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     cartItems.length === 0
-                      ? "text-gray-500 cursor-not-allowed"
+                      ? "text-[var(--dash-text-disabled)] cursor-not-allowed"
                       : "text-blue-400 hover:text-blue-300"
                   }`}
                   title="معاينة الفاتورة للإرسال للعميل"
@@ -5294,7 +5294,7 @@ function POSPageContent() {
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     isReturnMode
                       ? "text-orange-400 hover:text-orange-300"
-                      : "text-gray-300 hover:text-white"
+                      : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
                   <ArrowUturnLeftIcon className="h-5 w-5 mb-1" />
@@ -5302,7 +5302,7 @@ function POSPageContent() {
                 </button>
 
                 {/* Separator */}
-                <div className="h-8 w-px bg-gray-600 mx-1"></div>
+                <div className="h-8 w-px bg-[var(--dash-bg-overlay)] mx-1"></div>
 
                 {isPurchaseMode ? (
                   <div className="flex items-center gap-2">
@@ -5324,7 +5324,7 @@ function POSPageContent() {
                 ) : (
                   <button
                     onClick={handlePurchaseModeToggle}
-                    className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px] transition-all"
+                    className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px] transition-all"
                   >
                     <ShoppingBagIcon className="h-5 w-5 mb-1" />
                     <span className="text-sm">شراء</span>
@@ -5335,13 +5335,13 @@ function POSPageContent() {
           </div>
 
           {/* Action Buttons Bar - Mobile Version (shown only on mobile) */}
-          <div className="block md:hidden bg-[#374151] border-b border-gray-600 px-2 py-2 w-full mt-12">
+          <div className="block md:hidden bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-2 py-2 w-full mt-12">
             <div className="flex items-center justify-start gap-1 overflow-x-auto scrollbar-hide">
               {/* Action Buttons */}
               {/* زر الأعمدة مخفي مؤقتاً لتوفير المساحة
               <button
                 onClick={() => setShowColumnsModal(true)}
-                className="flex items-center gap-2 px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-gray-300 hover:text-white hover:bg-[#374151] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
               >
                 <TableCellsIcon className="h-4 w-4" />
                 <span className="text-xs">الأعمدة</span>
@@ -5350,7 +5350,7 @@ function POSPageContent() {
 
               <button
                 onClick={toggleHistoryModal}
-                className="flex items-center gap-2 px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-gray-300 hover:text-white hover:bg-[#374151] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
               >
                 <ClockIcon className="h-4 w-4" />
                 <span className="text-xs">التاريخ</span>
@@ -5358,10 +5358,10 @@ function POSPageContent() {
 
               <button
                 onClick={handleTransferModeToggle}
-                className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   isTransferMode
-                    ? "bg-green-600 text-white hover:bg-green-700"
-                    : "bg-[#2B3544] text-gray-300 hover:text-white hover:bg-[#374151]"
+                    ? "bg-green-600 text-[var(--dash-text-primary)] hover:bg-green-700"
+                    : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
               >
                 <ArrowsRightLeftIcon className="h-4 w-4" />
@@ -5370,10 +5370,10 @@ function POSPageContent() {
 
               <button
                 onClick={toggleCategoriesModal}
-                className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   selectedCategoryId
-                    ? "bg-blue-600 text-white hover:bg-blue-700 border-blue-600"
-                    : "bg-[#2B3544] text-gray-300 hover:text-white hover:bg-[#374151]"
+                    ? "bg-blue-600 text-[var(--dash-text-primary)] hover:bg-blue-700 border-blue-600"
+                    : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
               >
                 <Squares2X2Icon className="h-4 w-4" />
@@ -5384,10 +5384,10 @@ function POSPageContent() {
               {!isPurchaseMode && !isTransferMode && (
                 <button
                   onClick={() => setIsDiscountModalOpen(true)}
-                  className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors relative ${
+                  className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors relative ${
                     cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)
-                      ? "bg-orange-600 text-white hover:bg-orange-700 border-orange-500"
-                      : "bg-[#2B3544] text-gray-300 hover:text-white hover:bg-[#374151]"
+                      ? "bg-orange-600 text-[var(--dash-text-primary)] hover:bg-orange-700 border-orange-500"
+                      : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                   }`}
                 >
                   <ReceiptPercentIcon className="h-4 w-4" />
@@ -5401,10 +5401,10 @@ function POSPageContent() {
               {/* Postponed Invoices Button - Mobile */}
               <button
                 onClick={() => setIsPostponedModalOpen(true)}
-                className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors relative ${
+                className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors relative ${
                   postponedTabs.length > 0
-                    ? "bg-orange-600 text-white hover:bg-orange-700 border-orange-500"
-                    : "bg-[#2B3544] text-gray-300 hover:text-white hover:bg-[#374151]"
+                    ? "bg-orange-600 text-[var(--dash-text-primary)] hover:bg-orange-700 border-orange-500"
+                    : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
                 title="الفواتير المؤجلة"
               >
@@ -5420,10 +5420,10 @@ function POSPageContent() {
               <button
                 onClick={printPreviewReceipt}
                 disabled={cartItems.length === 0}
-                className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   cartItems.length === 0
-                    ? "bg-[#2B3544] text-gray-500 cursor-not-allowed"
-                    : "bg-[#2B3544] text-gray-300 hover:text-white hover:bg-[#374151]"
+                    ? "bg-[var(--dash-bg-surface)] text-[var(--dash-text-disabled)] cursor-not-allowed"
+                    : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
                 title="طباعة مراجعة للطلب الحالي"
               >
@@ -5434,10 +5434,10 @@ function POSPageContent() {
               <button
                 onClick={openPDFPreview}
                 disabled={cartItems.length === 0}
-                className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   cartItems.length === 0
-                    ? "bg-[#2B3544] text-gray-500 cursor-not-allowed"
-                    : "bg-[#2B3544] text-blue-400 hover:text-blue-300 hover:bg-[#374151]"
+                    ? "bg-[var(--dash-bg-surface)] text-[var(--dash-text-disabled)] cursor-not-allowed"
+                    : "bg-[var(--dash-bg-surface)] text-blue-400 hover:text-blue-300 hover:bg-[var(--dash-bg-overlay)]"
                 }`}
                 title="معاينة الفاتورة للإرسال للعميل"
               >
@@ -5448,10 +5448,10 @@ function POSPageContent() {
               {/* Returns Button */}
               <button
                 onClick={() => setIsReturnMode(!isReturnMode)}
-                className={`flex items-center gap-2 px-3 py-2 border border-gray-600 rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   isReturnMode
-                    ? "bg-orange-600 text-white hover:bg-orange-700"
-                    : "bg-[#2B3544] text-gray-300 hover:text-white hover:bg-[#374151]"
+                    ? "bg-orange-600 text-[var(--dash-text-primary)] hover:bg-orange-700"
+                    : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
               >
                 <ArrowUturnLeftIcon className="h-4 w-4" />
@@ -5463,14 +5463,14 @@ function POSPageContent() {
                 <>
                   <button
                     onClick={() => setShowQuickAddProductModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-green-600 border border-green-500 rounded text-white hover:bg-green-700 cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bg-green-600 border border-green-500 rounded text-[var(--dash-text-primary)] hover:bg-green-700 cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
                   >
                     <PlusIcon className="h-4 w-4" />
                     <span className="text-xs">منتج جديد</span>
                   </button>
                   <button
                     onClick={handlePurchaseModeToggle}
-                    className="flex items-center gap-2 px-3 py-2 bg-blue-600 border border-blue-500 rounded text-white hover:bg-blue-700 cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bg-blue-600 border border-blue-500 rounded text-[var(--dash-text-primary)] hover:bg-blue-700 cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
                   >
                     <ShoppingBagIcon className="h-4 w-4" />
                     <span className="text-xs">شراء</span>
@@ -5479,7 +5479,7 @@ function POSPageContent() {
               ) : (
                 <button
                   onClick={handlePurchaseModeToggle}
-                  className="flex items-center gap-2 px-3 py-2 bg-[#2B3544] border border-gray-600 rounded text-gray-300 hover:text-white hover:bg-[#374151] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
                 >
                   <ShoppingBagIcon className="h-4 w-4" />
                   <span className="text-xs">شراء</span>
@@ -5489,21 +5489,21 @@ function POSPageContent() {
           </div>
 
           {/* POS Tabs Bar - Mobile Version */}
-          <div className="block md:hidden bg-[#2B3544] border-b border-gray-600 px-2 py-2">
+          <div className="block md:hidden bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-2 py-2">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
               {/* POS Tabs */}
               <div className="flex items-center flex-shrink-0">
                 {posTabs.map((tab) => (
                   <div
                     key={tab.id}
-                    className={`flex items-center border-l border-gray-600 first:border-l-0 ${
+                    className={`flex items-center border-l border-[var(--dash-border-default)] first:border-l-0 ${
                       tab.active
                         ? tab.isTransferMode
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-green-600 text-[var(--dash-text-primary)]'
                           : tab.isPurchaseMode
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-[#F97316] text-white'
-                        : 'text-gray-300 hover:text-white hover:bg-[#4B5563]'
+                            ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                            : 'bg-[#F97316] text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
                     }`}
                   >
                     <button
@@ -5532,7 +5532,7 @@ function POSPageContent() {
                     setIsPartyModalForNewTab(true);
                     setIsPartyModalOpen(true);
                   }}
-                  className="px-2 py-1.5 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center border-l border-gray-600"
+                  className="px-2 py-1.5 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center border-l border-[var(--dash-border-default)]"
                 >
                   <PlusIcon className="w-4 h-4" />
                 </button>
@@ -5541,8 +5541,8 @@ function POSPageContent() {
               {/* زرار الخزنة */}
               <button
                 onClick={toggleRecordsModal}
-                className={`flex items-center gap-1 px-2 py-1.5 bg-[#374151] border rounded text-xs whitespace-nowrap flex-shrink-0 ${
-                  selections.record ? 'border-green-500/50 text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'border-gray-600 text-gray-300 hover:text-white hover:bg-[#4B5563]'
+                className={`flex items-center gap-1 px-2 py-1.5 bg-[var(--dash-bg-raised)] border rounded text-xs whitespace-nowrap flex-shrink-0 ${
+                  selections.record ? 'border-green-500/50 text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
                 }`}
               >
                 <BanknotesIcon className="h-3.5 w-3.5" />
@@ -5550,7 +5550,7 @@ function POSPageContent() {
                   {selections.record?.name ? (
                     selections.subSafe?.name ? (
                       <>
-                        <span className="text-white">{selections.record.name}</span>
+                        <span className="text-[var(--dash-text-primary)]">{selections.record.name}</span>
                         {' '}
                         <span className="text-yellow-400">{selections.subSafe.name}</span>
                       </>
@@ -5563,10 +5563,10 @@ function POSPageContent() {
               {!isPurchaseMode && !isTransferMode && (
                 <button
                   onClick={() => setIsPriceTypeModalOpen(true)}
-                  className={`flex items-center gap-1 px-2 py-1.5 border border-gray-600 rounded text-xs whitespace-nowrap flex-shrink-0 ${
+                  className={`flex items-center gap-1 px-2 py-1.5 border border-[var(--dash-border-default)] rounded text-xs whitespace-nowrap flex-shrink-0 ${
                     selectedPriceType !== "price"
-                      ? "bg-blue-600 text-white border-blue-500"
-                      : "bg-[#374151] text-gray-300 hover:text-white hover:bg-[#4B5563]"
+                      ? "bg-blue-600 text-[var(--dash-text-primary)] border-blue-500"
+                      : "bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]"
                   }`}
                 >
                   <CurrencyDollarIcon className="h-3.5 w-3.5" />
@@ -5577,7 +5577,7 @@ function POSPageContent() {
               {/* زرار عرض التفاصيل */}
               <button
                 onClick={() => setShowMobileDetailsModal(true)}
-                className="flex items-center gap-1 px-2 py-1.5 bg-[#374151] border border-gray-600 rounded text-gray-300 hover:text-white hover:bg-[#4B5563] text-xs whitespace-nowrap flex-shrink-0"
+                className="flex items-center gap-1 px-2 py-1.5 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563] text-xs whitespace-nowrap flex-shrink-0"
               >
                 <EyeIcon className="h-3.5 w-3.5" />
                 <span>عرض</span>
@@ -5586,13 +5586,13 @@ function POSPageContent() {
           </div>
 
           {/* Combined Selection Display & POS Tabs Bar (hidden on mobile) */}
-          <div className="hidden md:flex bg-[#2B3544] border-b border-gray-600 items-center justify-between">
+          <div className="hidden md:flex bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] items-center justify-between">
             {/* Right Side: Selection Display */}
             <div className="flex items-center gap-6 text-sm px-4 py-2">
               {/* Customer/Supplier */}
-              <span className="text-gray-300 whitespace-nowrap">
+              <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
                 {isPurchaseMode ? "المورد" : "العميل"}:{" "}
-                <span className="text-white font-medium">
+                <span className="text-[var(--dash-text-primary)] font-medium">
                   {isPurchaseMode
                     ? selectedSupplier
                       ? selectedSupplier.name
@@ -5604,9 +5604,9 @@ function POSPageContent() {
               </span>
 
               {/* Branch */}
-              <span className="text-gray-300 whitespace-nowrap">
+              <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
                 الفرع:{" "}
-                <span className="text-white font-medium">
+                <span className="text-[var(--dash-text-primary)] font-medium">
                   {selections.branch
                     ? selections.branch.name
                     : "غير محدد"}
@@ -5614,9 +5614,9 @@ function POSPageContent() {
               </span>
 
               {/* Record */}
-              <span className="text-gray-300 whitespace-nowrap">
+              <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
                 الخزنة:{" "}
-                <span className="text-white font-medium">
+                <span className="text-[var(--dash-text-primary)] font-medium">
                   {selections.record ? selections.record.name : "غير محدد"}
                 </span>
                 {selections.subSafe?.name && (
@@ -5631,9 +5631,9 @@ function POSPageContent() {
 
               {/* Price Type Display */}
               {!isPurchaseMode && !isTransferMode && (
-                <span className="text-gray-300 whitespace-nowrap">
+                <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
                   السعر:{" "}
-                  <span className={`font-medium ${selectedPriceType !== "price" ? "text-blue-400" : "text-white"}`}>
+                  <span className={`font-medium ${selectedPriceType !== "price" ? "text-blue-400" : "text-[var(--dash-text-primary)]"}`}>
                     {getPriceTypeName(selectedPriceType)}
                   </span>
                 </span>
@@ -5651,7 +5651,7 @@ function POSPageContent() {
                       setSelectedSupplier(null);
                     }
                   }}
-                  className="text-xs text-gray-400 hover:text-red-400 transition-colors px-2 py-1 rounded whitespace-nowrap"
+                  className="text-xs text-[var(--dash-text-muted)] hover:text-red-400 transition-colors px-2 py-1 rounded whitespace-nowrap"
                 >
                   مسح الكل
                 </button>
@@ -5659,21 +5659,21 @@ function POSPageContent() {
             </div>
 
             {/* Vertical Divider */}
-            <div className="h-8 w-px bg-gray-600"></div>
+            <div className="h-8 w-px bg-[var(--dash-bg-overlay)]"></div>
 
             {/* Left Side: POS Tabs */}
             <div className="flex items-center overflow-x-auto scrollbar-hide flex-1">
               {posTabs.map((tab) => (
                 <div
                   key={tab.id}
-                  className={`flex items-center border-l border-gray-600 ${
+                  className={`flex items-center border-l border-[var(--dash-border-default)] ${
                     tab.active
                       ? tab.isTransferMode
-                        ? 'bg-green-600 text-white'
+                        ? 'bg-green-600 text-[var(--dash-text-primary)]'
                         : tab.isPurchaseMode
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-[#F97316] text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-[#4B5563]'
+                          ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                          : 'bg-[#F97316] text-[var(--dash-text-primary)]'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
                   }`}
                   onContextMenu={(e) => {
                     // Show context menu for all tabs
@@ -5710,7 +5710,7 @@ function POSPageContent() {
                   setIsPartyModalForNewTab(true);
                   setIsPartyModalOpen(true);
                 }}
-                className="px-3 py-2 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center gap-1 border-l border-gray-600"
+                className="px-3 py-2 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center gap-1 border-l border-[var(--dash-border-default)]"
                 title="إضافة نافذة بيع جديدة (عميل أو مورد)"
               >
                 <PlusIcon className="w-4 h-4" />
@@ -5721,7 +5721,7 @@ function POSPageContent() {
             {/* Tab Context Menu for Postponing */}
             {tabContextMenu && (
               <div
-                className="fixed z-50 bg-[#2B3544] border border-gray-600 rounded-lg shadow-xl py-1 min-w-[160px]"
+                className="fixed z-50 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-xl py-1 min-w-[160px]"
                 style={{ top: tabContextMenu.y, left: tabContextMenu.x }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -5773,13 +5773,13 @@ function POSPageContent() {
                           }, 100);
                           setTabContextMenu(null);
                         }}
-                        className="w-full px-4 py-2 text-right text-sm text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 flex items-center gap-2 transition-colors"
+                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-orange-500/20 hover:text-orange-400 flex items-center gap-2 transition-colors"
                       >
                         <ClockIcon className="h-4 w-4" />
                         تأجيل الفاتورة
                       </button>
                     ) : (
-                      <div className="px-4 py-2 text-right text-sm text-gray-500 flex items-center gap-2">
+                      <div className="px-4 py-2 text-right text-sm text-[var(--dash-text-disabled)] flex items-center gap-2">
                         <ClockIcon className="h-4 w-4" />
                         أضف منتجات للتأجيل
                       </div>
@@ -5791,7 +5791,7 @@ function POSPageContent() {
                         setIsCustomerModalOpen(true);
                         setTabContextMenu(null);
                       }}
-                      className="w-full px-4 py-2 text-right text-sm text-gray-300 hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
+                      className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
                     >
                       <UserIcon className="h-4 w-4" />
                       تغيير العميل
@@ -5810,8 +5810,8 @@ function POSPageContent() {
                       }}
                       className={`w-full px-4 py-2 text-right text-sm flex items-center gap-2 transition-colors ${
                         (posTabs.find(t => t.id === tabContextMenu.tabId)?.cartItems?.length || 0) > 0
-                          ? 'text-gray-300 hover:bg-orange-500/20 hover:text-orange-400'
-                          : 'text-gray-500 cursor-not-allowed'
+                          ? 'text-[var(--dash-text-secondary)] hover:bg-orange-500/20 hover:text-orange-400'
+                          : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
                       }`}
                       disabled={(posTabs.find(t => t.id === tabContextMenu.tabId)?.cartItems?.length || 0) === 0}
                     >
@@ -5826,7 +5826,7 @@ function POSPageContent() {
                           setIsTransferLocationModalOpen(true);
                           setTabContextMenu(null);
                         }}
-                        className="w-full px-4 py-2 text-right text-sm text-gray-300 hover:bg-green-500/20 hover:text-green-400 flex items-center gap-2 transition-colors"
+                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-green-500/20 hover:text-green-400 flex items-center gap-2 transition-colors"
                       >
                         <ArrowsRightLeftIcon className="h-4 w-4" />
                         تغيير النقل
@@ -5838,7 +5838,7 @@ function POSPageContent() {
                           setIsCustomerModalOpen(true);
                           setTabContextMenu(null);
                         }}
-                        className="w-full px-4 py-2 text-right text-sm text-gray-300 hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
+                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
                       >
                         <UserIcon className="h-4 w-4" />
                         تغيير العميل
@@ -5851,7 +5851,7 @@ function POSPageContent() {
           </div>
 
           {/* Desktop Toolbar - Original Design (hidden on mobile) */}
-          <div className="hidden md:block bg-[#374151] border-b border-gray-600 px-4 py-3">
+          <div className="hidden md:block bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3">
             <div className="flex items-center justify-between">
               {/* Left Side Elements */}
               <div className="flex items-center gap-2">
@@ -5865,13 +5865,13 @@ function POSPageContent() {
                 />
 
                 {/* View Mode Toggle */}
-                <div className="flex bg-[#2B3544] rounded-lg p-1">
+                <div className="flex bg-[var(--dash-bg-surface)] rounded-lg p-1">
                   <button
                     onClick={() => setViewMode("grid")}
                     className={`p-2 rounded-md transition-colors ${
                       viewMode === "grid"
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:text-white"
+                        ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                        : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
                     <Squares2X2Icon className="h-4 w-4" />
@@ -5880,8 +5880,8 @@ function POSPageContent() {
                     onClick={() => setViewMode("table")}
                     className={`p-2 rounded-md transition-colors ${
                       viewMode === "table"
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:text-white"
+                        ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                        : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
                     <ListBulletIcon className="h-4 w-4" />
@@ -5894,7 +5894,7 @@ function POSPageContent() {
                 <div className="flex items-start gap-6">
                   {/* معلومات سرية - ربح الفاتورة ورصيد العميل (فقط في وضع البيع) */}
                   {!isPurchaseMode && (
-                    <div className="flex items-center gap-4 text-xs text-gray-500 font-mono self-center">
+                    <div className="flex items-center gap-4 text-xs text-[var(--dash-text-disabled)] font-mono self-center">
                       {/* PD: الربح - يظهر دائماً مع وجود منتجات (مخفي كباركود) */}
                       {cartItems.length > 0 && (
                         <span title="ربح الفاتورة">
@@ -5921,7 +5921,7 @@ function POSPageContent() {
           </div>
 
           {/* Mobile Unified Toolbar - New Design (shown only on mobile) */}
-          <div className="block md:hidden bg-[#374151] border-b border-gray-600 px-4 py-3 flex-shrink-0">
+          <div className="block md:hidden bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex-shrink-0">
             {/* Single Horizontal Row - Search Bar, View Toggle, Cart Toggle, Customer Info, Branch Info, Record Info, Clear All */}
             <div
               className="flex items-center gap-3 overflow-x-auto scrollbar-hide"
@@ -5943,7 +5943,7 @@ function POSPageContent() {
               {/* 2. Cart Toggle Button */}
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="p-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-colors bg-[#2B3544] border border-gray-600 flex-shrink-0"
+                className="p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-colors bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] flex-shrink-0"
                 title={isCartOpen ? "إخفاء السلة" : "إظهار السلة"}
               >
                 {isCartOpen ? (
@@ -5954,18 +5954,18 @@ function POSPageContent() {
               </button>
 
               {/* 3. Product Count */}
-              <span className="text-xs text-gray-400 whitespace-nowrap">
+              <span className="text-xs text-[var(--dash-text-muted)] whitespace-nowrap">
                 عرض {filteredProducts.length} من {products.length}
               </span>
 
               {/* 3. View Toggle (Images or Tables) */}
-              <div className="flex bg-[#2B3544] rounded-md overflow-hidden flex-shrink-0 border border-gray-600">
+              <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden flex-shrink-0 border border-[var(--dash-border-default)]">
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`p-2 transition-colors ${
                     viewMode === "grid"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-400 hover:text-white hover:bg-gray-600"
+                      ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                      : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                   }`}
                   title="عرض الصور"
                 >
@@ -5975,8 +5975,8 @@ function POSPageContent() {
                   onClick={() => setViewMode("table")}
                   className={`p-2 transition-colors ${
                     viewMode === "table"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-400 hover:text-white hover:bg-gray-600"
+                      ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                      : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                   }`}
                   title="عرض الجداول"
                 >
@@ -5992,34 +5992,34 @@ function POSPageContent() {
             {isCartOpen && (
               <div className="md:hidden fixed inset-0 z-50">
                 {/* Mobile Cart View */}
-                <div className="h-full bg-[#374151] border-t-2 border-gray-500 flex flex-col">
+                <div className="h-full bg-[var(--dash-bg-raised)] border-t-2 border-gray-500 flex flex-col">
                   {/* Cart Items Area - Full Height */}
                   <div className="flex-1 border-t-2 border-gray-500 flex flex-col min-h-0">
                     {cartItems.length === 0 ? (
                       <div className="flex-1 flex flex-col min-h-0">
                         {/* Cart Header - Always visible */}
-                        <div className="p-4 border-b border-gray-600 flex-shrink-0">
+                        <div className="p-4 border-b border-[var(--dash-border-default)] flex-shrink-0">
                           <div className="flex items-center gap-2">
                             {/* Close button */}
                             <button
                               onClick={() => setIsCartOpen(false)}
-                              className="text-gray-400 hover:text-white mr-2"
+                              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] mr-2"
                               title="إغلاق السلة"
                             >
                               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                               </svg>
                             </button>
-                            <span className="text-white font-medium">السلة</span>
-                            <span className="bg-gray-600 px-2 py-1 rounded text-xs text-gray-400">
+                            <span className="text-[var(--dash-text-primary)] font-medium">السلة</span>
+                            <span className="bg-[var(--dash-bg-overlay)] px-2 py-1 rounded text-xs text-[var(--dash-text-muted)]">
                               0
                             </span>
                           </div>
                         </div>
                         {/* Empty State */}
                         <div className="flex flex-col justify-center items-center flex-1 p-8">
-                          <ShoppingCartIcon className="h-24 w-24 text-gray-500 mb-8" />
-                          <p className="text-gray-400 text-sm text-center mb-4">
+                          <ShoppingCartIcon className="h-24 w-24 text-[var(--dash-text-disabled)] mb-8" />
+                          <p className="text-[var(--dash-text-muted)] text-sm text-center mb-4">
                             اضغط على المنتجات لإضافتها للسلة
                           </p>
                         </div>
@@ -6027,20 +6027,20 @@ function POSPageContent() {
                     ) : (
                       <div className="flex-1 flex flex-col min-h-0">
                         {/* Cart Header */}
-                        <div className="px-3 py-2 border-b border-gray-600 flex-shrink-0">
+                        <div className="px-3 py-2 border-b border-[var(--dash-border-default)] flex-shrink-0">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
                               {/* Close button for mobile */}
                               <button
                                 onClick={() => setIsCartOpen(false)}
-                                className="text-gray-400 hover:text-white"
+                                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                                 title="إغلاق السلة"
                               >
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                               </button>
-                              <span className="text-white font-medium text-sm">منتجات السلة: {cartItems.length}</span>
+                              <span className="text-[var(--dash-text-primary)] font-medium text-sm">منتجات السلة: {cartItems.length}</span>
                             </div>
                             {cartItems.length > 0 && (
                               <div className="flex items-center gap-2">
@@ -6090,7 +6090,7 @@ function POSPageContent() {
                                   <ClockIcon className="h-3 w-3" />
                                   تأجيل
                                 </button>
-                                <span className="text-gray-500">|</span>
+                                <span className="text-[var(--dash-text-disabled)]">|</span>
                                 <button
                                   onClick={() => setShowClearCartConfirm(true)}
                                   className="text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded px-1.5 py-0.5 transition-colors text-xs"
@@ -6123,11 +6123,11 @@ function POSPageContent() {
                           {cartItems.map((item) => (
                             <div
                               key={item.id}
-                              className="bg-[#2B3544] rounded-lg p-3 border border-gray-600"
+                              className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]"
                             >
                               <div className="flex gap-3 mb-2">
                                 {/* Product Image */}
-                                <div className="w-12 h-12 bg-[#374151] rounded-lg overflow-hidden flex-shrink-0">
+                                <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
                                   <ProductThumbnail
                                     src={item.product.main_image_url}
                                     alt={item.product.name}
@@ -6138,7 +6138,7 @@ function POSPageContent() {
                                 <div className="flex-1 min-w-0">
                                   <div className="flex justify-between items-start mb-1">
                                     <div className="flex items-center gap-2 min-w-0 flex-1">
-                                      <h4 className="font-medium text-white text-sm truncate">
+                                      <h4 className="font-medium text-[var(--dash-text-primary)] text-sm truncate">
                                         {item.product.name}
                                       </h4>
                                       {/* إظهار اسم الفرع فقط لو فيه أكتر من فرع في السلة */}
@@ -6175,7 +6175,7 @@ function POSPageContent() {
                                   {/* Quantity and Price Controls */}
                                   <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-400 text-xs">الكمية:</span>
+                                      <span className="text-[var(--dash-text-muted)] text-xs">الكمية:</span>
                                       <input
                                         type="number"
                                         min="1"
@@ -6238,12 +6238,12 @@ function POSPageContent() {
                                             return newCart;
                                           });
                                         }}
-                                        className="w-16 px-2 py-1 bg-[#374151] border border-gray-600 rounded text-white text-xs text-center"
+                                        className="w-16 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
                                       />
                                     </div>
 
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-400 text-xs">السعر:</span>
+                                      <span className="text-[var(--dash-text-muted)] text-xs">السعر:</span>
                                       <input
                                         type="number"
                                         min="0"
@@ -6266,7 +6266,7 @@ function POSPageContent() {
                                             return newCart;
                                           });
                                         }}
-                                        className="w-20 px-2 py-1 bg-[#374151] border border-gray-600 rounded text-white text-xs text-center"
+                                        className="w-20 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
                                       />
                                     </div>
                                   </div>
@@ -6287,7 +6287,7 @@ function POSPageContent() {
                   </div>
 
                   {/* Cart Footer */}
-                  <div className="p-4 border-t border-gray-600 bg-[#2B3544] flex-shrink-0">
+                  <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] flex-shrink-0">
                     {/* Payment Split Component - Show in sales, return, and purchase mode (not transfer or edit mode) */}
                     {!isTransferMode && !activePOSTab?.isEditMode && (
                       <PaymentSplit
@@ -6311,9 +6311,9 @@ function POSPageContent() {
                           <div className="text-right">
                             {(cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)) ? (
                               <>
-                                <div className="text-white text-sm font-medium">الإجمالي: ({cartItems.length})</div>
+                                <div className="text-[var(--dash-text-primary)] text-sm font-medium">الإجمالي: ({cartItems.length})</div>
                                 <div className="flex items-center gap-2 justify-end">
-                                  <span className="text-gray-400 text-xs line-through">
+                                  <span className="text-[var(--dash-text-muted)] text-xs line-through">
                                     {formatPrice(cartTotal, "system")}
                                   </span>
                                   <span className="text-orange-400 text-xs">
@@ -6326,7 +6326,7 @@ function POSPageContent() {
                               </>
                             ) : (
                               <>
-                                <div className="text-white text-sm font-medium">الإجمالي: ({cartItems.length})</div>
+                                <div className="text-[var(--dash-text-primary)] text-sm font-medium">الإجمالي: ({cartItems.length})</div>
                                 <div className="text-green-400 font-bold text-lg">
                                   {formatPrice(cartTotal, "system")}
                                 </div>
@@ -6336,7 +6336,7 @@ function POSPageContent() {
                         ) : (
                           <div className="text-right">
                             <div className="text-green-400 text-sm font-medium">وضع النقل</div>
-                            <div className="text-white font-bold text-lg">
+                            <div className="text-[var(--dash-text-primary)] font-bold text-lg">
                               {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                             </div>
                           </div>
@@ -6356,13 +6356,13 @@ function POSPageContent() {
                             onChange={(e) => setPaidAmount(e.target.value)}
                             placeholder="المدفوع"
                             disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                            className="w-24 min-w-0 px-3 py-2 bg-[#1F2937] text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            className="w-24 min-w-0 px-3 py-2 bg-[var(--dash-bg-base)] text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-blue-500 text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             style={{ MozAppearance: 'textfield' }}
                             dir="ltr"
                           />
                           <button
                             disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed"
                             onClick={handleCreateInvoice}
                           >
                             {isProcessingInvoice ? '...' : (
@@ -6381,7 +6381,7 @@ function POSPageContent() {
                         /* Normal confirm button for regular customers */
                         <button
                           disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                          className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed text-white bg-blue-600 hover:bg-blue-700"
+                          className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] bg-blue-600 hover:bg-blue-700"
                           onClick={handleCreateInvoice}
                         >
                           {isProcessingInvoice
@@ -6399,7 +6399,7 @@ function POSPageContent() {
                             !hasAllRequiredSelections() ||
                             isProcessingInvoice
                           }
-                          className={`flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed text-white ${
+                          className={`flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] ${
                             activePOSTab?.isEditMode
                               ? "bg-amber-600 hover:bg-amber-700"
                               : isTransferMode
@@ -6474,7 +6474,7 @@ function POSPageContent() {
                             <div
                               key={product.id}
                               onClick={() => handleProductClick(product)}
-                              className="bg-[#374151] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 border-transparent hover:border-gray-500 hover:bg-[#434E61] relative group"
+                              className="bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 border-transparent hover:border-gray-500 hover:bg-[#434E61] relative group"
                             >
                               {/* Product Image */}
                               <div className="mb-3 relative">
@@ -6499,7 +6499,7 @@ function POSPageContent() {
                                       setShowPurchasePrice(false); // Reset purchase price visibility
                                       setShowProductModal(true);
                                     }}
-                                    className={`bg-black/50 hover:bg-black/90 text-white p-2 rounded-full opacity-0 ${!isSidebarOpen ? 'group-hover:opacity-100' : 'pointer-events-none'} transition-all duration-200 shadow-lg`}
+                                    className={`bg-black/50 hover:bg-black/90 text-[var(--dash-text-primary)] p-2 rounded-full opacity-0 ${!isSidebarOpen ? 'group-hover:opacity-100' : 'pointer-events-none'} transition-all duration-200 shadow-lg`}
                                   >
                                     <EyeIcon className="h-4 w-4" />
                                   </button>
@@ -6507,13 +6507,13 @@ function POSPageContent() {
                               </div>
 
                               {/* Product Name */}
-                              <h3 className="text-white font-medium text-sm text-center mb-2 line-clamp-2">
+                              <h3 className="text-[var(--dash-text-primary)] font-medium text-sm text-center mb-2 line-clamp-2">
                                 {product.name}
                               </h3>
 
                               {/* Product Code */}
                               {product.product_code && (
-                                <p className="text-gray-400 text-xs text-center mb-1">
+                                <p className="text-[var(--dash-text-muted)] text-xs text-center mb-1">
                                   {product.product_code}
                                 </p>
                               )}
@@ -6532,7 +6532,7 @@ function POSPageContent() {
                                   <span className="text-blue-400 font-medium">
                                     {product._computed.totalQuantity}
                                   </span>
-                                  <span className="text-gray-400">
+                                  <span className="text-[var(--dash-text-muted)]">
                                     الكمية الإجمالية
                                   </span>
                                 </div>
@@ -6544,10 +6544,10 @@ function POSPageContent() {
                                       key={locationId}
                                       className="flex justify-between items-center"
                                     >
-                                      <span className="text-white">
+                                      <span className="text-[var(--dash-text-primary)]">
                                         {quantity}
                                       </span>
-                                      <span className="text-gray-400 truncate">
+                                      <span className="text-[var(--dash-text-muted)] truncate">
                                         {name}
                                       </span>
                                     </div>
@@ -6562,7 +6562,7 @@ function POSPageContent() {
                             <div className="col-span-full flex justify-center py-4">
                               <button
                                 onClick={() => setShowAllProducts(true)}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+                                className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
                               >
                                 <span>تحميل كل المنتجات ({productsWithComputedInventory.length - VISIBLE_PRODUCTS_LIMIT} منتج إضافي)</span>
                               </button>
@@ -6580,18 +6580,18 @@ function POSPageContent() {
 
         {/* Shopping Cart Panel - Desktop: Sidebar, Mobile: Shows below search toolbar */}
         <div className="hidden md:flex">
-          <div className="w-80 bg-[#374151] border-l-2 border-r-2 border-gray-500 flex flex-col h-screen flex-shrink-0"
+          <div className="w-80 bg-[var(--dash-bg-raised)] border-l-2 border-r-2 border-gray-500 flex flex-col h-screen flex-shrink-0"
           >
             {/* Cart Items Area - Full Height */}
             <div className="flex-1 border-t-2 border-gray-500 overflow-hidden">
               {cartItems.length === 0 ? (
                 <div className="flex flex-col justify-center items-center h-full p-8">
-                  <ShoppingCartIcon className="h-24 w-24 text-gray-500 mb-8" />
-                  <p className="text-gray-400 text-sm text-center mb-4">
+                  <ShoppingCartIcon className="h-24 w-24 text-[var(--dash-text-disabled)] mb-8" />
+                  <p className="text-[var(--dash-text-muted)] text-sm text-center mb-4">
                     اضغط على المنتجات لإضافتها للسلة
                   </p>
                   <div className="text-center">
-                    <span className="bg-gray-600 px-3 py-1 rounded text-sm text-gray-300">
+                    <span className="bg-[var(--dash-bg-overlay)] px-3 py-1 rounded text-sm text-[var(--dash-text-secondary)]">
                       0 منتج
                     </span>
                   </div>
@@ -6599,9 +6599,9 @@ function POSPageContent() {
               ) : (
                 <div className="h-full flex flex-col">
                   {/* Cart Header */}
-                  <div className="px-3 py-2 border-b border-gray-600 flex-shrink-0">
+                  <div className="px-3 py-2 border-b border-[var(--dash-border-default)] flex-shrink-0">
                     <div className="flex justify-between items-center">
-                      <span className="text-white font-medium text-sm">منتجات السلة: {cartItems.length}</span>
+                      <span className="text-[var(--dash-text-primary)] font-medium text-sm">منتجات السلة: {cartItems.length}</span>
                       {cartItems.length > 0 && (
                         <div className="flex items-center gap-2">
                           <button
@@ -6650,7 +6650,7 @@ function POSPageContent() {
                             <ClockIcon className="h-3 w-3" />
                             تأجيل
                           </button>
-                          <span className="text-gray-500">|</span>
+                          <span className="text-[var(--dash-text-disabled)]">|</span>
                           <button
                             onClick={clearCart}
                             className="text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded px-1.5 py-0.5 transition-colors text-xs"
@@ -6682,11 +6682,11 @@ function POSPageContent() {
                     {cartItems.map((item) => (
                       <div
                         key={item.id}
-                        className="bg-[#2B3544] rounded-lg p-3 border border-gray-600"
+                        className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]"
                       >
                         <div className="flex gap-3 mb-2">
                           {/* Product Image - OPTIMIZED */}
-                          <div className="w-12 h-12 bg-[#374151] rounded-lg overflow-hidden flex-shrink-0">
+                          <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
                             <ProductThumbnail
                               src={item.product.main_image_url}
                               alt={item.product.name}
@@ -6694,7 +6694,7 @@ function POSPageContent() {
                           </div>
 
                           <div className="flex-1 flex justify-between items-start">
-                            <h4 className="text-white text-sm font-medium leading-tight flex-1">
+                            <h4 className="text-[var(--dash-text-primary)] text-sm font-medium leading-tight flex-1">
                               {item.product.name}
                             </h4>
                             <div className="flex items-center gap-1 ml-2">
@@ -6725,7 +6725,7 @@ function POSPageContent() {
                         {/* Quantity and Price Row */}
                         <div className="flex justify-between items-center">
                           <div className="flex items-center gap-2">
-                            <span className="text-gray-400 text-xs">
+                            <span className="text-[var(--dash-text-muted)] text-xs">
                               الكمية:
                             </span>
                             <EditableField
@@ -6799,14 +6799,14 @@ function POSPageContent() {
                                   return newCart;
                                 });
                               }}
-                              className="text-white font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-gray-600/20 rounded px-1"
+                              className="text-[var(--dash-text-primary)] font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
                             />
                           </div>
 
                           <div className="flex items-center gap-2">
                             {!isTransferMode && (
                               <>
-                                <span className="text-gray-400 text-xs">
+                                <span className="text-[var(--dash-text-muted)] text-xs">
                                   السعر:
                                 </span>
                                 <EditableField
@@ -6831,7 +6831,7 @@ function POSPageContent() {
                                       return newCart;
                                     });
                                   }}
-                                  className="text-blue-400 font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-gray-600/20 rounded px-1"
+                                  className="text-blue-400 font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
                                 />
                                 <span className="text-blue-400 text-xs">
                                   {systemCurrency}
@@ -6844,13 +6844,13 @@ function POSPageContent() {
                         {/* Colors Display */}
                         {item.selectedColors &&
                           Object.keys(item.selectedColors).length > 0 && (
-                            <div className="mt-2 pt-2 border-t border-gray-600">
+                            <div className="mt-2 pt-2 border-t border-[var(--dash-border-default)]">
                               <div className="flex flex-wrap gap-1">
                                 {Object.entries(item.selectedColors).map(
                                   ([color, quantity]: [string, any]) => (
                                     <span
                                       key={color}
-                                      className="bg-gray-600 px-2 py-1 rounded text-xs text-white"
+                                      className="bg-[var(--dash-bg-overlay)] px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]"
                                     >
                                       {color}: {quantity}
                                     </span>
@@ -6863,13 +6863,13 @@ function POSPageContent() {
                         {/* Shapes Display */}
                         {item.selectedShapes &&
                           Object.keys(item.selectedShapes).length > 0 && (
-                            <div className="mt-2 pt-2 border-t border-gray-600">
+                            <div className="mt-2 pt-2 border-t border-[var(--dash-border-default)]">
                               <div className="flex flex-wrap gap-1">
                                 {Object.entries(item.selectedShapes).map(
                                   ([shape, quantity]: [string, any]) => (
                                     <span
                                       key={shape}
-                                      className="bg-purple-600/40 px-2 py-1 rounded text-xs text-white"
+                                      className="bg-purple-600/40 px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]"
                                     >
                                       🔷 {shape}: {quantity}
                                     </span>
@@ -6895,7 +6895,7 @@ function POSPageContent() {
             </div>
 
             {/* Cart Footer */}
-            <div className="p-4 border-t border-gray-600 bg-[#2B3544] flex-shrink-0">
+            <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] flex-shrink-0">
               {/* Payment Split Component - Show in sales, return, and purchase mode (not transfer or edit mode) */}
               {!isTransferMode && !activePOSTab?.isEditMode && (
                 <PaymentSplit
@@ -6919,9 +6919,9 @@ function POSPageContent() {
                     <div className="text-right">
                       {(cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)) ? (
                         <>
-                          <div className="text-white text-sm font-medium">الإجمالي: ({cartItems.length})</div>
+                          <div className="text-[var(--dash-text-primary)] text-sm font-medium">الإجمالي: ({cartItems.length})</div>
                           <div className="flex items-center gap-2 justify-end">
-                            <span className="text-gray-400 text-xs line-through">
+                            <span className="text-[var(--dash-text-muted)] text-xs line-through">
                               {formatPrice(cartTotal, "system")}
                             </span>
                             <span className="text-orange-400 text-xs">
@@ -6934,7 +6934,7 @@ function POSPageContent() {
                         </>
                       ) : (
                         <>
-                          <div className="text-white text-sm font-medium">الإجمالي: ({cartItems.length})</div>
+                          <div className="text-[var(--dash-text-primary)] text-sm font-medium">الإجمالي: ({cartItems.length})</div>
                           <div className="text-green-400 font-bold text-lg">
                             {formatPrice(cartTotal, "system")}
                           </div>
@@ -6944,7 +6944,7 @@ function POSPageContent() {
                   ) : (
                     <div className="text-right">
                       <div className="text-green-400 text-sm font-medium">وضع النقل</div>
-                      <div className="text-white font-bold text-lg">
+                      <div className="text-[var(--dash-text-primary)] font-bold text-lg">
                         {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                       </div>
                     </div>
@@ -6964,13 +6964,13 @@ function POSPageContent() {
                       onChange={(e) => setPaidAmount(e.target.value)}
                       placeholder="المدفوع"
                       disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                      className="w-24 min-w-0 px-3 py-2 bg-[#1F2937] text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      className="w-24 min-w-0 px-3 py-2 bg-[var(--dash-bg-base)] text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-blue-500 text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       style={{ MozAppearance: 'textfield' }}
                       dir="ltr"
                     />
                     <button
                       disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed"
                       onClick={handleCreateInvoice}
                     >
                       {isProcessingInvoice ? '...' : (
@@ -6989,7 +6989,7 @@ function POSPageContent() {
                   /* Normal confirm button for regular customers */
                   <button
                     disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                    className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed text-white bg-blue-600 hover:bg-blue-700"
+                    className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] bg-blue-600 hover:bg-blue-700"
                     onClick={handleCreateInvoice}
                   >
                     {isProcessingInvoice
@@ -7007,7 +7007,7 @@ function POSPageContent() {
                       !hasAllRequiredSelections() ||
                       isProcessingInvoice
                     }
-                    className={`flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed text-white ${
+                    className={`flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] ${
                       activePOSTab?.isEditMode
                         ? "bg-amber-600 hover:bg-amber-700"
                         : isTransferMode
@@ -7240,21 +7240,21 @@ function POSPageContent() {
 
           {/* Desktop Modal */}
           <div className="hidden md:flex fixed inset-0 z-50 items-center justify-center p-4">
-            <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] max-w-6xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
+            <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] max-w-6xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
               {/* Header */}
-              <div className="sticky top-0 bg-[#2B3544] px-8 py-6 border-b border-[#4A5568] flex items-center justify-between rounded-t-2xl">
+              <div className="sticky top-0 bg-[var(--dash-bg-surface)] px-8 py-6 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full overflow-hidden">
                     {modalProduct.main_image_url ? (
                       <img src={modalProduct.main_image_url} alt={modalProduct.name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full bg-blue-600 flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">📦</span>
+                        <span className="text-[var(--dash-text-primary)] font-bold text-lg">📦</span>
                       </div>
                     )}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">
                       تفاصيل المنتج
                     </h2>
                     <p className="text-blue-400 font-medium">
@@ -7264,7 +7264,7 @@ function POSPageContent() {
                 </div>
                 <button
                   onClick={() => setShowProductModal(false)}
-                  className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+                  className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
@@ -7276,37 +7276,37 @@ function POSPageContent() {
                   {/* Left Column - Product Info */}
                   <div className="space-y-6">
                     {/* Basic Info Card */}
-                    <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                    <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
                           <span className="text-blue-400 text-sm">ℹ️</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white">
+                        <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                           معلومات المنتج
                         </h3>
                       </div>
                       <div className="space-y-4">
-                        <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                          <span className="text-gray-400">المجموعة</span>
-                          <span className="text-white font-medium">
+                        <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                          <span className="text-[var(--dash-text-muted)]">المجموعة</span>
+                          <span className="text-[var(--dash-text-primary)] font-medium">
                             {modalProduct.category?.name || "غير محدد"}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                          <span className="text-gray-400">الوحدة</span>
-                          <span className="text-white font-medium">
+                        <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                          <span className="text-[var(--dash-text-muted)]">الوحدة</span>
+                          <span className="text-[var(--dash-text-primary)] font-medium">
                             {modalProduct.unit || "قطعة"}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                          <span className="text-gray-400">الحد الأدنى</span>
-                          <span className="text-white font-medium">
+                        <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                          <span className="text-[var(--dash-text-muted)]">الحد الأدنى</span>
+                          <span className="text-[var(--dash-text-primary)] font-medium">
                             {modalProduct.min_stock || 0}
                           </span>
                         </div>
                         <div className="flex justify-between items-center py-2">
-                          <span className="text-gray-400">الباركود</span>
-                          <span className="text-white font-mono text-sm">
+                          <span className="text-[var(--dash-text-muted)]">الباركود</span>
+                          <span className="text-[var(--dash-text-primary)] font-mono text-sm">
                             {modalProduct.barcode || "غير متوفر"}
                           </span>
                         </div>
@@ -7314,18 +7314,18 @@ function POSPageContent() {
                     </div>
 
                     {/* Pricing Card */}
-                    <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                    <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
                           <span className="text-green-400 text-sm">💰</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white">
+                        <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                           الأسعار
                         </h3>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                          <p className="text-gray-400 text-sm mb-1">
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
+                          <p className="text-[var(--dash-text-muted)] text-sm mb-1">
                             سعر البيع
                           </p>
                           <p className="text-green-400 font-bold text-xl">
@@ -7334,11 +7334,11 @@ function POSPageContent() {
                         </div>
                         <div
                           onClick={() => setShowPurchasePrice(!showPurchasePrice)}
-                          className="bg-[#2B3544] rounded-lg p-4 text-center cursor-pointer hover:bg-[#374151] transition-colors relative"
+                          className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center cursor-pointer hover:bg-[var(--dash-bg-overlay)] transition-colors relative"
                         >
                           {showPurchasePrice ? (
                             <>
-                              <p className="text-gray-400 text-sm mb-1">
+                              <p className="text-[var(--dash-text-muted)] text-sm mb-1">
                                 سعر الشراء
                               </p>
                               <p className="text-orange-400 font-bold text-xl">
@@ -7347,20 +7347,20 @@ function POSPageContent() {
                             </>
                           ) : (
                             <div className="flex items-center justify-center h-full min-h-[52px]">
-                              <EyeSlashIcon className="h-6 w-6 text-gray-500" />
+                              <EyeSlashIcon className="h-6 w-6 text-[var(--dash-text-disabled)]" />
                             </div>
                           )}
                         </div>
-                        <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                          <p className="text-gray-400 text-sm mb-1">
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
+                          <p className="text-[var(--dash-text-muted)] text-sm mb-1">
                             سعر الجملة
                           </p>
                           <p className="text-blue-400 font-bold text-lg">
                             {(modalProduct.wholesale_price || 0).toFixed(2)}
                           </p>
                         </div>
-                        <div className="bg-[#2B3544] rounded-lg p-4 text-center">
-                          <p className="text-gray-400 text-sm mb-1">سعر 1</p>
+                        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
+                          <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر 1</p>
                           <p className="text-purple-400 font-bold text-lg">
                             {(modalProduct.price1 || 0).toFixed(2)}
                           </p>
@@ -7369,19 +7369,19 @@ function POSPageContent() {
                     </div>
 
                     {/* Profit & Purchase Info Card */}
-                    <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                    <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-8 h-8 bg-yellow-600/20 rounded-lg flex items-center justify-center">
                           <span className="text-yellow-400 text-sm">📈</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white">الربح ومعلومات الشراء</h3>
+                        <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الربح ومعلومات الشراء</h3>
                       </div>
 
                       {/* ربح المنتج - بنفس شكل PD */}
-                      <div className="bg-[#2B3544] rounded-lg p-4 mb-4">
+                      <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 mb-4">
                         <div className="flex justify-between items-center">
-                          <span className="text-gray-400 text-sm">ربح المنتج</span>
-                          <span className="text-xs text-gray-500 font-mono">
+                          <span className="text-[var(--dash-text-muted)] text-sm">ربح المنتج</span>
+                          <span className="text-xs text-[var(--dash-text-disabled)] font-mono">
                             PD: {((modalProduct.price || 0) - (modalProduct.cost_price || 0)).toFixed(0)}
                           </span>
                         </div>
@@ -7390,27 +7390,27 @@ function POSPageContent() {
                       {/* آخر سعر شراء واسم المورد */}
                       {lastPurchaseInfo ? (
                         <div className="space-y-3">
-                          <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                            <span className="text-gray-400">آخر سعر شراء</span>
+                          <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                            <span className="text-[var(--dash-text-muted)]">آخر سعر شراء</span>
                             <span className="text-orange-400 font-bold">
                               {lastPurchaseInfo.unitPrice.toFixed(2)}
                             </span>
                           </div>
-                          <div className="flex justify-between items-center py-2 border-b border-gray-600/50">
-                            <span className="text-gray-400">المورد</span>
-                            <span className="text-white font-medium">
+                          <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
+                            <span className="text-[var(--dash-text-muted)]">المورد</span>
+                            <span className="text-[var(--dash-text-primary)] font-medium">
                               {lastPurchaseInfo.supplierName}
                             </span>
                           </div>
                           <button
                             onClick={() => setShowPurchaseHistoryModal(true)}
-                            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
+                            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-sm rounded-lg transition-colors"
                           >
                             عرض تاريخ الشراء
                           </button>
                         </div>
                       ) : (
-                        <p className="text-gray-500 text-sm text-center py-4">
+                        <p className="text-[var(--dash-text-disabled)] text-sm text-center py-4">
                           لا يوجد سجل شراء لهذا المنتج
                         </p>
                       )}
@@ -7418,16 +7418,16 @@ function POSPageContent() {
 
                     {/* Description Card */}
                     {modalProduct.description && (
-                      <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                      <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
                             <span className="text-purple-400 text-sm">📝</span>
                           </div>
-                          <h3 className="text-lg font-semibold text-white">
+                          <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                             وصف المنتج
                           </h3>
                         </div>
-                        <p className="text-gray-300 leading-relaxed">
+                        <p className="text-[var(--dash-text-secondary)] leading-relaxed">
                           {modalProduct.description}
                         </p>
                       </div>
@@ -7437,12 +7437,12 @@ function POSPageContent() {
                   {/* Middle Column - Inventory */}
                   <div className="space-y-6">
                     {/* Total Inventory Card */}
-                    <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                    <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
                           <span className="text-blue-400 text-sm">📊</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white">
+                        <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                           المخازن والفروع
                         </h3>
                       </div>
@@ -7478,10 +7478,10 @@ function POSPageContent() {
                               return (
                                 <div
                                   key={locationId}
-                                  className="bg-[#2B3544] rounded-lg p-4 border border-gray-600/30"
+                                  className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)]/30"
                                 >
                                   <div className="flex justify-between items-center mb-2">
-                                    <span className="text-white font-medium">
+                                    <span className="text-[var(--dash-text-primary)] font-medium">
                                       {locationName}
                                     </span>
                                     <span className="text-blue-400 font-bold text-lg">
@@ -7489,7 +7489,7 @@ function POSPageContent() {
                                     </span>
                                   </div>
                                   <div className="flex justify-between items-center text-sm">
-                                    <span className="text-gray-400">
+                                    <span className="text-[var(--dash-text-muted)]">
                                       الحد الأدنى
                                     </span>
                                     <span className="text-orange-400">
@@ -7506,14 +7506,14 @@ function POSPageContent() {
                     {/* Variants Card */}
                     {modalProduct.variantsData &&
                       Object.keys(modalProduct.variantsData).length > 0 && (
-                        <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                        <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
                             <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
                               <span className="text-purple-400 text-sm">
                                 🎨
                               </span>
                             </div>
-                            <h3 className="text-lg font-semibold text-white">
+                            <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                               الألوان والأشكال
                             </h3>
                           </div>
@@ -7555,9 +7555,9 @@ function POSPageContent() {
                                 return (
                                   <div
                                     key={locationId}
-                                    className="bg-[#2B3544] rounded-lg p-4"
+                                    className="bg-[var(--dash-bg-surface)] rounded-lg p-4"
                                   >
-                                    <p className="text-white font-medium mb-3">
+                                    <p className="text-[var(--dash-text-primary)] font-medium mb-3">
                                       {locationName}
                                     </p>
                                     <div className="flex flex-wrap gap-2">
@@ -7585,7 +7585,7 @@ function POSPageContent() {
 
                                       {/* Show unassigned quantity if any */}
                                       {unassignedQuantity > 0 && (
-                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white bg-gray-600 border border-gray-600">
+                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-[var(--dash-text-primary)] bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]">
                                           غير محدد ({unassignedQuantity})
                                         </span>
                                       )}
@@ -7602,12 +7602,12 @@ function POSPageContent() {
                   {/* Right Column - Images */}
                   <div className="space-y-6">
                     {/* Main Image Preview */}
-                    <div className="bg-[#374151] rounded-xl p-6 border border-[#4A5568]">
+                    <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-8 h-8 bg-indigo-600/20 rounded-lg flex items-center justify-center">
                           <span className="text-indigo-400 text-sm">🖼️</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white">
+                        <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                           صور المنتج
                         </h3>
                       </div>
@@ -7638,8 +7638,8 @@ function POSPageContent() {
                           )
                         ) : (
                           /* Fallback when no images available */
-                          <div className="w-full h-16 bg-[#2B3544] rounded-md border border-gray-600/30 flex items-center justify-center col-span-4">
-                            <span className="text-gray-500 text-xs">
+                          <div className="w-full h-16 bg-[var(--dash-bg-surface)] rounded-md border border-[var(--dash-border-default)]/30 flex items-center justify-center col-span-4">
+                            <span className="text-[var(--dash-text-disabled)] text-xs">
                               لا توجد صور متاحة
                             </span>
                           </div>
@@ -7657,13 +7657,13 @@ function POSPageContent() {
       {/* Categories Display Modal - Tree View */}
       {isCategoriesModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#2B3544] rounded-lg w-96 max-h-[80vh] overflow-hidden flex flex-col">
+          <div className="bg-[var(--dash-bg-surface)] rounded-lg w-96 max-h-[80vh] overflow-hidden flex flex-col">
             {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b border-gray-600">
-              <h3 className="text-xl font-bold text-white">المجموعات</h3>
+            <div className="flex justify-between items-center p-4 border-b border-[var(--dash-border-default)]">
+              <h3 className="text-xl font-bold text-[var(--dash-text-primary)]">المجموعات</h3>
               <button
                 onClick={toggleCategoriesModal}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
               >
                 <XMarkIcon className="h-5 w-5" />
               </button>
@@ -7672,11 +7672,11 @@ function POSPageContent() {
             {/* Tree View Content */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-2">
               {isLoadingCategories ? (
-                <div className="text-center py-4 text-gray-400">
+                <div className="text-center py-4 text-[var(--dash-text-muted)]">
                   جارٍ التحميل...
                 </div>
               ) : !categoryTree ? (
-                <div className="text-center py-4 text-gray-400">
+                <div className="text-center py-4 text-[var(--dash-text-muted)]">
                   لا توجد مجموعات
                 </div>
               ) : (
@@ -7693,8 +7693,8 @@ function POSPageContent() {
                         <div
                           className={`flex items-center cursor-pointer transition-colors ${
                             isSelected
-                              ? 'bg-blue-600 text-white'
-                              : 'hover:bg-[#374151] text-gray-300 hover:text-white'
+                              ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                              : 'hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                           }`}
                           style={{ paddingRight: `${16 + level * 24}px`, paddingLeft: '12px', paddingTop: '10px', paddingBottom: '10px' }}
                           onClick={() => {
@@ -7711,7 +7711,7 @@ function POSPageContent() {
                             <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                               {hasChildren ? (
                                 <button
-                                  className="text-gray-400 hover:text-white w-5 h-5 flex items-center justify-center rounded hover:bg-gray-600/30"
+                                  className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] w-5 h-5 flex items-center justify-center rounded hover:bg-[var(--dash-bg-overlay)]/30"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleCategoryNode(node.id);
@@ -7727,7 +7727,7 @@ function POSPageContent() {
                             </div>
 
                             {/* Folder Icon */}
-                            <FolderIcon className={`h-5 w-5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-gray-400'}`} />
+                            <FolderIcon className={`h-5 w-5 flex-shrink-0 ${isSelected ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`} />
 
                             {/* Category Name */}
                             <span className="text-base truncate">
@@ -7752,12 +7752,12 @@ function POSPageContent() {
             </div>
 
             {/* Footer Actions */}
-            <div className="p-4 border-t border-gray-600 space-y-2">
+            <div className="p-4 border-t border-[var(--dash-border-default)] space-y-2">
               {/* Clear Selection Button */}
               {selectedCategoryId && (
                 <button
                   onClick={() => setSelectedCategoryId(null)}
-                  className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2 bg-blue-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <XMarkIcon className="h-4 w-4" />
                   إظهار جميع المنتجات
@@ -7766,7 +7766,7 @@ function POSPageContent() {
               {/* Close Button */}
               <button
                 onClick={toggleCategoriesModal}
-                className="w-full py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="w-full py-2 bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
               >
                 إغلاق
               </button>
@@ -7786,18 +7786,18 @@ function POSPageContent() {
 
           {/* Modal */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-md">
+            <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-md">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+              <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                    <ShoppingBagIcon className="h-5 w-5 text-white" />
+                    <ShoppingBagIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-white">
+                    <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">
                       تفعيل وضع الشراء
                     </h2>
-                    <p className="text-gray-400 text-sm">تأكيد تبديل الوضع</p>
+                    <p className="text-[var(--dash-text-muted)] text-sm">تأكيد تبديل الوضع</p>
                   </div>
                 </div>
               </div>
@@ -7811,7 +7811,7 @@ function POSPageContent() {
                   </p>
                 </div>
 
-                <div className="space-y-3 text-gray-300 text-sm">
+                <div className="space-y-3 text-[var(--dash-text-secondary)] text-sm">
                   <div className="flex items-center gap-2">
                     <span className="text-blue-400">•</span>
                     <span>سيتم استبدال اختيار العميل باختيار المورد</span>
@@ -7830,23 +7830,23 @@ function POSPageContent() {
                   </div>
                 </div>
 
-                <p className="text-white font-medium mt-4 text-center">
+                <p className="text-[var(--dash-text-primary)] font-medium mt-4 text-center">
                   هل تريد تفعيل وضع الشراء؟
                 </p>
               </div>
 
               {/* Footer */}
-              <div className="p-6 border-t border-[#4A5568]">
+              <div className="p-6 border-t border-[var(--dash-border-default)]">
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShowPurchaseModeConfirm(false)}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition-colors"
+                    className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
                   >
                     إلغاء
                   </button>
                   <button
                     onClick={confirmPurchaseMode}
-                    className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-orange-600 hover:bg-orange-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                   >
                     <ShoppingBagIcon className="h-5 w-5" />
                     تفعيل وضع الشراء
@@ -7869,18 +7869,18 @@ function POSPageContent() {
 
           {/* Modal */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-md">
+            <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-md">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+              <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
-                    <ExclamationTriangleIcon className="h-5 w-5 text-white" />
+                    <ExclamationTriangleIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-white">
+                    <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">
                       إغلاق الفاتورة
                     </h2>
-                    <p className="text-gray-400 text-sm">تأكيد الإغلاق</p>
+                    <p className="text-[var(--dash-text-muted)] text-sm">تأكيد الإغلاق</p>
                   </div>
                 </div>
               </div>
@@ -7894,22 +7894,22 @@ function POSPageContent() {
                   </p>
                 </div>
 
-                <p className="text-gray-300 text-sm">
+                <p className="text-[var(--dash-text-secondary)] text-sm">
                   يوجد منتجات في السلة. هل تريد إغلاق الفاتورة وحذف جميع المنتجات؟
                 </p>
               </div>
 
               {/* Footer */}
-              <div className="flex gap-3 p-6 border-t border-[#4A5568]">
+              <div className="flex gap-3 p-6 border-t border-[var(--dash-border-default)]">
                 <button
                   onClick={cancelCloseTab}
-                  className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-3 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
                 >
                   إلغاء
                 </button>
                 <button
                   onClick={confirmCloseTab}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                 >
                   <XMarkIcon className="h-5 w-5" />
                   إغلاق الفاتورة
@@ -7931,32 +7931,32 @@ function POSPageContent() {
 
           {/* Modal */}
           <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-sm">
+            <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-sm">
               {/* Header */}
-              <div className="flex items-center justify-center p-6 border-b border-[#4A5568]">
+              <div className="flex items-center justify-center p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                    <TrashIcon className="h-6 w-6 text-white" />
+                    <TrashIcon className="h-6 w-6 text-[var(--dash-text-primary)]" />
                   </div>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6 text-center">
-                <h3 className="text-lg font-bold text-white mb-2">مسح السلة</h3>
-                <p className="text-gray-300 text-sm">
+                <h3 className="text-lg font-bold text-[var(--dash-text-primary)] mb-2">مسح السلة</h3>
+                <p className="text-[var(--dash-text-secondary)] text-sm">
                   هل أنت متأكد أنك تريد حذف جميع المنتجات من السلة؟
                 </p>
-                <p className="text-gray-400 text-xs mt-2">
+                <p className="text-[var(--dash-text-muted)] text-xs mt-2">
                   ({cartItems.length} منتج)
                 </p>
               </div>
 
               {/* Footer */}
-              <div className="flex gap-3 p-4 border-t border-[#4A5568]">
+              <div className="flex gap-3 p-4 border-t border-[var(--dash-border-default)]">
                 <button
                   onClick={() => setShowClearCartConfirm(false)}
-                  className="flex-1 px-4 py-2.5 bg-gray-600 hover:bg-gray-500 text-white rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors"
                 >
                   إلغاء
                 </button>
@@ -7965,7 +7965,7 @@ function POSPageContent() {
                     clearCart();
                     setShowClearCartConfirm(false);
                   }}
-                  className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors"
                 >
                   مسح الكل
                 </button>
@@ -7986,18 +7986,18 @@ function POSPageContent() {
 
           {/* Modal */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-md">
+            <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-md">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+              <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
-                    <PrinterIcon className="h-5 w-5 text-white" />
+                    <PrinterIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-white">
+                    <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">
                       طباعة الفاتورة
                     </h2>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-[var(--dash-text-muted)] text-sm">
                       تم إنشاء الفاتورة بنجاح
                     </p>
                   </div>
@@ -8012,7 +8012,7 @@ function POSPageContent() {
                     تم إنشاء{" "}
                     {lastInvoiceData?.isReturn ? "المرتجع" : "الفاتورة"} بنجاح
                   </p>
-                  <div className="text-white text-sm space-y-1">
+                  <div className="text-[var(--dash-text-primary)] text-sm space-y-1">
                     <p>
                       رقم الفاتورة:{" "}
                       <span className="font-bold">
@@ -8037,17 +8037,17 @@ function POSPageContent() {
                   </div>
                 </div>
 
-                <p className="text-white font-medium text-center mb-4">
+                <p className="text-[var(--dash-text-primary)] font-medium text-center mb-4">
                   هل تريد طباعة الفاتورة؟
                 </p>
               </div>
 
               {/* Footer */}
-              <div className="p-6 border-t border-[#4A5568]">
+              <div className="p-6 border-t border-[var(--dash-border-default)]">
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShowPrintReceiptModal(false)}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition-colors"
+                    className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
                   >
                     لا، شكراً
                   </button>
@@ -8056,7 +8056,7 @@ function POSPageContent() {
                       printReceipt(lastInvoiceData);
                       setShowPrintReceiptModal(false);
                     }}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                   >
                     <PrinterIcon className="h-5 w-5" />
                     نعم، اطبع الفاتورة
@@ -8073,7 +8073,7 @@ function POSPageContent() {
         .custom-scrollbar {
           /* For Firefox */
           scrollbar-width: thin;
-          scrollbar-color: #6b7280 #374151;
+          scrollbar-color: #6b7280 var(--dash-bg-raised);
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -8082,14 +8082,14 @@ function POSPageContent() {
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: #374151;
+          background: var(--dash-bg-raised);
           border-radius: 7px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: #6b7280;
           border-radius: 7px;
-          border: 2px solid #374151;
+          border: 2px solid var(--dash-bg-raised);
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -8147,14 +8147,14 @@ function POSPageContent() {
       {/* Add Tab Modal */}
       {showAddTabModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setShowAddTabModal(false)}>
-          <div className="bg-[#2B3544] rounded-lg p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-white text-lg font-medium mb-4">إضافة نافذة بيع جديدة</h3>
+          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-[var(--dash-text-primary)] text-lg font-medium mb-4">إضافة نافذة بيع جديدة</h3>
             <input
               type="text"
               value={newTabName}
               onChange={(e) => setNewTabName(e.target.value)}
               placeholder="اسم النافذة..."
-              className="w-full px-4 py-2 bg-[#374151] border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              className="w-full px-4 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
               onKeyPress={(e) => {
                 if (e.key === 'Enter' && newTabName.trim()) {
                   // Inherit selections from current tab, but ALWAYS use default customer
@@ -8177,7 +8177,7 @@ function POSPageContent() {
                   setNewTabName("");
                   setShowAddTabModal(false);
                 }}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                className="px-4 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded transition-colors"
               >
                 إلغاء
               </button>
@@ -8196,7 +8196,7 @@ function POSPageContent() {
                     setShowAddTabModal(false);
                   }
                 }}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
                 disabled={!newTabName.trim()}
               >
                 موافق
@@ -8209,12 +8209,12 @@ function POSPageContent() {
       {/* Mobile Details Modal */}
       {showMobileDetailsModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 md:hidden">
-          <div className="bg-[#2B3544] rounded-lg w-full max-w-sm border border-gray-600">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-600">
-              <h3 className="text-white font-medium">تفاصيل الفاتورة</h3>
+          <div className="bg-[var(--dash-bg-surface)] rounded-lg w-full max-w-sm border border-[var(--dash-border-default)]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--dash-border-default)]">
+              <h3 className="text-[var(--dash-text-primary)] font-medium">تفاصيل الفاتورة</h3>
               <button
                 onClick={() => setShowMobileDetailsModal(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
               >
                 <XMarkIcon className="h-5 w-5" />
               </button>
@@ -8222,10 +8222,10 @@ function POSPageContent() {
             <div className="p-4 space-y-3">
               {/* العميل/المورد */}
               <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-sm">
+                <span className="text-[var(--dash-text-muted)] text-sm">
                   {isPurchaseMode ? 'المورد' : 'العميل'}:
                 </span>
-                <span className="text-white text-sm font-medium">
+                <span className="text-[var(--dash-text-primary)] text-sm font-medium">
                   {isPurchaseMode
                     ? selectedSupplier?.name || 'غير محدد'
                     : selections.customer?.name || 'غير محدد'
@@ -8234,24 +8234,24 @@ function POSPageContent() {
               </div>
               {/* الفرع */}
               <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-sm">الفرع:</span>
-                <span className="text-white text-sm font-medium">
+                <span className="text-[var(--dash-text-muted)] text-sm">الفرع:</span>
+                <span className="text-[var(--dash-text-primary)] text-sm font-medium">
                   {selections.branch?.name || 'غير محدد'}
                 </span>
               </div>
               {/* الخزنة */}
               <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-sm">الخزنة:</span>
-                <span className="text-white text-sm font-medium">
+                <span className="text-[var(--dash-text-muted)] text-sm">الخزنة:</span>
+                <span className="text-[var(--dash-text-primary)] text-sm font-medium">
                   {selections.record?.name || 'غير محدد'}
                 </span>
               </div>
               {/* السعر */}
               {!isPurchaseMode && !isTransferMode && (
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">نوع السعر:</span>
+                  <span className="text-[var(--dash-text-muted)] text-sm">نوع السعر:</span>
                   <span className={`text-sm font-medium ${
-                    selectedPriceType !== "price" ? "text-blue-400" : "text-white"
+                    selectedPriceType !== "price" ? "text-blue-400" : "text-[var(--dash-text-primary)]"
                   }`}>
                     {getPriceTypeName(selectedPriceType)}
                   </span>

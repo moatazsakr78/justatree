@@ -172,31 +172,31 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-25 z-40"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar - wider for supplier form */}
-      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[#3A4553] z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
+      <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-[500px] bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
-      } shadow-2xl`}>
+      } shadow-[var(--dash-shadow-lg)] animate-dash-scale-in`}>
         
         {/* Header */}
-        <div className="bg-[#3A4553] px-4 py-3 flex items-center justify-start border-b border-[#4A5568]">
-          <h2 className="text-white text-lg font-medium flex-1 text-right flex items-center justify-end gap-2">
+        <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
+          <h2 className="text-[var(--dash-text-primary)] text-lg font-medium flex-1 text-right flex items-center justify-end gap-2">
             إضافة مورد
           </h2>
           <button
             onClick={onClose}
-            className="text-white hover:text-gray-200 transition-colors ml-4"
+            className="text-[var(--dash-text-primary)] hover:text-gray-200 transition-colors ml-4"
           >
             <ArrowRightIcon className="h-5 w-5" />
           </button>
         </div>
 
         {/* Tab Navigation Bar */}
-        <div className="bg-[#3A4553] border-b border-[#4A5568]">
+        <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)]">
           <div className="flex">
             {tabs.map((tab) => (
               <button
@@ -205,7 +205,7 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
                 className={`relative px-6 py-3 text-sm font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'text-[#5DADE2]'
-                    : 'text-gray-300 hover:text-white'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                 }`}
               >
                 {tab.label}
@@ -235,7 +235,7 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
           
           {/* Supplier Name */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               اسم المورد *
             </label>
             <input
@@ -244,17 +244,17 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
               value={formData.name}
               onChange={handleInputChange}
               placeholder="أدخل اسم المورد"
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm"
             />
           </div>
 
           {/* Group */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               المجموعة
             </label>
             {groupsLoading ? (
-              <div className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-gray-400 text-right text-sm">
+              <div className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-muted)] text-right text-sm">
                 جاري التحميل...
               </div>
             ) : (
@@ -271,7 +271,7 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
 
           {/* Opening Balance */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               الرصيد الافتتاحي
             </label>
             <input
@@ -280,13 +280,13 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
               value={formData.openingBalance}
               onChange={handleInputChange}
               placeholder="0.00"
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm"
             />
           </div>
 
           {/* Allowed Limit */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               الحد المسموح
             </label>
             <input
@@ -295,13 +295,13 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
               value={formData.allowedLimit}
               onChange={handleInputChange}
               placeholder="0.00"
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm"
             />
           </div>
 
           {/* Rank */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               الرتبة
             </label>
             <SearchableSelect
@@ -316,7 +316,7 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
 
           {/* Phone Number */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               رقم الهاتف
             </label>
             <input
@@ -325,13 +325,13 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="أدخل رقم الهاتف"
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm"
             />
           </div>
 
           {/* Governorate */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               المحافظة
             </label>
             <SearchableSelect
@@ -346,7 +346,7 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
 
           {/* Address */}
           <div className="space-y-2">
-            <label className="block text-white text-sm font-medium text-right">
+            <label className="block text-[var(--dash-text-primary)] text-sm font-medium text-right">
               العنوان
             </label>
             <textarea
@@ -355,13 +355,13 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
               onChange={handleInputChange}
               placeholder="أدخل العنوان التفصيلي"
               rows={3}
-              className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm resize-none"
+              className="w-full px-3 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm resize-none"
             />
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#3A4553] border-t border-[#4A5568]">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--dash-bg-surface)] border-t border-[var(--dash-border-default)]">
           <div className="flex gap-2">
             {/* Clear Fields Button */}
             <button
@@ -377,7 +377,7 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
             <div className="flex gap-2">
               <button
                 onClick={handleCancel}
-                className="bg-transparent hover:bg-gray-600/10 text-gray-300 border border-gray-600 hover:border-gray-500 px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
+                className="bg-transparent hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)] px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -389,8 +389,8 @@ export default function AddSupplierModal({ isOpen, onClose, onCreated }: AddSupp
                 disabled={isLoading}
                 className={`bg-transparent border px-4 py-2 text-sm font-medium transition-all duration-200 min-w-[80px] flex items-center gap-2 ${
                   isLoading 
-                    ? 'border-gray-600 text-gray-500 cursor-not-allowed' 
-                    : 'hover:bg-gray-600/10 text-gray-300 border-gray-600 hover:border-gray-500'
+                    ? 'border-[var(--dash-border-default)] text-[var(--dash-text-disabled)] cursor-not-allowed' 
+                    : 'hover:bg-[var(--dash-bg-overlay)]/10 text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:border-[var(--dash-bg-highlight)]'
                 }`}
               >
                 {isLoading ? (

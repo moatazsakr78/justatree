@@ -120,8 +120,8 @@ export default function VoiceMessage({
               className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center">
-              <svg className="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 rounded-full bg-[var(--dash-bg-highlight)] flex items-center justify-center">
+              <svg className="w-6 h-6 text-[var(--dash-text-secondary)]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
             </div>
@@ -134,7 +134,7 @@ export default function VoiceMessage({
         className={`flex items-center gap-3 px-3 py-2 rounded-2xl min-w-[200px] max-w-[280px] ${
           isOutgoing
             ? 'bg-green-600 rounded-tr-sm'
-            : 'bg-gray-600 rounded-tl-sm'
+            : 'bg-[var(--dash-bg-overlay)] rounded-tl-sm'
         }`}
       >
         {/* Play/Pause Button */}
@@ -143,7 +143,7 @@ export default function VoiceMessage({
           className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
             isOutgoing
               ? 'bg-green-700 hover:bg-green-800'
-              : 'bg-gray-500 hover:bg-gray-400'
+              : 'bg-[var(--dash-bg-highlight)] hover:bg-[var(--dash-bg-overlay)]'
           }`}
         >
           {isPlaying ? (
@@ -166,7 +166,7 @@ export default function VoiceMessage({
                 className={`w-[3px] rounded-full transition-all duration-150 ${
                   bar.isActive
                     ? isOutgoing ? 'bg-white' : 'bg-green-400'
-                    : isOutgoing ? 'bg-green-400/50' : 'bg-gray-400'
+                    : isOutgoing ? 'bg-green-400/50' : 'bg-[var(--dash-text-muted)]'
                 }`}
                 style={{ height: `${bar.height}%` }}
               />
@@ -175,7 +175,7 @@ export default function VoiceMessage({
 
           {/* Duration */}
           <div className="flex justify-between text-xs">
-            <span className={isOutgoing ? 'text-green-200' : 'text-gray-300'}>
+            <span className={isOutgoing ? 'text-green-200' : 'text-[var(--dash-text-secondary)]'}>
               {formatTime(isPlaying || currentTime > 0 ? currentTime : duration)}
             </span>
           </div>

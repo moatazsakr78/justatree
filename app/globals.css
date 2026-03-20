@@ -153,6 +153,73 @@
   --primary-hover-color: #4A1616;
   --button-color: #5d1f1f;
   --button-hover-color: #4A1616;
+
+  /* ══════════════════════════════════════════════════════════
+     Dashboard Design System — dark enterprise theme tokens
+     ══════════════════════════════════════════════════════════ */
+
+  /* Surface layers (darkest → lightest) */
+  --dash-bg-deepest: #0F1419;
+  --dash-bg-base: #151C25;
+  --dash-bg-surface: #1B2432;
+  --dash-bg-raised: #222D3D;
+  --dash-bg-overlay: #2A3648;
+  --dash-bg-highlight: #334155;
+
+  /* Borders */
+  --dash-border-subtle: rgba(148, 163, 184, 0.08);
+  --dash-border-default: rgba(148, 163, 184, 0.12);
+  --dash-border-strong: rgba(148, 163, 184, 0.20);
+  --dash-border-focus: #3B82F6;
+
+  /* Text */
+  --dash-text-primary: #F1F5F9;
+  --dash-text-secondary: #CBD5E1;
+  --dash-text-muted: #8B9DB7;
+  --dash-text-disabled: #4B5E78;
+
+  /* Accent colors */
+  --dash-accent-blue: #3B82F6;
+  --dash-accent-green: #10B981;
+  --dash-accent-red: #EF4444;
+  --dash-accent-orange: #F59E0B;
+  --dash-accent-purple: #8B5CF6;
+  --dash-accent-cyan: #06B6D4;
+
+  /* Accent subtle variants (backgrounds) */
+  --dash-accent-blue-subtle: rgba(59, 130, 246, 0.12);
+  --dash-accent-green-subtle: rgba(16, 185, 129, 0.12);
+  --dash-accent-red-subtle: rgba(239, 68, 68, 0.12);
+  --dash-accent-orange-subtle: rgba(245, 158, 11, 0.12);
+  --dash-accent-purple-subtle: rgba(139, 92, 246, 0.12);
+  --dash-accent-cyan-subtle: rgba(6, 182, 212, 0.12);
+
+  /* Component tokens */
+  --dash-header-bg: #151C25;
+  --dash-sidebar-bg: #151C25;
+  --dash-card-bg: #1B2432;
+  --dash-input-bg: #151C25;
+  --dash-table-header-bg: #1B2432;
+  --dash-modal-bg: #1B2432;
+  --dash-modal-backdrop: rgba(0, 0, 0, 0.60);
+  --dash-tooltip-bg: #222D3D;
+
+  /* Shadows */
+  --dash-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
+  --dash-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --dash-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4), 0 6px 10px rgba(0, 0, 0, 0.25);
+  --dash-shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.15), 0 0 6px rgba(59, 130, 246, 0.1);
+
+  /* Transitions */
+  --dash-transition-fast: 150ms;
+  --dash-transition-normal: 200ms;
+  --dash-transition-slow: 300ms;
+
+  /* Radii */
+  --dash-radius-sm: 6px;
+  --dash-radius-md: 8px;
+  --dash-radius-lg: 12px;
+  --dash-radius-xl: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -174,6 +241,79 @@ body {
   direction: rtl;
 }
 
+/* ══════════════════════════════════════════════════════════
+   Dashboard Utility Classes
+   ══════════════════════════════════════════════════════════ */
+
+/* Card hover — subtle lift + shadow */
+.dash-card-hover {
+  transition: transform var(--dash-transition-normal) ease, box-shadow var(--dash-transition-normal) ease;
+}
+.dash-card-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--dash-shadow-md);
+}
+
+/* Table row hover */
+.dash-row-hover {
+  transition: background-color var(--dash-transition-fast) ease;
+}
+.dash-row-hover:hover {
+  background-color: var(--dash-bg-overlay);
+}
+
+/* Focus ring */
+.dash-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--dash-bg-base), 0 0 0 4px var(--dash-accent-blue);
+}
+
+/* Button press */
+.dash-btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Themed thin scrollbar */
+.dash-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dash-bg-highlight) var(--dash-bg-surface);
+}
+.dash-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.dash-scrollbar::-webkit-scrollbar-track {
+  background: var(--dash-bg-surface);
+  border-radius: 3px;
+}
+.dash-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--dash-bg-highlight);
+  border-radius: 3px;
+}
+.dash-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--dash-text-muted);
+}
+
+/* Gradient utilities */
+.dash-gradient-blue {
+  background: linear-gradient(135deg, var(--dash-accent-blue), #2563EB);
+}
+.dash-gradient-green {
+  background: linear-gradient(135deg, var(--dash-accent-green), #059669);
+}
+.dash-gradient-red {
+  background: linear-gradient(135deg, var(--dash-accent-red), #DC2626);
+}
+.dash-gradient-orange {
+  background: linear-gradient(135deg, var(--dash-accent-orange), #D97706);
+}
+.dash-gradient-purple {
+  background: linear-gradient(135deg, var(--dash-accent-purple), #7C3AED);
+}
+.dash-gradient-cyan {
+  background: linear-gradient(135deg, var(--dash-accent-cyan), #0891B2);
+}
+
 /* Custom scrollbar styles for POS page */
 .custom-scrollbar {
   overflow-x: auto;
@@ -187,17 +327,17 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #374151;
+  background: var(--dash-bg-raised);
   border-radius: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #6B7280;
+  background: var(--dash-bg-highlight);
   border-radius: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
+  background: var(--dash-text-muted);
 }
 
 /* Show horizontal scrollbar */
@@ -214,7 +354,7 @@ body {
 /* Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #6B7280 #374151;
+  scrollbar-color: var(--dash-bg-highlight) var(--dash-bg-raised);
 }
 
 /* Alternative approach for hiding vertical scrollbar in Firefox */
@@ -258,18 +398,18 @@ body {
 
 /* Emoji Picker Dark Theme Styling */
 .EmojiPickerReact {
-  --epr-bg-color: #2B3544 !important;
-  --epr-category-label-bg-color: #2B3544 !important;
-  --epr-hover-bg-color: #374151 !important;
-  --epr-search-input-bg-color: #374151 !important;
-  --epr-search-input-text-color: #FFFFFF !important;
-  --epr-search-input-placeholder-color: #9CA3AF !important;
-  --epr-picker-border-color: #4B5563 !important;
-  --epr-category-icon-active-color: #10B981 !important;
-  --epr-text-color: #E5E7EB !important;
-  --epr-skin-tone-picker-menu-color: #374151 !important;
-  border: 1px solid #4B5563 !important;
-  border-radius: 0.5rem !important;
+  --epr-bg-color: var(--dash-bg-surface) !important;
+  --epr-category-label-bg-color: var(--dash-bg-surface) !important;
+  --epr-hover-bg-color: var(--dash-bg-overlay) !important;
+  --epr-search-input-bg-color: var(--dash-bg-raised) !important;
+  --epr-search-input-text-color: var(--dash-text-primary) !important;
+  --epr-search-input-placeholder-color: var(--dash-text-muted) !important;
+  --epr-picker-border-color: var(--dash-border-strong) !important;
+  --epr-category-icon-active-color: var(--dash-accent-green) !important;
+  --epr-text-color: var(--dash-text-secondary) !important;
+  --epr-skin-tone-picker-menu-color: var(--dash-bg-raised) !important;
+  border: 1px solid var(--dash-border-default) !important;
+  border-radius: var(--dash-radius-md) !important;
 }
 
 .EmojiPickerReact .epr-search-container input {

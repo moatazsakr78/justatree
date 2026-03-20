@@ -493,20 +493,20 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
   // ===================== MOBILE LAYOUT =====================
   if (isMobileDevice) {
     return (
-      <div className="fixed inset-0 bg-[#1F2937] z-50 flex flex-col">
+      <div className="fixed inset-0 bg-[var(--dash-bg-base)] z-50 flex flex-col">
         {showMobileDetails && mobileSelectedTransfer ? (
           /* ---- Mobile Detail View ---- */
           <div className="flex flex-col h-full">
-            <div className="bg-[#374151] border-b border-gray-600 px-4 py-3 flex items-center gap-3 flex-shrink-0">
+            <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex items-center gap-3 flex-shrink-0">
               <button onClick={() => setShowMobileDetails(false)}>
-                <ChevronRightIcon className="h-5 w-5 text-gray-300" />
+                <ChevronRightIcon className="h-5 w-5 text-[var(--dash-text-secondary)]" />
               </button>
-              <h2 className="text-white font-semibold text-sm flex-1 text-right">
+              <h2 className="text-[var(--dash-text-primary)] font-semibold text-sm flex-1 text-right">
                 تفاصيل فاتورة النقل {mobileSelectedTransfer.invoice_number}
               </h2>
             </div>
             {/* Summary info */}
-            <div className="p-4 border-b border-gray-700 bg-[#2B3544]">
+            <div className="p-4 border-b border-[var(--dash-border-subtle)] bg-[var(--dash-bg-surface)]">
               {(() => {
                 const { from, to } = parseTransferDirection(mobileSelectedTransfer.notes)
                 return (
@@ -516,7 +516,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                       <span className="text-green-400">←</span>
                       <span className="text-white font-medium">{from}</span>
                     </div>
-                    <div className="flex flex-wrap gap-3 text-xs text-gray-400 justify-end">
+                    <div className="flex flex-wrap gap-3 text-xs text-[var(--dash-text-muted)] justify-end">
                       <span>{formatDate(mobileSelectedTransfer.created_at)}</span>
                       <span>{formatTime(mobileSelectedTransfer.created_at, mobileSelectedTransfer.time)}</span>
                       {mobileSelectedTransfer.record && <span>الخزنة: {mobileSelectedTransfer.record.name}</span>}
@@ -529,18 +529,18 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
             {/* Items cards */}
             <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-2">
               {mobileSelectedTransfer.items.map((item, idx) => (
-                <div key={item.id} className="bg-[#2B3544] rounded-lg p-3 border border-gray-600">
+                <div key={item.id} className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                   <div className="flex items-center justify-between">
                     <span className="bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs font-medium">
                       {item.quantity} قطعة
                     </span>
-                    <span className="text-white text-sm font-medium">{item.product?.name || '—'}</span>
+                    <span className="text-[var(--dash-text-primary)] text-sm font-medium">{item.product?.name || '—'}</span>
                   </div>
                   {item.product?.barcode && (
-                    <div className="text-gray-400 text-xs mt-1 text-right">{item.product.barcode}</div>
+                    <div className="text-[var(--dash-text-muted)] text-xs mt-1 text-right">{item.product.barcode}</div>
                   )}
                   {item.notes && (
-                    <div className="text-gray-500 text-xs mt-1 text-right">{item.notes}</div>
+                    <div className="text-[var(--dash-text-disabled)] text-xs mt-1 text-right">{item.notes}</div>
                   )}
                 </div>
               ))}
@@ -549,37 +549,37 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
         ) : showMobileFilter ? (
           /* ---- Mobile Filter View ---- */
           <div className="flex flex-col h-full">
-            <div className="bg-[#374151] border-b border-gray-600 px-4 py-3 flex items-center gap-3 flex-shrink-0">
+            <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex items-center gap-3 flex-shrink-0">
               <button onClick={() => setShowMobileFilter(false)}>
-                <ChevronRightIcon className="h-5 w-5 text-gray-300" />
+                <ChevronRightIcon className="h-5 w-5 text-[var(--dash-text-secondary)]" />
               </button>
-              <h2 className="text-white font-semibold text-sm flex-1 text-right">الفلاتر</h2>
+              <h2 className="text-[var(--dash-text-primary)] font-semibold text-sm flex-1 text-right">الفلاتر</h2>
             </div>
             <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-4">
               {/* Location filter */}
               <div>
-                <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية حسب الموقع</h4>
+                <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 text-sm text-right">تصفية حسب الموقع</h4>
                 <div className="space-y-1.5">
-                  <label className="flex items-center justify-between cursor-pointer px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                  <label className="flex items-center justify-between cursor-pointer px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
                     <input
                       type="checkbox"
                       checked={!selectedLocations}
                       onChange={handleSelectAllLocations}
-                      className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                      className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
                     />
-                    <span className="text-gray-300 text-sm">الكل</span>
+                    <span className="text-[var(--dash-text-secondary)] text-sm">الكل</span>
                   </label>
                   {locations.map(loc => (
-                    <label key={loc.id} className="flex items-center justify-between cursor-pointer px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                    <label key={loc.id} className="flex items-center justify-between cursor-pointer px-2 py-1.5 rounded hover:bg-[var(--dash-bg-surface)] transition-colors">
                       <input
                         type="checkbox"
                         checked={!selectedLocations || selectedLocations.has(loc.name)}
                         onChange={() => handleLocationToggle(loc.name)}
-                        className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                        className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
                       />
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-500 text-xs">({loc.type === 'branch' ? 'فرع' : 'مخزن'})</span>
-                        <span className="text-gray-300 text-sm">{loc.name}</span>
+                        <span className="text-[var(--dash-text-disabled)] text-xs">({loc.type === 'branch' ? 'فرع' : 'مخزن'})</span>
+                        <span className="text-[var(--dash-text-secondary)] text-sm">{loc.name}</span>
                       </div>
                     </label>
                   ))}
@@ -588,7 +588,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
 
               {/* Direction filter */}
               <div>
-                <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية حسب الاتجاه</h4>
+                <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 text-sm text-right">تصفية حسب الاتجاه</h4>
                 <div className="flex gap-2">
                   {(['all', 'outgoing', 'incoming'] as const).map(dir => (
                     <button
@@ -597,7 +597,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                       className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${
                         directionFilter === dir
                           ? 'bg-green-600 text-white'
-                          : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                          : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-highlight)]'
                       }`}
                     >
                       {dir === 'all' ? 'الكل' : dir === 'outgoing' ? 'صادر' : 'وارد'}
@@ -608,13 +608,13 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
 
               {/* Date filter */}
               <div>
-                <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية حسب التاريخ</h4>
+                <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 text-sm text-right">تصفية حسب التاريخ</h4>
                 <button
                   onClick={() => setShowDateFilter(true)}
                   className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm transition-colors ${
                     dateFilter.type !== 'all'
                       ? 'bg-green-600/20 text-green-400 border border-green-600/30'
-                      : 'bg-gray-600 text-gray-300'
+                      : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)]'
                   }`}
                 >
                   <CalendarDaysIcon className="h-4 w-4" />
@@ -626,27 +626,27 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
         ) : (
           /* ---- Mobile Main View ---- */
           <div className="flex flex-col h-full">
-            <div className="bg-[#374151] border-b border-gray-600 px-4 py-3 flex items-center justify-between flex-shrink-0">
-              <button onClick={() => setShowMobileFilter(true)} className="text-gray-300 hover:text-white">
+            <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex items-center justify-between flex-shrink-0">
+              <button onClick={() => setShowMobileFilter(true)} className="text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]">
                 <FunnelIcon className="h-5 w-5" />
               </button>
               <div className="flex items-center gap-2">
                 <ArrowsRightLeftIcon className="h-5 w-5 text-green-400" />
-                <h2 className="text-white font-semibold text-sm">حركة النقل</h2>
+                <h2 className="text-[var(--dash-text-primary)] font-semibold text-sm">حركة النقل</h2>
               </div>
-              <button onClick={onClose} className="text-gray-400 hover:text-white">
+              <button onClick={onClose} className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]">
                 <XMarkIcon className="h-5 w-5" />
               </button>
             </div>
 
             {/* Collapsible summary */}
-            <div className="bg-[#2B3544] border-b border-gray-700">
+            <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-subtle)]">
               <button
                 onClick={() => setIsMobileInfoExpanded(!isMobileInfoExpanded)}
                 className="w-full px-4 py-2 flex items-center justify-between"
               >
                 <ChevronLeftIcon className={`h-4 w-4 text-gray-400 transition-transform ${isMobileInfoExpanded ? 'rotate-[-90deg]' : ''}`} />
-                <span className="text-gray-300 text-sm">ملخص ({filteredTransfers.length} عملية نقل)</span>
+                <span className="text-[var(--dash-text-secondary)] text-sm">ملخص ({filteredTransfers.length} عملية نقل)</span>
               </button>
               {isMobileInfoExpanded && (
                 <div className="px-4 pb-3">
@@ -677,10 +677,10 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                         setMobileSelectedTransfer(transfer)
                         setShowMobileDetails(true)
                       }}
-                      className="bg-[#2B3544] rounded-lg p-4 border border-gray-600 active:bg-[#374151] transition-colors cursor-pointer"
+                      className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] active:bg-[var(--dash-bg-raised)] transition-colors cursor-pointer"
                     >
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-gray-400 text-xs">
+                        <span className="text-[var(--dash-text-muted)] text-xs">
                           {formatDate(transfer.created_at)} &bull; {formatTime(transfer.created_at, transfer.time)}
                         </span>
                         <span className="text-green-400 font-medium text-sm">{transfer.invoice_number}</span>
@@ -696,18 +696,18 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                         </span>
                         <div className="flex flex-wrap gap-1 justify-end">
                           {transfer.items.slice(0, 3).map((item) => (
-                            <span key={item.id} className="bg-gray-600/50 px-2 py-0.5 rounded text-xs text-gray-300">
+                            <span key={item.id} className="bg-[var(--dash-bg-overlay)]/50 px-2 py-0.5 rounded text-xs text-[var(--dash-text-secondary)]">
                               {item.product?.name || '—'} &times; {item.quantity}
                             </span>
                           ))}
                           {transfer.items.length > 3 && (
-                            <span className="bg-gray-600/50 px-2 py-0.5 rounded text-xs text-gray-400">
+                            <span className="bg-[var(--dash-bg-overlay)]/50 px-2 py-0.5 rounded text-xs text-[var(--dash-text-muted)]">
                               +{transfer.items.length - 3}
                             </span>
                           )}
                         </div>
                       </div>
-                      <div className="text-gray-500 text-xs mt-2 text-center">اضغط لعرض التفاصيل</div>
+                      <div className="text-[var(--dash-text-disabled)] text-xs mt-2 text-center">اضغط لعرض التفاصيل</div>
                     </div>
                   )
                 })
@@ -719,7 +719,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 </div>
               )}
               {!hasMore && filteredTransfers.length > 0 && (
-                <div className="text-center text-gray-500 text-xs py-4">
+                <div className="text-center text-[var(--dash-text-disabled)] text-xs py-4">
                   تم عرض جميع عمليات النقل ({filteredTransfers.length})
                 </div>
               )}
@@ -740,9 +740,9 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
 
   // ===================== DESKTOP LAYOUT =====================
   return (
-    <div className="fixed inset-0 bg-[#1F2937] z-50 flex flex-col" style={{ userSelect: isDragging ? 'none' : 'auto' }}>
+    <div className="fixed inset-0 bg-[var(--dash-bg-base)] z-50 flex flex-col" style={{ userSelect: isDragging ? 'none' : 'auto' }}>
       {/* Header */}
-      <div className="bg-[#374151] border-b border-gray-600 px-6 py-4 flex-shrink-0">
+      <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-6 py-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
             {/* Tab Navigation */}
@@ -752,7 +752,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 className={`px-5 py-2.5 text-sm font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
                   activeTab === 'invoices'
                     ? 'text-green-400 border-green-400 bg-green-600/10'
-                    : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                 }`}
               >
                 فواتير النقل ({filteredTransfers.length})
@@ -762,7 +762,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                   activeTab === 'summary'
                     ? 'text-green-400 border-green-400 bg-green-600/10'
-                    : 'text-gray-300 hover:text-white border-transparent hover:border-gray-400 hover:bg-gray-600/20'
+                    : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                 }`}
               >
                 ملخص
@@ -771,13 +771,13 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
 
             {/* View Mode Toggle — invoices tab only */}
             {activeTab === 'invoices' && (
-              <div className="flex gap-1 bg-gray-600/50 rounded-lg p-1">
+              <div className="flex gap-1 bg-[var(--dash-bg-overlay)]/50 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode('list-only')}
                   className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                     viewMode === 'list-only'
                       ? 'bg-green-600 text-white shadow-sm'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                   }`}
                   title="عرض القائمة فقط"
                 >
@@ -788,7 +788,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                     viewMode === 'split'
                       ? 'bg-green-600 text-white shadow-sm'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                   }`}
                   title="عرض مقسم"
                 >
@@ -799,7 +799,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                     viewMode === 'details-only'
                       ? 'bg-green-600 text-white shadow-sm'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-600/50'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                   }`}
                   title="عرض التفاصيل فقط"
                 >
@@ -811,7 +811,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
 
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-600/30 transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--dash-bg-overlay)]/30 transition-colors"
           >
             ×
           </button>
@@ -824,22 +824,22 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
         <div className="flex">
           <button
             onClick={() => setShowSidebar(!showSidebar)}
-            className="w-6 bg-[#374151] hover:bg-[#4B5563] border-l border-gray-600 flex items-center justify-center transition-colors duration-200"
+            className="w-6 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] border-l border-[var(--dash-border-default)] flex items-center justify-center transition-colors duration-200"
             title={showSidebar ? 'إخفاء التفاصيل' : 'إظهار التفاصيل'}
           >
             {showSidebar ? (
-              <ChevronLeftIcon className="h-4 w-4 text-gray-300" />
+              <ChevronLeftIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
             ) : (
-              <ChevronRightIcon className="h-4 w-4 text-gray-300" />
+              <ChevronRightIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
             )}
           </button>
         </div>
 
         {/* Right Sidebar */}
         {showSidebar && (
-          <div className="w-80 bg-[#3B4754] border-l border-gray-600 flex flex-col overflow-y-auto scrollbar-hide">
+          <div className="w-80 bg-[var(--dash-bg-surface)] border-l border-[var(--dash-border-default)] flex flex-col overflow-y-auto scrollbar-hide">
             {/* Summary Card */}
-            <div className="p-4 border-b border-gray-600">
+            <div className="p-4 border-b border-[var(--dash-border-default)]">
               <div className="bg-green-600 rounded p-4 text-center">
                 <div className="text-2xl font-bold text-white">{summaryStats.totalTransfers}</div>
                 <div className="text-green-200 text-sm">إجمالي حركات النقل</div>
@@ -848,31 +848,31 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
             </div>
 
             {/* Location Filter */}
-            <div className="p-4 border-b border-gray-600">
-              <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية حسب الموقع</h4>
+            <div className="p-4 border-b border-[var(--dash-border-default)]">
+              <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 text-sm text-right">تصفية حسب الموقع</h4>
               <div className="space-y-1.5">
-                <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                <label className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-raised)] transition-colors">
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-300 text-sm">الكل</span>
+                    <span className="text-[var(--dash-text-secondary)] text-sm">الكل</span>
                   </div>
                   <input
                     type="checkbox"
                     checked={!selectedLocations}
                     onChange={handleSelectAllLocations}
-                    className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-0 cursor-pointer"
+                    className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0 cursor-pointer"
                   />
                 </label>
                 {locations.map(loc => (
-                  <label key={loc.id} className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[#2B3544] transition-colors">
+                  <label key={loc.id} className="flex items-center justify-between cursor-pointer group px-2 py-1.5 rounded hover:bg-[var(--dash-bg-raised)] transition-colors">
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-300 text-sm">{loc.name}</span>
-                      <span className="text-gray-500 text-xs">({loc.type === 'branch' ? 'فرع' : 'مخزن'})</span>
+                      <span className="text-[var(--dash-text-secondary)] text-sm">{loc.name}</span>
+                      <span className="text-[var(--dash-text-disabled)] text-xs">({loc.type === 'branch' ? 'فرع' : 'مخزن'})</span>
                     </div>
                     <input
                       type="checkbox"
                       checked={!selectedLocations || selectedLocations.has(loc.name)}
                       onChange={() => handleLocationToggle(loc.name)}
-                      className="w-4 h-4 rounded border-gray-500 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-0 cursor-pointer"
+                      className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0 cursor-pointer"
                     />
                   </label>
                 ))}
@@ -880,8 +880,8 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
             </div>
 
             {/* Direction Filter */}
-            <div className="p-4 border-b border-gray-600">
-              <h4 className="text-white font-medium mb-3 text-sm text-right">تصفية حسب الاتجاه</h4>
+            <div className="p-4 border-b border-[var(--dash-border-default)]">
+              <h4 className="text-[var(--dash-text-primary)] font-medium mb-3 text-sm text-right">تصفية حسب الاتجاه</h4>
               <div className="space-y-1.5">
                 {(['all', 'outgoing', 'incoming'] as const).map(dir => (
                   <button
@@ -890,7 +890,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                     className={`w-full px-3 py-2 rounded text-sm font-medium text-right transition-colors ${
                       directionFilter === dir
                         ? 'bg-green-600/20 text-green-400 border border-green-600/30'
-                        : 'bg-[#2B3544] text-gray-300 hover:bg-gray-600'
+                        : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                   >
                     {dir === 'all' ? 'الكل' : dir === 'outgoing' ? 'صادر (من الموقع المحدد)' : 'وارد (إلى الموقع المحدد)'}
@@ -903,19 +903,19 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
             <div className="p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-green-400 text-sm">{getFilterLabel(dateFilter)}</span>
-                <span className="text-gray-400 text-xs">الفترة</span>
+                <span className="text-[var(--dash-text-muted)] text-xs">الفترة</span>
               </div>
               {dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate && (
                 <div className="flex justify-between items-center">
-                  <span className="text-white text-sm">
+                  <span className="text-[var(--dash-text-primary)] text-sm">
                     {new Date(dateFilter.startDate).toLocaleDateString('en-GB')} - {new Date(dateFilter.endDate).toLocaleDateString('en-GB')}
                   </span>
-                  <span className="text-gray-400 text-xs">من - إلى</span>
+                  <span className="text-[var(--dash-text-muted)] text-xs">من - إلى</span>
                 </div>
               )}
               <div className="flex justify-between items-center">
-                <span className="text-white text-sm">{new Date().toLocaleDateString('en-GB')}</span>
-                <span className="text-gray-400 text-xs">التاريخ</span>
+                <span className="text-[var(--dash-text-primary)] text-sm">{new Date().toLocaleDateString('en-GB')}</span>
+                <span className="text-[var(--dash-text-muted)] text-xs">التاريخ</span>
               </div>
               <button
                 onClick={() => setShowDateFilter(true)}
@@ -947,7 +947,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               {/* Top Panel: Invoice List */}
               <div
                 ref={topPanelRef}
-                className={`absolute inset-0 bg-[#2B3544] transition-all duration-300 ${
+                className={`absolute inset-0 bg-[var(--dash-bg-surface)] transition-all duration-300 ${
                   viewMode === 'details-only' ? 'z-0 opacity-20' : 'z-10'
                 }`}
                 style={{
@@ -958,13 +958,13 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 {isLoading && transfers.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mr-3"></div>
-                    <span className="text-gray-400">جاري تحميل فواتير النقل...</span>
+                    <span className="text-[var(--dash-text-muted)]">جاري تحميل فواتير النقل...</span>
                   </div>
                 ) : filteredTransfers.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full p-8">
-                    <ArrowsRightLeftIcon className="h-16 w-16 text-gray-500 mb-4" />
-                    <p className="text-gray-400 text-lg mb-2">لا توجد عمليات نقل</p>
-                    <p className="text-gray-500 text-sm">لم يتم العثور على عمليات نقل في الفترة المحددة</p>
+                    <ArrowsRightLeftIcon className="h-16 w-16 text-[var(--dash-text-disabled)] mb-4" />
+                    <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد عمليات نقل</p>
+                    <p className="text-[var(--dash-text-disabled)] text-sm">لم يتم العثور على عمليات نقل في الفترة المحددة</p>
                   </div>
                 ) : (
                   <ResizableTable
@@ -981,17 +981,17 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               {/* Resizable Divider */}
               {viewMode === 'split' && (
                 <div
-                  className="absolute left-0 right-0 h-2 bg-gray-600 hover:bg-green-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
+                  className="absolute left-0 right-0 h-2 bg-[var(--dash-bg-overlay)] hover:bg-green-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
                   style={{ top: `${dividerPosition}%`, transform: 'translateY(-50%)' }}
                   onMouseDown={handleMouseDown}
                 >
-                  <div className="w-12 h-1 bg-gray-400 rounded-full"></div>
+                  <div className="w-12 h-1 bg-[var(--dash-text-muted)] rounded-full"></div>
                 </div>
               )}
 
               {/* Bottom Panel: Selected Invoice Details */}
               <div
-                className={`absolute inset-0 bg-[#2B3544] flex flex-col transition-all duration-300 ${
+                className={`absolute inset-0 bg-[var(--dash-bg-surface)] flex flex-col transition-all duration-300 ${
                   viewMode === 'list-only' ? 'z-0 opacity-20' : 'z-10'
                 }`}
                 style={{
@@ -1003,27 +1003,27 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 {selectedTransfer ? (
                   <>
                     {/* Detail Header */}
-                    <div className="flex items-center justify-between p-4 pb-2 flex-shrink-0 border-b border-gray-600">
+                    <div className="flex items-center justify-between p-4 pb-2 flex-shrink-0 border-b border-[var(--dash-border-default)]">
                       <div />
                       <h3 className="text-green-400 font-medium text-lg">
                         تفاصيل فاتورة النقل {selectedTransfer.invoice_number}
                       </h3>
                     </div>
                     {/* Info Row */}
-                    <div className="flex items-center justify-end gap-4 px-4 py-2 text-sm border-b border-gray-700 flex-shrink-0 flex-wrap">
+                    <div className="flex items-center justify-end gap-4 px-4 py-2 text-sm border-b border-[var(--dash-border-subtle)] flex-shrink-0 flex-wrap">
                       {selectedTransfer.creator && (
-                        <span className="text-gray-400">بواسطة: <span className="text-white">{selectedTransfer.creator.full_name}</span></span>
+                        <span className="text-[var(--dash-text-muted)]">بواسطة: <span className="text-[var(--dash-text-primary)]">{selectedTransfer.creator.full_name}</span></span>
                       )}
                       {selectedTransfer.record && (
-                        <span className="text-gray-400">الخزنة: <span className="text-white">{selectedTransfer.record.name}</span></span>
+                        <span className="text-[var(--dash-text-muted)]">الخزنة: <span className="text-[var(--dash-text-primary)]">{selectedTransfer.record.name}</span></span>
                       )}
-                      <span className="text-gray-400">
+                      <span className="text-[var(--dash-text-muted)]">
                         {formatDate(selectedTransfer.created_at)} {formatTime(selectedTransfer.created_at, selectedTransfer.time)}
                       </span>
                       {(() => {
                         const { from, to } = parseTransferDirection(selectedTransfer.notes)
                         return (
-                          <span className="text-white font-medium">
+                          <span className="text-[var(--dash-text-primary)] font-medium">
                             {from} <span className="text-green-400 mx-1">→</span> {to}
                           </span>
                         )
@@ -1041,7 +1041,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   </>
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <p className="text-gray-500">اختر فاتورة نقل لعرض التفاصيل</p>
+                    <p className="text-[var(--dash-text-disabled)]">اختر فاتورة نقل لعرض التفاصيل</p>
                   </div>
                 )}
               </div>
@@ -1051,43 +1051,43 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
             <div className="flex-1 overflow-y-auto scrollbar-hide p-6">
               {/* Stats Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div className="bg-[#2B3544] rounded-lg p-4 border border-gray-600 text-center">
+                <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
                   <div className="text-2xl font-bold text-green-400">{summaryStats.totalTransfers}</div>
-                  <div className="text-gray-400 text-sm mt-1">إجمالي فواتير النقل</div>
+                  <div className="text-[var(--dash-text-muted)] text-sm mt-1">إجمالي فواتير النقل</div>
                 </div>
-                <div className="bg-[#2B3544] rounded-lg p-4 border border-gray-600 text-center">
+                <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
                   <div className="text-2xl font-bold text-green-400">{summaryStats.totalItems}</div>
-                  <div className="text-gray-400 text-sm mt-1">إجمالي القطع المنقولة</div>
+                  <div className="text-[var(--dash-text-muted)] text-sm mt-1">إجمالي القطع المنقولة</div>
                 </div>
-                <div className="bg-[#2B3544] rounded-lg p-4 border border-gray-600 text-center">
+                <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
                   <div className="text-2xl font-bold text-green-400">{summaryStats.uniqueProducts}</div>
-                  <div className="text-gray-400 text-sm mt-1">منتجات فريدة</div>
+                  <div className="text-[var(--dash-text-muted)] text-sm mt-1">منتجات فريدة</div>
                 </div>
-                <div className="bg-[#2B3544] rounded-lg p-4 border border-gray-600 text-center">
+                <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
                   <div className="text-2xl font-bold text-green-400">{summaryStats.avgItemsPerTransfer}</div>
-                  <div className="text-gray-400 text-sm mt-1">متوسط القطع لكل عملية</div>
+                  <div className="text-[var(--dash-text-muted)] text-sm mt-1">متوسط القطع لكل عملية</div>
                 </div>
               </div>
 
               {/* Branch Flow Table */}
-              <h3 className="text-white font-semibold text-lg mb-4 text-right">حركة المواقع</h3>
+              <h3 className="text-[var(--dash-text-primary)] font-semibold text-lg mb-4 text-right">حركة المواقع</h3>
               {branchFlowData.length > 0 ? (
-                <div className="bg-[#2B3544] rounded-lg border border-gray-600 overflow-hidden">
+                <div className="bg-[var(--dash-bg-surface)] rounded-lg border border-[var(--dash-border-default)] overflow-hidden">
                   <table className="w-full text-sm">
-                    <thead className="bg-[#374151]">
+                    <thead className="bg-[var(--dash-bg-raised)]">
                       <tr>
-                        <th className="text-right text-gray-400 font-medium px-4 py-3">الموقع</th>
-                        <th className="text-center text-gray-400 font-medium px-4 py-3">صادر (عدد)</th>
-                        <th className="text-center text-gray-400 font-medium px-4 py-3">صادر (قطع)</th>
-                        <th className="text-center text-gray-400 font-medium px-4 py-3">وارد (عدد)</th>
-                        <th className="text-center text-gray-400 font-medium px-4 py-3">وارد (قطع)</th>
-                        <th className="text-center text-gray-400 font-medium px-4 py-3">صافي الحركة</th>
+                        <th className="text-right text-[var(--dash-text-muted)] font-medium px-4 py-3">الموقع</th>
+                        <th className="text-center text-[var(--dash-text-muted)] font-medium px-4 py-3">صادر (عدد)</th>
+                        <th className="text-center text-[var(--dash-text-muted)] font-medium px-4 py-3">صادر (قطع)</th>
+                        <th className="text-center text-[var(--dash-text-muted)] font-medium px-4 py-3">وارد (عدد)</th>
+                        <th className="text-center text-[var(--dash-text-muted)] font-medium px-4 py-3">وارد (قطع)</th>
+                        <th className="text-center text-[var(--dash-text-muted)] font-medium px-4 py-3">صافي الحركة</th>
                       </tr>
                     </thead>
                     <tbody>
                       {branchFlowData.map((flow, idx) => (
-                        <tr key={flow.name} className={`border-b border-gray-700 ${idx % 2 === 0 ? '' : 'bg-[#374151]/30'}`}>
-                          <td className="px-4 py-3 text-white font-medium text-right">{flow.name}</td>
+                        <tr key={flow.name} className={`border-b border-[var(--dash-border-subtle)] ${idx % 2 === 0 ? '' : 'bg-[var(--dash-bg-raised)]/30'}`}>
+                          <td className="px-4 py-3 text-[var(--dash-text-primary)] font-medium text-right">{flow.name}</td>
                           <td className="px-4 py-3 text-center text-red-400">{flow.outCount}</td>
                           <td className="px-4 py-3 text-center text-red-400">{flow.outQty}</td>
                           <td className="px-4 py-3 text-center text-green-400">{flow.inCount}</td>
@@ -1103,7 +1103,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   </table>
                 </div>
               ) : (
-                <div className="text-center text-gray-500 py-8">لا توجد بيانات لعرض حركة المواقع</div>
+                <div className="text-center text-[var(--dash-text-disabled)] py-8">لا توجد بيانات لعرض حركة المواقع</div>
               )}
 
               {isLoading && (

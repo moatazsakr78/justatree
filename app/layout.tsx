@@ -54,7 +54,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-arabic bg-[#1F2937] text-gray-800">
+      <body className="font-arabic bg-dash-deepest text-dash-text-primary">
         <Providers>
           <ThemeProvider>
             <SystemSettingsProvider>

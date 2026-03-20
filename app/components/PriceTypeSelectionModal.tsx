@@ -80,16 +80,16 @@ export default function PriceTypeSelectionModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1F2937] p-6 shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] p-6 shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)] animate-dash-scale-in">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                  <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
+                  <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     <CurrencyDollarIcon className="h-6 w-6 text-blue-400" />
                     اختيار نوع السعر
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700"
+                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--dash-bg-overlay)]"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -103,8 +103,8 @@ export default function PriceTypeSelectionModal({
                       onClick={() => handleSelect(option.id)}
                       className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${
                         selectedPriceType === option.id
-                          ? "bg-blue-600 text-white border-2 border-blue-400"
-                          : "bg-[#2B3544] text-gray-200 border-2 border-transparent hover:bg-[#374151] hover:border-gray-500"
+                          ? "bg-blue-600 text-[var(--dash-text-primary)] border-2 border-blue-400"
+                          : "bg-[var(--dash-bg-surface)] text-gray-200 border-2 border-transparent hover:bg-[var(--dash-bg-overlay)] hover:border-gray-500"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -112,7 +112,7 @@ export default function PriceTypeSelectionModal({
                           className={`w-10 h-10 rounded-full flex items-center justify-center ${
                             selectedPriceType === option.id
                               ? "bg-blue-500"
-                              : "bg-[#374151]"
+                              : "bg-[var(--dash-bg-raised)]"
                           }`}
                         >
                           <CurrencyDollarIcon className="h-5 w-5" />
@@ -123,7 +123,7 @@ export default function PriceTypeSelectionModal({
                             className={`text-sm ${
                               selectedPriceType === option.id
                                 ? "text-blue-200"
-                                : "text-gray-400"
+                                : "text-[var(--dash-text-muted)]"
                             }`}
                           >
                             {option.description}
@@ -131,15 +131,15 @@ export default function PriceTypeSelectionModal({
                         </div>
                       </div>
                       {selectedPriceType === option.id && (
-                        <CheckIcon className="h-6 w-6 text-white" />
+                        <CheckIcon className="h-6 w-6 text-[var(--dash-text-primary)]" />
                       )}
                     </button>
                   ))}
                 </div>
 
                 {/* Footer Note */}
-                <div className="mt-6 p-3 bg-[#2B3544] rounded-lg">
-                  <p className="text-sm text-gray-400 text-center">
+                <div className="mt-6 p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+                  <p className="text-sm text-[var(--dash-text-muted)] text-center">
                     سيتم عرض السعر المحدد في واجهة نقطة البيع وسيُعاد تعيينه لـ "سعر البيع" بعد إتمام كل فاتورة
                   </p>
                 </div>

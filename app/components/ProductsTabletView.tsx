@@ -210,7 +210,7 @@ export default function ProductsTabletView({
         accessor: '#', 
         width: 60,
         render: (value: any, item: any, index: number) => (
-          <span className="text-gray-400 font-medium">{index + 1}</span>
+          <span className="text-[var(--dash-text-muted)] font-medium">{index + 1}</span>
         )
       },
       { 
@@ -218,14 +218,14 @@ export default function ProductsTabletView({
         header: 'اسم المنتج', 
         accessor: 'name', 
         width: 200,
-        render: (value: string) => <span className="text-white font-medium">{value}</span>
+        render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
       },
       { 
         id: 'group', 
         header: 'المجموعة', 
         accessor: 'category', 
         width: 100,
-        render: (value: any) => <span className="text-gray-300">{value?.name || 'غير محدد'}</span>
+        render: (value: any) => <span className="text-[var(--dash-text-secondary)]">{value?.name || 'غير محدد'}</span>
       },
       { 
         id: 'totalQuantity', 
@@ -241,63 +241,63 @@ export default function ProductsTabletView({
         header: 'سعر الشراء', 
         accessor: 'cost_price', 
         width: 120,
-        render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+        render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
       },
       { 
         id: 'sellPrice', 
         header: 'سعر البيع', 
         accessor: 'price', 
         width: 120,
-        render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+        render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
       },
       { 
         id: 'wholeSalePrice', 
         header: 'سعر الجملة', 
         accessor: 'wholesale_price', 
         width: 120,
-        render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+        render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
       },
       { 
         id: 'sellPrice1', 
         header: 'سعر 1', 
         accessor: 'price1', 
         width: 100,
-        render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+        render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
       },
       { 
         id: 'sellPrice2', 
         header: 'سعر 2', 
         accessor: 'price2', 
         width: 100,
-        render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+        render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
       },
       { 
         id: 'sellPrice3', 
         header: 'سعر 3', 
         accessor: 'price3', 
         width: 100,
-        render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+        render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
       },
       { 
         id: 'sellPrice4', 
         header: 'سعر 4', 
         accessor: 'price4', 
         width: 100,
-        render: (value: number) => <span className="text-white">{(value || 0).toFixed(2)}</span>
+        render: (value: number) => <span className="text-[var(--dash-text-primary)]">{(value || 0).toFixed(2)}</span>
       },
       { 
         id: 'location', 
         header: 'الموقع', 
         accessor: 'location', 
         width: 100,
-        render: (value: string) => <span className="text-gray-300">{value || '-'}</span>
+        render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || '-'}</span>
       },
       { 
         id: 'barcode', 
         header: 'الباركود', 
         accessor: 'barcode', 
         width: 150,
-        render: (value: string) => <span className="text-gray-300 font-mono text-sm">{value || '-'}</span>
+        render: (value: string) => <span className="text-[var(--dash-text-secondary)] font-mono text-sm">{value || '-'}</span>
       }
     ]
 
@@ -414,7 +414,7 @@ export default function ProductsTabletView({
               
               {totalUnspecifiedQuantity > 0 && (
                 <span
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white bg-gray-600 border border-gray-600"
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-[var(--dash-text-primary)] bg-[var(--dash-bg-overlay)] border border-[var(--dash-bg-overlay)]"
                 >
                   غير محدد الكلي ({totalUnspecifiedQuantity})
                 </span>
@@ -764,7 +764,7 @@ export default function ProductsTabletView({
   }
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       
@@ -775,7 +775,7 @@ export default function ProductsTabletView({
       <div className="h-full pt-12 overflow-hidden flex flex-col">
         
         {/* Top Action Buttons Toolbar - Tablet Optimized with horizontal scrolling */}
-        <div className="bg-[#374151] border-b border-gray-600 px-2 py-2 w-full">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-2 py-2 w-full">
           <div 
             ref={toolbarRef}
             className="flex items-center gap-1 overflow-x-auto scrollbar-hide"
@@ -787,7 +787,7 @@ export default function ProductsTabletView({
           >
             <button 
               onClick={handleRefresh}
-              className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors"
             >
               <ArrowPathIcon className="h-4 w-4" />
               <span className="text-xs">تحديث</span>
@@ -795,7 +795,7 @@ export default function ProductsTabletView({
 
             <button 
               onClick={toggleCategorySidebar}
-              className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors"
             >
               <FolderPlusIcon className="h-4 w-4" />
               <span className="text-xs">مجموعة جديدة</span>
@@ -805,8 +805,8 @@ export default function ProductsTabletView({
               onClick={() => selectedCategory && handleEditCategory(selectedCategory)}
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedCategory && selectedCategory.name !== 'منتجات'
-                  ? 'text-gray-300 hover:text-white bg-[#2B3544] hover:bg-[#434E61]' 
-                  : 'text-gray-500 cursor-not-allowed bg-gray-700/50'
+                  ? 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)]' 
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedCategory || selectedCategory.name === 'منتجات'}
             >
@@ -819,7 +819,7 @@ export default function ProductsTabletView({
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedCategory && selectedCategory.name !== 'منتجات'
                   ? 'text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30' 
-                  : 'text-gray-500 cursor-not-allowed bg-gray-700/50'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedCategory || selectedCategory.name === 'منتجات'}
             >
@@ -829,7 +829,7 @@ export default function ProductsTabletView({
 
             <button
               onClick={toggleProductSidebar}
-              className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors"
             >
               <PlusIcon className="h-4 w-4" />
               <span className="text-xs">منتج جديد</span>
@@ -839,8 +839,8 @@ export default function ProductsTabletView({
               onClick={() => selectedProduct && handleEditProduct()}
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedProduct
-                  ? 'text-gray-300 hover:text-white bg-[#2B3544] hover:bg-[#434E61]'
-                  : 'text-gray-500 cursor-not-allowed bg-gray-700/50'
+                  ? 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)]'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedProduct}
             >
@@ -853,7 +853,7 @@ export default function ProductsTabletView({
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedProduct
                   ? 'text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30'
-                  : 'text-gray-500 cursor-not-allowed bg-gray-700/50'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedProduct}
             >
@@ -861,39 +861,39 @@ export default function ProductsTabletView({
               <span className="text-xs">حذف المنتج</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors">
               <PrinterIcon className="h-4 w-4" />
               <span className="text-xs">طباعة</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors">
               <DocumentArrowDownIcon className="h-4 w-4" />
               <span className="text-xs">حفظ كـ PDF</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors">
               <TagIcon className="h-4 w-4" />
               <span className="text-xs">بطاقات الأسعار</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors">
               <ArrowsUpDownIcon className="h-4 w-4" />
               <span className="text-xs">ترتيب</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors">
               <ArrowDownTrayIcon className="h-4 w-4" />
               <span className="text-xs">استيراد</span>
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors">
               <ArrowUpTrayIcon className="h-4 w-4" />
               <span className="text-xs">تصدير</span>
             </button>
 
             <button
               onClick={() => setShowColumnsModal(true)}
-              className="flex items-center gap-2 px-3 py-2 text-gray-300 hover:text-white cursor-pointer whitespace-nowrap bg-[#2B3544] hover:bg-[#434E61] rounded transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer whitespace-nowrap bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] rounded transition-colors"
             >
               <TableCellsIcon className="h-4 w-4" />
               <span className="text-xs">الأعمدة</span>
@@ -903,8 +903,8 @@ export default function ProductsTabletView({
               onClick={() => selectedProduct && setShowColorAssignmentModal(true)}
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedProduct
-                  ? 'text-gray-300 hover:text-white bg-[#2B3544] hover:bg-[#434E61]'
-                  : 'text-gray-500 cursor-not-allowed bg-gray-700/50'
+                  ? 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)]'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedProduct}
             >
@@ -917,7 +917,7 @@ export default function ProductsTabletView({
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedProduct
                   ? 'text-orange-300 hover:text-orange-100 bg-orange-900/20 hover:bg-orange-900/30'
-                  : 'text-gray-500 cursor-not-allowed bg-gray-700/50'
+                  : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedProduct}
             >
@@ -930,7 +930,7 @@ export default function ProductsTabletView({
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 missingDataFilter.size > 0
                   ? 'text-yellow-400 hover:text-yellow-300 bg-yellow-900/20 hover:bg-yellow-900/30'
-                  : 'text-gray-300 hover:text-white bg-[#2B3544] hover:bg-[#434E61]'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               <ExclamationTriangleIcon className="h-4 w-4" />
@@ -946,7 +946,7 @@ export default function ProductsTabletView({
         <div className="flex-1 flex flex-col overflow-hidden">
 
           {/* Search and Controls Section */}
-          <div className="bg-[#374151] border-b border-gray-600 px-4 py-3 flex-shrink-0">
+          <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-3 flex-shrink-0">
             {/* Single Horizontal Row - Search Bar, Product Count, View Toggle, Categories Toggle, Branches Dropdown */}
             <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide" style={{scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch'}}>
 
@@ -960,18 +960,18 @@ export default function ProductsTabletView({
                 />
 
               {/* 2. Product Count (Plain Text) */}
-              <span className="text-xs text-gray-400 whitespace-nowrap">
+              <span className="text-xs text-[var(--dash-text-muted)] whitespace-nowrap">
                 عرض {visibleProducts.length} من {products.length}
               </span>
 
               {/* 3. View Toggle (Images or Tables) */}
-                <div className="flex bg-[#2B3544] rounded-md overflow-hidden flex-shrink-0 border border-gray-600">
+                <div className="flex bg-[var(--dash-bg-surface)] rounded-md overflow-hidden flex-shrink-0 border border-[var(--dash-border-default)]">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-2 transition-colors ${
                       viewMode === 'grid'
                         ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                     title="عرض الصور"
                   >
@@ -982,7 +982,7 @@ export default function ProductsTabletView({
                     className={`p-2 transition-colors ${
                       viewMode === 'table'
                         ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-600'
+                        : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                     title="عرض الجداول"
                   >
@@ -993,7 +993,7 @@ export default function ProductsTabletView({
               {/* 4. Categories Toggle Button */}
                 <button
                   onClick={toggleCategoriesVisibility}
-                  className="p-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-colors bg-[#2B3544] border border-gray-600 flex-shrink-0"
+                  className="p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-colors bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] flex-shrink-0"
                   title={isCategoriesHidden ? 'إظهار المجموعات' : 'إخفاء المجموعات'}
                 >
                   {isCategoriesHidden ? (
@@ -1033,7 +1033,7 @@ export default function ProductsTabletView({
             )}
 
             {/* Products Content Container */}
-            <div className="flex-1 overflow-hidden bg-[#2B3544]">
+            <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)]">
               {viewMode === 'table' ? (
                 <ResizableTable
                   className="h-full w-full"
@@ -1062,10 +1062,10 @@ export default function ProductsTabletView({
                             setSelectedProduct(product as Product)
                           }
                         }}
-                        className={`bg-[#374151] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
+                        className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                           selectedProduct?.id === product.id
-                            ? 'border-blue-500 bg-[#434E61]'
-                            : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
+                            ? 'border-blue-500 bg-[var(--dash-bg-overlay)]'
+                            : 'border-transparent hover:border-[var(--dash-text-disabled)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
                         {/* Hover Button */}
@@ -1085,7 +1085,7 @@ export default function ProductsTabletView({
                         </div>
 
                         {/* Product Image - Larger on tablets */}
-                        <div className="w-full h-36 sm:h-44 md:h-48 bg-[#2B3544] rounded-md mb-3 flex items-center justify-center overflow-hidden">
+                        <div className="w-full h-36 sm:h-44 md:h-48 bg-[var(--dash-bg-surface)] rounded-md mb-3 flex items-center justify-center overflow-hidden">
                           {product.main_image_url ? (
                             <img
                               src={product.main_image_url}
@@ -1104,11 +1104,11 @@ export default function ProductsTabletView({
                         </div>
 
                         {/* Product Name */}
-                        <h3 className="text-white font-medium text-xs text-center mb-2 line-clamp-2">
+                        <h3 className="text-[var(--dash-text-primary)] font-medium text-xs text-center mb-2 line-clamp-2">
                           {product.name}
                         </h3>
                         {product.product_code && (
-                          <p className="text-gray-400 text-xs text-center mb-1">{product.product_code}</p>
+                          <p className="text-[var(--dash-text-muted)] text-xs text-center mb-1">{product.product_code}</p>
                         )}
 
                         {/* Product Details */}
@@ -1119,7 +1119,7 @@ export default function ProductsTabletView({
                               <span className="text-yellow-400 font-medium text-xs">
                                 {(product.rating || 0).toFixed(1)}
                               </span>
-                              <span className="text-gray-500 text-xs">
+                              <span className="text-[var(--dash-text-disabled)] text-xs">
                                 ({product.rating_count || 0})
                               </span>
                             </div>
@@ -1136,7 +1136,7 @@ export default function ProductsTabletView({
                                     {product.discountLabel}
                                   </span>
                                 </div>
-                                <span className="text-gray-500 line-through text-xs">
+                                <span className="text-[var(--dash-text-disabled)] line-through text-xs">
                                   {(product.price || 0).toFixed(2)}
                                 </span>
                               </>
@@ -1151,7 +1151,7 @@ export default function ProductsTabletView({
                             <span className="text-blue-400 font-medium text-xs">
                               {(product.inventoryData && Object.values(product.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0)) || 0}
                             </span>
-                            <span className="text-gray-400 text-xs">الكمية</span>
+                            <span className="text-[var(--dash-text-muted)] text-xs">الكمية</span>
                           </div>
 
                           {/* Show branch details - responsive based on available space */}
@@ -1161,10 +1161,10 @@ export default function ProductsTabletView({
 
                             return (
                               <div key={locationId} className={`flex justify-between items-center ${branchIndex === 1 ? 'md:block sm:hidden' : ''}`}>
-                                <span className="text-white text-xs">
+                                <span className="text-[var(--dash-text-primary)] text-xs">
                                   {inventory?.quantity || 0}
                                 </span>
-                                <span className="text-gray-400 truncate text-xs">
+                                <span className="text-[var(--dash-text-muted)] truncate text-xs">
                                   {locationName}
                                 </span>
                               </div>
@@ -1230,16 +1230,16 @@ export default function ProductsTabletView({
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={cancelDeleteCategory} />
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={cancelDeleteCategory} />
           
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-[#3A4553] rounded-lg shadow-2xl border border-[#4A5568] max-w-md w-full">
-              <div className="px-6 py-4 border-b border-[#4A5568]">
-                <h3 className="text-lg font-medium text-white text-right">تأكيد الحذف</h3>
+            <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-md w-full">
+              <div className="px-6 py-4 border-b border-[var(--dash-border-default)]">
+                <h3 className="text-lg font-medium text-[var(--dash-text-primary)] text-right">تأكيد الحذف</h3>
               </div>
               
               <div className="px-6 py-4">
-                <p className="text-gray-300 text-right mb-2">
+                <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من أنك تريد حذف هذه المجموعة؟
                 </p>
                 <p className="text-blue-400 font-medium text-right">
@@ -1247,10 +1247,10 @@ export default function ProductsTabletView({
                 </p>
               </div>
               
-              <div className="px-6 py-4 border-t border-[#4A5568] flex gap-3 justify-end">
+              <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
                 <button
                   onClick={cancelDeleteCategory}
-                  className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)] rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -1274,16 +1274,16 @@ export default function ProductsTabletView({
       {/* Product Delete Confirmation Modal */}
       {showDeleteProductConfirm && (
         <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={cancelDeleteProduct} />
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={cancelDeleteProduct} />
           
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-[#3A4553] rounded-lg shadow-2xl border border-[#4A5568] max-w-md w-full">
-              <div className="px-6 py-4 border-b border-[#4A5568]">
-                <h3 className="text-lg font-medium text-white text-right">تأكيد الحذف</h3>
+            <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-md w-full">
+              <div className="px-6 py-4 border-b border-[var(--dash-border-default)]">
+                <h3 className="text-lg font-medium text-[var(--dash-text-primary)] text-right">تأكيد الحذف</h3>
               </div>
               
               <div className="px-6 py-4">
-                <p className="text-gray-300 text-right mb-2">
+                <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من أنك تريد حذف هذا المنتج؟
                 </p>
                 <p className="text-blue-400 font-medium text-right">
@@ -1294,10 +1294,10 @@ export default function ProductsTabletView({
                 </p>
               </div>
               
-              <div className="px-6 py-4 border-t border-[#4A5568] flex gap-3 justify-end">
+              <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
                 <button
                   onClick={cancelDeleteProduct}
-                  className="px-4 py-2 text-gray-300 hover:text-white bg-transparent hover:bg-gray-600/20 border border-gray-600 hover:border-gray-500 rounded transition-colors"
+                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)] rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -1395,18 +1395,18 @@ export default function ProductsTabletView({
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-[9999]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999]"
             onClick={cancelBranchSelection}
           />
 
           {/* Modal */}
-          <div className="branches-dropdown fixed inset-4 bg-[#2B3544] rounded-2xl z-[99999] flex flex-col max-h-[80vh]">
+          <div className="branches-dropdown fixed inset-4 bg-[var(--dash-bg-surface)] rounded-2xl z-[99999] flex flex-col max-h-[80vh]">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-[#4A5568]">
-              <h3 className="text-white text-lg font-semibold">اختر الفروع والمخازن</h3>
+            <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
+              <h3 className="text-[var(--dash-text-primary)] text-lg font-semibold">اختر الفروع والمخازن</h3>
               <button
                 onClick={cancelBranchSelection}
-                className="text-gray-400 hover:text-white p-1"
+                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] p-1"
               >
                 <XMarkIcon className="w-6 h-6" />
               </button>
@@ -1418,7 +1418,7 @@ export default function ProductsTabletView({
                 {branches.map(branch => (
                   <div
                     key={branch.id}
-                    className="flex items-center gap-3 p-3 bg-[#374151] hover:bg-[#434E61] rounded-xl transition-colors border border-gray-600/30"
+                    className="flex items-center gap-3 p-3 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded-xl transition-colors border border-[var(--dash-border-default)]/30"
                   >
                     <div className="relative">
                       <input
@@ -1449,7 +1449,7 @@ export default function ProductsTabletView({
                       </div>
                     </div>
                     <div className="flex-1 text-right">
-                      <span className="text-white text-base font-medium block">
+                      <span className="text-[var(--dash-text-primary)] text-base font-medium block">
                         {branch.name}
                       </span>
                     </div>
@@ -1462,7 +1462,7 @@ export default function ProductsTabletView({
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-[#4A5568] bg-[#374151] rounded-b-2xl">
+            <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] rounded-b-2xl">
               <div className="flex items-center justify-between">
                 <span className="text-blue-400 font-medium">
                   {Object.values(tempSelectedBranches).filter(Boolean).length} من أصل {branches.length} محدد
@@ -1470,7 +1470,7 @@ export default function ProductsTabletView({
                 <div className="flex gap-2">
                   <button
                     onClick={cancelBranchSelection}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    className="bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     إلغاء
                   </button>

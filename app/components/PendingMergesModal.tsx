@@ -273,9 +273,9 @@ export default function PendingMergesModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[#1F2937] shadow-xl transition-all border border-gray-600">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[var(--dash-bg-base)] shadow-[var(--dash-shadow-lg)] transition-all border border-[var(--dash-border-default)] animate-dash-scale-in">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-600">
+                <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
                     <ClockIcon className="h-6 w-6 text-yellow-400" />
                     الدمجات المعلقة
@@ -345,7 +345,7 @@ export default function PendingMergesModal({
                             key={merge.id}
                             className={`p-4 rounded-xl border ${
                               stillCanUndo
-                                ? "bg-[#2B3544] border-gray-600"
+                                ? "bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)]"
                                 : "bg-gray-700/50 border-gray-700"
                             }`}
                           >
@@ -430,7 +430,7 @@ export default function PendingMergesModal({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-gray-600 flex justify-end">
+                <div className="p-4 border-t border-[var(--dash-border-default)] flex justify-end">
                   <button
                     onClick={onClose}
                     className="px-6 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-xl transition-colors"

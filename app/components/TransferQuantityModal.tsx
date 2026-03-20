@@ -69,21 +69,21 @@ export default function TransferQuantityModal({
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] max-w-md w-full">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-md w-full">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-[#4A5568] flex items-center justify-between">
+          <div className="px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
                 <ArrowsRightLeftIcon className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">تحويل كمية</h2>
+                <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">تحويل كمية</h2>
                 <p className="text-sm text-purple-400">{product.name}</p>
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-full transition-colors"
+              className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-full transition-colors"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -95,14 +95,14 @@ export default function TransferQuantityModal({
             {/* Source Branch */}
             {currentBranch && (
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
                   من فرع (المصدر)
                 </label>
-                <div className="w-full px-4 py-3 bg-[#374151] border border-gray-600 rounded-lg text-white">
+                <div className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)]">
                   {currentBranch.name}
                 </div>
                 <div className="mt-2 flex justify-between items-center text-sm px-1">
-                  <span className="text-gray-400">الكمية الحالية</span>
+                  <span className="text-[var(--dash-text-muted)]">الكمية الحالية</span>
                   <span className={`font-bold ${
                     fromCurrentQuantity < 0 ? 'text-red-400' :
                     fromCurrentQuantity === 0 ? 'text-gray-400' : 'text-green-400'
@@ -122,13 +122,13 @@ export default function TransferQuantityModal({
 
             {/* Destination Branch */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
                 إلى فرع (الوجهة)
               </label>
               <select
                 value={toBranchId}
                 onChange={(e) => setToBranchId(e.target.value)}
-                className="w-full px-4 py-3 bg-[#374151] border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="">اختر فرع الوجهة...</option>
                 {destinationBranches.map(branch => (
@@ -139,7 +139,7 @@ export default function TransferQuantityModal({
               </select>
               {toBranchId && (
                 <div className="mt-2 flex justify-between items-center text-sm px-1">
-                  <span className="text-gray-400">الكمية الحالية</span>
+                  <span className="text-[var(--dash-text-muted)]">الكمية الحالية</span>
                   <span className={`font-bold ${
                     toCurrentQuantity < 0 ? 'text-red-400' :
                     toCurrentQuantity === 0 ? 'text-gray-400' : 'text-green-400'
@@ -152,14 +152,14 @@ export default function TransferQuantityModal({
 
             {/* Transfer Quantity Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
                 كمية التحويل
               </label>
               <input
                 type="number"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
-                className="w-full px-4 py-3 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder="أدخل الكمية المراد تحويلها..."
                 min="1"
                 autoFocus
@@ -174,8 +174,8 @@ export default function TransferQuantityModal({
                   <div className="flex justify-between items-center">
                     <span className="text-red-400 text-sm">{currentBranch.name} (المصدر)</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-400 text-sm">{fromCurrentQuantity}</span>
-                      <span className="text-gray-500">←</span>
+                      <span className="text-[var(--dash-text-muted)] text-sm">{fromCurrentQuantity}</span>
+                      <span className="text-[var(--dash-text-disabled)]">←</span>
                       <span className={`font-bold ${fromResult < 0 ? 'text-red-400' : 'text-red-300'}`}>
                         {fromResult}
                       </span>
@@ -187,8 +187,8 @@ export default function TransferQuantityModal({
                   <div className="flex justify-between items-center">
                     <span className="text-green-400 text-sm">{toBranch?.name} (الوجهة)</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-400 text-sm">{toCurrentQuantity}</span>
-                      <span className="text-gray-500">←</span>
+                      <span className="text-[var(--dash-text-muted)] text-sm">{toCurrentQuantity}</span>
+                      <span className="text-[var(--dash-text-disabled)]">←</span>
                       <span className="text-green-300 font-bold">
                         {toResult}
                       </span>
@@ -200,24 +200,24 @@ export default function TransferQuantityModal({
 
             {/* Reason Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
                 السبب (اختياري)
               </label>
               <textarea
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 rows={2}
-                className="w-full px-4 py-3 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                 placeholder="اكتب سبب التحويل..."
               />
             </div>
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t border-[#4A5568] flex gap-3 justify-end">
+          <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
             <button
               onClick={handleClose}
-              className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-600/30 rounded-lg transition-colors"
+              className="px-4 py-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-lg transition-colors"
             >
               إلغاء
             </button>

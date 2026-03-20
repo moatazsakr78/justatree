@@ -99,10 +99,10 @@ export default function SearchableSelect({
       <button
         type="button"
         onClick={handleToggle}
-        className="w-full px-3 py-2 bg-[#2B3441] border border-[#4A5568] rounded text-white focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm flex items-center justify-between"
+        className="w-full px-3 py-2 bg-[var(--dash-input-bg)] border border-[var(--dash-border-default)] rounded-dash-sm text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm flex items-center justify-between transition-colors"
       >
         <ChevronDownIcon 
-          className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${
+          className={`h-4 w-4 text-[var(--dash-text-muted)] transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`} 
         />
@@ -123,23 +123,23 @@ export default function SearchableSelect({
               )}
             </>
           ) : (
-            <span className="text-gray-400">{placeholder}</span>
+            <span className="text-[var(--dash-text-muted)]">{placeholder}</span>
           )}
         </div>
       </button>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-[#2B3441] border border-[#4A5568] rounded shadow-lg max-h-60 overflow-hidden">
+        <div className="absolute z-50 w-full mt-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-dash-sm shadow-dash-lg max-h-60 overflow-hidden animate-dash-slide-up">
           {/* Search input */}
-          <div className="p-2 border-b border-[#4A5568]">
+          <div className="p-2 border-b border-[var(--dash-border-subtle)]">
             <input
               ref={searchInputRef}
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={searchPlaceholder}
-              className="w-full px-2 py-1 bg-[#1F2937] border border-[#4A5568] rounded text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#5DADE2] focus:border-[#5DADE2] text-right text-sm"
+              className="w-full px-2 py-1 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-dash-sm text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent text-right text-sm transition-colors"
             />
           </div>
 
@@ -151,7 +151,7 @@ export default function SearchableSelect({
                   key={option.value}
                   type="button"
                   onClick={() => handleSelect(option.value)}
-                  className="w-full px-3 py-2 text-right text-sm text-white hover:bg-[#3A4553] focus:bg-[#3A4553] focus:outline-none flex items-center justify-end gap-2 transition-colors"
+                  className="w-full px-3 py-2 text-right text-sm text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] focus:bg-[var(--dash-bg-overlay)] focus:outline-none flex items-center justify-end gap-2 transition-colors"
                 >
                   <span>{option.label}</span>
                   {option.icon && (
@@ -167,7 +167,7 @@ export default function SearchableSelect({
                 </button>
               ))
             ) : (
-              <div className="px-3 py-2 text-right text-sm text-gray-400">
+              <div className="px-3 py-2 text-right text-sm text-[var(--dash-text-muted)]">
                 لا توجد نتائج
               </div>
             )}

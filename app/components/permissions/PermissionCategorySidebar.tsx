@@ -42,8 +42,8 @@ export default function PermissionCategorySidebar({
   categoryStats = {},
 }: PermissionCategorySidebarProps) {
   return (
-    <div className="w-64 bg-[#2B3544] rounded-lg p-4">
-      <h3 className="text-white font-semibold mb-4 text-right">التصنيفات</h3>
+    <div className="w-64 bg-[var(--dash-bg-surface)] rounded-lg p-4">
+      <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">التصنيفات</h3>
 
       <div className="space-y-2">
         {categories.map((category) => {
@@ -60,7 +60,7 @@ export default function PermissionCategorySidebar({
                 transition-all duration-200 text-right
                 ${isSelected
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:bg-[#374151] hover:text-white'
+                  : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-raised)] hover:text-[var(--dash-text-primary)]'
                 }
               `}
             >
@@ -77,7 +77,7 @@ export default function PermissionCategorySidebar({
                       ? 'bg-white/20 text-white'
                       : stats.restricted > 0
                         ? 'bg-red-500/20 text-red-400'
-                        : 'bg-gray-600 text-gray-300'
+                        : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)]'
                     }
                   `}
                 >

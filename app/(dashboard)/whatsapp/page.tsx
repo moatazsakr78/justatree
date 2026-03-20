@@ -188,15 +188,15 @@ function MessageBubble({ msg, onReply, onRetry, onContextMenu, renderMessageCont
         }}
       >
         <div className="bg-green-600 rounded-full p-2">
-          <ArrowUturnLeftIcon className="h-4 w-4 text-white" />
+          <ArrowUturnLeftIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
         </div>
       </div>
 
       <div
         className={`max-w-[85%] md:max-w-[70%] rounded-lg px-3 md:px-4 py-2 cursor-pointer select-none ${
           msg.message_type === 'outgoing'
-            ? 'bg-green-600 text-white rounded-bl-none'
-            : 'bg-[#374151] text-white rounded-br-none'
+            ? 'bg-green-600 text-[var(--dash-text-primary)] rounded-bl-none'
+            : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] rounded-br-none'
         }`}
         style={{
           wordBreak: 'break-word',
@@ -213,11 +213,11 @@ function MessageBubble({ msg, onReply, onRetry, onContextMenu, renderMessageCont
               : 'bg-black/20 border-green-500'
           }`}>
             <p className={`text-xs font-medium ${
-              msg.message_type === 'outgoing' ? 'text-white/80' : 'text-green-400'
+              msg.message_type === 'outgoing' ? 'text-[var(--dash-text-primary)]/80' : 'text-green-400'
             }`}>
               {msg.quoted_message_sender}
             </p>
-            <p className="text-xs text-gray-300 truncate">{msg.quoted_message_text}</p>
+            <p className="text-xs text-[var(--dash-text-secondary)] truncate">{msg.quoted_message_text}</p>
           </div>
         )}
         {renderMessageContent(msg)}
@@ -239,7 +239,7 @@ function MessageBubble({ msg, onReply, onRetry, onContextMenu, renderMessageCont
                 title={msg.reactions?.filter(r => r.emoji === emoji).map(r => r.from_number).join(', ')}
               >
                 <span>{emoji}</span>
-                {count > 1 && <span className="text-gray-300 text-[10px]">{count}</span>}
+                {count > 1 && <span className="text-[var(--dash-text-secondary)] text-[10px]">{count}</span>}
               </span>
             ))}
           </div>
@@ -276,10 +276,10 @@ function MessageBubble({ msg, onReply, onRetry, onContextMenu, renderMessageCont
         onClick={() => onReply(msg)}
         className={`hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity absolute top-1/2 -translate-y-1/2 ${
           msg.message_type === 'outgoing' ? '-left-8' : '-right-8'
-        } p-1.5 bg-gray-600 hover:bg-gray-500 rounded-full`}
+        } p-1.5 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-highlight)] rounded-full`}
         title="رد"
       >
-        <ArrowUturnLeftIcon className="h-3.5 w-3.5 text-white" />
+        <ArrowUturnLeftIcon className="h-3.5 w-3.5 text-[var(--dash-text-primary)]" />
       </button>
     </div>
   )
@@ -1508,7 +1508,7 @@ export default function WhatsAppPage() {
       case 'document':
         return (
           <div className="flex items-center gap-2">
-            <DocumentIcon className="h-8 w-8 text-gray-300" />
+            <DocumentIcon className="h-8 w-8 text-[var(--dash-text-secondary)]" />
             <div>
               <p className="text-sm font-medium">{msg.message_text || 'مستند'}</p>
               {msg.media_url && (
@@ -1539,7 +1539,7 @@ export default function WhatsAppPage() {
   }
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden overflow-x-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden overflow-x-hidden">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
 
@@ -1550,10 +1550,10 @@ export default function WhatsAppPage() {
       <div className="h-full pt-12 overflow-hidden flex flex-col">
 
         {/* Page Header - رفيع وقابل للتمرير على الموبايل */}
-        <div className={`bg-[#374151] border-b border-gray-600 px-2 md:px-4 py-2 md:py-3 ${showMobileChat ? 'hidden md:block' : ''}`}>
+        <div className={`bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-2 md:px-4 py-2 md:py-3 ${showMobileChat ? 'hidden md:block' : ''}`}>
           <div className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-hide">
             <ChatBubbleLeftRightIcon className="h-5 w-5 md:h-6 md:w-6 text-green-500 flex-shrink-0" />
-            <h1 className="text-sm md:text-xl font-bold text-white flex-shrink-0 whitespace-nowrap">محادثات واتساب</h1>
+            <h1 className="text-sm md:text-xl font-bold text-[var(--dash-text-primary)] flex-shrink-0 whitespace-nowrap">محادثات واتساب</h1>
             {/* Connection Status */}
             <div className={`flex items-center gap-1 px-1.5 md:px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs flex-shrink-0 ${
               connectionStatus === 'connected'
@@ -1594,7 +1594,7 @@ export default function WhatsAppPage() {
             <button
               onClick={syncMessages}
               disabled={isSyncingMessages}
-              className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 text-gray-300 hover:text-white hover:bg-blue-600/30 rounded-md transition-colors disabled:opacity-50 flex-shrink-0"
+              className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-blue-600/30 rounded-md transition-colors disabled:opacity-50 flex-shrink-0"
               title="مزامنة الرسائل من واتساب"
             >
               <ArrowPathIcon className={`h-4 w-4 ${isSyncingMessages ? 'animate-spin' : ''}`} />
@@ -1603,7 +1603,7 @@ export default function WhatsAppPage() {
             <button
               onClick={syncContacts}
               disabled={isSyncing}
-              className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 text-gray-300 hover:text-white hover:bg-green-600/30 rounded-md transition-colors disabled:opacity-50 flex-shrink-0"
+              className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-green-600/30 rounded-md transition-colors disabled:opacity-50 flex-shrink-0"
               title="مزامنة صور العملاء"
             >
               <PhotoIcon className={`h-4 w-4 ${isSyncing ? 'animate-pulse' : ''}`} />
@@ -1614,7 +1614,7 @@ export default function WhatsAppPage() {
                 await fetchConversations()
                 if (selectedConversation) await fetchConversationMessages(selectedConversation)
               }}
-              className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 text-gray-300 hover:text-white hover:bg-gray-600/30 rounded-md transition-colors flex-shrink-0"
+              className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30 rounded-md transition-colors flex-shrink-0"
             >
               <ArrowPathIcon className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               <span className="text-xs md:text-sm">تحديث</span>
@@ -1630,18 +1630,18 @@ export default function WhatsAppPage() {
             ${showMobileChat ? 'hidden' : 'flex'}
             md:flex
             w-full md:w-80
-            bg-[#374151] border-l border-gray-600 flex-col
+            bg-[var(--dash-bg-raised)] border-l border-[var(--dash-border-default)] flex-col
           `}>
             {/* Search */}
-            <div className="p-3 border-b border-gray-600">
+            <div className="p-3 border-b border-[var(--dash-border-default)]">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="بحث في المحادثات..."
-                  className="w-full pl-4 pr-10 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                  className="w-full pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
@@ -1650,15 +1650,15 @@ export default function WhatsAppPage() {
             <div className="flex-1 overflow-y-auto scrollbar-hide">
               {isLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="text-gray-400">جاري التحميل...</div>
+                  <div className="text-[var(--dash-text-muted)]">جاري التحميل...</div>
                 </div>
               ) : filteredConversations.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 px-4">
-                  <ChatBubbleLeftRightIcon className="h-12 w-12 text-gray-500 mb-3" />
-                  <p className="text-gray-400 text-sm text-center">
+                  <ChatBubbleLeftRightIcon className="h-12 w-12 text-[var(--dash-text-disabled)] mb-3" />
+                  <p className="text-[var(--dash-text-muted)] text-sm text-center">
                     لا توجد محادثات بعد
                   </p>
-                  <p className="text-gray-500 text-xs text-center mt-1">
+                  <p className="text-[var(--dash-text-disabled)] text-xs text-center mt-1">
                     ستظهر الرسائل هنا عندما يتواصل معك العملاء
                   </p>
                 </div>
@@ -1667,10 +1667,10 @@ export default function WhatsAppPage() {
                   <div
                     key={conv.phoneNumber}
                     onClick={() => handleSelectConversation(conv.phoneNumber, conv.unreadCount)}
-                    className={`p-3 border-b border-gray-600/50 cursor-pointer transition-colors ${
+                    className={`p-3 border-b border-[var(--dash-border-default)]/50 cursor-pointer transition-colors ${
                       selectedConversation && cleanPhoneNumber(selectedConversation) === cleanPhoneNumber(conv.phoneNumber)
                         ? 'bg-green-600/20 border-r-2 border-r-green-500'
-                        : 'hover:bg-gray-600/20'
+                        : 'hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -1687,30 +1687,30 @@ export default function WhatsAppPage() {
                           }}
                         />
                       ) : null}
-                      <div className={`w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center flex-shrink-0 ${conv.profilePictureUrl ? 'hidden' : ''}`}>
-                        <UserCircleIcon className="h-6 w-6 text-gray-300" />
+                      <div className={`w-10 h-10 rounded-full bg-[var(--dash-bg-highlight)] flex items-center justify-center flex-shrink-0 ${conv.profilePictureUrl ? 'hidden' : ''}`}>
+                        <UserCircleIcon className="h-6 w-6 text-[var(--dash-text-secondary)]" />
                       </div>
                       <div className="flex-1 min-w-0 overflow-hidden">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-white font-medium text-sm truncate flex-1 min-w-0">
+                          <span className="text-[var(--dash-text-primary)] font-medium text-sm truncate flex-1 min-w-0">
                             {conv.customerName}
                           </span>
-                          <span className="text-gray-400 text-xs flex-shrink-0">
+                          <span className="text-[var(--dash-text-muted)] text-xs flex-shrink-0">
                             {formatTime(conv.lastMessageTime)}
                           </span>
                         </div>
-                        <p className="text-gray-400 text-xs truncate mt-1">
+                        <p className="text-[var(--dash-text-muted)] text-xs truncate mt-1">
                           {conv.lastSender === 'me' && (
                             <span className="text-green-400 ml-1">أنت: </span>
                           )}
                           {conv.lastMessage}
                         </p>
-                        <p className="text-gray-500 text-xs mt-1 font-mono truncate">
+                        <p className="text-[var(--dash-text-disabled)] text-xs mt-1 font-mono truncate">
                           +{conv.phoneNumber}
                         </p>
                       </div>
                       {conv.unreadCount > 0 && (
-                        <span className="bg-green-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] text-center">
+                        <span className="bg-green-500 text-[var(--dash-text-primary)] text-xs rounded-full px-2 py-0.5 min-w-[20px] text-center">
                           {conv.unreadCount}
                         </span>
                       )}
@@ -1726,14 +1726,14 @@ export default function WhatsAppPage() {
             ${!showMobileChat && !selectedConversation ? 'hidden' : ''}
             ${showMobileChat ? 'flex' : 'hidden'}
             md:flex
-            flex-1 flex-col bg-[#2B3544]
+            flex-1 flex-col bg-[var(--dash-bg-surface)]
             absolute md:relative inset-0 md:inset-auto
             z-30 md:z-auto
           `}>
             {selectedConversation ? (
               <>
                 {/* Chat Header */}
-                <div className="bg-[#374151] px-4 py-3 border-b border-gray-600 mt-12 md:mt-0">
+                <div className="bg-[var(--dash-bg-raised)] px-4 py-3 border-b border-[var(--dash-border-default)] mt-12 md:mt-0">
                   {(() => {
                     const selectedContact = conversations.find(c =>
                       cleanPhoneNumber(c.phoneNumber) === cleanPhoneNumber(selectedConversation || '')
@@ -1743,7 +1743,7 @@ export default function WhatsAppPage() {
                         {/* زر الرجوع - يظهر فقط على الموبايل */}
                         <button
                           onClick={handleBackToList}
-                          className="md:hidden p-2 -mr-2 text-gray-300 hover:text-white hover:bg-gray-600/50 rounded-full transition-colors"
+                          className="md:hidden p-2 -mr-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-full transition-colors"
                         >
                           <ArrowRightIcon className="h-5 w-5" />
                         </button>
@@ -1759,14 +1759,14 @@ export default function WhatsAppPage() {
                             }}
                           />
                         ) : null}
-                        <div className={`w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center ${selectedContact?.profilePictureUrl ? 'hidden' : ''}`}>
-                          <UserCircleIcon className="h-7 w-7 text-gray-300" />
+                        <div className={`w-12 h-12 rounded-full bg-[var(--dash-bg-highlight)] flex items-center justify-center ${selectedContact?.profilePictureUrl ? 'hidden' : ''}`}>
+                          <UserCircleIcon className="h-7 w-7 text-[var(--dash-text-secondary)]" />
                         </div>
                         <div>
-                          <h3 className="text-white font-medium">
+                          <h3 className="text-[var(--dash-text-primary)] font-medium">
                             {selectedContact?.customerName || selectedConversation}
                           </h3>
-                          <p className="text-gray-400 text-sm font-mono">
+                          <p className="text-[var(--dash-text-muted)] text-sm font-mono">
                             +{selectedConversation}
                           </p>
                         </div>
@@ -1787,7 +1787,7 @@ export default function WhatsAppPage() {
                 >
                   {conversationMessages.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
-                      <p className="text-gray-400">لا توجد رسائل في هذه المحادثة</p>
+                      <p className="text-[var(--dash-text-muted)]">لا توجد رسائل في هذه المحادثة</p>
                     </div>
                   ) : (
                     <>
@@ -1799,7 +1799,7 @@ export default function WhatsAppPage() {
                           <div key={msg.id || index}>
                             {showDate && (
                               <div className="flex justify-center my-4">
-                                <span className="bg-gray-600/50 text-gray-300 text-xs px-3 py-1 rounded-full">
+                                <span className="bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-secondary)] text-xs px-3 py-1 rounded-full">
                                   {formatDate(msg.created_at)}
                                 </span>
                               </div>
@@ -1825,9 +1825,9 @@ export default function WhatsAppPage() {
 
                 {/* Attachment Preview */}
                 {attachmentType && (
-                  <div className="bg-[#374151] px-4 py-3 border-t border-gray-600">
+                  <div className="bg-[var(--dash-bg-raised)] px-4 py-3 border-t border-[var(--dash-border-default)]">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-white text-sm font-medium">
+                      <span className="text-[var(--dash-text-primary)] text-sm font-medium">
                         {attachmentType === 'image' && 'إرسال صورة'}
                         {attachmentType === 'video' && 'إرسال فيديو'}
                         {attachmentType === 'document' && 'إرسال مستند'}
@@ -1835,7 +1835,7 @@ export default function WhatsAppPage() {
                       </span>
                       <button
                         onClick={resetAttachment}
-                        className="text-gray-400 hover:text-white"
+                        className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                         disabled={isUploading}
                       >
                         <XMarkIcon className="h-5 w-5" />
@@ -1869,11 +1869,11 @@ export default function WhatsAppPage() {
 
                         {/* Document Preview */}
                         {attachmentType === 'document' && (
-                          <div className="flex items-center gap-3 bg-[#2B3544] rounded-lg p-3">
+                          <div className="flex items-center gap-3 bg-[var(--dash-bg-surface)] rounded-lg p-3">
                             <DocumentIcon className="h-10 w-10 text-yellow-400 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
-                              <p className="text-white text-sm font-medium truncate">{filename}</p>
-                              <p className="text-gray-400 text-xs">
+                              <p className="text-[var(--dash-text-primary)] text-sm font-medium truncate">{filename}</p>
+                              <p className="text-[var(--dash-text-muted)] text-xs">
                                 {selectedFile.size > 1024 * 1024
                                   ? `${(selectedFile.size / (1024 * 1024)).toFixed(2)} MB`
                                   : `${(selectedFile.size / 1024).toFixed(2)} KB`}
@@ -1888,7 +1888,7 @@ export default function WhatsAppPage() {
                           value={caption}
                           onChange={(e) => setCaption(e.target.value)}
                           placeholder="تعليق (اختياري)"
-                          className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                          className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                           disabled={isUploading}
                         />
 
@@ -1899,8 +1899,8 @@ export default function WhatsAppPage() {
                           disabled={isUploading || isSending}
                           className={`w-full py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                             isUploading || isSending
-                              ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                              : 'bg-green-600 hover:bg-green-700 text-white'
+                              ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
+                              : 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
                           }`}
                         >
                           {isUploading ? (
@@ -1926,7 +1926,7 @@ export default function WhatsAppPage() {
                       <div className="space-y-3">
                         {isGettingLocation ? (
                           // Loading indicator while getting location
-                          <div className="flex flex-col items-center justify-center py-6 text-gray-400">
+                          <div className="flex flex-col items-center justify-center py-6 text-[var(--dash-text-muted)]">
                             <svg className="animate-spin h-8 w-8 mb-3 text-green-500" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
@@ -1936,12 +1936,12 @@ export default function WhatsAppPage() {
                         ) : latitude && longitude ? (
                           // Location found - show coordinates and send button
                           <>
-                            <div className="bg-[#2B3544] rounded-lg p-3">
+                            <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3">
                               <div className="flex items-center gap-3 mb-2">
                                 <MapPinIcon className="h-8 w-8 text-red-400 flex-shrink-0" />
                                 <div className="flex-1">
-                                  <p className="text-white text-sm font-medium">تم تحديد موقعك</p>
-                                  <p className="text-gray-400 text-xs mt-1">
+                                  <p className="text-[var(--dash-text-primary)] text-sm font-medium">تم تحديد موقعك</p>
+                                  <p className="text-[var(--dash-text-muted)] text-xs mt-1">
                                     {parseFloat(latitude).toFixed(6)}, {parseFloat(longitude).toFixed(6)}
                                   </p>
                                 </div>
@@ -1953,7 +1953,7 @@ export default function WhatsAppPage() {
                               value={locationName}
                               onChange={(e) => setLocationName(e.target.value)}
                               placeholder="اسم المكان (اختياري)"
-                              className="w-full px-3 py-2 bg-[#2B3544] border border-gray-600 rounded-md text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                              className="w-full px-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
 
                             <button
@@ -1962,8 +1962,8 @@ export default function WhatsAppPage() {
                               disabled={isSending}
                               className={`w-full py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                                 isSending
-                                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                                  : 'bg-green-600 hover:bg-green-700 text-white'
+                                  ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
+                                  : 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
                               }`}
                             >
                               {isSending ? (
@@ -1990,18 +1990,18 @@ export default function WhatsAppPage() {
 
                 {/* Reply Preview Bar */}
                 {replyingTo && (
-                  <div className="bg-[#2B3544] px-4 py-2 border-t border-gray-600 flex items-center gap-3">
+                  <div className="bg-[var(--dash-bg-surface)] px-4 py-2 border-t border-[var(--dash-border-default)] flex items-center gap-3">
                     <div className="w-1 h-10 bg-green-500 rounded-full flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-green-400 text-xs font-medium">
                         {replyingTo.message_type === 'outgoing' ? 'أنت' : replyingTo.customer_name}
                       </p>
-                      <p className="text-gray-400 text-sm truncate">{replyingTo.message_text}</p>
+                      <p className="text-[var(--dash-text-muted)] text-sm truncate">{replyingTo.message_text}</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setReplyingTo(null)}
-                      className="p-1 text-gray-400 hover:text-white hover:bg-gray-600/50 rounded-full transition-colors flex-shrink-0"
+                      className="p-1 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-full transition-colors flex-shrink-0"
                     >
                       <XMarkIcon className="h-5 w-5" />
                     </button>
@@ -2009,7 +2009,7 @@ export default function WhatsAppPage() {
                 )}
 
                 {/* Message Input */}
-                <form onSubmit={handleSendMessage} className="bg-[#374151] px-4 py-3 border-t border-gray-600">
+                <form onSubmit={handleSendMessage} className="bg-[var(--dash-bg-raised)] px-4 py-3 border-t border-[var(--dash-border-default)]">
                   {error && (
                     <div className="flex items-center gap-2 text-red-400 text-sm mb-2">
                       <ExclamationCircleIcon className="h-4 w-4" />
@@ -2022,7 +2022,7 @@ export default function WhatsAppPage() {
                       <button
                         type="button"
                         onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                        className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/50 rounded-full transition-colors"
+                        className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-full transition-colors"
                       >
                         <PaperClipIcon className="h-5 w-5" />
                       </button>
@@ -2052,11 +2052,11 @@ export default function WhatsAppPage() {
 
                       {/* Attachment Menu */}
                       {showAttachmentMenu && (
-                        <div className="absolute bottom-12 right-0 bg-[#2B3544] border border-gray-600 rounded-lg shadow-lg p-2 min-w-[150px]">
+                        <div className="absolute bottom-12 right-0 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-lg p-2 min-w-[150px]">
                           <button
                             type="button"
                             onClick={() => { imageInputRef.current?.click(); setShowAttachmentMenu(false) }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-gray-300 hover:bg-gray-600/50 rounded-md text-sm"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-md text-sm"
                           >
                             <PhotoIcon className="h-5 w-5 text-blue-400" />
                             <span>صورة</span>
@@ -2064,7 +2064,7 @@ export default function WhatsAppPage() {
                           <button
                             type="button"
                             onClick={() => { videoInputRef.current?.click(); setShowAttachmentMenu(false) }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-gray-300 hover:bg-gray-600/50 rounded-md text-sm"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-md text-sm"
                           >
                             <VideoCameraIcon className="h-5 w-5 text-purple-400" />
                             <span>فيديو</span>
@@ -2072,7 +2072,7 @@ export default function WhatsAppPage() {
                           <button
                             type="button"
                             onClick={() => { documentInputRef.current?.click(); setShowAttachmentMenu(false) }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-gray-300 hover:bg-gray-600/50 rounded-md text-sm"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-md text-sm"
                           >
                             <DocumentIcon className="h-5 w-5 text-yellow-400" />
                             <span>مستند</span>
@@ -2080,7 +2080,7 @@ export default function WhatsAppPage() {
                           <button
                             type="button"
                             onClick={handleGetLocation}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-gray-300 hover:bg-gray-600/50 rounded-md text-sm"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-md text-sm"
                           >
                             <MapPinIcon className="h-5 w-5 text-red-400" />
                             <span>موقع</span>
@@ -2094,7 +2094,7 @@ export default function WhatsAppPage() {
                       <button
                         type="button"
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className="p-2 text-gray-400 hover:text-white hover:bg-gray-600/50 rounded-full transition-colors"
+                        className="p-2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50 rounded-full transition-colors"
                         title="إضافة emoji"
                       >
                         <FaceSmileIcon className="h-5 w-5" />
@@ -2126,7 +2126,7 @@ export default function WhatsAppPage() {
                           value={newMessage}
                           onChange={(e) => setNewMessage(e.target.value)}
                           placeholder={attachmentType ? "تعليق إضافي (اختياري)..." : "اكتب رسالتك هنا..."}
-                          className="flex-1 px-4 py-2 bg-[#2B3544] border border-gray-600 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          className="flex-1 px-4 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-full text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                           disabled={isSending}
                         />
 
@@ -2137,8 +2137,8 @@ export default function WhatsAppPage() {
                             disabled={isSending}
                             className={`p-3 rounded-full transition-colors ${
                               !isSending
-                                ? 'bg-green-600 hover:bg-green-700 text-white'
-                                : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                                ? 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
+                                : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
                             }`}
                           >
                             {isSending ? (
@@ -2151,7 +2151,7 @@ export default function WhatsAppPage() {
                           <button
                             type="button"
                             onClick={() => setIsRecordingVoice(true)}
-                            className="p-3 rounded-full bg-green-600 hover:bg-green-700 text-white transition-colors"
+                            className="p-3 rounded-full bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] transition-colors"
                             title="تسجيل رسالة صوتية"
                           >
                             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -2166,8 +2166,8 @@ export default function WhatsAppPage() {
               </>
             ) : (
               /* No Conversation Selected */
-              <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
-                <ChatBubbleLeftRightIcon className="h-24 w-24 text-gray-500 mb-4" />
+              <div className="flex-1 flex flex-col items-center justify-center text-[var(--dash-text-muted)]">
+                <ChatBubbleLeftRightIcon className="h-24 w-24 text-[var(--dash-text-disabled)] mb-4" />
                 <h3 className="text-xl font-medium mb-2">مرحباً بك في محادثات واتساب</h3>
                 <p className="text-sm">اختر محادثة من القائمة للبدء</p>
                 {connectionStatus === 'disconnected' && (
@@ -2193,7 +2193,7 @@ export default function WhatsAppPage() {
           />
           {/* Menu */}
           <div
-            className="fixed z-50 bg-[#2B3544] border border-gray-600 rounded-lg shadow-lg py-1 min-w-[140px]"
+            className="fixed z-50 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-lg py-1 min-w-[140px]"
             style={{
               left: Math.min(contextMenu.x, window.innerWidth - 160),
               top: Math.min(contextMenu.y, window.innerHeight - 100),
@@ -2204,7 +2204,7 @@ export default function WhatsAppPage() {
                 setReplyingTo(contextMenu.msg)
                 setContextMenu(null)
               }}
-              className="flex items-center gap-2 w-full px-4 py-2 text-white hover:bg-gray-600/50 text-sm"
+              className="flex items-center gap-2 w-full px-4 py-2 text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50 text-sm"
             >
               <ArrowUturnLeftIcon className="h-4 w-4" />
               <span>رد على الرسالة</span>

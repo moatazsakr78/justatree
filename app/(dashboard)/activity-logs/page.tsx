@@ -95,12 +95,12 @@ export default function ActivityLogsPage() {
   };
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
 
       <div className="h-full pt-12 overflow-hidden flex flex-col">
-        <div className="p-4 border-b border-gray-700">
+        <div className="p-4 border-b border-[var(--dash-border-subtle)]">
           <ActivityLogsHeader
             filters={filters}
             onFiltersChange={setFilters}
@@ -120,7 +120,7 @@ export default function ActivityLogsPage() {
               <p className="text-lg">{error}</p>
               <button
                 onClick={refresh}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="mt-4 px-4 py-2 bg-blue-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-blue-700 transition-colors"
               >
                 إعادة المحاولة
               </button>

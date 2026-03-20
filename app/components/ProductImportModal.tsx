@@ -289,8 +289,8 @@ export default function ProductImportModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-2xl animate-dash-scale-in">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 flex items-center justify-between rounded-t-lg">
           <h2 className="text-xl font-bold text-white">استيراد المنتجات</h2>

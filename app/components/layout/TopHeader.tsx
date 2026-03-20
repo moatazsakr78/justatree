@@ -107,7 +107,7 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-12 bg-[#374151] border-b border-gray-600 px-4">
+    <div className="fixed top-0 left-0 right-0 z-50 h-12 bg-[var(--dash-header-bg)] border-b border-[var(--dash-border-default)] backdrop-blur-md px-4 shadow-dash-sm">
       <div className="flex items-center justify-between h-full">
         {/* Left side (يظهر يمين الشاشة في RTL) - Menu + Branch Switcher */}
         <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
 
         {/* Center - App title */}
         <div className="flex items-center">
-          <h1 className="text-white text-lg font-semibold">{getPageTitle()}</h1>
+          <h1 className="text-[var(--dash-text-primary)] text-lg font-semibold">{getPageTitle()}</h1>
         </div>
 
         {/* Right side (يظهر يسار الشاشة في RTL) - Website + Connection */}
@@ -160,7 +160,7 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
           {/* Website button */}
           <button
             onClick={() => window.location.href = '/'}
-            className="flex items-center gap-2 px-3 py-1.5 text-blue-400 hover:text-blue-300 hover:bg-gray-700 rounded-lg transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 text-[var(--dash-accent-blue)] hover:text-blue-300 hover:bg-[var(--dash-bg-overlay)] rounded-lg transition-colors"
             title="انتقل إلى الموقع الإلكتروني"
           >
             <GlobeAltIcon className="h-5 w-5" />

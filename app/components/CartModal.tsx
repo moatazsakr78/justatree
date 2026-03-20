@@ -685,7 +685,7 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
         dir="rtl"
       >
         {/* Responsive Header */}
-        <header className="border-b border-gray-600 py-0 flex-shrink-0" style={{backgroundColor: 'var(--primary-color)'}}>
+        <header className="border-b border-[var(--dash-border-default)] py-0 flex-shrink-0" style={{backgroundColor: 'var(--primary-color)'}}>
           {/* Desktop/Tablet Header */}
           <div className="hidden md:block">
             <div className="px-8 flex items-center justify-between" style={{minHeight: '80px'}}>
@@ -1230,7 +1230,7 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                           className={`w-full font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm ${
                             cartItems.length === 0
                               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                              : 'bg-gray-600 hover:bg-gray-700 text-white'
+                              : 'bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)]'
                           }`}
                         >
                           مسح السلة
@@ -1859,7 +1859,7 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                       className={`w-full font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm ${
                         cartItems.length === 0
                           ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          : 'bg-gray-600 hover:bg-gray-700 text-white'
+                          : 'bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)]'
                       }`}
                     >
                       مسح السلة

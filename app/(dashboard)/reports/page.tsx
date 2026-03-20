@@ -60,7 +60,7 @@ function ColumnsControlModalWrapper({
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div className="bg-[#2B3544] rounded-lg p-6 text-white">
+        <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 text-[var(--dash-text-primary)]">
           <div className="flex items-center gap-3">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-400"></div>
             <span>جاري تحميل إعدادات الأعمدة...</span>
@@ -162,7 +162,7 @@ const getTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'type', 
     width: 150,
     visible: true,
-    render: (value: string) => <span className="text-white font-medium">{value}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
   },
   { 
     id: 'date', 
@@ -170,7 +170,7 @@ const getTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'date', 
     width: 120,
     visible: true,
-    render: (value: string) => <span className="text-gray-300">{value}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value}</span>
   },
   {
     id: 'amount',
@@ -178,7 +178,7 @@ const getTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'amount',
     width: 150,
     visible: true,
-    render: (value: number) => <span className="text-white font-medium">{formatPrice(value)}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-primary)] font-medium">{formatPrice(value)}</span>
   },
   { 
     id: 'status', 
@@ -192,7 +192,7 @@ const getTableColumns = (formatPrice: (value: number) => string) => [
           ? 'bg-green-500/20 text-green-400' 
           : value === 'مراجعة'
           ? 'bg-yellow-500/20 text-yellow-400'
-          : 'bg-gray-500/20 text-gray-400'
+          : 'bg-[var(--dash-bg-highlight)]/20 text-[var(--dash-text-muted)]'
       }`}>
         {value}
       </span>
@@ -204,7 +204,7 @@ const getTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'invoice_count', 
     width: 100,
     visible: true,
-    render: (value: number) => <span className="text-gray-300">{value}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{value}</span>
   },
   { 
     id: 'customer_count', 
@@ -212,7 +212,7 @@ const getTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'customer_count', 
     width: 100,
     visible: true,
-    render: (value: number) => <span className="text-gray-300">{value}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{value}</span>
   }
 ];
 
@@ -231,7 +231,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'customer_name',
     width: 180,
     visible: true,
-    render: (value: string) => <span className="text-white font-medium">{value || 'غير محدد'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value || 'غير محدد'}</span>
   },
   {
     id: 'category',
@@ -239,7 +239,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'category',
     width: 100,
     visible: true,
-    render: (value: string) => <span className="text-gray-300">{value || 'عام'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || 'عام'}</span>
   },
   {
     id: 'rank',
@@ -247,7 +247,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'rank',
     width: 100,
     visible: true,
-    render: (value: string) => <span className="text-gray-300">{value || 'برونزي'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || 'برونزي'}</span>
   },
   {
     id: 'phone',
@@ -255,7 +255,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'phone',
     width: 120,
     visible: true,
-    render: (value: string) => <span className="text-gray-300 font-mono">{value || 'غير محدد'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)] font-mono">{value || 'غير محدد'}</span>
   },
   {
     id: 'backup_phone',
@@ -263,7 +263,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'backup_phone',
     width: 120,
     visible: true,
-    render: (value: string) => <span className="text-gray-300 font-mono">{value || 'غير محدد'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)] font-mono">{value || 'غير محدد'}</span>
   },
   {
     id: 'city',
@@ -271,7 +271,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'city',
     width: 100,
     visible: true,
-    render: (value: string) => <span className="text-gray-300">{value || 'غير محدد'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || 'غير محدد'}</span>
   },
   {
     id: 'created_at',
@@ -280,9 +280,9 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     width: 100,
     visible: true,
     render: (value: string) => {
-      if (!value) return <span className="text-gray-400">غير محدد</span>;
+      if (!value) return <span className="text-[var(--dash-text-muted)]">غير محدد</span>;
       const date = new Date(value);
-      return <span className="text-gray-300">{date.toLocaleDateString('en-GB')}</span>;
+      return <span className="text-[var(--dash-text-secondary)]">{date.toLocaleDateString('en-GB')}</span>;
     }
   },
   {
@@ -330,7 +330,7 @@ const getCategoriesTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'category_name',
     width: 200,
     visible: true,
-    render: (value: string) => <span className="text-white font-medium">{value || 'غير محدد'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value || 'غير محدد'}</span>
   },
   {
     id: 'total_quantity_sold',
@@ -338,7 +338,7 @@ const getCategoriesTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'total_quantity_sold',
     width: 120,
     visible: true,
-    render: (value: number) => <span className="text-gray-300">{value || 0}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{value || 0}</span>
   },
   {
     id: 'branch_name',
@@ -346,7 +346,7 @@ const getCategoriesTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'branch_name',
     width: 100,
     visible: true,
-    render: (value: string) => <span className="text-gray-300">{value || 'جميع الفروع'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || 'جميع الفروع'}</span>
   },
   {
     id: 'total_sales_amount',
@@ -354,7 +354,7 @@ const getCategoriesTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'total_sales_amount',
     width: 120,
     visible: true,
-    render: (value: number) => <span className="text-white font-medium">{formatPrice(value || 0)}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-primary)] font-medium">{formatPrice(value || 0)}</span>
   },
   {
     id: 'products_count',
@@ -362,7 +362,7 @@ const getCategoriesTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'products_count',
     width: 100,
     visible: true,
-    render: (value: number) => <span className="text-gray-300">{value || 0}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{value || 0}</span>
   },
   {
     id: 'avg_price',
@@ -370,7 +370,7 @@ const getCategoriesTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'avg_price',
     width: 100,
     visible: true,
-    render: (value: number) => <span className="text-gray-300">{formatPrice(value || 0)}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(value || 0)}</span>
   }
 ];
 
@@ -389,7 +389,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'category_name', 
     width: 120,
     visible: true,
-    render: (value: string) => <span className="text-white font-medium">{value || 'غير محدد'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value || 'غير محدد'}</span>
   },
   { 
     id: 'product_name', 
@@ -397,7 +397,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'product_name', 
     width: 200,
     visible: true,
-    render: (value: string) => <span className="text-white font-medium">{value}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
   },
   { 
     id: 'total_quantity_sold', 
@@ -405,7 +405,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'total_quantity_sold', 
     width: 80,
     visible: true,
-    render: (value: number) => <span className="text-gray-300">{value || 0}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{value || 0}</span>
   },
   { 
     id: 'branch_name', 
@@ -413,7 +413,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'branch_name', 
     width: 100,
     visible: true,
-    render: (value: string) => <span className="text-gray-300">{value || 'جميع الفروع'}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || 'جميع الفروع'}</span>
   },
   { 
     id: 'total_sales_amount', 
@@ -421,7 +421,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'total_sales_amount', 
     width: 120,
     visible: true,
-    render: (value: number) => <span className="text-white font-medium">{formatPrice(value || 0)}</span>
+    render: (value: number) => <span className="text-[var(--dash-text-primary)] font-medium">{formatPrice(value || 0)}</span>
   },
   { 
     id: 'current_sale_price', 
@@ -429,7 +429,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'current_sale_price', 
     width: 100,
     visible: true,
-    render: (value: string) => <span className="text-gray-300">{formatPrice(parseFloat(value || '0'))}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(parseFloat(value || '0'))}</span>
   },
   {
     id: 'total_sale_price',
@@ -441,12 +441,12 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const quantity = item.priceBreakdown?.get(price) || 0;
       const total = quantity * price;
       return (
-        <span className="text-white">
+        <span className="text-[var(--dash-text-primary)]">
           <span className="text-blue-400">{quantity}</span>
-          <span className="text-gray-300">*</span>
+          <span className="text-[var(--dash-text-secondary)]">*</span>
           <span className="text-green-400">{price.toFixed(2)}</span>
-          <span className="text-gray-300"> = </span>
-          <span className="text-white">{total.toFixed(2)}</span>
+          <span className="text-[var(--dash-text-secondary)]"> = </span>
+          <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
       );
     }
@@ -456,7 +456,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     header: 'سعر الجملة', 
     accessor: 'wholesale_price', 
     width: 100,
-    render: (value: string) => <span className="text-gray-300">{formatPrice(parseFloat(value || '0'))}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(parseFloat(value || '0'))}</span>
   },
   {
     id: 'total_wholesale_price',
@@ -468,12 +468,12 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const quantity = item.priceBreakdown?.get(price) || 0;
       const total = quantity * price;
       return (
-        <span className="text-white">
+        <span className="text-[var(--dash-text-primary)]">
           <span className="text-blue-400">{quantity}</span>
-          <span className="text-gray-300">*</span>
+          <span className="text-[var(--dash-text-secondary)]">*</span>
           <span className="text-green-400">{price.toFixed(2)}</span>
-          <span className="text-gray-300"> = </span>
-          <span className="text-white">{total.toFixed(2)}</span>
+          <span className="text-[var(--dash-text-secondary)]"> = </span>
+          <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
       );
     }
@@ -483,7 +483,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     header: 'سعر 1', 
     accessor: 'price1', 
     width: 80,
-    render: (value: string) => <span className="text-gray-300">{formatPrice(parseFloat(value || '0'))}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(parseFloat(value || '0'))}</span>
   },
   {
     id: 'total_price1',
@@ -495,12 +495,12 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const quantity = item.priceBreakdown?.get(price) || 0;
       const total = quantity * price;
       return (
-        <span className="text-white">
+        <span className="text-[var(--dash-text-primary)]">
           <span className="text-blue-400">{quantity}</span>
-          <span className="text-gray-300">*</span>
+          <span className="text-[var(--dash-text-secondary)]">*</span>
           <span className="text-green-400">{price.toFixed(2)}</span>
-          <span className="text-gray-300"> = </span>
-          <span className="text-white">{total.toFixed(2)}</span>
+          <span className="text-[var(--dash-text-secondary)]"> = </span>
+          <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
       );
     }
@@ -510,7 +510,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     header: 'سعر 2', 
     accessor: 'price2', 
     width: 80,
-    render: (value: string) => <span className="text-gray-300">{formatPrice(parseFloat(value || '0'))}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(parseFloat(value || '0'))}</span>
   },
   {
     id: 'total_price2',
@@ -522,12 +522,12 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const quantity = item.priceBreakdown?.get(price) || 0;
       const total = quantity * price;
       return (
-        <span className="text-white">
+        <span className="text-[var(--dash-text-primary)]">
           <span className="text-blue-400">{quantity}</span>
-          <span className="text-gray-300">*</span>
+          <span className="text-[var(--dash-text-secondary)]">*</span>
           <span className="text-green-400">{price.toFixed(2)}</span>
-          <span className="text-gray-300"> = </span>
-          <span className="text-white">{total.toFixed(2)}</span>
+          <span className="text-[var(--dash-text-secondary)]"> = </span>
+          <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
       );
     }
@@ -537,7 +537,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     header: 'سعر 3', 
     accessor: 'price3', 
     width: 80,
-    render: (value: string) => <span className="text-gray-300">{formatPrice(parseFloat(value || '0'))}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(parseFloat(value || '0'))}</span>
   },
   {
     id: 'total_price3',
@@ -549,12 +549,12 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const quantity = item.priceBreakdown?.get(price) || 0;
       const total = quantity * price;
       return (
-        <span className="text-white">
+        <span className="text-[var(--dash-text-primary)]">
           <span className="text-blue-400">{quantity}</span>
-          <span className="text-gray-300">*</span>
+          <span className="text-[var(--dash-text-secondary)]">*</span>
           <span className="text-green-400">{price.toFixed(2)}</span>
-          <span className="text-gray-300"> = </span>
-          <span className="text-white">{total.toFixed(2)}</span>
+          <span className="text-[var(--dash-text-secondary)]"> = </span>
+          <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
       );
     }
@@ -564,7 +564,7 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
     header: 'سعر 4', 
     accessor: 'price4', 
     width: 80,
-    render: (value: string) => <span className="text-gray-300">{formatPrice(parseFloat(value || '0'))}</span>
+    render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(parseFloat(value || '0'))}</span>
   },
   {
     id: 'total_price4',
@@ -576,12 +576,12 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const quantity = item.priceBreakdown?.get(price) || 0;
       const total = quantity * price;
       return (
-        <span className="text-white">
+        <span className="text-[var(--dash-text-primary)]">
           <span className="text-blue-400">{quantity}</span>
-          <span className="text-gray-300">*</span>
+          <span className="text-[var(--dash-text-secondary)]">*</span>
           <span className="text-green-400">{price.toFixed(2)}</span>
-          <span className="text-gray-300"> = </span>
-          <span className="text-white">{total.toFixed(2)}</span>
+          <span className="text-[var(--dash-text-secondary)]"> = </span>
+          <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
       );
     }
@@ -701,7 +701,7 @@ function ReportsPageContent() {
       accessor: 'user_name',
       width: 180,
       visible: true,
-      render: (value: string) => <span className="text-white font-medium">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value || '-'}</span>
     },
     {
       id: 'role',
@@ -709,7 +709,7 @@ function ReportsPageContent() {
       accessor: 'role',
       width: 120,
       visible: true,
-      render: (value: string) => <span className="text-gray-300">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || '-'}</span>
     },
     {
       id: 'total_invoices',
@@ -725,7 +725,7 @@ function ReportsPageContent() {
       accessor: 'total_amount',
       width: 140,
       visible: true,
-      render: (value: number) => <span className="text-white font-medium">{`EGP ${(value || 0).toFixed(2)}`}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)] font-medium">{`EGP ${(value || 0).toFixed(2)}`}</span>
     },
     {
       id: 'total_profit',
@@ -825,9 +825,9 @@ function ReportsPageContent() {
       width: 140,
       visible: true,
       render: (value: string) => {
-        if (!value) return <span className="text-gray-400">-</span>;
+        if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>;
         const date = new Date(value);
-        return <span className="text-gray-300">{date.toLocaleDateString('ar-EG')}</span>;
+        return <span className="text-[var(--dash-text-secondary)]">{date.toLocaleDateString('ar-EG')}</span>;
       }
     },
     {
@@ -837,7 +837,7 @@ function ReportsPageContent() {
       width: 130,
       visible: true,
       render: (value: number) => {
-        if (!value || value === 0) return <span className="text-gray-400">-</span>;
+        if (!value || value === 0) return <span className="text-[var(--dash-text-muted)]">-</span>;
         if (value === 1) return <span className="text-green-400">يومياً</span>;
         return <span className="text-blue-400">كل {Math.round(value)} يوم</span>;
       }
@@ -848,7 +848,7 @@ function ReportsPageContent() {
       accessor: 'customer_name',
       width: 180,
       visible: true,
-      render: (value: string) => <span className="text-white font-medium">{value || 'غير محدد'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value || 'غير محدد'}</span>
     },
     {
       id: 'invoice_count',
@@ -882,7 +882,7 @@ function ReportsPageContent() {
       visible: true,
       render: (value: number) => {
         const balance = value || 0;
-        const colorClass = balance > 0 ? 'text-red-400' : balance < 0 ? 'text-green-400' : 'text-gray-400';
+        const colorClass = balance > 0 ? 'text-red-400' : balance < 0 ? 'text-green-400' : 'text-[var(--dash-text-muted)]';
         return <span className={`${colorClass} font-medium`}>{formatPrice(balance)}</span>;
       }
     }
@@ -904,9 +904,9 @@ function ReportsPageContent() {
       width: 140,
       visible: true,
       render: (value: string) => {
-        if (!value) return <span className="text-gray-400">-</span>;
+        if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>;
         const date = new Date(value);
-        return <span className="text-white font-medium">{date.toLocaleDateString('ar-EG')}</span>;
+        return <span className="text-[var(--dash-text-primary)] font-medium">{date.toLocaleDateString('ar-EG')}</span>;
       }
     },
     {
@@ -939,7 +939,7 @@ function ReportsPageContent() {
       accessor: 'avg_sale',
       width: 130,
       visible: true,
-      render: (value: number) => <span className="text-gray-300">{formatPrice(value || 0)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(value || 0)}</span>
     }
   ], [formatPrice]);
 
@@ -958,7 +958,7 @@ function ReportsPageContent() {
       accessor: 'hour_range',
       width: 150,
       visible: true,
-      render: (value: string) => <span className="text-white font-medium">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value || '-'}</span>
     },
     {
       id: 'total_sales',
@@ -982,7 +982,7 @@ function ReportsPageContent() {
       accessor: 'avg_sale',
       width: 130,
       visible: true,
-      render: (value: number) => <span className="text-gray-300">{formatPrice(value || 0)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(value || 0)}</span>
     },
     {
       id: 'percentage',
@@ -1009,7 +1009,7 @@ function ReportsPageContent() {
       accessor: 'product_name',
       width: 200,
       visible: true,
-      render: (value: string) => <span className="text-white font-medium">{value || '-'}</span>
+      render: (value: string) => <span className="text-[var(--dash-text-primary)] font-medium">{value || '-'}</span>
     },
     {
       id: 'quantity',
@@ -1025,7 +1025,7 @@ function ReportsPageContent() {
       accessor: 'cost_price',
       width: 120,
       visible: true,
-      render: (value: number) => <span className="text-gray-300">{formatPrice(value || 0)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-secondary)]">{formatPrice(value || 0)}</span>
     },
     {
       id: 'total_amount',
@@ -1033,7 +1033,7 @@ function ReportsPageContent() {
       accessor: 'total_amount',
       width: 130,
       visible: true,
-      render: (value: number) => <span className="text-white font-medium">{formatPrice(value || 0)}</span>
+      render: (value: number) => <span className="text-[var(--dash-text-primary)] font-medium">{formatPrice(value || 0)}</span>
     },
     {
       id: 'profit',
@@ -2939,7 +2939,7 @@ function ReportsPageContent() {
   };
 
   return (
-    <div className="h-screen bg-[#2B3544] overflow-hidden">
+    <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
       {/* Top Header */}
       <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       
@@ -2950,26 +2950,26 @@ function ReportsPageContent() {
       <div className="h-full pt-12 overflow-hidden flex flex-col">
         
         {/* Top Action Buttons Toolbar - Full Width */}
-        <div className="bg-[#374151] border-b border-gray-600 px-4 py-2 w-full">
+        <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] px-4 py-2 w-full">
           <div className="flex items-center justify-start gap-1 overflow-x-auto scrollbar-hide">
             <button 
               onClick={() => setCurrentView('main')}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 currentView === 'main' 
                   ? 'text-blue-400 bg-blue-500/10' 
-                  : 'text-gray-300 hover:text-white'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               <DocumentTextIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">التقارير</span>
             </button>
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <ArrowsUpDownIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">ترتيب</span>
             </button>
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <DocumentArrowDownIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">تصدير</span>
             </button>
@@ -2980,7 +2980,7 @@ function ReportsPageContent() {
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 activeFilterType === 'simple' && getSimpleFiltersCount(simpleFilters) > 0
                   ? 'text-blue-400 bg-blue-500/10'
-                  : 'text-gray-300 hover:text-white'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               <FunnelIcon className="h-5 w-5 mb-1" />
@@ -2998,7 +2998,7 @@ function ReportsPageContent() {
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 activeFilterType === 'multi' && getMultiFiltersCount(multiFilters) > 0
                   ? 'text-green-400 bg-green-500/10'
-                  : 'text-gray-300 hover:text-white'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               <FunnelIcon className="h-5 w-5 mb-1" />
@@ -3012,23 +3012,23 @@ function ReportsPageContent() {
 
             <button
               onClick={() => setShowDateFilter(true)}
-              className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]"
             >
               <CalendarDaysIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">تواريخ</span>
             </button>
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <PresentationChartBarIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">عرض بياني</span>
             </button>
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <PrinterIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">طباعة</span>
             </button>
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <DocumentChartBarIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">تقرير مفصل</span>
             </button>
@@ -3039,14 +3039,14 @@ function ReportsPageContent() {
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 currentView === 'periodic' 
                   ? 'text-blue-400 bg-blue-500/10' 
-                  : 'text-gray-300 hover:text-white'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               <ClockIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">تقارير دورية</span>
             </button>
 
-            <button className="flex flex-col items-center p-2 text-gray-300 hover:text-white cursor-pointer min-w-[80px]">
+            <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
               <ArrowPathIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">تحديث</span>
             </button>
@@ -3068,25 +3068,25 @@ function ReportsPageContent() {
               <div className="flex">
                 <button
                   onClick={() => setShowReportsSidebar(!showReportsSidebar)}
-                  className="w-6 bg-[#374151] hover:bg-[#4B5563] border-l border-gray-600 flex items-center justify-center transition-colors duration-200"
+                  className="w-6 bg-[var(--dash-bg-raised)] hover:bg-[#4B5563] border-l border-[var(--dash-border-default)] flex items-center justify-center transition-colors duration-200"
                   title={showReportsSidebar ? 'إخفاء الشريط الجانبي' : 'إظهار الشريط الجانبي'}
                 >
                   {showReportsSidebar ? (
-                    <ChevronLeftIcon className="h-4 w-4 text-gray-300" />
+                    <ChevronLeftIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
                   ) : (
-                    <ChevronRightIcon className="h-4 w-4 text-gray-300" />
+                    <ChevronRightIcon className="h-4 w-4 text-[var(--dash-text-secondary)]" />
                   )}
                 </button>
               </div>
 
               {/* Right Sidebar */}
               {showReportsSidebar && (
-                <div className="w-80 bg-[#3B4754] border-r border-gray-600 flex flex-col overflow-hidden">
+                <div className="w-80 bg-[#3B4754] border-r border-[var(--dash-border-default)] flex flex-col overflow-hidden">
                   {/* Normal Sidebar Content */}
                   <>
                       {/* Balance Section */}
-                      <div className="p-3 border-b border-gray-600 flex-shrink-0">
-                        <div className="bg-blue-600 rounded-lg p-3 text-center text-white">
+                      <div className="p-3 border-b border-[var(--dash-border-default)] flex-shrink-0">
+                        <div className="bg-blue-600 rounded-lg p-3 text-center text-[var(--dash-text-primary)]">
                           <div className="text-xl font-bold mb-1">EGP {totalSalesAmount}</div>
                           <div className="text-xs opacity-90">{showProductsReport ? 'إجمالي المبيعات' : 'رصيد الحساب'}</div>
                         </div>
@@ -3095,63 +3095,63 @@ function ReportsPageContent() {
                       {/* Report Information - Scrollable */}
                       <div className="flex-1 overflow-y-auto scrollbar-hide">
                         {selectedReport && (
-                          <div className="p-3 border-b border-gray-600">
-                            <h3 className="text-white font-medium mb-2 text-right">معلومات التقرير</h3>
+                          <div className="p-3 border-b border-[var(--dash-border-default)]">
+                            <h3 className="text-[var(--dash-text-primary)] font-medium mb-2 text-right">معلومات التقرير</h3>
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
-                                <span className="text-white">{selectedReport.type}</span>
-                                <span className="text-gray-400">نوع التقرير</span>
+                                <span className="text-[var(--dash-text-primary)]">{selectedReport.type}</span>
+                                <span className="text-[var(--dash-text-muted)]">نوع التقرير</span>
                               </div>
                               <div className="flex justify-between text-sm">
-                                <span className="text-white">{selectedReport.date}</span>
-                                <span className="text-gray-400">تاريخ التقرير</span>
+                                <span className="text-[var(--dash-text-primary)]">{selectedReport.date}</span>
+                                <span className="text-[var(--dash-text-muted)]">تاريخ التقرير</span>
                               </div>
                               <div className="flex justify-between text-sm">
-                                <span className="text-white">{selectedReport.amount}</span>
-                                <span className="text-gray-400">المبلغ الإجمالي</span>
+                                <span className="text-[var(--dash-text-primary)]">{selectedReport.amount}</span>
+                                <span className="text-[var(--dash-text-muted)]">المبلغ الإجمالي</span>
                               </div>
                               <div className="flex justify-between text-sm">
-                                <span className="text-white">{selectedReport.invoice_count}</span>
-                                <span className="text-gray-400">عدد الفواتير</span>
+                                <span className="text-[var(--dash-text-primary)]">{selectedReport.invoice_count}</span>
+                                <span className="text-[var(--dash-text-muted)]">عدد الفواتير</span>
                               </div>
                             </div>
                           </div>
                         )}
 
                         {/* Summary Statistics */}
-                        <div className="p-3 border-b border-gray-600">
-                          <h3 className="text-white font-medium mb-2 text-right">إحصائيات التقرير</h3>
+                        <div className="p-3 border-b border-[var(--dash-border-default)]">
+                          <h3 className="text-[var(--dash-text-primary)] font-medium mb-2 text-right">إحصائيات التقرير</h3>
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
-                              <span className="text-white">1</span>
-                              <span className="text-gray-400">عدد التقارير</span>
+                              <span className="text-[var(--dash-text-primary)]">1</span>
+                              <span className="text-[var(--dash-text-muted)]">عدد التقارير</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                              <span className="text-white">EGP 480.00</span>
-                              <span className="text-gray-400">إجمالي المشتريات</span>
+                              <span className="text-[var(--dash-text-primary)]">EGP 480.00</span>
+                              <span className="text-[var(--dash-text-muted)]">إجمالي المشتريات</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                              <span className="text-white">EGP 480.00</span>
-                              <span className="text-gray-400">متوسط قيمة الطلبية</span>
+                              <span className="text-[var(--dash-text-primary)]">EGP 480.00</span>
+                              <span className="text-[var(--dash-text-muted)]">متوسط قيمة الطلبية</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                              <span className="text-white">7/15/2025</span>
-                              <span className="text-gray-400">آخر تحديث</span>
+                              <span className="text-[var(--dash-text-primary)]">7/15/2025</span>
+                              <span className="text-[var(--dash-text-muted)]">آخر تحديث</span>
                             </div>
                           </div>
                         </div>
 
                         {/* Message Area */}
-                        <div className="p-3 text-center text-gray-500 text-sm">
+                        <div className="p-3 text-center text-[var(--dash-text-disabled)] text-sm">
                           {selectedReport ? 'تفاصيل إضافية للتقرير المحدد' : 'اختر تقريراً لعرض التفاصيل'}
                         </div>
                       </div>
 
                       {/* Date Filter Button - Fixed at Bottom */}
-                      <div className="p-2 border-t border-gray-600 flex-shrink-0 bg-[#3B4754]">
+                      <div className="p-2 border-t border-[var(--dash-border-default)] flex-shrink-0 bg-[#3B4754]">
                         <button
                           onClick={() => setShowDateFilter(true)}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded font-medium flex items-center justify-center gap-2 transition-colors text-sm"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-2 rounded font-medium flex items-center justify-center gap-2 transition-colors text-sm"
                         >
                           <CalendarDaysIcon className="h-4 w-4" />
                           <span>التاريخ</span>
@@ -3179,11 +3179,11 @@ function ReportsPageContent() {
               {/* Main Content Area */}
               <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Tabs Bar - Only for table area, not sidebar */}
-                <div className="bg-[#374151] border-b border-gray-600 flex-shrink-0">
+                <div className="bg-[var(--dash-bg-raised)] border-b border-[var(--dash-border-default)] flex-shrink-0">
                   <div className="flex items-center overflow-x-auto scrollbar-hide">
                     {/* Search Box - Left Side */}
                     {activeTab !== 'main' && (
-                      <div className="flex-shrink-0 px-2 py-1.5 border-r border-gray-600">
+                      <div className="flex-shrink-0 px-2 py-1.5 border-r border-[var(--dash-border-default)]">
                         <div className="relative">
                           <input
                             type="text"
@@ -3198,14 +3198,14 @@ function ReportsPageContent() {
                               activeTab === 'profit_margin' ? 'بحث باسم المنتج...' :
                               'بحث...'
                             }
-                            className="w-56 bg-[#2B3544] border border-gray-600 rounded-md py-1.5 px-3 pr-8 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                            className="w-56 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md py-1.5 px-3 pr-8 text-sm text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                             dir="rtl"
                           />
-                          <MagnifyingGlassIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <MagnifyingGlassIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
                           {searchQuery && (
                             <button
                               onClick={() => setSearchQuery('')}
-                              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                             >
                               <XMarkIcon className="h-4 w-4" />
                             </button>
@@ -3215,10 +3215,10 @@ function ReportsPageContent() {
                     )}
 
                     {openTabs.map((tab) => (
-                      <div key={tab.id} className={`flex items-center border-r border-gray-600 ${
+                      <div key={tab.id} className={`flex items-center border-r border-[var(--dash-border-default)] ${
                         tab.active
-                          ? 'bg-[#2B3544] text-white border-b-2 border-blue-400'
-                          : 'text-gray-300 hover:text-white hover:bg-[#4B5563]'
+                          ? 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] border-b-2 border-blue-400'
+                          : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
                       }`}>
                         <button
                           onClick={() => switchTab(tab.id)}
@@ -3266,12 +3266,12 @@ function ReportsPageContent() {
                 </div>
 
                 {/* Table Container */}
-                <div className="flex-1 overflow-hidden bg-[#2B3544]">
+                <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)]">
                   {activeTab === 'products' ? (
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3297,7 +3297,7 @@ function ReportsPageContent() {
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3323,7 +3323,7 @@ function ReportsPageContent() {
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3349,7 +3349,7 @@ function ReportsPageContent() {
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3375,7 +3375,7 @@ function ReportsPageContent() {
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3397,7 +3397,7 @@ function ReportsPageContent() {
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3419,7 +3419,7 @@ function ReportsPageContent() {
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3441,7 +3441,7 @@ function ReportsPageContent() {
                     <>
                       {loading && (
                         <div className="flex items-center justify-center h-32">
-                          <div className="text-white">جاري تحميل البيانات...</div>
+                          <div className="text-[var(--dash-text-primary)]">جاري تحميل البيانات...</div>
                         </div>
                       )}
                       {!loading && (
@@ -3466,11 +3466,11 @@ function ReportsPageContent() {
                       <div className="space-y-6">
                         {/* Sales Reports */}
                         <div>
-                          <h2 className="text-lg font-semibold text-white mb-3 text-right flex items-center gap-2">
+                          <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
                             <ChartBarIcon className="h-5 w-5 text-blue-400" />
                             المبيعات
                           </h2>
-                          <div className="bg-[#374151] border border-gray-600 rounded-lg overflow-hidden">
+                          <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
                             {[
                               'الأصناف',
                               'التصنيفات الرئيسية',
@@ -3512,7 +3512,7 @@ function ReportsPageContent() {
                                     openProfitMarginReport();
                                   }
                                 }}
-                                className="group w-full bg-[#374151] hover:bg-[#3B4754] text-right text-white transition-all duration-200 flex items-center justify-between text-sm p-2"
+                                className="group w-full bg-[var(--dash-bg-raised)] hover:bg-[#3B4754] text-right text-[var(--dash-text-primary)] transition-all duration-200 flex items-center justify-between text-sm p-2"
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
@@ -3537,11 +3537,11 @@ function ReportsPageContent() {
 
                         {/* Purchase Reports */}
                         <div>
-                          <h2 className="text-lg font-semibold text-white mb-3 text-right flex items-center gap-2">
+                          <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
                             <ShoppingCartIcon className="h-5 w-5 text-green-400" />
                             المشتريات
                           </h2>
-                          <div className="bg-[#374151] border border-gray-600 rounded-lg overflow-hidden">
+                          <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
                             {[
                               'الأصناف',
                               'الموردين',
@@ -3553,7 +3553,7 @@ function ReportsPageContent() {
                             ].map((report, index) => (
                               <button
                                 key={index}
-                                className="group w-full bg-[#374151] hover:bg-[#3B4754] text-right text-white transition-all duration-200 flex items-center justify-between text-sm p-2"
+                                className="group w-full bg-[var(--dash-bg-raised)] hover:bg-[#3B4754] text-right text-[var(--dash-text-primary)] transition-all duration-200 flex items-center justify-between text-sm p-2"
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
@@ -3578,17 +3578,17 @@ function ReportsPageContent() {
 
                         {/* Loss and Damage */}
                         <div>
-                          <h2 className="text-lg font-semibold text-white mb-3 text-right flex items-center gap-2">
+                          <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
                             <ArchiveBoxIcon className="h-5 w-5 text-red-400" />
                             Loss and damage
                           </h2>
-                          <div className="bg-[#374151] border border-gray-600 rounded-lg overflow-hidden">
+                          <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
                             {[
                               'Products'
                             ].map((report, index) => (
                               <button
                                 key={index}
-                                className="group w-full bg-[#374151] hover:bg-[#3B4754] text-right text-white transition-all duration-200 flex items-center justify-between text-sm p-2"
+                                className="group w-full bg-[var(--dash-bg-raised)] hover:bg-[#3B4754] text-right text-[var(--dash-text-primary)] transition-all duration-200 flex items-center justify-between text-sm p-2"
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
@@ -3613,18 +3613,18 @@ function ReportsPageContent() {
 
                         {/* Inventory Control */}
                         <div>
-                          <h2 className="text-lg font-semibold text-white mb-3 text-right flex items-center gap-2">
+                          <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
                             <ArchiveBoxIcon className="h-5 w-5 text-orange-400" />
                             مراقبة المخزون
                           </h2>
-                          <div className="bg-[#374151] border border-gray-600 rounded-lg overflow-hidden">
+                          <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
                             {[
                               'قائمة المنتجات المروا طلبها',
                               'تحذير لطعامي المتوني'
                             ].map((report, index) => (
                               <button
                                 key={index}
-                                className="group w-full bg-[#374151] hover:bg-[#3B4754] text-right text-white transition-all duration-200 flex items-center justify-between text-sm p-2"
+                                className="group w-full bg-[var(--dash-bg-raised)] hover:bg-[#3B4754] text-right text-[var(--dash-text-primary)] transition-all duration-200 flex items-center justify-between text-sm p-2"
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
@@ -3652,11 +3652,11 @@ function ReportsPageContent() {
                     /* Other Reports - Not implemented yet */
                     <div className="flex items-center justify-center h-full">
                       <div className="text-center">
-                        <DocumentTextIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold text-white mb-2">
+                        <DocumentTextIcon className="h-16 w-16 text-[var(--dash-text-muted)] mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold text-[var(--dash-text-primary)] mb-2">
                           {openTabs.find(tab => tab.id === activeTab)?.title}
                         </h3>
-                        <p className="text-gray-400">هذا التقرير قيد التطوير</p>
+                        <p className="text-[var(--dash-text-muted)]">هذا التقرير قيد التطوير</p>
                       </div>
                     </div>
                   )}

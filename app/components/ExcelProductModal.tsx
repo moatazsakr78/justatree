@@ -542,30 +542,30 @@ export default function ExcelProductModal({
   // ==================== RENDER ====================
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#2B3544] rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-[var(--dash-bg-surface)] rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-[var(--dash-shadow-lg)]">
         {/* Header */}
-        <div className="bg-[#374151] px-6 py-4 flex items-center justify-between border-b border-gray-600">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+        <div className="bg-[var(--dash-bg-raised)] px-6 py-4 flex items-center justify-between border-b border-[var(--dash-border-default)]">
+          <h2 className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
             <TableCellsIcon className="w-6 h-6 text-green-400" />
             Excel - تصدير واستيراد المنتجات
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-600 bg-[#374151]">
+        <div className="flex border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]">
           <button
             onClick={() => setActiveTab('export')}
             className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
               activeTab === 'export'
-                ? 'text-blue-400 border-b-2 border-blue-400 bg-[#2B3544]'
-                : 'text-gray-400 hover:text-white'
+                ? 'text-blue-400 border-b-2 border-blue-400 bg-[var(--dash-bg-surface)]'
+                : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
             }`}
           >
             <CloudArrowDownIcon className="w-5 h-5" />
@@ -575,8 +575,8 @@ export default function ExcelProductModal({
             onClick={() => setActiveTab('import')}
             className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
               activeTab === 'import'
-                ? 'text-green-400 border-b-2 border-green-400 bg-[#2B3544]'
-                : 'text-gray-400 hover:text-white'
+                ? 'text-green-400 border-b-2 border-green-400 bg-[var(--dash-bg-surface)]'
+                : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
             }`}
           >
             <CloudArrowUpIcon className="w-5 h-5" />
@@ -586,8 +586,8 @@ export default function ExcelProductModal({
             onClick={() => setActiveTab('history')}
             className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
               activeTab === 'history'
-                ? 'text-orange-400 border-b-2 border-orange-400 bg-[#2B3544]'
-                : 'text-gray-400 hover:text-white'
+                ? 'text-orange-400 border-b-2 border-orange-400 bg-[var(--dash-bg-surface)]'
+                : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
             }`}
           >
             <ClockIcon className="w-5 h-5" />
@@ -603,7 +603,7 @@ export default function ExcelProductModal({
             <div className="space-y-6">
               {/* Format Selection */}
               <div>
-                <h3 className="text-white font-medium mb-3">صيغة الملف</h3>
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">صيغة الملف</h3>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -614,7 +614,7 @@ export default function ExcelProductModal({
                       onChange={() => setExportFormat('xlsx')}
                       className="text-blue-500"
                     />
-                    <span className="text-gray-300">Excel (.xlsx)</span>
+                    <span className="text-[var(--dash-text-secondary)]">Excel (.xlsx)</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -625,17 +625,17 @@ export default function ExcelProductModal({
                       onChange={() => setExportFormat('csv')}
                       className="text-blue-500"
                     />
-                    <span className="text-gray-300">CSV (.csv)</span>
+                    <span className="text-[var(--dash-text-secondary)]">CSV (.csv)</span>
                   </label>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-[var(--dash-text-disabled)] mt-2">
                   الصيغ المدعومة للتصدير: xlsx, csv
                 </p>
               </div>
 
               {/* Export Mode */}
               <div>
-                <h3 className="text-white font-medium mb-3">نطاق التصدير</h3>
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">نطاق التصدير</h3>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -646,7 +646,7 @@ export default function ExcelProductModal({
                       onChange={() => setExportMode('all')}
                       className="text-blue-500"
                     />
-                    <span className="text-gray-300">جميع المنتجات ({products.length})</span>
+                    <span className="text-[var(--dash-text-secondary)]">جميع المنتجات ({products.length})</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -658,7 +658,7 @@ export default function ExcelProductModal({
                       className="text-blue-500"
                       disabled={selectedProductIds.length === 0}
                     />
-                    <span className={selectedProductIds.length === 0 ? 'text-gray-500' : 'text-gray-300'}>
+                    <span className={selectedProductIds.length === 0 ? 'text-[var(--dash-text-disabled)]' : 'text-[var(--dash-text-secondary)]'}>
                       المنتجات المحددة ({selectedProductIds.length})
                     </span>
                   </label>
@@ -667,8 +667,8 @@ export default function ExcelProductModal({
 
               {/* Columns Selection */}
               <div>
-                <h3 className="text-white font-medium mb-3">الأعمدة للتصدير</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 bg-[#374151] p-4 rounded-lg">
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">الأعمدة للتصدير</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 bg-[var(--dash-bg-raised)] p-4 rounded-lg">
                   {exportColumns.map(col => (
                     <label key={col.id} className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -677,7 +677,7 @@ export default function ExcelProductModal({
                         onChange={() => toggleExportColumn(col.id)}
                         className="rounded text-blue-500"
                       />
-                      <span className="text-gray-300 text-sm">{col.label}</span>
+                      <span className="text-[var(--dash-text-secondary)] text-sm">{col.label}</span>
                     </label>
                   ))}
                 </div>
@@ -685,12 +685,12 @@ export default function ExcelProductModal({
 
               {/* Export Progress */}
               {isExporting && (
-                <div className="bg-[#374151] p-4 rounded-lg">
+                <div className="bg-[var(--dash-bg-raised)] p-4 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-300">جاري التصدير...</span>
+                    <span className="text-[var(--dash-text-secondary)]">جاري التصدير...</span>
                     <span className="text-blue-400">{exportProgress}%</span>
                   </div>
-                  <div className="w-full bg-gray-600 rounded-full h-2">
+                  <div className="w-full bg-[var(--dash-bg-overlay)] rounded-full h-2">
                     <div
                       className="bg-blue-500 h-2 rounded-full transition-all"
                       style={{ width: `${exportProgress}%` }}
@@ -725,7 +725,7 @@ export default function ExcelProductModal({
 
               {/* File Upload */}
               <div>
-                <h3 className="text-white font-medium mb-3">اختر الملف</h3>
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">اختر الملف</h3>
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -735,13 +735,13 @@ export default function ExcelProductModal({
                 />
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full border-2 border-dashed border-gray-600 rounded-lg p-8 flex flex-col items-center gap-3 hover:border-green-500 transition-colors"
+                  className="w-full border-2 border-dashed border-[var(--dash-border-default)] rounded-lg p-8 flex flex-col items-center gap-3 hover:border-green-500 transition-colors"
                 >
-                  <CloudArrowUpIcon className="w-12 h-12 text-gray-400" />
-                  <span className="text-gray-300">
+                  <CloudArrowUpIcon className="w-12 h-12 text-[var(--dash-text-muted)]" />
+                  <span className="text-[var(--dash-text-secondary)]">
                     {selectedFile ? selectedFile.name : 'اضغط لاختيار ملف أو اسحب الملف هنا'}
                   </span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-[var(--dash-text-disabled)]">
                     الصيغ المدعومة: {SUPPORTED_FORMATS.join(', ')}
                   </span>
                 </button>
@@ -750,14 +750,14 @@ export default function ExcelProductModal({
               {/* Column Mapping */}
               {fileColumns.length > 0 && (
                 <div>
-                  <h3 className="text-white font-medium mb-3">ربط الأعمدة</h3>
-                  <p className="text-gray-400 text-sm mb-4">
+                  <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">ربط الأعمدة</h3>
+                  <p className="text-[var(--dash-text-muted)] text-sm mb-4">
                     اختر العمود المناسب من ملفك لكل حقل في النظام
                   </p>
-                  <div className="bg-[#374151] rounded-lg p-4 space-y-3 max-h-64 overflow-y-auto">
+                  <div className="bg-[var(--dash-bg-raised)] rounded-lg p-4 space-y-3 max-h-64 overflow-y-auto">
                     {SYSTEM_COLUMNS.map(sysCol => (
                       <div key={sysCol.id} className="flex items-center gap-4">
-                        <div className="w-40 text-gray-300 text-sm flex items-center gap-1">
+                        <div className="w-40 text-[var(--dash-text-secondary)] text-sm flex items-center gap-1">
                           {sysCol.label}
                           {sysCol.required && <span className="text-red-400">*</span>}
                         </div>
@@ -767,7 +767,7 @@ export default function ExcelProductModal({
                             ...prev,
                             [sysCol.id]: e.target.value
                           }))}
-                          className="flex-1 bg-[#2B3544] border border-gray-600 rounded px-3 py-2 text-white text-sm"
+                          className="flex-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded px-3 py-2 text-[var(--dash-text-primary)] text-sm"
                         >
                           <option value="">-- اختر العمود --</option>
                           {fileColumns.map(col => (
@@ -783,13 +783,13 @@ export default function ExcelProductModal({
               {/* Preview Data */}
               {previewData.length > 0 && (
                 <div>
-                  <h3 className="text-white font-medium mb-3">معاينة البيانات (أول 5 صفوف)</h3>
-                  <div className="overflow-x-auto bg-[#374151] rounded-lg">
+                  <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">معاينة البيانات (أول 5 صفوف)</h3>
+                  <div className="overflow-x-auto bg-[var(--dash-bg-raised)] rounded-lg">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-gray-600">
+                        <tr className="border-b border-[var(--dash-border-default)]">
                           {fileColumns.slice(0, 6).map(col => (
-                            <th key={col} className="px-3 py-2 text-right text-gray-400 font-medium">
+                            <th key={col} className="px-3 py-2 text-right text-[var(--dash-text-muted)] font-medium">
                               {col}
                             </th>
                           ))}
@@ -797,9 +797,9 @@ export default function ExcelProductModal({
                       </thead>
                       <tbody>
                         {previewData.map((row, idx) => (
-                          <tr key={idx} className="border-b border-gray-700">
+                          <tr key={idx} className="border-b border-[var(--dash-border-subtle)]">
                             {fileColumns.slice(0, 6).map(col => (
-                              <td key={col} className="px-3 py-2 text-gray-300">
+                              <td key={col} className="px-3 py-2 text-[var(--dash-text-secondary)]">
                                 {String(row[col] || '').slice(0, 30)}
                               </td>
                             ))}
@@ -813,12 +813,12 @@ export default function ExcelProductModal({
 
               {/* Import Progress */}
               {isImporting && (
-                <div className="bg-[#374151] p-4 rounded-lg">
+                <div className="bg-[var(--dash-bg-raised)] p-4 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-300">جاري الاستيراد...</span>
+                    <span className="text-[var(--dash-text-secondary)]">جاري الاستيراد...</span>
                     <span className="text-green-400">{importProgress}%</span>
                   </div>
-                  <div className="w-full bg-gray-600 rounded-full h-2">
+                  <div className="w-full bg-[var(--dash-bg-overlay)] rounded-full h-2">
                     <div
                       className="bg-green-500 h-2 rounded-full transition-all"
                       style={{ width: `${importProgress}%` }}
@@ -829,19 +829,19 @@ export default function ExcelProductModal({
 
               {/* Success Message Popup */}
               {showSuccessMessage && importResults && importResults.success > 0 && (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[60]">
-                  <div className="bg-[#2B3544] rounded-2xl p-8 text-center max-w-md mx-4 animate-pulse-once shadow-2xl border border-green-500/30">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60]">
+                  <div className="bg-[var(--dash-bg-surface)] rounded-2xl p-8 text-center max-w-md mx-4 animate-pulse-once shadow-[var(--dash-shadow-lg)] border border-green-500/30">
                     <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CheckCircleIcon className="w-12 h-12 text-green-400" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">تم الاستيراد بنجاح!</h3>
-                    <p className="text-gray-400 mb-4">
+                    <h3 className="text-2xl font-bold text-[var(--dash-text-primary)] mb-2">تم الاستيراد بنجاح!</h3>
+                    <p className="text-[var(--dash-text-muted)] mb-4">
                       تم استيراد <span className="text-green-400 font-bold">{importResults.success}</span> منتج بنجاح
                       {importResults.failed > 0 && (
                         <span className="text-yellow-400"> ({importResults.failed} فشل)</span>
                       )}
                     </p>
-                    <p className="text-xs text-gray-500">سيتم إغلاق النافذة تلقائياً...</p>
+                    <p className="text-xs text-[var(--dash-text-disabled)]">سيتم إغلاق النافذة تلقائياً...</p>
                     <button
                       onClick={() => {
                         setShowSuccessMessage(false)
@@ -868,19 +868,19 @@ export default function ExcelProductModal({
                     ) : (
                       <ExclamationTriangleIcon className="w-5 h-5 text-yellow-400" />
                     )}
-                    <span className="text-white font-medium">نتائج الاستيراد</span>
+                    <span className="text-[var(--dash-text-primary)] font-medium">نتائج الاستيراد</span>
                   </div>
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-400">الإجمالي:</span>
-                      <span className="text-white mr-2">{importResults.total}</span>
+                      <span className="text-[var(--dash-text-muted)]">الإجمالي:</span>
+                      <span className="text-[var(--dash-text-primary)] mr-2">{importResults.total}</span>
                     </div>
                     <div>
-                      <span className="text-gray-400">نجح:</span>
+                      <span className="text-[var(--dash-text-muted)]">نجح:</span>
                       <span className="text-green-400 mr-2">{importResults.success}</span>
                     </div>
                     <div>
-                      <span className="text-gray-400">فشل:</span>
+                      <span className="text-[var(--dash-text-muted)]">فشل:</span>
                       <span className="text-red-400 mr-2">{importResults.failed}</span>
                     </div>
                   </div>
@@ -915,7 +915,7 @@ export default function ExcelProductModal({
             <div className="space-y-4">
               {/* Refresh Button */}
               <div className="flex justify-between items-center">
-                <h3 className="text-white font-medium">سجل عمليات الاستيراد</h3>
+                <h3 className="text-[var(--dash-text-primary)] font-medium">سجل عمليات الاستيراد</h3>
                 <button
                   onClick={loadImportHistory}
                   disabled={isLoadingHistory}
@@ -936,7 +936,7 @@ export default function ExcelProductModal({
                   <ArrowPathIcon className="w-8 h-8 text-gray-400 animate-spin" />
                 </div>
               ) : importHistory.length === 0 ? (
-                <div className="text-center py-12 text-gray-400">
+                <div className="text-center py-12 text-[var(--dash-text-muted)]">
                   لا توجد عمليات استيراد سابقة
                 </div>
               ) : (
@@ -944,24 +944,24 @@ export default function ExcelProductModal({
                   {importHistory.map(record => (
                     <div
                       key={record.id}
-                      className={`bg-[#374151] rounded-lg p-4 ${
+                      className={`bg-[var(--dash-bg-raised)] rounded-lg p-4 ${
                         record.rolled_back_at ? 'opacity-50' : ''
                       }`}
                     >
                       <div className="flex items-start justify-between">
                         <div className="space-y-1">
-                          <div className="text-white font-medium">{record.file_name}</div>
-                          <div className="text-xs text-gray-400">
+                          <div className="text-[var(--dash-text-primary)] font-medium">{record.file_name}</div>
+                          <div className="text-xs text-[var(--dash-text-muted)]">
                             {new Date(record.import_date).toLocaleString('ar-EG')}
                           </div>
                           <div className="flex gap-4 text-sm">
-                            <span className="text-gray-400">
-                              الإجمالي: <span className="text-white">{record.total_products}</span>
+                            <span className="text-[var(--dash-text-muted)]">
+                              الإجمالي: <span className="text-[var(--dash-text-primary)]">{record.total_products}</span>
                             </span>
-                            <span className="text-gray-400">
+                            <span className="text-[var(--dash-text-muted)]">
                               نجح: <span className="text-green-400">{record.successful_imports}</span>
                             </span>
-                            <span className="text-gray-400">
+                            <span className="text-[var(--dash-text-muted)]">
                               فشل: <span className="text-red-400">{record.failed_imports}</span>
                             </span>
                           </div>

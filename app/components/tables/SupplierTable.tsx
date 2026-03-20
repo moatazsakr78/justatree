@@ -48,14 +48,14 @@ export default function SupplierTable({ showActions = false }: SupplierTableProp
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-right">
-        <thead className="bg-gray-700 text-gray-300">
+        <thead className="bg-[var(--dash-table-header-bg)] text-[var(--dash-text-secondary)]">
           <tr>
             <th className="p-3 text-center">
               <input
                 type="checkbox"
                 checked={selectedRows.length === mockSuppliers.length}
                 onChange={toggleAllSelection}
-                className="w-4 h-4 text-[#5DADE2] bg-gray-700 border-gray-600 rounded focus:ring-[#5DADE2]"
+                className="w-4 h-4 text-[#5DADE2] bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-[#5DADE2]"
               />
             </th>
             <th className="p-3 text-right font-medium">#</th>
@@ -69,12 +69,12 @@ export default function SupplierTable({ showActions = false }: SupplierTableProp
             <th className="p-3 text-right font-medium">تاريخ الإنشاء</th>
           </tr>
         </thead>
-        <tbody className="bg-pos-darker divide-y divide-gray-700">
+        <tbody className="bg-pos-darker divide-y divide-[var(--dash-border-subtle)]">
           {mockSuppliers.map((supplier) => (
             <tr 
               key={supplier.id}
-              className={`hover:bg-gray-700 transition-colors ${
-                selectedRows.includes(supplier.id) ? 'bg-[#5DADE2]/20' : ''
+              className={`hover:bg-[var(--dash-bg-overlay)] transition-colors ${
+                selectedRows.includes(supplier.id) ? 'bg-[var(--dash-accent-blue-subtle)]' : ''
               }`}
             >
               <td className="p-3 text-center">
@@ -82,18 +82,18 @@ export default function SupplierTable({ showActions = false }: SupplierTableProp
                   type="checkbox"
                   checked={selectedRows.includes(supplier.id)}
                   onChange={() => toggleRowSelection(supplier.id)}
-                  className="w-4 h-4 text-[#5DADE2] bg-gray-700 border-gray-600 rounded focus:ring-[#5DADE2]"
+                  className="w-4 h-4 text-[#5DADE2] bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-[#5DADE2]"
                 />
               </td>
-              <td className="p-3 text-white font-medium">{supplier.id}</td>
-              <td className="p-3 text-white font-medium">{supplier.name}</td>
-              <td className="p-3 text-white">{supplier.email}</td>
-              <td className="p-3 text-white">{supplier.accountBalance}</td>
-              <td className="p-3 text-white">{supplier.city}</td>
-              <td className="p-3 text-white">{supplier.phone}</td>
-              <td className="p-3 text-white">{supplier.city}</td>
-              <td className="p-3 text-white">{supplier.address || '-'}</td>
-              <td className="p-3 text-gray-400">{supplier.createdAt}</td>
+              <td className="p-3 text-[var(--dash-text-primary)] font-medium">{supplier.id}</td>
+              <td className="p-3 text-[var(--dash-text-primary)] font-medium">{supplier.name}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{supplier.email}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{supplier.accountBalance}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{supplier.city}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{supplier.phone}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{supplier.city}</td>
+              <td className="p-3 text-[var(--dash-text-primary)]">{supplier.address || '-'}</td>
+              <td className="p-3 text-[var(--dash-text-muted)]">{supplier.createdAt}</td>
             </tr>
           ))}
         </tbody>

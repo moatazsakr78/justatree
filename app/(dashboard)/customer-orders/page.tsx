@@ -1239,14 +1239,14 @@ export default function CustomerOrdersPage() {
     <div className="min-h-screen text-gray-800" style={{backgroundColor: '#c0c0c0'}}>
 
       {/* Store Header (Red) */}
-      <header className="border-b border-gray-700 py-0 relative z-40" style={{backgroundColor: 'var(--primary-color)'}}>
+      <header className="border-b border-[var(--dash-border-subtle)] py-0 relative z-40" style={{backgroundColor: 'var(--primary-color)'}}>
         <div className="relative flex items-center min-h-[60px] md:min-h-[80px]">
           <div className="max-w-[95%] md:max-w-[95%] lg:max-w-[80%] mx-auto px-2 md:px-3 lg:px-4 flex items-center justify-between min-h-[60px] md:min-h-[80px] w-full">
             
             {/* زر العودة - اليسار */}
             <button
               onClick={() => window.history.back()}
-              className="flex items-center p-2 text-white hover:text-gray-300 transition-colors"
+              className="flex items-center p-2 text-[var(--dash-text-primary)] hover:text-[var(--dash-text-secondary)] transition-colors"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -1255,7 +1255,7 @@ export default function CustomerOrdersPage() {
 
             {/* النص الرئيسي - الوسط */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
-              <h1 className="text-lg md:text-2xl font-bold text-white text-center whitespace-nowrap">
+              <h1 className="text-lg md:text-2xl font-bold text-[var(--dash-text-primary)] text-center whitespace-nowrap">
                 قائمة الطلبات
               </h1>
             </div>
@@ -1277,7 +1277,7 @@ export default function CustomerOrdersPage() {
             onClick={() => setActiveTab('all')}
             className={`flex-1 min-w-0 py-2 md:py-4 px-2 md:px-6 text-sm md:text-base font-semibold transition-colors ${
               activeTab === 'all'
-                ? 'text-white'
+                ? 'text-[var(--dash-text-primary)]'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
             style={{
@@ -1290,7 +1290,7 @@ export default function CustomerOrdersPage() {
             onClick={() => setActiveTab('preparation')}
             className={`flex-1 min-w-0 py-2 md:py-4 px-2 md:px-6 text-sm md:text-base font-semibold transition-colors ${
               activeTab === 'preparation'
-                ? 'text-white'
+                ? 'text-[var(--dash-text-primary)]'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
             style={{
@@ -1303,7 +1303,7 @@ export default function CustomerOrdersPage() {
             onClick={() => setActiveTab('followup')}
             className={`flex-1 min-w-0 py-2 md:py-4 px-2 md:px-6 text-sm md:text-base font-semibold transition-colors ${
               activeTab === 'followup'
-                ? 'text-white'
+                ? 'text-[var(--dash-text-primary)]'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
             style={{
@@ -1316,7 +1316,7 @@ export default function CustomerOrdersPage() {
             onClick={() => setActiveTab('completed')}
             className={`flex-1 min-w-0 py-2 md:py-4 px-2 md:px-6 text-sm md:text-base font-semibold transition-colors ${
               activeTab === 'completed'
-                ? 'text-white'
+                ? 'text-[var(--dash-text-primary)]'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
             style={{
@@ -1329,7 +1329,7 @@ export default function CustomerOrdersPage() {
             onClick={() => setActiveTab('issues')}
             className={`flex-1 min-w-0 py-2 md:py-4 px-2 md:px-6 text-sm md:text-base font-semibold transition-colors ${
               activeTab === 'issues'
-                ? 'text-white'
+                ? 'text-[var(--dash-text-primary)]'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
             style={{
@@ -1342,7 +1342,7 @@ export default function CustomerOrdersPage() {
             onClick={() => setActiveTab('postponed')}
             className={`flex-1 min-w-0 py-2 md:py-4 px-2 md:px-6 text-sm md:text-base font-semibold transition-colors ${
               activeTab === 'postponed'
-                ? 'text-white'
+                ? 'text-[var(--dash-text-primary)]'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
             style={{
@@ -1395,7 +1395,7 @@ export default function CustomerOrdersPage() {
         <div className="space-y-2 md:space-y-3 lg:space-y-4">
           {filteredOrders.length === 0 ? (
             <div className="bg-white rounded-lg p-4 md:p-8 shadow-lg text-center">
-              <div className="text-gray-400 text-4xl md:text-6xl mb-2 md:mb-4">📦</div>
+              <div className="text-[var(--dash-text-muted)] text-4xl md:text-6xl mb-2 md:mb-4">📦</div>
               <h3 className="text-lg md:text-xl font-semibold text-gray-600 mb-1 md:mb-2">
                 {activeTab === 'all' && 'لا توجد طلبات'}
                 {activeTab === 'preparation' && 'لا توجد طلبات قيد التحضير'}
@@ -1404,7 +1404,7 @@ export default function CustomerOrdersPage() {
                 {activeTab === 'issues' && 'لا توجد طلبات بها مشاكل'}
                 {activeTab === 'postponed' && 'لا توجد طلبات مؤجلة'}
               </h3>
-              <p className="text-sm md:text-base text-gray-500">
+              <p className="text-sm md:text-base text-[var(--dash-text-disabled)]">
                 {activeTab === 'all' && 'لا توجد طلبات في قاعدة البيانات'}
                 {activeTab === 'preparation' && 'جميع الطلبات تم تحضيرها'}
                 {activeTab === 'followup' && 'لا توجد طلبات تحتاج متابعة'}
@@ -1425,7 +1425,7 @@ export default function CustomerOrdersPage() {
                       <div className="flex items-center gap-2">
                         <span
                           className={`inline-flex items-center gap-1 md:gap-2 px-3 md:px-4 py-1 md:py-2 rounded-full text-sm md:text-base font-semibold cursor-pointer ${
-                            order.status === 'ready_for_pickup' ? 'text-green-800' : 'text-white'
+                            order.status === 'ready_for_pickup' ? 'text-green-800' : 'text-[var(--dash-text-primary)]'
                           }`}
                           style={{ backgroundColor: statusColors[order.status] }}
                           onContextMenu={(e) => {
@@ -1495,7 +1495,7 @@ export default function CustomerOrdersPage() {
                           <h4 className="text-sm font-semibold text-blue-600">معلومات العميل</h4>
                           {/* Collapse/Expand Arrow */}
                           <svg 
-                            className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
+                            className={`w-5 h-5 text-[var(--dash-text-disabled)] transform transition-transform duration-200 ${
                               isExpanded ? 'rotate-90' : 'rotate-0'
                             }`} 
                             fill="none" 
@@ -1593,7 +1593,7 @@ export default function CustomerOrdersPage() {
                               <h5 className="text-lg font-semibold text-blue-600">التفاصيل المالية</h5>
                               {/* Collapse/Expand Arrow */}
                               <svg
-                                className={`w-6 h-6 text-gray-500 transform transition-transform duration-200 ${
+                                className={`w-6 h-6 text-[var(--dash-text-disabled)] transform transition-transform duration-200 ${
                                   isExpanded ? 'rotate-90' : 'rotate-0'
                                 }`}
                                 fill="none"
@@ -1658,7 +1658,7 @@ export default function CustomerOrdersPage() {
                               e.stopPropagation();
                               handleStartPreparation(order.id);
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -1674,7 +1674,7 @@ export default function CustomerOrdersPage() {
                               e.stopPropagation();
                               handlePreparationPage(order.id);
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-[var(--dash-text-primary)] text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                             style={{ backgroundColor: '#F59E0B' }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = '#D97706';
@@ -1699,7 +1699,7 @@ export default function CustomerOrdersPage() {
                                 updateOrderStatus(order.id, 'pending');
                               }
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-[var(--dash-text-primary)] text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                             style={{ backgroundColor: '#EC4899' }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = '#DB2777';
@@ -1723,7 +1723,7 @@ export default function CustomerOrdersPage() {
                               e.stopPropagation();
                               handleEditOrder(order);
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -1742,7 +1742,7 @@ export default function CustomerOrdersPage() {
                                   trackingDropdownOrderId === order.id ? null : order.id
                                 );
                               }}
-                              className="inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                              className="inline-flex items-center gap-2 px-4 py-2 text-[var(--dash-text-primary)] text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                               style={{ backgroundColor: '#25D366' }}
                               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#1DA851'; }}
                               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#25D366'; }}
@@ -1757,7 +1757,7 @@ export default function CustomerOrdersPage() {
                             </button>
                             {trackingDropdownOrderId === order.id && (
                               <div
-                                className="absolute top-full mt-1 right-0 bg-[#1F2937] border border-gray-600 rounded-lg shadow-xl z-50 min-w-[200px] overflow-hidden"
+                                className="absolute top-full mt-1 right-0 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-lg shadow-xl z-50 min-w-[200px] overflow-hidden"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 {/* Send via WhatsApp */}
@@ -1782,7 +1782,7 @@ export default function CustomerOrdersPage() {
                                       alert('فشل في إرسال الرسالة');
                                     }
                                   }}
-                                  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white hover:bg-green-600/20 transition-colors"
+                                  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-[var(--dash-text-primary)] hover:bg-green-600/20 transition-colors"
                                 >
                                   <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -1803,7 +1803,7 @@ export default function CustomerOrdersPage() {
                                     }
                                     setTimeout(() => setTrackingDropdownOrderId(null), 1500);
                                   }}
-                                  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white hover:bg-blue-600/20 transition-colors border-t border-gray-600"
+                                  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-[var(--dash-text-primary)] hover:bg-blue-600/20 transition-colors border-t border-[var(--dash-border-default)]"
                                 >
                                   {copiedTrackingOrderId === order.id ? (
                                     <>
@@ -1833,7 +1833,7 @@ export default function CustomerOrdersPage() {
                               e.stopPropagation();
                               completePreparation(order.id);
                             }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1849,7 +1849,7 @@ export default function CustomerOrdersPage() {
                               e.stopPropagation();
                               moveToNextStatus(order.id);
                             }}
-                            className={`inline-flex items-center gap-1 px-3 py-1 text-white text-xs font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 ${
+                            className={`inline-flex items-center gap-1 px-3 py-1 text-[var(--dash-text-primary)] text-xs font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 ${
                               order.status === 'ready_for_pickup' ? 'bg-green-600 hover:bg-green-700' :
                               order.status === 'ready_for_shipping' ? 'bg-blue-600 hover:bg-blue-700' :
                               'bg-green-600 hover:bg-green-700'
@@ -1909,7 +1909,7 @@ export default function CustomerOrdersPage() {
                                       className="w-full h-full object-cover rounded-lg"
                                     />
                                   ) : (
-                                    <span className="text-gray-400 text-xl">📦</span>
+                                    <span className="text-[var(--dash-text-muted)] text-xl">📦</span>
                                   )}
                                 </div>
 
@@ -1977,7 +1977,7 @@ export default function CustomerOrdersPage() {
                                               className="w-full h-full object-cover rounded-lg"
                                             />
                                           ) : (
-                                            <span className="text-gray-400 text-lg">📦</span>
+                                            <span className="text-[var(--dash-text-muted)] text-lg">📦</span>
                                           )}
                                         </div>
                                         <div className="min-w-0 flex-1">
@@ -2035,7 +2035,7 @@ export default function CustomerOrdersPage() {
                                             className="w-full h-full object-cover rounded-lg"
                                           />
                                         ) : (
-                                          <span className="text-gray-400 text-sm">📦</span>
+                                          <span className="text-[var(--dash-text-muted)] text-sm">📦</span>
                                         )}
                                       </div>
                                       <div className="min-w-0 flex-1">
@@ -2091,7 +2091,7 @@ export default function CustomerOrdersPage() {
               </button>
               <button
                 onClick={confirmStartPreparation}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg transition-colors"
               >
                 نعم، بدء التحضير
               </button>
@@ -2116,10 +2116,10 @@ export default function CustomerOrdersPage() {
             {/* Modal Header */}
             <div className="p-4 md:p-6 border-b border-gray-200 flex-shrink-0" style={{ backgroundColor: 'var(--primary-color)' }}>
               <div className="flex justify-between items-center">
-                <h3 className="text-xl md:text-2xl font-semibold text-white">تعديل الطلب: {selectedOrderForEdit.id}</h3>
+                <h3 className="text-xl md:text-2xl font-semibold text-[var(--dash-text-primary)]">تعديل الطلب: {selectedOrderForEdit.id}</h3>
                 <button
                   onClick={closeEditModal}
-                  className="text-white hover:text-gray-300 transition-colors p-2"
+                  className="text-[var(--dash-text-primary)] hover:text-[var(--dash-text-secondary)] transition-colors p-2"
                 >
                   <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2147,7 +2147,7 @@ export default function CustomerOrdersPage() {
                     <h4 className="font-semibold text-gray-800">عناصر الطلب</h4>
                     <button
                       onClick={() => setShowAddProductSection(!showAddProductSection)}
-                      className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors text-sm font-medium"
+                      className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -2167,7 +2167,7 @@ export default function CustomerOrdersPage() {
                             setProductSearchQuery('');
                             setSearchResults([]);
                           }}
-                          className="text-gray-500 hover:text-gray-700"
+                          className="text-[var(--dash-text-disabled)] hover:text-gray-700"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2189,12 +2189,12 @@ export default function CustomerOrdersPage() {
                         />
                         <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                           {isSearching ? (
-                            <svg className="w-5 h-5 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-[var(--dash-text-muted)] animate-spin" fill="none" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                           ) : (
-                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-[var(--dash-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                           )}
@@ -2218,12 +2218,12 @@ export default function CustomerOrdersPage() {
                                     className="w-full h-full object-cover rounded-lg"
                                   />
                                 ) : (
-                                  <span className="text-gray-400 text-xl">📦</span>
+                                  <span className="text-[var(--dash-text-muted)] text-xl">📦</span>
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <h6 className="font-semibold text-gray-800 truncate">{product.name}</h6>
-                                <p className="text-gray-500 text-sm">كود: {product.product_code || 'غير محدد'}</p>
+                                <p className="text-[var(--dash-text-disabled)] text-sm">كود: {product.product_code || 'غير محدد'}</p>
                               </div>
                               <div className="text-left">
                                 <p className="font-bold text-green-600">{formatPrice(product.price)}</p>
@@ -2238,7 +2238,7 @@ export default function CustomerOrdersPage() {
 
                       {/* No Results */}
                       {productSearchQuery && !isSearching && searchResults.length === 0 && (
-                        <div className="text-center py-4 text-gray-500">
+                        <div className="text-center py-4 text-[var(--dash-text-disabled)]">
                           لم يتم العثور على منتجات
                         </div>
                       )}
@@ -2247,7 +2247,7 @@ export default function CustomerOrdersPage() {
 
                   {selectedOrderForEdit.items.length === 0 ? (
                     <div className="text-center py-8">
-                      <p className="text-gray-500">لا توجد عناصر في الطلب</p>
+                      <p className="text-[var(--dash-text-disabled)]">لا توجد عناصر في الطلب</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -2256,7 +2256,7 @@ export default function CustomerOrdersPage() {
                           {/* New Item Badge */}
                           {(item as any).isNew && (
                             <div className="flex justify-end">
-                              <span className="px-2 py-1 bg-green-500 text-white text-xs rounded-full font-medium">
+                              <span className="px-2 py-1 bg-green-500 text-[var(--dash-text-primary)] text-xs rounded-full font-medium">
                                 منتج جديد
                               </span>
                             </div>
@@ -2273,7 +2273,7 @@ export default function CustomerOrdersPage() {
                                   className="w-full h-full object-cover rounded-lg"
                                 />
                               ) : (
-                                <span className="text-gray-400 text-2xl">📦</span>
+                                <span className="text-[var(--dash-text-muted)] text-2xl">📦</span>
                               )}
                             </div>
 
@@ -2300,14 +2300,14 @@ export default function CustomerOrdersPage() {
                             <div className="flex items-center gap-2">
                               <button
                                 onClick={() => updateItemQuantity(item.id, item.quantity - 1)}
-                                className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+                                className="w-8 h-8 bg-red-500 hover:bg-red-600 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm font-bold transition-colors"
                               >
                                 -
                               </button>
                               <span className="w-12 text-center font-semibold">{item.quantity}</span>
                               <button
                                 onClick={() => updateItemQuantity(item.id, item.quantity + 1)}
-                                className="w-8 h-8 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+                                className="w-8 h-8 bg-green-500 hover:bg-green-600 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm font-bold transition-colors"
                               >
                                 +
                               </button>
@@ -2321,7 +2321,7 @@ export default function CustomerOrdersPage() {
                             {/* Remove Button */}
                             <button
                               onClick={() => removeItem(item.id)}
-                              className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors"
+                              className="w-8 h-8 bg-red-500 hover:bg-red-600 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center transition-colors"
                               title="حذف المنتج"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2382,7 +2382,7 @@ export default function CustomerOrdersPage() {
                 <button
                   onClick={saveOrderChanges}
                   disabled={savingOrder}
-                  className="px-8 py-3 text-white rounded-lg transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-3 text-[var(--dash-text-primary)] rounded-lg transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: 'var(--primary-color)' }}
                   onMouseEnter={(e) => {
                     if (!savingOrder) e.currentTarget.style.backgroundColor = '#4a1919';
@@ -2421,7 +2421,7 @@ export default function CustomerOrdersPage() {
             onClick={() => handleContextMenuAction('cancelled')}
             className="w-full px-4 py-2 text-right hover:bg-gray-100 transition-colors flex items-center gap-2"
           >
-            <span className="w-3 h-3 bg-gray-500 rounded-full"></span>
+            <span className="w-3 h-3 bg-[var(--dash-bg-highlight)] rounded-full"></span>
             <span>ملغي</span>
           </button>
           <button
@@ -2461,7 +2461,7 @@ export default function CustomerOrdersPage() {
               </button>
               <button
                 onClick={() => handleInvoiceConfirmation(true)}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg transition-colors"
               >
                 نعم، إنشاء فاتورة
               </button>
@@ -2477,10 +2477,10 @@ export default function CustomerOrdersPage() {
             {/* Modal Header */}
             <div className="p-6 border-b border-gray-200" style={{ backgroundColor: 'var(--primary-color)' }}>
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-semibold text-white">إنشاء فاتورة للطلب: {selectedOrderForInvoice.id}</h3>
+                <h3 className="text-xl font-semibold text-[var(--dash-text-primary)]">إنشاء فاتورة للطلب: {selectedOrderForInvoice.id}</h3>
                 <button
                   onClick={() => setShowCreateInvoiceModal(false)}
-                  className="text-white hover:text-gray-300 transition-colors"
+                  className="text-[var(--dash-text-primary)] hover:text-[var(--dash-text-secondary)] transition-colors"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2530,7 +2530,7 @@ export default function CustomerOrdersPage() {
                               className="w-full h-full object-cover rounded-lg"
                             />
                           ) : (
-                            <span className="text-gray-400 text-xl">📦</span>
+                            <span className="text-[var(--dash-text-muted)] text-xl">📦</span>
                           )}
                         </div>
                         <div className="flex-1">
@@ -2566,13 +2566,13 @@ export default function CustomerOrdersPage() {
                       <div className="mt-2 flex gap-2">
                         <button
                           onClick={() => setInvoiceData({...invoiceData, paidAmount: selectedOrderForInvoice.total})}
-                          className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm transition-colors"
+                          className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded text-sm transition-colors"
                         >
                           كامل المبلغ
                         </button>
                         <button
                           onClick={() => setInvoiceData({...invoiceData, paidAmount: selectedOrderForInvoice.total / 2})}
-                          className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm transition-colors"
+                          className="px-3 py-1 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded text-sm transition-colors"
                         >
                           نصف المبلغ
                         </button>
@@ -2692,7 +2692,7 @@ export default function CustomerOrdersPage() {
                   className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
                     creatingInvoice || !invoiceData.selectedBranch || !invoiceData.selectedRecord
                       ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-white'
+                      : 'bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)]'
                   }`}
                 >
                   {creatingInvoice ? 'جاري إنشاء الفاتورة...' : 'إنشاء الفاتورة'}

@@ -428,10 +428,10 @@ export default function ColorSelectionModal({
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-        <div className="bg-[#2B3544] rounded-2xl shadow-2xl border border-[#4A5568] w-full max-w-lg max-h-[90vh] overflow-hidden pointer-events-auto relative transform transition-transform duration-200 modal-container">
+        <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] w-full max-w-lg max-h-[90vh] overflow-hidden pointer-events-auto relative transform transition-transform duration-200 modal-container animate-dash-scale-in">
 
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#4A5568]">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 isPurchaseMode
@@ -440,10 +440,10 @@ export default function ColorSelectionModal({
                     ? 'bg-gradient-to-r from-orange-500 to-amber-600'
                     : 'bg-gradient-to-r from-blue-500 to-purple-500'
               }`}>
-                <span className="text-white text-lg">{isPurchaseMode ? '🛒' : isTransferMode ? '📦' : '🎨'}</span>
+                <span className="text-[var(--dash-text-primary)] text-lg">{isPurchaseMode ? '🛒' : isTransferMode ? '📦' : '🎨'}</span>
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">{product.name}</h2>
+                <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">{product.name}</h2>
                 <p className={`text-sm ${
                   isPurchaseMode
                     ? 'text-green-400'
@@ -461,7 +461,7 @@ export default function ColorSelectionModal({
               </div>
             </div>
             <button onClick={onClose}>
-              <XMarkIcon className="h-5 w-5 text-gray-400" />
+              <XMarkIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
             </button>
           </div>
 
@@ -469,12 +469,12 @@ export default function ColorSelectionModal({
           <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto scrollbar-hide relative modal-content">
 
             {/* Total Quantity Selector */}
-            <div className="bg-[#374151] rounded-xl p-4 border border-[#4A5568]">
-              <label className="text-gray-300 text-sm mb-3 block">الكمية الإجمالية</label>
+            <div className="bg-[var(--dash-bg-raised)] rounded-xl p-4 border border-[var(--dash-border-default)]">
+              <label className="text-[var(--dash-text-secondary)] text-sm mb-3 block">الكمية الإجمالية</label>
               <div className="flex items-center justify-between gap-4">
 
                 {/* Product Image */}
-                <div className="w-20 h-20 bg-[#2B3544] rounded-lg flex items-center justify-center overflow-hidden border border-[#4A5568] flex-shrink-0 relative">
+                <div className="w-20 h-20 bg-[var(--dash-bg-surface)] rounded-lg flex items-center justify-center overflow-hidden border border-[var(--dash-border-default)] flex-shrink-0 relative">
                   {product.main_image_url ? (
                     <img src={product.main_image_url} alt={product.name} className="w-full h-full object-cover" />
                   ) : (
@@ -488,7 +488,7 @@ export default function ColorSelectionModal({
                 {hasVariants ? (
                   /* Read-only when colors/shapes exist */
                   <div className="flex items-center gap-4 flex-1 justify-center relative">
-                    <div className="bg-[#2B3544] text-white font-bold text-xl text-center rounded-lg px-4 py-2 min-w-[80px] border-2 border-gray-600">
+                    <div className="bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] font-bold text-xl text-center rounded-lg px-4 py-2 min-w-[80px] border-2 border-[var(--dash-border-default)]">
                       {totalQuantity}
                     </div>
                   </div>
@@ -497,9 +497,9 @@ export default function ColorSelectionModal({
                   <div className="flex items-center gap-4 flex-1 justify-center relative">
                     <button
                       onClick={() => handleManualQuantityChange(-1)}
-                      className="w-8 h-8 bg-[#374151] hover:bg-[#4A5568] rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
+                      className="w-8 h-8 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
                     >
-                      <MinusIcon className="h-4 w-4 text-white" />
+                      <MinusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                     </button>
                     <input
                       ref={quantityInputRef}
@@ -515,14 +515,14 @@ export default function ColorSelectionModal({
                         }
                       }}
                       onFocus={(e) => e.target.select()}
-                      className="bg-[#2B3544] text-white font-bold text-lg text-center rounded-lg px-4 py-2 w-[70px] outline-none border-2 border-transparent focus:border-blue-500 hover:bg-[#374151] transition-all cursor-pointer"
+                      className="bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] font-bold text-lg text-center rounded-lg px-4 py-2 w-[70px] outline-none border-2 border-transparent focus:border-blue-500 hover:bg-[var(--dash-bg-overlay)] transition-all cursor-pointer"
                       placeholder="1"
                     />
                     <button
                       onClick={() => handleManualQuantityChange(1)}
-                      className="w-8 h-8 bg-[#374151] hover:bg-[#4A5568] rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
+                      className="w-8 h-8 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
                     >
-                      <PlusIcon className="h-4 w-4 text-white" />
+                      <PlusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                     </button>
                   </div>
                 )}
@@ -537,11 +537,11 @@ export default function ColorSelectionModal({
 
             {/* Purchase Price Section - Only in Purchase Mode */}
             {isPurchaseMode && (
-              <div className="bg-[#374151] rounded-xl p-4 border border-[#4A5568]">
+              <div className="bg-[var(--dash-bg-raised)] rounded-xl p-4 border border-[var(--dash-border-default)]">
                 <div className="flex items-center justify-between mb-3">
-                  <label className="text-gray-300 text-sm">سعر الشراء للوحدة</label>
+                  <label className="text-[var(--dash-text-secondary)] text-sm">سعر الشراء للوحدة</label>
                   {product.cost_price ? (
-                    <span className="text-xs text-gray-500 bg-[#2B3544] px-2 py-1 rounded">
+                    <span className="text-xs text-[var(--dash-text-disabled)] bg-[var(--dash-bg-surface)] px-2 py-1 rounded">
                       آخر سعر شراء: {formatPrice(product.cost_price, 'system')}
                     </span>
                   ) : (
@@ -563,21 +563,21 @@ export default function ColorSelectionModal({
                         }
                       }}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[#2B3544] text-white font-bold text-lg text-center rounded-lg px-4 py-3 outline-none border-2 border-transparent focus:border-green-500 hover:bg-[#3D4A5C] transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] font-bold text-lg text-center rounded-lg px-4 py-3 outline-none border-2 border-transparent focus:border-green-500 hover:bg-[#3D4A5C] transition-all"
                       placeholder={product.cost_price ? product.cost_price.toString() : "أدخل سعر الشراء"}
                       min="0"
                       step="0.01"
                     />
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--dash-text-muted)] text-sm">
                       {currentCurrency}
                     </span>
                   </div>
                 </div>
 
                 {/* Total Purchase Price */}
-                <div className="mt-3 pt-3 border-t border-[#4A5568]">
+                <div className="mt-3 pt-3 border-t border-[var(--dash-border-default)]">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm">إجمالي الشراء ({totalQuantity} وحدة)</span>
+                    <span className="text-[var(--dash-text-muted)] text-sm">إجمالي الشراء ({totalQuantity} وحدة)</span>
                     <span className="text-green-400 font-bold text-lg">{formatPrice(totalPrice, 'system')}</span>
                   </div>
                 </div>
@@ -586,13 +586,13 @@ export default function ColorSelectionModal({
 
             {/* Additional Pricing Fields - Only in Purchase Mode */}
             {isPurchaseMode && (
-              <div className="bg-[#374151] rounded-xl p-4 border border-[#4A5568] space-y-4">
-                <h4 className="text-white font-medium text-sm border-b border-[#4A5568] pb-2 mb-3">أسعار البيع</h4>
+              <div className="bg-[var(--dash-bg-raised)] rounded-xl p-4 border border-[var(--dash-border-default)] space-y-4">
+                <h4 className="text-[var(--dash-text-primary)] font-medium text-sm border-b border-[var(--dash-border-default)] pb-2 mb-3">أسعار البيع</h4>
 
                 {/* Product Code */}
                 {product.product_code && (
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-gray-400 text-xs">كود المنتج:</span>
+                    <span className="text-[var(--dash-text-muted)] text-xs">كود المنتج:</span>
                     <span className="text-blue-400 text-sm font-medium bg-blue-500/10 px-2 py-1 rounded">{product.product_code}</span>
                   </div>
                 )}
@@ -600,26 +600,26 @@ export default function ColorSelectionModal({
                 {/* Row 1: Sale Price + Wholesale Price */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">سعر البيع</label>
+                    <label className="block text-[var(--dash-text-muted)] text-xs mb-1">سعر البيع</label>
                     <input
                       type="number"
                       value={salePrice}
                       onChange={(e) => setSalePrice(parseFloat(e.target.value) || 0)}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[#2B3544] text-white text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
                       placeholder="0.00"
                       min="0"
                       step="0.01"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">سعر الجملة</label>
+                    <label className="block text-[var(--dash-text-muted)] text-xs mb-1">سعر الجملة</label>
                     <input
                       type="number"
                       value={wholesalePrice}
                       onChange={(e) => setWholesalePrice(parseFloat(e.target.value) || 0)}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[#2B3544] text-white text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
                       placeholder="0.00"
                       min="0"
                       step="0.01"
@@ -630,26 +630,26 @@ export default function ColorSelectionModal({
                 {/* Row 2: Price 1 + Price 2 */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">سعر 1</label>
+                    <label className="block text-[var(--dash-text-muted)] text-xs mb-1">سعر 1</label>
                     <input
                       type="number"
                       value={price1}
                       onChange={(e) => setPrice1(parseFloat(e.target.value) || 0)}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[#2B3544] text-white text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
                       placeholder="0.00"
                       min="0"
                       step="0.01"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">سعر 2</label>
+                    <label className="block text-[var(--dash-text-muted)] text-xs mb-1">سعر 2</label>
                     <input
                       type="number"
                       value={price2}
                       onChange={(e) => setPrice2(parseFloat(e.target.value) || 0)}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[#2B3544] text-white text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
                       placeholder="0.00"
                       min="0"
                       step="0.01"
@@ -660,26 +660,26 @@ export default function ColorSelectionModal({
                 {/* Row 3: Price 3 + Price 4 */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">سعر 3</label>
+                    <label className="block text-[var(--dash-text-muted)] text-xs mb-1">سعر 3</label>
                     <input
                       type="number"
                       value={price3}
                       onChange={(e) => setPrice3(parseFloat(e.target.value) || 0)}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[#2B3544] text-white text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
                       placeholder="0.00"
                       min="0"
                       step="0.01"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">سعر 4</label>
+                    <label className="block text-[var(--dash-text-muted)] text-xs mb-1">سعر 4</label>
                     <input
                       type="number"
                       value={price4}
                       onChange={(e) => setPrice4(parseFloat(e.target.value) || 0)}
                       onFocus={(e) => e.target.select()}
-                      className="w-full bg-[#2B3544] text-white text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
+                      className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
                       placeholder="0.00"
                       min="0"
                       step="0.01"
@@ -689,12 +689,12 @@ export default function ColorSelectionModal({
 
                 {/* Product Code Input */}
                 <div>
-                  <label className="block text-gray-400 text-xs mb-1">كود المنتج</label>
+                  <label className="block text-[var(--dash-text-muted)] text-xs mb-1">كود المنتج</label>
                   <input
                     type="text"
                     value={productCode}
                     onChange={(e) => setProductCode(e.target.value)}
-                    className="w-full bg-[#2B3544] text-white text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
+                    className="w-full bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] text-sm text-center rounded-lg px-2 py-2 outline-none border border-transparent focus:border-blue-500 transition-all"
                     placeholder="أدخل كود المنتج"
                   />
                 </div>
@@ -704,7 +704,7 @@ export default function ColorSelectionModal({
             {/* Color Selection */}
             {colors.length > 0 && (
               <div>
-                <h3 className="text-white font-medium mb-3">اختيار الألوان</h3>
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">اختيار الألوان</h3>
 
                 {!validationInfo.isValid && (
                   <div className="mb-4 p-2 bg-red-500/10 border border-red-500/30 rounded-lg">
@@ -714,17 +714,17 @@ export default function ColorSelectionModal({
 
                 <div className="grid grid-cols-2 gap-4">
                   {colors.map((color) => (
-                    <div key={color.name} className="bg-[#374151] rounded-xl p-4 border border-[#4A5568] relative">
+                    <div key={color.name} className="bg-[var(--dash-bg-raised)] rounded-xl p-4 border border-[var(--dash-border-default)] relative">
 
                       {/* Color Display */}
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 bg-[#2B3544] rounded-lg flex items-center justify-center overflow-hidden border border-[#4A5568] flex-shrink-0 relative">
+                        <div className="w-12 h-12 bg-[var(--dash-bg-surface)] rounded-lg flex items-center justify-center overflow-hidden border border-[var(--dash-border-default)] flex-shrink-0 relative">
                           {color.image ? (
                             <img src={color.image} alt={color.name} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full rounded-lg flex items-center justify-center relative" style={{ backgroundColor: color.color }}>
                               {color.name === 'غير محدد الكلي' ? (
-                                <span className="text-white text-lg font-bold">؟</span>
+                                <span className="text-[var(--dash-text-primary)] text-lg font-bold">؟</span>
                               ) : (
                                 <div className="w-8 h-8 rounded-full border-2 border-white shadow-lg" style={{ backgroundColor: color.color }}></div>
                               )}
@@ -734,10 +734,10 @@ export default function ColorSelectionModal({
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <div className="w-4 h-4 rounded-full border border-gray-600 flex-shrink-0" style={{ backgroundColor: color.color }} />
-                            <span className="text-white font-medium text-sm truncate">{color.name}</span>
+                            <div className="w-4 h-4 rounded-full border border-[var(--dash-border-default)] flex-shrink-0" style={{ backgroundColor: color.color }} />
+                            <span className="text-[var(--dash-text-primary)] font-medium text-sm truncate">{color.name}</span>
                           </div>
-                          <p className="text-gray-400 text-xs">متوفر: {color.availableQuantity}</p>
+                          <p className="text-[var(--dash-text-muted)] text-xs">متوفر: {color.availableQuantity}</p>
                         </div>
                       </div>
 
@@ -746,9 +746,9 @@ export default function ColorSelectionModal({
                         <button 
                           onClick={() => handleQuantityChange(color.name, -1)} 
                           disabled={!selections[color.name]}
-                          className="w-8 h-8 bg-[#2B3544] hover:bg-[#4A5568] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
+                          className="w-8 h-8 bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
                         >
-                          <MinusIcon className="h-4 w-4 text-white" />
+                          <MinusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                         </button>
 
                         <input
@@ -769,15 +769,15 @@ export default function ColorSelectionModal({
                           onFocus={(e) => e.target.select()}
                           min="0"
                           max={color.availableQuantity}
-                          className="bg-[#2B3544] rounded-lg px-3 py-2 w-[60px] text-center text-white font-bold outline-none border-2 border-transparent focus:border-blue-500 mx-2"
+                          className="bg-[var(--dash-bg-surface)] rounded-lg px-3 py-2 w-[60px] text-center text-[var(--dash-text-primary)] font-bold outline-none border-2 border-transparent focus:border-blue-500 mx-2"
                         />
 
                         <button 
                           onClick={() => handleQuantityChange(color.name, 1)} 
                           disabled={(selections[color.name] || 0) >= color.availableQuantity}
-                          className="w-8 h-8 bg-[#2B3544] hover:bg-[#4A5568] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
+                          className="w-8 h-8 bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
                         >
-                          <PlusIcon className="h-4 w-4 text-white" />
+                          <PlusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                         </button>
                       </div>
                     </div>
@@ -789,28 +789,28 @@ export default function ColorSelectionModal({
             {/* Shape Selection */}
             {shapes.length > 0 && (
               <div>
-                <h3 className="text-white font-medium mb-3">اختيار الأشكال</h3>
+                <h3 className="text-[var(--dash-text-primary)] font-medium mb-3">اختيار الأشكال</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {shapes.map((shape: any) => (
-                    <div key={shape.name} className="bg-[#374151] rounded-xl p-4 border border-[#4A5568] relative">
+                    <div key={shape.name} className="bg-[var(--dash-bg-raised)] rounded-xl p-4 border border-[var(--dash-border-default)] relative">
 
                       {/* Shape Display */}
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 bg-[#2B3544] rounded-lg flex items-center justify-center overflow-hidden border border-[#4A5568] flex-shrink-0 relative">
+                        <div className="w-12 h-12 bg-[var(--dash-bg-surface)] rounded-lg flex items-center justify-center overflow-hidden border border-[var(--dash-border-default)] flex-shrink-0 relative">
                           {shape.image ? (
                             <img src={shape.image} alt={shape.name} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full rounded-lg flex items-center justify-center relative bg-gray-600">
-                              <span className="text-white text-lg">🔷</span>
+                            <div className="w-full h-full rounded-lg flex items-center justify-center relative bg-[var(--dash-bg-overlay)]">
+                              <span className="text-[var(--dash-text-primary)] text-lg">🔷</span>
                             </div>
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-white font-medium text-sm truncate">{shape.name}</span>
+                            <span className="text-[var(--dash-text-primary)] font-medium text-sm truncate">{shape.name}</span>
                           </div>
-                          <p className="text-gray-400 text-xs">متوفر: {shape.availableQuantity}</p>
+                          <p className="text-[var(--dash-text-muted)] text-xs">متوفر: {shape.availableQuantity}</p>
                         </div>
                       </div>
 
@@ -819,9 +819,9 @@ export default function ColorSelectionModal({
                         <button
                           onClick={() => handleShapeQuantityChange(shape.name, -1)}
                           disabled={!shapeSelections[shape.name]}
-                          className="w-8 h-8 bg-[#2B3544] hover:bg-[#4A5568] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
+                          className="w-8 h-8 bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
                         >
-                          <MinusIcon className="h-4 w-4 text-white" />
+                          <MinusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                         </button>
 
                         <input
@@ -842,15 +842,15 @@ export default function ColorSelectionModal({
                           onFocus={(e) => e.target.select()}
                           min="0"
                           max={shape.availableQuantity}
-                          className="bg-[#2B3544] rounded-lg px-3 py-2 w-[60px] text-center text-white font-bold outline-none border-2 border-transparent focus:border-blue-500 mx-2"
+                          className="bg-[var(--dash-bg-surface)] rounded-lg px-3 py-2 w-[60px] text-center text-[var(--dash-text-primary)] font-bold outline-none border-2 border-transparent focus:border-blue-500 mx-2"
                         />
 
                         <button
                           onClick={() => handleShapeQuantityChange(shape.name, 1)}
                           disabled={(shapeSelections[shape.name] || 0) >= shape.availableQuantity}
-                          className="w-8 h-8 bg-[#2B3544] hover:bg-[#4A5568] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
+                          className="w-8 h-8 bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)] disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
                         >
-                          <PlusIcon className="h-4 w-4 text-white" />
+                          <PlusIcon className="h-4 w-4 text-[var(--dash-text-primary)]" />
                         </button>
                       </div>
                     </div>
@@ -881,7 +881,7 @@ export default function ColorSelectionModal({
                           setManualQuantity(newValue);
                         }
                       }}
-                      className="h-12 bg-[#374151] hover:bg-[#4B5563] active:bg-[#4B5563] text-white text-xl font-medium rounded-lg transition-colors border border-gray-600"
+                      className="h-12 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] active:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] text-xl font-medium rounded-lg transition-colors border border-[var(--dash-border-default)]"
                     >
                       {num}
                     </button>
@@ -908,7 +908,7 @@ export default function ColorSelectionModal({
                         }
                       }
                     }}
-                    className="h-12 bg-[#374151] hover:bg-[#4B5563] active:bg-[#4B5563] text-white text-xl font-medium rounded-lg transition-colors border border-gray-600"
+                    className="h-12 bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-bg-overlay)] active:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] text-xl font-medium rounded-lg transition-colors border border-[var(--dash-border-default)]"
                   >
                     0
                   </button>
@@ -934,11 +934,11 @@ export default function ColorSelectionModal({
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-[#4A5568] relative bg-[#2B3544]">
+          <div className="p-6 border-t border-[var(--dash-border-default)] relative bg-[var(--dash-bg-surface)]">
             <div className="flex gap-3">
               <button 
                 onClick={onClose} 
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium transition-colors duration-150 relative"
+                className="flex-1 bg-[var(--dash-bg-overlay)] hover:bg-gray-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors duration-150 relative"
               >
                 إلغاء
               </button>
@@ -947,13 +947,13 @@ export default function ColorSelectionModal({
                 disabled={totalQuantity === 0 || !validationInfo.isValid}
                 className={`flex-1 py-3 rounded-lg font-medium transition-colors duration-150 flex items-center justify-center gap-2 relative ${
                   totalQuantity === 0 || !validationInfo.isValid
-                    ? 'bg-gray-600 cursor-not-allowed opacity-50'
+                    ? 'bg-[var(--dash-bg-overlay)] cursor-not-allowed opacity-50'
                     : isTransferMode
                       ? 'bg-orange-600 hover:bg-orange-700'
                       : isPurchaseMode
                         ? 'bg-green-600 hover:bg-green-700'
                         : 'bg-blue-600 hover:bg-blue-700'
-                } text-white`}
+                } text-[var(--dash-text-primary)]`}
               >
                 <ShoppingCartIcon className="h-5 w-5 flex-shrink-0" />
                 <span className="truncate">

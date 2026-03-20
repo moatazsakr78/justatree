@@ -31,7 +31,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#2B3544]">
+    <div className="min-h-screen bg-dash-base">
       {showTopHeader && (
         <TopHeader onMenuClick={toggleSidebar} isMenuOpen={isSidebarOpen} />
       )}

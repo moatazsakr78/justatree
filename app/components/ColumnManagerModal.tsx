@@ -151,17 +151,17 @@ export default function ColumnManagerModal({
   const totalCount = localColumns.length;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" dir="rtl">
-      <div className="bg-[#4B5563] rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[80vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+      <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-md mx-4 max-h-[80vh] flex flex-col animate-dash-scale-in">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-600">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--dash-border-default)]">
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-5 w-5" />
           </button>
-          <h2 className="text-lg font-medium text-white">إدارة الأعمدة</h2>
+          <h2 className="text-lg font-medium text-[var(--dash-text-primary)]">إدارة الأعمدة</h2>
           <div></div> {/* Spacer for centering */}
         </div>
 
@@ -192,10 +192,10 @@ export default function ColumnManagerModal({
                 className="flex items-center justify-between px-4 py-3 bg-[#3B4451] hover:bg-[#434B59] rounded transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-gray-300 text-sm font-medium">{column.width}px</span>
+                  <span className="text-[var(--dash-text-secondary)] text-sm font-medium">{column.width}px</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-white font-medium">
+                  <span className="text-[var(--dash-text-primary)] font-medium">
                     {column.header}
                   </span>
                   <div className="relative">
@@ -236,7 +236,7 @@ export default function ColumnManagerModal({
           <div className="flex gap-2 justify-center">
             <button
               onClick={onClose}
-              className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors font-medium"
+              className="px-6 py-2 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded transition-colors font-medium"
             >
               إلغاء
             </button>

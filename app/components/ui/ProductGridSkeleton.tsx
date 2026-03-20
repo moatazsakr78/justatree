@@ -11,17 +11,17 @@ interface ProductGridSkeletonProps {
 
 function ProductCardSkeleton() {
   return (
-    <div className="bg-[#374151] rounded-lg p-3 animate-pulse">
+    <div className="bg-[var(--dash-bg-raised)] rounded-dash-md p-3 animate-pulse">
       {/* Image skeleton */}
       <div className="mb-3 relative">
-        <div className="aspect-square bg-gray-600 rounded-lg" />
+        <div className="aspect-square bg-[var(--dash-bg-overlay)] rounded-lg" />
       </div>
 
       {/* Name skeleton */}
-      <div className="h-4 bg-gray-600 rounded mb-2 mx-auto w-3/4" />
+      <div className="h-4 bg-[var(--dash-bg-overlay)] rounded mb-2 mx-auto w-3/4" />
 
       {/* Price skeleton */}
-      <div className="h-5 bg-gray-600 rounded mx-auto w-1/2" />
+      <div className="h-5 bg-[var(--dash-bg-overlay)] rounded mx-auto w-1/2" />
     </div>
   );
 }

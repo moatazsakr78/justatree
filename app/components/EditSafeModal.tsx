@@ -207,14 +207,14 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
   // Confirmation step for disabling drawers
   if (step === 'confirm-disable') {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" dir="rtl">
-        <div className="bg-pos-darker rounded-lg p-6 w-[480px] max-w-lg mx-4 max-h-[90vh] overflow-y-auto scrollbar-hide">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+        <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-[480px] max-w-lg mx-4 max-h-[90vh] overflow-y-auto scrollbar-hide shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white">إزالة الأدراج</h2>
+            <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">إزالة الأدراج</h2>
             <button
               onClick={handleClose}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
@@ -235,35 +235,35 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
 
           {/* Drawer list */}
           <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-300 mb-2">الأدراج التي سيتم إزالتها:</h4>
+            <h4 className="text-sm font-medium text-[var(--dash-text-secondary)] mb-2">الأدراج التي سيتم إزالتها:</h4>
             <div className="space-y-2">
               {childDrawers.map((drawer) => (
-                <div key={drawer.id} className="flex items-center justify-between bg-gray-700/50 rounded-lg px-3 py-2">
-                  <span className="text-sm text-gray-200">{drawer.name}</span>
-                  <span className="text-sm text-gray-400">{formatPrice(drawer.balance)}</span>
+                <div key={drawer.id} className="flex items-center justify-between bg-[var(--dash-bg-raised)]/50 rounded-lg px-3 py-2">
+                  <span className="text-sm text-[var(--dash-text-primary)]">{drawer.name}</span>
+                  <span className="text-sm text-[var(--dash-text-muted)]">{formatPrice(drawer.balance)}</span>
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-600">
-              <span className="text-sm font-medium text-gray-200">إجمالي الرصيد المُدمج</span>
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--dash-border-default)]">
+              <span className="text-sm font-medium text-[var(--dash-text-primary)]">إجمالي الرصيد المُدمج</span>
               <span className="text-sm font-bold text-blue-400">{formatPrice(totalDrawerBalance)}</span>
             </div>
           </div>
 
           {/* What will happen */}
-          <div className="bg-gray-700/30 rounded-lg p-3 mb-4">
-            <h4 className="text-sm font-medium text-gray-300 mb-2">ما سيحدث:</h4>
-            <ul className="space-y-1.5 text-xs text-gray-400">
+          <div className="bg-[var(--dash-bg-raised)]/30 rounded-lg p-3 mb-4">
+            <h4 className="text-sm font-medium text-[var(--dash-text-secondary)] mb-2">ما سيحدث:</h4>
+            <ul className="space-y-1.5 text-xs text-[var(--dash-text-muted)]">
               <li className="flex items-start gap-2">
-                <span className="text-gray-500 mt-0.5">•</span>
+                <span className="text-[var(--dash-text-disabled)] mt-0.5">•</span>
                 <span>نقل جميع المعاملات والمبيعات إلى الخزنة الرئيسية</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-gray-500 mt-0.5">•</span>
+                <span className="text-[var(--dash-text-disabled)] mt-0.5">•</span>
                 <span>دمج أرصدة الأدراج في رصيد الخزنة</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-gray-500 mt-0.5">•</span>
+                <span className="text-[var(--dash-text-disabled)] mt-0.5">•</span>
                 <span>حذف الأدراج نهائياً</span>
               </li>
             </ul>
@@ -271,7 +271,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
 
           {/* Confirmation input */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               اكتب اسم الخزنة <span className="text-red-400 font-bold">"{safe?.name}"</span> للتأكيد
             </label>
             <input
@@ -279,7 +279,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
               value={disableConfirmText}
               onChange={(e) => setDisableConfirmText(e.target.value)}
               placeholder={safe?.name || ''}
-              className="w-full bg-gray-700 text-white placeholder-gray-500 px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-red-500"
               disabled={isLoading}
             />
           </div>
@@ -288,7 +288,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
           <div className="flex items-center justify-end gap-3">
             <button
               onClick={handleBackToEdit}
-              className="px-4 py-2 text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+              className="px-4 py-2 text-[var(--dash-text-secondary)] bg-[var(--dash-bg-raised)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
               disabled={isLoading}
             >
               رجوع
@@ -296,7 +296,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
             <button
               onClick={handleConfirmDisable}
               disabled={disableConfirmText.trim() !== safe?.name?.trim() || isLoading}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-red-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'جاري الإزالة...' : 'تأكيد الإزالة'}
             </button>
@@ -308,16 +308,16 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
 
   // Normal edit step
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" dir="rtl">
-      <div className="bg-pos-darker rounded-lg p-6 w-96 max-w-md mx-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+      <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-96 max-w-md mx-4 shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">
             تعديل {safe?.safe_type === 'sub' ? 'الدرج' : 'الخزنة'}
           </h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] transition-colors"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -326,7 +326,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
         {/* Form */}
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
               {safe?.safe_type === 'sub' ? 'اسم الدرج' : 'اسم الخزنة'}
             </label>
             <input
@@ -334,7 +334,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
               value={safeName}
               onChange={(e) => setSafeName(e.target.value)}
               placeholder="أدخل اسم الخزنة..."
-              className="w-full bg-gray-700 text-white placeholder-gray-400 px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
               disabled={isLoading}
             />
           </div>
@@ -347,10 +347,10 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
                   type="checkbox"
                   checked={supportsDrawers}
                   onChange={(e) => handleDrawerToggle(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
-                <span className="text-sm font-medium text-gray-300">تدعم الأدراج</span>
+                <span className="text-sm font-medium text-[var(--dash-text-secondary)]">تدعم الأدراج</span>
               </label>
             </div>
           )}
@@ -363,12 +363,12 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
                   type="checkbox"
                   checked={showTransfers}
                   onChange={(e) => setShowTransfers(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
-                <span className="text-sm font-medium text-gray-300">فصل التحويلات</span>
+                <span className="text-sm font-medium text-[var(--dash-text-secondary)]">فصل التحويلات</span>
               </label>
-              <p className="text-xs text-gray-500 mt-1 mr-8">فصل رصيد التحويلات عن رصيد الخزنة</p>
+              <p className="text-xs text-[var(--dash-text-disabled)] mt-1 mr-8">فصل رصيد التحويلات عن رصيد الخزنة</p>
             </div>
           )}
 
@@ -376,7 +376,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
           {isEnablingDrawers && safe?.safe_type !== 'sub' && (
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-1.5">
                   اسم الدرج الأول
                 </label>
                 <input
@@ -384,7 +384,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
                   value={firstDrawerName}
                   onChange={(e) => setFirstDrawerName(e.target.value)}
                   placeholder="درج 1"
-                  className="w-full bg-gray-700 text-white placeholder-gray-400 px-3 py-1.5 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] px-3 py-1.5 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] text-sm"
                   disabled={isLoading}
                 />
               </div>
@@ -399,7 +399,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
         <div className="flex items-center justify-end gap-3 mt-6">
           <button
             onClick={handleClose}
-            className="px-4 py-2 text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+            className="px-4 py-2 text-[var(--dash-text-secondary)] bg-[var(--dash-bg-raised)] rounded-lg hover:bg-[var(--dash-bg-overlay)] transition-colors"
             disabled={isLoading}
           >
             إلغاء
@@ -407,7 +407,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
           <button
             onClick={handleSave}
             disabled={!safeName.trim() || isLoading}
-            className={`px-4 py-2 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`px-4 py-2 text-[var(--dash-text-primary)] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               isEnablingDrawers
                 ? 'bg-green-600 hover:bg-green-700'
                 : 'bg-blue-600 hover:bg-blue-700'

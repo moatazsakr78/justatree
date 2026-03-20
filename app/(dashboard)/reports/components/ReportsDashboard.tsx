@@ -67,26 +67,26 @@ export default function ReportsDashboard({ dateFilter, onDateFilterClick }: Repo
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className={`p-2 rounded-lg bg-[#374151] border border-gray-600 hover:border-gray-500 transition-colors ${
+            className={`p-2 rounded-lg bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)] transition-colors ${
               isRefreshing ? 'animate-spin' : ''
             }`}
             title="تحديث البيانات"
           >
-            <ArrowPathIcon className="h-5 w-5 text-gray-300" />
+            <ArrowPathIcon className="h-5 w-5 text-[var(--dash-text-secondary)]" />
           </button>
-          <span className="text-gray-400 text-sm">
+          <span className="text-[var(--dash-text-muted)] text-sm">
             آخر تحديث: {lastUpdated.toLocaleTimeString('ar-EG')}
           </span>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={onDateFilterClick}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#374151] border border-gray-600 hover:border-blue-500 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] hover:border-blue-500 transition-colors"
           >
-            <span className="text-white font-medium">{getFilterLabel()}</span>
+            <span className="text-[var(--dash-text-primary)] font-medium">{getFilterLabel()}</span>
             <CalendarDaysIcon className="h-5 w-5 text-blue-400" />
           </button>
-          <h2 className="text-xl font-bold text-white">لوحة التحكم</h2>
+          <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">لوحة التحكم</h2>
         </div>
       </div>
 
@@ -142,27 +142,27 @@ export default function ReportsDashboard({ dateFilter, onDateFilterClick }: Repo
 
       {/* Quick Stats Summary */}
       {kpiSummary && (
-        <div className="bg-[#374151] rounded-lg border border-gray-600 p-4">
-          <h3 className="text-white font-semibold mb-4 text-right">ملخص سريع</h3>
+        <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
+          <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">ملخص سريع</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="p-3 bg-[#2B3544] rounded-lg">
-              <p className="text-gray-400 text-sm mb-1">إجمالي الفواتير</p>
-              <p className="text-2xl font-bold text-white">{kpiSummary.orderCount.toLocaleString('ar-EG')}</p>
+            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+              <p className="text-[var(--dash-text-muted)] text-sm mb-1">إجمالي الفواتير</p>
+              <p className="text-2xl font-bold text-[var(--dash-text-primary)]">{kpiSummary.orderCount.toLocaleString('ar-EG')}</p>
             </div>
-            <div className="p-3 bg-[#2B3544] rounded-lg">
-              <p className="text-gray-400 text-sm mb-1">عدد العملاء</p>
-              <p className="text-2xl font-bold text-white">{kpiSummary.customerCount.toLocaleString('ar-EG')}</p>
+            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+              <p className="text-[var(--dash-text-muted)] text-sm mb-1">عدد العملاء</p>
+              <p className="text-2xl font-bold text-[var(--dash-text-primary)]">{kpiSummary.customerCount.toLocaleString('ar-EG')}</p>
             </div>
-            <div className="p-3 bg-[#2B3544] rounded-lg">
-              <p className="text-gray-400 text-sm mb-1">نسبة الربح</p>
+            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+              <p className="text-[var(--dash-text-muted)] text-sm mb-1">نسبة الربح</p>
               <p className="text-2xl font-bold text-green-400">
                 {kpiSummary.totalSales > 0
                   ? ((kpiSummary.totalProfit / kpiSummary.totalSales) * 100).toFixed(1)
                   : 0}%
               </p>
             </div>
-            <div className="p-3 bg-[#2B3544] rounded-lg">
-              <p className="text-gray-400 text-sm mb-1">متوسط الفاتورة</p>
+            <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+              <p className="text-[var(--dash-text-muted)] text-sm mb-1">متوسط الفاتورة</p>
               <p className="text-2xl font-bold text-blue-400">
                 {kpiSummary.avgOrderValue.toLocaleString('ar-EG', { maximumFractionDigits: 0 })}
               </p>
