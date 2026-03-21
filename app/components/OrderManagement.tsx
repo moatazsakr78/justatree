@@ -200,10 +200,10 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
   const getInvoiceTypeColor = (invoiceType: string | null) => {
     if (!invoiceType) return 'bg-gray-900 text-gray-300'
     switch (invoiceType) {
-      case 'Sale': return 'bg-green-900 text-green-300'
-      case 'Purchase': return 'bg-blue-900 text-blue-300'
-      case 'Sale Return': return 'bg-orange-900 text-orange-300'
-      case 'Purchase Return': return 'bg-purple-900 text-purple-300'
+      case 'Sale': return 'bg-dash-accent-green-subtle text-dash-accent-green'
+      case 'Purchase': return 'bg-dash-accent-blue-subtle text-dash-accent-blue'
+      case 'Sale Return': return 'bg-dash-accent-orange-subtle text-dash-accent-orange'
+      case 'Purchase Return': return 'bg-dash-accent-purple-subtle text-dash-accent-purple'
       default: return 'bg-gray-900 text-gray-300'
     }
   }
@@ -246,17 +246,17 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
         {/* Orders List - Card Format */}
         {isLoading ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mb-4"></div>
             <p className="text-[var(--dash-text-muted)] text-lg">جاري تحميل الطلبات...</p>
           </div>
         ) : error ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8">
-            <DocumentTextIcon className="h-16 w-16 text-red-500 mb-4" />
-            <p className="text-red-400 text-lg mb-2">خطأ في التحميل</p>
+            <DocumentTextIcon className="h-16 w-16 text-dash-accent-red mb-4" />
+            <p className="text-dash-accent-red text-lg mb-2">خطأ في التحميل</p>
             <p className="text-[var(--dash-text-disabled)] text-sm mb-4">{error}</p>
             <button
               onClick={fetchOrders}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
+              className="px-4 py-2 dash-btn-primary rounded-lg text-sm transition-colors"
             >
               إعادة المحاولة
             </button>
@@ -267,7 +267,7 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
               <div
                 key={order.id}
                 className={`bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden cursor-pointer transition-all ${
-                  selectedOrder?.id === order.id ? 'ring-2 ring-blue-500 bg-blue-600/10' : 'hover:bg-[var(--dash-bg-overlay)]'
+                  selectedOrder?.id === order.id ? 'ring-2 ring-blue-500 bg-dash-accent-blue-subtle' : 'hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 onClick={() => handleOrderSelect(order)}
               >
@@ -282,7 +282,7 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
                   </div>
                   
                   <div className="text-right">
-                    <p className="text-xl font-bold text-green-400">EGP {order.total_amount.toFixed(2)}</p>
+                    <p className="text-xl font-bold text-dash-accent-green">EGP {order.total_amount.toFixed(2)}</p>
                     <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-[var(--dash-text-primary)] mt-2 ${getInvoiceTypeColor(order.invoice_type)}`}>
                       {getInvoiceTypeText(order.invoice_type)}
                     </span>
@@ -293,7 +293,7 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
                 {isLoadingItems && selectedOrder?.id === order.id ? (
                   <div className="p-4">
                     <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-3"></div>
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-3"></div>
                       <p className="text-[var(--dash-text-muted)]">جاري تحميل عناصر الطلب...</p>
                     </div>
                   </div>
@@ -330,7 +330,7 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
 
                             {/* Price */}
                             <div className="text-center">
-                              <p className="font-medium text-green-400 text-sm">{item.unit_price.toFixed(2)} جنيه</p>
+                              <p className="font-medium text-dash-accent-green text-sm">{item.unit_price.toFixed(2)} جنيه</p>
                             </div>
 
                             {/* Quantity */}
@@ -340,7 +340,7 @@ export default function OrderManagement({ className = "" }: OrderManagementProps
 
                             {/* Total */}
                             <div className="text-center">
-                              <p className="font-semibold text-green-400">{itemTotal.toFixed(2)} جنيه</p>
+                              <p className="font-semibold text-dash-accent-green">{itemTotal.toFixed(2)} جنيه</p>
                             </div>
 
                             {/* Notes */}

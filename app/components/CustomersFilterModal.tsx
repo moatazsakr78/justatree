@@ -181,7 +181,7 @@ export default function CustomersFilterModal({
     const avatarUrl = getAvatarUrl(customer);
 
     return (
-      <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-blue-600 border-2 border-blue-400">
+      <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-dash-accent-blue border-2 border-dash-accent-blue">
         <img
           src={avatarUrl}
           alt={customer.name || 'Customer Avatar'}
@@ -225,7 +225,7 @@ export default function CustomersFilterModal({
           {/* Header */}
           <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-dash-accent-blue rounded-full flex items-center justify-center">
                 <UserIcon className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -254,7 +254,7 @@ export default function CustomersFilterModal({
                   {groupsLoading ? (
                     <div className="text-[var(--dash-text-muted)] text-center py-4">جاري التحميل...</div>
                   ) : groupsError ? (
-                    <div className="text-red-400 text-center py-4 text-sm">{groupsError}</div>
+                    <div className="text-dash-accent-red text-center py-4 text-sm">{groupsError}</div>
                   ) : (
                     allGroups.map(group => (
                       <label
@@ -271,7 +271,7 @@ export default function CustomersFilterModal({
                           />
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                             selectedGroups.has(group.id)
-                              ? 'bg-blue-600 border-blue-600'
+                              ? 'bg-dash-accent-blue border-dash-accent-blue'
                               : 'bg-transparent border-[var(--dash-text-muted)]'
                           }`}>
                             {selectedGroups.has(group.id) && (
@@ -292,7 +292,7 @@ export default function CustomersFilterModal({
                         </span>
                         
                         {/* Customer count in group */}
-                        <span className="text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30">
+                        <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-1 rounded border border-dash-accent-blue/30">
                           {customers.filter(c => {
                             // Count customers in this group and all subgroups
                             const getAllSubGroupIds = (groupId: string): string[] => {
@@ -321,10 +321,10 @@ export default function CustomersFilterModal({
               {/* Selection Summary */}
               <div className="p-4 border-t border-[var(--dash-border-default)] mt-auto">
                 <div className="text-center space-y-2">
-                  <div className="text-sm text-blue-400">
+                  <div className="text-sm text-dash-accent-blue">
                     {selectedGroups.size} مجموعة محددة
                   </div>
-                  <div className="text-sm text-green-400">
+                  <div className="text-sm text-dash-accent-green">
                     {selectedCustomers.size} عميل محدد
                   </div>
                 </div>
@@ -346,7 +346,7 @@ export default function CustomersFilterModal({
                         onClick={() => setViewMode('grid')}
                         className={`p-2 transition-colors ${
                           viewMode === 'grid'
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-dash-accent-blue text-white'
                             : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
@@ -356,7 +356,7 @@ export default function CustomersFilterModal({
                         onClick={() => setViewMode('table')}
                         className={`p-2 transition-colors ${
                           viewMode === 'table'
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-dash-accent-blue text-white'
                             : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
@@ -380,13 +380,13 @@ export default function CustomersFilterModal({
                     <div className="flex gap-2">
                       <button
                         onClick={handleSelectAllCustomers}
-                        className="px-3 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
+                        className="px-3 py-1 text-xs dash-btn-green rounded transition-colors"
                       >
                         تحديد الكل
                       </button>
                       <button
                         onClick={handleDeselectAllCustomers}
-                        className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
+                        className="px-3 py-1 text-xs dash-btn-red rounded transition-colors"
                       >
                         إلغاء الكل
                       </button>
@@ -397,7 +397,7 @@ export default function CustomersFilterModal({
                   <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)]">
                     <span>عرض {filteredCustomers.length} من أصل {customers.length} عميل</span>
                     {selectedGroup && (
-                      <span className="text-blue-400">المجموعة: {selectedGroup.name}</span>
+                      <span className="text-dash-accent-blue">المجموعة: {selectedGroup.name}</span>
                     )}
                   </div>
                 </div>
@@ -414,7 +414,7 @@ export default function CustomersFilterModal({
                           key={customer.id}
                           className={`bg-[var(--dash-bg-raised)] rounded-lg p-4 cursor-pointer transition-all duration-200 border-2 relative group ${
                             selectedCustomers.has(customer.id)
-                              ? 'border-blue-500 bg-[#434E61]'
+                              ? 'border-dash-accent-blue bg-[#434E61]'
                               : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
                           }`}
                         >
@@ -429,7 +429,7 @@ export default function CustomersFilterModal({
                               />
                               <div className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors shadow-lg ${
                                 selectedCustomers.has(customer.id)
-                                  ? 'bg-blue-600 border-blue-600'
+                                  ? 'bg-dash-accent-blue border-dash-accent-blue'
                                   : 'bg-black/70 border-white/70'
                               }`}>
                                 {selectedCustomers.has(customer.id) && (
@@ -460,7 +460,7 @@ export default function CustomersFilterModal({
                             
                             {/* Loyalty Points */}
                             <div className="flex justify-between items-center">
-                              <span className="text-blue-400 font-medium">
+                              <span className="text-dash-accent-blue font-medium">
                                 {(customer.loyalty_points || 0).toLocaleString()}
                               </span>
                               <span className="text-gray-400">النقاط</span>
@@ -474,7 +474,7 @@ export default function CustomersFilterModal({
                                   if (rank) {
                                     return (
                                       <>
-                                        <span className="text-yellow-400 text-xs">{rank.name}</span>
+                                        <span className="text-dash-accent-orange text-xs">{rank.name}</span>
                                         <div className="w-3 h-3 relative">
                                           <Image
                                             src={rank.icon}
@@ -514,7 +514,7 @@ export default function CustomersFilterModal({
                           <tr 
                             key={customer.id}
                             className={`border-b border-gray-600 hover:bg-[var(--dash-bg-raised)] ${
-                              selectedCustomers.has(customer.id) ? 'bg-blue-500/10' : ''
+                              selectedCustomers.has(customer.id) ? 'bg-dash-accent-blue-subtle' : ''
                             }`}
                           >
                             <td className="px-4 py-3">
@@ -527,7 +527,7 @@ export default function CustomersFilterModal({
                                 />
                                 <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                                   selectedCustomers.has(customer.id)
-                                    ? 'bg-blue-600 border-blue-600'
+                                    ? 'bg-dash-accent-blue border-dash-accent-blue'
                                     : 'bg-transparent border-[var(--dash-text-muted)]'
                                 }`}>
                                   {selectedCustomers.has(customer.id) && (
@@ -538,7 +538,7 @@ export default function CustomersFilterModal({
                             </td>
                             <td className="px-4 py-3 text-white">{customer.name}</td>
                             <td className="px-4 py-3 text-[var(--dash-text-secondary)] font-mono text-sm">{customer.phone || 'غير محدد'}</td>
-                            <td className="px-4 py-3 text-blue-400">{(customer.loyalty_points || 0).toLocaleString()}</td>
+                            <td className="px-4 py-3 text-dash-accent-blue">{(customer.loyalty_points || 0).toLocaleString()}</td>
                             <td className="px-4 py-3">
                               {customer.rank ? (() => {
                                 const rank = ranks.find(r => r.id === customer.rank)
@@ -590,7 +590,7 @@ export default function CustomersFilterModal({
               </button>
               <button
                 onClick={handleApply}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors font-medium"
+                className="px-6 py-2 dash-btn-primary rounded transition-colors font-medium"
               >
                 تطبيق الفلترة
               </button>

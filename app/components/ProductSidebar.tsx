@@ -170,7 +170,7 @@ const ImageUploadArea = ({ onImageSelect, images, onImageRemove, label, multiple
       <div
         className={`border-2 border-dashed p-8 text-center transition-all duration-200 ${
           isDragOver
-            ? 'border-blue-400 bg-blue-400/10'
+            ? 'border-dash-accent-blue bg-blue-400/10'
             : 'border-[var(--dash-border-default)] bg-[#4A5568]/30'
         }`}
         onDragOver={handleDragOver}
@@ -216,7 +216,7 @@ const ImageUploadArea = ({ onImageSelect, images, onImageRemove, label, multiple
               <button
                 type="button"
                 onClick={() => onImageRemove(image.id)}
-                className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 dash-btn-red rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2330,7 +2330,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleDeleteBarcode(index)}
-                            className="text-red-400 hover:text-red-300 transition-colors"
+                            className="text-dash-accent-red hover:text-dash-accent-red transition-colors"
                           >
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -2340,8 +2340,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                             onClick={() => handleEditBarcode(index)}
                             className={`transition-colors ${
                               editingBarcodeIndex === index 
-                                ? 'text-blue-300' 
-                                : 'text-blue-400 hover:text-blue-300'
+                                ? 'text-dash-accent-blue' 
+                                : 'text-dash-accent-blue hover:text-dash-accent-blue'
                             }`}
                           >
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2403,8 +2403,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
               <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
                 <div className="bg-[var(--dash-bg-base)] rounded-xl p-6 max-w-md mx-4 border border-[var(--dash-border-default)] shadow-xl">
                   <div className="text-center">
-                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-900/30 mb-4">
-                      <LockClosedIcon className="h-6 w-6 text-yellow-400" />
+                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-dash-accent-orange-subtle/30 mb-4">
+                      <LockClosedIcon className="h-6 w-6 text-dash-accent-orange" />
                     </div>
                     <h3 className="text-lg font-bold text-[var(--dash-text-primary)] mb-2">
                       هل أنت متأكد أنك تريد تعديل سعر الشراء؟
@@ -2452,8 +2452,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                     }}
                     className={`flex items-center gap-2 ${isAdmin ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}
                   >
-                    <LockClosedIcon className="h-4 w-4 text-yellow-400" />
-                    <span className="text-xs text-yellow-400">محسوب تلقائياً</span>
+                    <LockClosedIcon className="h-4 w-4 text-dash-accent-orange" />
+                    <span className="text-xs text-dash-accent-orange">محسوب تلقائياً</span>
                   </button>
                 )}
               </div>
@@ -2491,7 +2491,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                 <button
                   type="button"
                   onClick={() => setShowPurchaseHistoryModal(true)}
-                  className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-sm rounded transition-colors"
+                  className="px-3 py-2 dash-btn-primary text-sm rounded transition-colors"
                 >
                   عرض
                 </button>
@@ -2654,7 +2654,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                       {pendingVideos.map((video, index) => (
                         <div key={index} className="flex items-center gap-3 p-3 bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)]">
                           <div className="flex-shrink-0">
-                            <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-8 h-8 text-dash-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                             </svg>
                           </div>
@@ -2670,7 +2670,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
 
                           <button
                             onClick={() => removePendingVideo(index)}
-                            className="p-1 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded transition-colors"
+                            className="p-1 text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle/20 rounded transition-colors"
                             title="حذف الفيديو"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2687,14 +2687,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                     <div className="space-y-2">
                       <h4 className="text-sm font-medium text-[var(--dash-text-secondary)]">جاري رفع الفيديوهات...</h4>
                       {Object.entries(videoUploadProgress).map(([id, progress]) => (
-                        <div key={id} className="bg-green-900/20 border border-green-600/30 rounded-lg p-3">
+                        <div key={id} className="bg-dash-accent-green-subtle/20 border border-dash-accent-green/30 rounded-lg p-3">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm text-green-400">جاري رفع الفيديو...</span>
-                            <span className="text-sm text-green-300">{Math.round(progress)}%</span>
+                            <span className="text-sm text-dash-accent-green">جاري رفع الفيديو...</span>
+                            <span className="text-sm text-dash-accent-green">{Math.round(progress)}%</span>
                           </div>
-                          <div className="w-full bg-green-900/40 rounded-full h-2">
+                          <div className="w-full bg-dash-accent-green-subtle/40 rounded-full h-2">
                             <div
-                              className="bg-green-500 h-2 rounded-full transition-all duration-500 ease-out"
+                              className="bg-dash-accent-green h-2 rounded-full transition-all duration-500 ease-out"
                               style={{ width: `${progress}%` }}
                             />
                           </div>
@@ -2848,14 +2848,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           alt="معاينة"
                           className="w-24 h-24 object-cover rounded mx-auto border border-[var(--dash-border-default)]"
                         />
-                        <p className="text-green-400 text-xs">{shapeImageFile?.name}</p>
+                        <p className="text-dash-accent-green text-xs">{shapeImageFile?.name}</p>
                         <button
                           type="button"
                           onClick={() => {
                             setShapeImageFile(null)
                             setShapeImagePreview(null)
                           }}
-                          className="text-red-400 hover:text-red-300 text-xs"
+                          className="text-dash-accent-red hover:text-dash-accent-red text-xs"
                         >
                           إزالة الصورة
                         </button>
@@ -2959,7 +2959,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => editShape(shape)}
-                              className="text-blue-400 hover:text-blue-300 transition-colors p-1"
+                              className="text-dash-accent-blue hover:text-dash-accent-blue transition-colors p-1"
                               title="تعديل"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2968,7 +2968,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                             </button>
                             <button
                               onClick={() => deleteShape(shape.id)}
-                              className="text-red-400 hover:text-red-300 transition-colors p-1"
+                              className="text-dash-accent-red hover:text-dash-accent-red transition-colors p-1"
                               title="حذف"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3086,14 +3086,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           alt="معاينة"
                           className="w-24 h-24 object-cover rounded mx-auto border border-[var(--dash-border-default)]"
                         />
-                        <p className="text-green-400 text-xs">{colorImageFile?.name}</p>
+                        <p className="text-dash-accent-green text-xs">{colorImageFile?.name}</p>
                         <button
                           type="button"
                           onClick={() => {
                             setColorImageFile(null)
                             setColorImagePreview(null)
                           }}
-                          className="text-red-400 hover:text-red-300 text-xs"
+                          className="text-dash-accent-red hover:text-dash-accent-red text-xs"
                         >
                           إزالة الصورة
                         </button>
@@ -3185,7 +3185,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => editColor(color)}
-                              className="text-blue-400 hover:text-blue-300 transition-colors p-1"
+                              className="text-dash-accent-blue hover:text-dash-accent-blue transition-colors p-1"
                               title="تعديل"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3194,7 +3194,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                             </button>
                             <button
                               onClick={() => deleteColor(color.id)}
-                              className="text-red-400 hover:text-red-300 transition-colors p-1"
+                              className="text-dash-accent-red hover:text-dash-accent-red transition-colors p-1"
                               title="حذف"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3241,14 +3241,14 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                             {/* Branch Header */}
                             <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--dash-border-default)]">
                               <div className="flex items-center gap-3">
-                                <div className="p-2 rounded bg-blue-600/20 text-blue-400">
+                                <div className="p-2 rounded bg-dash-accent-blue-subtle text-dash-accent-blue">
                                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                   </svg>
                                 </div>
                                 <div>
                                   <h3 className="text-[var(--dash-text-primary)] font-medium text-lg">{branch.name}</h3>
-                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-600/20 text-blue-300 border border-blue-600/30">
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue/30">
                                     فرع
                                   </span>
                                 </div>
@@ -3257,10 +3257,10 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                 <p className="text-[var(--dash-text-secondary)] text-sm">
                                   الكمية الإجمالية: <span className="font-bold text-[var(--dash-text-primary)]">{getBranchTotalQuantity(branch.id)}</span> قطعة
                                 </p>
-                                <p className="text-blue-400 text-sm">
+                                <p className="text-dash-accent-blue text-sm">
                                   المخصص: <span className="font-bold">{getTotalAllocatedQuantity(branch.id)}</span> قطعة
                                 </p>
-                                <p className="text-green-400 text-sm">
+                                <p className="text-dash-accent-green text-sm">
                                   المتبقي: <span className="font-bold">{getBranchTotalQuantity(branch.id) - getTotalAllocatedQuantity(branch.id)}</span> قطعة
                                 </p>
                               </div>
@@ -3392,8 +3392,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                             <div className="flex items-center gap-3">
                               <div className={`p-2 rounded-lg ${
                                 threshold.locationType === 'branch' 
-                                  ? 'bg-blue-600/20 text-blue-400' 
-                                  : 'bg-green-600/20 text-green-400'
+                                  ? 'bg-dash-accent-blue-subtle text-dash-accent-blue' 
+                                  : 'bg-dash-accent-green-subtle text-dash-accent-green'
                               }`}>
                                 {threshold.locationType === 'branch' ? (
                                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3409,8 +3409,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
                                 <h3 className="text-[var(--dash-text-primary)] font-medium">{threshold.locationName}</h3>
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                   threshold.locationType === 'branch'
-                                    ? 'bg-blue-600/20 text-blue-300 border border-blue-600/30'
-                                    : 'bg-green-600/20 text-green-300 border border-green-600/30'
+                                    ? 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue/30'
+                                    : 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green/30'
                                 }`}>
                                   {threshold.locationType === 'branch' ? 'فرع' : 'مخزن'}
                                 </span>

@@ -54,7 +54,7 @@ export default function PaymentMethodsChart({ dateFilter, height = 300 }: Paymen
     return (
       <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
         <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">طرق الدفع</h3>
-        <div className="flex items-center justify-center text-red-400" style={{ height }}>
+        <div className="flex items-center justify-center text-dash-accent-red" style={{ height }}>
           {error}
         </div>
       </div>

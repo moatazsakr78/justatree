@@ -25,18 +25,18 @@ export default function PaymentProgressCard({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <CreditCardIcon className="w-6 h-6 text-blue-400" />
+          <CreditCardIcon className="w-6 h-6 text-dash-accent-blue" />
           <h3 className="text-lg font-bold text-[var(--dash-text-primary)]">حالة الدفع</h3>
         </div>
         {fullyPaid ? (
-          <div className="flex items-center gap-2 bg-green-500/20 px-3 py-1 rounded-full">
-            <CheckCircleIcon className="w-5 h-5 text-green-400" />
-            <span className="text-green-400 text-sm font-medium">مدفوع بالكامل</span>
+          <div className="flex items-center gap-2 bg-dash-accent-green-subtle px-3 py-1 rounded-full">
+            <CheckCircleIcon className="w-5 h-5 text-dash-accent-green" />
+            <span className="text-dash-accent-green text-sm font-medium">مدفوع بالكامل</span>
           </div>
         ) : (
-          <div className="flex items-center gap-2 bg-orange-500/20 px-3 py-1 rounded-full">
-            <ClockIcon className="w-5 h-5 text-orange-400" />
-            <span className="text-orange-400 text-sm font-medium">في انتظار الدفع</span>
+          <div className="flex items-center gap-2 bg-dash-accent-orange-subtle px-3 py-1 rounded-full">
+            <ClockIcon className="w-5 h-5 text-dash-accent-orange" />
+            <span className="text-dash-accent-orange text-sm font-medium">في انتظار الدفع</span>
           </div>
         )}
       </div>
@@ -49,12 +49,12 @@ export default function PaymentProgressCard({
         </div>
         <div className="flex justify-between items-center">
           <span className="text-[var(--dash-text-secondary)]">المدفوع:</span>
-          <span className="text-green-400 font-bold">{totalPaid.toFixed(2)} جنيه</span>
+          <span className="text-dash-accent-green font-bold">{totalPaid.toFixed(2)} جنيه</span>
         </div>
         {!fullyPaid && (
           <div className="flex justify-between items-center border-t border-[var(--dash-border-default)] pt-3">
             <span className="text-[var(--dash-text-secondary)]">المتبقي:</span>
-            <span className="text-orange-400 font-bold text-lg">{remainingAmount.toFixed(2)} جنيه</span>
+            <span className="text-dash-accent-orange font-bold text-lg">{remainingAmount.toFixed(2)} جنيه</span>
           </div>
         )}
       </div>
@@ -68,7 +68,7 @@ export default function PaymentProgressCard({
         <div className="w-full bg-[var(--dash-bg-raised)] rounded-full h-3 overflow-hidden">
           <div
             className={`h-full transition-all duration-500 ${
-              fullyPaid ? 'bg-green-500' : 'bg-blue-500'
+              fullyPaid ? 'bg-dash-accent-green' : 'bg-dash-accent-blue'
             }`}
             style={{ width: `${progressPercentage}%` }}
           />
@@ -79,7 +79,7 @@ export default function PaymentProgressCard({
       {!fullyPaid && (
         <button
           onClick={onUploadReceipt}
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 dash-btn-primary rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
         >
           <svg
             className="w-5 h-5"
@@ -99,8 +99,8 @@ export default function PaymentProgressCard({
       )}
 
       {/* Help Text */}
-      <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-        <p className="text-blue-300 text-sm">
+      <div className="mt-4 p-3 bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg">
+        <p className="text-dash-accent-blue text-sm">
           {fullyPaid
             ? '✓ تم استلام كامل المبلغ. شكراً لك!'
             : 'يرجى رفع صورة إيصال التحويل البنكي للتحقق من الدفع'}

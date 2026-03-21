@@ -98,7 +98,7 @@ export default function EditRecordModal({ isOpen, onClose, onRecordUpdated, reco
           <button
             onClick={handleSave}
             disabled={!recordName.trim() || isLoading || recordName === record?.name}
-            className="px-4 py-2 bg-blue-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-dash-accent-blue text-[var(--dash-text-primary)] rounded-lg hover:brightness-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'جاري الحفظ...' : 'حفظ التغييرات'}
           </button>

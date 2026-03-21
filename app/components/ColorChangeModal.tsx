@@ -316,12 +316,12 @@ export default function ColorChangeModal({
           {/* Header */}
           <div className="sticky top-0 bg-[var(--dash-bg-surface)] px-8 py-6 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-dash-accent-orange rounded-full flex items-center justify-center">
                 <ArrowPathIcon className="h-6 w-6 text-[var(--dash-text-primary)]" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">تغيير ألوان المنتج</h2>
-                <p className="text-blue-400 font-medium">{product.name}</p>
+                <p className="text-dash-accent-blue font-medium">{product.name}</p>
               </div>
             </div>
             <button
@@ -338,8 +338,8 @@ export default function ColorChangeModal({
               /* Branch Selection Step */
               <div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                    <BuildingStorefrontIcon className="h-5 w-5 text-blue-400" />
+                  <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                    <BuildingStorefrontIcon className="h-5 w-5 text-dash-accent-blue" />
                   </div>
                   <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">اختر الفرع المراد تغيير ألوانه</h3>
                 </div>
@@ -361,20 +361,20 @@ export default function ColorChangeModal({
                         className="bg-[var(--dash-bg-raised)] hover:bg-[#434E61] border border-[var(--dash-border-default)] rounded-xl p-6 text-right transition-colors group"
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <div className="w-10 h-10 bg-orange-600/20 rounded-lg flex items-center justify-center">
-                            <BuildingStorefrontIcon className="h-6 w-6 text-orange-400" />
+                          <div className="w-10 h-10 bg-dash-accent-orange-subtle rounded-lg flex items-center justify-center">
+                            <BuildingStorefrontIcon className="h-6 w-6 text-dash-accent-orange" />
                           </div>
                           <h4 className="text-[var(--dash-text-primary)] font-semibold text-lg">{branch.name}</h4>
                         </div>
                         
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
-                            <span className="text-blue-400 font-bold text-xl">{branch.colorVariants.length}</span>
+                            <span className="text-dash-accent-blue font-bold text-xl">{branch.colorVariants.length}</span>
                             <span className="text-[var(--dash-text-muted)]">عدد الألوان المحددة</span>
                           </div>
                           
                           <div className="flex justify-between items-center">
-                            <span className="text-green-400 font-medium">
+                            <span className="text-dash-accent-green font-medium">
                               {branch.colorVariants.reduce((sum, v) => sum + v.quantity, 0)}
                             </span>
                             <span className="text-[var(--dash-text-muted)]">إجمالي الكميات</span>
@@ -387,7 +387,7 @@ export default function ColorChangeModal({
                               {branch.colorVariants.map((variant, index) => (
                                 <span
                                   key={index}
-                                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-600 text-[var(--dash-text-primary)]"
+                                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-dash-accent-orange text-[var(--dash-text-primary)]"
                                 >
                                   <div 
                                     className="w-3 h-3 rounded-full border border-white/30 mr-1"
@@ -409,8 +409,8 @@ export default function ColorChangeModal({
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-orange-600/20 rounded-lg flex items-center justify-center">
-                      <ArrowPathIcon className="h-5 w-5 text-orange-400" />
+                    <div className="w-8 h-8 bg-dash-accent-orange-subtle rounded-lg flex items-center justify-center">
+                      <ArrowPathIcon className="h-5 w-5 text-dash-accent-orange" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الألوان الحالية المتاحة للتغيير</h3>
@@ -440,11 +440,11 @@ export default function ColorChangeModal({
                     <div className="bg-[var(--dash-bg-raised)] rounded-lg p-4 border border-[var(--dash-border-default)]">
                       <h4 className="text-[var(--dash-text-primary)] font-medium mb-4 text-center">من</h4>
                       <div className="text-center mb-4">
-                        <div className="text-purple-400 text-2xl font-bold">
+                        <div className="text-dash-accent-purple text-2xl font-bold">
                           {getTotalFrom()}
                         </div>
                         <div className="text-[var(--dash-text-muted)] text-sm">الكمية</div>
-                        <div className="text-red-400 text-xs mt-1">
+                        <div className="text-dash-accent-red text-xs mt-1">
                           يجب أن يساوي {getTotalTo()}
                         </div>
                       </div>
@@ -465,7 +465,7 @@ export default function ColorChangeModal({
                                 <button
                                   onClick={() => updateFromColorQuantity(index, color.quantity - 1)}
                                   disabled={color.quantity <= 0}
-                                  className="w-6 h-6 bg-red-600 hover:bg-red-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
+                                  className="w-6 h-6 dash-btn-red disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
                                 >
                                   <MinusIcon className="h-3 w-3" />
                                 </button>
@@ -473,7 +473,7 @@ export default function ColorChangeModal({
                                 <button
                                   onClick={() => updateFromColorQuantity(index, color.quantity + 1)}
                                   disabled={color.quantity >= (color.maxQuantity || 0)}
-                                  className="w-6 h-6 bg-green-600 hover:bg-green-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
+                                  className="w-6 h-6 dash-btn-green disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
                                 >
                                   <PlusIcon className="h-3 w-3" />
                                 </button>
@@ -495,13 +495,13 @@ export default function ColorChangeModal({
                       
                       <div className="text-center mb-4">
                         <div className={`text-2xl font-bold ${
-                          isBalanced() ? 'text-green-400' : 'text-red-400'
+                          isBalanced() ? 'text-dash-accent-green' : 'text-dash-accent-red'
                         }`}>
                           {getTotalTo()}
                         </div>
                         <div className="text-[var(--dash-text-muted)] text-sm">الكمية</div>
                         {!isBalanced() && (
-                          <div className="text-red-400 text-xs mt-1">
+                          <div className="text-dash-accent-red text-xs mt-1">
                             يجب أن تساوي {getTotalFrom()}
                           </div>
                         )}
@@ -523,14 +523,14 @@ export default function ColorChangeModal({
                                 <button
                                   onClick={() => updateToColorQuantity(index, color.quantity - 1)}
                                   disabled={color.quantity <= 0}
-                                  className="w-6 h-6 bg-red-600 hover:bg-red-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
+                                  className="w-6 h-6 dash-btn-red disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
                                 >
                                   <MinusIcon className="h-3 w-3" />
                                 </button>
                                 <span className="text-[var(--dash-text-primary)] font-medium w-8 text-center">{color.quantity}</span>
                                 <button
                                   onClick={() => updateToColorQuantity(index, color.quantity + 1)}
-                                  className="w-6 h-6 bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
+                                  className="w-6 h-6 dash-btn-green text-[var(--dash-text-primary)] rounded-full flex items-center justify-center text-sm"
                                 >
                                   <PlusIcon className="h-3 w-3" />
                                 </button>
@@ -546,16 +546,16 @@ export default function ColorChangeModal({
                 {/* Balance Status */}
                 <div className={`mt-6 p-4 rounded-lg border ${
                   isBalanced() 
-                    ? 'bg-green-600/20 border-green-500/30' 
-                    : 'bg-red-600/20 border-red-500/30'
+                    ? 'bg-dash-accent-green-subtle border-dash-accent-green/30' 
+                    : 'bg-dash-accent-red-subtle border-dash-accent-red/30'
                 }`}>
                   <div className="text-center">
                     {isBalanced() ? (
-                      <p className="text-green-400 font-medium">
+                      <p className="text-dash-accent-green font-medium">
                         ✅ الكميات متوازنة - يمكن الحفظ
                       </p>
                     ) : (
-                      <p className="text-red-400 font-medium">
+                      <p className="text-dash-accent-red font-medium">
                         ⚠️ الكميات غير متوازنة - من: {getTotalFrom()}, إلى: {getTotalTo()}
                       </p>
                     )}
@@ -575,7 +575,7 @@ export default function ColorChangeModal({
                     disabled={!canSave() || isSaving}
                     className={`px-6 py-2 rounded transition-colors flex items-center gap-2 ${
                       canSave() && !isSaving
-                        ? 'bg-orange-600 hover:bg-orange-700 text-[var(--dash-text-primary)]'
+                        ? 'bg-dash-accent-orange hover:brightness-90 text-[var(--dash-text-primary)]'
                         : 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)] cursor-not-allowed'
                     }`}
                   >

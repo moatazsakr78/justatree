@@ -284,13 +284,13 @@ export default function AddCustomerModal({ isOpen, onClose, onCreated }: AddCust
 
           {/* Error/Success Messages */}
           {error && (
-            <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded text-right text-sm">
+            <div className="bg-dash-accent-red-subtle/20 border border-dash-accent-red text-dash-accent-red px-4 py-3 rounded text-right text-sm">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="bg-green-900/20 border border-green-500 text-green-400 px-4 py-3 rounded text-right text-sm">
+            <div className="bg-dash-accent-green-subtle/20 border border-dash-accent-green text-dash-accent-green px-4 py-3 rounded text-right text-sm">
               {success}
             </div>
           )}

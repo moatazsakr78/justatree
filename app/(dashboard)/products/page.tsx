@@ -331,7 +331,7 @@ export default function ProductsPage() {
         accessor: 'totalQuantity', 
         width: 120,
         render: (value: number) => (
-          <span className="text-blue-400 font-medium">قطعة {value}</span>
+          <span className="text-dash-accent-blue font-medium">قطعة {value}</span>
         )
       },
       { 
@@ -411,7 +411,7 @@ export default function ProductsPage() {
           const inventoryData = item.inventoryData?.[branch.id]
           const quantity = inventoryData?.quantity || 0
           return (
-            <span className="text-blue-400 font-medium">قطعة {quantity}</span>
+            <span className="text-dash-accent-blue font-medium">قطعة {quantity}</span>
           )
         }
       }))
@@ -433,7 +433,7 @@ export default function ProductsPage() {
           const isLowStock = quantity <= minStock && minStock > 0
           
           return (
-            <span className={`font-medium ${isLowStock ? 'text-red-400' : 'text-yellow-400'}`}>
+            <span className={`font-medium ${isLowStock ? 'text-dash-accent-red' : 'text-dash-accent-orange'}`}>
               {minStock} قطعة
             </span>
           )
@@ -544,7 +544,7 @@ export default function ProductsPage() {
       width: 80,
       render: (value: boolean) => (
         <div className="flex justify-center">
-          <div className={`w-3 h-3 rounded-full ${value ? 'bg-green-500' : 'bg-red-500'}`}></div>
+          <div className={`w-3 h-3 rounded-full ${value ? 'bg-dash-accent-green' : 'bg-dash-accent-red'}`}></div>
         </div>
       )
     }
@@ -1070,7 +1070,7 @@ export default function ProductsPage() {
               onClick={handleDeleteCategory}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 selectedCategory && selectedCategory.name !== 'منتجات'
-                  ? 'text-red-400 hover:text-red-300' 
+                  ? 'text-dash-accent-red hover:text-dash-accent-red'
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedCategory || selectedCategory.name === 'منتجات'}
@@ -1104,7 +1104,7 @@ export default function ProductsPage() {
               onClick={handleDeleteProduct}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 selectedProduct
-                  ? 'text-red-400 hover:text-red-300'
+                  ? 'text-dash-accent-red hover:text-dash-accent-red'
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedProduct}
@@ -1117,7 +1117,7 @@ export default function ProductsPage() {
               onClick={handleHideProduct}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 selectedProduct
-                  ? 'text-orange-400 hover:text-orange-300'
+                  ? 'text-dash-accent-orange hover:text-dash-accent-orange'
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedProduct}
@@ -1159,7 +1159,7 @@ export default function ProductsPage() {
 
             <button
               onClick={() => setShowExcelModal(true)}
-              className="flex flex-col items-center p-2 text-green-400 hover:text-green-300 cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-dash-accent-green hover:text-dash-accent-green cursor-pointer min-w-[80px]"
             >
               <TableCellsIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">Excel</span>
@@ -1169,7 +1169,7 @@ export default function ProductsPage() {
               <>
                 <button
                   onClick={() => setShowExportModal(true)}
-                  className="flex flex-col items-center p-2 text-green-300 hover:text-green-100 cursor-pointer min-w-[80px] animate-pulse"
+                  className="flex flex-col items-center p-2 text-dash-accent-green hover:text-dash-accent-green cursor-pointer min-w-[80px] animate-pulse"
                 >
                   <ArrowUpTrayIcon className="h-5 w-5 mb-1" />
                   <span className="text-sm">تصدير المحددة ({selectedProductIds.length})</span>
@@ -1180,7 +1180,7 @@ export default function ProductsPage() {
                     setIsSelectionMode(false)
                     setSelectedProductIds([])
                   }}
-                  className="flex flex-col items-center p-2 text-red-300 hover:text-red-100 cursor-pointer min-w-[80px]"
+                  className="flex flex-col items-center p-2 text-dash-accent-red hover:text-dash-accent-red cursor-pointer min-w-[80px]"
                 >
                   <XMarkIcon className="h-5 w-5 mb-1" />
                   <span className="text-sm">إلغاء التحديد</span>
@@ -1221,7 +1221,7 @@ export default function ProductsPage() {
               onClick={() => selectedProduct && setShowColorChangeModal(true)}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 selectedProduct
-                  ? 'text-orange-300 hover:text-orange-100'
+                  ? 'text-dash-accent-orange hover:text-dash-accent-orange'
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedProduct}
@@ -1234,7 +1234,7 @@ export default function ProductsPage() {
               onClick={() => setShowMissingDataModal(true)}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 missingDataFilter.size > 0
-                  ? 'text-yellow-400 hover:text-yellow-300'
+                  ? 'text-dash-accent-orange hover:text-dash-accent-orange'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
@@ -1273,7 +1273,7 @@ export default function ProductsPage() {
                         setTempSelectedBranches({...selectedBranches})
                         setShowBranchesDropdown(!showBranchesDropdown)
                       }}
-                      className={`flex items-center ${isMobile ? 'gap-1 px-2 py-2 text-xs' : 'gap-2 px-4 py-2 text-sm'} bg-blue-600 hover:bg-blue-700 rounded-md text-[var(--dash-text-primary)] font-medium transition-colors ${isMobile ? 'max-w-[120px] min-w-[100px]' : ''}`}
+                      className={`flex items-center ${isMobile ? 'gap-1 px-2 py-2 text-xs' : 'gap-2 px-4 py-2 text-sm'} dash-btn-primary rounded-md text-[var(--dash-text-primary)] font-medium transition-colors ${isMobile ? 'max-w-[120px] min-w-[100px]' : ''}`}
                     >
                       <span className={isMobile ? 'truncate' : ''}>{selectedGroup}</span>
                       <ChevronDownIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} transition-transform flex-shrink-0 ${showBranchesDropdown ? 'rotate-180' : ''}`} />
@@ -1294,12 +1294,12 @@ export default function ProductsPage() {
                                   type="checkbox"
                                   checked={selectedBranches[branch.id] || false}
                                   onChange={() => handleBranchToggle(branch.id)}
-                                  className="w-5 h-5 text-blue-600 bg-[var(--dash-bg-surface)] border-2 border-blue-500 rounded focus:ring-blue-500 focus:ring-2 accent-blue-600"
+                                  className="w-5 h-5 text-dash-accent-blue bg-[var(--dash-bg-surface)] border-2 border-dash-accent-blue rounded focus:ring-dash-accent-blue focus:ring-2 accent-[var(--dash-accent-blue)]"
                                 />
                                 <span className="text-[var(--dash-text-primary)] text-base font-medium flex-1 text-right">
                                   {branch.name}
                                 </span>
-                                <span className="text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30">
+                                <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-1 rounded border border-dash-accent-blue">
                                   {branch.name.includes('مخزن') || branch.name.includes('شاكوس') ? 'مخزن' : 'فرع'}
                                 </span>
                               </label>
@@ -1310,7 +1310,7 @@ export default function ProductsPage() {
                         {/* Simple Summary at Bottom */}
                         <div className="px-4 py-2 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]">
                           <div className="text-center">
-                            <span className="text-blue-400 font-medium text-sm">
+                            <span className="text-dash-accent-blue font-medium text-sm">
                               {Object.values(selectedBranches).filter(Boolean).length} من أصل {branches.length} محدد
                             </span>
                           </div>
@@ -1325,18 +1325,18 @@ export default function ProductsPage() {
                     <button 
                       onClick={() => setViewMode('grid')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'grid' 
-                          ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                        viewMode === 'grid'
+                          ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                           : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <Squares2X2Icon className="h-4 w-4" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => setViewMode('table')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'table' 
-                          ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                        viewMode === 'table'
+                          ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                           : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
@@ -1408,8 +1408,8 @@ export default function ProductsPage() {
                         }}
                         className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                           isSelected
-                            ? 'border-blue-500 bg-[#434E61]'
-                            : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
+                            ? 'border-dash-accent-blue bg-[#434E61]'
+                            : 'border-transparent hover:border-[var(--dash-border-default)] hover:bg-[#434E61]'
                         }`}
                       >
                         {/* Product Image - OPTIMIZED */}
@@ -1451,8 +1451,8 @@ export default function ProductsPage() {
                           {/* Rating */}
                           {(product.rating || 0) > 0 && (
                             <div className="flex justify-center items-center gap-1 mb-1">
-                              <span className="text-yellow-400 text-xs">⭐</span>
-                              <span className="text-yellow-400 font-medium text-xs">
+                              <span className="text-dash-accent-orange text-xs">⭐</span>
+                              <span className="text-dash-accent-orange font-medium text-xs">
                                 {(product.rating || 0).toFixed(1)}
                               </span>
                               <span className="text-[var(--dash-text-disabled)] text-xs">
@@ -1466,10 +1466,10 @@ export default function ProductsPage() {
                             {product.isDiscounted ? (
                               <>
                                 <div className="flex items-center gap-1">
-                                  <span className="text-blue-400 font-medium text-sm">
+                                  <span className="text-dash-accent-blue font-medium text-sm">
                                     {(product.finalPrice || 0).toFixed(2)}
                                   </span>
-                                  <span className="bg-red-600 text-[var(--dash-text-primary)] text-xs px-1 py-0.5 rounded">
+                                  <span className="bg-dash-accent-red text-[var(--dash-text-primary)] text-xs px-1 py-0.5 rounded">
                                     {product.discountLabel}
                                   </span>
                                 </div>
@@ -1478,7 +1478,7 @@ export default function ProductsPage() {
                                 </span>
                               </>
                             ) : (
-                              <span className="text-blue-400 font-medium text-sm">
+                              <span className="text-dash-accent-blue font-medium text-sm">
                                 {(product.price || 0).toFixed(2)}
                               </span>
                             )}
@@ -1486,7 +1486,7 @@ export default function ProductsPage() {
 
                           {/* Total Quantity */}
                           <div className="flex justify-between items-center">
-                            <span className="text-blue-400 font-medium">
+                            <span className="text-dash-accent-blue font-medium">
                               {(product.inventoryData && Object.values(product.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0)) || 0}
                             </span>
                             <span className="text-[var(--dash-text-muted)]">الكمية الإجمالية</span>
@@ -1519,7 +1519,7 @@ export default function ProductsPage() {
                     <div className="flex justify-center py-6">
                       <button
                         onClick={() => setShowAllProducts(true)}
-                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors shadow-lg"
+                        className="px-6 py-3 dash-btn-primary text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors shadow-lg"
                       >
                         تحميل كل المنتجات ({filteredProducts.length - VISIBLE_PRODUCTS_LIMIT} منتج إضافي)
                       </button>
@@ -1594,7 +1594,7 @@ export default function ProductsPage() {
                 <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من أنك تريد حذف هذه المجموعة؟
                 </p>
-                <p className="text-blue-400 font-medium text-right">
+                <p className="text-dash-accent-blue font-medium text-right">
                   {selectedCategory?.name}
                 </p>
               </div>
@@ -1603,7 +1603,7 @@ export default function ProductsPage() {
               <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
                 <button
                   onClick={cancelDeleteCategory}
-                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-gray-500 rounded transition-colors"
+                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)] rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -1612,8 +1612,8 @@ export default function ProductsPage() {
                   disabled={isDeleting}
                   className={`px-4 py-2 rounded transition-colors ${
                     isDeleting
-                      ? 'bg-red-600/50 text-red-300 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)]'
+                      ? 'bg-dash-accent-red/50 text-dash-accent-red cursor-not-allowed'
+                      : 'dash-btn-red text-[var(--dash-text-primary)]'
                   }`}
                 >
                   {isDeleting ? 'جاري الحذف...' : 'نعم، احذف'}
@@ -1647,14 +1647,14 @@ export default function ProductsPage() {
                     <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                       هل أنت متأكد من أنك تريد حذف هذا المنتج؟
                     </p>
-                    <p className="text-blue-400 font-medium text-right mb-4">
+                    <p className="text-dash-accent-blue font-medium text-right mb-4">
                       {selectedProduct?.name}
                     </p>
 
                     {/* Product Usage Stats */}
                     {productUsageStats?.hasUsage && (
-                      <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 mb-4 border border-yellow-500/30">
-                        <p className="text-yellow-400 font-medium text-right mb-3 flex items-center justify-end gap-2">
+                      <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 mb-4 border border-dash-accent-orange/30">
+                        <p className="text-dash-accent-orange font-medium text-right mb-3 flex items-center justify-end gap-2">
                           <span>⚠️</span>
                           <span>هذا المنتج موجود في:</span>
                         </p>
@@ -1704,15 +1704,15 @@ export default function ProductsPage() {
                     )}
 
                     {!productUsageStats?.hasUsage && (
-                      <p className="text-yellow-400 text-sm text-right">
+                      <p className="text-dash-accent-orange text-sm text-right">
                         تحذير: لا يمكن التراجع عن هذا الإجراء
                       </p>
                     )}
                   </>
                 ) : (
                   <>
-                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
-                      <p className="text-green-400 text-right flex items-center justify-end gap-2">
+                    <div className="bg-dash-accent-green-subtle border border-dash-accent-green/30 rounded-lg p-4 mb-4">
+                      <p className="text-dash-accent-green text-right flex items-center justify-end gap-2">
                         <span>✓</span>
                         <span>لا تقلق!</span>
                       </p>
@@ -1734,7 +1734,7 @@ export default function ProductsPage() {
               <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
                 <button
                   onClick={cancelDeleteProduct}
-                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-gray-500 rounded transition-colors"
+                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)] rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -1743,8 +1743,8 @@ export default function ProductsPage() {
                   disabled={isDeletingProduct}
                   className={`px-4 py-2 rounded transition-colors ${
                     isDeletingProduct
-                      ? 'bg-red-600/50 text-red-300 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)]'
+                      ? 'bg-dash-accent-red/50 text-dash-accent-red cursor-not-allowed'
+                      : 'dash-btn-red text-[var(--dash-text-primary)]'
                   }`}
                 >
                   {isDeletingProduct ? 'جاري الحذف...' : (showFinalDeleteConfirm ? 'نعم، احذف المنتج' : (productUsageStats?.hasUsage ? 'متابعة' : 'نعم، احذف'))}
@@ -1776,12 +1776,12 @@ export default function ProductsPage() {
                 <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من إخفاء هذا المنتج؟
                 </p>
-                <p className="text-blue-400 font-medium text-right mb-4">
+                <p className="text-dash-accent-blue font-medium text-right mb-4">
                   {selectedProduct?.name}
                 </p>
 
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
-                  <p className="text-green-400 text-right font-medium">
+                <div className="bg-dash-accent-green-subtle border border-dash-accent-green/30 rounded-lg p-4 mb-4">
+                  <p className="text-dash-accent-green text-right font-medium">
                     لا تقلق!
                   </p>
                   <p className="text-[var(--dash-text-secondary)] text-right mt-2">
@@ -1797,7 +1797,7 @@ export default function ProductsPage() {
               <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
                 <button
                   onClick={cancelHideProduct}
-                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-gray-500 rounded transition-colors"
+                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)] rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -1806,8 +1806,8 @@ export default function ProductsPage() {
                   disabled={isHidingProduct}
                   className={`px-4 py-2 rounded transition-colors ${
                     isHidingProduct
-                      ? 'bg-orange-600/50 text-orange-300 cursor-not-allowed'
-                      : 'bg-orange-600 hover:bg-orange-700 text-[var(--dash-text-primary)]'
+                      ? 'bg-dash-accent-orange/50 text-dash-accent-orange cursor-not-allowed'
+                      : 'bg-dash-accent-orange hover:bg-dash-accent-orange/80 text-[var(--dash-text-primary)]'
                   }`}
                 >
                   {isHidingProduct ? 'جاري الإخفاء...' : 'نعم، إخفاء المنتج'}
@@ -1834,14 +1834,14 @@ export default function ProductsPage() {
                       {modalProduct.main_image_url ? (
                         <img src={modalProduct.main_image_url} alt={modalProduct.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+                        <div className="w-full h-full bg-dash-accent-blue flex items-center justify-center">
                           <span className="text-[var(--dash-text-primary)] font-bold text-lg">📦</span>
                         </div>
                       )}
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">تفاصيل المنتج</h2>
-                      <p className="text-blue-400 font-medium">{modalProduct.name}</p>
+                      <p className="text-dash-accent-blue font-medium">{modalProduct.name}</p>
                     </div>
                   </div>
                   <button
@@ -1862,8 +1862,8 @@ export default function ProductsPage() {
                       {/* Basic Info Card */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-blue-400 text-sm">ℹ️</span>
+                          <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-blue text-sm">ℹ️</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">معلومات المنتج</h3>
                         </div>
@@ -1890,27 +1890,27 @@ export default function ProductsPage() {
                       {/* Pricing Card */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-green-400 text-sm">💰</span>
+                          <div className="w-8 h-8 bg-dash-accent-green-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-green text-sm">💰</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الأسعار</h3>
                         </div>
 
                         {/* Main Price with Discount */}
                         <div className="mb-4">
-                          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center border border-green-600/30">
+                          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center border border-dash-accent-green/30">
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر البيع</p>
                             <div className="flex items-center justify-center gap-2">
                               {modalProduct.isDiscounted ? (
                                 <>
-                                  <p className="text-green-400 font-bold text-2xl">{(modalProduct.finalPrice || 0).toFixed(2)}</p>
+                                  <p className="text-dash-accent-green font-bold text-2xl">{(modalProduct.finalPrice || 0).toFixed(2)}</p>
                                   <p className="text-[var(--dash-text-disabled)] line-through text-lg">{(modalProduct.price || 0).toFixed(2)}</p>
-                                  <span className="bg-red-600 text-[var(--dash-text-primary)] text-xs px-2 py-1 rounded-full">
+                                  <span className="bg-dash-accent-red text-[var(--dash-text-primary)] text-xs px-2 py-1 rounded-full">
                                     {modalProduct.discountLabel}
                                   </span>
                                 </>
                               ) : (
-                                <p className="text-green-400 font-bold text-2xl">{(modalProduct.price || 0).toFixed(2)}</p>
+                                <p className="text-dash-accent-green font-bold text-2xl">{(modalProduct.price || 0).toFixed(2)}</p>
                               )}
                             </div>
                           </div>
@@ -1924,7 +1924,7 @@ export default function ProductsPage() {
                             {showPurchasePrice ? (
                               <>
                                 <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر الشراء</p>
-                                <p className="text-orange-400 font-bold text-lg">{(modalProduct.cost_price || 0).toFixed(2)}</p>
+                                <p className="text-dash-accent-orange font-bold text-lg">{(modalProduct.cost_price || 0).toFixed(2)}</p>
                               </>
                             ) : (
                               <div className="flex items-center justify-center h-full min-h-[52px]">
@@ -1934,15 +1934,15 @@ export default function ProductsPage() {
                           </div>
                           <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر الجملة</p>
-                            <p className="text-blue-400 font-bold text-lg">{(modalProduct.wholesale_price || 0).toFixed(2)}</p>
+                            <p className="text-dash-accent-blue font-bold text-lg">{(modalProduct.wholesale_price || 0).toFixed(2)}</p>
                           </div>
                           <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر 1</p>
-                            <p className="text-purple-400 font-bold text-lg">{(modalProduct.price1 || 0).toFixed(2)}</p>
+                            <p className="text-dash-accent-purple font-bold text-lg">{(modalProduct.price1 || 0).toFixed(2)}</p>
                           </div>
                           <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر 2</p>
-                            <p className="text-indigo-400 font-bold text-lg">{(modalProduct.price2 || 0).toFixed(2)}</p>
+                            <p className="text-dash-accent-purple font-bold text-lg">{(modalProduct.price2 || 0).toFixed(2)}</p>
                           </div>
                         </div>
                       </div>
@@ -1950,14 +1950,14 @@ export default function ProductsPage() {
                       {/* Rating Card */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-yellow-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-yellow-400 text-sm">⭐</span>
+                          <div className="w-8 h-8 bg-dash-accent-orange-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-orange text-sm">⭐</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">التقييمات</h3>
                         </div>
                         <div className="text-center">
                           <div className="flex items-center justify-center gap-2 mb-2">
-                            <span className="text-yellow-400 font-bold text-3xl">
+                            <span className="text-dash-accent-orange font-bold text-3xl">
                               {(modalProduct.rating || 0).toFixed(1)}
                             </span>
                             <div className="flex">
@@ -1966,8 +1966,8 @@ export default function ProductsPage() {
                                   key={star}
                                   className={`text-xl ${
                                     star <= (modalProduct.rating || 0)
-                                      ? 'text-yellow-400'
-                                      : 'text-gray-600'
+                                      ? 'text-dash-accent-orange'
+                                      : 'text-[var(--dash-text-disabled)]'
                                   }`}
                                 >
                                   ⭐
@@ -1990,8 +1990,8 @@ export default function ProductsPage() {
                       {modalProduct.description && (
                         <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                              <span className="text-purple-400 text-sm">📝</span>
+                            <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                              <span className="text-dash-accent-purple text-sm">📝</span>
                             </div>
                             <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">وصف المنتج</h3>
                           </div>
@@ -2006,16 +2006,16 @@ export default function ProductsPage() {
                       {/* Total Inventory Card */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-blue-400 text-sm">📊</span>
+                          <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-blue text-sm">📊</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">المخازن والفروع</h3>
                         </div>
 
                         {/* Total Quantity Display */}
-                        <div className="bg-blue-600/10 rounded-lg p-4 mb-4 text-center border border-blue-600/20">
-                          <p className="text-blue-400 text-sm mb-1">الكمية الإجمالية</p>
-                          <p className="text-blue-400 font-bold text-3xl">
+                        <div className="bg-dash-accent-blue-subtle rounded-lg p-4 mb-4 text-center border border-dash-accent-blue/20">
+                          <p className="text-dash-accent-blue text-sm mb-1">الكمية الإجمالية</p>
+                          <p className="text-dash-accent-blue font-bold text-3xl">
                             {modalProduct.inventoryData && Object.values(modalProduct.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0) || 0}
                           </p>
                         </div>
@@ -2030,11 +2030,11 @@ export default function ProductsPage() {
                               <div key={locationId} className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)]/30">
                                 <div className="flex justify-between items-center mb-2">
                                   <span className="text-[var(--dash-text-primary)] font-medium">{locationName}</span>
-                                  <span className="text-blue-400 font-bold text-lg">{inventory?.quantity || 0}</span>
+                                  <span className="text-dash-accent-blue font-bold text-lg">{inventory?.quantity || 0}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
                                   <span className="text-[var(--dash-text-muted)]">الحد الأدنى</span>
-                                  <span className="text-orange-400">{inventory?.min_stock || 0}</span>
+                                  <span className="text-dash-accent-orange">{inventory?.min_stock || 0}</span>
                                 </div>
                               </div>
                             )
@@ -2046,8 +2046,8 @@ export default function ProductsPage() {
                       {modalProduct.variantsData && Object.keys(modalProduct.variantsData).length > 0 && (
                         <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                              <span className="text-purple-400 text-sm">🎨</span>
+                            <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                              <span className="text-dash-accent-purple text-sm">🎨</span>
                             </div>
                             <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الألوان والأشكال</h3>
                           </div>
@@ -2128,8 +2128,8 @@ export default function ProductsPage() {
                       {/* Main Image Preview */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-indigo-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-indigo-400 text-sm">🖼️</span>
+                          <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-purple text-sm">🖼️</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">صور المنتج</h3>
                         </div>
@@ -2342,8 +2342,8 @@ export default function ProductsPage() {
                       />
                       <div className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-colors cursor-pointer ${
                         tempSelectedBranches[branch.id]
-                          ? 'bg-blue-600 border-blue-600'
-                          : 'bg-transparent border-blue-500'
+                          ? 'bg-dash-accent-blue border-dash-accent-blue'
+                          : 'bg-transparent border-dash-accent-blue'
                       }`}>
                         {tempSelectedBranches[branch.id] && (
                           <svg className="w-3 h-3 text-[var(--dash-text-primary)]" fill="currentColor" viewBox="0 0 20 20">
@@ -2357,7 +2357,7 @@ export default function ProductsPage() {
                         {branch.name}
                       </span>
                     </div>
-                    <span className="text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30">
+                    <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-1 rounded border border-dash-accent-blue">
                       {branch.name.includes('مخزن') || branch.name.includes('شاكوس') ? 'مخزن' : 'فرع'}
                     </span>
                   </div>
@@ -2368,7 +2368,7 @@ export default function ProductsPage() {
             {/* Footer */}
             <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] rounded-b-2xl">
               <div className="flex items-center justify-between">
-                <span className="text-blue-400 font-medium">
+                <span className="text-dash-accent-blue font-medium">
                   {Object.values(tempSelectedBranches).filter(Boolean).length} من أصل {branches.length} محدد
                 </span>
                 <div className="flex gap-2">
@@ -2380,7 +2380,7 @@ export default function ProductsPage() {
                   </button>
                   <button
                     onClick={applyBranchSelection}
-                    className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-4 py-2 rounded-lg font-medium transition-colors"
+                    className="dash-btn-primary px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     تطبيق
                   </button>

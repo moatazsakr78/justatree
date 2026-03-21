@@ -207,13 +207,13 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
       {/* Header with actions */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <BuildingStorefrontIcon className="h-5 w-5 text-blue-400" />
+          <BuildingStorefrontIcon className="h-5 w-5 text-dash-accent-blue" />
           <h3 className="text-[var(--dash-text-primary)] font-medium">الفروع المخصصة</h3>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={selectAll}
-            className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-xs text-dash-accent-blue hover:text-dash-accent-blue/80 transition-colors"
           >
             تحديد الكل
           </button>
@@ -229,7 +229,7 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
 
       {/* Error message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
+        <div className="mb-4 p-3 bg-dash-accent-red-subtle border border-dash-accent-red/50 rounded-lg text-dash-accent-red text-sm">
           {error}
         </div>
       )}
@@ -245,7 +245,7 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
               key={branch.id}
               className={`flex items-center gap-3 p-3 rounded-lg border transition-colors cursor-pointer ${
                 isSelected
-                  ? 'bg-blue-500/10 border-blue-500/50'
+                  ? 'bg-dash-accent-blue-subtle border-dash-accent-blue/50'
                   : 'bg-[var(--dash-bg-base)]/50 border-[var(--dash-border-subtle)] hover:border-[var(--dash-border-default)]'
               }`}
               onClick={() => toggleBranch(branch.id)}
@@ -253,7 +253,7 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
               {/* Checkbox */}
               <div
                 className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${
-                  isSelected ? 'bg-blue-500' : 'border border-[var(--dash-border-default)]'
+                  isSelected ? 'bg-dash-accent-blue' : 'border border-[var(--dash-border-default)]'
                 }`}
               >
                 {isSelected && <CheckIcon className="h-3 w-3 text-white" />}
@@ -273,8 +273,8 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
                   }}
                   className={`p-1 rounded transition-colors ${
                     isDefault
-                      ? 'text-yellow-400'
-                      : 'text-[var(--dash-text-disabled)] hover:text-yellow-400'
+                      ? 'text-dash-accent-orange'
+                      : 'text-[var(--dash-text-disabled)] hover:text-dash-accent-orange'
                   }`}
                   title={isDefault ? 'الفرع الافتراضي' : 'تعيين كفرع افتراضي'}
                 >
@@ -298,7 +298,7 @@ export default function UserBranchSelector({ userId, onSave, className = '' }: U
         <button
           onClick={saveAssignments}
           disabled={isSaving}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-dash-accent-blue hover:bg-dash-accent-blue disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
         >
           {isSaving ? 'جاري الحفظ...' : 'حفظ'}
         </button>

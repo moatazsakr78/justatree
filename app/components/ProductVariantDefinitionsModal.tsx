@@ -222,8 +222,8 @@ export default function ProductVariantDefinitionsModal({
             onClick={() => setActiveTab('color')}
             className={`flex-1 px-6 py-3 text-center font-medium transition-colors ${
               activeTab === 'color'
-                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
+                : 'text-gray-600 hover:text-dash-accent-blue hover:bg-gray-50'
             }`}
           >
             ألوان المنتج
@@ -232,8 +232,8 @@ export default function ProductVariantDefinitionsModal({
             onClick={() => setActiveTab('shape')}
             className={`flex-1 px-6 py-3 text-center font-medium transition-colors ${
               activeTab === 'shape'
-                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
+                : 'text-gray-600 hover:text-dash-accent-blue hover:bg-gray-50'
             }`}
           >
             أشكال المنتج
@@ -246,7 +246,7 @@ export default function ProductVariantDefinitionsModal({
           {!showAddForm && (
             <button
               onClick={() => setShowAddForm(true)}
-              className="w-full mb-4 px-4 py-3 border-2 border-dashed border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+              className="w-full mb-4 px-4 py-3 border-2 border-dashed border-blue-300 text-dash-accent-blue rounded-lg hover:bg-dash-accent-blue-subtle transition-colors flex items-center justify-center gap-2"
             >
               <PlusIcon className="w-5 h-5" />
               <span className="font-medium">
@@ -257,7 +257,7 @@ export default function ProductVariantDefinitionsModal({
 
           {/* Add/Edit Form */}
           {showAddForm && (
-            <div className="mb-6 p-4 border-2 border-blue-300 rounded-lg bg-blue-50">
+            <div className="mb-6 p-4 border-2 border-blue-300 rounded-lg bg-dash-accent-blue-subtle">
               <h3 className="text-lg font-bold text-gray-800 mb-4">
                 {editingId
                   ? (activeTab === 'color' ? 'تعديل اللون' : 'تعديل الشكل')
@@ -276,7 +276,7 @@ export default function ProductVariantDefinitionsModal({
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder={activeTab === 'color' ? 'مثال: أحمر، أزرق' : 'مثال: استيتش يضحك (اختياري)'}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dash-accent-blue focus:border-transparent"
                   />
                 </div>
 
@@ -297,7 +297,7 @@ export default function ProductVariantDefinitionsModal({
                         type="text"
                         value={formData.color_hex}
                         onChange={(e) => setFormData({ ...formData, color_hex: e.target.value })}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dash-accent-blue focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -313,7 +313,7 @@ export default function ProductVariantDefinitionsModal({
                     value={formData.image_url}
                     onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                     placeholder="https://example.com/image.jpg"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dash-accent-blue focus:border-transparent"
                   />
                   {formData.image_url && (
                     <div className="mt-2 relative w-32 h-32 border border-gray-300 rounded-lg overflow-hidden">
@@ -341,7 +341,7 @@ export default function ProductVariantDefinitionsModal({
                       value={formData.barcode}
                       onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
                       placeholder="مثال: 1234567890123"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dash-accent-blue focus:border-transparent"
                     />
                   </div>
                 )}
@@ -352,7 +352,7 @@ export default function ProductVariantDefinitionsModal({
                 <button
                   onClick={handleAddOrUpdate}
                   disabled={isSaving}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 flex items-center justify-center gap-2"
+                  className="flex-1 bg-dash-accent-blue text-white px-4 py-2 rounded-lg hover:brightness-90 transition-colors disabled:bg-gray-400 flex items-center justify-center gap-2"
                 >
                   {isSaving ? (
                     <>
@@ -380,7 +380,7 @@ export default function ProductVariantDefinitionsModal({
           {/* Definitions List */}
           {isLoading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-dash-accent-blue mx-auto"></div>
               <p className="text-gray-600 mt-4">جاري التحميل...</p>
             </div>
           ) : definitions.length === 0 ? (
@@ -440,14 +440,14 @@ export default function ProductVariantDefinitionsModal({
                   <div className="flex gap-2 mt-3">
                     <button
                       onClick={() => handleEdit(def)}
-                      className="flex-1 px-3 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-1"
+                      className="flex-1 px-3 py-1.5 text-sm bg-dash-accent-blue text-white rounded hover:brightness-90 transition-colors flex items-center justify-center gap-1"
                     >
                       <PencilIcon className="w-4 h-4" />
                       تعديل
                     </button>
                     <button
                       onClick={() => handleDelete(def.id)}
-                      className="flex-1 px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center justify-center gap-1"
+                      className="flex-1 px-3 py-1.5 text-sm bg-dash-accent-red text-white rounded hover:brightness-90 transition-colors flex items-center justify-center gap-1"
                     >
                       <TrashIcon className="w-4 h-4" />
                       حذف

@@ -36,7 +36,7 @@ export default function UnauthorizedAccess({ userRole, message }: UnauthorizedAc
         <div className="space-y-4">
           <button
             onClick={handleGoBack}
-            className="w-full flex items-center justify-center gap-3 bg-[var(--dash-accent-blue)] hover:bg-blue-700 text-[var(--dash-text-primary)] font-medium py-3 px-6 rounded-dash-md transition-colors"
+            className="w-full flex items-center justify-center gap-3 dash-btn-primary text-[var(--dash-text-primary)] font-medium py-3 px-6 rounded-dash-md transition-colors"
           >
             <HomeIcon className="h-5 w-5" />
             العودة للصفحة الرئيسية

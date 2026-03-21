@@ -73,7 +73,7 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isTransferMode ? 'bg-orange-600' : 'bg-blue-600'}`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isTransferMode ? 'bg-dash-accent-orange' : 'bg-dash-accent-blue'}`}>
                 <ShoppingCartIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
               </div>
               <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">
@@ -109,10 +109,10 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
               <div className="flex-1">
                 <h3 className="text-[var(--dash-text-primary)] font-medium text-sm">{product.name}</h3>
                 {!isTransferMode && (
-                  <p className="text-blue-400 font-bold text-lg">{formatPrice(product.price || 0, 'system')}</p>
+                  <p className="text-dash-accent-blue font-bold text-lg">{formatPrice(product.price || 0, 'system')}</p>
                 )}
                 {isTransferMode && (
-                  <p className="text-orange-400 font-bold text-sm">وضع النقل</p>
+                  <p className="text-dash-accent-orange font-bold text-sm">وضع النقل</p>
                 )}
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
                     console.log('تم النقر على حقل الكمية')
                     e.target.select()
                   }}
-                  className="bg-red-600 text-[var(--dash-text-primary)] font-bold text-xl text-center rounded-lg px-6 py-3 min-w-[80px] outline-none border-4 border-yellow-400 focus:border-green-500 hover:bg-red-700 transition-all"
+                  className="bg-dash-accent-red text-[var(--dash-text-primary)] font-bold text-xl text-center rounded-lg px-6 py-3 min-w-[80px] outline-none border-4 border-dash-accent-orange focus:border-dash-accent-green hover:bg-dash-accent-red transition-all"
                   placeholder="اكتب هنا"
                 />
                 <button
@@ -166,7 +166,7 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
                     onClick={() => setSelectedColor(color.name)}
                     className={`p-3 rounded-lg border-2 transition-all ${
                       selectedColor === color.name
-                        ? 'border-blue-500 bg-blue-500/10'
+                        ? 'border-dash-accent-blue bg-dash-accent-blue/10'
                         : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                     }`}
                   >
@@ -198,8 +198,8 @@ export default function AddToCartModal({ isOpen, onClose, product, onAddToCart, 
               onClick={handleAddToCart}
               className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 text-[var(--dash-text-primary)] ${
                 isTransferMode
-                  ? 'bg-orange-600 hover:bg-orange-700'
-                  : 'bg-blue-600 hover:bg-blue-700'
+                  ? 'dash-btn-orange'
+                  : 'dash-btn-primary'
               }`}
             >
               <ShoppingCartIcon className="h-5 w-5" />

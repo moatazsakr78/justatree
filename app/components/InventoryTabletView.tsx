@@ -406,10 +406,10 @@ export default function InventoryTabletView({
         
         // Determine color based on stock status
         const stockStatus = getStockStatus(item)
-        let colorClass = 'text-green-400' // Good - Green
-        if (stockStatus === 'low') colorClass = 'text-yellow-400' // Low - Yellow  
-        if (stockStatus === 'zero') colorClass = 'text-red-400' // Zero - Red
-        
+        let colorClass = 'text-dash-accent-green' // Good - Green
+        if (stockStatus === 'low') colorClass = 'text-dash-accent-orange' // Low - Yellow
+        if (stockStatus === 'zero') colorClass = 'text-dash-accent-red' // Zero - Red
+
         return (
           <span className={`${colorClass} font-medium`}>قطعة {totalQuantity}</span>
         )
@@ -487,13 +487,13 @@ export default function InventoryTabletView({
         const minStock = inventoryData?.min_stock || 0
         
         // Determine color based on quantity status for this specific branch
-        let colorClass = 'text-green-400' // Good - Green
+        let colorClass = 'text-dash-accent-green' // Good - Green
         if (quantity <= 0) {
-          colorClass = 'text-red-400' // Zero - Red
+          colorClass = 'text-dash-accent-red' // Zero - Red
         } else if (quantity <= minStock && minStock > 0) {
-          colorClass = 'text-yellow-400' // Low - Yellow
+          colorClass = 'text-dash-accent-orange' // Low - Yellow
         }
-        
+
         return (
           <span className={`${colorClass} font-medium`}>
             قطعة {quantity}
@@ -519,7 +519,7 @@ export default function InventoryTabletView({
         const isLowStock = quantity <= minStock && minStock > 0
         
         return (
-          <span className={`font-medium ${isLowStock ? 'text-red-400' : 'text-yellow-400'}`}>
+          <span className={`font-medium ${isLowStock ? 'text-dash-accent-red' : 'text-dash-accent-orange'}`}>
             {minStock} قطعة
           </span>
         )
@@ -624,7 +624,7 @@ export default function InventoryTabletView({
       width: 80,
       render: (value: boolean) => (
         <div className="flex justify-center">
-          <div className={`w-3 h-3 rounded-full ${value ? 'bg-green-500' : 'bg-red-500'}`}></div>
+          <div className={`w-3 h-3 rounded-full ${value ? 'bg-dash-accent-green' : 'bg-dash-accent-red'}`}></div>
         </div>
       )
     }
@@ -643,10 +643,10 @@ export default function InventoryTabletView({
 
           const getStatusColor = (s: string) => {
             switch(s) {
-              case 'تام الجرد': return 'bg-green-600 text-white'
-              case 'استعد': return 'bg-yellow-600 text-white'
-              case 'غير مجرود': return 'bg-red-600 text-white'
-              default: return 'bg-red-600 text-white'
+              case 'تام الجرد': return 'bg-dash-accent-green text-white'
+              case 'استعد': return 'bg-dash-accent-orange text-white'
+              case 'غير مجرود': return 'bg-dash-accent-red text-white'
+              default: return 'bg-dash-accent-red text-white'
             }
           }
 
@@ -1161,7 +1161,7 @@ export default function InventoryTabletView({
                 onClick={() => setViewMode('grid')}
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-dash-accent-blue text-white'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 title="عرض الصور"
@@ -1172,7 +1172,7 @@ export default function InventoryTabletView({
                 onClick={() => setViewMode('table')}
                 className={`p-2 transition-colors ${
                   viewMode === 'table'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-dash-accent-blue text-white'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 title="عرض الجداول"
@@ -1186,7 +1186,7 @@ export default function InventoryTabletView({
               onClick={toggleAuditBadges}
               className={`p-2 rounded-md transition-colors flex-shrink-0 ${
                 showAuditBadges
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-dash-accent-blue text-white'
                   : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)]'
               }`}
               title="إظهار/إخفاء حالة الجرد"
@@ -1211,7 +1211,7 @@ export default function InventoryTabletView({
             <div className="relative branches-dropdown flex-shrink-0">
               <button
                 onClick={() => setShowBranchesDropdown(!showBranchesDropdown)}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white text-xs font-medium transition-colors whitespace-nowrap"
+                className="flex items-center gap-2 px-4 py-2 dash-btn-primary rounded-md text-white text-xs font-medium transition-colors whitespace-nowrap"
               >
                 <span>الفروع والمخازن</span>
                 <ChevronDownIcon className={`h-4 w-4 transition-transform ${showBranchesDropdown ? 'rotate-180' : ''}`} />
@@ -1231,7 +1231,7 @@ export default function InventoryTabletView({
                             type="checkbox"
                             checked={selectedBranches[branch.id] || false}
                             onChange={() => handleBranchToggle(branch.id)}
-                            className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-surface)] border-2 border-blue-500 rounded focus:ring-blue-500"
+                            className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-surface)] border-2 border-dash-accent-blue rounded focus:ring-dash-accent-blue"
                           />
                           <span className="text-[var(--dash-text-primary)] text-sm flex-1 text-right">
                             {branch.name}
@@ -1250,7 +1250,7 @@ export default function InventoryTabletView({
                 onClick={() => handleStockStatusToggle('good')}
                 className={`px-3 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                   stockStatusFilters.good
-                    ? 'bg-green-600 hover:bg-green-700 text-white'
+                    ? 'dash-btn-green text-white'
                     : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] opacity-50'
                 }`}
               >
@@ -1260,7 +1260,7 @@ export default function InventoryTabletView({
                 onClick={() => handleStockStatusToggle('low')}
                 className={`px-3 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                   stockStatusFilters.low
-                    ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
+                    ? 'bg-dash-accent-orange hover:bg-dash-accent-orange/80 text-white'
                     : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] opacity-50'
                 }`}
               >
@@ -1270,7 +1270,7 @@ export default function InventoryTabletView({
                 onClick={() => handleStockStatusToggle('zero')}
                 className={`px-3 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                   stockStatusFilters.zero
-                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    ? 'dash-btn-red text-white'
                     : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] opacity-50'
                 }`}
               >
@@ -1282,7 +1282,7 @@ export default function InventoryTabletView({
             <div className="relative audit-branches-dropdown flex-shrink-0">
               <button
                 onClick={() => setShowAuditBranchesDropdown(!showAuditBranchesDropdown)}
-                className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded text-white text-xs font-medium transition-colors whitespace-nowrap"
+                className="flex items-center gap-1 px-3 py-1.5 dash-btn-primary rounded text-white text-xs font-medium transition-colors whitespace-nowrap"
               >
                 <span>فروع الجرد</span>
                 <ChevronDownIcon className={`h-3 w-3 transition-transform ${showAuditBranchesDropdown ? 'rotate-180' : ''}`} />
@@ -1302,13 +1302,13 @@ export default function InventoryTabletView({
                             {branch.name}
                           </span>
                           <div className="flex gap-2">
-                            <button className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded">
+                            <button className="px-2 py-1 dash-btn-green text-white text-xs rounded">
                               تام
                             </button>
-                            <button className="px-2 py-1 bg-yellow-600 hover:bg-yellow-700 text-white text-xs rounded">
+                            <button className="px-2 py-1 bg-dash-accent-orange hover:bg-dash-accent-orange/80 text-white text-xs rounded">
                               استعد
                             </button>
-                            <button className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded">
+                            <button className="px-2 py-1 dash-btn-red text-white text-xs rounded">
                               غير مجرود
                             </button>
                           </div>
@@ -1325,7 +1325,7 @@ export default function InventoryTabletView({
               onClick={() => setAuditStatusFilters(prev => ({ ...prev, fully_audited: !prev.fully_audited }))}
               className={`px-2 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                 auditStatusFilters.fully_audited
-                  ? 'bg-green-600 hover:bg-green-700 text-white'
+                  ? 'dash-btn-green text-white'
                   : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] opacity-50'
               }`}
             >
@@ -1335,7 +1335,7 @@ export default function InventoryTabletView({
               onClick={() => setAuditStatusFilters(prev => ({ ...prev, ready: !prev.ready }))}
               className={`px-2 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                 auditStatusFilters.ready
-                  ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
+                  ? 'bg-dash-accent-orange hover:bg-dash-accent-orange/80 text-white'
                   : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] opacity-50'
               }`}
             >
@@ -1345,7 +1345,7 @@ export default function InventoryTabletView({
               onClick={() => setAuditStatusFilters(prev => ({ ...prev, not_audited: !prev.not_audited }))}
               className={`px-2 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                 auditStatusFilters.not_audited
-                  ? 'bg-red-600 hover:bg-red-700 text-white'
+                  ? 'dash-btn-red text-white'
                   : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] opacity-50'
               }`}
             >
@@ -1355,10 +1355,10 @@ export default function InventoryTabletView({
 
           {/* Capital Display Row */}
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide mt-2" style={{scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch'}}>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-600/20 to-emerald-600/20 border border-blue-500/30 rounded-lg flex-shrink-0">
-              <BanknotesIcon className="h-4 w-4 text-emerald-400" />
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-dash-accent-blue/20 to-dash-accent-green/20 border border-dash-accent-blue/30 rounded-lg flex-shrink-0">
+              <BanknotesIcon className="h-4 w-4 text-dash-accent-green" />
               <span className="text-xs text-[var(--dash-text-muted)]">رأس المال:</span>
-              <span className="text-sm font-bold text-emerald-400">
+              <span className="text-sm font-bold text-dash-accent-green">
                 {branchCapitals.total.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
               </span>
             </div>
@@ -1368,7 +1368,7 @@ export default function InventoryTabletView({
                 className="flex items-center gap-1.5 px-2 py-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)]/50 rounded-md flex-shrink-0"
               >
                 <span className="text-xs text-[var(--dash-text-muted)]">{branch.name}:</span>
-                <span className="text-xs font-semibold text-blue-300">
+                <span className="text-xs font-semibold text-dash-accent-blue">
                   {branch.capital.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                 </span>
               </div>
@@ -1399,7 +1399,7 @@ export default function InventoryTabletView({
                 </div>
               ) : error ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="text-red-400">خطأ: {error}</div>
+                  <div className="text-dash-accent-red">خطأ: {error}</div>
                 </div>
               ) : viewMode === 'table' ? (
                 <ResizableTable
@@ -1431,7 +1431,7 @@ export default function InventoryTabletView({
                         }}
                         className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                           selectedProduct?.id === product.id
-                            ? 'border-blue-500 bg-[#434E61]'
+                            ? 'border-dash-accent-blue bg-[#434E61]'
                             : 'border-transparent hover:border-[var(--dash-text-disabled)] hover:bg-[#434E61]'
                         }`}
                       >
@@ -1463,10 +1463,10 @@ export default function InventoryTabletView({
                                 (() => {
                                   const status = (product.inventoryData[currentBranch.id] as any)?.audit_status || 'غير مجرود'
                                   switch(status) {
-                                    case 'تام الجرد': return 'bg-green-600 text-white'
-                                    case 'استعد': return 'bg-yellow-600 text-white'
-                                    case 'غير مجرود': return 'bg-red-600 text-white'
-                                    default: return 'bg-red-600 text-white'
+                                    case 'تام الجرد': return 'bg-dash-accent-green text-white'
+                                    case 'استعد': return 'bg-dash-accent-orange text-white'
+                                    case 'غير مجرود': return 'bg-dash-accent-red text-white'
+                                    default: return 'bg-dash-accent-red text-white'
                                   }
                                 })()
                               }`}
@@ -1507,7 +1507,7 @@ export default function InventoryTabletView({
                         <div className="space-y-1 text-xs">
                           {/* Selling Price */}
                           <div className="flex justify-center mb-2">
-                            <span className="text-blue-400 font-medium text-xs">
+                            <span className="text-dash-accent-blue font-medium text-xs">
                               {(product.price || 0).toFixed(2)}
                             </span>
                           </div>
@@ -1517,9 +1517,9 @@ export default function InventoryTabletView({
                             <span className={`font-medium text-xs ${
                               (() => {
                                 const stockStatus = getStockStatus(product)
-                                if (stockStatus === 'zero') return 'text-red-400'
-                                if (stockStatus === 'low') return 'text-yellow-400'
-                                return 'text-green-400'
+                                if (stockStatus === 'zero') return 'text-dash-accent-red'
+                                if (stockStatus === 'low') return 'text-dash-accent-orange'
+                                return 'text-dash-accent-green'
                               })()
                             }`}>
                               {calculateTotalQuantity(product)}
@@ -1536,11 +1536,11 @@ export default function InventoryTabletView({
                               const quantity = inventory?.quantity || 0
                               const minStock = inventory?.min_stock || 0
 
-                              let colorClass = 'text-green-400'
+                              let colorClass = 'text-dash-accent-green'
                               if (quantity <= 0) {
-                                colorClass = 'text-red-400'
+                                colorClass = 'text-dash-accent-red'
                               } else if (quantity <= minStock && minStock > 0) {
-                                colorClass = 'text-yellow-400'
+                                colorClass = 'text-dash-accent-orange'
                               }
 
                               return (
@@ -1564,7 +1564,7 @@ export default function InventoryTabletView({
                     <div className="flex justify-center py-6">
                       <button
                         onClick={() => setShowAllProducts(true)}
-                        className="w-full max-w-md px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors shadow-lg"
+                        className="w-full max-w-md px-4 py-3 dash-btn-primary rounded-lg font-medium text-sm transition-colors shadow-lg"
                       >
                         تحميل كل المنتجات ({filteredProducts.length - VISIBLE_PRODUCTS_LIMIT} منتج إضافي)
                       </button>
@@ -1630,30 +1630,30 @@ export default function InventoryTabletView({
         >
           <button
             onClick={() => handleQuantityAction('add')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-green-600/20 hover:text-green-400 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-green-subtle hover:text-dash-accent-green transition-colors"
           >
-            <PlusIcon className="h-4 w-4 text-green-400" />
+            <PlusIcon className="h-4 w-4 text-dash-accent-green" />
             <span className="text-sm">إضافة</span>
           </button>
           <button
             onClick={() => handleQuantityAction('subtract')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-red-600/20 hover:text-red-400 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-red-subtle hover:text-dash-accent-red transition-colors"
           >
-            <MinusIcon className="h-4 w-4 text-red-400" />
+            <MinusIcon className="h-4 w-4 text-dash-accent-red" />
             <span className="text-sm">خصم</span>
           </button>
           <button
             onClick={() => handleQuantityAction('edit')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-blue-600/20 hover:text-blue-400 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-blue-subtle hover:text-dash-accent-blue transition-colors"
           >
-            <PencilSquareIcon className="h-4 w-4 text-blue-400" />
+            <PencilSquareIcon className="h-4 w-4 text-dash-accent-blue" />
             <span className="text-sm">تعديل</span>
           </button>
           <button
             onClick={() => handleTransferAction()}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-purple-600/20 hover:text-purple-400 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-purple-subtle hover:text-dash-accent-purple transition-colors"
           >
-            <ArrowsRightLeftIcon className="h-4 w-4 text-purple-400" />
+            <ArrowsRightLeftIcon className="h-4 w-4 text-dash-accent-purple" />
             <span className="text-sm">تحويل</span>
           </button>
         </div>
@@ -1680,9 +1680,9 @@ export default function InventoryTabletView({
             return availableStatuses.map((status) => {
               const getStatusColor = (s: string) => {
                 switch(s) {
-                  case 'تام الجرد': return 'hover:bg-green-600/20 text-green-400'
-                  case 'استعد': return 'hover:bg-yellow-600/20 text-yellow-400'
-                  case 'غير مجرود': return 'hover:bg-red-600/20 text-red-400'
+                  case 'تام الجرد': return 'hover:bg-dash-accent-green-subtle text-dash-accent-green'
+                  case 'استعد': return 'hover:bg-dash-accent-orange-subtle text-dash-accent-orange'
+                  case 'غير مجرود': return 'hover:bg-dash-accent-red-subtle text-dash-accent-red'
                   default: return 'hover:bg-[var(--dash-bg-overlay)]/20 text-[var(--dash-text-muted)]'
                 }
               }

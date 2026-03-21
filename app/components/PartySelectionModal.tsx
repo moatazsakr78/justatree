@@ -306,8 +306,8 @@ export default function PartySelectionModal({
 
   const getRankColor = (rank: string | null) => {
     switch (rank) {
-      case "immortal": return "text-red-500";
-      case "vip": return "text-yellow-500";
+      case "immortal": return "text-dash-accent-red";
+      case "vip": return "text-dash-accent-orange";
       case "gold": return "text-yellow-600";
       case "silver": return "text-gray-400";
       case "bronze": return "text-orange-600";
@@ -356,9 +356,9 @@ export default function PartySelectionModal({
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
                     {selectedTab === "customer" ? (
-                      <UserIcon className="h-6 w-6 text-blue-400" />
+                      <UserIcon className="h-6 w-6 text-dash-accent-blue" />
                     ) : (
-                      <TruckIcon className="h-6 w-6 text-amber-400" />
+                      <TruckIcon className="h-6 w-6 text-dash-accent-orange" />
                     )}
                     اختيار طرف
                   </Dialog.Title>
@@ -381,7 +381,7 @@ export default function PartySelectionModal({
                       }}
                       className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
                         selectedTab === "customer"
-                          ? "bg-blue-600 text-white shadow-lg"
+                          ? "bg-dash-accent-blue text-white shadow-lg"
                           : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30"
                       }`}
                     >
@@ -430,7 +430,7 @@ export default function PartySelectionModal({
                           className={`px-3 py-1.5 rounded-lg text-sm transition-all flex items-center gap-1 ${
                             selectedGroup === group.id
                               ? selectedTab === "customer"
-                                ? "bg-blue-600 text-white"
+                                ? "bg-dash-accent-blue text-white"
                                 : "bg-amber-600 text-white"
                               : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-raised)]"
                           }`}
@@ -459,7 +459,7 @@ export default function PartySelectionModal({
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <div className={`animate-spin rounded-full h-10 w-10 border-b-2 ${
-                        selectedTab === "customer" ? "border-blue-500" : "border-amber-500"
+                        selectedTab === "customer" ? "border-dash-accent-blue" : "border-amber-500"
                       } mb-4`}></div>
                       <p className="text-[var(--dash-text-muted)]">
                         {selectedTab === "customer" ? "جاري تحميل العملاء..." : "جاري تحميل الموردين..."}
@@ -479,14 +479,14 @@ export default function PartySelectionModal({
                           onClick={() => handleSelectCustomer(customer)}
                           className={`w-full p-4 flex items-center gap-4 hover:bg-[var(--dash-bg-surface)] transition-colors border-b border-[var(--dash-border-subtle)]/50 ${
                             currentSelection?.id === customer.id && currentSelection?.type === "customer"
-                              ? "bg-blue-600/20 border-l-4 border-l-blue-500"
+                              ? "bg-dash-accent-blue-subtle border-l-4 border-l-blue-500"
                               : ""
-                          } ${isDefaultCustomer(customer) ? "bg-green-500/10" : ""}`}
+                          } ${isDefaultCustomer(customer) ? "bg-dash-accent-green-subtle" : ""}`}
                         >
                           <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold ${
                             isDefaultCustomer(customer)
-                              ? "bg-green-500/30 text-green-300"
-                              : "bg-blue-500/30 text-blue-300"
+                              ? "bg-dash-accent-green/30 text-dash-accent-green"
+                              : "bg-dash-accent-blue/30 text-dash-accent-blue"
                           }`}>
                             {customer.name.substring(0, 2)}
                           </div>
@@ -494,7 +494,7 @@ export default function PartySelectionModal({
                             <div className="flex items-center gap-2">
                               <span className="text-[var(--dash-text-primary)] font-medium">{customer.name}</span>
                               {isDefaultCustomer(customer) && (
-                                <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded">
+                                <span className="text-xs bg-dash-accent-green-subtle text-dash-accent-green px-2 py-0.5 rounded">
                                   افتراضي
                                 </span>
                               )}
@@ -508,12 +508,12 @@ export default function PartySelectionModal({
                           </div>
                           <div className="text-left">
                             <div className={`text-lg font-medium ${
-                              customer.calculated_balance >= 0 ? "text-green-400" : "text-red-400"
+                              customer.calculated_balance >= 0 ? "text-dash-accent-green" : "text-dash-accent-red"
                             }`}>
                               {formatCurrency(Math.abs(customer.calculated_balance))} ج.م
                             </div>
                             {customer.loyalty_points && customer.loyalty_points > 0 && (
-                              <p className="text-yellow-500 text-xs">{customer.loyalty_points} نقطة</p>
+                              <p className="text-dash-accent-orange text-xs">{customer.loyalty_points} نقطة</p>
                             )}
                           </div>
                         </button>
@@ -539,8 +539,8 @@ export default function PartySelectionModal({
                         >
                           <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold ${
                             isDefaultSupplier(supplier)
-                              ? "bg-amber-500/30 text-amber-300"
-                              : "bg-amber-500/20 text-amber-400"
+                              ? "bg-amber-500/30 text-dash-accent-orange"
+                              : "bg-dash-accent-orange-subtle text-dash-accent-orange"
                           }`}>
                             {supplier.name.substring(0, 2)}
                           </div>
@@ -548,7 +548,7 @@ export default function PartySelectionModal({
                             <div className="flex items-center gap-2">
                               <span className="text-[var(--dash-text-primary)] font-medium">{supplier.name}</span>
                               {isDefaultSupplier(supplier) && (
-                                <span className="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded">
+                                <span className="text-xs bg-dash-accent-orange-subtle text-dash-accent-orange px-2 py-0.5 rounded">
                                   افتراضي
                                 </span>
                               )}
@@ -559,7 +559,7 @@ export default function PartySelectionModal({
                           </div>
                           <div className="text-left">
                             <div className={`text-lg font-medium ${
-                              supplier.calculated_balance >= 0 ? "text-red-400" : "text-green-400"
+                              supplier.calculated_balance >= 0 ? "text-dash-accent-red" : "text-dash-accent-green"
                             }`}>
                               {formatCurrency(Math.abs(supplier.calculated_balance))} ج.م
                             </div>

@@ -395,7 +395,8 @@
       "Bash(find /c/Users/pc/Desktop/elfaroukgroup/app -type f \\\\\\( -path \"*\\(website\\)*\" -o -path \"*\\(orders\\)*\" -o -path \"*\\(invoices\\)*\" \\\\\\) \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\))",
       "Bash(find /c/Users/pc/Desktop/elfaroukgroup/app/api -type f \\\\\\(-name *whatsapp* -o -name *message* \\\\\\))",
       "Bash(npx tailwindcss:*)",
-      "Bash(mcp__supabase__list_tables --project_id=\"hecedrbnbknohssgaoso\" --schemas='[\"\"\"\"elfaroukgroup\"\"\"\"]' --verbose=true)"
+      "Bash(mcp__supabase__list_tables --project_id=\"hecedrbnbknohssgaoso\" --schemas='[\"\"\"\"elfaroukgroup\"\"\"\"]' --verbose=true)",
+      "Bash(sort -t: -k2 -nr)"
     ],
     "deny": [],
     "additionalDirectories": [

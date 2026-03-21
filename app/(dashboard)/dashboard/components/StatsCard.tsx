@@ -16,29 +16,29 @@ interface StatsCardProps {
 
 const colorClasses = {
   blue: {
-    bg: 'bg-blue-500/10',
-    text: 'text-blue-400',
-    iconBg: 'bg-blue-500/20',
+    bg: 'bg-dash-accent-blue-subtle',
+    text: 'text-dash-accent-blue',
+    iconBg: 'bg-dash-accent-blue-subtle',
   },
   green: {
-    bg: 'bg-green-500/10',
-    text: 'text-green-400',
-    iconBg: 'bg-green-500/20',
+    bg: 'bg-dash-accent-green-subtle',
+    text: 'text-dash-accent-green',
+    iconBg: 'bg-dash-accent-green-subtle',
   },
   purple: {
-    bg: 'bg-purple-500/10',
-    text: 'text-purple-400',
-    iconBg: 'bg-purple-500/20',
+    bg: 'bg-dash-accent-purple-subtle',
+    text: 'text-dash-accent-purple',
+    iconBg: 'bg-dash-accent-purple-subtle',
   },
   red: {
-    bg: 'bg-red-500/10',
-    text: 'text-red-400',
-    iconBg: 'bg-red-500/20',
+    bg: 'bg-dash-accent-red-subtle',
+    text: 'text-dash-accent-red',
+    iconBg: 'bg-dash-accent-red-subtle',
   },
   orange: {
-    bg: 'bg-orange-500/10',
-    text: 'text-orange-400',
-    iconBg: 'bg-orange-500/20',
+    bg: 'bg-dash-accent-orange-subtle',
+    text: 'text-dash-accent-orange',
+    iconBg: 'bg-dash-accent-orange-subtle',
   },
 };
 
@@ -111,11 +111,11 @@ export default function StatsCard({
           {change !== null && (
             <div className="flex items-center gap-1">
               {isPositive ? (
-                <ArrowTrendingUpIcon className="w-4 h-4 text-green-400" />
+                <ArrowTrendingUpIcon className="w-4 h-4 text-dash-accent-green" />
               ) : (
-                <ArrowTrendingDownIcon className="w-4 h-4 text-red-400" />
+                <ArrowTrendingDownIcon className="w-4 h-4 text-dash-accent-red" />
               )}
-              <span className={`text-sm font-medium ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+              <span className={`text-sm font-medium ${isPositive ? 'text-dash-accent-green' : 'text-dash-accent-red'}`}>
                 {isPositive ? '+' : ''}{change.toFixed(1)}%
               </span>
               <span className="text-[var(--dash-text-disabled)] text-xs">من السابق</span>

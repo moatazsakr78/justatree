@@ -55,7 +55,7 @@ export default function CustomerTable({ showActions = false }: CustomerTableProp
                 type="checkbox"
                 checked={selectedRows.length === mockCustomers.length}
                 onChange={toggleAllSelection}
-                className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
+                className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-dash-accent-blue"
               />
             </th>
             <th className="p-3 text-right font-medium">#</th>
@@ -82,7 +82,7 @@ export default function CustomerTable({ showActions = false }: CustomerTableProp
                   type="checkbox"
                   checked={selectedRows.includes(customer.id)}
                   onChange={() => toggleRowSelection(customer.id)}
-                  className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-dash-accent-blue"
                 />
               </td>
               <td className="p-3 text-[var(--dash-text-primary)] font-medium">{customer.id}</td>

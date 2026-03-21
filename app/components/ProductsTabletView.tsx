@@ -233,7 +233,7 @@ export default function ProductsTabletView({
         accessor: 'totalQuantity', 
         width: 120,
         render: (value: number) => (
-          <span className="text-blue-400 font-medium">قطعة {value}</span>
+          <span className="text-dash-accent-blue font-medium">قطعة {value}</span>
         )
       },
       { 
@@ -312,7 +312,7 @@ export default function ProductsTabletView({
           const inventoryData = item.inventoryData?.[branch.id]
           const quantity = inventoryData?.quantity || 0
           return (
-            <span className="text-blue-400 font-medium">قطعة {quantity}</span>
+            <span className="text-dash-accent-blue font-medium">قطعة {quantity}</span>
           )
         }
       }))
@@ -332,7 +332,7 @@ export default function ProductsTabletView({
           const isLowStock = quantity <= minStock && minStock > 0
           
           return (
-            <span className={`font-medium ${isLowStock ? 'text-red-400' : 'text-yellow-400'}`}>
+            <span className={`font-medium ${isLowStock ? 'text-dash-accent-red' : 'text-dash-accent-orange'}`}>
               {minStock} قطعة
             </span>
           )
@@ -431,7 +431,7 @@ export default function ProductsTabletView({
       width: 80,
       render: (value: boolean) => (
         <div className="flex justify-center">
-          <div className={`w-3 h-3 rounded-full ${value ? 'bg-green-500' : 'bg-red-500'}`}></div>
+          <div className={`w-3 h-3 rounded-full ${value ? 'bg-dash-accent-green' : 'bg-dash-accent-red'}`}></div>
         </div>
       )
     }
@@ -818,7 +818,7 @@ export default function ProductsTabletView({
               onClick={handleDeleteCategory}
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedCategory && selectedCategory.name !== 'منتجات'
-                  ? 'text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30' 
+                  ? 'text-dash-accent-red hover:text-dash-accent-red bg-dash-accent-red-subtle/20 hover:bg-dash-accent-red-subtle/30' 
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedCategory || selectedCategory.name === 'منتجات'}
@@ -852,7 +852,7 @@ export default function ProductsTabletView({
               onClick={handleDeleteProduct}
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedProduct
-                  ? 'text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30'
+                  ? 'text-dash-accent-red hover:text-dash-accent-red bg-dash-accent-red-subtle/20 hover:bg-dash-accent-red-subtle/30'
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedProduct}
@@ -916,7 +916,7 @@ export default function ProductsTabletView({
               onClick={() => selectedProduct && setShowColorChangeModal(true)}
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 selectedProduct
-                  ? 'text-orange-300 hover:text-orange-100 bg-orange-900/20 hover:bg-orange-900/30'
+                  ? 'text-dash-accent-orange hover:text-orange-100 bg-dash-accent-orange-subtle/20 hover:bg-dash-accent-orange-subtle'
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed bg-[var(--dash-bg-raised)]/50'
               }`}
               disabled={!selectedProduct}
@@ -929,7 +929,7 @@ export default function ProductsTabletView({
               onClick={() => setShowMissingDataModal(true)}
               className={`flex items-center gap-2 px-3 py-2 cursor-pointer whitespace-nowrap rounded transition-colors ${
                 missingDataFilter.size > 0
-                  ? 'text-yellow-400 hover:text-yellow-300 bg-yellow-900/20 hover:bg-yellow-900/30'
+                  ? 'text-dash-accent-orange hover:text-dash-accent-orange bg-dash-accent-orange-subtle hover:bg-dash-accent-orange-subtle/30'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-[var(--dash-bg-surface)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
@@ -970,7 +970,7 @@ export default function ProductsTabletView({
                     onClick={() => setViewMode('grid')}
                     className={`p-2 transition-colors ${
                       viewMode === 'grid'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-dash-accent-blue text-white'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                     title="عرض الصور"
@@ -981,7 +981,7 @@ export default function ProductsTabletView({
                     onClick={() => setViewMode('table')}
                     className={`p-2 transition-colors ${
                       viewMode === 'table'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-dash-accent-blue text-white'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                     title="عرض الجداول"
@@ -1011,7 +1011,7 @@ export default function ProductsTabletView({
                       setTempSelectedBranches({...selectedBranches})
                       setShowBranchesDropdown(!showBranchesDropdown)
                     }}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white text-xs font-medium transition-colors whitespace-nowrap"
+                    className="flex items-center gap-2 px-4 py-2 dash-btn-primary rounded-md text-white text-xs font-medium transition-colors whitespace-nowrap"
                   >
                     <span>الفروع والمخازن</span>
                     <ChevronDownIcon className={`h-4 w-4 transition-transform ${showBranchesDropdown ? 'rotate-180' : ''}`} />
@@ -1064,7 +1064,7 @@ export default function ProductsTabletView({
                         }}
                         className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                           selectedProduct?.id === product.id
-                            ? 'border-blue-500 bg-[var(--dash-bg-overlay)]'
+                            ? 'border-dash-accent-blue bg-[var(--dash-bg-overlay)]'
                             : 'border-transparent hover:border-[var(--dash-text-disabled)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
@@ -1115,8 +1115,8 @@ export default function ProductsTabletView({
                         <div className="space-y-1 text-xs">
                           {(product.rating || 0) > 0 && (
                             <div className="flex justify-center items-center gap-1 mb-1">
-                              <span className="text-yellow-400 text-xs">⭐</span>
-                              <span className="text-yellow-400 font-medium text-xs">
+                              <span className="text-dash-accent-orange text-xs">⭐</span>
+                              <span className="text-dash-accent-orange font-medium text-xs">
                                 {(product.rating || 0).toFixed(1)}
                               </span>
                               <span className="text-[var(--dash-text-disabled)] text-xs">
@@ -1129,10 +1129,10 @@ export default function ProductsTabletView({
                             {product.isDiscounted ? (
                               <>
                                 <div className="flex items-center gap-1">
-                                  <span className="text-blue-400 font-medium text-xs">
+                                  <span className="text-dash-accent-blue font-medium text-xs">
                                     {(product.finalPrice || 0).toFixed(2)}
                                   </span>
-                                  <span className="bg-red-600 text-white text-xs px-1 py-0.5 rounded">
+                                  <span className="bg-dash-accent-red text-white text-xs px-1 py-0.5 rounded">
                                     {product.discountLabel}
                                   </span>
                                 </div>
@@ -1141,14 +1141,14 @@ export default function ProductsTabletView({
                                 </span>
                               </>
                             ) : (
-                              <span className="text-blue-400 font-medium text-xs">
+                              <span className="text-dash-accent-blue font-medium text-xs">
                                 {(product.price || 0).toFixed(2)}
                               </span>
                             )}
                           </div>
 
                           <div className="flex justify-between items-center">
-                            <span className="text-blue-400 font-medium text-xs">
+                            <span className="text-dash-accent-blue font-medium text-xs">
                               {(product.inventoryData && Object.values(product.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0)) || 0}
                             </span>
                             <span className="text-[var(--dash-text-muted)] text-xs">الكمية</span>
@@ -1180,7 +1180,7 @@ export default function ProductsTabletView({
                     <div className="flex justify-center py-6">
                       <button
                         onClick={() => setShowAllProducts(true)}
-                        className="w-full max-w-md px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors shadow-lg"
+                        className="w-full max-w-md px-4 py-3 dash-btn-primary rounded-lg font-medium text-sm transition-colors shadow-lg"
                       >
                         تحميل كل المنتجات ({filteredProducts.length - VISIBLE_PRODUCTS_LIMIT} منتج إضافي)
                       </button>
@@ -1242,7 +1242,7 @@ export default function ProductsTabletView({
                 <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من أنك تريد حذف هذه المجموعة؟
                 </p>
-                <p className="text-blue-400 font-medium text-right">
+                <p className="text-dash-accent-blue font-medium text-right">
                   {selectedCategory?.name}
                 </p>
               </div>
@@ -1259,8 +1259,8 @@ export default function ProductsTabletView({
                   disabled={isDeleting}
                   className={`px-4 py-2 rounded transition-colors ${
                     isDeleting
-                      ? 'bg-red-600/50 text-red-300 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-white'
+                      ? 'bg-dash-accent-red/50 text-dash-accent-red cursor-not-allowed'
+                      : 'dash-btn-red'
                   }`}
                 >
                   {isDeleting ? 'جاري الحذف...' : 'نعم، احذف'}
@@ -1286,10 +1286,10 @@ export default function ProductsTabletView({
                 <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من أنك تريد حذف هذا المنتج؟
                 </p>
-                <p className="text-blue-400 font-medium text-right">
+                <p className="text-dash-accent-blue font-medium text-right">
                   {selectedProduct?.name}
                 </p>
-                <p className="text-yellow-400 text-sm text-right mt-2">
+                <p className="text-dash-accent-orange text-sm text-right mt-2">
                   تحذير: لا يمكن التراجع عن هذا الإجراء
                 </p>
               </div>
@@ -1306,8 +1306,8 @@ export default function ProductsTabletView({
                   disabled={isDeletingProduct}
                   className={`px-4 py-2 rounded transition-colors ${
                     isDeletingProduct
-                      ? 'bg-red-600/50 text-red-300 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-white'
+                      ? 'bg-dash-accent-red/50 text-dash-accent-red cursor-not-allowed'
+                      : 'dash-btn-red'
                   }`}
                 >
                   {isDeletingProduct ? 'جاري الحذف...' : 'نعم، احذف'}
@@ -1433,8 +1433,8 @@ export default function ProductsTabletView({
                       <div
                         className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-colors cursor-pointer ${
                           tempSelectedBranches[branch.id]
-                            ? 'bg-blue-600 border-blue-600'
-                            : 'bg-transparent border-blue-500'
+                            ? 'bg-dash-accent-blue border-dash-accent-blue'
+                            : 'bg-transparent border-dash-accent-blue'
                         }`}
                         onClick={(e) => {
                           e.stopPropagation()
@@ -1453,7 +1453,7 @@ export default function ProductsTabletView({
                         {branch.name}
                       </span>
                     </div>
-                    <span className="text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30">
+                    <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-1 rounded border border-dash-accent-blue/30">
                       {branch.name.includes('مخزن') || branch.name.includes('شاكوس') ? 'مخزن' : 'فرع'}
                     </span>
                   </div>
@@ -1464,7 +1464,7 @@ export default function ProductsTabletView({
             {/* Footer */}
             <div className="p-4 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] rounded-b-2xl">
               <div className="flex items-center justify-between">
-                <span className="text-blue-400 font-medium">
+                <span className="text-dash-accent-blue font-medium">
                   {Object.values(tempSelectedBranches).filter(Boolean).length} من أصل {branches.length} محدد
                 </span>
                 <div className="flex gap-2">
@@ -1476,7 +1476,7 @@ export default function ProductsTabletView({
                   </button>
                   <button
                     onClick={applyBranchSelection}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    className="dash-btn-primary px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     تطبيق
                   </button>

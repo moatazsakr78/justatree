@@ -104,7 +104,7 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-red-600 bg-[var(--primary-color)]">
+        <div className="flex items-center justify-between p-4 border-b border-dash-accent-red bg-[var(--primary-color)]">
           {showCategories ? (
             <>
               <button

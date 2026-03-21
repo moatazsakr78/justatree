@@ -125,14 +125,14 @@ const ProductCard = memo(function ProductCard({
       <div className="space-y-1 text-xs">
         {/* Price */}
         <div className="flex justify-center mb-2">
-          <span className="text-blue-400 font-medium text-sm">
+          <span className="text-dash-accent-blue font-medium text-sm">
             {getProductPriceByType(product).toFixed(2)}
           </span>
         </div>
 
         {/* Total Quantity */}
         <div className="flex justify-between items-center">
-          <span className="text-blue-400 font-medium">{totalQuantity}</span>
+          <span className="text-dash-accent-blue font-medium">{totalQuantity}</span>
           <span className="text-[var(--dash-text-muted)]">الكمية الإجمالية</span>
         </div>
 

@@ -63,7 +63,7 @@ export default function CapitalCard({ data, loading = false }: CapitalCardProps)
               </span>
             )}
             {warehouseCount > 0 && (
-              <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full font-medium">
+              <span className="px-2 py-0.5 bg-dash-accent-blue-subtle text-dash-accent-blue text-xs rounded-full font-medium">
                 {warehouseCount} مخزن
               </span>
             )}
@@ -94,18 +94,18 @@ export default function CapitalCard({ data, loading = false }: CapitalCardProps)
                   {isBranch ? (
                     <BuildingStorefrontIcon className="w-4 h-4 text-emerald-400" />
                   ) : (
-                    <BuildingOffice2Icon className="w-4 h-4 text-blue-400" />
+                    <BuildingOffice2Icon className="w-4 h-4 text-dash-accent-blue" />
                   )}
                   <span className="text-[var(--dash-text-primary)] text-sm font-medium">{location.name}</span>
                 </div>
-                <span className={`text-sm font-semibold ${isBranch ? 'text-emerald-300' : 'text-blue-300'}`}>
+                <span className={`text-sm font-semibold ${isBranch ? 'text-emerald-300' : 'text-dash-accent-blue'}`}>
                   {formatCurrencyAr(location.capital)}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1.5 bg-[var(--dash-bg-overlay)] rounded-full overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all ${isBranch ? 'bg-emerald-500' : 'bg-blue-500'}`}
+                    className={`h-full rounded-full transition-all ${isBranch ? 'bg-emerald-500' : 'bg-dash-accent-blue'}`}
                     style={{ width: `${percentage}%` }}
                   ></div>
                 </div>

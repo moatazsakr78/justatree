@@ -2331,7 +2331,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'invoiceValue',
       width: 130,
       render: (value: number, item: any) => (
-        <span className="font-medium text-green-500">
+        <span className="font-medium text-dash-accent-green">
           {value > 0 ? `↑ ${formatPrice(value, 'system')}` : '-'}
         </span>
       )
@@ -2346,7 +2346,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
           return <span className="font-medium text-[var(--dash-text-disabled)]">-</span>
         }
         return (
-          <span className="font-medium text-red-500">
+          <span className="font-medium text-dash-accent-red">
             ↓ {formatPrice(Math.abs(value), 'system')}
           </span>
         )
@@ -2357,7 +2357,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'طريقة الدفع',
       accessor: 'payment_method',
       width: 120,
-      render: (value: string) => <span className="text-blue-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value || '-'}</span>
     },
     {
       id: 'netAmount',
@@ -2372,11 +2372,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         const isPositive = netAmount > 0;
         return (
           <span className="font-medium">
-            <span className={isPositive ? 'text-green-500' : 'text-red-500'}>
+            <span className={isPositive ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
               {isPositive ? '↑' : '↓'}
             </span>
             {' '}
-            <span className="text-blue-500">
+            <span className="text-dash-accent-blue">
               {formatPrice(Math.abs(netAmount), 'system')}
             </span>
           </span>
@@ -2453,12 +2453,12 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     setEditingNoteValue('')
                   }
                 }}
-                className="flex-1 bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] text-sm px-2 py-1 rounded border border-blue-500 focus:outline-none"
+                className="flex-1 bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] text-sm px-2 py-1 rounded border border-dash-accent-blue focus:outline-none"
                 autoFocus
               />
               <button
                 onClick={() => saveStatementNote(item, editingNoteValue)}
-                className="text-green-500 hover:text-green-400 p-1"
+                className="text-dash-accent-green hover:text-dash-accent-green p-1"
                 title="حفظ"
               >
                 ✓
@@ -2468,7 +2468,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   setEditingNoteId(null)
                   setEditingNoteValue('')
                 }}
-                className="text-red-500 hover:text-red-400 p-1"
+                className="text-dash-accent-red hover:text-dash-accent-red p-1"
                 title="إلغاء"
               >
                 ✕
@@ -2512,9 +2512,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       width: 180,
       render: (value: string, item: any) => (
         <span className={`flex items-center gap-1 ${item.status === 'cancelled' ? 'opacity-60' : ''}`}>
-          <span className="text-blue-400">{value}</span>
+          <span className="text-dash-accent-blue">{value}</span>
           {item.status === 'cancelled' && (
-            <span className="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded">ملغاة</span>
+            <span className="text-[10px] bg-dash-accent-red-subtle text-dash-accent-red px-1.5 py-0.5 rounded">ملغاة</span>
           )}
         </span>
       )
@@ -2537,7 +2537,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       render: (value: string) => {
         if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>
         const timeOnly = value.substring(0, 5)
-        return <span className="text-blue-400 font-mono">{timeOnly}</span>
+        return <span className="text-dash-accent-blue font-mono">{timeOnly}</span>
       }
     },
     {
@@ -2565,13 +2565,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
           // Linked purchase invoices have blue color
           if (isLinkedPurchase) {
             return invoiceType.includes('مرتجع')
-              ? 'bg-orange-900 text-orange-300'  // Purchase return
-              : 'bg-blue-900 text-blue-300'      // Purchase invoice
+              ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'  // Purchase return
+              : 'bg-dash-accent-blue-subtle text-dash-accent-blue'      // Purchase invoice
           }
           // Regular sales
           switch (invoiceType) {
-            case 'Sale Invoice': return 'bg-green-900 text-green-300'
-            case 'Sale Return': return 'bg-red-900 text-red-300'
+            case 'Sale Invoice': return 'bg-dash-accent-green-subtle text-dash-accent-green'
+            case 'Sale Return': return 'bg-dash-accent-red-subtle text-dash-accent-red'
             default: return 'bg-gray-900 text-[var(--dash-text-secondary)]'
           }
         }
@@ -2602,7 +2602,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'المبلغ الإجمالي',
       accessor: 'total_amount',
       width: 150,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value, 'system')}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value, 'system')}</span>
     },
     {
       id: 'invoiceValue',
@@ -2613,8 +2613,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         <div className="flex items-center justify-center gap-1">
           {value > 0 ? (
             <>
-              <span className="text-green-400">↑</span>
-              <span className="text-green-400 font-medium">{formatPrice(value, 'system')}</span>
+              <span className="text-dash-accent-green">↑</span>
+              <span className="text-dash-accent-green font-medium">{formatPrice(value, 'system')}</span>
             </>
           ) : (
             <span className="text-[var(--dash-text-disabled)]">-</span>
@@ -2631,8 +2631,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         <div className="flex items-center justify-center gap-1">
           {value > 0 ? (
             <>
-              <span className="text-red-400">↓</span>
-              <span className="text-red-400 font-medium">{formatPrice(value, 'system')}</span>
+              <span className="text-dash-accent-red">↓</span>
+              <span className="text-dash-accent-red font-medium">{formatPrice(value, 'system')}</span>
             </>
           ) : (
             <span className="text-[var(--dash-text-disabled)]">-</span>
@@ -2651,10 +2651,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
           <div className="flex items-center justify-center gap-1">
             {net !== 0 ? (
               <>
-                <span className={net > 0 ? 'text-green-400' : 'text-red-400'}>
+                <span className={net > 0 ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
                   {net > 0 ? '↑' : '↓'}
                 </span>
-                <span className="text-blue-400 font-medium">{formatPrice(Math.abs(net), 'system')}</span>
+                <span className="text-dash-accent-blue font-medium">{formatPrice(Math.abs(net), 'system')}</span>
               </>
             ) : (
               <span className="text-[var(--dash-text-disabled)]">-</span>
@@ -2683,7 +2683,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'طريقة الدفع',
       accessor: 'payment_method',
       width: 120,
-      render: (value: string) => <span className="text-blue-400">{value}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value}</span>
     },
     {
       id: 'notes',
@@ -2697,14 +2697,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'الخزنة',
       accessor: 'record.name',
       width: 120,
-      render: (value: string, item: any) => <span className="text-cyan-400">{item.record?.name || '-'}</span>
+      render: (value: string, item: any) => <span className="text-dash-accent-cyan">{item.record?.name || '-'}</span>
     },
     {
       id: 'employee_name',
       header: 'الموظف',
       accessor: 'cashier.full_name',
       width: 120,
-      render: (value: string, item: any) => <span className="text-yellow-400">{item.cashier?.full_name || '-'}</span>
+      render: (value: string, item: any) => <span className="text-dash-accent-orange">{item.cashier?.full_name || '-'}</span>
     }
   ].filter(col => visibleInvoiceColumns.includes(col.id))
 
@@ -2736,7 +2736,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       render: (value: string) => {
         const date = new Date(value)
         const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-        return <span className="text-blue-400">{time}</span>
+        return <span className="text-dash-accent-blue">{time}</span>
       }
     },
     {
@@ -2744,7 +2744,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'المبلغ',
       accessor: 'amount',
       width: 140,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value, 'system')}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value, 'system')}</span>
     },
     {
       id: 'payment_method',
@@ -2758,7 +2758,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
           'bank_transfer': 'تحويل بنكي',
           'check': 'شيك'
         }
-        return <span className="text-blue-400">{methodNames[value] || value}</span>
+        return <span className="text-dash-accent-blue">{methodNames[value] || value}</span>
       }
     },
     {
@@ -2773,14 +2773,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'الخزنة',
       accessor: 'safe_name',
       width: 120,
-      render: (value: string) => <span className="text-cyan-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-dash-accent-cyan">{value || '-'}</span>
     },
     {
       id: 'employee_name',
       header: 'الموظف',
       accessor: 'employee_name',
       width: 120,
-      render: (value: string, item: any) => <span className="text-yellow-400">{item.employee_name || item.creator?.full_name || '-'}</span>
+      render: (value: string, item: any) => <span className="text-dash-accent-orange">{item.employee_name || item.creator?.full_name || '-'}</span>
     }
   ].filter(col => visiblePaymentsColumns.includes(col.id))
 
@@ -2800,7 +2800,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'product.category.name', 
       width: 120,
       render: (value: string, item: any) => (
-        <span className="text-blue-400">{item.product?.category?.name || 'غير محدد'}</span>
+        <span className="text-dash-accent-blue">{item.product?.category?.name || 'غير محدد'}</span>
       )
     },
     {
@@ -2833,7 +2833,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       accessor: 'product.barcode', 
       width: 150,
       render: (value: string, item: any) => (
-        <span className="text-orange-400 font-mono text-sm">{item.product?.barcode || 'غير محدد'}</span>
+        <span className="text-dash-accent-orange font-mono text-sm">{item.product?.barcode || 'غير محدد'}</span>
       )
     },
     { 
@@ -2841,23 +2841,23 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'السعر', 
       accessor: 'unit_price', 
       width: 100,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value, 'system')}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value, 'system')}</span>
     },
-    { 
-      id: 'discount', 
-      header: 'خصم', 
-      accessor: 'discount', 
+    {
+      id: 'discount',
+      header: 'خصم',
+      accessor: 'discount',
       width: 80,
-      render: (value: number) => <span className="text-red-400 font-medium">{value ? value.toFixed(2) : '0.00'}</span>
+      render: (value: number) => <span className="text-dash-accent-red font-medium">{value ? value.toFixed(2) : '0.00'}</span>
     },
-    { 
-      id: 'total', 
-      header: 'الإجمالي', 
-      accessor: 'total', 
+    {
+      id: 'total',
+      header: 'الإجمالي',
+      accessor: 'total',
       width: 120,
       render: (value: any, item: any) => {
         const total = (item.quantity * item.unit_price) - (item.discount || 0)
-        return <span className="text-green-400 font-bold">{formatPrice(total, 'system')}</span>
+        return <span className="text-dash-accent-green font-bold">{formatPrice(total, 'system')}</span>
       }
     },
     {
@@ -2903,7 +2903,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   </button>
                   <div className="flex-1 text-center">
                     <span className="text-[var(--dash-text-primary)] font-medium">تفاصيل الفاتورة</span>
-                    <span className="text-blue-400 mr-2">#{mobileSelectedInvoice.invoice_number}</span>
+                    <span className="text-dash-accent-blue mr-2">#{mobileSelectedInvoice.invoice_number}</span>
                   </div>
                   <div className="w-9" />
                 </div>
@@ -2913,12 +2913,12 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   <div className="flex justify-between items-center mb-2">
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                       mobileSelectedInvoice.invoice_type === 'مرتجع شراء'
-                        ? 'bg-orange-900 text-orange-300'
+                        ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
                         : mobileSelectedInvoice.invoice_type === 'مرتجع' || mobileSelectedInvoice.invoice_type === 'مرتجع بيع' || mobileSelectedInvoice.invoice_type === 'Sale Return'
-                          ? 'bg-red-900 text-red-300'
+                          ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                           : mobileSelectedInvoice.invoice_type === 'فاتورة شراء' || mobileSelectedInvoice.invoice_type === 'Purchase Invoice'
-                            ? 'bg-blue-900 text-blue-300'
-                            : 'bg-green-900 text-green-300'
+                            ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
+                            : 'bg-dash-accent-green-subtle text-dash-accent-green'
                     }`}>
                       {mobileSelectedInvoice.invoice_type === 'Sale Invoice' ? 'فاتورة بيع' :
                        mobileSelectedInvoice.invoice_type === 'Sale Return' ? 'مرتجع بيع' :
@@ -2974,7 +2974,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             localStorage.setItem('pos_edit_invoice', JSON.stringify(editData))
                             window.open(`/pos?edit=true&saleId=${mobileSelectedInvoice.id}`, '_blank')
                           }}
-                          className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1.5 dash-btn-primary rounded-lg py-2 text-sm font-medium transition-colors"
                         >
                           <PencilSquareIcon className="h-4 w-4" />
                           <span>تحرير</span>
@@ -2984,7 +2984,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         onClick={() => {
                           handleDeleteInvoice(mobileSelectedInvoice)
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 dash-btn-red rounded-lg py-2 text-sm font-medium transition-colors"
                       >
                         <TrashIcon className="h-4 w-4" />
                         <span>حذف</span>
@@ -3005,7 +3005,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                   {isLoadingMobileInvoiceItems ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
                     </div>
                   ) : mobileInvoiceItems.length === 0 ? (
                     <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد عناصر</div>
@@ -3057,11 +3057,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-[var(--dash-text-muted)]">خصم:</span>
-                                <span className="text-orange-400">{formatPrice(item.discount || 0, 'system')}</span>
+                                <span className="text-dash-accent-orange">{formatPrice(item.discount || 0, 'system')}</span>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-[var(--dash-text-muted)]">الإجمالي:</span>
-                                <span className="text-green-400 font-medium">{formatPrice(itemTotal, 'system')}</span>
+                                <span className="text-dash-accent-green font-medium">{formatPrice(itemTotal, 'system')}</span>
                               </div>
                             </div>
 
@@ -3105,11 +3105,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         <ChevronDownIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                       )}
                     </div>
-                    <div className="flex-1 bg-blue-600 rounded-lg px-5 py-2 text-center">
+                    <div className="flex-1 bg-dash-accent-blue rounded-lg px-5 py-2 text-center">
                       <div className="font-bold text-[var(--dash-text-primary)] text-xl">
                         {formatPrice(isDefaultCustomer ? displayedInvoicesSum : customerBalance, 'system')}
                       </div>
-                      <div className="text-blue-200 text-[10px]">
+                      <div className="text-dash-accent-blue text-[10px]">
                         {isDefaultCustomer ? 'مجموع الفواتير' : 'رصيد العميل'}
                       </div>
                     </div>
@@ -3121,7 +3121,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       {/* Customer Info - Compact Row */}
                       <div className="flex items-center justify-between gap-2 text-sm">
                         <span className="text-[var(--dash-text-muted)]" dir="ltr">{customer.phone || '-'}</span>
-                        <span className="text-yellow-400 flex items-center gap-1 text-xs">
+                        <span className="text-dash-accent-orange flex items-center gap-1 text-xs">
                           <span>{customer.rank || 'عادي'}</span>
                           <span>⭐</span>
                         </span>
@@ -3134,11 +3134,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           <div className="text-[var(--dash-text-muted)] text-[9px]">الفواتير</div>
                         </div>
                         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
-                          <div className="text-blue-400 text-xs font-bold">{formatPrice(totalInvoicesAmount, 'system')}</div>
+                          <div className="text-dash-accent-blue text-xs font-bold">{formatPrice(totalInvoicesAmount, 'system')}</div>
                           <div className="text-[var(--dash-text-muted)] text-[9px]">الإجمالي</div>
                         </div>
                         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
-                          <div className="text-green-400 text-xs font-bold">{formatPrice(totalPayments, 'system')}</div>
+                          <div className="text-dash-accent-green text-xs font-bold">{formatPrice(totalPayments, 'system')}</div>
                           <div className="text-[var(--dash-text-muted)] text-[9px]">الدفعات</div>
                         </div>
                         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
@@ -3150,7 +3150,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       {/* Date Filter Button - Compact */}
                       <button
                         onClick={() => setShowDateFilter(true)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+                        className="w-full dash-btn-primary rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
                       >
                         <CalendarDaysIcon className="h-4 w-4" />
                         <span>فلتر التاريخ</span>
@@ -3159,7 +3159,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       {/* Current Filter Display */}
                       {dateFilter.type !== 'all' && (
                         <div className="text-center">
-                          <span className="text-xs text-blue-400">
+                          <span className="text-xs text-dash-accent-blue">
                             {dateFilter.type === 'today' && 'عرض فواتير اليوم'}
                             {dateFilter.type === 'current_week' && 'عرض فواتير الأسبوع الحالي'}
                             {dateFilter.type === 'last_week' && 'عرض فواتير الأسبوع الماضي'}
@@ -3181,7 +3181,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 <div className="p-3 space-y-2">
                   {isLoadingSales ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
                     </div>
                   ) : salesWithFinancialData.length === 0 ? (
                     <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد فواتير</div>
@@ -3201,23 +3201,23 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {/* Header Row - Amount + Invoice# + Type Badge */}
                           <div className="flex justify-between items-center mb-2">
                             <span className={`font-bold text-lg ${
-                              parseFloat(sale.total_amount) < 0 ? 'text-orange-400' : 'text-[var(--dash-text-primary)]'
+                              parseFloat(sale.total_amount) < 0 ? 'text-dash-accent-orange' : 'text-[var(--dash-text-primary)]'
                             }`}>
                               {formatPrice(Math.abs(parseFloat(sale.total_amount)), 'system')}
                             </span>
                             <div className="flex items-center gap-2">
-                              <span className={`text-blue-400 font-medium text-sm ${sale.status === 'cancelled' ? 'opacity-60' : ''}`}>#{sale.invoice_number}</span>
+                              <span className={`text-dash-accent-blue font-medium text-sm ${sale.status === 'cancelled' ? 'opacity-60' : ''}`}>#{sale.invoice_number}</span>
                               {sale.status === 'cancelled' && (
-                                <span className="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded">ملغاة</span>
+                                <span className="text-[10px] bg-dash-accent-red-subtle text-dash-accent-red px-1.5 py-0.5 rounded">ملغاة</span>
                               )}
                               <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                                 sale.invoice_type === 'مرتجع شراء'
-                                  ? 'bg-orange-900 text-orange-300'
+                                  ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
                                   : sale.invoice_type === 'مرتجع' || sale.invoice_type === 'مرتجع بيع' || sale.invoice_type === 'Sale Return'
-                                    ? 'bg-red-900 text-red-300'
+                                    ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                                     : sale.invoice_type === 'فاتورة شراء' || sale.invoice_type === 'Purchase Invoice'
-                                      ? 'bg-blue-900 text-blue-300'
-                                      : 'bg-green-900 text-green-300'
+                                      ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
+                                      : 'bg-dash-accent-green-subtle text-dash-accent-green'
                               }`}>
                                 {sale.invoice_type === 'Sale Invoice' ? 'فاتورة بيع' :
                                  sale.invoice_type === 'Sale Return' ? 'مرتجع بيع' :
@@ -3259,7 +3259,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             </div>
                             <div className="flex justify-between">
                               <span className="text-[var(--dash-text-disabled)]">المنتجات:</span>
-                              <span className="text-blue-400">{itemsCount > 0 ? itemsCount : '...'}</span>
+                              <span className="text-dash-accent-blue">{itemsCount > 0 ? itemsCount : '...'}</span>
                             </div>
                           </div>
 
@@ -3271,8 +3271,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <div className="flex items-center justify-center gap-1">
                                 {sale.invoiceValue > 0 ? (
                                   <>
-                                    <span className="text-green-400">↑</span>
-                                    <span className="text-green-400 font-medium">
+                                    <span className="text-dash-accent-green">↑</span>
+                                    <span className="text-dash-accent-green font-medium">
                                       {formatPrice(sale.invoiceValue, 'system')}
                                     </span>
                                   </>
@@ -3288,8 +3288,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <div className="flex items-center justify-center gap-1">
                                 {sale.paidAmount > 0 ? (
                                   <>
-                                    <span className="text-red-400">↓</span>
-                                    <span className="text-red-400 font-medium">
+                                    <span className="text-dash-accent-red">↓</span>
+                                    <span className="text-dash-accent-red font-medium">
                                       {formatPrice(sale.paidAmount, 'system')}
                                     </span>
                                   </>
@@ -3305,10 +3305,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <div className="flex items-center justify-center gap-1">
                                 {netAmount !== 0 ? (
                                   <>
-                                    <span className={netAmount > 0 ? 'text-green-400' : 'text-red-400'}>
+                                    <span className={netAmount > 0 ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
                                       {netAmount > 0 ? '↑' : '↓'}
                                     </span>
-                                    <span className="text-blue-400 font-medium">
+                                    <span className="text-dash-accent-blue font-medium">
                                       {formatPrice(Math.abs(netAmount), 'system')}
                                     </span>
                                   </>
@@ -3353,7 +3353,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 <div className="p-4 space-y-3">
                   {isLoadingPayments ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-green"></div>
                     </div>
                   ) : customerPayments.length === 0 ? (
                     <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد دفعات</div>
@@ -3364,10 +3364,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         className="bg-[var(--dash-bg-raised)] rounded-lg p-4"
                       >
                         <div className="flex justify-between items-start mb-2">
-                          <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">
+                          <span className="px-2 py-0.5 rounded text-xs font-medium bg-dash-accent-green-subtle text-dash-accent-green">
                             دفعة
                           </span>
-                          <span className="font-bold text-lg text-green-400">
+                          <span className="font-bold text-lg text-dash-accent-green">
                             {formatPrice(payment.amount || 0, 'system')}
                           </span>
                         </div>
@@ -3390,7 +3390,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         setPaymentType('payment')
                         setShowAddPaymentModal(true)
                       }}
-                      className="w-full bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] rounded-lg py-3 font-medium flex items-center justify-center gap-2 transition-colors mt-4"
+                      className="w-full dash-btn-green rounded-lg py-3 font-medium flex items-center justify-center gap-2 transition-colors mt-4"
                     >
                       <PlusIcon className="h-5 w-5" />
                       <span>إضافة دفعة</span>
@@ -3404,7 +3404,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 <div className="p-4 space-y-3">
                   {isLoadingStatements ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
                     </div>
                   ) : accountStatements.length === 0 ? (
                     <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد حركات</div>
@@ -3431,13 +3431,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             statement.saleId ? 'cursor-pointer active:bg-[#4B5563]' : ''
                           } ${
                             statement.type === 'فاتورة بيع'
-                              ? 'border-2 border-green-700/50'
+                              ? 'border-2 border-dash-accent-green/50'
                               : statement.type === 'فاتورة شراء'
-                                ? 'border-2 border-blue-700/50'
+                                ? 'border-2 border-dash-accent-blue/50'
                                 : statement.type === 'مرتجع بيع'
-                                  ? 'border-2 border-red-700/50'
+                                  ? 'border-2 border-dash-accent-red/50'
                                   : statement.type === 'مرتجع شراء'
-                                    ? 'border-2 border-orange-700/50'
+                                    ? 'border-2 border-dash-accent-orange/50'
                                     : statement.type === 'دفعة'
                                       ? 'border-2 border-emerald-700/50'
                                       : 'border-2 border-[var(--dash-border-default)]/50'
@@ -3447,13 +3447,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           <div className="flex justify-between items-center mb-2">
                             <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                               statement.type === 'فاتورة بيع'
-                                ? 'bg-green-900 text-green-300'
+                                ? 'bg-dash-accent-green-subtle text-dash-accent-green'
                                 : statement.type === 'فاتورة شراء'
-                                  ? 'bg-blue-900 text-blue-300'
+                                  ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
                                   : statement.type === 'مرتجع بيع'
-                                    ? 'bg-red-900 text-red-300'
+                                    ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                                     : statement.type === 'مرتجع شراء'
-                                      ? 'bg-orange-900 text-orange-300'
+                                      ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
                                       : statement.type === 'دفعة'
                                         ? 'bg-emerald-900 text-emerald-300'
                                         : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]'
@@ -3478,8 +3478,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <div className="flex items-center justify-center gap-1">
                                 {statement.invoiceValue > 0 ? (
                                   <>
-                                    <span className="text-green-400">↑</span>
-                                    <span className="text-green-400 font-medium">
+                                    <span className="text-dash-accent-green">↑</span>
+                                    <span className="text-dash-accent-green font-medium">
                                       {formatPrice(statement.invoiceValue, 'system')}
                                     </span>
                                   </>
@@ -3495,8 +3495,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <div className="flex items-center justify-center gap-1">
                                 {statement.paidAmount > 0 ? (
                                   <>
-                                    <span className="text-red-400">↓</span>
-                                    <span className="text-red-400 font-medium">
+                                    <span className="text-dash-accent-red">↓</span>
+                                    <span className="text-dash-accent-red font-medium">
                                       {formatPrice(statement.paidAmount, 'system')}
                                     </span>
                                   </>
@@ -3512,10 +3512,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <div className="flex items-center justify-center gap-1">
                                 {netAmount !== 0 ? (
                                   <>
-                                    <span className={netAmount > 0 ? 'text-green-400' : 'text-red-400'}>
+                                    <span className={netAmount > 0 ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
                                       {netAmount > 0 ? '↑' : '↓'}
                                     </span>
-                                    <span className="text-blue-400 font-medium">
+                                    <span className="text-dash-accent-blue font-medium">
                                       {formatPrice(Math.abs(netAmount), 'system')}
                                     </span>
                                   </>
@@ -3551,7 +3551,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 onClick={() => setActiveTab('invoices')}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                   activeTab === 'invoices'
-                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                 }`}
               >
@@ -3565,7 +3565,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     onClick={() => setActiveTab('payments')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'payments'
-                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
@@ -3577,7 +3577,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     onClick={() => setActiveTab('statement')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'statement'
-                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
@@ -3617,7 +3617,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         onClick={() => setActiveTab('invoices')}
                         className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                           activeTab === 'invoices'
-                            ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                            ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                             : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                         }`}
                       >
@@ -3631,7 +3631,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setActiveTab('payments')}
                             className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                               activeTab === 'payments'
-                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                                 : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                           >
@@ -3642,7 +3642,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setActiveTab('statement')}
                             className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                               activeTab === 'statement'
-                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                                 : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                           >
@@ -3658,7 +3658,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setViewMode('invoices-only')}
                             className={`px-2.5 py-1.5 text-base rounded transition-all duration-200 ${
                               viewMode === 'invoices-only'
-                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                                 : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                             title="فواتير فقط"
@@ -3669,7 +3669,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setViewMode('split')}
                             className={`px-2.5 py-1.5 text-base rounded transition-all duration-200 ${
                               viewMode === 'split'
-                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                                 : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                             title="عرض مقسم"
@@ -3680,7 +3680,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setViewMode('details-only')}
                             className={`px-2.5 py-1.5 text-base rounded transition-all duration-200 ${
                               viewMode === 'details-only'
-                                ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                                ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                                 : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                             }`}
                             title="تفاصيل فقط"
@@ -3741,7 +3741,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               }
                             }}
                             disabled={sales.length === 0 || selectedTransaction >= sales.length}
-                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-red-400 hover:text-red-300 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed hover:bg-red-600/10 rounded-lg transition-all whitespace-nowrap"
+                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-dash-accent-red hover:text-dash-accent-red disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed hover:bg-dash-accent-red-subtle rounded-lg transition-all whitespace-nowrap"
                           >
                             <TrashIcon className="h-4 w-4" />
                             <span>حذف</span>
@@ -3812,7 +3812,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           }
                         }}
                         disabled={sales.length === 0 || selectedTransaction >= sales.length || (sales.length > 0 && selectedTransaction < sales.length && sales[selectedTransaction]?.status === 'cancelled')}
-                        className="flex flex-col items-center p-2 text-orange-400 hover:text-orange-300 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
+                        className="flex flex-col items-center p-2 text-dash-accent-orange hover:text-dash-accent-orange disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
                       >
                         <XCircleIcon className="h-5 w-5 mb-1" />
                         <span className="text-sm">إلغاء الفاتورة</span>
@@ -3836,7 +3836,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setActiveTab('payments')}
                             className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                               activeTab === 'payments'
-                                ? 'text-blue-400 border-blue-400 bg-blue-600/10'
+                                ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle'
                                 : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                             }`}
                           >
@@ -3846,7 +3846,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             onClick={() => setActiveTab('statement')}
                             className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                               activeTab === 'statement'
-                                ? 'text-blue-400 border-blue-400 bg-blue-600/10'
+                                ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle'
                                 : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                             }`}
                           >
@@ -3858,7 +3858,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         onClick={() => setActiveTab('invoices')}
                         className={`px-6 py-3 text-base font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
                           activeTab === 'invoices'
-                            ? 'text-blue-400 border-blue-400 bg-blue-600/10'
+                            ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle'
                             : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-gray-400 hover:bg-[var(--dash-bg-overlay)]/20'
                         }`}
                       >
@@ -3873,7 +3873,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           onClick={() => setViewMode('invoices-only')}
                           className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                             viewMode === 'invoices-only'
-                              ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                              ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                               : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                           }`}
                           title="عرض فواتير العميل فقط"
@@ -3884,7 +3884,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           onClick={() => setViewMode('split')}
                           className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                             viewMode === 'split'
-                              ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                              ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                               : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                           }`}
                           title="عرض مقسم"
@@ -3895,7 +3895,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           onClick={() => setViewMode('details-only')}
                           className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                             viewMode === 'details-only'
-                              ? 'bg-blue-600 text-[var(--dash-text-primary)] shadow-sm'
+                              ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] shadow-sm'
                               : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                           }`}
                           title="عرض تفاصيل الفاتورة فقط"
@@ -3940,11 +3940,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
 
                 {/* Customer Balance / Invoices Sum */}
                 <div className={`border-b border-[var(--dash-border-default)] ${isTabletDevice ? 'p-3' : 'p-4'}`}>
-                  <div className={`bg-blue-600 rounded text-center ${isTabletDevice ? 'p-3' : 'p-4'}`}>
+                  <div className={`bg-dash-accent-blue rounded text-center ${isTabletDevice ? 'p-3' : 'p-4'}`}>
                     <div className={`font-bold text-[var(--dash-text-primary)] ${isTabletDevice ? 'text-xl' : 'text-2xl'}`}>
                       {formatPrice(isDefaultCustomer ? displayedInvoicesSum : customerBalance, 'system')}
                     </div>
-                    <div className={`text-blue-200 ${isTabletDevice ? 'text-xs' : 'text-sm'}`}>
+                    <div className={`text-dash-accent-blue ${isTabletDevice ? 'text-xs' : 'text-sm'}`}>
                       {isDefaultCustomer ? 'مجموع الفواتير' : 'رصيد العميل'}
                     </div>
                   </div>
@@ -3990,7 +3990,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     )}
 
                     <div className="flex justify-between items-center">
-                      <span className="text-yellow-400 flex items-center gap-1">
+                      <span className="text-dash-accent-orange flex items-center gap-1">
                         <span className={isTabletDevice ? 'text-sm' : ''}>{customer.rank || 'عادي'}</span>
                         <span>⭐</span>
                       </span>
@@ -4014,13 +4014,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         <span className="text-[var(--dash-text-muted)] text-xs">عدد الفواتير</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className={`text-blue-400 ${isTabletDevice ? 'text-sm' : ''}`}>
+                        <span className={`text-dash-accent-blue ${isTabletDevice ? 'text-sm' : ''}`}>
                           {formatPrice(totalInvoicesAmount, 'system')}
                         </span>
                         <span className="text-[var(--dash-text-muted)] text-xs">إجمالي الفواتير</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className={`text-green-400 ${isTabletDevice ? 'text-sm' : ''}`}>
+                        <span className={`text-dash-accent-green ${isTabletDevice ? 'text-sm' : ''}`}>
                           {formatPrice(totalPayments, 'system')}
                         </span>
                         <span className="text-[var(--dash-text-muted)] text-xs">إجمالي الدفعات</span>
@@ -4050,7 +4050,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 <div className={`border-t border-[var(--dash-border-default)] ${isTabletDevice ? 'p-3' : 'p-4'}`}>
                   <button
                     onClick={() => setShowDateFilter(true)}
-                    className={`w-full bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded font-medium flex items-center justify-center gap-2 transition-colors ${
+                    className={`w-full dash-btn-primary rounded font-medium flex items-center justify-center gap-2 transition-colors ${
                       isTabletDevice ? 'px-3 py-2 text-sm' : 'px-4 py-3'
                     }`}
                   >
@@ -4061,7 +4061,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                   {/* Current Filter Display */}
                   {dateFilter.type !== 'all' && (
                     <div className="mt-2 text-center">
-                      <span className="text-xs text-blue-400">
+                      <span className="text-xs text-dash-accent-blue">
                         {dateFilter.type === 'today' && 'عرض فواتير اليوم'}
                         {dateFilter.type === 'current_week' && 'عرض فواتير الأسبوع الحالي'}
                         {dateFilter.type === 'last_week' && 'عرض فواتير الأسبوع الماضي'}
@@ -4093,7 +4093,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               setSelectedStatementInvoice(null)
                               setStatementInvoiceItems([])
                             }}
-                            className="text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors text-sm"
+                            className="text-dash-accent-blue hover:text-dash-accent-blue flex items-center gap-2 transition-colors text-sm"
                           >
                             <ChevronRightIcon className="h-4 w-4" />
                             <span>العودة</span>
@@ -4102,7 +4102,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             {/* Print Receipt Button */}
                             <button
                               onClick={() => printReceipt(selectedStatementInvoice, statementInvoiceItems)}
-                              className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="dash-btn-primary px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                             >
                               <PrinterIcon className="h-4 w-4" />
@@ -4112,7 +4112,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             {/* Print A4 Invoice Button */}
                             <button
                               onClick={() => printA4Invoice(selectedStatementInvoice, statementInvoiceItems)}
-                              className="bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="dash-btn-green px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                             >
                               <DocumentIcon className="h-4 w-4" />
@@ -4137,14 +4137,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     onClick={() => saveDocument(selectedStatementInvoice, statementInvoiceItems, 'pdf')}
                                     className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-t-lg transition-colors"
                                   >
-                                    <DocumentArrowDownIcon className="h-4 w-4 text-red-400" />
+                                    <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-red" />
                                     <span>PDF</span>
                                   </button>
                                   <button
                                     onClick={() => saveDocument(selectedStatementInvoice, statementInvoiceItems, 'png')}
                                     className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-b-lg transition-colors"
                                   >
-                                    <DocumentArrowDownIcon className="h-4 w-4 text-blue-400" />
+                                    <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-blue" />
                                     <span>PNG</span>
                                   </button>
                                 </div>
@@ -4162,7 +4162,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex === 0
                                 ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
+                                : 'bg-dash-accent-blue hover:bg-dash-accent-blue text-[var(--dash-text-primary)]'
                             }`}
                           >
                             <ChevronRightIcon className="h-5 w-5" />
@@ -4186,7 +4186,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex >= invoiceStatements.length - 1
                                 ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
+                                : 'bg-dash-accent-blue hover:bg-dash-accent-blue text-[var(--dash-text-primary)]'
                             }`}
                           >
                             <ChevronLeftIcon className="h-5 w-5" />
@@ -4199,8 +4199,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             <div className="flex items-center gap-4">
                               <span className={`px-3 py-1 rounded text-sm font-medium ${
                                 selectedStatementInvoice?.invoice_type === 'Sale Return' || selectedStatementInvoice?.invoice_type === 'مرتجع'
-                                  ? 'bg-orange-600/20 text-orange-400 border border-orange-600/30'
-                                  : 'bg-green-600/20 text-green-400 border border-green-600/30'
+                                  ? 'bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange'
+                                  : 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green'
                               }`}>
                                 {selectedStatementInvoice?.invoice_type === 'Sale Return' ? 'مرتجع بيع' :
                                  selectedStatementInvoice?.invoice_type === 'Sale Invoice' ? 'فاتورة بيع' :
@@ -4227,7 +4227,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         <div className="flex-1 overflow-hidden">
                           {isLoadingStatementInvoiceItems ? (
                             <div className="flex items-center justify-center h-full">
-                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                               <span className="text-[var(--dash-text-muted)]">جاري تحميل تفاصيل الفاتورة...</span>
                             </div>
                           ) : (
@@ -4247,11 +4247,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     const isHighlighted = highlightedProductId === item.product?.id
                                     return (
                                     <tr key={item.id} className={`border-b border-[var(--dash-border-subtle)] ${isHighlighted ? 'bg-yellow-500/30 hover:bg-yellow-500/40' : 'hover:bg-[var(--dash-bg-raised)]/50'}`}>
-                                      <td className="px-4 py-3 text-blue-400 font-medium text-sm">{index + 1}</td>
+                                      <td className="px-4 py-3 text-dash-accent-blue font-medium text-sm">{index + 1}</td>
                                       <td className="px-4 py-3 font-medium text-sm">
                                         <div className="flex items-center gap-2">
                                           {isHighlighted && <span className="text-yellow-300 text-lg">★</span>}
-                                          <span className={isHighlighted ? 'text-yellow-100 font-bold' : 'text-blue-400'}>
+                                          <span className={isHighlighted ? 'text-yellow-100 font-bold' : 'text-dash-accent-blue'}>
                                             {item.product?.name || 'منتج غير معروف'}
                                           </span>
                                         </div>
@@ -4268,15 +4268,15 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                     </tr>
                                   )})}
                                   {/* Totals Row */}
-                                  <tr className="bg-[var(--dash-bg-raised)] border-t-2 border-blue-500">
-                                    <td colSpan={2} className="px-4 py-3 text-left text-blue-400 font-bold text-sm">
+                                  <tr className="bg-[var(--dash-bg-raised)] border-t-2 border-dash-accent-blue">
+                                    <td colSpan={2} className="px-4 py-3 text-left text-dash-accent-blue font-bold text-sm">
                                       - = اجمالي = -
                                     </td>
-                                    <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
+                                    <td className="px-4 py-3 text-center text-dash-accent-blue font-bold text-sm">
                                       {statementInvoiceItems.reduce((sum, item) => sum + Math.abs(item.quantity), 0)}
                                     </td>
                                     <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm"></td>
-                                    <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
+                                    <td className="px-4 py-3 text-center text-dash-accent-blue font-bold text-sm">
                                       {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                                     </td>
                                   </tr>
@@ -4309,19 +4309,19 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             </div>
                             <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                               <span className="text-[var(--dash-text-muted)] mb-1">المدفوع</span>
-                              <span className="text-green-400 font-bold">
+                              <span className="text-dash-accent-green font-bold">
                                 {formatPrice(selectedStatementInvoice?.paidAmount || 0)}
                               </span>
                             </div>
                             <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                               <span className="text-[var(--dash-text-muted)] mb-1">آجل</span>
-                              <span className="text-orange-400 font-bold">
+                              <span className="text-dash-accent-orange font-bold">
                                 {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0) - (selectedStatementInvoice?.paidAmount || 0))}
                               </span>
                             </div>
                             <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                               <span className="text-[var(--dash-text-muted)] mb-1">الرصيد</span>
-                              <span className={`font-bold ${customerBalance >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                              <span className={`font-bold ${customerBalance >= 0 ? 'text-dash-accent-red' : 'text-dash-accent-green'}`}>
                                 {formatPrice(Math.abs(customerBalance))}
                               </span>
                             </div>
@@ -4352,7 +4352,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         <div className="flex-1 flex flex-col overflow-hidden">
                           {isLoadingStatements ? (
                             <div className="flex items-center justify-center h-full">
-                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                               <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
                             </div>
                           ) : accountStatements.length === 0 ? (
@@ -4379,7 +4379,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               {/* Loading more indicator */}
                               {isLoadingMoreStatements && (
                                 <div className="flex items-center justify-center py-4">
-                                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
                                   <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                                 </div>
                               )}
@@ -4406,23 +4406,23 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       }}
                     >
                       {/* Product Search Bar */}
-                      <div className={`bg-[var(--dash-bg-raised)] border-b p-3 flex-shrink-0 transition-colors ${searchQuery ? 'border-blue-500' : 'border-[var(--dash-border-default)]'}`}>
+                      <div className={`bg-[var(--dash-bg-raised)] border-b p-3 flex-shrink-0 transition-colors ${searchQuery ? 'border-dash-accent-blue' : 'border-[var(--dash-border-default)]'}`}>
                         {searchQuery && (
                           <div className="mb-2 text-xs flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-blue-400">
+                            <div className="flex items-center gap-2 text-dash-accent-blue">
                               <span>🔍</span>
                               <span>البحث نشط - عرض الفواتير التي تحتوي على المنتج المحدد فقط</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <span className="text-[var(--dash-text-muted)]">النتائج:</span>
-                              <span className="bg-blue-600 text-[var(--dash-text-primary)] px-2 py-0.5 rounded font-medium">
+                              <span className="bg-dash-accent-blue text-[var(--dash-text-primary)] px-2 py-0.5 rounded font-medium">
                                 {sales.length}
                               </span>
                             </div>
                           </div>
                         )}
                         <div className="relative">
-                          <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-blue-400' : 'text-[var(--dash-text-muted)]'}`} />
+                          <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-dash-accent-blue' : 'text-[var(--dash-text-muted)]'}`} />
                           <input
                             type="text"
                             placeholder="ابحث عن منتج (اسم المنتج أو الباركود)..."
@@ -4446,7 +4446,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex gap-1">
                             <button
                               onClick={() => searchProductInInvoices(searchQuery)}
-                              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-xs rounded transition-colors"
+                              className="px-3 py-1 dash-btn-primary text-xs rounded transition-colors"
                             >
                               بحث
                             </button>
@@ -4464,7 +4464,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       <div className="flex-1 min-h-0">
                         {isLoadingSales ? (
                           <div className="flex items-center justify-center h-full">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                             <span className="text-[var(--dash-text-muted)]">جاري تحميل الفواتير...</span>
                           </div>
                         ) : (
@@ -4483,7 +4483,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     {/* Resizable Divider - Only show in split mode */}
                     {viewMode === 'split' && (
                       <div
-                        className="absolute left-0 right-0 h-2 bg-[var(--dash-bg-overlay)] hover:bg-blue-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
+                        className="absolute left-0 right-0 h-2 bg-[var(--dash-bg-overlay)] hover:bg-dash-accent-blue cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
                         style={{ top: `${dividerPosition}%`, transform: 'translateY(-50%)' }}
                         onMouseDown={handleMouseDown}
                       >
@@ -4507,7 +4507,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {/* Print Receipt Button */}
                           <button
                             onClick={() => printReceipt(sales[selectedTransaction], saleItems)}
-                            className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="dash-btn-primary px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                             disabled={isLoadingItems || saleItems.length === 0}
                           >
                             <PrinterIcon className="h-4 w-4" />
@@ -4517,7 +4517,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {/* Print A4 Invoice Button */}
                           <button
                             onClick={() => printA4Invoice(sales[selectedTransaction], saleItems)}
-                            className="bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="dash-btn-green px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                             disabled={isLoadingItems || saleItems.length === 0}
                           >
                             <DocumentIcon className="h-4 w-4" />
@@ -4542,21 +4542,21 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                   onClick={() => saveDocument(sales[selectedTransaction], saleItems, 'pdf')}
                                   className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-t-lg transition-colors"
                                 >
-                                  <DocumentArrowDownIcon className="h-4 w-4 text-red-400" />
+                                  <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-red" />
                                   <span>PDF</span>
                                 </button>
                                 <button
                                   onClick={() => saveDocument(sales[selectedTransaction], saleItems, 'png')}
                                   className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-b-lg transition-colors"
                                 >
-                                  <DocumentArrowDownIcon className="h-4 w-4 text-blue-400" />
+                                  <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-blue" />
                                   <span>PNG</span>
                                 </button>
                               </div>
                             )}
                           </div>
                         </div>
-                        <h3 className="text-blue-400 font-medium text-lg">
+                        <h3 className="text-dash-accent-blue font-medium text-lg">
                           تفاصيل الفاتورة {sales[selectedTransaction]?.invoice_number || ''}
                         </h3>
                       </div>
@@ -4564,7 +4564,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       <div className="flex-1 min-h-0">
                         {isLoadingItems ? (
                           <div className="flex items-center justify-center h-full">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                             <span className="text-[var(--dash-text-muted)]">جاري تحميل العناصر...</span>
                           </div>
                         ) : (
@@ -4596,7 +4596,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               setPaymentType('payment')
                               setShowAddPaymentModal(true)
                             }}
-                            className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="dash-btn-primary px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                           >
                             <PlusIcon className="h-4 w-4" />
                             إضافة دفعة
@@ -4613,7 +4613,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     <div className="flex-1 flex flex-col overflow-hidden relative">
                       {isLoadingPayments ? (
                         <div className="flex items-center justify-center h-full">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                           <span className="text-[var(--dash-text-muted)]">جاري تحميل الدفعات...</span>
                         </div>
                       ) : customerPayments.length === 0 ? (
@@ -4636,7 +4636,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {/* Loading more indicator */}
                           {isLoadingMorePayments && (
                             <div className="flex items-center justify-center py-4">
-                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
                               <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
@@ -4657,7 +4657,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               handleDeletePayment(contextMenu.payment)
                               setContextMenu(null)
                             }}
-                            className="w-full px-4 py-2 text-right text-red-400 hover:bg-red-600/20 hover:text-red-300 flex items-center gap-2 transition-colors"
+                            className="w-full px-4 py-2 text-right text-dash-accent-red hover:bg-dash-accent-red-subtle hover:text-dash-accent-red flex items-center gap-2 transition-colors"
                           >
                             <TrashIcon className="h-4 w-4" />
                             <span>حذف الدفعة</span>
@@ -4738,7 +4738,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
             {/* Header */}
             <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
               <h3 className="text-[var(--dash-text-primary)] text-lg font-semibold flex items-center gap-2">
-                <TableCellsIcon className="h-5 w-5 text-blue-400" />
+                <TableCellsIcon className="h-5 w-5 text-dash-accent-blue" />
                 إدارة الأعمدة
               </h3>
               <button
@@ -4755,7 +4755,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 onClick={() => setColumnManagerTab('invoices')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'invoices'
-                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
+                    ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -4765,7 +4765,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 onClick={() => setColumnManagerTab('details')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'details'
-                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
+                    ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -4775,7 +4775,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 onClick={() => setColumnManagerTab('print')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'print'
-                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
+                    ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -4795,7 +4795,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                 onClick={() => setColumnManagerTab('payments')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'payments'
-                    ? 'text-green-400 border-b-2 border-green-400 bg-green-600/10'
+                    ? 'text-dash-accent-green border-b-2 border-dash-accent-green bg-dash-accent-green-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -4816,7 +4816,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visibleInvoiceColumns.includes(col.id)
-                            ? 'bg-blue-600/20 border-blue-500'
+                            ? 'bg-dash-accent-blue-subtle border-dash-accent-blue'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4825,13 +4825,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visibleInvoiceColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'invoices')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visibleInvoiceColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4850,7 +4850,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visibleDetailsColumns.includes(col.id)
-                            ? 'bg-blue-600/20 border-blue-500'
+                            ? 'bg-dash-accent-blue-subtle border-dash-accent-blue'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4859,13 +4859,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visibleDetailsColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'details')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visibleDetailsColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4884,7 +4884,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visiblePrintColumns.includes(col.id)
-                            ? 'bg-green-600/20 border-green-500'
+                            ? 'bg-dash-accent-green-subtle border-dash-accent-green'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4893,13 +4893,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visiblePrintColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'print')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visiblePrintColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4933,7 +4933,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4952,7 +4952,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visiblePaymentsColumns.includes(col.id)
-                            ? 'bg-green-600/20 border-green-500'
+                            ? 'bg-dash-accent-green-subtle border-dash-accent-green'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4961,13 +4961,13 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           checked={visiblePaymentsColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'payments')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visiblePaymentsColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4987,7 +4987,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
               </div>
               <button
                 onClick={() => setShowColumnManager(false)}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors"
+                className="px-6 py-2 dash-btn-primary rounded-lg font-medium transition-colors"
               >
                 تم
               </button>

@@ -131,7 +131,7 @@ export default function TransferLocationModal({
         {/* Modal Header */}
         <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-2">
-            <ArrowsRightLeftIcon className="h-5 w-5 text-green-400" />
+            <ArrowsRightLeftIcon className="h-5 w-5 text-dash-accent-green" />
             <h2 className="text-[var(--dash-text-primary)] text-lg font-semibold">
               {currentStep === 'from' ? 'اختيار مصدر النقل' : 'اختيار وجهة النقل'}
             </h2>
@@ -147,7 +147,7 @@ export default function TransferLocationModal({
         {/* Progress Indicator */}
         <div className="px-6 py-4 bg-[var(--dash-bg-surface)]">
           <div className="flex items-center justify-center gap-4">
-            <div className={`flex items-center gap-2 ${currentStep === 'from' ? 'text-green-400' : fromLocation ? 'text-green-400' : 'text-[var(--dash-text-muted)]'}`}>
+            <div className={`flex items-center gap-2 ${currentStep === 'from' ? 'text-dash-accent-green' : fromLocation ? 'text-dash-accent-green' : 'text-[var(--dash-text-muted)]'}`}>
               <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
                 fromLocation ? 'border-green-400 bg-green-400' : currentStep === 'from' ? 'border-green-400' : 'border-[var(--dash-text-muted)]'
               }`}>
@@ -158,7 +158,7 @@ export default function TransferLocationModal({
             
             <ArrowsRightLeftIcon className="h-5 w-5 text-[var(--dash-text-muted)]" />
             
-            <div className={`flex items-center gap-2 ${currentStep === 'to' ? 'text-green-400' : toLocation ? 'text-green-400' : 'text-[var(--dash-text-muted)]'}`}>
+            <div className={`flex items-center gap-2 ${currentStep === 'to' ? 'text-dash-accent-green' : toLocation ? 'text-dash-accent-green' : 'text-[var(--dash-text-muted)]'}`}>
               <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
                 toLocation ? 'border-green-400 bg-green-400' : currentStep === 'to' ? 'border-green-400' : 'border-[var(--dash-text-muted)]'
               }`}>
@@ -199,17 +199,17 @@ export default function TransferLocationModal({
           <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mb-4"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-green mb-4"></div>
                 <p className="text-[var(--dash-text-muted)]">جاري تحميل المواقع...</p>
               </div>
             ) : error ? (
               <div className="flex flex-col items-center justify-center p-8">
-                <BuildingOfficeIcon className="h-16 w-16 text-red-500 mb-4" />
-                <p className="text-red-400 text-lg mb-2">خطأ في التحميل</p>
+                <BuildingOfficeIcon className="h-16 w-16 text-dash-accent-red mb-4" />
+                <p className="text-dash-accent-red text-lg mb-2">خطأ في التحميل</p>
                 <p className="text-[var(--dash-text-disabled)] text-sm mb-4">{error}</p>
                 <button
                   onClick={fetchLocations}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors"
+                  className="px-4 py-2 dash-btn-green rounded-lg text-sm transition-colors"
                 >
                   إعادة المحاولة
                 </button>
@@ -221,7 +221,7 @@ export default function TransferLocationModal({
                   className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:border-green-400 ${
                     (currentStep === 'from' && fromLocation?.id === location.id) ||
                     (currentStep === 'to' && toLocation?.id === location.id)
-                      ? 'border-green-500 bg-green-500/10'
+                      ? 'border-dash-accent-green bg-dash-accent-green-subtle'
                       : 'border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)]'
                   }`}
                   onClick={() => handleLocationSelect(location)}
@@ -229,9 +229,9 @@ export default function TransferLocationModal({
                   {/* Location Type Icon */}
                   <div className="absolute left-4 top-4">
                     {location.type === 'branch' ? (
-                      <BuildingOfficeIcon className="h-6 w-6 text-blue-400" />
+                      <BuildingOfficeIcon className="h-6 w-6 text-dash-accent-blue" />
                     ) : (
-                      <BuildingStorefrontIcon className="h-6 w-6 text-purple-400" />
+                      <BuildingStorefrontIcon className="h-6 w-6 text-dash-accent-purple" />
                     )}
                   </div>
 
@@ -242,7 +242,7 @@ export default function TransferLocationModal({
                         {location.name}
                       </h3>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        location.type === 'branch' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'
+                        location.type === 'branch' ? 'bg-dash-accent-blue-subtle text-dash-accent-blue' : 'bg-dash-accent-purple-subtle text-dash-accent-purple'
                       }`}>
                         {location.type === 'branch' ? 'فرع' : 'مخزن'}
                       </span>
@@ -284,7 +284,7 @@ export default function TransferLocationModal({
             {(fromLocation || toLocation) && (
               <button
                 onClick={handleReset}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm transition-colors"
+                className="px-4 py-2 dash-btn-red rounded-lg text-sm transition-colors"
               >
                 إعادة تعيين
               </button>
@@ -301,7 +301,7 @@ export default function TransferLocationModal({
             <button
               onClick={handleConfirm}
               disabled={!fromLocation || !toLocation}
-              className="px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors"
+              className="px-6 py-2 dash-btn-green disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors"
             >
               تأكيد النقل
             </button>

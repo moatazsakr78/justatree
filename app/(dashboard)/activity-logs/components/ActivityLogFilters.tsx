@@ -99,7 +99,7 @@ export default function ActivityLogFilters({
                 onClick={() => toggleItem(option.value)}
                 className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
                   isSelected
-                    ? 'bg-blue-600/20 border border-blue-500/50 text-blue-400'
+                    ? 'bg-dash-accent-blue-subtle border border-dash-accent-blue text-dash-accent-blue'
                     : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -119,7 +119,7 @@ export default function ActivityLogFilters({
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+            className="flex-1 py-2 text-sm dash-btn-primary rounded-lg transition-colors"
           >
             تطبيق {selected.length > 0 ? `(${selected.length})` : ''}
           </button>

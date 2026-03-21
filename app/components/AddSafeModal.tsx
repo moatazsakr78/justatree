@@ -206,7 +206,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                   type="checkbox"
                   checked={supportsDrawers}
                   onChange={(e) => setSupportsDrawers(e.target.checked)}
-                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
                 <span className="text-sm font-medium text-[var(--dash-text-secondary)]">تدعم الأدراج</span>
@@ -223,7 +223,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                   type="checkbox"
                   checked={showTransfers}
                   onChange={(e) => setShowTransfers(e.target.checked)}
-                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
                 <span className="text-sm font-medium text-[var(--dash-text-secondary)]">فصل التحويلات</span>
@@ -263,7 +263,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                     name="balanceDestination"
                     checked={balanceDestination === 'safe'}
                     onChange={() => setBalanceDestination('safe')}
-                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
+                    className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                     disabled={isLoading}
                   />
                   <span className="text-sm text-[var(--dash-text-secondary)]">
@@ -276,7 +276,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
                     name="balanceDestination"
                     checked={balanceDestination === 'transfers'}
                     onChange={() => setBalanceDestination('transfers')}
-                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
+                    className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                     disabled={isLoading}
                   />
                   <span className="text-sm text-[var(--dash-text-secondary)]">التحويلات</span>
@@ -298,7 +298,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
           <button
             onClick={handleSave}
             disabled={!safeName.trim() || isLoading}
-            className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-dash-accent-green text-[var(--dash-text-primary)] rounded-lg hover:brightness-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'جاري الحفظ...' : 'حفظ'}
           </button>

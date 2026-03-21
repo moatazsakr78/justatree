@@ -57,7 +57,7 @@ const TreeNodeComponent = ({
       <div
         className={`flex items-center justify-between px-3 py-2.5 cursor-pointer transition-all duration-200 rounded-lg mx-1 my-0.5 ${
           isSelected
-            ? 'bg-blue-600 text-white'
+            ? 'bg-dash-accent-blue text-white'
             : hasChildren
               ? 'hover:bg-[var(--dash-bg-surface)] text-gray-200'
               : 'hover:bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
@@ -97,7 +97,7 @@ const TreeNodeComponent = ({
               ${isSelected
                 ? 'bg-white/20 text-white'
                 : node.count.selected > 0
-                  ? 'bg-red-500/20 text-red-400'
+                  ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                   : 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)]'
               }
             `}

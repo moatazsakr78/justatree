@@ -59,7 +59,7 @@ export default function DataTable<T extends { id: string | number }>({
                   type="checkbox"
                   checked={isAllSelected}
                   onChange={toggleAllSelection}
-                  className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-dash-accent-blue"
                 />
               </th>
             )}
@@ -84,7 +84,7 @@ export default function DataTable<T extends { id: string | number }>({
                     type="checkbox"
                     checked={isRowSelected(item.id)}
                     onChange={() => toggleRowSelection(item.id)}
-                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-dash-accent-blue"
                   />
                 </td>
               )}

@@ -459,12 +459,12 @@ export default function ColorAssignmentModal({
           {/* Header */}
           <div className="sticky top-0 bg-[var(--dash-bg-surface)] px-8 py-6 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-dash-accent-purple rounded-full flex items-center justify-center">
                 <TagIcon className="h-6 w-6 text-[var(--dash-text-primary)]" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">تحديد ألوان المنتج</h2>
-                <p className="text-blue-400 font-medium">{product.name}</p>
+                <p className="text-dash-accent-blue font-medium">{product.name}</p>
               </div>
             </div>
             <button
@@ -481,8 +481,8 @@ export default function ColorAssignmentModal({
               /* Branch Selection Step */
               <div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                    <BuildingStorefrontIcon className="h-5 w-5 text-blue-400" />
+                  <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                    <BuildingStorefrontIcon className="h-5 w-5 text-dash-accent-blue" />
                   </div>
                   <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">اختر الفرع المراد تحديد ألوانه</h3>
                 </div>
@@ -504,25 +504,25 @@ export default function ColorAssignmentModal({
                         className="bg-[var(--dash-bg-raised)] hover:bg-[#434E61] border border-[var(--dash-border-default)] rounded-xl p-6 text-right transition-colors group"
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                            <BuildingStorefrontIcon className="h-6 w-6 text-blue-400" />
+                          <div className="w-10 h-10 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                            <BuildingStorefrontIcon className="h-6 w-6 text-dash-accent-blue" />
                           </div>
                           <h4 className="text-[var(--dash-text-primary)] font-semibold text-lg">{branchData.branchName}</h4>
                         </div>
                         
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
-                            <span className="text-blue-400 font-bold text-xl">{branchData.totalQuantity}</span>
+                            <span className="text-dash-accent-blue font-bold text-xl">{branchData.totalQuantity}</span>
                             <span className="text-[var(--dash-text-muted)]">الكمية الإجمالية</span>
                           </div>
                           
                           <div className="flex justify-between items-center">
-                            <span className="text-green-400 font-medium">{branchData.assignedQuantity}</span>
+                            <span className="text-dash-accent-green font-medium">{branchData.assignedQuantity}</span>
                             <span className="text-[var(--dash-text-muted)]">محدد الألوان</span>
                           </div>
                           
                           <div className="flex justify-between items-center">
-                            <span className="text-orange-400 font-bold text-lg">{branchData.unassignedQuantity}</span>
+                            <span className="text-dash-accent-orange font-bold text-lg">{branchData.unassignedQuantity}</span>
                             <span className="text-[var(--dash-text-muted)]">غير محدد الألوان</span>
                           </div>
 
@@ -534,7 +534,7 @@ export default function ColorAssignmentModal({
                                 {branchData.variants.map((variant, index) => (
                                   <span
                                     key={index}
-                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-600 text-[var(--dash-text-primary)]"
+                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-dash-accent-blue text-[var(--dash-text-primary)]"
                                   >
                                     {variant.name} ({variant.quantity})
                                   </span>
@@ -565,8 +565,8 @@ export default function ColorAssignmentModal({
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                      <TagIcon className="h-5 w-5 text-purple-400" />
+                    <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                      <TagIcon className="h-5 w-5 text-dash-accent-purple" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">تحديد كميات الألوان</h3>
@@ -589,36 +589,36 @@ export default function ColorAssignmentModal({
                 {/* Dynamic Unassigned Counter */}
                 <div className={`rounded-xl p-4 mb-6 transition-all duration-300 ${
                   getRemainingQuantity() === 0 
-                    ? 'bg-gradient-to-r from-green-600/20 to-emerald-600/20 border border-green-500/30' 
-                    : getRemainingQuantity() < 5 
-                    ? 'bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border border-yellow-500/30' 
-                    : 'bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-500/30'
+                    ? 'bg-dash-accent-green-subtle border border-dash-accent-green/30'
+                    : getRemainingQuantity() < 5
+                    ? 'bg-dash-accent-orange-subtle border border-dash-accent-orange/30'
+                    : 'bg-dash-accent-orange-subtle border border-dash-accent-orange/30'
                 }`}>
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-2 mb-2">
                       <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        getRemainingQuantity() === 0 
-                          ? 'bg-green-400 animate-bounce' 
-                          : getRemainingQuantity() < 5 
-                          ? 'bg-yellow-400 animate-pulse' 
-                          : 'bg-orange-400 animate-pulse'
+                        getRemainingQuantity() === 0
+                          ? 'bg-dash-accent-green animate-bounce'
+                          : getRemainingQuantity() < 5
+                          ? 'bg-dash-accent-orange animate-pulse'
+                          : 'bg-dash-accent-orange animate-pulse'
                       }`}></div>
                       <h3 className={`font-medium transition-colors duration-300 ${
                         getRemainingQuantity() === 0 
-                          ? 'text-green-400' 
+                          ? 'text-dash-accent-green' 
                           : getRemainingQuantity() < 5 
-                          ? 'text-yellow-400' 
-                          : 'text-orange-400'
+                          ? 'text-dash-accent-orange' 
+                          : 'text-dash-accent-orange'
                       }`}>
                         الكميات المتبقية للتحديد
                       </h3>
                     </div>
                     <div className={`font-bold text-4xl mb-1 transition-colors duration-300 ${
                       getRemainingQuantity() === 0 
-                        ? 'text-green-400' 
+                        ? 'text-dash-accent-green' 
                         : getRemainingQuantity() < 5 
-                        ? 'text-yellow-400' 
-                        : 'text-orange-400'
+                        ? 'text-dash-accent-orange' 
+                        : 'text-dash-accent-orange'
                     }`}>
                       {getRemainingQuantity()}
                     </div>
@@ -628,11 +628,11 @@ export default function ColorAssignmentModal({
                     
                     {/* Status Message */}
                     {getRemainingQuantity() === 0 ? (
-                      <div className="mt-2 text-green-400 text-sm font-medium">
+                      <div className="mt-2 text-dash-accent-green text-sm font-medium">
                         ✅ تم تحديد جميع الكميات
                       </div>
                     ) : getRemainingQuantity() < 5 ? (
-                      <div className="mt-2 text-yellow-400 text-sm font-medium">
+                      <div className="mt-2 text-dash-accent-orange text-sm font-medium">
                         ⚠️ كمية قليلة متبقية
                       </div>
                     ) : (
@@ -643,7 +643,7 @@ export default function ColorAssignmentModal({
                     <div className="mt-3 space-y-1 text-xs text-[var(--dash-text-muted)]">
                       <div className="flex items-center justify-center gap-4">
                         <div className="flex items-center gap-1">
-                          <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                          <div className="w-2 h-2 bg-dash-accent-blue rounded-full"></div>
                           <span>منتج أصلي</span>
                         </div>
                         <div className="flex items-center gap-1">
@@ -711,7 +711,7 @@ export default function ColorAssignmentModal({
                         console.log('Setting test colors:', defaultTestColors);
                         setTestColors(defaultTestColors);
                       }}
-                      className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
+                      className="mt-4 px-4 py-2 dash-btn-primary text-[var(--dash-text-primary)] rounded transition-colors"
                     >
                       استخدام ألوان تجريبية (للاختبار)
                     </button>
@@ -736,20 +736,20 @@ export default function ColorAssignmentModal({
                                   {(colorAssignments[color.name] || 0) > 0 && (
                                     <div className="space-y-1">
                                       <div className="flex items-center gap-2 text-xs">
-                                        <span className="text-blue-400">
+                                        <span className="text-dash-accent-blue">
                                           سيُضاف: {colorAssignments[color.name] || 0}
                                         </span>
                                         <span className="text-[var(--dash-text-disabled)]">•</span>
-                                        <span className="text-orange-400">
+                                        <span className="text-dash-accent-orange">
                                           متبقي: {getRemainingQuantity()}
                                         </span>
                                         {/* Image status indicator */}
                                         {color.image && color.image.trim() !== '' ? (
-                                          <span className="text-green-400 text-xs">📷</span>
+                                          <span className="text-dash-accent-green text-xs">📷</span>
                                         ) : hasColorImage(color) ? (
-                                          <span className="text-blue-400 text-xs">📷✨</span>
+                                          <span className="text-dash-accent-blue text-xs">📷✨</span>
                                         ) : (
-                                          <span className="text-red-400 text-xs">📷❌</span>
+                                          <span className="text-dash-accent-red text-xs">📷❌</span>
                                         )}
                                       </div>
                                       
@@ -765,11 +765,11 @@ export default function ColorAssignmentModal({
                                         const totalAfter = existingQuantity + newQuantity
                                         
                                         return existingQuantity > 0 ? (
-                                          <div className="text-xs text-purple-400">
+                                          <div className="text-xs text-dash-accent-purple">
                                             {existingQuantity} (موجود) + {newQuantity} (جديد) = {totalAfter} (النهائي)
                                           </div>
                                         ) : (
-                                          <div className="text-xs text-green-400">
+                                          <div className="text-xs text-dash-accent-green">
                                             لون جديد: {newQuantity}
                                           </div>
                                         )
@@ -782,7 +782,7 @@ export default function ColorAssignmentModal({
                               <div className="flex items-center gap-2">
                                 <button
                                   onClick={() => handleColorQuantityChange(color.name, (colorAssignments[color.name] || 0) - 1)}
-                                  className="w-8 h-8 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center transition-colors"
+                                  className="w-8 h-8 dash-btn-red text-[var(--dash-text-primary)] rounded-full flex items-center justify-center transition-colors"
                                   disabled={colorAssignments[color.name] <= 0}
                                 >
                                   -
@@ -799,7 +799,7 @@ export default function ColorAssignmentModal({
                                 
                                 <button
                                   onClick={() => handleColorQuantityChange(color.name, (colorAssignments[color.name] || 0) + 1)}
-                                  className="w-8 h-8 bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] rounded-full flex items-center justify-center transition-colors"
+                                  className="w-8 h-8 dash-btn-green text-[var(--dash-text-primary)] rounded-full flex items-center justify-center transition-colors"
                                   disabled={getRemainingQuantity() <= 0}
                                 >
                                   +
@@ -845,7 +845,7 @@ export default function ColorAssignmentModal({
                                       </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                      <span className="text-green-400 text-xs">✓ موجودة</span>
+                                      <span className="text-dash-accent-green text-xs">✓ موجودة</span>
                                       {/* Only show change button if color doesn't have existing image */}
                                       {(!color.image || color.image.trim() === '') && (
                                         <button
@@ -856,7 +856,7 @@ export default function ColorAssignmentModal({
                                             input.onchange = (e) => handleImageUpload(color.name, e as any)
                                             input.click()
                                           }}
-                                          className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-xs rounded transition-colors"
+                                          className="px-2 py-1 dash-btn-primary text-[var(--dash-text-primary)] text-xs rounded transition-colors"
                                         >
                                           تغيير
                                         </button>
@@ -873,7 +873,7 @@ export default function ColorAssignmentModal({
                                       input.onchange = (e) => handleImageUpload(color.name, e as any)
                                       input.click()
                                     }}
-                                    className="flex items-center gap-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] text-xs rounded transition-colors animate-pulse"
+                                    className="flex items-center gap-2 px-3 py-1 dash-btn-red text-[var(--dash-text-primary)] text-xs rounded transition-colors animate-pulse"
                                   >
                                     <PlusIcon className="h-3 w-3" />
                                     إضافة صورة (مطلوبة)
@@ -883,8 +883,8 @@ export default function ColorAssignmentModal({
                               
                               {/* Warning message for colors that need images */}
                               {needsImageUpload(color) && (
-                                <div className="bg-red-600/20 border border-red-500/30 rounded-lg p-2 mt-2">
-                                  <p className="text-red-400 text-xs text-center">
+                                <div className="bg-dash-accent-red-subtle border border-dash-accent-red/30 rounded-lg p-2 mt-2">
+                                  <p className="text-dash-accent-red text-xs text-center">
                                     🚨 يجب إضافة صورة لهذا اللون قبل الحفظ
                                   </p>
                                 </div>
@@ -892,8 +892,8 @@ export default function ColorAssignmentModal({
                               
                               {/* Success message for colors with images */}
                               {hasColorImage(color) && (color.image && color.image.trim() !== '') && (
-                                <div className="bg-green-600/20 border border-green-500/30 rounded-lg p-2 mt-2">
-                                  <p className="text-green-400 text-xs text-center">
+                                <div className="bg-dash-accent-green-subtle border border-dash-accent-green/30 rounded-lg p-2 mt-2">
+                                  <p className="text-dash-accent-green text-xs text-center">
                                     ✅ هذا اللون لديه صورة مسبقاً
                                   </p>
                                 </div>
@@ -905,18 +905,18 @@ export default function ColorAssignmentModal({
                     ))}
 
                     {/* Enhanced Summary */}
-                    <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-lg p-4 border border-blue-500/20">
+                    <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-lg p-4 border border-dash-accent-blue/20">
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
-                          <span className="text-blue-400 font-medium">إجمالي سيُضاف:</span>
-                          <span className="text-blue-400 font-bold text-lg">
+                          <span className="text-dash-accent-blue font-medium">إجمالي سيُضاف:</span>
+                          <span className="text-dash-accent-blue font-bold text-lg">
                             {getTotalAssigned()}
                           </span>
                         </div>
                         
                         <div className="flex justify-between items-center">
-                          <span className="text-orange-400 font-medium">المتبقي غير محدد:</span>
-                          <span className="text-orange-400 font-bold text-lg">
+                          <span className="text-dash-accent-orange font-medium">المتبقي غير محدد:</span>
+                          <span className="text-dash-accent-orange font-bold text-lg">
                             {getRemainingQuantity()}
                           </span>
                         </div>
@@ -930,24 +930,24 @@ export default function ColorAssignmentModal({
                         
                         {/* Visual Feedback */}
                         {getTotalAssigned() > selectedBranch.unassignedQuantity && (
-                          <div className="bg-red-600/20 border border-red-500/30 rounded-lg p-2 mt-3">
-                            <p className="text-red-400 text-sm text-center">
+                          <div className="bg-dash-accent-red-subtle border border-dash-accent-red/30 rounded-lg p-2 mt-3">
+                            <p className="text-dash-accent-red text-sm text-center">
                               ⚠️ العدد المحدد يتجاوز الكمية المتاحة
                             </p>
                           </div>
                         )}
                         
                         {getRemainingQuantity() === 0 && getTotalAssigned() > 0 && (
-                          <div className="bg-green-600/20 border border-green-500/30 rounded-lg p-2 mt-3">
-                            <p className="text-green-400 text-sm text-center">
+                          <div className="bg-dash-accent-green-subtle border border-dash-accent-green/30 rounded-lg p-2 mt-3">
+                            <p className="text-dash-accent-green text-sm text-center">
                               🎉 تم تحديد جميع الكميات بنجاح!
                             </p>
                           </div>
                         )}
                         
                         {getTotalAssigned() > 0 && getRemainingQuantity() > 0 && (
-                          <div className="bg-yellow-600/20 border border-yellow-500/30 rounded-lg p-2 mt-3">
-                            <p className="text-yellow-400 text-sm text-center">
+                          <div className="bg-dash-accent-orange-subtle border border-dash-accent-orange/30 rounded-lg p-2 mt-3">
+                            <p className="text-dash-accent-orange text-sm text-center">
                               💡 يمكنك تحديد {getRemainingQuantity()} كمية إضافية
                             </p>
                           </div>
@@ -955,19 +955,19 @@ export default function ColorAssignmentModal({
                         
                         {/* Missing Images Warning */}
                         {getMissingImages().length > 0 && (
-                          <div className="bg-red-600/20 border border-red-500/30 rounded-lg p-3 mt-3">
+                          <div className="bg-dash-accent-red-subtle border border-dash-accent-red/30 rounded-lg p-3 mt-3">
                             <div className="text-center">
-                              <p className="text-red-400 text-sm font-medium mb-2">
+                              <p className="text-dash-accent-red text-sm font-medium mb-2">
                                 🚨 صور مطلوبة مفقودة
                               </p>
-                              <p className="text-red-300 text-xs mb-2">
+                              <p className="text-dash-accent-red text-xs mb-2">
                                 الألوان التالية تحتاج لصور:
                               </p>
                               <div className="flex flex-wrap justify-center gap-1">
                                 {getMissingImages().map((color, index) => (
                                   <span 
                                     key={index}
-                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-700/50 text-red-300 border border-red-500/50"
+                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-700/50 text-dash-accent-red border border-dash-accent-red/50"
                                   >
                                     <div 
                                       className="w-3 h-3 rounded-full border border-red-300 mr-1"
@@ -999,7 +999,7 @@ export default function ColorAssignmentModal({
                       disabled={!canSave() || isSaving}
                       className={`px-6 py-2 rounded transition-colors flex items-center gap-2 ${
                         canSave() && !isSaving
-                          ? 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
+                          ? 'dash-btn-green text-[var(--dash-text-primary)]'
                           : 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)] cursor-not-allowed'
                       }`}
                     >

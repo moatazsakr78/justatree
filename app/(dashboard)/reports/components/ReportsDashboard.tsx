@@ -81,10 +81,10 @@ export default function ReportsDashboard({ dateFilter, onDateFilterClick }: Repo
         <div className="flex items-center gap-3">
           <button
             onClick={onDateFilterClick}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] hover:border-blue-500 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] hover:border-dash-accent-blue transition-colors"
           >
             <span className="text-[var(--dash-text-primary)] font-medium">{getFilterLabel()}</span>
-            <CalendarDaysIcon className="h-5 w-5 text-blue-400" />
+            <CalendarDaysIcon className="h-5 w-5 text-dash-accent-blue" />
           </button>
           <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">لوحة التحكم</h2>
         </div>
@@ -155,7 +155,7 @@ export default function ReportsDashboard({ dateFilter, onDateFilterClick }: Repo
             </div>
             <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
               <p className="text-[var(--dash-text-muted)] text-sm mb-1">نسبة الربح</p>
-              <p className="text-2xl font-bold text-green-400">
+              <p className="text-2xl font-bold text-dash-accent-green">
                 {kpiSummary.totalSales > 0
                   ? ((kpiSummary.totalProfit / kpiSummary.totalSales) * 100).toFixed(1)
                   : 0}%
@@ -163,7 +163,7 @@ export default function ReportsDashboard({ dateFilter, onDateFilterClick }: Repo
             </div>
             <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
               <p className="text-[var(--dash-text-muted)] text-sm mb-1">متوسط الفاتورة</p>
-              <p className="text-2xl font-bold text-blue-400">
+              <p className="text-2xl font-bold text-dash-accent-blue">
                 {kpiSummary.avgOrderValue.toLocaleString('ar-EG', { maximumFractionDigits: 0 })}
               </p>
             </div>

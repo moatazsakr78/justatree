@@ -175,7 +175,7 @@ export default function HistoryModal({
         {/* Modal Header */}
         <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-2">
-            <ClockIcon className="h-5 w-5 text-blue-400" />
+            <ClockIcon className="h-5 w-5 text-dash-accent-blue" />
             <h2 className="text-[var(--dash-text-primary)] text-lg font-semibold">تاريخ المبيعات</h2>
           </div>
           <button
@@ -222,17 +222,17 @@ export default function HistoryModal({
             <div className="flex-1 overflow-auto">
               {isLoading ? (
                 <div className="flex-1 flex flex-col items-center justify-center p-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mb-4"></div>
                   <p className="text-[var(--dash-text-muted)] text-lg">جاري تحميل تاريخ المبيعات...</p>
                 </div>
               ) : error ? (
                 <div className="flex-1 flex flex-col items-center justify-center p-8">
-                  <DocumentTextIcon className="h-16 w-16 text-red-500 mb-4" />
-                  <p className="text-red-400 text-lg mb-2">خطأ في التحميل</p>
+                  <DocumentTextIcon className="h-16 w-16 text-dash-accent-red mb-4" />
+                  <p className="text-dash-accent-red text-lg mb-2">خطأ في التحميل</p>
                   <p className="text-[var(--dash-text-disabled)] text-sm mb-4">{error}</p>
                   <button
                     onClick={fetchSalesHistory}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
+                    className="px-4 py-2 dash-btn-primary rounded-lg text-sm transition-colors"
                   >
                     إعادة المحاولة
                   </button>
@@ -243,7 +243,7 @@ export default function HistoryModal({
                     <div key={sale.id}>
                       <div
                         className={`grid grid-cols-8 gap-4 p-3 hover:bg-[var(--dash-bg-surface)] cursor-pointer transition-colors ${
-                          selectedSale?.id === sale.id ? 'bg-blue-600/20 border-l-4 border-blue-500' : ''
+                          selectedSale?.id === sale.id ? 'bg-dash-accent-blue-subtle border-l-4 border-dash-accent-blue' : ''
                         }`}
                         onClick={() => handleSaleSelect(sale)}
                       >
@@ -253,7 +253,7 @@ export default function HistoryModal({
                         <div className="text-center text-[var(--dash-text-secondary)]">
                           {sale.customer?.name || 'عميل مجهول'}
                         </div>
-                        <div className="text-center text-green-400 font-medium">
+                        <div className="text-center text-dash-accent-green font-medium">
                           {sale.total_amount.toFixed(2)}
                         </div>
                         <div className="text-center text-[var(--dash-text-secondary)]">
@@ -262,8 +262,8 @@ export default function HistoryModal({
                         <div className="text-center">
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                             sale.is_updated 
-                              ? 'bg-orange-900 text-orange-300 border border-orange-600/30' 
-                              : 'bg-green-900 text-green-300 border border-green-600/30'
+                              ? 'bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange/30' 
+                              : 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green/30'
                           }`}>
                             {sale.is_updated ? 'نعم' : 'لا'}
                           </span>
@@ -271,14 +271,14 @@ export default function HistoryModal({
                         <div className="text-center text-[var(--dash-text-muted)] text-sm">
                           {formatDate(sale.created_at)}
                         </div>
-                        <div className="text-center text-blue-400">
+                        <div className="text-center text-dash-accent-blue">
                           {sale.sale_items?.length || 0} عنصر
                         </div>
                         <div className="text-center">
                           {sale.is_updated ? (
                             <button
                               onClick={(e) => handleResetUpdatedStatus(sale.id, e)}
-                              className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors flex items-center gap-1 mx-auto"
+                              className="px-2 py-1 text-xs bg-dash-accent-green text-white rounded hover:brightness-90 transition-colors flex items-center gap-1 mx-auto"
                               title="إعادة تعيين حالة التحديث"
                             >
                               <ArrowPathIcon className="h-3 w-3" />
@@ -287,7 +287,7 @@ export default function HistoryModal({
                           ) : (
                             <button
                               onClick={(e) => handleMarkAsUpdated(sale.id, e)}
-                              className="px-2 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors flex items-center gap-1 mx-auto"
+                              className="px-2 py-1 text-xs bg-dash-accent-orange text-white rounded hover:brightness-90 transition-colors flex items-center gap-1 mx-auto"
                               title="وضع علامة كمحدث"
                             >
                               <PencilIcon className="h-3 w-3" />
@@ -299,7 +299,7 @@ export default function HistoryModal({
                       
                       {/* Sale Details - Expandable */}
                       {selectedSale?.id === sale.id && sale.sale_items && (
-                        <div className="bg-[var(--dash-bg-surface)] border-l-4 border-blue-500 p-4">
+                        <div className="bg-[var(--dash-bg-surface)] border-l-4 border-dash-accent-blue p-4">
                           <h4 className="text-[var(--dash-text-primary)] font-medium mb-3">تفاصيل الفاتورة:</h4>
                           <div className="space-y-2">
                             {sale.sale_items.map((item, index) => (
@@ -314,7 +314,7 @@ export default function HistoryModal({
                                 <div className="flex items-center gap-4 text-sm">
                                   <span className="text-[var(--dash-text-secondary)]">الكمية: {item.quantity}</span>
                                   <span className="text-[var(--dash-text-secondary)]">السعر: {item.unit_price.toFixed(2)}</span>
-                                  <span className="text-green-400 font-medium">
+                                  <span className="text-dash-accent-green font-medium">
                                     الإجمالي: {(item.quantity * item.unit_price).toFixed(2)}
                                   </span>
                                 </div>
@@ -327,14 +327,14 @@ export default function HistoryModal({
                             <div className="flex justify-between items-center text-sm mb-2">
                               <div className="space-y-1">
                                 {sale.discount_amount && sale.discount_amount > 0 && (
-                                  <div className="text-orange-400">خصم: {sale.discount_amount.toFixed(2)}</div>
+                                  <div className="text-dash-accent-orange">خصم: {sale.discount_amount.toFixed(2)}</div>
                                 )}
                                 {sale.tax_amount && sale.tax_amount > 0 && (
-                                  <div className="text-blue-400">ضريبة: {sale.tax_amount.toFixed(2)}</div>
+                                  <div className="text-dash-accent-blue">ضريبة: {sale.tax_amount.toFixed(2)}</div>
                                 )}
                               </div>
                               <div className="text-right">
-                                <div className="text-green-400 font-bold text-lg">
+                                <div className="text-dash-accent-green font-bold text-lg">
                                   الإجمالي النهائي: {sale.total_amount.toFixed(2)}
                                 </div>
                               </div>
@@ -346,8 +346,8 @@ export default function HistoryModal({
                                 <span className="text-[var(--dash-text-muted)]">حالة التحديث:</span>
                                 <span className={`px-2 py-1 rounded-full font-medium ${
                                   sale.is_updated 
-                                    ? 'bg-orange-900 text-orange-300' 
-                                    : 'bg-green-900 text-green-300'
+                                    ? 'bg-dash-accent-orange-subtle text-dash-accent-orange' 
+                                    : 'bg-dash-accent-green-subtle text-dash-accent-green'
                                 }`}>
                                   {sale.is_updated ? 'تم التحديث' : 'لم يتم التحديث'}
                                 </span>

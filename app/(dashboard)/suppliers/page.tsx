@@ -67,7 +67,7 @@ const tableColumns = [
       <div className="flex items-center gap-2">
         <span className="text-[var(--dash-text-primary)] font-medium">{value}</span>
         {supplier.id === DEFAULT_SUPPLIER_ID && (
-          <span className="text-yellow-400">★</span>
+          <span className="text-dash-accent-orange">★</span>
         )}
       </div>
     )
@@ -184,7 +184,7 @@ const TreeView = ({
       <div 
         className={`flex items-center cursor-pointer transition-colors ${
           selectedGroupId === node.id 
-            ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+            ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
             : 'hover:bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
         }`}
         style={{ paddingRight: `${16 + level * 24}px`, paddingLeft: '12px', paddingTop: '8px', paddingBottom: '8px' }}
@@ -731,7 +731,7 @@ export default function SuppliersPage() {
               onClick={handleDeleteGroup}
               className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
                 selectedSupplierGroup && !selectedSupplierGroup.isDefault
-                  ? 'text-red-400 hover:text-red-300 hover:bg-red-600/10'
+                  ? 'text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle'
                   : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
               }`}
               disabled={!selectedSupplierGroup || selectedSupplierGroup.isDefault}
@@ -770,7 +770,7 @@ export default function SuppliersPage() {
                   ? 'text-[var(--dash-text-disabled)] cursor-not-allowed'
                   : isDeleting
                   ? 'text-[var(--dash-text-disabled)] cursor-not-allowed'
-                  : 'text-red-400 hover:text-red-300 hover:bg-red-600/10'
+                  : 'text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle'
               }`}
               disabled={!selectedSupplier || (selectedSupplier && isDefaultSupplier(selectedSupplier.id)) || isDeleting}
               title={
@@ -843,7 +843,7 @@ export default function SuppliersPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="اسم المورد..."
-                className="w-56 sm:w-64 md:w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-56 sm:w-64 md:w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue focus:border-transparent text-sm"
               />
             </div>
 
@@ -871,7 +871,7 @@ export default function SuppliersPage() {
                 onClick={() => setViewMode('grid')}
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -881,7 +881,7 @@ export default function SuppliersPage() {
                 onClick={() => setViewMode('table')}
                 className={`p-2 transition-colors ${
                   viewMode === 'table'
-                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -905,7 +905,7 @@ export default function SuppliersPage() {
                   </div>
                 ) : groupsError ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="text-red-400 text-sm">{groupsError}</div>
+                    <div className="text-dash-accent-red text-sm">{groupsError}</div>
                   </div>
                 ) : groups.length === 0 ? (
                   <div className="flex items-center justify-center py-8">
@@ -937,7 +937,7 @@ export default function SuppliersPage() {
                 </div>
               ) : suppliersError ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="text-red-400">{suppliersError}</div>
+                  <div className="text-dash-accent-red">{suppliersError}</div>
                 </div>
               ) : viewMode === 'grid' ? (
                 <div className="h-full overflow-y-auto scrollbar-hide">
@@ -1044,7 +1044,7 @@ export default function SuppliersPage() {
                 <p className="text-[var(--dash-text-secondary)] text-right mb-2">
                   هل أنت متأكد من أنك تريد حذف هذه المجموعة؟
                 </p>
-                <p className="text-blue-400 font-medium text-right">
+                <p className="text-dash-accent-blue font-medium text-right">
                   {selectedSupplierGroup?.name}
                 </p>
               </div>
@@ -1053,7 +1053,7 @@ export default function SuppliersPage() {
               <div className="px-6 py-4 border-t border-[var(--dash-border-default)] flex gap-3 justify-end">
                 <button
                   onClick={cancelDeleteGroup}
-                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-gray-500 rounded transition-colors"
+                  className="px-4 py-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] bg-transparent hover:bg-[var(--dash-bg-overlay)]/20 border border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)] rounded transition-colors"
                 >
                   إلغاء
                 </button>
@@ -1062,8 +1062,8 @@ export default function SuppliersPage() {
                   disabled={isDeleting}
                   className={`px-4 py-2 rounded transition-colors ${
                     isDeleting
-                      ? 'bg-red-600/50 text-red-300 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)]'
+                      ? 'bg-dash-accent-red/50 text-dash-accent-red cursor-not-allowed'
+                      : 'dash-btn-red'
                   }`}
                 >
                   {isDeleting ? 'جاري الحذف...' : 'نعم، احذف'}

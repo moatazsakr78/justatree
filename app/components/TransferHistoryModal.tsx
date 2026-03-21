@@ -400,7 +400,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
   const invoiceColumns = useMemo(() => [
     { id: 'index', header: '#', accessor: 'index', width: 50, minWidth: 40 },
     { id: 'invoice_number', header: 'رقم الفاتورة', accessor: 'invoice_number', width: 150, minWidth: 100,
-      render: (value: string) => <span className="text-green-400 text-xs">{value}</span>
+      render: (value: string) => <span className="text-dash-accent-green text-xs">{value}</span>
     },
     { id: 'date', header: 'التاريخ', accessor: 'date', width: 110, minWidth: 80 },
     { id: 'time', header: 'الساعة', accessor: 'time', width: 80, minWidth: 60 },
@@ -413,7 +413,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
     { id: 'items_count', header: 'عدد الأصناف', accessor: 'items_count', width: 90, minWidth: 70 },
     { id: 'total_qty', header: 'إجمالي القطع', accessor: 'total_qty', width: 100, minWidth: 70,
       render: (value: number) => (
-        <span className="bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs font-medium">{value}</span>
+        <span className="bg-dash-accent-green-subtle text-dash-accent-green px-2 py-0.5 rounded text-xs font-medium">{value}</span>
       )
     },
     { id: 'record', header: 'الخزنة', accessor: 'record', width: 100, minWidth: 70 },
@@ -427,7 +427,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
     { id: 'barcode', header: 'الباركود', accessor: 'barcode', width: 150, minWidth: 100 },
     { id: 'quantity', header: 'الكمية', accessor: 'quantity', width: 80, minWidth: 60,
       render: (value: number) => (
-        <span className="bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs font-medium">{value}</span>
+        <span className="bg-dash-accent-green-subtle text-dash-accent-green px-2 py-0.5 rounded text-xs font-medium">{value}</span>
       )
     },
     { id: 'notes', header: 'ملاحظات', accessor: 'notes', width: 200, minWidth: 100 },
@@ -513,7 +513,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm justify-end">
                       <span className="text-[var(--dash-text-primary)] font-medium">{to}</span>
-                      <span className="text-green-400">←</span>
+                      <span className="text-dash-accent-green">←</span>
                       <span className="text-[var(--dash-text-primary)] font-medium">{from}</span>
                     </div>
                     <div className="flex flex-wrap gap-3 text-xs text-[var(--dash-text-muted)] justify-end">
@@ -531,7 +531,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               {mobileSelectedTransfer.items.map((item, idx) => (
                 <div key={item.id} className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                   <div className="flex items-center justify-between">
-                    <span className="bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs font-medium">
+                    <span className="bg-dash-accent-green-subtle text-dash-accent-green px-2 py-0.5 rounded text-xs font-medium">
                       {item.quantity} قطعة
                     </span>
                     <span className="text-[var(--dash-text-primary)] text-sm font-medium">{item.product?.name || '—'}</span>
@@ -565,7 +565,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                       type="checkbox"
                       checked={!selectedLocations}
                       onChange={handleSelectAllLocations}
-                      className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                      className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0"
                     />
                     <span className="text-[var(--dash-text-secondary)] text-sm">الكل</span>
                   </label>
@@ -575,7 +575,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                         type="checkbox"
                         checked={!selectedLocations || selectedLocations.has(loc.name)}
                         onChange={() => handleLocationToggle(loc.name)}
-                        className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                        className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0"
                       />
                       <div className="flex items-center gap-2">
                         <span className="text-[var(--dash-text-disabled)] text-xs">({loc.type === 'branch' ? 'فرع' : 'مخزن'})</span>
@@ -596,7 +596,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                       onClick={() => setDirectionFilter(dir)}
                       className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${
                         directionFilter === dir
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-dash-accent-green text-white'
                           : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-highlight)]'
                       }`}
                     >
@@ -613,7 +613,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   onClick={() => setShowDateFilter(true)}
                   className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm transition-colors ${
                     dateFilter.type !== 'all'
-                      ? 'bg-green-600/20 text-green-400 border border-green-600/30'
+                      ? 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green/30'
                       : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)]'
                   }`}
                 >
@@ -631,7 +631,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 <FunnelIcon className="h-5 w-5" />
               </button>
               <div className="flex items-center gap-2">
-                <ArrowsRightLeftIcon className="h-5 w-5 text-green-400" />
+                <ArrowsRightLeftIcon className="h-5 w-5 text-dash-accent-green" />
                 <h2 className="text-[var(--dash-text-primary)] font-semibold text-sm">حركة النقل</h2>
               </div>
               <button onClick={onClose} className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]">
@@ -650,7 +650,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               </button>
               {isMobileInfoExpanded && (
                 <div className="px-4 pb-3">
-                  <div className="bg-green-600 rounded p-3 text-center">
+                  <div className="bg-dash-accent-green rounded p-3 text-center">
                     <div className="text-xl font-bold text-white">{summaryStats.totalTransfers}</div>
                     <div className="text-green-200 text-xs">عمليات نقل &bull; {summaryStats.totalItems} قطعة</div>
                   </div>
@@ -683,15 +683,15 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                         <span className="text-[var(--dash-text-muted)] text-xs">
                           {formatDate(transfer.created_at)} &bull; {formatTime(transfer.created_at, transfer.time)}
                         </span>
-                        <span className="text-green-400 font-medium text-sm">{transfer.invoice_number}</span>
+                        <span className="text-dash-accent-green font-medium text-sm">{transfer.invoice_number}</span>
                       </div>
                       <div className="flex items-center gap-2 mb-3 justify-end">
                         <span className="text-[var(--dash-text-primary)] text-sm font-medium">{to}</span>
-                        <span className="text-green-400">←</span>
+                        <span className="text-dash-accent-green">←</span>
                         <span className="text-[var(--dash-text-primary)] text-sm font-medium">{from}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs font-medium">
+                        <span className="bg-dash-accent-green-subtle text-dash-accent-green px-2 py-0.5 rounded text-xs font-medium">
                           {totalQty} قطعة
                         </span>
                         <div className="flex flex-wrap gap-1 justify-end">
@@ -715,7 +715,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
 
               {isLoading && (
                 <div className="flex justify-center p-6">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-500"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-green"></div>
                 </div>
               )}
               {!hasMore && filteredTransfers.length > 0 && (
@@ -751,7 +751,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 onClick={() => setActiveTab('invoices')}
                 className={`px-5 py-2.5 text-sm font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
                   activeTab === 'invoices'
-                    ? 'text-green-400 border-green-400 bg-green-600/10'
+                    ? 'text-dash-accent-green border-green-400 bg-dash-accent-green-subtle'
                     : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                 }`}
               >
@@ -761,7 +761,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                 onClick={() => setActiveTab('summary')}
                 className={`px-5 py-2.5 text-sm font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                   activeTab === 'summary'
-                    ? 'text-green-400 border-green-400 bg-green-600/10'
+                    ? 'text-dash-accent-green border-green-400 bg-dash-accent-green-subtle'
                     : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                 }`}
               >
@@ -776,7 +776,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   onClick={() => setViewMode('list-only')}
                   className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                     viewMode === 'list-only'
-                      ? 'bg-green-600 text-white shadow-sm'
+                      ? 'bg-dash-accent-green text-white shadow-sm'
                       : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                   }`}
                   title="عرض القائمة فقط"
@@ -787,7 +787,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   onClick={() => setViewMode('split')}
                   className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                     viewMode === 'split'
-                      ? 'bg-green-600 text-white shadow-sm'
+                      ? 'bg-dash-accent-green text-white shadow-sm'
                       : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                   }`}
                   title="عرض مقسم"
@@ -798,7 +798,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                   onClick={() => setViewMode('details-only')}
                   className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                     viewMode === 'details-only'
-                      ? 'bg-green-600 text-white shadow-sm'
+                      ? 'bg-dash-accent-green text-white shadow-sm'
                       : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                   }`}
                   title="عرض التفاصيل فقط"
@@ -840,7 +840,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
           <div className="w-80 bg-[var(--dash-bg-surface)] border-l border-[var(--dash-border-default)] flex flex-col overflow-y-auto scrollbar-hide">
             {/* Summary Card */}
             <div className="p-4 border-b border-[var(--dash-border-default)]">
-              <div className="bg-green-600 rounded p-4 text-center">
+              <div className="bg-dash-accent-green rounded p-4 text-center">
                 <div className="text-2xl font-bold text-white">{summaryStats.totalTransfers}</div>
                 <div className="text-green-200 text-sm">إجمالي حركات النقل</div>
                 <div className="text-green-100 text-xs mt-1">{summaryStats.totalItems} قطعة</div>
@@ -859,7 +859,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                     type="checkbox"
                     checked={!selectedLocations}
                     onChange={handleSelectAllLocations}
-                    className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0 cursor-pointer"
+                    className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0 cursor-pointer"
                   />
                 </label>
                 {locations.map(loc => (
@@ -872,7 +872,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                       type="checkbox"
                       checked={!selectedLocations || selectedLocations.has(loc.name)}
                       onChange={() => handleLocationToggle(loc.name)}
-                      className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0 cursor-pointer"
+                      className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0 cursor-pointer"
                     />
                   </label>
                 ))}
@@ -889,7 +889,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                     onClick={() => setDirectionFilter(dir)}
                     className={`w-full px-3 py-2 rounded text-sm font-medium text-right transition-colors ${
                       directionFilter === dir
-                        ? 'bg-green-600/20 text-green-400 border border-green-600/30'
+                        ? 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green/30'
                         : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                   >
@@ -902,7 +902,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
             {/* Date Filter */}
             <div className="p-4 space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-green-400 text-sm">{getFilterLabel(dateFilter)}</span>
+                <span className="text-dash-accent-green text-sm">{getFilterLabel(dateFilter)}</span>
                 <span className="text-[var(--dash-text-muted)] text-xs">الفترة</span>
               </div>
               {dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate && (
@@ -919,14 +919,14 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               </div>
               <button
                 onClick={() => setShowDateFilter(true)}
-                className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
+                className="w-full dash-btn-green px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
               >
                 <CalendarDaysIcon className="h-5 w-5" />
                 <span>التاريخ</span>
               </button>
               {dateFilter.type !== 'all' && (
                 <div className="mt-2 text-center">
-                  <span className="text-xs text-green-400">
+                  <span className="text-xs text-dash-accent-green">
                     {dateFilter.type === 'today' ? 'عرض فواتير اليوم' :
                      dateFilter.type === 'current_week' ? 'عرض فواتير الأسبوع الحالي' :
                      dateFilter.type === 'current_month' ? 'عرض فواتير الشهر الحالي' :
@@ -957,7 +957,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               >
                 {isLoading && transfers.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mr-3"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-green mr-3"></div>
                     <span className="text-[var(--dash-text-muted)]">جاري تحميل فواتير النقل...</span>
                   </div>
                 ) : filteredTransfers.length === 0 ? (
@@ -981,7 +981,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               {/* Resizable Divider */}
               {viewMode === 'split' && (
                 <div
-                  className="absolute left-0 right-0 h-2 bg-[var(--dash-bg-overlay)] hover:bg-green-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
+                  className="absolute left-0 right-0 h-2 bg-[var(--dash-bg-overlay)] hover:bg-dash-accent-green cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
                   style={{ top: `${dividerPosition}%`, transform: 'translateY(-50%)' }}
                   onMouseDown={handleMouseDown}
                 >
@@ -1005,7 +1005,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                     {/* Detail Header */}
                     <div className="flex items-center justify-between p-4 pb-2 flex-shrink-0 border-b border-[var(--dash-border-default)]">
                       <div />
-                      <h3 className="text-green-400 font-medium text-lg">
+                      <h3 className="text-dash-accent-green font-medium text-lg">
                         تفاصيل فاتورة النقل {selectedTransfer.invoice_number}
                       </h3>
                     </div>
@@ -1024,7 +1024,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                         const { from, to } = parseTransferDirection(selectedTransfer.notes)
                         return (
                           <span className="text-[var(--dash-text-primary)] font-medium">
-                            {from} <span className="text-green-400 mx-1">→</span> {to}
+                            {from} <span className="text-dash-accent-green mx-1">→</span> {to}
                           </span>
                         )
                       })()}
@@ -1052,19 +1052,19 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
               {/* Stats Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
-                  <div className="text-2xl font-bold text-green-400">{summaryStats.totalTransfers}</div>
+                  <div className="text-2xl font-bold text-dash-accent-green">{summaryStats.totalTransfers}</div>
                   <div className="text-[var(--dash-text-muted)] text-sm mt-1">إجمالي فواتير النقل</div>
                 </div>
                 <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
-                  <div className="text-2xl font-bold text-green-400">{summaryStats.totalItems}</div>
+                  <div className="text-2xl font-bold text-dash-accent-green">{summaryStats.totalItems}</div>
                   <div className="text-[var(--dash-text-muted)] text-sm mt-1">إجمالي القطع المنقولة</div>
                 </div>
                 <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
-                  <div className="text-2xl font-bold text-green-400">{summaryStats.uniqueProducts}</div>
+                  <div className="text-2xl font-bold text-dash-accent-green">{summaryStats.uniqueProducts}</div>
                   <div className="text-[var(--dash-text-muted)] text-sm mt-1">منتجات فريدة</div>
                 </div>
                 <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)] text-center">
-                  <div className="text-2xl font-bold text-green-400">{summaryStats.avgItemsPerTransfer}</div>
+                  <div className="text-2xl font-bold text-dash-accent-green">{summaryStats.avgItemsPerTransfer}</div>
                   <div className="text-[var(--dash-text-muted)] text-sm mt-1">متوسط القطع لكل عملية</div>
                 </div>
               </div>
@@ -1088,12 +1088,12 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
                       {branchFlowData.map((flow, idx) => (
                         <tr key={flow.name} className={`border-b border-[var(--dash-border-subtle)] ${idx % 2 === 0 ? '' : 'bg-[var(--dash-bg-raised)]/30'}`}>
                           <td className="px-4 py-3 text-[var(--dash-text-primary)] font-medium text-right">{flow.name}</td>
-                          <td className="px-4 py-3 text-center text-red-400">{flow.outCount}</td>
-                          <td className="px-4 py-3 text-center text-red-400">{flow.outQty}</td>
-                          <td className="px-4 py-3 text-center text-green-400">{flow.inCount}</td>
-                          <td className="px-4 py-3 text-center text-green-400">{flow.inQty}</td>
+                          <td className="px-4 py-3 text-center text-dash-accent-red">{flow.outCount}</td>
+                          <td className="px-4 py-3 text-center text-dash-accent-red">{flow.outQty}</td>
+                          <td className="px-4 py-3 text-center text-dash-accent-green">{flow.inCount}</td>
+                          <td className="px-4 py-3 text-center text-dash-accent-green">{flow.inQty}</td>
                           <td className="px-4 py-3 text-center">
-                            <span className={flow.inQty - flow.outQty >= 0 ? 'text-green-400' : 'text-red-400'}>
+                            <span className={flow.inQty - flow.outQty >= 0 ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
                               {flow.inQty - flow.outQty >= 0 ? '+' : ''}{flow.inQty - flow.outQty}
                             </span>
                           </td>
@@ -1108,7 +1108,7 @@ export default function TransferHistoryModal({ isOpen, onClose }: TransferHistor
 
               {isLoading && (
                 <div className="flex justify-center p-6">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-500"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-green"></div>
                 </div>
               )}
             </div>

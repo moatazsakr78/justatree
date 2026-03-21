@@ -382,7 +382,7 @@ export default function AddPaymentModal({
                 onClick={() => setPaymentType('payment')}
                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
                   paymentType === 'payment'
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-dash-accent-blue text-white shadow-sm'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -393,7 +393,7 @@ export default function AddPaymentModal({
                 onClick={() => setPaymentType('discount')}
                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
                   paymentType === 'discount'
-                    ? 'bg-purple-600 text-white shadow-sm'
+                    ? 'bg-dash-accent-purple text-white shadow-sm'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -404,7 +404,7 @@ export default function AddPaymentModal({
                 onClick={() => setPaymentType('loan')}
                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
                   paymentType === 'loan'
-                    ? 'bg-orange-600 text-white shadow-sm'
+                    ? 'bg-dash-accent-orange text-white shadow-sm'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -415,24 +415,24 @@ export default function AddPaymentModal({
             {/* Current Balance Display */}
             <div className={`rounded p-4 text-center ${
               paymentType === 'loan'
-                ? 'bg-orange-600/20 border border-orange-600'
+                ? 'bg-dash-accent-orange-subtle border border-dash-accent-orange'
                 : paymentType === 'discount'
-                  ? 'bg-purple-600/20 border border-purple-600'
-                  : 'bg-blue-600/20 border border-blue-600'
+                  ? 'bg-dash-accent-purple-subtle border border-dash-accent-purple'
+                  : 'bg-dash-accent-blue-subtle border border-dash-accent-blue'
             }`}>
               <div className={`text-sm mb-1 ${
-                paymentType === 'loan' ? 'text-orange-300' : paymentType === 'discount' ? 'text-purple-300' : 'text-blue-300'
+                paymentType === 'loan' ? 'text-dash-accent-orange' : paymentType === 'discount' ? 'text-dash-accent-purple' : 'text-dash-accent-blue'
               }`}>
                 الرصيد الحالي
               </div>
               <div className="text-2xl font-bold text-[var(--dash-text-primary)]">{formatPrice(currentBalance)}</div>
               {paymentType === 'loan' && (
-                <div className="text-xs text-orange-300 mt-1">
+                <div className="text-xs text-dash-accent-orange mt-1">
                   السلفة ستزيد الرصيد المستحق على العميل
                 </div>
               )}
               {paymentType === 'discount' && (
-                <div className="text-xs text-purple-300 mt-1">
+                <div className="text-xs text-dash-accent-purple mt-1">
                   الخصم سيقلل الرصيد المستحق على العميل
                 </div>
               )}
@@ -441,7 +441,7 @@ export default function AddPaymentModal({
             {/* Amount Input */}
             <div>
               <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
-                {paymentType === 'loan' ? 'مبلغ السلفة' : paymentType === 'discount' ? 'مبلغ الخصم' : 'مبلغ الدفعة'} <span className="text-red-400">*</span>
+                {paymentType === 'loan' ? 'مبلغ السلفة' : paymentType === 'discount' ? 'مبلغ الخصم' : 'مبلغ الدفعة'} <span className="text-dash-accent-red">*</span>
               </label>
               <input
                 type="number"
@@ -450,7 +450,7 @@ export default function AddPaymentModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 className={`w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 ${
-                  paymentType === 'loan' ? 'focus:ring-orange-500' : paymentType === 'discount' ? 'focus:ring-purple-500' : 'focus:ring-[var(--dash-accent-blue)]'
+                  paymentType === 'loan' ? 'focus:ring-dash-accent-orange' : paymentType === 'discount' ? 'focus:ring-dash-accent-purple' : 'focus:ring-[var(--dash-accent-blue)]'
                 }`}
                 placeholder={paymentType === 'loan' ? 'أدخل مبلغ السلفة' : paymentType === 'discount' ? 'أدخل مبلغ الخصم' : 'أدخل مبلغ الدفعة'}
                 required
@@ -461,8 +461,8 @@ export default function AddPaymentModal({
             {amount && parseFloat(amount) > 0 && paymentType === 'payment' && (
               <div className={`rounded p-3 text-center ${
                 remainingBalance < 0
-                  ? 'bg-red-600/20 border border-red-600'
-                  : 'bg-green-600/20 border border-green-600'
+                  ? 'bg-dash-accent-red-subtle border border-dash-accent-red'
+                  : 'bg-dash-accent-green-subtle border border-dash-accent-green'
               }`}>
                 <div className="text-sm mb-1" style={{ color: remainingBalance < 0 ? '#FCA5A5' : '#86EFAC' }}>
                   الرصيد المتبقي
@@ -476,8 +476,8 @@ export default function AddPaymentModal({
 
             {/* New Balance Display for Loan */}
             {amount && parseFloat(amount) > 0 && paymentType === 'loan' && (
-              <div className="rounded p-3 text-center bg-orange-600/20 border border-orange-600">
-                <div className="text-sm mb-1 text-orange-300">
+              <div className="rounded p-3 text-center bg-dash-accent-orange-subtle border border-dash-accent-orange">
+                <div className="text-sm mb-1 text-dash-accent-orange">
                   الرصيد الجديد بعد السلفة
                 </div>
                 <div className="text-xl font-bold text-[var(--dash-text-primary)]">
@@ -488,8 +488,8 @@ export default function AddPaymentModal({
 
             {/* New Balance Display for Discount */}
             {amount && parseFloat(amount) > 0 && paymentType === 'discount' && (
-              <div className="rounded p-3 text-center bg-purple-600/20 border border-purple-600">
-                <div className="text-sm mb-1 text-purple-300">
+              <div className="rounded p-3 text-center bg-dash-accent-purple-subtle border border-dash-accent-purple">
+                <div className="text-sm mb-1 text-dash-accent-purple">
                   الرصيد الجديد بعد الخصم
                 </div>
                 <div className="text-xl font-bold text-[var(--dash-text-primary)]">
@@ -549,14 +549,14 @@ export default function AddPaymentModal({
             {/* البيان */}
             <div>
               <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
-                البيان {(paymentType === 'loan' || paymentType === 'discount') && <span className="text-red-400">*</span>}
+                البيان {(paymentType === 'loan' || paymentType === 'discount') && <span className="text-dash-accent-red">*</span>}
               </label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 className={`w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 resize-none ${
-                  paymentType === 'loan' ? 'focus:ring-orange-500' : paymentType === 'discount' ? 'focus:ring-purple-500' : 'focus:ring-[var(--dash-accent-blue)]'
+                  paymentType === 'loan' ? 'focus:ring-dash-accent-orange' : paymentType === 'discount' ? 'focus:ring-dash-accent-purple' : 'focus:ring-[var(--dash-accent-blue)]'
                 }`}
                 placeholder="أدخل البيان"
                 required={paymentType === 'loan' || paymentType === 'discount'}
@@ -578,10 +578,10 @@ export default function AddPaymentModal({
                 disabled={isSubmitting || !amount || parseFloat(amount) <= 0 || ((paymentType === 'loan' || paymentType === 'discount') && (!notes || notes.trim() === ''))}
                 className={`flex-1 px-4 py-2 text-white rounded font-medium transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed ${
                   paymentType === 'loan'
-                    ? 'bg-orange-600 hover:bg-orange-700'
+                    ? 'dash-btn-orange'
                     : paymentType === 'discount'
-                      ? 'bg-purple-600 hover:bg-purple-700'
-                      : 'bg-blue-600 hover:bg-blue-700'
+                      ? 'dash-btn-purple'
+                      : 'dash-btn-primary'
                 }`}
               >
                 {isSubmitting

@@ -332,7 +332,7 @@ export default function EditInvoiceModal({
           {isLoading ? (
             <div className="text-center py-8 text-[var(--dash-text-muted)]">جاري تحميل البيانات...</div>
           ) : error ? (
-            <div className="text-center py-8 text-red-400">{error}</div>
+            <div className="text-center py-8 text-dash-accent-red">{error}</div>
           ) : (
             <>
               {/* معلومات الفاتورة */}
@@ -385,7 +385,7 @@ export default function EditInvoiceModal({
                               setPaymentMethodSearch('')
                             }}
                             className={`w-full px-4 py-2 text-right flex items-center justify-between hover:bg-[var(--dash-bg-overlay)] transition-colors ${
-                              selectedPaymentMethod === method.name ? 'bg-blue-600/30 text-blue-300' : 'text-[var(--dash-text-secondary)]'
+                              selectedPaymentMethod === method.name ? 'bg-dash-accent-blue/30 text-dash-accent-blue' : 'text-[var(--dash-text-secondary)]'
                             }`}
                           >
                             <span>{method.name}</span>
@@ -436,7 +436,7 @@ export default function EditInvoiceModal({
                             setSafeSearch('')
                           }}
                           className={`w-full px-4 py-2 text-right flex items-center justify-between hover:bg-[var(--dash-bg-overlay)] transition-colors ${
-                            selectedRecordId === null ? 'bg-blue-600/30 text-blue-300' : 'text-[var(--dash-text-secondary)]'
+                            selectedRecordId === null ? 'bg-dash-accent-blue/30 text-dash-accent-blue' : 'text-[var(--dash-text-secondary)]'
                           }`}
                         >
                           <span>لا يوجد</span>
@@ -453,7 +453,7 @@ export default function EditInvoiceModal({
                               setSafeSearch('')
                             }}
                             className={`w-full px-4 py-2 text-right flex items-center justify-between hover:bg-[var(--dash-bg-overlay)] transition-colors ${
-                              selectedRecordId === safe.id ? 'bg-blue-600/30 text-blue-300' : 'text-[var(--dash-text-secondary)]'
+                              selectedRecordId === safe.id ? 'bg-dash-accent-blue/30 text-dash-accent-blue' : 'text-[var(--dash-text-secondary)]'
                             }`}
                           >
                             <span>{safe.name}</span>
@@ -509,7 +509,7 @@ export default function EditInvoiceModal({
                             setCustomerSearch('')
                           }}
                           className={`w-full px-4 py-2 text-right flex items-center justify-between hover:bg-[var(--dash-bg-overlay)] transition-colors ${
-                            selectedCustomerId === customer.id ? 'bg-blue-600/30 text-blue-300' : 'text-[var(--dash-text-secondary)]'
+                            selectedCustomerId === customer.id ? 'bg-dash-accent-blue/30 text-dash-accent-blue' : 'text-[var(--dash-text-secondary)]'
                           }`}
                         >
                           <div>
@@ -569,7 +569,7 @@ export default function EditInvoiceModal({
                             setBranchSearch('')
                           }}
                           className={`w-full px-4 py-2 text-right flex items-center justify-between hover:bg-[var(--dash-bg-overlay)] transition-colors ${
-                            selectedBranchId === branch.id ? 'bg-blue-600/30 text-blue-300' : 'text-[var(--dash-text-secondary)]'
+                            selectedBranchId === branch.id ? 'bg-dash-accent-blue/30 text-dash-accent-blue' : 'text-[var(--dash-text-secondary)]'
                           }`}
                         >
                           <span>{branch.name}</span>
@@ -596,7 +596,7 @@ export default function EditInvoiceModal({
           <button
             onClick={handleSave}
             disabled={isLoading || isSaving}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-dash-accent-blue text-white rounded-lg hover:brightness-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSaving ? 'جاري الحفظ...' : 'حفظ التغييرات'}
           </button>

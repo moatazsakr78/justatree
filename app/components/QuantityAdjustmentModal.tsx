@@ -60,7 +60,7 @@ export default function QuantityAdjustmentModal({
   const isSubtractMode = mode === 'subtract'
   const title = isAddMode ? 'إضافة كمية' : isSubtractMode ? 'خصم كمية' : 'تعديل الكمية'
   const IconComponent = isAddMode ? PlusIcon : isSubtractMode ? MinusIcon : PencilIcon
-  const iconBg = isSubtractMode ? 'bg-red-600' : 'bg-blue-600'
+  const iconBg = isSubtractMode ? 'bg-dash-accent-red' : 'bg-dash-accent-blue'
 
   return (
     <>
@@ -78,7 +78,7 @@ export default function QuantityAdjustmentModal({
               </div>
               <div>
                 <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">{title}</h2>
-                <p className="text-sm text-blue-400">{product.name}</p>
+                <p className="text-sm text-dash-accent-blue">{product.name}</p>
               </div>
             </div>
             <button
@@ -102,8 +102,8 @@ export default function QuantityAdjustmentModal({
                 <div className="flex justify-between items-center">
                   <span className="text-[var(--dash-text-muted)]">الكمية الحالية</span>
                   <span className={`font-bold text-lg ${
-                    currentQuantity < 0 ? 'text-red-400' :
-                    currentQuantity === 0 ? 'text-[var(--dash-text-muted)]' : 'text-green-400'
+                    currentQuantity < 0 ? 'text-dash-accent-red' :
+                    currentQuantity === 0 ? 'text-[var(--dash-text-muted)]' : 'text-dash-accent-green'
                   }`}>
                     {currentQuantity}
                   </span>
@@ -131,8 +131,8 @@ export default function QuantityAdjustmentModal({
             {quantity && (() => {
               const numQ = parseInt(quantity) || 0
               const result = isAddMode ? currentQuantity + numQ : isSubtractMode ? currentQuantity - numQ : numQ
-              const previewBg = isSubtractMode ? 'bg-red-600/10 border-red-600/20' : 'bg-blue-600/10 border-blue-600/20'
-              const previewText = isSubtractMode ? 'text-red-400' : 'text-blue-400'
+              const previewBg = isSubtractMode ? 'bg-dash-accent-red-subtle border-dash-accent-red/20' : 'bg-dash-accent-blue-subtle border-dash-accent-blue/20'
+              const previewText = isSubtractMode ? 'text-dash-accent-red' : 'text-dash-accent-blue'
               return (
                 <div className={`${previewBg} border rounded-lg p-4`}>
                   <div className="flex justify-between items-center">
@@ -171,7 +171,7 @@ export default function QuantityAdjustmentModal({
             <button
               onClick={handleSubmit}
               disabled={!quantity}
-              className={`px-6 py-2 ${isSubtractMode ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors font-medium`}
+              className={`px-6 py-2 ${isSubtractMode ? 'dash-btn-red' : 'dash-btn-primary'} disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors font-medium`}
             >
               تأكيد {isAddMode ? 'الإضافة' : isSubtractMode ? 'الخصم' : 'التعديل'}
             </button>

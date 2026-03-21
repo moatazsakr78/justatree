@@ -223,7 +223,7 @@ export default function ProductVariantQuantitiesModal({
               <select
                 value={selectedBranchId}
                 onChange={(e) => setSelectedBranchId(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dash-accent-green focus:border-transparent"
               >
                 {branches.map(branch => (
                   <option key={branch.id} value={branch.id}>
@@ -239,7 +239,7 @@ export default function ProductVariantQuantitiesModal({
                 onClick={() => setActiveVariantType('color')}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   activeVariantType === 'color'
-                    ? 'bg-green-600 text-white'
+                    ? 'bg-dash-accent-green text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -249,7 +249,7 @@ export default function ProductVariantQuantitiesModal({
                 onClick={() => setActiveVariantType('shape')}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   activeVariantType === 'shape'
-                    ? 'bg-green-600 text-white'
+                    ? 'bg-dash-accent-green text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -263,7 +263,7 @@ export default function ProductVariantQuantitiesModal({
         <div className="flex-1 overflow-y-auto p-6">
           {isLoading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-dash-accent-green mx-auto"></div>
               <p className="text-gray-600 mt-4">جاري التحميل...</p>
             </div>
           ) : definitions.length === 0 ? (
@@ -276,8 +276,8 @@ export default function ProductVariantQuantitiesModal({
             </div>
           ) : (
             <div>
-              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
+              <div className="mb-4 p-3 bg-dash-accent-blue-subtle border border-blue-200 rounded-lg">
+                <p className="text-sm text-dash-accent-blue">
                   <span className="font-bold">ملاحظة:</span> أدخل الكمية المتوفرة من كل {activeVariantType === 'color' ? 'لون' : 'شكل'} في <span className="font-bold">{selectedBranch?.name}</span>
                 </p>
               </div>
@@ -329,7 +329,7 @@ export default function ProductVariantQuantitiesModal({
                         min="0"
                         value={quantities[def.id]?.[selectedBranchId] || 0}
                         onChange={(e) => handleQuantityChange(def.id, selectedBranchId, e.target.value)}
-                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-center text-lg font-bold focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-center text-lg font-bold focus:ring-2 focus:ring-dash-accent-green focus:border-dash-accent-green"
                       />
                     </div>
                   </div>
@@ -344,7 +344,7 @@ export default function ProductVariantQuantitiesModal({
           <button
             onClick={handleSave}
             disabled={isSaving || definitions.length === 0}
-            className="flex-1 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 flex items-center justify-center gap-2 font-medium"
+            className="flex-1 bg-dash-accent-green text-white px-4 py-3 rounded-lg hover:brightness-90 transition-colors disabled:bg-gray-400 flex items-center justify-center gap-2 font-medium"
           >
             {isSaving ? (
               <>

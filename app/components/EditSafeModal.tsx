@@ -221,12 +221,12 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
           </div>
 
           {/* Warning */}
-          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4">
+          <div className="bg-dash-accent-red-subtle border border-dash-accent-red/30 rounded-lg p-4 mb-4">
             <div className="flex items-start gap-3">
-              <ExclamationTriangleIcon className="h-6 w-6 text-red-400 flex-shrink-0 mt-0.5" />
+              <ExclamationTriangleIcon className="h-6 w-6 text-dash-accent-red flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-red-400 font-bold text-sm mb-1">تحذير: إزالة جميع الأدراج</h3>
-                <p className="text-red-300/80 text-sm">
+                <h3 className="text-dash-accent-red font-bold text-sm mb-1">تحذير: إزالة جميع الأدراج</h3>
+                <p className="text-dash-accent-red/80 text-sm">
                   سيتم دمج جميع الأدراج في الخزنة الرئيسية. لا يمكن التراجع عن هذا الإجراء.
                 </p>
               </div>
@@ -246,7 +246,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
             </div>
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--dash-border-default)]">
               <span className="text-sm font-medium text-[var(--dash-text-primary)]">إجمالي الرصيد المُدمج</span>
-              <span className="text-sm font-bold text-blue-400">{formatPrice(totalDrawerBalance)}</span>
+              <span className="text-sm font-bold text-dash-accent-blue">{formatPrice(totalDrawerBalance)}</span>
             </div>
           </div>
 
@@ -272,7 +272,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
           {/* Confirmation input */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
-              اكتب اسم الخزنة <span className="text-red-400 font-bold">"{safe?.name}"</span> للتأكيد
+              اكتب اسم الخزنة <span className="text-dash-accent-red font-bold">"{safe?.name}"</span> للتأكيد
             </label>
             <input
               type="text"
@@ -296,7 +296,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
             <button
               onClick={handleConfirmDisable}
               disabled={disableConfirmText.trim() !== safe?.name?.trim() || isLoading}
-              className="px-4 py-2 bg-red-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-dash-accent-red text-[var(--dash-text-primary)] rounded-lg hover:brightness-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'جاري الإزالة...' : 'تأكيد الإزالة'}
             </button>
@@ -347,7 +347,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
                   type="checkbox"
                   checked={supportsDrawers}
                   onChange={(e) => handleDrawerToggle(e.target.checked)}
-                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
                 <span className="text-sm font-medium text-[var(--dash-text-secondary)]">تدعم الأدراج</span>
@@ -363,7 +363,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
                   type="checkbox"
                   checked={showTransfers}
                   onChange={(e) => setShowTransfers(e.target.checked)}
-                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
+                  className="w-5 h-5 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
                   disabled={isLoading}
                 />
                 <span className="text-sm font-medium text-[var(--dash-text-secondary)]">فصل التحويلات</span>
@@ -374,7 +374,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
 
           {/* Enable drawers: first drawer name + balance info */}
           {isEnablingDrawers && safe?.safe_type !== 'sub' && (
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 space-y-3">
+            <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg p-3 space-y-3">
               <div>
                 <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-1.5">
                   اسم الدرج الأول
@@ -388,7 +388,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
                   disabled={isLoading}
                 />
               </div>
-              <p className="text-xs text-blue-300/80">
+              <p className="text-xs text-dash-accent-blue/80">
                 سيتم نقل رصيد الخزنة ({formatPrice(currentBalance)}) إلى الدرج الجديد
               </p>
             </div>
@@ -409,8 +409,8 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
             disabled={!safeName.trim() || isLoading}
             className={`px-4 py-2 text-[var(--dash-text-primary)] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               isEnablingDrawers
-                ? 'bg-green-600 hover:bg-green-700'
-                : 'bg-blue-600 hover:bg-blue-700'
+                ? 'dash-btn-green'
+                : 'dash-btn-primary'
             }`}
           >
             {isLoading

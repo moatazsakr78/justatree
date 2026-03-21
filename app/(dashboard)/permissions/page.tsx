@@ -1038,7 +1038,7 @@ export default function PermissionsPage() {
       width: 200,
       render: (value: any, role: Role) => (
         <div className="flex items-center gap-2">
-          <ShieldCheckIcon className="h-4 w-4 text-blue-400" />
+          <ShieldCheckIcon className="h-4 w-4 text-dash-accent-blue" />
           <span className="font-medium text-[var(--dash-text-primary)]">{value}</span>
         </div>
       )
@@ -1073,8 +1073,8 @@ export default function PermissionsPage() {
         <div className="flex items-center gap-2">
           <span className={`px-2 py-1 text-xs rounded-full ${
             role.roleType === 'حقل رئيسي' 
-              ? 'bg-purple-600/20 text-purple-300 border border-purple-600/30' 
-              : 'bg-blue-600/20 text-blue-300 border border-blue-600/30'
+              ? 'bg-dash-accent-purple-subtle text-dash-accent-purple border border-dash-accent-purple/30'
+              : 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue/30'
           }`}>
             {role.roleType === 'حقل رئيسي' ? 'حقل رئيسي' : role.parentRole}
           </span>
@@ -1101,10 +1101,10 @@ export default function PermissionsPage() {
       width: 250,
       render: (value: any, item: PermissionTemplate) => (
         <div className="flex items-center gap-2">
-          <KeyIcon className="h-4 w-4 text-blue-400" />
+          <KeyIcon className="h-4 w-4 text-dash-accent-blue" />
           <span className="font-medium text-[var(--dash-text-primary)]">{value}</span>
           {value === 'عام' && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-500/20 text-green-400">افتراضي</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-dash-accent-green-subtle text-dash-accent-green">افتراضي</span>
           )}
         </div>
       )
@@ -1150,7 +1150,7 @@ export default function PermissionsPage() {
       width: 200,
       render: (value: any, user: User) => (
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-blue-600">
+          <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-dash-accent-blue">
             {user.avatar_url ? (
               <img 
                 src={user.avatar_url} 
@@ -1186,7 +1186,7 @@ export default function PermissionsPage() {
           {editingUserId === user.id ? (
             <div className="flex items-center gap-2 w-full">
               <select
-                className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md px-2 py-1 text-[var(--dash-text-primary)] text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md px-2 py-1 text-[var(--dash-text-primary)] text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-dash-accent-blue"
                 value={value || 'عميل'}
                 onChange={(e) => updateUserRole(user.id, e.target.value)}
                 disabled={updatingRole || user.is_admin}
@@ -1196,7 +1196,7 @@ export default function PermissionsPage() {
                 ))}
               </select>
               {updatingRole && (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-dash-accent-blue"></div>
               )}
               <button
                 onClick={() => setEditingUserId(null)}
@@ -1209,16 +1209,16 @@ export default function PermissionsPage() {
           ) : (
             <div className="flex items-center gap-2 w-full">
               <span className={`px-2 py-1 text-[var(--dash-text-primary)] text-xs rounded-full ${
-                value === 'عميل' ? 'bg-green-600' :
-                value === 'جملة' ? 'bg-blue-600' :
-                value === 'موظف' ? 'bg-blue-600' :
-                value === 'أدمن رئيسي' ? 'bg-purple-600' : 'bg-[var(--dash-bg-overlay)]'
+                value === 'عميل' ? 'bg-dash-accent-green' :
+                value === 'جملة' ? 'bg-dash-accent-blue' :
+                value === 'موظف' ? 'bg-dash-accent-blue' :
+                value === 'أدمن رئيسي' ? 'bg-dash-accent-purple' : 'bg-[var(--dash-bg-overlay)]'
               }`}>
                 {value || 'غير محدد'}
               </span>
               {user.is_admin && (
                 <LockClosedIcon
-                  className="h-3 w-3 text-yellow-400"
+                  className="h-3 w-3 text-dash-accent-orange"
                   title="محمي - لا يمكن تغيير رتبته"
                 />
               )}
@@ -1227,7 +1227,7 @@ export default function PermissionsPage() {
                 className={`text-xs ${
                   user.is_admin
                     ? 'text-gray-600 cursor-not-allowed'
-                    : 'text-[var(--dash-text-muted)] hover:text-blue-400'
+                    : 'text-[var(--dash-text-muted)] hover:text-dash-accent-blue'
                 }`}
                 disabled={user.is_admin}
                 title={user.is_admin ? 'لا يمكن تغيير رتبة هذا المستخدم - محمي (is_admin=true)' : ''}
@@ -1275,7 +1275,7 @@ export default function PermissionsPage() {
             {editingPermissionUserId === user.id ? (
               <div className="flex items-center gap-2 w-full">
                 <select
-                  className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md px-2 py-1 text-[var(--dash-text-primary)] text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md px-2 py-1 text-[var(--dash-text-primary)] text-xs flex-1 focus:outline-none focus:ring-2 focus:ring-dash-accent-blue"
                   value={value || ''}
                   onChange={(e) => updateUserPermission(user.id, e.target.value || null)}
                   disabled={updatingPermission}
@@ -1286,7 +1286,7 @@ export default function PermissionsPage() {
                   ))}
                 </select>
                 {updatingPermission && (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-dash-accent-blue"></div>
                 )}
                 <button
                   onClick={() => setEditingPermissionUserId(null)}
@@ -1300,14 +1300,14 @@ export default function PermissionsPage() {
               <div className="flex items-center gap-2 w-full">
                 <span className={`px-2 py-1 text-[var(--dash-text-primary)] text-xs rounded-full ${
                   user.permission_name && user.permission_name !== 'عام'
-                    ? 'bg-cyan-600'
+                    ? 'bg-dash-accent-cyan'
                     : 'bg-[var(--dash-bg-overlay)]'
                 }`}>
                   {user.permission_name || 'عام'}
                 </span>
                 <button
                   onClick={() => setEditingPermissionUserId(user.id)}
-                  className="text-xs text-[var(--dash-text-muted)] hover:text-blue-400"
+                  className="text-xs text-[var(--dash-text-muted)] hover:text-dash-accent-blue"
                 >
                   <PencilIcon className="h-3 w-3" />
                 </button>
@@ -1348,7 +1348,7 @@ export default function PermissionsPage() {
           ) : null}
           <button
             onClick={() => setEditingBranchUserId(user.id)}
-            className="flex items-center gap-1 px-2 py-1 text-xs bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-md transition-colors"
+            className="flex items-center gap-1 px-2 py-1 text-xs bg-dash-accent-blue-subtle hover:bg-dash-accent-blue-subtle/80 text-dash-accent-blue rounded-md transition-colors"
             title="تعيين الفروع"
           >
             <BuildingStorefrontIcon className="h-3 w-3" />
@@ -1544,8 +1544,8 @@ export default function PermissionsPage() {
                 <button
                   onClick={() => setActiveView('roles')}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
-                    activeView === 'roles' 
-                      ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                    activeView === 'roles'
+                      ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                       : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
@@ -1555,8 +1555,8 @@ export default function PermissionsPage() {
                 <button
                   onClick={() => setActiveView('users')}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
-                    activeView === 'users' 
-                      ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                    activeView === 'users'
+                      ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                       : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
@@ -1566,8 +1566,8 @@ export default function PermissionsPage() {
                 <button
                   onClick={() => setActiveView('permissions')}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
-                    activeView === 'permissions' 
-                      ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                    activeView === 'permissions'
+                      ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                       : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
@@ -1582,7 +1582,7 @@ export default function PermissionsPage() {
               <div className="flex-1 overflow-y-auto scrollbar-hide">
                 <div className="p-4">
                   {/* عنوان القالب المحدد */}
-                  <div className="mb-4 p-3 bg-blue-600/20 border border-blue-500/30 rounded-lg">
+                  <div className="mb-4 p-3 bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg">
                     <span className="text-[var(--dash-text-muted)] text-xs">تعديل صلاحيات:</span>
                     <h3 className="text-[var(--dash-text-primary)] font-bold">{selectedTemplate?.name || 'غير محدد'}</h3>
                   </div>
@@ -1590,7 +1590,7 @@ export default function PermissionsPage() {
                   {/* زر حفظ التغييرات */}
                   <button
                     onClick={handleSaveTemplatePermissions}
-                    className="w-full mb-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
+                    className="w-full mb-4 px-4 py-2 dash-btn-green text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
                   >
                     حفظ التغييرات
                   </button>
@@ -1630,9 +1630,9 @@ export default function PermissionsPage() {
                                 key={page.id}
                                 className={`flex items-center gap-2 px-3 py-2 mx-1 my-0.5 rounded-lg transition-all duration-200 ${
                                   isSelected
-                                    ? 'bg-blue-600'
+                                    ? 'bg-dash-accent-blue'
                                     : isPageHidden
-                                      ? 'bg-red-500/10 opacity-60'
+                                      ? 'bg-dash-accent-red-subtle opacity-60'
                                       : 'hover:bg-[var(--dash-bg-surface)]'
                                 }`}
                                 style={{ paddingRight: '28px' }}
@@ -1651,8 +1651,8 @@ export default function PermissionsPage() {
                                   className={`
                                     flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all duration-200
                                     ${isPageHidden
-                                      ? 'bg-red-500 border-red-500 hover:bg-red-600 hover:border-red-600'
-                                      : 'bg-green-500 border-green-500 hover:bg-green-600 hover:border-green-600'
+                                      ? 'bg-dash-accent-red border-dash-accent-red hover:brightness-110'
+                                      : 'bg-dash-accent-green border-dash-accent-green hover:brightness-110'
                                     }
                                   `}
                                   title={isPageHidden ? 'الصفحة مخفية - اضغط للإظهار' : 'الصفحة ظاهرة - اضغط للإخفاء'}
@@ -1701,7 +1701,7 @@ export default function PermissionsPage() {
                                       ${isSelected
                                         ? 'bg-white/20 text-[var(--dash-text-primary)]'
                                         : page.count.selected > 0
-                                          ? 'bg-red-500/20 text-red-400'
+                                          ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                                           : 'bg-[var(--dash-bg-overlay)]/50 text-[var(--dash-text-muted)]'
                                       }
                                     `}
@@ -1712,7 +1712,7 @@ export default function PermissionsPage() {
 
                                 {/* Hidden indicator */}
                                 {isPageHidden && (
-                                  <span className="text-xs text-red-400 flex-shrink-0">مخفية</span>
+                                  <span className="text-xs text-dash-accent-red flex-shrink-0">مخفية</span>
                                 )}
                               </div>
                             );
@@ -1734,8 +1734,8 @@ export default function PermissionsPage() {
                   <p>2. اختر قالباً من الجدول</p>
                   <p>3. اضغط على "إعدادات" لتعديل صلاحياته</p>
                 </div>
-                <div className="mt-4 p-3 bg-blue-600/10 border border-blue-500/30 rounded-lg">
-                  <span className="text-blue-400 text-xs">معلومة:</span>
+                <div className="mt-4 p-3 bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg">
+                  <span className="text-dash-accent-blue text-xs">معلومة:</span>
                   <p className="text-[var(--dash-text-secondary)] text-xs mt-1">كل قالب يحدد الصلاحيات الممنوعة، وكل ما عداها يكون مسموحاً</p>
                 </div>
                 {/* إحصائيات الصلاحيات */}
@@ -1766,13 +1766,13 @@ export default function PermissionsPage() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[var(--dash-text-muted)]">الأدوار الرئيسية:</span>
-                    <span className="text-green-400 font-medium">
+                    <span className="text-dash-accent-green font-medium">
                       {roles.filter(r => r.roleType === 'حقل رئيسي').length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[var(--dash-text-muted)]">إجمالي المستخدمين:</span>
-                    <span className="text-blue-400 font-medium">
+                    <span className="text-dash-accent-blue font-medium">
                       {roles.reduce((sum, role) => sum + role.userCount, 0)}
                     </span>
                   </div>
@@ -1791,19 +1791,19 @@ export default function PermissionsPage() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[var(--dash-text-muted)]">لديهم أدوار:</span>
-                    <span className="text-blue-400 font-medium">
+                    <span className="text-dash-accent-blue font-medium">
                       {realUsers.filter(u => u.role && u.role !== 'غير محدد').length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[var(--dash-text-muted)]">بدون أدوار:</span>
-                    <span className="text-orange-400 font-medium">
+                    <span className="text-dash-accent-orange font-medium">
                       {realUsers.filter(u => !u.role || u.role === 'غير محدد').length}
                     </span>
                   </div>
                   {usersLoading && (
                     <div className="flex items-center justify-center py-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-dash-accent-blue"></div>
                       <span className="mr-2 text-[var(--dash-text-muted)] text-xs">جاري التحميل...</span>
                     </div>
                   )}
@@ -1825,7 +1825,7 @@ export default function PermissionsPage() {
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                      className="w-80 pl-4 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue focus:border-transparent text-sm"
                       placeholder={`البحث في ${
                         activeView === 'roles' ? 'الأدوار' : 
                         activeView === 'users' ? 'المستخدمين' : 'الصلاحيات'
@@ -1838,7 +1838,7 @@ export default function PermissionsPage() {
                     <button 
                       onClick={() => setViewMode('list')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'list' ? 'bg-blue-600 text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
+                        viewMode === 'list' ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <ListBulletIcon className="h-4 w-4" />
@@ -1846,7 +1846,7 @@ export default function PermissionsPage() {
                     <button 
                       onClick={() => setViewMode('grid')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'grid' ? 'bg-blue-600 text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
+                        viewMode === 'grid' ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <Squares2X2Icon className="h-4 w-4" />
@@ -1860,7 +1860,7 @@ export default function PermissionsPage() {
                     {activeView === 'roles' ? 'إدارة الأدوار' : 
                      activeView === 'users' ? 'إدارة المستخدمين' : 'إدارة الصلاحيات'}
                   </h2>
-                  <span className="bg-blue-600 text-[var(--dash-text-primary)] px-2 py-1 rounded-full text-xs">
+                  <span className="bg-dash-accent-blue text-[var(--dash-text-primary)] px-2 py-1 rounded-full text-xs">
                     {getCurrentData().length}
                   </span>
                 </div>
@@ -1890,7 +1890,7 @@ export default function PermissionsPage() {
                                 const codes = editingTemplateCategoryPermissions.map(p => p.code);
                                 restrictAllTemplateCategory(codes);
                               }}
-                              className="px-3 py-1.5 text-sm rounded-lg bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] transition-colors"
+                              className="px-3 py-1.5 text-sm rounded-lg dash-btn-red text-[var(--dash-text-primary)] transition-colors"
                             >
                               منع الكل
                             </button>
@@ -1899,7 +1899,7 @@ export default function PermissionsPage() {
                                 const codes = editingTemplateCategoryPermissions.map(p => p.code);
                                 unrestrictAllTemplateCategory(codes);
                               }}
-                              className="px-3 py-1.5 text-sm rounded-lg bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)] transition-colors"
+                              className="px-3 py-1.5 text-sm rounded-lg dash-btn-green text-[var(--dash-text-primary)] transition-colors"
                             >
                               السماح بالكل
                             </button>
@@ -1911,13 +1911,13 @@ export default function PermissionsPage() {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
                               <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-red-500" />
+                                <div className="w-3 h-3 rounded-full bg-dash-accent-red" />
                                 <span className="text-[var(--dash-text-secondary)] text-sm">
                                   ممنوع: {editingTemplateCategoryPermissions.filter(p => editingTemplateRestrictions.includes(p.code)).length}
                                 </span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-green-500" />
+                                <div className="w-3 h-3 rounded-full bg-dash-accent-green" />
                                 <span className="text-[var(--dash-text-secondary)] text-sm">
                                   مسموح: {editingTemplateCategoryPermissions.filter(p => !editingTemplateRestrictions.includes(p.code)).length}
                                 </span>
@@ -1938,13 +1938,13 @@ export default function PermissionsPage() {
                                   className={`
                                     relative flex flex-col p-4 rounded-xl border transition-all duration-200 cursor-pointer hover:scale-[1.02]
                                     ${isRestricted
-                                      ? 'bg-red-500/10 border-red-500/40 hover:border-red-500'
-                                      : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)]/50 hover:border-green-500/50'
+                                      ? 'bg-dash-accent-red-subtle border-dash-accent-red/40 hover:border-dash-accent-red'
+                                      : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)]/50 hover:border-dash-accent-green/50'
                                     }
                                   `}
                                 >
                                   {/* Status Indicator */}
-                                  <div className={`absolute top-3 left-3 w-2 h-2 rounded-full ${isRestricted ? 'bg-red-500' : 'bg-green-500'}`} />
+                                  <div className={`absolute top-3 left-3 w-2 h-2 rounded-full ${isRestricted ? 'bg-dash-accent-red' : 'bg-dash-accent-green'}`} />
 
                                   {/* Header: Checkbox + Title */}
                                   <div className="flex items-start gap-3">
@@ -1952,8 +1952,8 @@ export default function PermissionsPage() {
                                     <div className={`
                                       flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors duration-200
                                       ${isRestricted
-                                        ? 'bg-red-500 border-red-500'
-                                        : 'border-green-500 bg-green-500'
+                                        ? 'bg-dash-accent-red border-dash-accent-red'
+                                        : 'border-dash-accent-green bg-dash-accent-green'
                                       }
                                     `}>
                                       {isRestricted ? (
@@ -1972,9 +1972,9 @@ export default function PermissionsPage() {
                                       <div className="flex items-center gap-2 flex-wrap">
                                         <h4 className="text-[var(--dash-text-primary)] font-medium text-sm leading-tight">{permission.name}</h4>
                                         <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
-                                          permission.permission_type === 'button' ? 'bg-blue-500/20 text-blue-400' :
-                                          permission.permission_type === 'feature' ? 'bg-green-500/20 text-green-400' :
-                                          'bg-purple-500/20 text-purple-400'
+                                          permission.permission_type === 'button' ? 'bg-dash-accent-blue-subtle text-dash-accent-blue' :
+                                          permission.permission_type === 'feature' ? 'bg-dash-accent-green-subtle text-dash-accent-green' :
+                                          'bg-dash-accent-purple-subtle text-dash-accent-purple'
                                         }`}>
                                           {permission.permission_type === 'button' ? 'زر' :
                                            permission.permission_type === 'feature' ? 'ميزة' : 'عرض'}
@@ -1991,9 +1991,9 @@ export default function PermissionsPage() {
                                   {/* Status Text */}
                                   <div className="mt-3 mr-9">
                                     {isRestricted ? (
-                                      <span className="text-xs text-red-400 font-medium">ممنوع</span>
+                                      <span className="text-xs text-dash-accent-red font-medium">ممنوع</span>
                                     ) : (
-                                      <span className="text-xs text-green-400 font-medium">مسموح</span>
+                                      <span className="text-xs text-dash-accent-green font-medium">مسموح</span>
                                     )}
                                   </div>
                                 </div>
@@ -2064,7 +2064,7 @@ export default function PermissionsPage() {
                             <p className="text-sm mb-4">قم بإنشاء صلاحية جديدة للبدء</p>
                             <button
                               onClick={handleOpenAddTemplateModal}
-                              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg transition-colors"
+                              className="px-4 py-2 dash-btn-primary text-[var(--dash-text-primary)] rounded-lg transition-colors"
                             >
                               صلاحية جديدة
                             </button>
@@ -2217,22 +2217,22 @@ export default function PermissionsPage() {
             </div>
 
             {/* Role Info */}
-            <div className="bg-blue-50/10 border border-blue-600/30 rounded-lg p-4">
-              <h4 className="text-blue-300 font-medium mb-2 flex items-center gap-2 justify-end">
+            <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg p-4">
+              <h4 className="text-dash-accent-blue font-medium mb-2 flex items-center gap-2 justify-end">
                 <span>معلومات الدور</span>
                 <ShieldCheckIcon className="h-4 w-4" />
               </h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-blue-300">فرعي</span>
+                  <span className="text-dash-accent-blue">فرعي</span>
                   <span className="text-[var(--dash-text-secondary)]">نوع الدور:</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-blue-300">جملة</span>
+                  <span className="text-dash-accent-blue">جملة</span>
                   <span className="text-[var(--dash-text-secondary)]">مشتق من:</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-blue-300">
+                  <span className="text-dash-accent-blue">
                     {selectedRoleTemplateId
                       ? templates.find(t => t.id === selectedRoleTemplateId)?.name || 'قالب محدد'
                       : 'نفس صلاحيات الجملة'}
@@ -2370,22 +2370,22 @@ export default function PermissionsPage() {
             </div>
 
             {/* Role Info */}
-            <div className="bg-blue-50/10 border border-blue-600/30 rounded-lg p-4">
-              <h4 className="text-blue-300 font-medium mb-2 flex items-center gap-2 justify-end">
+            <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg p-4">
+              <h4 className="text-dash-accent-blue font-medium mb-2 flex items-center gap-2 justify-end">
                 <span>معلومات الدور</span>
                 <ShieldCheckIcon className="h-4 w-4" />
               </h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-blue-300">فرعي</span>
+                  <span className="text-dash-accent-blue">فرعي</span>
                   <span className="text-[var(--dash-text-secondary)]">نوع الدور:</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-blue-300">جملة</span>
+                  <span className="text-dash-accent-blue">جملة</span>
                   <span className="text-[var(--dash-text-secondary)]">مشتق من:</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-blue-300">نفس صلاحيات الجملة</span>
+                  <span className="text-dash-accent-blue">نفس صلاحيات الجملة</span>
                   <span className="text-[var(--dash-text-secondary)]">الصلاحيات:</span>
                 </div>
               </div>
@@ -2494,8 +2494,8 @@ export default function PermissionsPage() {
             </div>
 
             {/* Info Box */}
-            <div className="bg-blue-50/10 border border-blue-600/30 rounded-lg p-4">
-              <h4 className="text-blue-300 font-medium mb-2 flex items-center gap-2 justify-end">
+            <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg p-4">
+              <h4 className="text-dash-accent-blue font-medium mb-2 flex items-center gap-2 justify-end">
                 <span>معلومات</span>
                 <KeyIcon className="h-4 w-4" />
               </h4>
@@ -2522,7 +2522,7 @@ export default function PermissionsPage() {
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2 rounded ${
                   !newTemplateName.trim() || isCreatingTemplate
                     ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
+                    : 'dash-btn-primary text-[var(--dash-text-primary)]'
                 }`}
               >
                 {isCreatingTemplate ? (
@@ -2619,7 +2619,7 @@ export default function PermissionsPage() {
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2 rounded ${
                   !newTemplateName.trim()
                     ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)]'
+                    : 'dash-btn-primary text-[var(--dash-text-primary)]'
                 }`}
               >
                 <CheckIcon className="w-4 h-4" />

@@ -662,9 +662,9 @@ export default function ResizableTable({
     <div className={`h-full ${className}`} ref={containerRef}>
       {/* Simplified loading indicator */}
       {isInitializing.current && (
-        <div className="absolute top-0 left-0 right-0 z-50 bg-blue-500/5 border-b border-blue-400/50">
-          <div className="flex items-center justify-center gap-2 py-1 text-blue-400 text-xs">
-            <div className="animate-spin rounded-full h-2 w-2 border border-blue-400 border-t-transparent"></div>
+        <div className="absolute top-0 left-0 right-0 z-50 bg-dash-accent-blue/5 border-b border-dash-accent-blue/50">
+          <div className="flex items-center justify-center gap-2 py-1 text-dash-accent-blue text-xs">
+            <div className="animate-spin rounded-full h-2 w-2 border border-dash-accent-blue border-t-transparent"></div>
             <span>تحديث...</span>
           </div>
         </div>

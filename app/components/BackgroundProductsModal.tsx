@@ -91,9 +91,9 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-3">
-            <CloudArrowUpIcon className="h-6 w-6 text-blue-400" />
+            <CloudArrowUpIcon className="h-6 w-6 text-dash-accent-blue" />
             <h2 className="text-lg font-semibold text-white">عمليات المنتجات في الخلفية</h2>
-            <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-sm rounded-full">
+            <span className="px-2 py-0.5 bg-dash-accent-blue-subtle text-dash-accent-blue text-sm rounded-full">
               {tasks.length}
             </span>
           </div>
@@ -124,10 +124,10 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
               {tasks.map((task) => {
                 const statusInfo = getStatusLabel(task.status)
                 const colorClasses: Record<string, string> = {
-                  yellow: 'bg-yellow-500/20 text-yellow-400',
-                  blue: 'bg-blue-500/20 text-blue-400',
-                  green: 'bg-green-500/20 text-green-400',
-                  red: 'bg-red-500/20 text-red-400'
+                  yellow: 'bg-dash-accent-orange-subtle text-dash-accent-orange',
+                  blue: 'bg-dash-accent-blue-subtle text-dash-accent-blue',
+                  green: 'bg-dash-accent-green-subtle text-dash-accent-green',
+                  red: 'bg-dash-accent-red-subtle text-dash-accent-red'
                 }
 
                 return (
@@ -139,7 +139,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
                       <div className="space-y-2 flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-white font-medium truncate">{task.productName}</span>
-                          <span className={`px-1.5 py-0.5 text-xs rounded ${task.type === 'update' ? 'bg-orange-500/20 text-orange-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                          <span className={`px-1.5 py-0.5 text-xs rounded ${task.type === 'update' ? 'bg-dash-accent-orange-subtle text-dash-accent-orange' : 'bg-dash-accent-green-subtle text-dash-accent-green'}`}>
                             {task.type === 'update' ? 'تعديل' : 'إنشاء'}
                           </span>
                           <span className={`flex items-center gap-1 px-2 py-0.5 text-xs rounded-full ${colorClasses[statusInfo.color]}`}>
@@ -152,7 +152,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
                         {task.status !== 'completed' && task.status !== 'failed' && task.status !== 'queued' && (
                           <div className="w-full bg-[var(--dash-bg-raised)] rounded-full h-1.5">
                             <div
-                              className="bg-blue-500 h-1.5 rounded-full transition-all duration-500"
+                              className="bg-dash-accent-blue h-1.5 rounded-full transition-all duration-500"
                               style={{ width: `${task.progress}%` }}
                             />
                           </div>
@@ -160,7 +160,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
 
                         {/* Error message */}
                         {task.error && (
-                          <p className="text-sm text-red-400 mt-1">{task.error}</p>
+                          <p className="text-sm text-dash-accent-red mt-1">{task.error}</p>
                         )}
                       </div>
 
@@ -169,7 +169,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
                         {task.status === 'failed' && (
                           <button
                             onClick={() => retryTask(task.id)}
-                            className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded transition-colors"
+                            className="p-1.5 text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded transition-colors"
                             title="إعادة المحاولة"
                           >
                             <ArrowPathIcon className="h-4 w-4" />
@@ -198,7 +198,7 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
           <div className="flex items-center justify-between text-sm text-[var(--dash-text-muted)]">
             <span>
               {tasks.some(t => t.status !== 'completed' && t.status !== 'failed') && (
-                <span className="text-blue-400">جاري العمل... لا تغلق المتصفح</span>
+                <span className="text-dash-accent-blue">جاري العمل... لا تغلق المتصفح</span>
               )}
             </span>
             <span>

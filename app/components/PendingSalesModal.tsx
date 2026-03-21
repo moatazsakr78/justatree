@@ -82,28 +82,28 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
     switch (status) {
       case 'pending':
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full">
+          <span className="flex items-center gap-1 px-2 py-1 bg-dash-accent-orange-subtle text-dash-accent-orange text-xs rounded-full">
             <ClockIcon className="h-3 w-3" />
             في الانتظار
           </span>
         )
       case 'syncing':
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full">
+          <span className="flex items-center gap-1 px-2 py-1 bg-dash-accent-blue-subtle text-dash-accent-blue text-xs rounded-full">
             <ArrowPathIcon className="h-3 w-3 animate-spin" />
             جاري المزامنة
           </span>
         )
       case 'synced':
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">
+          <span className="flex items-center gap-1 px-2 py-1 bg-dash-accent-green-subtle text-dash-accent-green text-xs rounded-full">
             <CheckCircleIcon className="h-3 w-3" />
             تمت المزامنة
           </span>
         )
       case 'failed':
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full">
+          <span className="flex items-center gap-1 px-2 py-1 bg-dash-accent-red-subtle text-dash-accent-red text-xs rounded-full">
             <ExclamationCircleIcon className="h-3 w-3" />
             فشلت
           </span>
@@ -131,9 +131,9 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-3">
-            <CloudArrowUpIcon className="h-6 w-6 text-orange-400" />
+            <CloudArrowUpIcon className="h-6 w-6 text-dash-accent-orange" />
             <h2 className="text-lg font-semibold text-white">الفواتير المعلقة</h2>
-            <span className="px-2 py-0.5 bg-orange-500/20 text-orange-400 text-sm rounded-full">
+            <span className="px-2 py-0.5 bg-dash-accent-orange-subtle text-dash-accent-orange text-sm rounded-full">
               {sales.filter(s => s.sync_status === 'pending').length}
             </span>
           </div>
@@ -141,7 +141,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
             <button
               onClick={handleSync}
               disabled={isSyncing || !navigator.onLine}
-              className="flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-white text-sm rounded-lg transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 bg-dash-accent-blue hover:bg-dash-accent-blue disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-white text-sm rounded-lg transition-colors"
             >
               <ArrowPathIcon className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
               {isSyncing ? 'جاري المزامنة...' : 'مزامنة الآن'}
@@ -170,7 +170,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                   key={sale.local_id}
                   className={`p-4 rounded-lg border transition-colors cursor-pointer ${
                     selectedSale?.local_id === sale.local_id
-                      ? 'bg-[var(--dash-bg-raised)] border-blue-500'
+                      ? 'bg-[var(--dash-bg-raised)] border-dash-accent-blue'
                       : 'bg-[var(--dash-bg-base)] border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)]'
                   }`}
                   onClick={() => setSelectedSale(
@@ -184,7 +184,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                           {sale.temp_invoice_number}
                         </span>
                         {sale.invoice_number && (
-                          <span className="text-green-400 text-sm">
+                          <span className="text-dash-accent-green text-sm">
                             ({sale.invoice_number})
                           </span>
                         )}
@@ -198,7 +198,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                     </div>
                     <div className="text-left">
                       <p className={`text-lg font-semibold ${
-                        sale.total_amount >= 0 ? 'text-green-400' : 'text-red-400'
+                        sale.total_amount >= 0 ? 'text-dash-accent-green' : 'text-dash-accent-red'
                       }`}>
                         {Math.abs(sale.total_amount).toFixed(2)}
                       </p>
@@ -228,7 +228,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                       </div>
 
                       {sale.sync_error && (
-                        <div className="mt-3 p-2 bg-red-500/10 border border-red-500/20 rounded text-sm text-red-400">
+                        <div className="mt-3 p-2 bg-dash-accent-red-subtle border border-dash-accent-red/20 rounded text-sm text-dash-accent-red">
                           خطأ: {sale.sync_error}
                         </div>
                       )}
@@ -240,7 +240,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
                               e.stopPropagation()
                               handleDelete(sale.local_id)
                             }}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm rounded-lg transition-colors"
+                            className="flex items-center gap-1 px-3 py-1.5 bg-dash-accent-red-subtle hover:bg-dash-accent-red/30 text-dash-accent-red text-sm rounded-lg transition-colors"
                           >
                             <TrashIcon className="h-4 w-4" />
                             حذف
@@ -260,7 +260,7 @@ export default function PendingSalesModal({ isOpen, onClose }: PendingSalesModal
           <div className="flex items-center justify-between text-sm text-[var(--dash-text-muted)]">
             <span>
               {!navigator.onLine && (
-                <span className="text-red-400">غير متصل - المزامنة ستتم تلقائياً عند عودة الاتصال</span>
+                <span className="text-dash-accent-red">غير متصل - المزامنة ستتم تلقائياً عند عودة الاتصال</span>
               )}
             </span>
             <span>

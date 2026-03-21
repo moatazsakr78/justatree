@@ -149,7 +149,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
               </div>
             ) : session?.user ? (
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center overflow-hidden">
+                <div className="w-10 h-10 bg-dash-accent-purple rounded-full flex items-center justify-center overflow-hidden">
                   {session.user.image ? (
                     <img
                       src={session.user.image}

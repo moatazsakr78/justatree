@@ -159,7 +159,7 @@ export default function ProductsFilterModal({
           {/* Header */}
           <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-dash-accent-blue rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-lg">🏷️</span>
               </div>
               <div>
@@ -200,7 +200,7 @@ export default function ProductsFilterModal({
                         />
                         <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                           selectedCategories.has(category.id)
-                            ? 'bg-blue-600 border-blue-600'
+                            ? 'bg-dash-accent-blue border-dash-accent-blue'
                             : 'bg-transparent border-gray-400'
                         }`}>
                           {selectedCategories.has(category.id) && (
@@ -221,7 +221,7 @@ export default function ProductsFilterModal({
                       </span>
                       
                       {/* Product count in category */}
-                      <span className="text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30">
+                      <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-1 rounded border border-dash-accent-blue/30">
                         {products.filter(p => p.category?.id === category.id).length}
                       </span>
                     </label>
@@ -232,10 +232,10 @@ export default function ProductsFilterModal({
               {/* Selection Summary */}
               <div className="p-4 border-t border-[var(--dash-border-default)] mt-auto">
                 <div className="text-center space-y-2">
-                  <div className="text-sm text-blue-400">
+                  <div className="text-sm text-dash-accent-blue">
                     {selectedCategories.size} مجموعة محددة
                   </div>
-                  <div className="text-sm text-green-400">
+                  <div className="text-sm text-dash-accent-green">
                     {selectedProducts.size} منتج محدد
                   </div>
                 </div>
@@ -257,7 +257,7 @@ export default function ProductsFilterModal({
                         onClick={() => setViewMode('grid')}
                         className={`p-2 transition-colors ${
                           viewMode === 'grid' 
-                            ? 'bg-blue-600 text-white' 
+                            ? 'bg-dash-accent-blue text-white' 
                             : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
@@ -267,7 +267,7 @@ export default function ProductsFilterModal({
                         onClick={() => setViewMode('table')}
                         className={`p-2 transition-colors ${
                           viewMode === 'table' 
-                            ? 'bg-blue-600 text-white' 
+                            ? 'bg-dash-accent-blue text-white' 
                             : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                         }`}
                       >
@@ -291,13 +291,13 @@ export default function ProductsFilterModal({
                     <div className="flex gap-2">
                       <button
                         onClick={handleSelectAllProducts}
-                        className="px-3 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
+                        className="px-3 py-1 text-xs dash-btn-green rounded transition-colors"
                       >
                         تحديد الكل
                       </button>
                       <button
                         onClick={handleDeselectAllProducts}
-                        className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
+                        className="px-3 py-1 text-xs dash-btn-red rounded transition-colors"
                       >
                         إلغاء الكل
                       </button>
@@ -308,7 +308,7 @@ export default function ProductsFilterModal({
                   <div className="flex items-center gap-4 text-sm text-[var(--dash-text-muted)]">
                     <span>عرض {filteredProducts.length} من أصل {products.length} منتج</span>
                     {selectedCategory && (
-                      <span className="text-blue-400">المجموعة: {selectedCategory.name}</span>
+                      <span className="text-dash-accent-blue">المجموعة: {selectedCategory.name}</span>
                     )}
                   </div>
                 </div>
@@ -325,7 +325,7 @@ export default function ProductsFilterModal({
                           key={product.id}
                           className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                             selectedProducts.has(product.id)
-                              ? 'border-blue-500 bg-[#434E61]'
+                              ? 'border-dash-accent-blue bg-[#434E61]'
                               : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
                           }`}
                         >
@@ -340,7 +340,7 @@ export default function ProductsFilterModal({
                               />
                               <div className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors shadow-lg ${
                                 selectedProducts.has(product.id)
-                                  ? 'bg-blue-600 border-blue-600'
+                                  ? 'bg-dash-accent-blue border-dash-accent-blue'
                                   : 'bg-black/70 border-white/70'
                               }`}>
                                 {selectedProducts.has(product.id) && (
@@ -368,14 +368,14 @@ export default function ProductsFilterModal({
                           <div className="space-y-1 text-xs">
                             {/* Price */}
                             <div className="flex justify-center mb-2">
-                              <span className="text-blue-400 font-medium text-sm">
+                              <span className="text-dash-accent-blue font-medium text-sm">
                                 {(product.price || 0).toFixed(2)}
                               </span>
                             </div>
                             
                             {/* Total Quantity */}
                             <div className="flex justify-between items-center">
-                              <span className="text-blue-400 font-medium">
+                              <span className="text-dash-accent-blue font-medium">
                                 {(product.inventoryData && Object.values(product.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0)) || 0}
                               </span>
                               <span className="text-[var(--dash-text-muted)]">الكمية</span>
@@ -403,7 +403,7 @@ export default function ProductsFilterModal({
                           <tr 
                             key={product.id}
                             className={`border-b border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-raised)] ${
-                              selectedProducts.has(product.id) ? 'bg-blue-500/10' : ''
+                              selectedProducts.has(product.id) ? 'bg-dash-accent-blue-subtle' : ''
                             }`}
                           >
                             <td className="px-4 py-3">
@@ -416,7 +416,7 @@ export default function ProductsFilterModal({
                                 />
                                 <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                                   selectedProducts.has(product.id)
-                                    ? 'bg-blue-600 border-blue-600'
+                                    ? 'bg-dash-accent-blue border-dash-accent-blue'
                                     : 'bg-transparent border-gray-400'
                                 }`}>
                                   {selectedProducts.has(product.id) && (
@@ -427,8 +427,8 @@ export default function ProductsFilterModal({
                             </td>
                             <td className="px-4 py-3 text-[var(--dash-text-primary)]">{product.name}</td>
                             <td className="px-4 py-3 text-[var(--dash-text-secondary)]">{product.category?.name || 'غير محدد'}</td>
-                            <td className="px-4 py-3 text-blue-400">{(product.price || 0).toFixed(2)}</td>
-                            <td className="px-4 py-3 text-blue-400">
+                            <td className="px-4 py-3 text-dash-accent-blue">{(product.price || 0).toFixed(2)}</td>
+                            <td className="px-4 py-3 text-dash-accent-blue">
                               {(product.inventoryData && Object.values(product.inventoryData).reduce((sum: number, inv: any) => sum + (inv?.quantity || 0), 0)) || 0}
                             </td>
                           </tr>
@@ -458,7 +458,7 @@ export default function ProductsFilterModal({
               </button>
               <button
                 onClick={handleApply}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors font-medium"
+                className="px-6 py-2 dash-btn-primary rounded transition-colors font-medium"
               >
                 تطبيق الفلترة
               </button>

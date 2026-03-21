@@ -277,7 +277,7 @@ export default function PendingMergesModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <ClockIcon className="h-6 w-6 text-yellow-400" />
+                    <ClockIcon className="h-6 w-6 text-dash-accent-orange" />
                     الدمجات المعلقة
                   </Dialog.Title>
                   <div className="flex items-center gap-2">
@@ -298,8 +298,8 @@ export default function PendingMergesModal({
                 </div>
 
                 {/* Info Box */}
-                <div className="mx-6 mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
-                  <p className="text-sm text-yellow-400">
+                <div className="mx-6 mt-4 p-4 bg-dash-accent-orange-subtle border border-dash-accent-orange/30 rounded-xl">
+                  <p className="text-sm text-dash-accent-orange">
                     يمكنك فك الدمج واسترجاع الحسابات المدمجة خلال 24 ساعة من وقت الدمج.
                     بعد انتهاء المهلة، يصبح الدمج نهائياً.
                   </p>
@@ -307,7 +307,7 @@ export default function PendingMergesModal({
 
                 {/* Success Message */}
                 {successMessage && (
-                  <div className="mx-6 mt-4 p-3 bg-green-500/10 border border-green-500/50 rounded-lg flex items-center gap-2 text-green-400">
+                  <div className="mx-6 mt-4 p-3 bg-dash-accent-green-subtle border border-dash-accent-green/50 rounded-lg flex items-center gap-2 text-dash-accent-green">
                     <CheckCircleIcon className="h-5 w-5 flex-shrink-0" />
                     <span className="text-sm">{successMessage}</span>
                   </div>
@@ -315,7 +315,7 @@ export default function PendingMergesModal({
 
                 {/* Error Message */}
                 {error && (
-                  <div className="mx-6 mt-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2 text-red-400">
+                  <div className="mx-6 mt-4 p-3 bg-dash-accent-red-subtle border border-dash-accent-red/50 rounded-lg flex items-center gap-2 text-dash-accent-red">
                     <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0" />
                     <span className="text-sm">{error}</span>
                   </div>
@@ -325,12 +325,12 @@ export default function PendingMergesModal({
                 <div className="p-6 max-h-[400px] overflow-y-auto scrollbar-hide">
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-dash-accent-blue mb-4"></div>
                       <p className="text-[var(--dash-text-muted)]">جاري التحميل...</p>
                     </div>
                   ) : merges.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <CheckCircleIcon className="h-16 w-16 text-green-500 mb-4" />
+                      <CheckCircleIcon className="h-16 w-16 text-dash-accent-green mb-4" />
                       <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد دمجات معلقة</p>
                       <p className="text-[var(--dash-text-disabled)] text-sm">جميع الدمجات السابقة أصبحت نهائية</p>
                     </div>
@@ -354,15 +354,15 @@ export default function PendingMergesModal({
                                 {/* Customers Info */}
                                 <div className="flex items-center gap-3 mb-3">
                                   <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
-                                      <UserIcon className="h-4 w-4 text-red-400" />
+                                    <div className="w-8 h-8 rounded-full bg-dash-accent-red-subtle flex items-center justify-center">
+                                      <UserIcon className="h-4 w-4 text-dash-accent-red" />
                                     </div>
                                     <span className="text-[var(--dash-text-primary)] font-medium">{mergedData?.name || "عميل محذوف"}</span>
                                   </div>
                                   <span className="text-[var(--dash-text-disabled)]">→</span>
                                   <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                                      <UserIcon className="h-4 w-4 text-green-400" />
+                                    <div className="w-8 h-8 rounded-full bg-dash-accent-green-subtle flex items-center justify-center">
+                                      <UserIcon className="h-4 w-4 text-dash-accent-green" />
                                     </div>
                                     <span className="text-[var(--dash-text-primary)] font-medium">
                                       {merge.primary_customer?.name || "عميل"}
@@ -380,7 +380,7 @@ export default function PendingMergesModal({
                                   </span>
                                   <span>
                                     الرصيد:{" "}
-                                    <span className={merge.merged_account_balance >= 0 ? "text-green-400" : "text-red-400"}>
+                                    <span className={merge.merged_account_balance >= 0 ? "text-dash-accent-green" : "text-dash-accent-red"}>
                                       {merge.merged_account_balance.toLocaleString()} ج.م
                                     </span>
                                   </span>
@@ -388,8 +388,8 @@ export default function PendingMergesModal({
 
                                 {/* Time Info */}
                                 <div className="flex items-center gap-2 text-sm">
-                                  <ClockIcon className="h-4 w-4 text-yellow-500" />
-                                  <span className={stillCanUndo ? "text-yellow-400" : "text-[var(--dash-text-disabled)]"}>
+                                  <ClockIcon className="h-4 w-4 text-dash-accent-orange" />
+                                  <span className={stillCanUndo ? "text-dash-accent-orange" : "text-[var(--dash-text-disabled)]"}>
                                     {stillCanUndo ? (
                                       <>المتبقي: {getTimeRemaining(merge.can_undo_until)}</>
                                     ) : (
@@ -405,7 +405,7 @@ export default function PendingMergesModal({
                                 disabled={!stillCanUndo || undoingId === merge.id}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                                   stillCanUndo && undoingId !== merge.id
-                                    ? "bg-orange-600 hover:bg-orange-700 text-white"
+                                    ? "bg-dash-accent-orange hover:brightness-90 text-white"
                                     : "bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed"
                                 }`}
                               >

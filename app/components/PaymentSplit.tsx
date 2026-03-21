@@ -182,9 +182,9 @@ export default function PaymentSplit({ totalAmount, onPaymentsChange, isDefaultC
                   isDefaultCustomer && payments.length === 1
                     ? "bg-[var(--dash-bg-base)] border-[var(--dash-border-subtle)] cursor-not-allowed opacity-75"
                     : isReturnMode
-                    ? "bg-[var(--dash-bg-raised)] border-red-500 focus:ring-red-500 text-red-400"
+                    ? "bg-[var(--dash-bg-raised)] border-dash-accent-red focus:ring-red-500 text-dash-accent-red"
                     : isPurchaseMode
-                    ? "bg-[var(--dash-bg-raised)] border-purple-500 focus:ring-purple-500"
+                    ? "bg-[var(--dash-bg-raised)] border-dash-accent-purple focus:ring-dash-accent-purple"
                     : "bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)]"
                 }`}
                 style={{ MozAppearance: 'textfield' }}
@@ -215,7 +215,7 @@ export default function PaymentSplit({ totalAmount, onPaymentsChange, isDefaultC
               {index === payments.length - 1 && (
                 <button
                   onClick={addPaymentRow}
-                  className="p-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                  className="p-1 bg-dash-accent-green text-white rounded hover:brightness-90 transition-colors"
                   title="إضافة"
                 >
                   <PlusIcon className="h-3 w-3" />
@@ -226,7 +226,7 @@ export default function PaymentSplit({ totalAmount, onPaymentsChange, isDefaultC
               {payments.length > 1 && (
                 <button
                   onClick={() => removePaymentRow(payment.id)}
-                  className="p-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                  className="p-1 bg-dash-accent-red text-white rounded hover:brightness-90 transition-colors"
                   title="حذف"
                 >
                   <XMarkIcon className="h-3 w-3" />
@@ -243,12 +243,12 @@ export default function PaymentSplit({ totalAmount, onPaymentsChange, isDefaultC
           <div className="flex items-center gap-3">
             <span className="text-[var(--dash-text-muted)]">
               {isPurchaseMode ? "مدفوع للمورد: " : "مدفوع: "}
-              <span className={`font-medium ${isPurchaseMode ? "text-purple-400" : "text-green-400"}`}>{totalPaid.toFixed(0)}</span>
+              <span className={`font-medium ${isPurchaseMode ? "text-dash-accent-purple" : "text-dash-accent-green"}`}>{totalPaid.toFixed(0)}</span>
             </span>
             {creditAmount > 0 && (
               <span className="text-[var(--dash-text-muted)]">
                 {isPurchaseMode ? "متبقي للمورد: " : "آجل: "}
-                <span className="text-orange-400 font-medium">{creditAmount.toFixed(0)}</span>
+                <span className="text-dash-accent-orange font-medium">{creditAmount.toFixed(0)}</span>
               </span>
             )}
           </div>

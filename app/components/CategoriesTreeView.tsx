@@ -74,7 +74,7 @@ const TreeView = ({
       <div 
         className={`flex items-center cursor-pointer transition-colors ${
           selectedCategoryId === node.id 
-            ? 'bg-blue-600 text-white'
+            ? 'bg-dash-accent-blue text-white'
             : 'hover:bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
         }`}
         style={{ paddingRight: `${16 + level * 24}px`, paddingLeft: '12px', paddingTop: '8px', paddingBottom: '8px' }}

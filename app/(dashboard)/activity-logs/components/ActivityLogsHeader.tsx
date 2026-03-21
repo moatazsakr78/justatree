@@ -73,7 +73,7 @@ export default function ActivityLogsHeader({
             onKeyDown={handleSearchKeyDown}
             onBlur={handleSearchSubmit}
             placeholder="بحث في سجل النشاط..."
-            className="w-full pr-10 pl-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-blue-500"
+            className="w-full pr-10 pl-3 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-dash-accent-blue"
           />
         </div>
 
@@ -82,7 +82,7 @@ export default function ActivityLogsHeader({
           onClick={onDateFilterClick}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors ${
             hasDateFilter
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/50'
+              ? 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue'
               : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]'
           }`}
         >
@@ -95,14 +95,14 @@ export default function ActivityLogsHeader({
           onClick={onEntityFilterClick}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors ${
             filters.entityTypes.length > 0
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/50'
+              ? 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue'
               : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]'
           }`}
         >
           <FunnelIcon className="w-4 h-4" />
           <span>النوع</span>
           {filters.entityTypes.length > 0 && (
-            <span className="bg-blue-500 text-white text-xs px-1.5 rounded-full">{filters.entityTypes.length}</span>
+            <span className="bg-dash-accent-blue text-white text-xs px-1.5 rounded-full">{filters.entityTypes.length}</span>
           )}
         </button>
 
@@ -111,14 +111,14 @@ export default function ActivityLogsHeader({
           onClick={onActionFilterClick}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors ${
             filters.actionTypes.length > 0
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/50'
+              ? 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue'
               : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)] border border-[var(--dash-border-default)]'
           }`}
         >
           <AdjustmentsHorizontalIcon className="w-4 h-4" />
           <span>الإجراء</span>
           {filters.actionTypes.length > 0 && (
-            <span className="bg-blue-500 text-white text-xs px-1.5 rounded-full">{filters.actionTypes.length}</span>
+            <span className="bg-dash-accent-blue text-white text-xs px-1.5 rounded-full">{filters.actionTypes.length}</span>
           )}
         </button>
       </div>

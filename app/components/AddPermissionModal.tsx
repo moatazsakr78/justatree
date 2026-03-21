@@ -16,10 +16,10 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
   const [isLoading, setIsLoading] = useState(false)
 
   const accessLevels = [
-    { value: 'read', label: 'قراءة', color: 'text-blue-400' },
-    { value: 'write', label: 'كتابة', color: 'text-green-400' },
-    { value: 'delete', label: 'حذف', color: 'text-red-400' },
-    { value: 'admin', label: 'إدارة كاملة', color: 'text-purple-400' }
+    { value: 'read', label: 'قراءة', color: 'text-dash-accent-blue' },
+    { value: 'write', label: 'كتابة', color: 'text-dash-accent-green' },
+    { value: 'delete', label: 'حذف', color: 'text-dash-accent-red' },
+    { value: 'admin', label: 'إدارة كاملة', color: 'text-dash-accent-purple' }
   ]
 
   const handleSave = async () => {
@@ -62,7 +62,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 rounded-lg">
+            <div className="p-2 bg-dash-accent-blue rounded-lg">
               <KeyIcon className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">إضافة صلاحية جديدة</h2>
@@ -80,7 +80,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
           {/* Permission Name */}
           <div>
             <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
-              اسم الصلاحية <span className="text-red-400">*</span>
+              اسم الصلاحية <span className="text-dash-accent-red">*</span>
             </label>
             <input
               type="text"
@@ -95,7 +95,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
           {/* Description */}
           <div>
             <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
-              الوصف <span className="text-red-400">*</span>
+              الوصف <span className="text-dash-accent-red">*</span>
             </label>
             <textarea
               value={description}
@@ -126,7 +126,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
                   />
                   <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ml-3 ${
                     accessLevel === level.value 
-                      ? 'border-blue-500 bg-blue-500' 
+                      ? 'border-dash-accent-blue bg-dash-accent-blue' 
                       : 'border-[var(--dash-border-default)]'
                   }`}>
                     {accessLevel === level.value && (
@@ -154,7 +154,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
           <button
             onClick={handleSave}
             disabled={!permissionName.trim() || !description.trim() || isLoading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-6 py-2 dash-btn-primary text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isLoading ? (
               <>

@@ -151,7 +151,7 @@ export default function PaymentMethodsPage() {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => router.push('/safes')}
-              className="px-4 py-2 bg-purple-600 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-purple-700 transition-colors"
+              className="px-4 py-2 dash-btn-purple rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
             >
               <CreditCardIcon className="h-4 w-4" />
               الخزن
@@ -163,7 +163,7 @@ export default function PaymentMethodsPage() {
               إدارة وعرض جميع طرق الدفع المتاحة
             </h1>
             <h1 className="text-xl font-bold">طرق الدفع</h1>
-            <CreditCardIcon className="h-6 w-6 text-purple-600" />
+            <CreditCardIcon className="h-6 w-6 text-dash-accent-purple" />
           </div>
         </div>
 
@@ -176,7 +176,7 @@ export default function PaymentMethodsPage() {
                 <p className="text-[var(--dash-text-muted)] text-sm">إجمالي طرق الدفع</p>
                 <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">{paymentMethods.length}</p>
               </div>
-              <div className="text-blue-500 text-3xl">💳</div>
+              <div className="text-dash-accent-blue text-3xl">💳</div>
             </div>
           </div>
 
@@ -189,7 +189,7 @@ export default function PaymentMethodsPage() {
                   {paymentMethods.filter(method => method.is_active === true).length}
                 </p>
               </div>
-              <div className="text-green-500 text-2xl">✅</div>
+              <div className="text-dash-accent-green text-2xl">✅</div>
             </div>
           </div>
 
@@ -202,7 +202,7 @@ export default function PaymentMethodsPage() {
                   {paymentMethods.find(method => method.is_default === true)?.name || 'غير محدد'}
                 </p>
               </div>
-              <div className="text-purple-500 text-2xl">⭐</div>
+              <div className="text-dash-accent-purple text-2xl">⭐</div>
             </div>
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function PaymentMethodsPage() {
             <div className="flex items-center gap-4">
               <button 
                 onClick={openAddModal}
-                className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-green-700 transition-colors"
+                className="px-4 py-2 dash-btn-green rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
               >
                 <PlusIcon className="h-4 w-4" />
                 إضافة طريقة دفع جديدة
@@ -226,7 +226,7 @@ export default function PaymentMethodsPage() {
                 placeholder="البحث في طرق الدفع..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 w-80"
+                className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue w-80"
               />
               <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--dash-text-muted)]" />
             </div>
@@ -246,7 +246,7 @@ export default function PaymentMethodsPage() {
                 <th className="p-3 text-right font-medium">الإجراءات</th>
               </tr>
             </thead>
-            <tbody className="bg-pos-darker divide-y divide-gray-700">
+            <tbody className="bg-pos-darker divide-y divide-dash-border">
               {filteredPaymentMethods.length > 0 ? (
                 filteredPaymentMethods.map((method, index) => (
                   <tr 
@@ -256,17 +256,17 @@ export default function PaymentMethodsPage() {
                     <td className="p-3 text-[var(--dash-text-primary)] font-medium">{index + 1}</td>
                     <td className="p-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-[var(--dash-text-primary)] text-sm">
+                        <div className="w-8 h-8 bg-dash-accent-blue rounded flex items-center justify-center text-[var(--dash-text-primary)] text-sm">
                           💳
                         </div>
                         <span className="text-[var(--dash-text-primary)] font-medium">{method.name}</span>
                         {method.is_default === true && (
-                          <span className="px-2 py-1 bg-purple-900 text-purple-300 rounded-full text-xs mr-2">
+                          <span className="px-2 py-1 bg-dash-accent-purple-subtle text-dash-accent-purple rounded-full text-xs mr-2">
                             افتراضية
                           </span>
                         )}
                         {method.name.toLowerCase() === 'cash' && (
-                          <span className="px-2 py-1 bg-orange-900 text-orange-300 rounded-full text-xs mr-2">
+                          <span className="px-2 py-1 bg-dash-accent-orange-subtle text-dash-accent-orange rounded-full text-xs mr-2">
                             أساسية
                           </span>
                         )}
@@ -274,17 +274,17 @@ export default function PaymentMethodsPage() {
                     </td>
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded-full text-xs ${
-                        method.is_active === true 
-                          ? 'bg-green-900 text-green-300' 
-                          : 'bg-red-900 text-red-300'
+                        method.is_active === true
+                          ? 'bg-dash-accent-green-subtle text-dash-accent-green'
+                          : 'bg-dash-accent-red-subtle text-dash-accent-red'
                       }`}>
                         {method.is_active === true ? 'نشط' : 'غير نشط'}
                       </span>
                     </td>
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded-full text-xs ${
-                        method.is_default === true 
-                          ? 'bg-purple-900 text-purple-300' 
+                        method.is_default === true
+                          ? 'bg-dash-accent-purple-subtle text-dash-accent-purple'
                           : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-muted)]'
                       }`}>
                         {method.is_default === true ? 'نعم' : 'لا'}
@@ -295,7 +295,7 @@ export default function PaymentMethodsPage() {
                       <div className="flex items-center gap-2">
                         <button 
                           onClick={() => openEditModal(method)}
-                          className="px-3 py-1 text-xs bg-blue-600 text-[var(--dash-text-primary)] rounded hover:bg-blue-700 transition-colors flex items-center gap-1"
+                          className="px-3 py-1 text-xs dash-btn-primary rounded transition-colors flex items-center gap-1"
                         >
                           <PencilIcon className="h-3 w-3" />
                           تعديل
@@ -303,7 +303,7 @@ export default function PaymentMethodsPage() {
                         {method.name.toLowerCase() !== 'cash' && (
                           <button 
                             onClick={() => handleDeletePaymentMethod(method)}
-                            className="px-3 py-1 text-xs bg-red-600 text-[var(--dash-text-primary)] rounded hover:bg-red-700 transition-colors flex items-center gap-1"
+                            className="px-3 py-1 text-xs dash-btn-red rounded transition-colors flex items-center gap-1"
                           >
                             <TrashIcon className="h-3 w-3" />
                             حذف

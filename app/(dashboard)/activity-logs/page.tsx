@@ -116,11 +116,11 @@ export default function ActivityLogsPage() {
 
         <div className="flex-1 overflow-auto scrollbar-hide p-4">
           {error ? (
-            <div className="flex flex-col items-center justify-center py-16 text-red-400">
+            <div className="flex flex-col items-center justify-center py-16 text-dash-accent-red">
               <p className="text-lg">{error}</p>
               <button
                 onClick={refresh}
-                className="mt-4 px-4 py-2 bg-blue-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-blue-700 transition-colors"
+                className="mt-4 px-4 py-2 dash-btn-primary rounded-lg transition-colors"
               >
                 إعادة المحاولة
               </button>

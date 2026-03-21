@@ -63,7 +63,7 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
         <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] w-full max-w-2xl max-h-[80vh] overflow-hidden">
           
           {/* Header */}
-          <div className={`flex items-center justify-between p-6 border-b ${isPurchaseMode ? 'border-blue-600/50 bg-gradient-to-r from-blue-900/30 to-blue-800/20' : 'border-[var(--dash-border-default)]'}`}>
+          <div className={`flex items-center justify-between p-6 border-b ${isPurchaseMode ? 'border-dash-accent-blue/50 bg-gradient-to-r from-blue-900/30 to-blue-800/20' : 'border-[var(--dash-border-default)]'}`}>
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isPurchaseMode ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 'bg-gradient-to-r from-green-500 to-blue-500'}`}>
                 <TruckIcon className="h-5 w-5 text-white" />
@@ -99,7 +99,7 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
           <div className="p-6 max-h-[50vh] overflow-y-auto scrollbar-hide">
             {loading ? (
               <div className="flex items-center justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
                 <span className="text-[var(--dash-text-muted)] mr-3">جاري التحميل...</span>
               </div>
             ) : filteredSuppliers.length === 0 ? (
@@ -113,9 +113,9 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
                   <div
                     key={supplier.id}
                     onClick={() => handleSupplierSelect(supplier)}
-                    className={`bg-[var(--dash-bg-raised)] rounded-xl p-4 border cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-500/5 ${
+                    className={`bg-[var(--dash-bg-raised)] rounded-xl p-4 border cursor-pointer transition-all hover:border-dash-accent-blue hover:bg-dash-accent-blue/5 ${
                       selectedSupplier?.id === supplier.id
-                        ? 'border-blue-500 bg-blue-500/10'
+                        ? 'border-dash-accent-blue bg-dash-accent-blue-subtle'
                         : 'border-[var(--dash-border-default)]'
                     }`}
                   >
@@ -137,7 +137,7 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
                         </div>
                       </div>
                       <div className="text-left flex-shrink-0">
-                        <div className="text-blue-400 font-bold">
+                        <div className="text-dash-accent-blue font-bold">
                           {supplier.account_balance ? `${parseFloat(supplier.account_balance).toFixed(2)} جنيه` : '0.00 جنيه'}
                         </div>
                         <div className="text-xs text-[var(--dash-text-muted)]">الرصيد</div>

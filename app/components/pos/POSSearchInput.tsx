@@ -101,7 +101,7 @@ const POSSearchInput = memo(forwardRef<POSSearchInputRef, POSSearchInputProps>(f
   return (
     <div className={`relative ${className || 'w-72'}`}>
       <div
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-blue-600 px-2 py-0.5 rounded text-xs text-white font-medium z-10 select-none cursor-pointer"
+        className="absolute left-2 top-1/2 -translate-y-1/2 bg-dash-accent-blue px-2 py-0.5 rounded text-xs text-white font-medium z-10 select-none cursor-pointer"
         onClick={handleModeClick}
       >
         {getModeLabel()}
@@ -116,7 +116,7 @@ const POSSearchInput = memo(forwardRef<POSSearchInputRef, POSSearchInputProps>(f
         placeholder={getPlaceholder()}
         className={isMobile
           ? "w-full pl-16 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] focus:border-transparent"
-          : "w-full pl-16 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          : "w-full pl-16 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue"
         }
         style={isMobile ? { fontSize: "16px" } : undefined}
       />

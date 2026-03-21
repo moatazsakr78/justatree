@@ -137,7 +137,7 @@ export default function OrderPaymentReceipts({
               key={receipt.id}
               className={`border rounded-lg p-3 ${
                 isVerified
-                  ? 'border-green-400 bg-green-50'
+                  ? 'border-green-400 bg-dash-accent-green-subtle'
                   : isPending
                   ? 'border-orange-300 bg-orange-50'
                   : 'border-gray-300 bg-gray-50'

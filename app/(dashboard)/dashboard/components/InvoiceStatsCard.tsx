@@ -38,27 +38,27 @@ export default function InvoiceStatsCard({
   }
 
   return (
-    <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm dash-card-hover p-5 bg-green-500/10 transition-colors">
+    <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm dash-card-hover p-5 bg-dash-accent-green-subtle transition-colors">
       <div className="flex items-center justify-between gap-4">
         <div className="flex-1 min-w-0">
           <p className="text-[var(--dash-text-muted)] text-sm font-medium mb-2">{`فواتير ${periodLabel}`}</p>
           {/* Invoice row */}
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-400 flex-shrink-0"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-dash-accent-green flex-shrink-0"></span>
             <span className="text-[var(--dash-text-primary)] font-bold text-sm">{invoiceCount.toLocaleString('ar-EG')}</span>
             <span className="text-[var(--dash-text-muted)] text-xs">فاتورة</span>
-            <span className="text-green-400 font-bold text-sm mr-auto truncate">{formatCurrencyAr(invoiceTotal)}</span>
+            <span className="text-dash-accent-green font-bold text-sm mr-auto truncate">{formatCurrencyAr(invoiceTotal)}</span>
           </div>
           {/* Return row */}
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-400 flex-shrink-0"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-dash-accent-red flex-shrink-0"></span>
             <span className="text-[var(--dash-text-primary)] font-bold text-sm">{returnCount.toLocaleString('ar-EG')}</span>
             <span className="text-[var(--dash-text-muted)] text-xs">مرتجع</span>
-            <span className="text-red-400 font-bold text-sm mr-auto truncate">{returnTotal > 0 ? `-${formatCurrencyAr(returnTotal)}` : formatCurrencyAr(0)}</span>
+            <span className="text-dash-accent-red font-bold text-sm mr-auto truncate">{returnTotal > 0 ? `-${formatCurrencyAr(returnTotal)}` : formatCurrencyAr(0)}</span>
           </div>
         </div>
-        <div className="p-3 rounded-xl bg-green-500/20 flex-shrink-0">
-          <DocumentTextIcon className="w-8 h-8 text-green-400" />
+        <div className="p-3 rounded-xl bg-dash-accent-green-subtle flex-shrink-0">
+          <DocumentTextIcon className="w-8 h-8 text-dash-accent-green" />
         </div>
       </div>
     </div>

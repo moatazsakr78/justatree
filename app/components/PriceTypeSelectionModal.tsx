@@ -84,7 +84,7 @@ export default function PriceTypeSelectionModal({
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <CurrencyDollarIcon className="h-6 w-6 text-blue-400" />
+                    <CurrencyDollarIcon className="h-6 w-6 text-dash-accent-blue" />
                     اختيار نوع السعر
                   </Dialog.Title>
                   <button
@@ -103,7 +103,7 @@ export default function PriceTypeSelectionModal({
                       onClick={() => handleSelect(option.id)}
                       className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${
                         selectedPriceType === option.id
-                          ? "bg-blue-600 text-[var(--dash-text-primary)] border-2 border-blue-400"
+                          ? "bg-dash-accent-blue text-[var(--dash-text-primary)] border-2 border-dash-accent-blue"
                           : "bg-[var(--dash-bg-surface)] text-gray-200 border-2 border-transparent hover:bg-[var(--dash-bg-overlay)] hover:border-gray-500"
                       }`}
                     >
@@ -111,7 +111,7 @@ export default function PriceTypeSelectionModal({
                         <div
                           className={`w-10 h-10 rounded-full flex items-center justify-center ${
                             selectedPriceType === option.id
-                              ? "bg-blue-500"
+                              ? "bg-dash-accent-blue"
                               : "bg-[var(--dash-bg-raised)]"
                           }`}
                         >
@@ -122,7 +122,7 @@ export default function PriceTypeSelectionModal({
                           <div
                             className={`text-sm ${
                               selectedPriceType === option.id
-                                ? "text-blue-200"
+                                ? "text-dash-accent-blue"
                                 : "text-[var(--dash-text-muted)]"
                             }`}
                           >

@@ -109,7 +109,7 @@ export default function MobileProductDetailsModal({
           {product.main_image_url ? (
             <img src={product.main_image_url} alt={product.name} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+            <div className="w-full h-full bg-dash-accent-blue flex items-center justify-center">
               <span className="text-white text-xs">📦</span>
             </div>
           )}
@@ -133,7 +133,7 @@ export default function MobileProductDetailsModal({
             onClick={() => setActiveTab(tab.key)}
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               activeTab === tab.key
-                ? "text-blue-400 border-b-2 border-blue-400"
+                ? "text-dash-accent-blue border-b-2 border-dash-accent-blue"
                 : "text-[var(--dash-text-muted)]"
             }`}
           >
@@ -149,31 +149,31 @@ export default function MobileProductDetailsModal({
           <>
             {/* Quick Stats */}
             <div className="flex gap-3">
-              <div className="flex-1 bg-green-600/10 border border-green-600/20 rounded-lg p-3 text-center">
+              <div className="flex-1 bg-dash-accent-green-subtle border border-dash-accent-green/20 rounded-lg p-3 text-center">
                 <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">سعر البيع</p>
                 {isDiscounted ? (
                   <div className="flex items-center justify-center gap-1.5">
-                    <p className="text-green-400 font-bold text-lg">
+                    <p className="text-dash-accent-green font-bold text-lg">
                       {(finalPrice || 0).toFixed(2)}
                     </p>
                     <p className="text-[var(--dash-text-disabled)] line-through text-sm">
                       {(product.price || 0).toFixed(2)}
                     </p>
                     {discountLabel && (
-                      <span className="bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                      <span className="bg-dash-accent-red text-white text-[10px] px-1.5 py-0.5 rounded-full">
                         {discountLabel}
                       </span>
                     )}
                   </div>
                 ) : (
-                  <p className="text-green-400 font-bold text-lg">
+                  <p className="text-dash-accent-green font-bold text-lg">
                     {(product.price || 0).toFixed(2)}
                   </p>
                 )}
               </div>
-              <div className="flex-1 bg-blue-600/10 border border-blue-600/20 rounded-lg p-3 text-center">
+              <div className="flex-1 bg-dash-accent-blue-subtle border border-dash-accent-blue/20 rounded-lg p-3 text-center">
                 <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">الكمية</p>
-                <p className="text-blue-400 font-bold text-lg">
+                <p className="text-dash-accent-blue font-bold text-lg">
                   {totalQuantity}
                 </p>
               </div>
@@ -214,13 +214,13 @@ export default function MobileProductDetailsModal({
 
               {/* Main sell price with discount (if applicable) */}
               {isDiscounted && (
-                <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 text-center mb-2.5 border border-green-600/30">
+                <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 text-center mb-2.5 border border-dash-accent-green/30">
                   <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">سعر البيع</p>
                   <div className="flex items-center justify-center gap-2">
-                    <p className="text-green-400 font-bold text-xl">{(finalPrice || 0).toFixed(2)}</p>
+                    <p className="text-dash-accent-green font-bold text-xl">{(finalPrice || 0).toFixed(2)}</p>
                     <p className="text-[var(--dash-text-disabled)] line-through text-base">{(product.price || 0).toFixed(2)}</p>
                     {discountLabel && (
-                      <span className="bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
+                      <span className="bg-dash-accent-red text-white text-xs px-2 py-0.5 rounded-full">
                         {discountLabel}
                       </span>
                     )}
@@ -232,7 +232,7 @@ export default function MobileProductDetailsModal({
                 {!isDiscounted && (
                   <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 text-center">
                     <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">سعر البيع</p>
-                    <p className="text-green-400 font-bold text-base">
+                    <p className="text-dash-accent-green font-bold text-base">
                       {(product.price || 0).toFixed(2)}
                     </p>
                   </div>
@@ -244,7 +244,7 @@ export default function MobileProductDetailsModal({
                   {showPurchasePrice ? (
                     <>
                       <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">سعر الشراء</p>
-                      <p className="text-orange-400 font-bold text-base">
+                      <p className="text-dash-accent-orange font-bold text-base">
                         {(product.cost_price || 0).toFixed(2)}
                       </p>
                     </>
@@ -256,20 +256,20 @@ export default function MobileProductDetailsModal({
                 </div>
                 <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 text-center">
                   <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">سعر الجملة</p>
-                  <p className="text-blue-400 font-bold text-base">
+                  <p className="text-dash-accent-blue font-bold text-base">
                     {(product.wholesale_price || 0).toFixed(2)}
                   </p>
                 </div>
                 <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 text-center">
                   <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">سعر 1</p>
-                  <p className="text-purple-400 font-bold text-base">
+                  <p className="text-dash-accent-purple font-bold text-base">
                     {(product.price1 || 0).toFixed(2)}
                   </p>
                 </div>
                 {price2 !== undefined && (
                   <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 text-center">
                     <p className="text-[var(--dash-text-muted)] text-xs mb-0.5">سعر 2</p>
-                    <p className="text-indigo-400 font-bold text-base">
+                    <p className="text-dash-accent-purple font-bold text-base">
                       {(price2 || 0).toFixed(2)}
                     </p>
                   </div>
@@ -283,7 +283,7 @@ export default function MobileProductDetailsModal({
                 <h3 className="text-[var(--dash-text-primary)] font-semibold text-sm mb-3">التقييمات</h3>
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-2 mb-1">
-                    <span className="text-yellow-400 font-bold text-2xl">
+                    <span className="text-dash-accent-orange font-bold text-2xl">
                       {(rating || 0).toFixed(1)}
                     </span>
                     <div className="flex">
@@ -292,7 +292,7 @@ export default function MobileProductDetailsModal({
                           key={star}
                           className={`text-base ${
                             star <= (rating || 0)
-                              ? "text-yellow-400"
+                              ? "text-dash-accent-orange"
                               : "text-[var(--dash-border-default)]"
                           }`}
                         >
@@ -335,7 +335,7 @@ export default function MobileProductDetailsModal({
                   <div className="space-y-2">
                     <div className="flex justify-between items-center py-1.5 border-b border-[var(--dash-border-default)]/30">
                       <span className="text-[var(--dash-text-muted)] text-sm">آخر سعر شراء</span>
-                      <span className="text-orange-400 font-bold text-sm">
+                      <span className="text-dash-accent-orange font-bold text-sm">
                         {lastPurchaseInfo.unitPrice.toFixed(2)}
                       </span>
                     </div>
@@ -347,7 +347,7 @@ export default function MobileProductDetailsModal({
                     </div>
                     <button
                       onClick={onShowPurchaseHistory}
-                      className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors mt-2"
+                      className="w-full px-3 py-2 dash-btn-primary text-sm rounded-lg transition-colors mt-2"
                     >
                       عرض تاريخ الشراء
                     </button>
@@ -378,9 +378,9 @@ export default function MobileProductDetailsModal({
         {activeTab === "inventory" && (
           <>
             {/* Total Quantity Banner */}
-            <div className="bg-blue-600/10 rounded-xl p-4 text-center border border-blue-600/20">
-              <p className="text-blue-400 text-sm mb-1">الكمية الإجمالية</p>
-              <p className="text-blue-400 font-bold text-3xl">{totalQuantity}</p>
+            <div className="bg-dash-accent-blue-subtle rounded-xl p-4 text-center border border-dash-accent-blue/20">
+              <p className="text-dash-accent-blue text-sm mb-1">الكمية الإجمالية</p>
+              <p className="text-dash-accent-blue font-bold text-3xl">{totalQuantity}</p>
             </div>
 
             {/* Branch/Warehouse Cards */}
@@ -402,13 +402,13 @@ export default function MobileProductDetailsModal({
                         <span className="text-[var(--dash-text-primary)] font-medium text-sm">
                           {locationName}
                         </span>
-                        <span className="text-blue-400 font-bold text-lg">
+                        <span className="text-dash-accent-blue font-bold text-lg">
                           {inventory?.quantity || 0}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-[var(--dash-text-muted)]">الحد الأدنى</span>
-                        <span className="text-orange-400">
+                        <span className="text-dash-accent-orange">
                           {inventory?.min_stock || 0}
                         </span>
                       </div>

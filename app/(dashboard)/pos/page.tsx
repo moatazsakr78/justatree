@@ -77,7 +77,7 @@ function EditableField({
         onChange={(e) => setTempValue(e.target.value)}
         onBlur={handleSubmit}
         onKeyDown={handleKeyPress}
-        className={`${className} ring-1 ring-blue-500`}
+        className={`${className} ring-1 ring-dash-accent-blue`}
         autoFocus
         onFocus={(e) => e.target.select()}
       />
@@ -962,7 +962,7 @@ function POSPageContent() {
         accessor: "totalQuantity",
         width: 120,
         render: (value: number) => (
-          <span className="text-blue-400 font-medium">قطعة {value}</span>
+          <span className="text-dash-accent-blue font-medium">قطعة {value}</span>
         ),
       },
       {
@@ -1060,7 +1060,7 @@ function POSPageContent() {
         const inventoryData = item.inventoryData?.[branch.id];
         const quantity = inventoryData?.quantity || 0;
         return (
-          <span className="text-blue-400 font-medium">قطعة {quantity}</span>
+          <span className="text-dash-accent-blue font-medium">قطعة {quantity}</span>
         );
       },
     }));
@@ -1081,7 +1081,7 @@ function POSPageContent() {
 
         return (
           <span
-            className={`font-medium ${isLowStock ? "text-red-400" : "text-yellow-400"}`}
+            className={`font-medium ${isLowStock ? "text-dash-accent-red" : "text-dash-accent-orange"}`}
           >
             {minStock} قطعة
           </span>
@@ -1222,7 +1222,7 @@ function POSPageContent() {
       render: (value: boolean) => (
         <div className="flex justify-center">
           <div
-            className={`w-3 h-3 rounded-full ${value ? "bg-green-500" : "bg-red-500"}`}
+            className={`w-3 h-3 rounded-full ${value ? "bg-dash-accent-green" : "bg-dash-accent-red"}`}
           ></div>
         </div>
       ),
@@ -4840,7 +4840,7 @@ function POSPageContent() {
                 value={newTabName}
                 onChange={(e) => setNewTabName(e.target.value)}
                 placeholder="اسم النافذة..."
-                className="w-full px-4 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                className="w-full px-4 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue mb-4"
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && newTabName.trim()) {
                     // Inherit selections from current tab, but ALWAYS use default customer
@@ -4882,7 +4882,7 @@ function POSPageContent() {
                       setShowAddTabModal(false);
                     }
                   }}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
+                  className="px-4 py-2 dash-btn-primary rounded transition-colors"
                   disabled={!newTabName.trim()}
                 >
                   موافق
@@ -4921,8 +4921,8 @@ function POSPageContent() {
                       : "هل تريد تفعيل وضع الشراء من الموردين؟"}
                   </p>
                   {!isPurchaseMode && (
-                    <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                      <p className="text-blue-400 text-sm">
+                    <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue rounded-lg p-4">
+                      <p className="text-dash-accent-blue text-sm">
                         📝 في وضع الشراء، سيتم تحديد المورد والمخزن بدلاً من
                         العميل والفرع.
                       </p>
@@ -4946,7 +4946,7 @@ function POSPageContent() {
                         }
                         setShowPurchaseModeConfirm(false);
                       }}
-                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors"
+                      className="flex-1 dash-btn-purple py-3 rounded-lg font-medium transition-colors"
                     >
                       {isPurchaseMode ? "إيقاف وضع الشراء" : "تفعيل وضع الشراء"}
                     </button>
@@ -4968,7 +4968,7 @@ function POSPageContent() {
               <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-md">
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-10 bg-gradient-to-r from-dash-accent-green to-dash-accent-blue rounded-full flex items-center justify-center">
                       <PrinterIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                     </div>
                     <div>
@@ -4983,9 +4983,9 @@ function POSPageContent() {
                 </div>
 
                 <div className="p-6">
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
-                    <p className="text-green-400 text-sm flex items-center gap-2 mb-2">
-                      <span className="text-green-400">✅</span>
+                  <div className="bg-dash-accent-green-subtle border border-dash-accent-green rounded-lg p-4 mb-4">
+                    <p className="text-dash-accent-green text-sm flex items-center gap-2 mb-2">
+                      <span className="text-dash-accent-green">✅</span>
                       تم إنشاء{" "}
                       {lastInvoiceData?.isReturn ? "المرتجع" : "الفاتورة"} بنجاح
                     </p>
@@ -4998,7 +4998,7 @@ function POSPageContent() {
                       </p>
                       <p>
                         الإجمالي:{" "}
-                        <span className="font-bold text-green-400">
+                        <span className="font-bold text-dash-accent-green">
                           {formatPrice(
                             lastInvoiceData?.totalAmount || 0,
                             "system",
@@ -5032,7 +5032,7 @@ function POSPageContent() {
                         printReceipt(lastInvoiceData);
                         setShowPrintReceiptModal(false);
                       }}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                      className="flex-1 dash-btn-primary py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                     >
                       <PrinterIcon className="h-5 w-5" />
                       نعم، اطبع الفاتورة
@@ -5067,7 +5067,7 @@ function POSPageContent() {
                 <button
                   onClick={toggleRecordsModal}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
-                    selections.record ? 'text-green-400 hover:text-green-300' : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
+                    selections.record ? 'text-dash-accent-green hover:text-dash-accent-green' : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                   }`}
                 >
                   <BanknotesIcon className="h-5 w-5 mb-1" />
@@ -5077,13 +5077,13 @@ function POSPageContent() {
                         <>
                           <span>{selections.record.name}</span>
                           {' '}
-                          <span className="text-yellow-400 text-xs">{selections.subSafe.name}</span>
+                          <span className="text-dash-accent-orange text-xs">{selections.subSafe.name}</span>
                         </>
                       ) : selections.record.name
                     ) : 'الخزنة'}
                   </span>
                   {!selections.record && (
-                    <div className="w-1 h-1 bg-red-400 rounded-full mt-1"></div>
+                    <div className="w-1 h-1 bg-dash-accent-red rounded-full mt-1"></div>
                   )}
                 </button>
 
@@ -5117,7 +5117,7 @@ function POSPageContent() {
                     )}
                     {(selectedPartyType === 'customer' && !selections.customer) ||
                      (selectedPartyType === 'supplier' && !selectedSupplierForSale) ? (
-                      <div className="w-1 h-1 bg-red-400 rounded-full mt-1"></div>
+                      <div className="w-1 h-1 bg-dash-accent-red rounded-full mt-1"></div>
                     ) : null}
                   </button>
                 )}
@@ -5128,14 +5128,14 @@ function POSPageContent() {
                     onClick={() => setIsPriceTypeModalOpen(true)}
                     className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
                       selectedPriceType !== "price"
-                        ? "text-blue-400 hover:text-blue-300"
+                        ? "text-dash-accent-blue hover:text-dash-accent-blue"
                         : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
                     <CurrencyDollarIcon className="h-5 w-5 mb-1" />
                     <span className="text-sm">السعر</span>
                     {selectedPriceType !== "price" && (
-                      <div className="w-1 h-1 bg-blue-400 rounded-full mt-1"></div>
+                      <div className="w-1 h-1 bg-dash-accent-blue rounded-full mt-1"></div>
                     )}
                   </button>
                 )}
@@ -5166,7 +5166,7 @@ function POSPageContent() {
                   onClick={handleTransferModeToggle}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     isTransferMode
-                      ? "text-green-400 hover:text-green-300"
+                      ? "text-dash-accent-green hover:text-dash-accent-green"
                       : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
@@ -5178,14 +5178,14 @@ function POSPageContent() {
                   onClick={toggleCategoriesModal}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all relative ${
                     selectedCategoryId
-                      ? "text-blue-400 hover:text-blue-300"
+                      ? "text-dash-accent-blue hover:text-dash-accent-blue"
                       : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
                   <div className="relative">
                     <Squares2X2Icon className="h-5 w-5 mb-1" />
                     {selectedCategoryId && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-dash-accent-blue rounded-full"></span>
                     )}
                   </div>
                   <span className="text-sm">{selectedCategoryName || 'الفئات'}</span>
@@ -5197,14 +5197,14 @@ function POSPageContent() {
                     onClick={() => setIsDiscountModalOpen(true)}
                     className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                       cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)
-                        ? "text-orange-400 hover:text-orange-300"
+                        ? "text-dash-accent-orange hover:text-dash-accent-orange"
                         : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
                     <ReceiptPercentIcon className="h-5 w-5 mb-1" />
                     <span className="text-sm">خصم</span>
                     {(cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)) && (
-                      <div className="w-1 h-1 bg-orange-400 rounded-full mt-1"></div>
+                      <div className="w-1 h-1 bg-dash-accent-orange rounded-full mt-1"></div>
                     )}
                   </button>
                 )}
@@ -5214,14 +5214,14 @@ function POSPageContent() {
                   onClick={() => setIsPostponedModalOpen(true)}
                   className={`relative flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     postponedTabs.length > 0
-                      ? "text-orange-400 hover:text-orange-300"
+                      ? "text-dash-accent-orange hover:text-dash-accent-orange"
                       : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
                   <ClockIcon className="h-5 w-5 mb-1" />
                   <span className="text-sm">الفواتير</span>
                   {postponedTabs.length > 0 && (
-                    <div className="absolute top-0 right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center text-xs text-[var(--dash-text-primary)] font-bold">
+                    <div className="absolute top-0 right-2 w-5 h-5 bg-dash-accent-orange rounded-full flex items-center justify-center text-xs text-[var(--dash-text-primary)] font-bold">
                       {postponedTabs.length}
                     </div>
                   )}
@@ -5233,7 +5233,7 @@ function POSPageContent() {
                   disabled={!selections.record}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     selections.record
-                      ? "text-green-400 hover:text-green-300"
+                      ? "text-dash-accent-green hover:text-dash-accent-green"
                       : "text-[var(--dash-text-disabled)] cursor-not-allowed"
                   }`}
                   title={selections.record ? `درج ${selections.record.name}` : "يجب اختيار سجل أولاً"}
@@ -5277,7 +5277,7 @@ function POSPageContent() {
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     cartItems.length === 0
                       ? "text-[var(--dash-text-disabled)] cursor-not-allowed"
-                      : "text-blue-400 hover:text-blue-300"
+                      : "text-dash-accent-blue hover:text-dash-accent-blue"
                   }`}
                   title="معاينة الفاتورة للإرسال للعميل"
                 >
@@ -5293,7 +5293,7 @@ function POSPageContent() {
                   onClick={() => setIsReturnMode(!isReturnMode)}
                   className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] transition-all ${
                     isReturnMode
-                      ? "text-orange-400 hover:text-orange-300"
+                      ? "text-dash-accent-orange hover:text-dash-accent-orange"
                       : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                   }`}
                 >
@@ -5308,14 +5308,14 @@ function POSPageContent() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setShowQuickAddProductModal(true)}
-                      className="flex flex-col items-center p-2 text-green-400 hover:text-green-300 cursor-pointer min-w-[80px] transition-all"
+                      className="flex flex-col items-center p-2 text-dash-accent-green hover:text-dash-accent-green cursor-pointer min-w-[80px] transition-all"
                     >
                       <PlusIcon className="h-5 w-5 mb-1" />
                       <span className="text-sm">منتج جديد</span>
                     </button>
                     <button
                       onClick={handlePurchaseModeToggle}
-                      className="flex flex-col items-center p-2 text-blue-400 hover:text-blue-300 cursor-pointer min-w-[80px] transition-all"
+                      className="flex flex-col items-center p-2 text-dash-accent-blue hover:text-dash-accent-blue cursor-pointer min-w-[80px] transition-all"
                     >
                       <ShoppingBagIcon className="h-5 w-5 mb-1" />
                       <span className="text-sm">شراء</span>
@@ -5360,7 +5360,7 @@ function POSPageContent() {
                 onClick={handleTransferModeToggle}
                 className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   isTransferMode
-                    ? "bg-green-600 text-[var(--dash-text-primary)] hover:bg-green-700"
+                    ? "dash-btn-green"
                     : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
               >
@@ -5372,7 +5372,7 @@ function POSPageContent() {
                 onClick={toggleCategoriesModal}
                 className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   selectedCategoryId
-                    ? "bg-blue-600 text-[var(--dash-text-primary)] hover:bg-blue-700 border-blue-600"
+                    ? "dash-btn-primary border-dash-accent-blue"
                     : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
               >
@@ -5386,14 +5386,14 @@ function POSPageContent() {
                   onClick={() => setIsDiscountModalOpen(true)}
                   className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors relative ${
                     cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)
-                      ? "bg-orange-600 text-[var(--dash-text-primary)] hover:bg-orange-700 border-orange-500"
+                      ? "bg-dash-accent-orange text-[var(--dash-text-primary)] hover:brightness-90 border-dash-accent-orange"
                       : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                   }`}
                 >
                   <ReceiptPercentIcon className="h-4 w-4" />
                   <span className="text-xs">خصم</span>
                   {(cartDiscount > 0 || cartItems.some(item => item.discount && item.discount > 0)) && (
-                    <div className="w-1 h-1 bg-orange-300 rounded-full absolute -top-1 -right-1"></div>
+                    <div className="w-1 h-1 bg-dash-accent-orange rounded-full absolute -top-1 -right-1"></div>
                   )}
                 </button>
               )}
@@ -5403,7 +5403,7 @@ function POSPageContent() {
                 onClick={() => setIsPostponedModalOpen(true)}
                 className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors relative ${
                   postponedTabs.length > 0
-                    ? "bg-orange-600 text-[var(--dash-text-primary)] hover:bg-orange-700 border-orange-500"
+                    ? "bg-dash-accent-orange text-[var(--dash-text-primary)] hover:brightness-90 border-dash-accent-orange"
                     : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
                 title="الفواتير المؤجلة"
@@ -5411,7 +5411,7 @@ function POSPageContent() {
                 <ClockIcon className="h-4 w-4" />
                 <span className="text-xs">الفواتير</span>
                 {postponedTabs.length > 0 && (
-                  <span className="bg-orange-300 text-orange-800 text-xs px-1.5 rounded-full font-bold">
+                  <span className="bg-dash-accent-orange text-[var(--dash-bg-deepest)] text-xs px-1.5 rounded-full font-bold">
                     {postponedTabs.length}
                   </span>
                 )}
@@ -5437,7 +5437,7 @@ function POSPageContent() {
                 className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   cartItems.length === 0
                     ? "bg-[var(--dash-bg-surface)] text-[var(--dash-text-disabled)] cursor-not-allowed"
-                    : "bg-[var(--dash-bg-surface)] text-blue-400 hover:text-blue-300 hover:bg-[var(--dash-bg-overlay)]"
+                    : "bg-[var(--dash-bg-surface)] text-dash-accent-blue hover:text-dash-accent-blue hover:bg-[var(--dash-bg-overlay)]"
                 }`}
                 title="معاينة الفاتورة للإرسال للعميل"
               >
@@ -5450,7 +5450,7 @@ function POSPageContent() {
                 onClick={() => setIsReturnMode(!isReturnMode)}
                 className={`flex items-center gap-2 px-3 py-2 border border-[var(--dash-border-default)] rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors ${
                   isReturnMode
-                    ? "bg-orange-600 text-[var(--dash-text-primary)] hover:bg-orange-700"
+                    ? "bg-dash-accent-orange text-[var(--dash-text-primary)] hover:brightness-90"
                     : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                 }`}
               >
@@ -5463,14 +5463,14 @@ function POSPageContent() {
                 <>
                   <button
                     onClick={() => setShowQuickAddProductModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-green-600 border border-green-500 rounded text-[var(--dash-text-primary)] hover:bg-green-700 cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 dash-btn-green border border-dash-accent-green rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
                   >
                     <PlusIcon className="h-4 w-4" />
                     <span className="text-xs">منتج جديد</span>
                   </button>
                   <button
                     onClick={handlePurchaseModeToggle}
-                    className="flex items-center gap-2 px-3 py-2 bg-blue-600 border border-blue-500 rounded text-[var(--dash-text-primary)] hover:bg-blue-700 cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 dash-btn-primary border border-dash-accent-blue rounded cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors"
                   >
                     <ShoppingBagIcon className="h-4 w-4" />
                     <span className="text-xs">شراء</span>
@@ -5499,11 +5499,11 @@ function POSPageContent() {
                     className={`flex items-center border-l border-[var(--dash-border-default)] first:border-l-0 ${
                       tab.active
                         ? tab.isTransferMode
-                          ? 'bg-green-600 text-[var(--dash-text-primary)]'
+                          ? 'bg-dash-accent-green text-[var(--dash-text-primary)]'
                           : tab.isPurchaseMode
-                            ? 'bg-blue-600 text-[var(--dash-text-primary)]'
-                            : 'bg-[#F97316] text-[var(--dash-text-primary)]'
-                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
+                            ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
+                            : 'bg-dash-accent-orange text-[var(--dash-text-primary)]'
+                        : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                     }`}
                   >
                     <button
@@ -5518,7 +5518,7 @@ function POSPageContent() {
                           e.stopPropagation();
                           handleCloseTab(tab.id);
                         }}
-                        className="p-1 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                        className="p-1 hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded transition-colors"
                       >
                         <XMarkIcon className="w-3 h-3" />
                       </button>
@@ -5532,7 +5532,7 @@ function POSPageContent() {
                     setIsPartyModalForNewTab(true);
                     setIsPartyModalOpen(true);
                   }}
-                  className="px-2 py-1.5 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center border-l border-[var(--dash-border-default)]"
+                  className="px-2 py-1.5 text-dash-accent-green hover:text-dash-accent-green hover:bg-dash-accent-green-subtle transition-colors flex items-center border-l border-[var(--dash-border-default)]"
                 >
                   <PlusIcon className="w-4 h-4" />
                 </button>
@@ -5542,7 +5542,7 @@ function POSPageContent() {
               <button
                 onClick={toggleRecordsModal}
                 className={`flex items-center gap-1 px-2 py-1.5 bg-[var(--dash-bg-raised)] border rounded text-xs whitespace-nowrap flex-shrink-0 ${
-                  selections.record ? 'border-green-500/50 text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
+                  selections.record ? 'border-dash-accent-green text-dash-accent-green hover:text-dash-accent-green hover:bg-dash-accent-green-subtle' : 'border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
                 <BanknotesIcon className="h-3.5 w-3.5" />
@@ -5552,7 +5552,7 @@ function POSPageContent() {
                       <>
                         <span className="text-[var(--dash-text-primary)]">{selections.record.name}</span>
                         {' '}
-                        <span className="text-yellow-400">{selections.subSafe.name}</span>
+                        <span className="text-dash-accent-orange">{selections.subSafe.name}</span>
                       </>
                     ) : selections.record.name
                   ) : 'الخزنة'}
@@ -5565,8 +5565,8 @@ function POSPageContent() {
                   onClick={() => setIsPriceTypeModalOpen(true)}
                   className={`flex items-center gap-1 px-2 py-1.5 border border-[var(--dash-border-default)] rounded text-xs whitespace-nowrap flex-shrink-0 ${
                     selectedPriceType !== "price"
-                      ? "bg-blue-600 text-[var(--dash-text-primary)] border-blue-500"
-                      : "bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]"
+                      ? "bg-dash-accent-blue text-[var(--dash-text-primary)] border-dash-accent-blue"
+                      : "bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                   }`}
                 >
                   <CurrencyDollarIcon className="h-3.5 w-3.5" />
@@ -5577,7 +5577,7 @@ function POSPageContent() {
               {/* زرار عرض التفاصيل */}
               <button
                 onClick={() => setShowMobileDetailsModal(true)}
-                className="flex items-center gap-1 px-2 py-1.5 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563] text-xs whitespace-nowrap flex-shrink-0"
+                className="flex items-center gap-1 px-2 py-1.5 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] text-xs whitespace-nowrap flex-shrink-0"
               >
                 <EyeIcon className="h-3.5 w-3.5" />
                 <span>عرض</span>
@@ -5622,7 +5622,7 @@ function POSPageContent() {
                 {selections.subSafe?.name && (
                   <>
                     {" "}
-                    <span className="text-yellow-400 font-medium">
+                    <span className="text-dash-accent-orange font-medium">
                       {selections.subSafe.name}
                     </span>
                   </>
@@ -5633,7 +5633,7 @@ function POSPageContent() {
               {!isPurchaseMode && !isTransferMode && (
                 <span className="text-[var(--dash-text-secondary)] whitespace-nowrap">
                   السعر:{" "}
-                  <span className={`font-medium ${selectedPriceType !== "price" ? "text-blue-400" : "text-[var(--dash-text-primary)]"}`}>
+                  <span className={`font-medium ${selectedPriceType !== "price" ? "text-dash-accent-blue" : "text-[var(--dash-text-primary)]"}`}>
                     {getPriceTypeName(selectedPriceType)}
                   </span>
                 </span>
@@ -5651,7 +5651,7 @@ function POSPageContent() {
                       setSelectedSupplier(null);
                     }
                   }}
-                  className="text-xs text-[var(--dash-text-muted)] hover:text-red-400 transition-colors px-2 py-1 rounded whitespace-nowrap"
+                  className="text-xs text-[var(--dash-text-muted)] hover:text-dash-accent-red transition-colors px-2 py-1 rounded whitespace-nowrap"
                 >
                   مسح الكل
                 </button>
@@ -5669,11 +5669,11 @@ function POSPageContent() {
                   className={`flex items-center border-l border-[var(--dash-border-default)] ${
                     tab.active
                       ? tab.isTransferMode
-                        ? 'bg-green-600 text-[var(--dash-text-primary)]'
+                        ? 'bg-dash-accent-green text-[var(--dash-text-primary)]'
                         : tab.isPurchaseMode
-                          ? 'bg-blue-600 text-[var(--dash-text-primary)]'
-                          : 'bg-[#F97316] text-[var(--dash-text-primary)]'
-                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
+                          ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
+                          : 'bg-dash-accent-orange text-[var(--dash-text-primary)]'
+                      : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                   }`}
                   onContextMenu={(e) => {
                     // Show context menu for all tabs
@@ -5695,7 +5695,7 @@ function POSPageContent() {
                         e.stopPropagation();
                         handleCloseTab(tab.id);
                       }}
-                      className="ml-1 p-1 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                      className="ml-1 p-1 hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded transition-colors"
                       title="إغلاق"
                     >
                       <XMarkIcon className="w-4 h-4" />
@@ -5710,7 +5710,7 @@ function POSPageContent() {
                   setIsPartyModalForNewTab(true);
                   setIsPartyModalOpen(true);
                 }}
-                className="px-3 py-2 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center gap-1 border-l border-[var(--dash-border-default)]"
+                className="px-3 py-2 text-dash-accent-green hover:text-dash-accent-green hover:bg-dash-accent-green-subtle transition-colors flex items-center gap-1 border-l border-[var(--dash-border-default)]"
                 title="إضافة نافذة بيع جديدة (عميل أو مورد)"
               >
                 <PlusIcon className="w-4 h-4" />
@@ -5773,7 +5773,7 @@ function POSPageContent() {
                           }, 100);
                           setTabContextMenu(null);
                         }}
-                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-orange-500/20 hover:text-orange-400 flex items-center gap-2 transition-colors"
+                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-dash-accent-orange-subtle hover:text-dash-accent-orange flex items-center gap-2 transition-colors"
                       >
                         <ClockIcon className="h-4 w-4" />
                         تأجيل الفاتورة
@@ -5791,7 +5791,7 @@ function POSPageContent() {
                         setIsCustomerModalOpen(true);
                         setTabContextMenu(null);
                       }}
-                      className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
+                      className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-dash-accent-blue-subtle hover:text-dash-accent-blue flex items-center gap-2 transition-colors"
                     >
                       <UserIcon className="h-4 w-4" />
                       تغيير العميل
@@ -5810,7 +5810,7 @@ function POSPageContent() {
                       }}
                       className={`w-full px-4 py-2 text-right text-sm flex items-center gap-2 transition-colors ${
                         (posTabs.find(t => t.id === tabContextMenu.tabId)?.cartItems?.length || 0) > 0
-                          ? 'text-[var(--dash-text-secondary)] hover:bg-orange-500/20 hover:text-orange-400'
+                          ? 'text-[var(--dash-text-secondary)] hover:bg-dash-accent-orange-subtle hover:text-dash-accent-orange'
                           : 'text-[var(--dash-text-disabled)] cursor-not-allowed'
                       }`}
                       disabled={(posTabs.find(t => t.id === tabContextMenu.tabId)?.cartItems?.length || 0) === 0}
@@ -5826,7 +5826,7 @@ function POSPageContent() {
                           setIsTransferLocationModalOpen(true);
                           setTabContextMenu(null);
                         }}
-                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-green-500/20 hover:text-green-400 flex items-center gap-2 transition-colors"
+                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-dash-accent-green-subtle hover:text-dash-accent-green flex items-center gap-2 transition-colors"
                       >
                         <ArrowsRightLeftIcon className="h-4 w-4" />
                         تغيير النقل
@@ -5838,7 +5838,7 @@ function POSPageContent() {
                           setIsCustomerModalOpen(true);
                           setTabContextMenu(null);
                         }}
-                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-blue-500/20 hover:text-blue-400 flex items-center gap-2 transition-colors"
+                        className="w-full px-4 py-2 text-right text-sm text-[var(--dash-text-secondary)] hover:bg-dash-accent-blue-subtle hover:text-dash-accent-blue flex items-center gap-2 transition-colors"
                       >
                         <UserIcon className="h-4 w-4" />
                         تغيير العميل
@@ -5870,7 +5870,7 @@ function POSPageContent() {
                     onClick={() => setViewMode("grid")}
                     className={`p-2 rounded-md transition-colors ${
                       viewMode === "grid"
-                        ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                        ? "bg-dash-accent-blue text-[var(--dash-text-primary)]"
                         : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
@@ -5880,7 +5880,7 @@ function POSPageContent() {
                     onClick={() => setViewMode("table")}
                     className={`p-2 rounded-md transition-colors ${
                       viewMode === "table"
-                        ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                        ? "bg-dash-accent-blue text-[var(--dash-text-primary)]"
                         : "text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]"
                     }`}
                   >
@@ -5904,10 +5904,10 @@ function POSPageContent() {
                       {/* قبل/بعد: رصيد العميل - يظهر فقط مع عميل غير افتراضي */}
                       {selections.customer && selections.customer.id !== defaultCustomer?.id && cartItems.length > 0 && (
                         <>
-                          <span className="text-red-400" title="رصيد العميل قبل">
+                          <span className="text-dash-accent-red" title="رصيد العميل قبل">
                             قبل: {(selections.customer.calculated_balance || 0).toFixed(0)}
                           </span>
-                          <span className="text-green-400" title="رصيد العميل بعد">
+                          <span className="text-dash-accent-green" title="رصيد العميل بعد">
                             بعد: {((selections.customer.calculated_balance || 0) + (isReturnMode ? -1 : 1) * calculateTotalWithDiscounts() - paymentSplitData.reduce((sum, p) => sum + (p.amount || 0), 0)).toFixed(0)}
                           </span>
                         </>
@@ -5964,7 +5964,7 @@ function POSPageContent() {
                   onClick={() => setViewMode("grid")}
                   className={`p-2 transition-colors ${
                     viewMode === "grid"
-                      ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                      ? "bg-dash-accent-blue text-[var(--dash-text-primary)]"
                       : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                   }`}
                   title="عرض الصور"
@@ -5975,7 +5975,7 @@ function POSPageContent() {
                   onClick={() => setViewMode("table")}
                   className={`p-2 transition-colors ${
                     viewMode === "table"
-                      ? "bg-blue-600 text-[var(--dash-text-primary)]"
+                      ? "bg-dash-accent-blue text-[var(--dash-text-primary)]"
                       : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
                   }`}
                   title="عرض الجداول"
@@ -6084,7 +6084,7 @@ function POSPageContent() {
                                       }, 150);
                                     }, 100);
                                   }}
-                                  className="text-orange-400 hover:text-orange-300 hover:bg-orange-400/10 rounded px-1.5 py-0.5 transition-colors text-xs flex items-center gap-1"
+                                  className="text-dash-accent-orange hover:text-dash-accent-orange hover:bg-dash-accent-orange-subtle rounded px-1.5 py-0.5 transition-colors text-xs flex items-center gap-1"
                                   title="تأجيل الفاتورة"
                                 >
                                   <ClockIcon className="h-3 w-3" />
@@ -6093,7 +6093,7 @@ function POSPageContent() {
                                 <span className="text-[var(--dash-text-disabled)]">|</span>
                                 <button
                                   onClick={() => setShowClearCartConfirm(true)}
-                                  className="text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded px-1.5 py-0.5 transition-colors text-xs"
+                                  className="text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded px-1.5 py-0.5 transition-colors text-xs"
                                   title="مسح السلة"
                                 >
                                   مسح الكل
@@ -6105,11 +6105,11 @@ function POSPageContent() {
 
                         {/* Transfer Direction Header */}
                         {isTransferMode && transferFromLocation && transferToLocation && (
-                          <div className="px-4 py-2 bg-green-600/10 border-b border-green-600/30 flex-shrink-0">
+                          <div className="px-4 py-2 bg-dash-accent-green-subtle border-b border-dash-accent-green flex-shrink-0">
                             <div className="flex items-center justify-center gap-2 text-sm" dir="ltr">
-                              <span className="text-green-400 font-medium">{transferFromLocation.name}</span>
-                              <span className="text-green-400">→</span>
-                              <span className="text-green-400 font-medium">{transferToLocation.name}</span>
+                              <span className="text-dash-accent-green font-medium">{transferFromLocation.name}</span>
+                              <span className="text-dash-accent-green">→</span>
+                              <span className="text-dash-accent-green font-medium">{transferToLocation.name}</span>
                             </div>
                           </div>
                         )}
@@ -6143,7 +6143,7 @@ function POSPageContent() {
                                       </h4>
                                       {/* إظهار اسم الفرع فقط لو فيه أكتر من فرع في السلة */}
                                       {showBranchPerItem && item.branch_name && (
-                                        <span className="text-xs text-blue-300 bg-blue-900/50 px-2 py-0.5 rounded-full flex-shrink-0 border border-blue-500/30">
+                                        <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-0.5 rounded-full flex-shrink-0 border border-dash-accent-blue">
                                           {item.branch_name}
                                         </span>
                                       )}
@@ -6156,7 +6156,7 @@ function POSPageContent() {
                                             setEditingCartItem(item);
                                             setShowQuickAddProductModal(true);
                                           }}
-                                          className="text-blue-400 hover:text-blue-300 p-1"
+                                          className="text-dash-accent-blue hover:text-dash-accent-blue p-1"
                                           title="تعديل المنتج"
                                         >
                                           <PencilIcon className="h-4 w-4" />
@@ -6164,7 +6164,7 @@ function POSPageContent() {
                                       )}
                                       <button
                                         onClick={() => removeFromCart(item.id)}
-                                        className="text-red-400 hover:text-red-300 p-1"
+                                        className="text-dash-accent-red hover:text-dash-accent-red p-1"
                                         title="إزالة من السلة"
                                       >
                                         <XMarkIcon className="h-4 w-4" />
@@ -6275,7 +6275,7 @@ function POSPageContent() {
 
                               {/* Total Price */}
                               <div className="text-right">
-                                <span className="text-green-400 font-bold text-sm">
+                                <span className="text-dash-accent-green font-bold text-sm">
                                   {formatPrice(item.totalPrice || (item.price * item.quantity) || 0, "system")}
                                 </span>
                               </div>
@@ -6316,18 +6316,18 @@ function POSPageContent() {
                                   <span className="text-[var(--dash-text-muted)] text-xs line-through">
                                     {formatPrice(cartTotal, "system")}
                                   </span>
-                                  <span className="text-orange-400 text-xs">
+                                  <span className="text-dash-accent-orange text-xs">
                                     خصم {cartDiscount > 0 ? (cartDiscountType === "percentage" ? `${cartDiscount}%` : `${cartDiscount} ج.م`) : ""}
                                   </span>
                                 </div>
-                                <div className="text-green-400 font-bold text-lg">
+                                <div className="text-dash-accent-green font-bold text-lg">
                                   {formatPrice(calculateTotalWithDiscounts(), "system")}
                                 </div>
                               </>
                             ) : (
                               <>
                                 <div className="text-[var(--dash-text-primary)] text-sm font-medium">الإجمالي: ({cartItems.length})</div>
-                                <div className="text-green-400 font-bold text-lg">
+                                <div className="text-dash-accent-green font-bold text-lg">
                                   {formatPrice(cartTotal, "system")}
                                 </div>
                               </>
@@ -6335,7 +6335,7 @@ function POSPageContent() {
                           </div>
                         ) : (
                           <div className="text-right">
-                            <div className="text-green-400 text-sm font-medium">وضع النقل</div>
+                            <div className="text-dash-accent-green text-sm font-medium">وضع النقل</div>
                             <div className="text-[var(--dash-text-primary)] font-bold text-lg">
                               {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                             </div>
@@ -6356,19 +6356,19 @@ function POSPageContent() {
                             onChange={(e) => setPaidAmount(e.target.value)}
                             placeholder="المدفوع"
                             disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                            className="w-24 min-w-0 px-3 py-2 bg-[var(--dash-bg-base)] text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-blue-500 text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            className="w-24 min-w-0 px-3 py-2 bg-[var(--dash-bg-base)] text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-dash-accent-blue text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             style={{ MozAppearance: 'textfield' }}
                             dir="ltr"
                           />
                           <button
                             disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed"
+                            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 dash-btn-primary font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed"
                             onClick={handleCreateInvoice}
                           >
                             {isProcessingInvoice ? '...' : (
                               <>
                                 {paidAmount && parseFloat(paidAmount) > 0 && (
-                                  <span className="text-orange-300 font-bold whitespace-nowrap text-xs">
+                                  <span className="text-dash-accent-orange font-bold whitespace-nowrap text-xs">
                                     الباقي: {(parseFloat(paidAmount) - calculateTotalWithDiscounts()).toFixed(0)}
                                   </span>
                                 )}
@@ -6381,7 +6381,7 @@ function POSPageContent() {
                         /* Normal confirm button for regular customers */
                         <button
                           disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                          className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] bg-blue-600 hover:bg-blue-700"
+                          className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed dash-btn-primary"
                           onClick={handleCreateInvoice}
                         >
                           {isProcessingInvoice
@@ -6403,10 +6403,10 @@ function POSPageContent() {
                             activePOSTab?.isEditMode
                               ? "bg-amber-600 hover:bg-amber-700"
                               : isTransferMode
-                                ? "bg-green-600 hover:bg-green-700"
+                                ? "dash-btn-green"
                                 : isReturnMode
-                                  ? "bg-red-600 hover:bg-red-700"
-                                  : "bg-purple-600 hover:bg-purple-700"
+                                  ? "dash-btn-red"
+                                  : "dash-btn-purple"
                           }`}
                           onClick={handleCreateInvoice}
                         >
@@ -6443,7 +6443,7 @@ function POSPageContent() {
               {/* Error State */}
               {error && (
                 <div className="flex items-center justify-center h-full">
-                  <div className="text-red-400">خطأ: {error}</div>
+                  <div className="text-dash-accent-red">خطأ: {error}</div>
                 </div>
               )}
 
@@ -6522,14 +6522,14 @@ function POSPageContent() {
                               <div className="space-y-1 text-xs">
                                 {/* Price */}
                                 <div className="flex justify-center mb-2">
-                                  <span className="text-blue-400 font-medium text-sm">
+                                  <span className="text-dash-accent-blue font-medium text-sm">
                                     {getProductPriceByType(product).toFixed(2)}
                                   </span>
                                 </div>
 
                                 {/* Total Quantity - Using pre-computed value */}
                                 <div className="flex justify-between items-center">
-                                  <span className="text-blue-400 font-medium">
+                                  <span className="text-dash-accent-blue font-medium">
                                     {product._computed.totalQuantity}
                                   </span>
                                   <span className="text-[var(--dash-text-muted)]">
@@ -6562,7 +6562,7 @@ function POSPageContent() {
                             <div className="col-span-full flex justify-center py-4">
                               <button
                                 onClick={() => setShowAllProducts(true)}
-                                className="bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+                                className="dash-btn-primary px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
                               >
                                 <span>تحميل كل المنتجات ({productsWithComputedInventory.length - VISIBLE_PRODUCTS_LIMIT} منتج إضافي)</span>
                               </button>
@@ -6644,7 +6644,7 @@ function POSPageContent() {
                                 }, 150);
                               }, 100);
                             }}
-                            className="text-orange-400 hover:text-orange-300 hover:bg-orange-400/10 rounded px-1.5 py-0.5 transition-colors text-xs flex items-center gap-1"
+                            className="text-dash-accent-orange hover:text-dash-accent-orange hover:bg-dash-accent-orange-subtle rounded px-1.5 py-0.5 transition-colors text-xs flex items-center gap-1"
                             title="تأجيل الفاتورة"
                           >
                             <ClockIcon className="h-3 w-3" />
@@ -6653,7 +6653,7 @@ function POSPageContent() {
                           <span className="text-[var(--dash-text-disabled)]">|</span>
                           <button
                             onClick={clearCart}
-                            className="text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded px-1.5 py-0.5 transition-colors text-xs"
+                            className="text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded px-1.5 py-0.5 transition-colors text-xs"
                             title="مسح السلة"
                           >
                             مسح الكل
@@ -6665,11 +6665,11 @@ function POSPageContent() {
 
                   {/* Transfer Direction Header */}
                   {isTransferMode && transferFromLocation && transferToLocation && (
-                    <div className="px-4 py-2 bg-green-600/10 border-b border-green-600/30 flex-shrink-0">
+                    <div className="px-4 py-2 bg-dash-accent-green-subtle border-b border-dash-accent-green flex-shrink-0">
                       <div className="flex items-center justify-center gap-2 text-sm">
-                        <span className="text-green-400 font-medium">{transferFromLocation.name}</span>
-                        <span className="text-green-400">→</span>
-                        <span className="text-green-400 font-medium">{transferToLocation.name}</span>
+                        <span className="text-dash-accent-green font-medium">{transferFromLocation.name}</span>
+                        <span className="text-dash-accent-green">→</span>
+                        <span className="text-dash-accent-green font-medium">{transferToLocation.name}</span>
                       </div>
                     </div>
                   )}
@@ -6705,7 +6705,7 @@ function POSPageContent() {
                                     setEditingCartItem(item);
                                     setShowQuickAddProductModal(true);
                                   }}
-                                  className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-full p-1 transition-colors"
+                                  className="text-dash-accent-blue hover:text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-full p-1 transition-colors"
                                   title="تعديل المنتج"
                                 >
                                   <PencilIcon className="h-4 w-4" />
@@ -6713,7 +6713,7 @@ function POSPageContent() {
                               )}
                               <button
                                 onClick={() => removeFromCart(item.id)}
-                                className="text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-full p-1 transition-colors text-lg leading-none"
+                                className="text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-full p-1 transition-colors text-lg leading-none"
                                 title="إزالة من السلة"
                               >
                                 ×
@@ -6831,9 +6831,9 @@ function POSPageContent() {
                                       return newCart;
                                     });
                                   }}
-                                  className="text-blue-400 font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
+                                  className="text-dash-accent-blue font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
                                 />
-                                <span className="text-blue-400 text-xs">
+                                <span className="text-dash-accent-blue text-xs">
                                   {systemCurrency}
                                 </span>
                               </>
@@ -6869,7 +6869,7 @@ function POSPageContent() {
                                   ([shape, quantity]: [string, any]) => (
                                     <span
                                       key={shape}
-                                      className="bg-purple-600/40 px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]"
+                                      className="bg-dash-accent-purple-subtle px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]"
                                     >
                                       🔷 {shape}: {quantity}
                                     </span>
@@ -6882,7 +6882,7 @@ function POSPageContent() {
                         {/* Total */}
                         {!isTransferMode && (
                           <div className="mt-2 text-left">
-                            <span className="text-green-400 font-bold text-sm">
+                            <span className="text-dash-accent-green font-bold text-sm">
                               {(item.totalPrice || (item.price * item.quantity) || 0).toFixed(2)} {systemCurrency}
                             </span>
                           </div>
@@ -6924,18 +6924,18 @@ function POSPageContent() {
                             <span className="text-[var(--dash-text-muted)] text-xs line-through">
                               {formatPrice(cartTotal, "system")}
                             </span>
-                            <span className="text-orange-400 text-xs">
+                            <span className="text-dash-accent-orange text-xs">
                               خصم {cartDiscount > 0 ? (cartDiscountType === "percentage" ? `${cartDiscount}%` : `${cartDiscount} ج.م`) : ""}
                             </span>
                           </div>
-                          <div className="text-green-400 font-bold text-lg">
+                          <div className="text-dash-accent-green font-bold text-lg">
                             {formatPrice(calculateTotalWithDiscounts(), "system")}
                           </div>
                         </>
                       ) : (
                         <>
                           <div className="text-[var(--dash-text-primary)] text-sm font-medium">الإجمالي: ({cartItems.length})</div>
-                          <div className="text-green-400 font-bold text-lg">
+                          <div className="text-dash-accent-green font-bold text-lg">
                             {formatPrice(cartTotal, "system")}
                           </div>
                         </>
@@ -6943,7 +6943,7 @@ function POSPageContent() {
                     </div>
                   ) : (
                     <div className="text-right">
-                      <div className="text-green-400 text-sm font-medium">وضع النقل</div>
+                      <div className="text-dash-accent-green text-sm font-medium">وضع النقل</div>
                       <div className="text-[var(--dash-text-primary)] font-bold text-lg">
                         {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                       </div>
@@ -6964,19 +6964,19 @@ function POSPageContent() {
                       onChange={(e) => setPaidAmount(e.target.value)}
                       placeholder="المدفوع"
                       disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                      className="w-24 min-w-0 px-3 py-2 bg-[var(--dash-bg-base)] text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-blue-500 text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      className="w-24 min-w-0 px-3 py-2 bg-[var(--dash-bg-base)] text-[var(--dash-text-primary)] text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-1 focus:ring-dash-accent-blue text-left border-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       style={{ MozAppearance: 'textfield' }}
                       dir="ltr"
                     />
                     <button
                       disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed"
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 dash-btn-primary font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed"
                       onClick={handleCreateInvoice}
                     >
                       {isProcessingInvoice ? '...' : (
                         <>
                           {paidAmount && parseFloat(paidAmount) > 0 && (
-                            <span className="text-orange-300 font-bold whitespace-nowrap text-xs">
+                            <span className="text-dash-accent-orange font-bold whitespace-nowrap text-xs">
                               الباقي: {(parseFloat(paidAmount) - calculateTotalWithDiscounts()).toFixed(0)}
                             </span>
                           )}
@@ -6989,7 +6989,7 @@ function POSPageContent() {
                   /* Normal confirm button for regular customers */
                   <button
                     disabled={cartItems.length === 0 || !hasAllRequiredSelections() || isProcessingInvoice}
-                    className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] bg-blue-600 hover:bg-blue-700"
+                    className="flex-1 py-2 px-4 rounded-lg font-medium text-sm transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed dash-btn-primary"
                     onClick={handleCreateInvoice}
                   >
                     {isProcessingInvoice
@@ -7011,10 +7011,10 @@ function POSPageContent() {
                       activePOSTab?.isEditMode
                         ? "bg-amber-600 hover:bg-amber-700"
                         : isTransferMode
-                          ? "bg-green-600 hover:bg-green-700"
+                          ? "dash-btn-green"
                           : isReturnMode
-                            ? "bg-red-600 hover:bg-red-700"
-                            : "bg-purple-600 hover:bg-purple-700"
+                            ? "dash-btn-red"
+                            : "dash-btn-purple"
                     }`}
                     onClick={handleCreateInvoice}
                   >
@@ -7248,7 +7248,7 @@ function POSPageContent() {
                     {modalProduct.main_image_url ? (
                       <img src={modalProduct.main_image_url} alt={modalProduct.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+                      <div className="w-full h-full bg-dash-accent-blue flex items-center justify-center">
                         <span className="text-[var(--dash-text-primary)] font-bold text-lg">📦</span>
                       </div>
                     )}
@@ -7257,7 +7257,7 @@ function POSPageContent() {
                     <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">
                       تفاصيل المنتج
                     </h2>
-                    <p className="text-blue-400 font-medium">
+                    <p className="text-dash-accent-blue font-medium">
                       {modalProduct.name}
                     </p>
                   </div>
@@ -7278,8 +7278,8 @@ function POSPageContent() {
                     {/* Basic Info Card */}
                     <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                          <span className="text-blue-400 text-sm">ℹ️</span>
+                        <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                          <span className="text-dash-accent-blue text-sm">ℹ️</span>
                         </div>
                         <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                           معلومات المنتج
@@ -7316,8 +7316,8 @@ function POSPageContent() {
                     {/* Pricing Card */}
                     <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                          <span className="text-green-400 text-sm">💰</span>
+                        <div className="w-8 h-8 bg-dash-accent-green-subtle rounded-lg flex items-center justify-center">
+                          <span className="text-dash-accent-green text-sm">💰</span>
                         </div>
                         <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                           الأسعار
@@ -7328,7 +7328,7 @@ function POSPageContent() {
                           <p className="text-[var(--dash-text-muted)] text-sm mb-1">
                             سعر البيع
                           </p>
-                          <p className="text-green-400 font-bold text-xl">
+                          <p className="text-dash-accent-green font-bold text-xl">
                             {(modalProduct.price || 0).toFixed(2)}
                           </p>
                         </div>
@@ -7341,7 +7341,7 @@ function POSPageContent() {
                               <p className="text-[var(--dash-text-muted)] text-sm mb-1">
                                 سعر الشراء
                               </p>
-                              <p className="text-orange-400 font-bold text-xl">
+                              <p className="text-dash-accent-orange font-bold text-xl">
                                 {(modalProduct.cost_price || 0).toFixed(2)}
                               </p>
                             </>
@@ -7355,13 +7355,13 @@ function POSPageContent() {
                           <p className="text-[var(--dash-text-muted)] text-sm mb-1">
                             سعر الجملة
                           </p>
-                          <p className="text-blue-400 font-bold text-lg">
+                          <p className="text-dash-accent-blue font-bold text-lg">
                             {(modalProduct.wholesale_price || 0).toFixed(2)}
                           </p>
                         </div>
                         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
                           <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر 1</p>
-                          <p className="text-purple-400 font-bold text-lg">
+                          <p className="text-dash-accent-purple font-bold text-lg">
                             {(modalProduct.price1 || 0).toFixed(2)}
                           </p>
                         </div>
@@ -7371,8 +7371,8 @@ function POSPageContent() {
                     {/* Profit & Purchase Info Card */}
                     <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 bg-yellow-600/20 rounded-lg flex items-center justify-center">
-                          <span className="text-yellow-400 text-sm">📈</span>
+                        <div className="w-8 h-8 bg-dash-accent-orange-subtle rounded-lg flex items-center justify-center">
+                          <span className="text-dash-accent-orange text-sm">📈</span>
                         </div>
                         <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الربح ومعلومات الشراء</h3>
                       </div>
@@ -7392,7 +7392,7 @@ function POSPageContent() {
                         <div className="space-y-3">
                           <div className="flex justify-between items-center py-2 border-b border-[var(--dash-border-default)]/50">
                             <span className="text-[var(--dash-text-muted)]">آخر سعر شراء</span>
-                            <span className="text-orange-400 font-bold">
+                            <span className="text-dash-accent-orange font-bold">
                               {lastPurchaseInfo.unitPrice.toFixed(2)}
                             </span>
                           </div>
@@ -7404,7 +7404,7 @@ function POSPageContent() {
                           </div>
                           <button
                             onClick={() => setShowPurchaseHistoryModal(true)}
-                            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] text-sm rounded-lg transition-colors"
+                            className="w-full px-4 py-2 dash-btn-primary text-sm rounded-lg transition-colors"
                           >
                             عرض تاريخ الشراء
                           </button>
@@ -7420,8 +7420,8 @@ function POSPageContent() {
                     {modalProduct.description && (
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-purple-400 text-sm">📝</span>
+                          <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-purple text-sm">📝</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                             وصف المنتج
@@ -7439,8 +7439,8 @@ function POSPageContent() {
                     {/* Total Inventory Card */}
                     <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                          <span className="text-blue-400 text-sm">📊</span>
+                        <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                          <span className="text-dash-accent-blue text-sm">📊</span>
                         </div>
                         <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">
                           المخازن والفروع
@@ -7448,11 +7448,11 @@ function POSPageContent() {
                       </div>
 
                       {/* Total Quantity Display */}
-                      <div className="bg-blue-600/10 rounded-lg p-4 mb-4 text-center border border-blue-600/20">
-                        <p className="text-blue-400 text-sm mb-1">
+                      <div className="bg-dash-accent-blue-subtle rounded-lg p-4 mb-4 text-center border border-dash-accent-blue">
+                        <p className="text-dash-accent-blue text-sm mb-1">
                           الكمية الإجمالية
                         </p>
-                        <p className="text-blue-400 font-bold text-3xl">
+                        <p className="text-dash-accent-blue font-bold text-3xl">
                           {(modalProduct.inventoryData &&
                             Object.values(modalProduct.inventoryData).reduce(
                               (sum: number, inv: any) =>
@@ -7484,7 +7484,7 @@ function POSPageContent() {
                                     <span className="text-[var(--dash-text-primary)] font-medium">
                                       {locationName}
                                     </span>
-                                    <span className="text-blue-400 font-bold text-lg">
+                                    <span className="text-dash-accent-blue font-bold text-lg">
                                       {inventory?.quantity || 0}
                                     </span>
                                   </div>
@@ -7492,7 +7492,7 @@ function POSPageContent() {
                                     <span className="text-[var(--dash-text-muted)]">
                                       الحد الأدنى
                                     </span>
-                                    <span className="text-orange-400">
+                                    <span className="text-dash-accent-orange">
                                       {inventory?.min_stock || 0}
                                     </span>
                                   </div>
@@ -7508,8 +7508,8 @@ function POSPageContent() {
                       Object.keys(modalProduct.variantsData).length > 0 && (
                         <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                              <span className="text-purple-400 text-sm">
+                            <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                              <span className="text-dash-accent-purple text-sm">
                                 🎨
                               </span>
                             </div>
@@ -7693,7 +7693,7 @@ function POSPageContent() {
                         <div
                           className={`flex items-center cursor-pointer transition-colors ${
                             isSelected
-                              ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                              ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                               : 'hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
                           }`}
                           style={{ paddingRight: `${16 + level * 24}px`, paddingLeft: '12px', paddingTop: '10px', paddingBottom: '10px' }}
@@ -7757,7 +7757,7 @@ function POSPageContent() {
               {selectedCategoryId && (
                 <button
                   onClick={() => setSelectedCategoryId(null)}
-                  className="w-full py-2 bg-blue-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2 dash-btn-primary rounded-lg transition-colors flex items-center justify-center gap-2"
                 >
                   <XMarkIcon className="h-4 w-4" />
                   إظهار جميع المنتجات
@@ -7790,7 +7790,7 @@ function POSPageContent() {
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-r from-dash-accent-orange to-dash-accent-red rounded-full flex items-center justify-center">
                     <ShoppingBagIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                   </div>
                   <div>
@@ -7804,28 +7804,28 @@ function POSPageContent() {
 
               {/* Content */}
               <div className="p-6">
-                <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4 mb-4">
-                  <p className="text-orange-400 text-sm flex items-center gap-2">
-                    <span className="text-orange-400">⚠️</span>
+                <div className="bg-dash-accent-orange-subtle border border-dash-accent-orange rounded-lg p-4 mb-4">
+                  <p className="text-dash-accent-orange text-sm flex items-center gap-2">
+                    <span className="text-dash-accent-orange">⚠️</span>
                     سيتم تغيير واجهة نقطة البيع لوضع الشراء
                   </p>
                 </div>
 
                 <div className="space-y-3 text-[var(--dash-text-secondary)] text-sm">
                   <div className="flex items-center gap-2">
-                    <span className="text-blue-400">•</span>
+                    <span className="text-dash-accent-blue">•</span>
                     <span>سيتم استبدال اختيار العميل باختيار المورد</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-blue-400">•</span>
+                    <span className="text-dash-accent-blue">•</span>
                     <span>سيتم إضافة خيار اختيار المخزن أو الفرع</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-blue-400">•</span>
+                    <span className="text-dash-accent-blue">•</span>
                     <span>سيتم تعطيل اختيار الألوان والأشكال</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-blue-400">•</span>
+                    <span className="text-dash-accent-blue">•</span>
                     <span>سيتم إضافة إمكانية إنشاء منتجات جديدة</span>
                   </div>
                 </div>
@@ -7846,7 +7846,7 @@ function POSPageContent() {
                   </button>
                   <button
                     onClick={confirmPurchaseMode}
-                    className="flex-1 bg-orange-600 hover:bg-orange-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-dash-accent-orange text-[var(--dash-text-primary)] hover:brightness-90 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                   >
                     <ShoppingBagIcon className="h-5 w-5" />
                     تفعيل وضع الشراء
@@ -7873,7 +7873,7 @@ function POSPageContent() {
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-r from-dash-accent-red to-dash-accent-orange rounded-full flex items-center justify-center">
                     <ExclamationTriangleIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                   </div>
                   <div>
@@ -7887,9 +7887,9 @@ function POSPageContent() {
 
               {/* Content */}
               <div className="p-6">
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4">
-                  <p className="text-red-400 text-sm flex items-center gap-2">
-                    <span className="text-red-400">⚠️</span>
+                <div className="bg-dash-accent-red-subtle border border-dash-accent-red rounded-lg p-4 mb-4">
+                  <p className="text-dash-accent-red text-sm flex items-center gap-2">
+                    <span className="text-dash-accent-red">⚠️</span>
                     متأكد؟ الفاتورة هتتحذف
                   </p>
                 </div>
@@ -7909,7 +7909,7 @@ function POSPageContent() {
                 </button>
                 <button
                   onClick={confirmCloseTab}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 dash-btn-red py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                 >
                   <XMarkIcon className="h-5 w-5" />
                   إغلاق الفاتورة
@@ -7935,7 +7935,7 @@ function POSPageContent() {
               {/* Header */}
               <div className="flex items-center justify-center p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-r from-dash-accent-red to-dash-accent-red rounded-full flex items-center justify-center">
                     <TrashIcon className="h-6 w-6 text-[var(--dash-text-primary)]" />
                   </div>
                 </div>
@@ -7965,7 +7965,7 @@ function POSPageContent() {
                     clearCart();
                     setShowClearCartConfirm(false);
                   }}
-                  className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-2.5 dash-btn-red rounded-lg font-medium transition-colors"
                 >
                   مسح الكل
                 </button>
@@ -7990,7 +7990,7 @@ function POSPageContent() {
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-r from-dash-accent-green to-dash-accent-blue rounded-full flex items-center justify-center">
                     <PrinterIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                   </div>
                   <div>
@@ -8006,9 +8006,9 @@ function POSPageContent() {
 
               {/* Content */}
               <div className="p-6">
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
-                  <p className="text-green-400 text-sm flex items-center gap-2 mb-2">
-                    <span className="text-green-400">✅</span>
+                <div className="bg-dash-accent-green-subtle border border-dash-accent-green rounded-lg p-4 mb-4">
+                  <p className="text-dash-accent-green text-sm flex items-center gap-2 mb-2">
+                    <span className="text-dash-accent-green">✅</span>
                     تم إنشاء{" "}
                     {lastInvoiceData?.isReturn ? "المرتجع" : "الفاتورة"} بنجاح
                   </p>
@@ -8021,7 +8021,7 @@ function POSPageContent() {
                     </p>
                     <p>
                       الإجمالي:{" "}
-                      <span className="font-bold text-green-400">
+                      <span className="font-bold text-dash-accent-green">
                         {formatPrice(
                           lastInvoiceData?.totalAmount || 0,
                           "system",
@@ -8056,7 +8056,7 @@ function POSPageContent() {
                       printReceipt(lastInvoiceData);
                       setShowPrintReceiptModal(false);
                     }}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 dash-btn-primary py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                   >
                     <PrinterIcon className="h-5 w-5" />
                     نعم، اطبع الفاتورة
@@ -8154,7 +8154,7 @@ function POSPageContent() {
               value={newTabName}
               onChange={(e) => setNewTabName(e.target.value)}
               placeholder="اسم النافذة..."
-              className="w-full px-4 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              className="w-full px-4 py-2 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue mb-4"
               onKeyPress={(e) => {
                 if (e.key === 'Enter' && newTabName.trim()) {
                   // Inherit selections from current tab, but ALWAYS use default customer
@@ -8196,7 +8196,7 @@ function POSPageContent() {
                     setShowAddTabModal(false);
                   }
                 }}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded transition-colors"
+                className="px-4 py-2 dash-btn-primary rounded transition-colors"
                 disabled={!newTabName.trim()}
               >
                 موافق
@@ -8251,7 +8251,7 @@ function POSPageContent() {
                 <div className="flex items-center justify-between">
                   <span className="text-[var(--dash-text-muted)] text-sm">نوع السعر:</span>
                   <span className={`text-sm font-medium ${
-                    selectedPriceType !== "price" ? "text-blue-400" : "text-[var(--dash-text-primary)]"
+                    selectedPriceType !== "price" ? "text-dash-accent-blue" : "text-[var(--dash-text-primary)]"
                   }`}>
                     {getPriceTypeName(selectedPriceType)}
                   </span>

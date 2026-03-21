@@ -52,10 +52,10 @@ export default function TopCustomersCard({ customers, loading = false }: TopCust
   // Generate avatar background color based on name
   const getAvatarColor = (name: string) => {
     const colors = [
-      'bg-blue-500',
-      'bg-green-500',
-      'bg-purple-500',
-      'bg-orange-500',
+      'bg-dash-accent-blue',
+      'bg-dash-accent-green',
+      'bg-dash-accent-purple',
+      'bg-dash-accent-orange',
       'bg-pink-500',
       'bg-teal-500',
     ];
@@ -116,7 +116,7 @@ export default function TopCustomersCard({ customers, loading = false }: TopCust
 
             {/* Total Spent */}
             <div className="text-left">
-              <p className="text-green-400 font-semibold text-sm whitespace-nowrap">
+              <p className="text-dash-accent-green font-semibold text-sm whitespace-nowrap">
                 {formatCurrencyAr(customer.totalSpent)}
               </p>
             </div>
@@ -126,7 +126,7 @@ export default function TopCustomersCard({ customers, loading = false }: TopCust
 
       <Link
         href="/customers"
-        className="flex items-center justify-center gap-2 mt-4 py-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+        className="flex items-center justify-center gap-2 mt-4 py-2 text-dash-accent-blue hover:text-dash-accent-blue text-sm font-medium transition-colors"
       >
         <span>عرض جميع العملاء</span>
         <ArrowLeftIcon className="w-4 h-4" />

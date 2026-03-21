@@ -192,7 +192,7 @@ export default function ExpenseAdditionModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <BanknotesIcon className="h-6 w-6 text-yellow-400" />
+                    <BanknotesIcon className="h-6 w-6 text-dash-accent-orange" />
                     مصروفات / إضافة - {record?.name || "غير محدد"}
                   </Dialog.Title>
                   <button
@@ -217,11 +217,11 @@ export default function ExpenseAdditionModal({
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">الرصيد الحالي</p>
-                            <p className="text-2xl font-bold text-blue-400">
+                            <p className="text-2xl font-bold text-dash-accent-blue">
                               {currentBalance.toFixed(2)}
                             </p>
                           </div>
-                          <BanknotesIcon className="h-12 w-12 text-blue-500/30" />
+                          <BanknotesIcon className="h-12 w-12 text-dash-accent-blue/30" />
                         </div>
                       </div>
 
@@ -231,7 +231,7 @@ export default function ExpenseAdditionModal({
                           onClick={() => setOperationType("expense")}
                           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${
                             operationType === "expense"
-                              ? "bg-red-600 text-white"
+                              ? "bg-dash-accent-red text-white"
                               : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
@@ -242,7 +242,7 @@ export default function ExpenseAdditionModal({
                           onClick={() => setOperationType("deposit")}
                           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${
                             operationType === "deposit"
-                              ? "bg-green-600 text-white"
+                              ? "bg-dash-accent-green text-white"
                               : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
@@ -259,12 +259,12 @@ export default function ExpenseAdditionModal({
                           value={amount}
                           onChange={(e) => setAmount(e.target.value)}
                           placeholder="أدخل المبلغ"
-                          className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-[var(--dash-text-primary)] text-lg focus:outline-none focus:border-yellow-500"
+                          className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg px-4 py-3 text-[var(--dash-text-primary)] text-lg focus:outline-none focus:border-dash-accent-orange"
                           min={0}
                           step="0.01"
                         />
                         {operationType === "expense" && parseFloat(amount) > currentBalance && (
-                          <p className="text-red-400 text-xs mt-1">المبلغ أكبر من الرصيد المتاح</p>
+                          <p className="text-dash-accent-red text-xs mt-1">المبلغ أكبر من الرصيد المتاح</p>
                         )}
                       </div>
 
@@ -280,11 +280,11 @@ export default function ExpenseAdditionModal({
                           placeholder={operationType === "expense" ? "سبب المصروف..." : "سبب الإضافة..."}
                           rows={3}
                           className={`w-full bg-[var(--dash-bg-surface)] border rounded-lg px-4 py-3 text-[var(--dash-text-primary)] focus:outline-none resize-none ${
-                            notesError ? "border-red-500" : "border-[var(--dash-border-default)] focus:border-yellow-500"
+                            notesError ? "border-dash-accent-red" : "border-[var(--dash-border-default)] focus:border-dash-accent-orange"
                           }`}
                         />
                         {notesError && (
-                          <p className="text-red-400 text-xs mt-1">يجب إدخال السبب</p>
+                          <p className="text-dash-accent-red text-xs mt-1">يجب إدخال السبب</p>
                         )}
                       </div>
 
@@ -294,8 +294,8 @@ export default function ExpenseAdditionModal({
                         disabled={isProcessing || !amount || !notes.trim()}
                         className={`w-full px-4 py-3 rounded-lg font-medium text-white transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed ${
                           operationType === "expense"
-                            ? "bg-red-600 hover:bg-red-700"
-                            : "bg-green-600 hover:bg-green-700"
+                            ? "dash-btn-red"
+                            : "dash-btn-green"
                         }`}
                       >
                         {isProcessing

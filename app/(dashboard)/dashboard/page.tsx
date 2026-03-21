@@ -148,11 +148,11 @@ export default function DashboardPage() {
           ) : error ? (
             <div className="flex items-center justify-center h-64">
               <div className="text-center">
-                <ExclamationTriangleIcon className="w-16 h-16 text-red-400 mx-auto mb-4" />
-                <p className="text-red-400 text-lg">{error}</p>
+                <ExclamationTriangleIcon className="w-16 h-16 text-dash-accent-red mx-auto mb-4" />
+                <p className="text-dash-accent-red text-lg">{error}</p>
                 <button
                   onClick={refresh}
-                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="mt-4 px-4 py-2 dash-btn-primary rounded-lg transition-colors"
                 >
                   إعادة المحاولة
                 </button>

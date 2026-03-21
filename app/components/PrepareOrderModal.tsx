@@ -253,7 +253,7 @@ export default function PrepareOrderModal({ isOpen, onClose, orderId }: PrepareO
     return (
       <div className="fixed inset-0 bg-gray-100 z-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-dash-accent-red mx-auto mb-4"></div>
           <p className="text-gray-600">جاري تحميل الطلب...</p>
         </div>
       </div>
@@ -296,7 +296,7 @@ export default function PrepareOrderModal({ isOpen, onClose, orderId }: PrepareO
       <div className="bg-gray-300 h-2 w-full">
         <div 
           className={`h-full transition-all duration-300 ${
-            preparationProgress === 100 ? 'bg-green-500' : 'bg-yellow-500'
+            preparationProgress === 100 ? 'bg-dash-accent-green' : 'bg-dash-accent-orange'
           }`}
           style={{ width: `${preparationProgress}%` }}
         ></div>
@@ -330,14 +330,14 @@ export default function PrepareOrderModal({ isOpen, onClose, orderId }: PrepareO
               key={item.id} 
               className={`bg-white rounded-lg p-4 shadow-sm border-2 transition-all cursor-pointer relative ${
                 item.isPrepared 
-                  ? 'border-green-400 bg-green-50' 
+                  ? 'border-green-400 bg-dash-accent-green-subtle' 
                   : 'border-gray-200 hover:border-gray-300'
               }`}
               onClick={() => toggleItemPreparation(item.id)}
             >
               {/* Green checkmark overlay when prepared */}
               {item.isPrepared && (
-                <div className="absolute top-3 right-3 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                <div className="absolute top-3 right-3 w-8 h-8 bg-dash-accent-green rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
@@ -371,7 +371,7 @@ export default function PrepareOrderModal({ isOpen, onClose, orderId }: PrepareO
                   
                   {item.isPrepared && (
                     <div className="mt-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-dash-accent-green-subtle text-dash-accent-green">
                         تم التحضير
                       </span>
                     </div>
@@ -391,7 +391,7 @@ export default function PrepareOrderModal({ isOpen, onClose, orderId }: PrepareO
             disabled={!allItemsPrepared}
             className={`w-full py-4 rounded-lg font-bold text-white text-lg transition-all ${
               allItemsPrepared
-                ? 'bg-green-600 hover:bg-green-700 cursor-pointer shadow-lg'
+                ? 'dash-btn-green cursor-pointer shadow-lg'
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
           >

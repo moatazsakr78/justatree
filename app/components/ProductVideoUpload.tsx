@@ -184,15 +184,15 @@ export default function ProductVideoUpload({
             !productId
               ? 'border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] cursor-not-allowed opacity-60'
               : isDragOver
-              ? 'border-blue-400 bg-blue-900/20 cursor-pointer'
-              : 'border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] hover:border-blue-500 hover:bg-blue-900/10 cursor-pointer'
+              ? 'border-dash-accent-blue bg-dash-accent-blue-subtle cursor-pointer'
+              : 'border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] hover:border-dash-accent-blue hover:bg-dash-accent-blue-subtle/10 cursor-pointer'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <div className="text-center">
             {isLoading ? (
               <>
-                <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                <span className="text-red-500 text-sm">جاري الرفع...</span>
+                <div className="w-8 h-8 border-2 border-dash-accent-red border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                <span className="text-dash-accent-red text-sm">جاري الرفع...</span>
               </>
             ) : !productId ? (
               <>
@@ -206,7 +206,7 @@ export default function ProductVideoUpload({
               </>
             ) : (
               <>
-                <svg className="h-8 w-8 text-blue-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-8 w-8 text-dash-accent-blue mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
                 <span className="text-[var(--dash-text-secondary)] text-sm">
@@ -233,14 +233,14 @@ export default function ProductVideoUpload({
       {Object.keys(uploadProgress).length > 0 && (
         <div className="space-y-2">
           {Object.entries(uploadProgress).map(([id, progress]) => (
-            <div key={id} className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-3">
+            <div key={id} className="bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg p-3">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-blue-400">جاري رفع الفيديو...</span>
-                <span className="text-sm text-blue-300">{Math.round(progress)}%</span>
+                <span className="text-sm text-dash-accent-blue">جاري رفع الفيديو...</span>
+                <span className="text-sm text-dash-accent-blue">{Math.round(progress)}%</span>
               </div>
-              <div className="w-full bg-blue-900/40 rounded-full h-2">
+              <div className="w-full bg-dash-accent-blue-subtle/40 rounded-full h-2">
                 <div
-                  className="bg-blue-500 h-2 rounded-full transition-all duration-500 ease-out"
+                  className="bg-dash-accent-blue h-2 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -251,8 +251,8 @@ export default function ProductVideoUpload({
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-900/20 border border-red-600/30 rounded-lg p-3">
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="bg-dash-accent-red-subtle/20 border border-dash-accent-red/30 rounded-lg p-3">
+          <p className="text-sm text-dash-accent-red">{error}</p>
         </div>
       )}
 
@@ -329,7 +329,7 @@ export default function ProductVideoUpload({
                         modal.appendChild(videoElement)
                         document.body.appendChild(modal)
                       }}
-                      className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 rounded-full transition-colors"
+                      className="p-2 text-dash-accent-blue hover:text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-full transition-colors"
                       title="تشغيل الفيديو"
                     >
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -341,7 +341,7 @@ export default function ProductVideoUpload({
                     <button
                       onClick={() => handleDeleteVideo(video)}
                       disabled={disabled}
-                      className="p-2 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle/20 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       title="حذف الفيديو"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

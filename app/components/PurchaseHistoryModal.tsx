@@ -96,7 +96,7 @@ export default function PurchaseHistoryModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)] bg-gradient-to-r from-blue-900/30 to-purple-900/30">
                   <Dialog.Title className="text-lg font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <ClockIcon className="h-6 w-6 text-blue-400" />
+                    <ClockIcon className="h-6 w-6 text-dash-accent-blue" />
                     تاريخ أسعار الشراء
                   </Dialog.Title>
                   <button
@@ -117,7 +117,7 @@ export default function PurchaseHistoryModal({
                 <div className="p-4 max-h-[60vh] overflow-y-auto scrollbar-hide">
                   {isLoading ? (
                     <div className="text-center py-12">
-                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-400 mx-auto"></div>
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-dash-accent-blue mx-auto"></div>
                       <p className="mt-4 text-[var(--dash-text-muted)]">جاري التحميل...</p>
                     </div>
                   ) : history.length === 0 ? (
@@ -132,18 +132,18 @@ export default function PurchaseHistoryModal({
                     <div className="space-y-3">
                       {/* Summary */}
                       <div className="grid grid-cols-3 gap-3 mb-4">
-                        <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-3 text-center">
-                          <p className="text-blue-400 text-xs mb-1">إجمالي الفواتير</p>
+                        <div className="bg-dash-accent-blue-subtle border border-blue-700/50 rounded-lg p-3 text-center">
+                          <p className="text-dash-accent-blue text-xs mb-1">إجمالي الفواتير</p>
                           <p className="text-white text-xl font-bold">{history.length}</p>
                         </div>
-                        <div className="bg-green-900/20 border border-green-700/50 rounded-lg p-3 text-center">
-                          <p className="text-green-400 text-xs mb-1">إجمالي الكمية</p>
+                        <div className="bg-dash-accent-green-subtle/20 border border-green-700/50 rounded-lg p-3 text-center">
+                          <p className="text-dash-accent-green text-xs mb-1">إجمالي الكمية</p>
                           <p className="text-white text-xl font-bold">
                             {history.reduce((sum, h) => sum + h.quantity, 0)}
                           </p>
                         </div>
-                        <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-3 text-center">
-                          <p className="text-purple-400 text-xs mb-1">متوسط السعر</p>
+                        <div className="bg-dash-accent-purple-subtle/20 border border-purple-700/50 rounded-lg p-3 text-center">
+                          <p className="text-dash-accent-purple text-xs mb-1">متوسط السعر</p>
                           <p className="text-white text-xl font-bold">
                             {formatPrice(
                               history.reduce((sum, h) => sum + h.unitPrice, 0) / history.length
@@ -167,13 +167,13 @@ export default function PurchaseHistoryModal({
                           key={item.id}
                           className={`grid grid-cols-12 gap-2 px-3 py-3 rounded-lg text-sm ${
                             index === 0
-                              ? 'bg-green-900/20 border border-green-700/50'
+                              ? 'bg-dash-accent-green-subtle/20 border border-green-700/50'
                               : 'bg-[var(--dash-bg-surface)]/50 hover:bg-[var(--dash-bg-surface)]'
                           } transition-colors`}
                         >
                           <div className="col-span-3 text-[var(--dash-text-secondary)] flex items-center gap-1">
                             {index === 0 && (
-                              <span className="text-green-400 text-xs">(آخر)</span>
+                              <span className="text-dash-accent-green text-xs">(آخر)</span>
                             )}
                             {formatDate(item.invoiceDate)}
                           </div>
@@ -181,14 +181,14 @@ export default function PurchaseHistoryModal({
                             <TruckIcon className="h-4 w-4 text-[var(--dash-text-disabled)]" />
                             {item.supplierName}
                           </div>
-                          <div className="col-span-2 text-center text-blue-400 font-medium">
+                          <div className="col-span-2 text-center text-dash-accent-blue font-medium">
                             {item.quantity}
                           </div>
-                          <div className="col-span-2 text-center text-green-400 font-medium flex items-center justify-center gap-1">
+                          <div className="col-span-2 text-center text-dash-accent-green font-medium flex items-center justify-center gap-1">
                             <CurrencyDollarIcon className="h-4 w-4" />
                             {formatPrice(item.unitPrice)}
                           </div>
-                          <div className="col-span-2 text-center text-purple-400 font-medium">
+                          <div className="col-span-2 text-center text-dash-accent-purple font-medium">
                             {formatPrice(item.totalPrice)}
                           </div>
                         </div>

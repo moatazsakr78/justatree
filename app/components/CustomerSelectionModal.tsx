@@ -170,9 +170,9 @@ export default function CustomerSelectionModal({
   const getRankColor = (rank: string | null) => {
     switch (rank) {
       case "immortal":
-        return "text-red-500";
+        return "text-dash-accent-red";
       case "vip":
-        return "text-yellow-500";
+        return "text-dash-accent-orange";
       case "gold":
         return "text-yellow-600";
       case "silver":
@@ -238,7 +238,7 @@ export default function CustomerSelectionModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <UserIcon className="h-6 w-6 text-blue-400" />
+                    <UserIcon className="h-6 w-6 text-dash-accent-blue" />
                     اختيار عميل
                   </Dialog.Title>
                   <button
@@ -272,7 +272,7 @@ export default function CustomerSelectionModal({
                           onClick={() => setSelectedGroup(group.id)}
                           className={`px-3 py-1.5 rounded-lg text-sm transition-all flex items-center gap-1 ${
                             selectedGroup === group.id
-                              ? "bg-blue-600 text-white"
+                              ? "bg-dash-accent-blue text-white"
                               : "bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-raised)]"
                           }`}
                         >
@@ -297,16 +297,16 @@ export default function CustomerSelectionModal({
                 <div className="max-h-[400px] overflow-y-auto scrollbar-hide">
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-dash-accent-blue mb-4"></div>
                       <p className="text-[var(--dash-text-muted)]">جاري تحميل العملاء...</p>
                     </div>
                   ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <UserIcon className="h-12 w-12 text-red-500 mb-4" />
-                      <p className="text-red-400 mb-2">{error}</p>
+                      <UserIcon className="h-12 w-12 text-dash-accent-red mb-4" />
+                      <p className="text-dash-accent-red mb-2">{error}</p>
                       <button
                         onClick={fetchCustomers}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
+                        className="px-4 py-2 dash-btn-primary rounded-lg text-sm transition-colors"
                       >
                         إعادة المحاولة
                       </button>
@@ -319,21 +319,21 @@ export default function CustomerSelectionModal({
                           onClick={() => handleSelect(customer)}
                           className={`w-full flex items-center justify-between p-4 rounded-xl transition-all border-2 hover:border-[var(--dash-border-default)] ${
                             isDefaultCustomer(customer)
-                              ? "bg-green-500/10 border-green-500/30 hover:bg-green-500/20"
+                              ? "bg-dash-accent-green-subtle border-dash-accent-green/30 hover:bg-dash-accent-green-subtle"
                               : "bg-[var(--dash-bg-surface)] border-transparent hover:bg-[var(--dash-bg-raised)]"
                           } text-[var(--dash-text-secondary)]`}
                         >
                           <div className="flex items-center gap-3">
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              isDefaultCustomer(customer) ? "bg-green-500/20" : "bg-[var(--dash-bg-raised)]"
+                              isDefaultCustomer(customer) ? "bg-dash-accent-green-subtle" : "bg-[var(--dash-bg-raised)]"
                             }`}>
-                              <UserIcon className={`h-5 w-5 ${isDefaultCustomer(customer) ? "text-green-400" : ""}`} />
+                              <UserIcon className={`h-5 w-5 ${isDefaultCustomer(customer) ? "text-dash-accent-green" : ""}`} />
                             </div>
                             <div className="text-right">
                               <div className="font-semibold flex items-center gap-2">
                                 {customer.name}
                                 {isDefaultCustomer(customer) && (
-                                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-lg">
+                                  <span className="text-xs bg-dash-accent-green-subtle text-dash-accent-green px-2 py-0.5 rounded-lg">
                                     افتراضي
                                   </span>
                                 )}
@@ -357,9 +357,9 @@ export default function CustomerSelectionModal({
                             <div
                               className={`font-medium ${
                                 customer.calculated_balance > 0
-                                  ? "text-green-400"
+                                  ? "text-dash-accent-green"
                                   : customer.calculated_balance < 0
-                                  ? "text-red-400"
+                                  ? "text-dash-accent-red"
                                   : "text-[var(--dash-text-muted)]"
                               }`}
                             >
@@ -367,7 +367,7 @@ export default function CustomerSelectionModal({
                               ج.م
                             </div>
                             {customer.loyalty_points && customer.loyalty_points > 0 && (
-                              <div className="text-xs text-yellow-500">
+                              <div className="text-xs text-dash-accent-orange">
                                 {customer.loyalty_points} نقطة
                               </div>
                             )}

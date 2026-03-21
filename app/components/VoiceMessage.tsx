@@ -133,7 +133,7 @@ export default function VoiceMessage({
       <div
         className={`flex items-center gap-3 px-3 py-2 rounded-2xl min-w-[200px] max-w-[280px] ${
           isOutgoing
-            ? 'bg-green-600 rounded-tr-sm'
+            ? 'bg-dash-accent-green rounded-tr-sm'
             : 'bg-[var(--dash-bg-overlay)] rounded-tl-sm'
         }`}
       >

@@ -138,7 +138,7 @@ export default function CustomersGridView({
             className={`
               relative bg-[var(--dash-bg-raised)] rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg
               ${isSelected
-                ? 'border-blue-500 ring-2 ring-blue-500 ring-opacity-50'
+                ? 'border-dash-accent-blue ring-2 ring-dash-accent-blue ring-opacity-50'
                 : 'border-[var(--dash-border-default)] hover:border-gray-500'
               }
             `}
@@ -148,7 +148,7 @@ export default function CustomersGridView({
               <div className="flex flex-col items-center text-center">
                 {/* Avatar */}
                 <div className="flex-shrink-0 mb-3">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-blue-600 border-2 border-[var(--dash-border-default)]">
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-dash-accent-blue border-2 border-[var(--dash-border-default)]">
                     {avatarUrl ? (
                       <img
                         src={avatarUrl}
@@ -182,7 +182,7 @@ export default function CustomersGridView({
                       {customer.name}
                     </h3>
                     {isDefault && (
-                      <StarIcon className="h-4 w-4 text-yellow-400 flex-shrink-0" />
+                      <StarIcon className="h-4 w-4 text-dash-accent-orange flex-shrink-0" />
                     )}
                   </div>
 
@@ -216,7 +216,7 @@ export default function CustomersGridView({
               {/* Email - أضف البريد الإلكتروني إذا وجد */}
               {customer.email && (
                 <div className="flex items-center gap-2">
-                  <svg className="h-3 w-3 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-3 w-3 text-dash-accent-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
                   <span className="text-[var(--dash-text-secondary)] text-xs truncate">
@@ -227,7 +227,7 @@ export default function CustomersGridView({
 
               {/* Loyalty Points */}
               <div className="flex items-center gap-2">
-                <TrophyIcon className="h-3 w-3 text-blue-400 flex-shrink-0" />
+                <TrophyIcon className="h-3 w-3 text-dash-accent-blue flex-shrink-0" />
                 <span className="text-xs text-[var(--dash-text-secondary)]">النقاط:</span>
                 <span className="text-[var(--dash-text-primary)] font-medium text-xs">
                   {(customer.loyalty_points || 0).toLocaleString()}
@@ -237,7 +237,7 @@ export default function CustomersGridView({
               {/* Phone */}
               {customer.phone && (
                 <div className="flex items-center gap-2">
-                  <PhoneIcon className="h-3 w-3 text-green-400 flex-shrink-0" />
+                  <PhoneIcon className="h-3 w-3 text-dash-accent-green flex-shrink-0" />
                   <span className="text-[var(--dash-text-secondary)] text-xs font-mono truncate">
                     {customer.phone}
                   </span>
@@ -247,7 +247,7 @@ export default function CustomersGridView({
               {/* City */}
               {customer.city && (
                 <div className="flex items-center gap-2">
-                  <MapPinIcon className="h-3 w-3 text-red-400 flex-shrink-0" />
+                  <MapPinIcon className="h-3 w-3 text-dash-accent-red flex-shrink-0" />
                   <span className="text-[var(--dash-text-secondary)] text-xs truncate">
                     {customer.city}
                   </span>
@@ -256,7 +256,7 @@ export default function CustomersGridView({
 
               {/* Created Date */}
               <div className="flex items-center gap-2">
-                <CalendarIcon className="h-3 w-3 text-purple-400 flex-shrink-0" />
+                <CalendarIcon className="h-3 w-3 text-dash-accent-purple flex-shrink-0" />
                 <span className="text-xs text-[var(--dash-text-secondary)]">منذ:</span>
                 <span className="text-[var(--dash-text-muted)] text-xs">
                   {formatDate(customer.created_at)}
@@ -266,7 +266,7 @@ export default function CustomersGridView({
 
             {/* Selection Indicator */}
             {isSelected && (
-              <div className="absolute top-2 right-2 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></div>
+              <div className="absolute top-2 right-2 w-3 h-3 bg-dash-accent-blue rounded-full border-2 border-white"></div>
             )}
           </div>
         )

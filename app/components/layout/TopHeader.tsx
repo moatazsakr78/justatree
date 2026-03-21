@@ -82,26 +82,26 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
   const getConnectionIndicator = () => {
     if (!isOnline) {
       return (
-        <div className="flex items-center gap-1 px-2 py-1 bg-red-500/20 rounded-full" title="غير متصل بالإنترنت">
-          <SignalSlashIcon className="h-4 w-4 text-red-400" />
-          <span className="text-xs text-red-400 hidden sm:inline">غير متصل</span>
+        <div className="flex items-center gap-1 px-2 py-1 bg-dash-accent-red-subtle rounded-full" title="غير متصل بالإنترنت">
+          <SignalSlashIcon className="h-4 w-4 text-dash-accent-red" />
+          <span className="text-xs text-dash-accent-red hidden sm:inline">غير متصل</span>
         </div>
       );
     }
 
     if (connectionQuality === 'slow') {
       return (
-        <div className="flex items-center gap-1 px-2 py-1 bg-yellow-500/20 rounded-full" title="الاتصال بطيء">
-          <SignalIcon className="h-4 w-4 text-yellow-400" />
-          <span className="text-xs text-yellow-400 hidden sm:inline">بطيء</span>
+        <div className="flex items-center gap-1 px-2 py-1 bg-dash-accent-orange-subtle rounded-full" title="الاتصال بطيء">
+          <SignalIcon className="h-4 w-4 text-dash-accent-orange" />
+          <span className="text-xs text-dash-accent-orange hidden sm:inline">بطيء</span>
         </div>
       );
     }
 
     return (
-      <div className="flex items-center gap-1 px-2 py-1 bg-green-500/20 rounded-full" title="متصل">
-        <SignalIcon className="h-4 w-4 text-green-400" />
-        <span className="text-xs text-green-400 hidden sm:inline">متصل</span>
+      <div className="flex items-center gap-1 px-2 py-1 bg-dash-accent-green-subtle rounded-full" title="متصل">
+        <SignalIcon className="h-4 w-4 text-dash-accent-green" />
+        <span className="text-xs text-dash-accent-green hidden sm:inline">متصل</span>
       </div>
     );
   };
@@ -126,11 +126,11 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
           {pendingSalesCount > 0 && (
             <button
               onClick={() => setShowPendingSalesModal(true)}
-              className="flex items-center gap-1 px-2 py-1 rounded-full transition-colors bg-orange-500/20 hover:bg-orange-500/30 cursor-pointer"
+              className="flex items-center gap-1 px-2 py-1 rounded-full transition-colors bg-dash-accent-orange-subtle hover:bg-dash-accent-orange-subtle cursor-pointer"
               title={`${pendingSalesCount} فواتير في الانتظار - اضغط للعرض`}
             >
-              <CloudArrowUpIcon className={`h-4 w-4 text-orange-400 ${isSyncing ? 'animate-pulse' : ''}`} />
-              <span className="text-xs text-orange-400 font-medium">{pendingSalesCount}</span>
+              <CloudArrowUpIcon className={`h-4 w-4 text-dash-accent-orange ${isSyncing ? 'animate-pulse' : ''}`} />
+              <span className="text-xs text-dash-accent-orange font-medium">{pendingSalesCount}</span>
             </button>
           )}
 
@@ -138,13 +138,13 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
           {tasks.length > 0 && (
             <button
               onClick={() => setShowBackgroundProductsModal(true)}
-              className="relative flex items-center gap-1 px-2 py-1 rounded-full transition-colors bg-blue-500/20 hover:bg-blue-500/30 cursor-pointer"
+              className="relative flex items-center gap-1 px-2 py-1 rounded-full transition-colors bg-dash-accent-blue-subtle hover:bg-dash-accent-blue-subtle cursor-pointer"
               title={`${activeTaskCount} عمليات المنتجات في الخلفية - اضغط للعرض`}
             >
-              <CloudArrowUpIcon className={`h-4 w-4 text-blue-400 ${activeTaskCount > 0 ? 'animate-pulse' : ''}`} />
-              <span className="text-xs text-blue-400 font-medium">{tasks.length}</span>
+              <CloudArrowUpIcon className={`h-4 w-4 text-dash-accent-blue ${activeTaskCount > 0 ? 'animate-pulse' : ''}`} />
+              <span className="text-xs text-dash-accent-blue font-medium">{tasks.length}</span>
               {hasFailedTasks && (
-                <span className="absolute -top-0.5 -left-0.5 h-2 w-2 bg-red-500 rounded-full" />
+                <span className="absolute -top-0.5 -left-0.5 h-2 w-2 bg-dash-accent-red rounded-full" />
               )}
             </button>
           )}
@@ -160,7 +160,7 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
           {/* Website button */}
           <button
             onClick={() => window.location.href = '/'}
-            className="flex items-center gap-2 px-3 py-1.5 text-[var(--dash-accent-blue)] hover:text-blue-300 hover:bg-[var(--dash-bg-overlay)] rounded-lg transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 text-dash-accent-blue hover:text-dash-accent-blue hover:bg-[var(--dash-bg-overlay)] rounded-lg transition-colors"
             title="انتقل إلى الموقع الإلكتروني"
           >
             <GlobeAltIcon className="h-5 w-5" />

@@ -143,7 +143,7 @@ export default function MissingDataFilterModal({
               onClick={() => setFilterMode('OR')}
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                 filterMode === 'OR'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-dash-accent-blue text-white'
                   : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-highlight)]'
               }`}
             >
@@ -153,7 +153,7 @@ export default function MissingDataFilterModal({
               onClick={() => setFilterMode('AND')}
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                 filterMode === 'AND'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-dash-accent-blue text-white'
                   : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-highlight)]'
               }`}
             >
@@ -186,7 +186,7 @@ export default function MissingDataFilterModal({
                       type="checkbox"
                       checked={selectedFilters.has(field.id)}
                       onChange={() => toggleFilter(field.id)}
-                      className="w-5 h-5 rounded border-[var(--dash-border-default)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
+                      className="w-5 h-5 rounded border-[var(--dash-border-default)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
                     />
                     <span className="text-gray-200">{field.label}</span>
                   </label>
@@ -216,7 +216,7 @@ export default function MissingDataFilterModal({
                         type="checkbox"
                         checked={selectedFilters.has(`stock_branch_${branch.id}`)}
                         onChange={() => toggleFilter(`stock_branch_${branch.id}`)}
-                        className="w-5 h-5 rounded border-[var(--dash-border-default)] text-blue-600 focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
+                        className="w-5 h-5 rounded border-[var(--dash-border-default)] text-dash-accent-blue focus:ring-[var(--dash-accent-blue)] focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
                       />
                       <span className="text-gray-200">{branch.name}</span>
                     </label>
@@ -229,9 +229,9 @@ export default function MissingDataFilterModal({
                         type="checkbox"
                         checked={selectedFilters.has(`lowstock_branch_${branch.id}`)}
                         onChange={() => toggleFilter(`lowstock_branch_${branch.id}`)}
-                        className="w-4 h-4 rounded border-[var(--dash-border-default)] text-orange-500 focus:ring-orange-500 focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
+                        className="w-4 h-4 rounded border-[var(--dash-border-default)] text-dash-accent-orange focus:ring-orange-500 focus:ring-offset-0 bg-[var(--dash-bg-raised)]"
                       />
-                      <span className="text-orange-400 text-sm whitespace-nowrap">منخفض عند</span>
+                      <span className="text-dash-accent-orange text-sm whitespace-nowrap">منخفض عند</span>
                     </label>
                   </div>
                 ))}
@@ -250,7 +250,7 @@ export default function MissingDataFilterModal({
               </span>
               <button
                 onClick={handleClear}
-                className="text-sm text-red-400 hover:text-red-300 transition-colors"
+                className="text-sm text-dash-accent-red hover:text-dash-accent-red transition-colors"
               >
                 مسح الكل
               </button>
@@ -269,7 +269,7 @@ export default function MissingDataFilterModal({
               onClick={handleApply}
               className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
                 selectedFilters.size > 0
-                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'dash-btn-primary'
                   : 'bg-[var(--dash-bg-highlight)] text-[var(--dash-text-secondary)]'
               }`}
             >

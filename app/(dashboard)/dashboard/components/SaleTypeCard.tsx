@@ -54,16 +54,16 @@ export default function SaleTypeCard({
   }
 
   return (
-    <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm dash-card-hover p-5 bg-blue-500/10 transition-colors">
+    <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm dash-card-hover p-5 bg-dash-accent-blue-subtle transition-colors">
       <div className="flex items-center justify-between gap-4">
         <div className="flex-1 min-w-0">
           <p className="text-[var(--dash-text-muted)] text-sm font-medium mb-2">{`تصنيف مبيعات ${periodLabel}`}</p>
           {/* Ground invoices row */}
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-400 flex-shrink-0"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-dash-accent-green flex-shrink-0"></span>
             <span className="text-[var(--dash-text-primary)] font-bold text-sm">{groundInvoiceCount.toLocaleString('ar-EG')}</span>
             <span className="text-[var(--dash-text-muted)] text-xs">فاتورة أرضي</span>
-            <span className="text-green-400 font-bold text-sm mr-auto truncate">
+            <span className="text-dash-accent-green font-bold text-sm mr-auto truncate">
               {formatCurrencyAr(groundInvoiceTotal)}
             </span>
             <span className="text-[var(--dash-text-disabled)] text-xs">{groundPercentage.toFixed(0)}%</span>
@@ -71,20 +71,20 @@ export default function SaleTypeCard({
           {/* Ground returns row */}
           {groundReturnCount > 0 && (
             <div className="flex items-center gap-2 mb-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-400 flex-shrink-0"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-dash-accent-red flex-shrink-0"></span>
               <span className="text-[var(--dash-text-primary)] font-bold text-sm">{groundReturnCount.toLocaleString('ar-EG')}</span>
               <span className="text-[var(--dash-text-muted)] text-xs">مرتجع أرضي</span>
-              <span className="text-red-400 font-bold text-sm mr-auto truncate">
+              <span className="text-dash-accent-red font-bold text-sm mr-auto truncate">
                 -{formatCurrencyAr(Math.abs(groundReturnTotal))}
               </span>
             </div>
           )}
           {/* Online invoices row */}
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-400 flex-shrink-0"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-dash-accent-blue flex-shrink-0"></span>
             <span className="text-[var(--dash-text-primary)] font-bold text-sm">{onlineInvoiceCount.toLocaleString('ar-EG')}</span>
             <span className="text-[var(--dash-text-muted)] text-xs">فاتورة أون لاين</span>
-            <span className="text-blue-400 font-bold text-sm mr-auto truncate">
+            <span className="text-dash-accent-blue font-bold text-sm mr-auto truncate">
               {formatCurrencyAr(onlineInvoiceTotal)}
             </span>
             <span className="text-[var(--dash-text-disabled)] text-xs">{onlinePercentage.toFixed(0)}%</span>
@@ -92,10 +92,10 @@ export default function SaleTypeCard({
           {/* Online returns row */}
           {onlineReturnCount > 0 && (
             <div className="flex items-center gap-2 mb-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-400 flex-shrink-0"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-dash-accent-red flex-shrink-0"></span>
               <span className="text-[var(--dash-text-primary)] font-bold text-sm">{onlineReturnCount.toLocaleString('ar-EG')}</span>
               <span className="text-[var(--dash-text-muted)] text-xs">مرتجع أون لاين</span>
-              <span className="text-red-400 font-bold text-sm mr-auto truncate">
+              <span className="text-dash-accent-red font-bold text-sm mr-auto truncate">
                 -{formatCurrencyAr(Math.abs(onlineReturnTotal))}
               </span>
             </div>
@@ -108,8 +108,8 @@ export default function SaleTypeCard({
             </div>
           )}
         </div>
-        <div className="p-3 rounded-xl bg-blue-500/20 flex-shrink-0">
-          <BuildingStorefrontIcon className="w-8 h-8 text-blue-400" />
+        <div className="p-3 rounded-xl bg-dash-accent-blue-subtle flex-shrink-0">
+          <BuildingStorefrontIcon className="w-8 h-8 text-dash-accent-blue" />
         </div>
       </div>
     </div>

@@ -260,12 +260,12 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                     {/* Card Header with Icon and Type */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 rounded-lg bg-blue-600/20 text-blue-400">
+                        <div className="p-3 rounded-lg bg-dash-accent-blue-subtle text-dash-accent-blue">
                           <BuildingStorefrontIcon className="h-6 w-6" />
                         </div>
                         <div>
                           <h3 className="text-[var(--dash-text-primary)] text-lg font-semibold">{branch.name}</h3>
-                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-600/20 text-blue-300 border border-blue-600/30">
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-dash-accent-blue-subtle text-dash-accent-blue border border-[var(--dash-accent-blue)]/30">
                             فرع
                           </span>
                         </div>
@@ -275,14 +275,14 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={() => handleEditBranch(branch)}
-                          className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-lg transition-colors"
+                          className="p-2 text-dash-accent-blue hover:brightness-125 hover:bg-dash-accent-blue-subtle rounded-lg transition-colors"
                           title="تعديل"
                         >
                           <PencilSquareIcon className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteBranchClick(branch)}
-                          className="p-2 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors"
+                          className="p-2 text-dash-accent-red hover:brightness-125 hover:bg-dash-accent-red-subtle rounded-lg transition-colors"
                           title="حذف"
                         >
                           <TrashIcon className="h-4 w-4" />
@@ -317,8 +317,8 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                           <div className="text-[var(--dash-text-muted)] text-xs font-medium mb-1">الأشكال والألوان</div>
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             branch.allow_variants 
-                              ? 'bg-green-600/20 text-green-300 border border-green-600/30' 
-                              : 'bg-red-600/20 text-red-300 border border-red-600/30'
+                              ? 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green/30' 
+                              : 'bg-dash-accent-red-subtle text-dash-accent-red border border-dash-accent-red/30'
                           }`}>
                             {branch.allow_variants ? 'مسموح' : 'غير مسموح'}
                           </span>
@@ -340,12 +340,12 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                     {/* Card Header with Icon and Type */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 rounded-lg bg-green-600/20 text-green-400">
+                        <div className="p-3 rounded-lg bg-dash-accent-green-subtle text-dash-accent-green">
                           <BuildingOffice2Icon className="h-6 w-6" />
                         </div>
                         <div>
                           <h3 className="text-white text-lg font-semibold">{warehouse.name}</h3>
-                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-300 border border-green-600/30">
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green/30">
                             مخزن
                           </span>
                         </div>
@@ -355,14 +355,14 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={() => handleEditWarehouse(warehouse)}
-                          className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-lg transition-colors"
+                          className="p-2 text-dash-accent-blue hover:text-dash-accent-blue hover:bg-blue-400/10 rounded-lg transition-colors"
                           title="تعديل"
                         >
                           <PencilSquareIcon className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteWarehouseClick(warehouse)}
-                          className="p-2 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors"
+                          className="p-2 text-dash-accent-red hover:text-dash-accent-red hover:bg-red-400/10 rounded-lg transition-colors"
                           title="حذف"
                         >
                           <TrashIcon className="h-4 w-4" />
@@ -397,8 +397,8 @@ export default function ManagementModal({ isOpen, onClose, onEditBranch, onEditW
                           <div className="text-[var(--dash-text-muted)] text-xs font-medium mb-1">الأشكال والألوان</div>
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             warehouse.allow_variants 
-                              ? 'bg-green-600/20 text-green-300 border border-green-600/30' 
-                              : 'bg-red-600/20 text-red-300 border border-red-600/30'
+                              ? 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green/30' 
+                              : 'bg-dash-accent-red-subtle text-dash-accent-red border border-dash-accent-red/30'
                           }`}>
                             {warehouse.allow_variants ? 'مسموح' : 'غير مسموح'}
                           </span>

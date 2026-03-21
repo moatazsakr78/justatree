@@ -54,8 +54,8 @@ export default function KPICardGrid({ dateFilter, onDataLoad }: KPICardGridProps
   if (error) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="col-span-full bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
-          <p className="text-red-400">{error}</p>
+        <div className="col-span-full bg-dash-accent-red-subtle border border-dash-accent-red/30 rounded-lg p-4 text-center">
+          <p className="text-dash-accent-red">{error}</p>
         </div>
       </div>
     );
@@ -69,8 +69,8 @@ export default function KPICardGrid({ dateFilter, onDataLoad }: KPICardGridProps
         value={kpiData?.totalSales || 0}
         previousValue={kpiData?.previousPeriod.totalSales || 0}
         icon={CurrencyDollarIcon}
-        iconBgColor="bg-green-500/20"
-        iconColor="text-green-400"
+        iconBgColor="bg-dash-accent-green-subtle"
+        iconColor="text-dash-accent-green"
         sparklineData={salesSparkline}
         formatAsCurrency={true}
         loading={loading}
@@ -82,8 +82,8 @@ export default function KPICardGrid({ dateFilter, onDataLoad }: KPICardGridProps
         value={kpiData?.totalProfit || 0}
         previousValue={kpiData?.previousPeriod.totalProfit || 0}
         icon={ChartBarIcon}
-        iconBgColor="bg-blue-500/20"
-        iconColor="text-blue-400"
+        iconBgColor="bg-dash-accent-blue-subtle"
+        iconColor="text-dash-accent-blue"
         sparklineData={profitSparkline}
         formatAsCurrency={true}
         loading={loading}
@@ -95,8 +95,8 @@ export default function KPICardGrid({ dateFilter, onDataLoad }: KPICardGridProps
         value={kpiData?.orderCount || 0}
         previousValue={kpiData?.previousPeriod.orderCount || 0}
         icon={ShoppingCartIcon}
-        iconBgColor="bg-purple-500/20"
-        iconColor="text-purple-400"
+        iconBgColor="bg-dash-accent-purple-subtle"
+        iconColor="text-dash-accent-purple"
         sparklineData={ordersSparkline}
         formatAsCurrency={false}
         loading={loading}
@@ -108,8 +108,8 @@ export default function KPICardGrid({ dateFilter, onDataLoad }: KPICardGridProps
         value={kpiData?.avgOrderValue || 0}
         previousValue={kpiData?.previousPeriod.avgOrderValue || 0}
         icon={ReceiptPercentIcon}
-        iconBgColor="bg-orange-500/20"
-        iconColor="text-orange-400"
+        iconBgColor="bg-dash-accent-orange-subtle"
+        iconColor="text-dash-accent-orange"
         sparklineData={[]}
         formatAsCurrency={true}
         loading={loading}

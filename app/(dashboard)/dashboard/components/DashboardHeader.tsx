@@ -63,7 +63,7 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
         <div className="flex flex-col">
           <h1 className="text-xl md:text-2xl font-bold text-[var(--dash-text-primary)]">
             {getGreeting()}،{' '}
-            <span className="text-blue-400">
+            <span className="text-dash-accent-blue">
               {loading ? '...' : profile?.full_name || 'مستخدم'}
             </span>
           </h1>
@@ -96,7 +96,7 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
             onClick={onDateFilterClick}
             className="flex items-center gap-2 px-4 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] rounded-lg hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] transition-colors"
           >
-            <CalendarDaysIcon className="w-5 h-5 text-blue-400" />
+            <CalendarDaysIcon className="w-5 h-5 text-dash-accent-blue" />
             <span className="hidden sm:inline">{getDateFilterLabel(dateFilter)}</span>
           </button>
 
@@ -106,14 +106,14 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
               onClick={onSimpleFilterClick}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors relative ${
                 activeFilterType === 'simple'
-                  ? 'bg-blue-600 text-[var(--dash-text-primary)] border border-blue-500'
+                  ? 'bg-dash-accent-blue text-[var(--dash-text-primary)] border border-dash-accent-blue'
                   : 'bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               <FunnelIcon className="w-5 h-5" />
               <span className="hidden sm:inline">فلتر</span>
               {simpleFiltersCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                <span className="absolute -top-2 -right-2 bg-dash-accent-blue text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                   {simpleFiltersCount}
                 </span>
               )}
@@ -126,14 +126,14 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
               onClick={onMultiFilterClick}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors relative ${
                 activeFilterType === 'multi'
-                  ? 'bg-green-600 text-[var(--dash-text-primary)] border border-green-500'
+                  ? 'bg-dash-accent-green text-[var(--dash-text-primary)] border border-dash-accent-green'
                   : 'bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
               <FunnelIcon className="w-5 h-5" />
               <span className="hidden sm:inline">فلتر متعدد</span>
               {multiFiltersCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                <span className="absolute -top-2 -right-2 bg-dash-accent-green text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                   {multiFiltersCount}
                 </span>
               )}
@@ -143,7 +143,7 @@ export default function DashboardHeader({ onRefresh, lastUpdated, isRefreshing, 
           {/* New Sale Button */}
           <Link
             href="/pos"
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 dash-btn-primary rounded-lg transition-colors"
           >
             <PlusIcon className="w-5 h-5" />
             <span className="hidden sm:inline">بيع جديد</span>

@@ -229,7 +229,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
 
         <div className="p-3 sm:p-6">
           {/* Date Range Display */}
-          <div className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded text-center font-medium text-sm sm:text-base mb-4 sm:mb-6">
+          <div className="bg-dash-accent-blue text-white px-3 sm:px-4 py-2 rounded text-center font-medium text-sm sm:text-base mb-4 sm:mb-6">
             {getDateRangeText()}
           </div>
 
@@ -239,7 +239,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               onClick={() => handleFilterClick('today')}
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'today'
-                  ? 'bg-blue-600 text-white border-blue-500'
+                  ? 'bg-dash-accent-blue text-white border-dash-accent-blue'
                   : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
@@ -250,7 +250,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               onClick={() => handleFilterClick('current_week')}
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'current_week'
-                  ? 'bg-blue-600 text-white border-blue-500'
+                  ? 'bg-dash-accent-blue text-white border-dash-accent-blue'
                   : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
@@ -261,7 +261,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               onClick={() => handleFilterClick('current_month')}
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'current_month'
-                  ? 'bg-blue-600 text-white border-blue-500'
+                  ? 'bg-dash-accent-blue text-white border-dash-accent-blue'
                   : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
@@ -272,7 +272,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               onClick={() => handleFilterClick('last_week')}
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'last_week'
-                  ? 'bg-blue-600 text-white border-blue-500'
+                  ? 'bg-dash-accent-blue text-white border-dash-accent-blue'
                   : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
@@ -283,7 +283,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               onClick={() => handleFilterClick('last_month')}
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'last_month'
-                  ? 'bg-blue-600 text-white border-blue-500'
+                  ? 'bg-dash-accent-blue text-white border-dash-accent-blue'
                   : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
@@ -294,7 +294,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               onClick={() => handleFilterClick('custom')}
               className={`p-2 sm:p-3 rounded text-xs sm:text-sm font-medium border transition-colors ${
                 selectedFilter === 'custom'
-                  ? 'bg-blue-600 text-white border-blue-500'
+                  ? 'bg-dash-accent-blue text-white border-dash-accent-blue'
                   : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
               }`}
             >
@@ -355,11 +355,11 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
                         ${!isCurrentMonth
                           ? 'text-[var(--dash-text-disabled)] hover:text-[var(--dash-text-muted)]'
                           : isSelected
-                          ? 'bg-blue-600 text-white font-bold'
+                          ? 'bg-dash-accent-blue text-white font-bold'
                           : isInRange
-                          ? 'bg-blue-600/30 text-blue-300'
+                          ? 'bg-dash-accent-blue/30 text-dash-accent-blue'
                           : isToday
-                          ? 'text-yellow-400 font-bold'
+                          ? 'text-dash-accent-orange font-bold'
                           : 'text-white hover:bg-[var(--dash-bg-overlay)]'
                         }
                       `}
@@ -386,7 +386,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
             {/* Clear All Button */}
             <button
               onClick={handleClearAll}
-              className="px-4 sm:px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors text-sm sm:text-base order-last sm:order-first"
+              className="px-4 sm:px-6 py-2 dash-btn-red rounded transition-colors text-sm sm:text-base order-last sm:order-first"
             >
               إلغاء التحديد
             </button>
@@ -400,7 +400,7 @@ export default function SimpleDateFilterModal({ isOpen, onClose, onDateFilterCha
               </button>
               <button
                 onClick={handleApply}
-                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors text-sm sm:text-base"
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 dash-btn-primary rounded transition-colors text-sm sm:text-base"
               >
                 موافق
               </button>

@@ -1991,7 +1991,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       accessor: 'invoiceValue',
       width: 130,
       render: (value: number, item: any) => (
-        <span className="font-medium text-green-500">
+        <span className="font-medium text-dash-accent-green">
           {value > 0 ? `↑ ${formatPrice(value)}` : '-'}
         </span>
       )
@@ -2007,7 +2007,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
           return <span className="font-medium text-[var(--dash-text-disabled)]">-</span>
         }
         return (
-          <span className="font-medium text-red-500">
+          <span className="font-medium text-dash-accent-red">
             ↓ {formatPrice(Math.abs(value))}
           </span>
         )
@@ -2018,7 +2018,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       header: 'طريقة الدفع',
       accessor: 'payment_method',
       width: 120,
-      render: (value: string) => <span className="text-blue-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value || '-'}</span>
     },
     {
       id: 'netAmount',
@@ -2035,11 +2035,11 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
         const isPositive = netAmount > 0;
         return (
           <span className="font-medium">
-            <span className={isPositive ? 'text-green-500' : 'text-red-500'}>
+            <span className={isPositive ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
               {isPositive ? '↑' : '↓'}
             </span>
             {' '}
-            <span className="text-blue-500">
+            <span className="text-dash-accent-blue">
               {formatPrice(Math.abs(netAmount))}
             </span>
           </span>
@@ -2053,7 +2053,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       width: 140,
       render: (value: string, item: any) => (
         <span className={`font-medium ${item.amount >= 0 ? 'text-amber-400' : 'text-[var(--dash-text-primary)]'} ${
-          item.isFirstRow ? 'bg-yellow-500/20 px-2 py-1 rounded' : ''
+          item.isFirstRow ? 'bg-dash-accent-orange-subtle px-2 py-1 rounded' : ''
         }`}>{value}</span>
       )
     },
@@ -2114,12 +2114,12 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     setEditingNoteValue('')
                   }
                 }}
-                className="flex-1 bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] text-sm px-2 py-1 rounded border border-blue-500 focus:outline-none"
+                className="flex-1 bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] text-sm px-2 py-1 rounded border border-dash-accent-blue focus:outline-none"
                 autoFocus
               />
               <button
                 onClick={() => saveStatementNote(item, editingNoteValue)}
-                className="text-green-500 hover:text-green-400 p-1"
+                className="text-dash-accent-green hover:text-dash-accent-green p-1"
                 title="حفظ"
               >
                 ✓
@@ -2129,7 +2129,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                   setEditingNoteId(null)
                   setEditingNoteValue('')
                 }}
-                className="text-red-500 hover:text-red-400 p-1"
+                className="text-dash-accent-red hover:text-dash-accent-red p-1"
                 title="إلغاء"
               >
                 ✕
@@ -2171,7 +2171,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       header: 'رقم الفاتورة', 
       accessor: 'invoice_number', 
       width: 180,
-      render: (value: string) => <span className="text-blue-400">{value}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value}</span>
     },
     { 
       id: 'created_at', 
@@ -2191,7 +2191,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       render: (value: string) => {
         if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>
         const timeOnly = value.substring(0, 5)
-        return <span className="text-blue-400 font-mono">{timeOnly}</span>
+        return <span className="text-dash-accent-blue font-mono">{timeOnly}</span>
       }
     },
     {
@@ -2219,13 +2219,13 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
           // Linked sales have green color (like customer sales)
           if (isLinkedSale) {
             return invoiceType.includes('مرتجع')
-              ? 'bg-red-900 text-red-300'      // Sale return
-              : 'bg-green-900 text-green-300'  // Sale invoice
+              ? 'bg-dash-accent-red-subtle text-dash-accent-red'      // Sale return
+              : 'bg-dash-accent-green-subtle text-dash-accent-green'  // Sale invoice
           }
           // Regular purchases
           switch (invoiceType) {
-            case 'Purchase Invoice': return 'bg-blue-900 text-blue-300'
-            case 'Purchase Return': return 'bg-yellow-900 text-yellow-300'
+            case 'Purchase Invoice': return 'bg-dash-accent-blue-subtle text-dash-accent-blue'
+            case 'Purchase Return': return 'bg-dash-accent-orange-subtle text-dash-accent-orange'
             default: return 'bg-[var(--dash-bg-base)] text-[var(--dash-text-secondary)]'
           }
         }
@@ -2256,14 +2256,14 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       header: 'المبلغ الإجمالي', 
       accessor: 'total_amount', 
       width: 150,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value)}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value)}</span>
     },
     {
       id: 'payment_method',
       header: 'طريقة الدفع',
       accessor: 'payment_method',
       width: 120,
-      render: (value: string) => <span className="text-blue-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value || '-'}</span>
     },
     {
       id: 'notes',
@@ -2277,14 +2277,14 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       header: 'الخزنة',
       accessor: 'record.name',
       width: 120,
-      render: (value: string, item: any) => <span className="text-cyan-400">{item.record?.name || '-'}</span>
+      render: (value: string, item: any) => <span className="text-dash-accent-cyan">{item.record?.name || '-'}</span>
     },
     {
       id: 'employee_name',
       header: 'الموظف',
       accessor: 'creator.full_name',
       width: 120,
-      render: (value: string, item: any) => <span className="text-yellow-400">{item.creator?.full_name || '-'}</span>
+      render: (value: string, item: any) => <span className="text-dash-accent-orange">{item.creator?.full_name || '-'}</span>
     }
   ].filter(col => visibleInvoiceColumns.includes(col.id))
 
@@ -2316,7 +2316,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       render: (value: string) => {
         const date = new Date(value)
         const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-        return <span className="text-blue-400">{time}</span>
+        return <span className="text-dash-accent-blue">{time}</span>
       }
     },
     {
@@ -2324,7 +2324,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       header: 'المبلغ',
       accessor: 'amount',
       width: 140,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value)}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value)}</span>
     },
     {
       id: 'payment_method',
@@ -2338,7 +2338,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
           'bank_transfer': 'تحويل بنكي',
           'check': 'شيك'
         }
-        return <span className="text-blue-400">{methodNames[value] || value}</span>
+        return <span className="text-dash-accent-blue">{methodNames[value] || value}</span>
       }
     },
     {
@@ -2353,14 +2353,14 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       header: 'الخزنة',
       accessor: 'safe_name',
       width: 120,
-      render: (value: string) => <span className="text-cyan-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-dash-accent-cyan">{value || '-'}</span>
     },
     {
       id: 'employee_name',
       header: 'الموظف',
       accessor: 'employee_name',
       width: 120,
-      render: (value: string, item: any) => <span className="text-yellow-400">{item.employee_name || item.creator?.full_name || '-'}</span>
+      render: (value: string, item: any) => <span className="text-dash-accent-orange">{item.employee_name || item.creator?.full_name || '-'}</span>
     }
   ].filter(col => visiblePaymentsColumns.includes(col.id))
 
@@ -2380,7 +2380,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       accessor: 'product.category.name', 
       width: 120,
       render: (value: string, item: any) => (
-        <span className="text-blue-400">{item.product?.category?.name || 'غير محدد'}</span>
+        <span className="text-dash-accent-blue">{item.product?.category?.name || 'غير محدد'}</span>
       )
     },
     {
@@ -2392,8 +2392,8 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
         const isHighlighted = highlightedProductId === item.product?.id
         return (
           <div className="flex items-center gap-2">
-            {isHighlighted && <span className="text-yellow-300 text-lg">★</span>}
-            <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-[var(--dash-text-primary)]'}`}>
+            {isHighlighted && <span className="text-dash-accent-orange text-lg">★</span>}
+            <span className={`font-medium ${isHighlighted ? 'text-dash-accent-orange font-bold' : 'text-[var(--dash-text-primary)]'}`}>
               {item.product?.name || 'منتج محذوف'}
             </span>
           </div>
@@ -2413,7 +2413,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       accessor: 'product.barcode', 
       width: 150,
       render: (value: string, item: any) => (
-        <span className="text-orange-400 font-mono text-sm">{item.product?.barcode || 'غير محدد'}</span>
+        <span className="text-dash-accent-orange font-mono text-sm">{item.product?.barcode || 'غير محدد'}</span>
       )
     },
     { 
@@ -2421,23 +2421,23 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       header: 'السعر', 
       accessor: 'unit_purchase_price', 
       width: 100,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value)}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value)}</span>
     },
-    { 
-      id: 'discount_amount', 
-      header: 'خصم', 
-      accessor: 'discount_amount', 
+    {
+      id: 'discount_amount',
+      header: 'خصم',
+      accessor: 'discount_amount',
       width: 80,
-      render: (value: number) => <span className="text-red-400 font-medium">{value ? value.toFixed(2) : '0%'}</span>
+      render: (value: number) => <span className="text-dash-accent-red font-medium">{value ? value.toFixed(2) : '0%'}</span>
     },
-    { 
-      id: 'total', 
-      header: 'الإجمالي', 
-      accessor: 'total', 
+    {
+      id: 'total',
+      header: 'الإجمالي',
+      accessor: 'total',
       width: 120,
       render: (value: any, item: any) => {
         const total = (item.quantity * item.unit_purchase_price) - (item.discount_amount || 0)
-        return <span className="text-green-400 font-bold">{formatPrice(total)}</span>
+        return <span className="text-dash-accent-green font-bold">{formatPrice(total)}</span>
       }
     },
     {
@@ -2483,7 +2483,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                   </button>
                   <div className="flex-1 text-center">
                     <span className="text-[var(--dash-text-primary)] font-medium">تفاصيل الفاتورة</span>
-                    <span className="text-blue-400 mr-2">#{mobileSelectedInvoice.invoice_number}</span>
+                    <span className="text-dash-accent-blue mr-2">#{mobileSelectedInvoice.invoice_number}</span>
                   </div>
                   <div className="w-9" />
                 </div>
@@ -2493,12 +2493,12 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                   <div className="flex justify-between items-center mb-2">
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                       mobileSelectedInvoice.invoice_type === 'مرتجع شراء'
-                        ? 'bg-orange-900 text-orange-300'
+                        ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
                         : mobileSelectedInvoice.invoice_type === 'فاتورة بيع (عميل مرتبط)' || mobileSelectedInvoice.invoice_type === 'Sale Invoice'
-                          ? 'bg-green-900 text-green-300'
+                          ? 'bg-dash-accent-green-subtle text-dash-accent-green'
                           : mobileSelectedInvoice.invoice_type === 'مرتجع بيع (عميل مرتبط)' || mobileSelectedInvoice.invoice_type === 'Sale Return'
-                            ? 'bg-red-900 text-red-300'
-                            : 'bg-blue-900 text-blue-300'
+                            ? 'bg-dash-accent-red-subtle text-dash-accent-red'
+                            : 'bg-dash-accent-blue-subtle text-dash-accent-blue'
                     }`}>
                       {mobileSelectedInvoice.invoice_type === 'Purchase Invoice' ? 'فاتورة شراء' :
                        mobileSelectedInvoice.invoice_type === 'Purchase Return' ? 'مرتجع شراء' :
@@ -2536,7 +2536,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           onClick={() => {
                             // TODO: Implement edit functionality
                           }}
-                          className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-sm font-medium transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1.5 dash-btn-primary text-white rounded-lg py-2 text-sm font-medium transition-colors"
                         >
                           <PencilSquareIcon className="h-4 w-4" />
                           <span>تحرير</span>
@@ -2546,7 +2546,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         onClick={() => {
                           handleDeleteInvoice(mobileSelectedInvoice)
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg py-2 text-sm font-medium transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 dash-btn-red text-white rounded-lg py-2 text-sm font-medium transition-colors"
                       >
                         <TrashIcon className="h-4 w-4" />
                         <span>حذف</span>
@@ -2567,7 +2567,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
 
                   {isLoadingMobileInvoiceItems ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
                     </div>
                   ) : mobileInvoiceItems.length === 0 ? (
                     <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد عناصر</div>
@@ -2620,11 +2620,11 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-[var(--dash-text-muted)]">خصم:</span>
-                                <span className="text-orange-400">{formatPrice(discount)}</span>
+                                <span className="text-dash-accent-orange">{formatPrice(discount)}</span>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-[var(--dash-text-muted)]">الإجمالي:</span>
-                                <span className="text-green-400 font-medium">{formatPrice(itemTotal)}</span>
+                                <span className="text-dash-accent-green font-medium">{formatPrice(itemTotal)}</span>
                               </div>
                             </div>
 
@@ -2668,11 +2668,11 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         <ChevronDownIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                       )}
                     </div>
-                    <div className="flex-1 bg-blue-600 rounded-lg px-5 py-2 text-center">
+                    <div className="flex-1 bg-dash-accent-blue rounded-lg px-5 py-2 text-center">
                       <div className="font-bold text-white text-xl">
                         {formatPrice(supplierBalance)}
                       </div>
-                      <div className="text-blue-200 text-[10px]">
+                      <div className="text-dash-accent-blue text-[10px]">
                         رصيد المورد
                       </div>
                     </div>
@@ -2684,7 +2684,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       {/* Supplier Info - Compact Row */}
                       <div className="flex items-center justify-between gap-2 text-sm">
                         <span className="text-[var(--dash-text-muted)]" dir="ltr">{supplier.phone || '-'}</span>
-                        <span className="text-yellow-400 flex items-center gap-1 text-xs">
+                        <span className="text-dash-accent-orange flex items-center gap-1 text-xs">
                           <span>{supplier.rank || 'عادي'}</span>
                           <span>⭐</span>
                         </span>
@@ -2697,11 +2697,11 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           <div className="text-[var(--dash-text-muted)] text-[9px]">الفواتير</div>
                         </div>
                         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
-                          <div className="text-blue-400 text-xs font-bold">{formatPrice(totalInvoicesAmount)}</div>
+                          <div className="text-dash-accent-blue text-xs font-bold">{formatPrice(totalInvoicesAmount)}</div>
                           <div className="text-[var(--dash-text-muted)] text-[9px]">الإجمالي</div>
                         </div>
                         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
-                          <div className="text-green-400 text-xs font-bold">{formatPrice(totalPayments)}</div>
+                          <div className="text-dash-accent-green text-xs font-bold">{formatPrice(totalPayments)}</div>
                           <div className="text-[var(--dash-text-muted)] text-[9px]">الدفعات</div>
                         </div>
                         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-2 text-center">
@@ -2713,7 +2713,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       {/* Date Filter Button - Compact */}
                       <button
                         onClick={() => setShowDateFilter(true)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+                        className="w-full dash-btn-primary text-white rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
                       >
                         <CalendarDaysIcon className="h-4 w-4" />
                         <span>فلتر التاريخ</span>
@@ -2722,7 +2722,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       {/* Current Filter Display */}
                       {dateFilter.type !== 'all' && (
                         <div className="text-center">
-                          <span className="text-xs text-blue-400">
+                          <span className="text-xs text-dash-accent-blue">
                             {dateFilter.type === 'today' && 'عرض فواتير اليوم'}
                             {dateFilter.type === 'current_week' && 'عرض فواتير الأسبوع الحالي'}
                             {dateFilter.type === 'last_week' && 'عرض فواتير الأسبوع الماضي'}
@@ -2744,7 +2744,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     <div className="p-3 space-y-2">
                       {isLoadingInvoices ? (
                         <div className="flex items-center justify-center py-8">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
                         </div>
                       ) : purchaseInvoices.length === 0 ? (
                         <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد فواتير</div>
@@ -2763,20 +2763,20 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                               {/* Header Row - Amount + Invoice# + Type Badge */}
                               <div className="flex justify-between items-center mb-2">
                                 <span className={`font-bold text-lg ${
-                                  parseFloat(invoice.total_amount) < 0 ? 'text-orange-400' : 'text-[var(--dash-text-primary)]'
+                                  parseFloat(invoice.total_amount) < 0 ? 'text-dash-accent-orange' : 'text-[var(--dash-text-primary)]'
                                 }`}>
                                   {formatPrice(Math.abs(parseFloat(invoice.total_amount)))}
                                 </span>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-blue-400 font-medium text-sm">#{invoice.invoice_number}</span>
+                                  <span className="text-dash-accent-blue font-medium text-sm">#{invoice.invoice_number}</span>
                                   <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                                     invoice.invoice_type === 'مرتجع شراء'
-                                      ? 'bg-orange-900 text-orange-300'
+                                      ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
                                       : invoice.invoice_type === 'فاتورة بيع (عميل مرتبط)' || invoice.invoice_type === 'Sale Invoice'
-                                        ? 'bg-green-900 text-green-300'
+                                        ? 'bg-dash-accent-green-subtle text-dash-accent-green'
                                         : invoice.invoice_type === 'مرتجع بيع (عميل مرتبط)' || invoice.invoice_type === 'Sale Return'
-                                          ? 'bg-red-900 text-red-300'
-                                          : 'bg-blue-900 text-blue-300'
+                                          ? 'bg-dash-accent-red-subtle text-dash-accent-red'
+                                          : 'bg-dash-accent-blue-subtle text-dash-accent-blue'
                                   }`}>
                                     {invoice.invoice_type === 'Purchase Invoice' ? 'فاتورة شراء' :
                                      invoice.invoice_type === 'Purchase Return' ? 'مرتجع شراء' :
@@ -2813,7 +2813,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-[var(--dash-text-disabled)]">المنتجات:</span>
-                                  <span className="text-blue-400">{itemsCount > 0 ? itemsCount : '...'}</span>
+                                  <span className="text-dash-accent-blue">{itemsCount > 0 ? itemsCount : '...'}</span>
                                 </div>
                               </div>
 
@@ -2851,7 +2851,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     <div className="p-4 space-y-3">
                       {isLoadingPayments ? (
                         <div className="flex items-center justify-center py-8">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-green"></div>
                         </div>
                       ) : supplierPayments.length === 0 ? (
                         <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد دفعات</div>
@@ -2862,10 +2862,10 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             className="bg-[var(--dash-bg-raised)] rounded-lg p-4"
                           >
                             <div className="flex justify-between items-start mb-2">
-                              <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">
+                              <span className="px-2 py-0.5 rounded text-xs font-medium bg-dash-accent-green-subtle text-dash-accent-green">
                                 دفعة
                               </span>
-                              <span className="font-bold text-lg text-green-400">
+                              <span className="font-bold text-lg text-dash-accent-green">
                                 {formatPrice(payment.amount || 0)}
                               </span>
                             </div>
@@ -2884,7 +2884,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       {/* Add Payment Button */}
                       <button
                         onClick={() => setShowAddPaymentModal(true)}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2 transition-colors mt-4"
+                        className="w-full dash-btn-green text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2 transition-colors mt-4"
                       >
                         <PlusIcon className="h-5 w-5" />
                         <span>إضافة دفعة</span>
@@ -2897,7 +2897,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     <div className="p-4 space-y-3">
                       {isLoadingStatements ? (
                         <div className="flex items-center justify-center py-8">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
                         </div>
                       ) : accountStatements.length === 0 ? (
                         <div className="text-center py-8 text-[var(--dash-text-muted)]">لا توجد حركات</div>
@@ -2922,13 +2922,13 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                 statement.invoiceId ? 'cursor-pointer active:bg-[var(--dash-bg-overlay)]' : ''
                               } ${
                                 statement.type === 'فاتورة شراء'
-                                  ? 'border-2 border-blue-700/50'
+                                  ? 'border-2 border-dash-accent-blue/50'
                                   : statement.type === 'مرتجع شراء'
-                                    ? 'border-2 border-orange-700/50'
+                                    ? 'border-2 border-dash-accent-orange/50'
                                     : statement.type === 'فاتورة بيع (عميل مرتبط)'
-                                      ? 'border-2 border-green-700/50'
+                                      ? 'border-2 border-dash-accent-green/50'
                                       : statement.type === 'مرتجع بيع (عميل مرتبط)'
-                                        ? 'border-2 border-red-700/50'
+                                        ? 'border-2 border-dash-accent-red/50'
                                         : statement.type === 'دفعة'
                                           ? 'border-2 border-emerald-700/50'
                                           : 'border-2 border-[var(--dash-border-default)]/50'
@@ -2938,13 +2938,13 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                               <div className="flex justify-between items-center mb-2">
                                 <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                                   statement.type === 'فاتورة شراء'
-                                    ? 'bg-blue-900 text-blue-300'
+                                    ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
                                     : statement.type === 'مرتجع شراء'
-                                      ? 'bg-orange-900 text-orange-300'
+                                      ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
                                       : statement.type === 'فاتورة بيع (عميل مرتبط)'
-                                        ? 'bg-green-900 text-green-300'
+                                        ? 'bg-dash-accent-green-subtle text-dash-accent-green'
                                         : statement.type === 'مرتجع بيع (عميل مرتبط)'
-                                          ? 'bg-red-900 text-red-300'
+                                          ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                                           : statement.type === 'دفعة'
                                             ? 'bg-emerald-900 text-emerald-300'
                                             : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]'
@@ -2969,8 +2969,8 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                   <div className="flex items-center justify-center gap-1">
                                     {statement.invoiceValue > 0 ? (
                                       <>
-                                        <span className="text-green-400">↑</span>
-                                        <span className="text-green-400 font-medium">
+                                        <span className="text-dash-accent-green">↑</span>
+                                        <span className="text-dash-accent-green font-medium">
                                           {formatPrice(statement.invoiceValue)}
                                         </span>
                                       </>
@@ -2986,8 +2986,8 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                   <div className="flex items-center justify-center gap-1">
                                     {statement.paidAmount > 0 ? (
                                       <>
-                                        <span className="text-red-400">↓</span>
-                                        <span className="text-red-400 font-medium">
+                                        <span className="text-dash-accent-red">↓</span>
+                                        <span className="text-dash-accent-red font-medium">
                                           {formatPrice(statement.paidAmount)}
                                         </span>
                                       </>
@@ -3003,10 +3003,10 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                   <div className="flex items-center justify-center gap-1">
                                     {netAmount !== 0 ? (
                                       <>
-                                        <span className={netAmount > 0 ? 'text-green-400' : 'text-red-400'}>
+                                        <span className={netAmount > 0 ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
                                           {netAmount > 0 ? '↑' : '↓'}
                                         </span>
-                                        <span className="text-blue-400 font-medium">
+                                        <span className="text-dash-accent-blue font-medium">
                                           {formatPrice(Math.abs(netAmount))}
                                         </span>
                                       </>
@@ -3042,7 +3042,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     onClick={() => setActiveTab('invoices')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'invoices'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-dash-accent-blue text-white'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
@@ -3054,7 +3054,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     onClick={() => setActiveTab('payments')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'payments'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-dash-accent-blue text-white'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
@@ -3066,7 +3066,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     onClick={() => setActiveTab('statement')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg transition-colors ${
                       activeTab === 'statement'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-dash-accent-blue text-white'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
                     }`}
                   >
@@ -3099,7 +3099,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       }
                     }}
                     disabled={purchaseInvoices.length === 0 || selectedTransaction >= purchaseInvoices.length}
-                    className="flex flex-col items-center p-2 text-red-400 hover:text-red-300 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
+                    className="flex flex-col items-center p-2 text-dash-accent-red hover:text-dash-accent-red disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors"
                   >
                     <TrashIcon className="h-5 w-5 mb-1" />
                     <span className="text-sm">حذف الفاتورة</span>
@@ -3120,7 +3120,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     onClick={() => setActiveTab('payments')}
                     className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'payments' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                        ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle' 
                         : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
@@ -3130,7 +3130,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     onClick={() => setActiveTab('statement')}
                     className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'statement' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                        ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle' 
                         : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
@@ -3140,7 +3140,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     onClick={() => setActiveTab('invoices')}
                     className={`px-6 py-3 text-base font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'invoices' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                        ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle' 
                         : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
@@ -3155,7 +3155,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       onClick={() => setViewMode('invoices-only')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'invoices-only'
-                          ? 'bg-blue-600 text-white shadow-sm'
+                          ? 'bg-dash-accent-blue text-white shadow-sm'
                           : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض فواتير المورد فقط"
@@ -3166,7 +3166,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       onClick={() => setViewMode('split')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'split'
-                          ? 'bg-blue-600 text-white shadow-sm'
+                          ? 'bg-dash-accent-blue text-white shadow-sm'
                           : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض مقسم"
@@ -3177,7 +3177,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       onClick={() => setViewMode('details-only')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'details-only'
-                          ? 'bg-blue-600 text-white shadow-sm'
+                          ? 'bg-dash-accent-blue text-white shadow-sm'
                           : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض تفاصيل الفاتورة فقط"
@@ -3218,9 +3218,9 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                 
                 {/* Supplier Balance */}
                 <div className="p-4 border-b border-[var(--dash-border-default)]">
-                  <div className="bg-blue-600 rounded p-4 text-center">
+                  <div className="bg-dash-accent-blue rounded p-4 text-center">
                     <div className="text-2xl font-bold text-[var(--dash-text-primary)]">{formatPrice(supplierBalance)}</div>
-                    <div className="text-blue-200 text-sm">رصيد المورد</div>
+                    <div className="text-dash-accent-blue text-sm">رصيد المورد</div>
                   </div>
                 </div>
 
@@ -3254,7 +3254,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-yellow-400 flex items-center gap-1">
+                    <span className="text-dash-accent-orange flex items-center gap-1">
                       <span>{supplier.rank || 'عادي'}</span>
                       <span>⭐</span>
                     </span>
@@ -3275,11 +3275,11 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     <span className="text-[var(--dash-text-muted)] text-sm">عدد الفواتير</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-blue-400">{formatPrice(totalInvoicesAmount)}</span>
+                    <span className="text-dash-accent-blue">{formatPrice(totalInvoicesAmount)}</span>
                     <span className="text-[var(--dash-text-muted)] text-sm">إجمالي الفواتير</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-green-400">{formatPrice(totalPayments)}</span>
+                    <span className="text-dash-accent-green">{formatPrice(totalPayments)}</span>
                     <span className="text-[var(--dash-text-muted)] text-sm">إجمالي الدفعات</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -3302,7 +3302,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
               <div className="p-4 border-t border-[var(--dash-border-default)]">
                 <button
                   onClick={() => setShowDateFilter(true)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
+                  className="w-full dash-btn-primary text-white px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
                 >
                   <CalendarDaysIcon className="h-5 w-5" />
                   <span>التاريخ</span>
@@ -3311,7 +3311,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                 {/* Current Filter Display */}
                 {dateFilter.type !== 'all' && (
                   <div className="mt-2 text-center">
-                    <span className="text-xs text-blue-400">
+                    <span className="text-xs text-dash-accent-blue">
                       {dateFilter.type === 'today' && 'عرض فواتير اليوم'}
                       {dateFilter.type === 'current_week' && 'عرض فواتير الأسبوع الحالي'}
                       {dateFilter.type === 'last_week' && 'عرض فواتير الأسبوع الماضي'}
@@ -3343,7 +3343,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                               setSelectedStatementInvoice(null)
                               setStatementInvoiceItems([])
                             }}
-                            className="text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors text-sm"
+                            className="text-dash-accent-blue hover:text-dash-accent-blue flex items-center gap-2 transition-colors text-sm"
                           >
                             <ChevronRightIcon className="h-4 w-4" />
                             <span>العودة</span>
@@ -3352,7 +3352,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             {/* Print Receipt Button */}
                             <button
                               onClick={() => printReceipt(selectedStatementInvoice, statementInvoiceItems)}
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="dash-btn-primary text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                             >
                               <PrinterIcon className="h-4 w-4" />
@@ -3362,7 +3362,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             {/* Print A4 Invoice Button */}
                             <button
                               onClick={() => printA4Invoice(selectedStatementInvoice, statementInvoiceItems)}
-                              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="dash-btn-green text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                             >
                               <DocumentIcon className="h-4 w-4" />
@@ -3373,7 +3373,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             <div className="relative" ref={saveDropdownStatementRef}>
                               <button
                                 onClick={() => setShowSaveDropdownStatement(!showSaveDropdownStatement)}
-                                className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                                className="dash-btn-purple px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                                 disabled={isLoadingStatementInvoiceItems || statementInvoiceItems.length === 0}
                               >
                                 <ArrowDownTrayIcon className="h-4 w-4" />
@@ -3387,14 +3387,14 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                     onClick={() => saveDocument(selectedStatementInvoice, statementInvoiceItems, 'pdf')}
                                     className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-t-lg transition-colors"
                                   >
-                                    <DocumentArrowDownIcon className="h-4 w-4 text-red-400" />
+                                    <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-red" />
                                     <span>PDF</span>
                                   </button>
                                   <button
                                     onClick={() => saveDocument(selectedStatementInvoice, statementInvoiceItems, 'png')}
                                     className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-b-lg transition-colors"
                                   >
-                                    <DocumentArrowDownIcon className="h-4 w-4 text-blue-400" />
+                                    <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-blue" />
                                     <span>PNG</span>
                                   </button>
                                 </div>
@@ -3412,7 +3412,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex === 0
                                 ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'dash-btn-primary text-white'
                             }`}
                           >
                             <ChevronRightIcon className="h-5 w-5" />
@@ -3436,7 +3436,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             className={`p-2 rounded-lg transition-colors ${
                               currentInvoiceIndex >= invoiceStatements.length - 1
                                 ? 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-disabled)] cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'dash-btn-primary text-white'
                             }`}
                           >
                             <ChevronLeftIcon className="h-5 w-5" />
@@ -3449,8 +3449,8 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             <div className="flex items-center gap-4">
                               <span className={`px-3 py-1 rounded text-sm font-medium ${
                                 selectedStatementInvoice?.invoice_type === 'Purchase Return' || selectedStatementInvoice?.invoice_type === 'مرتجع شراء'
-                                  ? 'bg-orange-600/20 text-orange-400 border border-orange-600/30'
-                                  : 'bg-blue-600/20 text-blue-400 border border-blue-600/30'
+                                  ? 'bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange'
+                                  : 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue'
                               }`}>
                                 {selectedStatementInvoice?.invoice_type === 'Purchase Return' ? 'مرتجع شراء' :
                                  selectedStatementInvoice?.invoice_type === 'Purchase Invoice' ? 'فاتورة شراء' :
@@ -3477,7 +3477,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         <div className="flex-1 overflow-hidden">
                           {isLoadingStatementInvoiceItems ? (
                             <div className="flex items-center justify-center h-full">
-                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                               <span className="text-[var(--dash-text-muted)]">جاري تحميل تفاصيل الفاتورة...</span>
                             </div>
                           ) : (
@@ -3496,12 +3496,12 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                   {statementInvoiceItems.map((item, index) => {
                                     const isHighlighted = highlightedProductId === item.product?.id
                                     return (
-                                    <tr key={item.id} className={`border-b border-[var(--dash-border-subtle)] ${isHighlighted ? 'bg-yellow-500/30 hover:bg-yellow-500/40' : 'hover:bg-[var(--dash-bg-raised)]/50'}`}>
-                                      <td className="px-4 py-3 text-blue-400 font-medium text-sm">{index + 1}</td>
+                                    <tr key={item.id} className={`border-b border-[var(--dash-border-subtle)] ${isHighlighted ? 'bg-dash-accent-orange-subtle hover:bg-dash-accent-orange-subtle' : 'hover:bg-[var(--dash-bg-raised)]/50'}`}>
+                                      <td className="px-4 py-3 text-dash-accent-blue font-medium text-sm">{index + 1}</td>
                                       <td className="px-4 py-3 font-medium text-sm">
                                         <div className="flex items-center gap-2">
-                                          {isHighlighted && <span className="text-yellow-300 text-lg">★</span>}
-                                          <span className={isHighlighted ? 'text-yellow-100 font-bold' : 'text-blue-400'}>
+                                          {isHighlighted && <span className="text-dash-accent-orange text-lg">★</span>}
+                                          <span className={isHighlighted ? 'text-dash-accent-orange font-bold' : 'text-dash-accent-blue'}>
                                             {item.product?.name || 'منتج غير معروف'}
                                           </span>
                                         </div>
@@ -3518,15 +3518,15 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                     </tr>
                                   )})}
                                   {/* Totals Row */}
-                                  <tr className="bg-[var(--dash-bg-raised)] border-t-2 border-blue-500">
-                                    <td colSpan={2} className="px-4 py-3 text-left text-blue-400 font-bold text-sm">
+                                  <tr className="bg-[var(--dash-bg-raised)] border-t-2 border-dash-accent-blue">
+                                    <td colSpan={2} className="px-4 py-3 text-left text-dash-accent-blue font-bold text-sm">
                                       - = اجمالي = -
                                     </td>
-                                    <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
+                                    <td className="px-4 py-3 text-center text-dash-accent-blue font-bold text-sm">
                                       {statementInvoiceItems.reduce((sum, item) => sum + Math.abs(item.quantity), 0)}
                                     </td>
                                     <td className="px-4 py-3 text-center text-[var(--dash-text-primary)] text-sm"></td>
-                                    <td className="px-4 py-3 text-center text-blue-400 font-bold text-sm">
+                                    <td className="px-4 py-3 text-center text-dash-accent-blue font-bold text-sm">
                                       {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                                     </td>
                                   </tr>
@@ -3559,19 +3559,19 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             </div>
                             <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                               <span className="text-[var(--dash-text-muted)] mb-1">المدفوع</span>
-                              <span className="text-green-400 font-bold">
+                              <span className="text-dash-accent-green font-bold">
                                 {formatPrice(Math.abs(selectedStatementInvoice?.total_amount || 0))}
                               </span>
                             </div>
                             <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                               <span className="text-[var(--dash-text-muted)] mb-1">آجل</span>
-                              <span className="text-orange-400 font-bold">
+                              <span className="text-dash-accent-orange font-bold">
                                 {formatPrice(0)}
                               </span>
                             </div>
                             <div className="flex flex-col items-center bg-[var(--dash-bg-raised)] rounded-lg p-3 border border-[var(--dash-border-default)]">
                               <span className="text-[var(--dash-text-muted)] mb-1">الرصيد</span>
-                              <span className={`font-bold ${supplierBalance >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                              <span className={`font-bold ${supplierBalance >= 0 ? 'text-dash-accent-red' : 'text-dash-accent-green'}`}>
                                 {formatPrice(Math.abs(supplierBalance))}
                               </span>
                             </div>
@@ -3600,7 +3600,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       <div className="flex-1 overflow-auto scrollbar-hide">
                         {isLoadingStatements ? (
                           <div className="flex items-center justify-center h-full">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                             <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
                           </div>
                         ) : accountStatements.length === 0 ? (
@@ -3625,7 +3625,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             <div ref={statementsSentinelRef} className="h-4" />
                             {isLoadingMoreStatements && (
                               <div className="flex items-center justify-center py-4">
-                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
                                 <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                               </div>
                             )}
@@ -3651,23 +3651,23 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       }}
                     >
                       {/* Product Search Bar */}
-                      <div className={`bg-[var(--dash-bg-raised)] border-b p-3 flex-shrink-0 transition-colors ${searchQuery ? 'border-blue-500' : 'border-[var(--dash-border-default)]'}`}>
+                      <div className={`bg-[var(--dash-bg-raised)] border-b p-3 flex-shrink-0 transition-colors ${searchQuery ? 'border-dash-accent-blue' : 'border-[var(--dash-border-default)]'}`}>
                         {searchQuery && (
                           <div className="mb-2 text-xs flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-blue-400">
+                            <div className="flex items-center gap-2 text-dash-accent-blue">
                               <span>🔍</span>
                               <span>البحث نشط - عرض الفواتير التي تحتوي على المنتج المحدد فقط</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <span className="text-[var(--dash-text-muted)]">النتائج:</span>
-                              <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-medium">
+                              <span className="bg-dash-accent-blue text-white px-2 py-0.5 rounded font-medium">
                                 {purchaseInvoices.length}
                               </span>
                             </div>
                           </div>
                         )}
                         <div className="relative">
-                          <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-blue-400' : 'text-[var(--dash-text-muted)]'}`} />
+                          <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-dash-accent-blue' : 'text-[var(--dash-text-muted)]'}`} />
                           <input
                             type="text"
                             placeholder="ابحث عن منتج (اسم المنتج أو الباركود)..."
@@ -3691,7 +3691,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex gap-1">
                             <button
                               onClick={() => searchProductInInvoices(searchQuery)}
-                              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors"
+                              className="px-3 py-1 dash-btn-primary text-white text-xs rounded transition-colors"
                             >
                               بحث
                             </button>
@@ -3709,7 +3709,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       <div className="flex-1 min-h-0">
                         {isLoadingInvoices ? (
                           <div className="flex items-center justify-center h-full">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                             <span className="text-[var(--dash-text-muted)]">جاري تحميل الفواتير...</span>
                           </div>
                         ) : (
@@ -3728,7 +3728,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     {/* Resizable Divider - Only show in split mode */}
                     {viewMode === 'split' && (
                       <div
-                        className="absolute left-0 right-0 h-2 bg-[var(--dash-border-default)] hover:bg-blue-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
+                        className="absolute left-0 right-0 h-2 bg-[var(--dash-border-default)] hover:bg-dash-accent-blue cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
                         style={{ top: `${dividerPosition}%`, transform: 'translateY(-50%)' }}
                         onMouseDown={handleMouseDown}
                       >
@@ -3752,7 +3752,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           {/* Print Receipt Button */}
                           <button
                             onClick={() => printReceipt(purchaseInvoices[selectedTransaction], purchaseInvoiceItems)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="dash-btn-primary text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                             disabled={isLoadingItems || purchaseInvoiceItems.length === 0}
                           >
                             <PrinterIcon className="h-4 w-4" />
@@ -3762,7 +3762,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           {/* Print A4 Invoice Button */}
                           <button
                             onClick={() => printA4Invoice(purchaseInvoices[selectedTransaction], purchaseInvoiceItems)}
-                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="dash-btn-green text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                             disabled={isLoadingItems || purchaseInvoiceItems.length === 0}
                           >
                             <DocumentIcon className="h-4 w-4" />
@@ -3773,7 +3773,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           <div className="relative" ref={saveDropdownRef}>
                             <button
                               onClick={() => setShowSaveDropdown(!showSaveDropdown)}
-                              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                              className="dash-btn-purple px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                               disabled={isLoadingItems || purchaseInvoiceItems.length === 0}
                             >
                               <ArrowDownTrayIcon className="h-4 w-4" />
@@ -3787,21 +3787,21 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                   onClick={() => saveDocument(purchaseInvoices[selectedTransaction], purchaseInvoiceItems, 'pdf')}
                                   className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-t-lg transition-colors"
                                 >
-                                  <DocumentArrowDownIcon className="h-4 w-4 text-red-400" />
+                                  <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-red" />
                                   <span>PDF</span>
                                 </button>
                                 <button
                                   onClick={() => saveDocument(purchaseInvoices[selectedTransaction], purchaseInvoiceItems, 'png')}
                                   className="w-full px-4 py-2 text-right text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] flex items-center gap-2 rounded-b-lg transition-colors"
                                 >
-                                  <DocumentArrowDownIcon className="h-4 w-4 text-blue-400" />
+                                  <DocumentArrowDownIcon className="h-4 w-4 text-dash-accent-blue" />
                                   <span>PNG</span>
                                 </button>
                               </div>
                             )}
                           </div>
                         </div>
-                        <h3 className="text-blue-400 font-medium text-lg">
+                        <h3 className="text-dash-accent-blue font-medium text-lg">
                           تفاصيل الفاتورة {purchaseInvoices[selectedTransaction]?.invoice_number || ''}
                         </h3>
                       </div>
@@ -3809,7 +3809,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                       <div className="flex-1 min-h-0 px-4 pb-4">
                         {isLoadingItems ? (
                           <div className="flex items-center justify-center h-full">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                             <span className="text-[var(--dash-text-muted)]">جاري تحميل العناصر...</span>
                           </div>
                         ) : (
@@ -3819,7 +3819,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                             data={purchaseInvoiceItems}
                             getRowClassName={(item) =>
                               highlightedProductId === item.product?.id
-                                ? 'bg-yellow-500/30 hover:bg-yellow-500/40'
+                                ? 'bg-dash-accent-orange-subtle hover:bg-dash-accent-orange-subtle'
                                 : ''
                             }
                             reportType="SUPPLIER_INVOICE_DETAILS_REPORT"
@@ -3838,7 +3838,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         <div>
                           <button
                             onClick={() => setShowAddPaymentModal(true)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="dash-btn-primary text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                           >
                             <PlusIcon className="h-4 w-4" />
                             إضافة دفعة
@@ -3855,7 +3855,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                     <div className="flex-1 overflow-auto scrollbar-hide">
                       {isLoadingPayments ? (
                         <div className="flex items-center justify-center h-full">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                           <span className="text-[var(--dash-text-muted)]">جاري تحميل الدفعات...</span>
                         </div>
                       ) : supplierPayments.length === 0 ? (
@@ -3873,7 +3873,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           <div ref={paymentsSentinelRef} className="h-4" />
                           {isLoadingMorePayments && (
                             <div className="flex items-center justify-center py-4">
-                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-2"></div>
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
                               <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
@@ -3940,7 +3940,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
             {/* Header */}
             <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
               <h3 className="text-[var(--dash-text-primary)] text-lg font-semibold flex items-center gap-2">
-                <TableCellsIcon className="h-5 w-5 text-blue-400" />
+                <TableCellsIcon className="h-5 w-5 text-dash-accent-blue" />
                 إدارة الأعمدة
               </h3>
               <button
@@ -3957,7 +3957,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                 onClick={() => setColumnManagerTab('invoices')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'invoices'
-                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
+                    ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -3967,7 +3967,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                 onClick={() => setColumnManagerTab('details')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'details'
-                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
+                    ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -3977,7 +3977,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                 onClick={() => setColumnManagerTab('print')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'print'
-                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-600/10'
+                    ? 'text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -3997,7 +3997,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                 onClick={() => setColumnManagerTab('payments')}
                 className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${
                   columnManagerTab === 'payments'
-                    ? 'text-green-400 border-b-2 border-green-400 bg-green-600/10'
+                    ? 'text-dash-accent-green border-b-2 border-dash-accent-green bg-dash-accent-green-subtle'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -4018,7 +4018,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visibleInvoiceColumns.includes(col.id)
-                            ? 'bg-blue-600/20 border-blue-500'
+                            ? 'bg-dash-accent-blue-subtle border-dash-accent-blue'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4027,13 +4027,13 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           checked={visibleInvoiceColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'invoices')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-dash-accent-blue focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visibleInvoiceColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4052,7 +4052,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visibleDetailsColumns.includes(col.id)
-                            ? 'bg-blue-600/20 border-blue-500'
+                            ? 'bg-dash-accent-blue-subtle border-dash-accent-blue'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4061,13 +4061,13 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           checked={visibleDetailsColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'details')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-dash-accent-blue focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visibleDetailsColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4086,7 +4086,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visiblePrintColumns.includes(col.id)
-                            ? 'bg-green-600/20 border-green-500'
+                            ? 'bg-dash-accent-green-subtle border-dash-accent-green'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4095,13 +4095,13 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           checked={visiblePrintColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'print')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visiblePrintColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4135,7 +4135,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4154,7 +4154,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         key={col.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                           visiblePaymentsColumns.includes(col.id)
-                            ? 'bg-green-600/20 border-green-500'
+                            ? 'bg-dash-accent-green-subtle border-dash-accent-green'
                             : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)] hover:border-[var(--dash-border-default)]'
                         } ${col.required ? 'opacity-60 cursor-not-allowed' : ''}`}
                       >
@@ -4163,13 +4163,13 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                           checked={visiblePaymentsColumns.includes(col.id)}
                           onChange={() => toggleColumn(col.id, 'payments')}
                           disabled={col.required}
-                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-green-500 focus:ring-green-500 focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-[var(--dash-border-subtle)] bg-[var(--dash-bg-raised)] text-dash-accent-green focus:ring-dash-accent-green focus:ring-offset-0"
                         />
                         <span className={`text-sm ${visiblePaymentsColumns.includes(col.id) ? 'text-[var(--dash-text-primary)]' : 'text-[var(--dash-text-muted)]'}`}>
                           {col.label}
                         </span>
                         {col.required && (
-                          <span className="text-xs text-yellow-500 mr-auto">مطلوب</span>
+                          <span className="text-xs text-dash-accent-orange mr-auto">مطلوب</span>
                         )}
                       </label>
                     ))}
@@ -4189,7 +4189,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
               </div>
               <button
                 onClick={() => setShowColumnManager(false)}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                className="px-6 py-2 dash-btn-primary text-white rounded-lg font-medium transition-colors"
               >
                 تم
               </button>

@@ -330,7 +330,7 @@ export default function CategorySidebar({ isOpen, onClose, categories, onCategor
                           onClick={() => handleParentSelect(category.id, category.name)}
                           className={`w-full px-3 py-2 text-right hover:bg-[var(--dash-bg-raised)] transition-colors ${
                             isRootProducts 
-                              ? 'font-medium text-blue-400 cursor-default' 
+                              ? 'font-medium text-dash-accent-blue cursor-default' 
                               : 'text-[var(--dash-text-primary)]'
                           }`}
                           disabled={false}
@@ -375,8 +375,8 @@ export default function CategorySidebar({ isOpen, onClose, categories, onCategor
                   <div className="text-center">
                     {isUploading ? (
                       <>
-                        <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                        <span className="text-blue-400 text-sm">جاري الرفع...</span>
+                        <div className="w-8 h-8 border-2 border-dash-accent-blue border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                        <span className="text-dash-accent-blue text-sm">جاري الرفع...</span>
                       </>
                     ) : (
                       <>
@@ -399,7 +399,7 @@ export default function CategorySidebar({ isOpen, onClose, categories, onCategor
                   <button
                     type="button"
                     onClick={removeImage}
-                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-[var(--dash-text-primary)] rounded-full p-1 transition-colors"
+                    className="absolute top-2 right-2 bg-dash-accent-red hover:bg-dash-accent-red text-[var(--dash-text-primary)] rounded-full p-1 transition-colors"
                   >
                     <XMarkIcon className="h-4 w-4" />
                   </button>

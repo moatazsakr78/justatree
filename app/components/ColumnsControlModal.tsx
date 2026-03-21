@@ -86,7 +86,7 @@ export default function ColumnsControlModal({
           <div className="px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
             <div className="text-right">
               <h3 className="text-lg font-medium text-[var(--dash-text-primary)]">إدارة الأعمدة</h3>
-              <p className="text-sm text-blue-400 mt-1">🎯 اختر الأعمدة ثم اضغط &quot;تطبيق&quot;</p>
+              <p className="text-sm text-dash-accent-blue mt-1">🎯 اختر الأعمدة ثم اضغط &quot;تطبيق&quot;</p>
             </div>
             <button
               onClick={handleCancel}
@@ -103,7 +103,7 @@ export default function ColumnsControlModal({
             <div className="flex gap-2 mb-4">
               <button
                 onClick={handleSelectAll}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
+                className="px-4 py-2 dash-btn-primary rounded-md text-sm font-medium transition-colors"
               >
                 تحديد الكل
               </button>
@@ -126,7 +126,7 @@ export default function ColumnsControlModal({
                     type="checkbox"
                     checked={column.visible}
                     onChange={() => handleColumnToggle(column.id)}
-                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-blue-500 focus:ring-2"
+                    className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-dash-accent-blue focus:ring-2"
                   />
                   <span className="text-[var(--dash-text-primary)] text-sm font-medium flex-1 text-right">
                     {column.header}
@@ -138,7 +138,7 @@ export default function ColumnsControlModal({
             {/* Summary */}
             <div className="mt-4 p-3 bg-[var(--dash-bg-raised)] rounded-lg">
               <div className="flex justify-between items-center text-sm">
-                <span className="text-blue-400 font-medium">
+                <span className="text-dash-accent-blue font-medium">
                   {localColumns.filter(col => col.visible).length} من أصل {localColumns.length}
                 </span>
                 <span className="text-[var(--dash-text-muted)]">الأعمدة المعروضة</span>
@@ -157,7 +157,7 @@ export default function ColumnsControlModal({
             <button
               onClick={handleApply}
               disabled={isSaving}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded transition-colors flex items-center gap-2"
+              className="px-4 py-2 dash-btn-primary disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded transition-colors flex items-center gap-2"
             >
               {isSaving && (
                 <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

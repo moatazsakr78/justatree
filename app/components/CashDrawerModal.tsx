@@ -249,11 +249,11 @@ export default function CashDrawerModal({
 
   const getTransactionTypeLabel = (type: string) => {
     const labels: Record<string, { text: string; color: string }> = {
-      sale: { text: "بيع", color: "text-green-400" },
-      return: { text: "مرتجع", color: "text-red-400" },
-      withdrawal: { text: "سحب", color: "text-orange-400" },
-      deposit: { text: "إضافه", color: "text-green-400" },
-      expense: { text: "مصروفات", color: "text-red-400" },
+      sale: { text: "بيع", color: "text-dash-accent-green" },
+      return: { text: "مرتجع", color: "text-dash-accent-red" },
+      withdrawal: { text: "سحب", color: "text-dash-accent-orange" },
+      deposit: { text: "إضافه", color: "text-dash-accent-green" },
+      expense: { text: "مصروفات", color: "text-dash-accent-red" },
       adjustment: { text: "تعديل", color: "text-gray-400" },
     };
     return labels[type] || { text: type, color: "text-gray-400" };
@@ -289,7 +289,7 @@ export default function CashDrawerModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <BanknotesIcon className="h-6 w-6 text-green-400" />
+                    <BanknotesIcon className="h-6 w-6 text-dash-accent-green" />
                     الدرج - {record?.name || "غير محدد"}
                   </Dialog.Title>
                   <button
@@ -314,11 +314,11 @@ export default function CashDrawerModal({
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">الرصيد الحالي</p>
-                            <p className="text-3xl font-bold text-green-400">
+                            <p className="text-3xl font-bold text-dash-accent-green">
                               {currentBalance.toFixed(2)}
                             </p>
                           </div>
-                          <BanknotesIcon className="h-16 w-16 text-green-500/30" />
+                          <BanknotesIcon className="h-16 w-16 text-dash-accent-green/30" />
                         </div>
                       </div>
 
@@ -326,7 +326,7 @@ export default function CashDrawerModal({
                       <div className="flex gap-3 mb-6">
                         <button
                           onClick={() => setShowWithdrawForm(!showWithdrawForm)}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-dash-accent-orange hover:brightness-90 text-white rounded-lg transition-colors"
                         >
                           <ArrowUpTrayIcon className="h-5 w-5" />
                           سحب جزئي
@@ -334,7 +334,7 @@ export default function CashDrawerModal({
                         <button
                           onClick={handleWithdrawAll}
                           disabled={currentBalance <= 0 || isProcessing}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 dash-btn-red disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
                         >
                           <ArrowDownTrayIcon className="h-5 w-5" />
                           سحب الكل
@@ -353,7 +353,7 @@ export default function CashDrawerModal({
                                 value={withdrawAmount}
                                 onChange={(e) => setWithdrawAmount(e.target.value)}
                                 placeholder="أدخل المبلغ"
-                                className="w-full bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:border-orange-500"
+                                className="w-full bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:border-dash-accent-orange"
                                 max={currentBalance}
                                 min={0}
                                 step="0.01"
@@ -366,14 +366,14 @@ export default function CashDrawerModal({
                                 value={withdrawNotes}
                                 onChange={(e) => setWithdrawNotes(e.target.value)}
                                 placeholder="سبب السحب"
-                                className="w-full bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:border-orange-500"
+                                className="w-full bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded-lg px-4 py-2 text-[var(--dash-text-primary)] focus:outline-none focus:border-dash-accent-orange"
                               />
                             </div>
                             <div className="flex gap-2">
                               <button
                                 onClick={handleWithdraw}
                                 disabled={isProcessing || !withdrawAmount}
-                                className="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors"
+                                className="flex-1 px-4 py-2 bg-dash-accent-orange hover:brightness-90 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors"
                               >
                                 {isProcessing ? "جاري المعالجة..." : "تأكيد السحب"}
                               </button>
@@ -423,7 +423,7 @@ export default function CashDrawerModal({
                                   <div className="text-left">
                                     <span
                                       className={`font-bold ${
-                                        isOutgoingType(txn.transaction_type) ? "text-red-400" : "text-green-400"
+                                        isOutgoingType(txn.transaction_type) ? "text-dash-accent-red" : "text-dash-accent-green"
                                       }`}
                                     >
                                       {isOutgoingType(txn.transaction_type) ? "-" : "+"}

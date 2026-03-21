@@ -154,7 +154,7 @@ export default function InventoryPDFExportModal({
               <DocumentArrowDownIcon className="h-6 w-6 text-white" />
               <div>
                 <h3 className="text-lg font-bold text-white">Packing List</h3>
-                <p className="text-sm text-blue-200">اختر المنتجات والأعمدة</p>
+                <p className="text-sm text-dash-accent-blue">اختر المنتجات والأعمدة</p>
               </div>
             </div>
             <button
@@ -182,7 +182,7 @@ export default function InventoryPDFExportModal({
                     checked={exportMode === 'all'}
                     onChange={() => setExportMode('all')}
                     disabled={isExporting}
-                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)]"
+                    className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)]"
                   />
                   <span className="text-white">جميع المنتجات ({products.length})</span>
                 </label>
@@ -193,7 +193,7 @@ export default function InventoryPDFExportModal({
                     checked={exportMode === 'selected'}
                     onChange={() => setExportMode('selected')}
                     disabled={isExporting || selectedProductIds.length === 0}
-                    className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)]"
+                    className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)]"
                   />
                   <span className={selectedProductIds.length === 0 ? 'text-[var(--dash-text-disabled)]' : 'text-[var(--dash-text-primary)]'}>
                     المنتجات المحددة ({selectedProductIds.length})
@@ -209,7 +209,7 @@ export default function InventoryPDFExportModal({
                     onClose()
                   }}
                   disabled={isExporting}
-                  className="w-full mt-4 px-4 py-2.5 bg-blue-600/20 text-blue-400 border border-blue-500/50 rounded-lg hover:bg-blue-600/30 transition-colors flex items-center justify-center gap-2 font-medium disabled:opacity-50"
+                  className="w-full mt-4 px-4 py-2.5 bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue/50 rounded-lg hover:bg-dash-accent-blue/30 transition-colors flex items-center justify-center gap-2 font-medium disabled:opacity-50"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -246,12 +246,12 @@ export default function InventoryPDFExportModal({
                   checked={includeImages}
                   onChange={(e) => setIncludeImages(e.target.checked)}
                   disabled={isExporting}
-                  className="w-5 h-5 text-blue-600 bg-[var(--dash-bg-surface)] border-2 border-blue-500 rounded focus:ring-[var(--dash-accent-blue)]"
+                  className="w-5 h-5 text-dash-accent-blue bg-[var(--dash-bg-surface)] border-2 border-dash-accent-blue rounded focus:ring-[var(--dash-accent-blue)]"
                 />
                 <span className="text-white font-medium">تضمين صور المنتجات</span>
               </label>
               {includeImages && (
-                <p className="text-sm text-yellow-400 mt-2 pr-8">
+                <p className="text-sm text-dash-accent-orange mt-2 pr-8">
                   ⚠️ تضمين الصور قد يستغرق وقتًا أطول
                 </p>
               )}
@@ -267,7 +267,7 @@ export default function InventoryPDFExportModal({
                   <button
                     onClick={handleSelectAllColumns}
                     disabled={isExporting}
-                    className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50"
+                    className="px-3 py-1 text-sm dash-btn-primary rounded-md transition-colors disabled:opacity-50"
                   >
                     تحديد الكل
                   </button>
@@ -288,7 +288,7 @@ export default function InventoryPDFExportModal({
                     key={column.id}
                     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors border ${
                       column.enabled
-                        ? 'bg-blue-600/20 border-blue-500'
+                        ? 'bg-dash-accent-blue-subtle border-dash-accent-blue'
                         : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
                     } ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
@@ -297,7 +297,7 @@ export default function InventoryPDFExportModal({
                       checked={column.enabled}
                       onChange={() => handleColumnToggle(column.id)}
                       disabled={isExporting}
-                      className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-[var(--dash-accent-blue)]"
+                      className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-[var(--dash-accent-blue)]"
                     />
                     <span className="text-[var(--dash-text-primary)] text-sm font-medium">
                       {column.label}
@@ -309,7 +309,7 @@ export default function InventoryPDFExportModal({
               {/* Summary */}
               <div className="mt-3 p-3 bg-[var(--dash-bg-raised)] rounded-lg">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-blue-400 font-medium">
+                  <span className="text-dash-accent-blue font-medium">
                     {enabledColumnsCount} من أصل {columns.length}
                   </span>
                   <span className="text-[var(--dash-text-muted)]">الأعمدة المحددة</span>
@@ -327,7 +327,7 @@ export default function InventoryPDFExportModal({
                   <span className="text-sm font-medium text-[var(--dash-text-secondary)]">
                     جاري التصدير... ({processedCount} من {totalCount})
                   </span>
-                  <span className="text-sm font-bold text-blue-400">{exportProgress}%</span>
+                  <span className="text-sm font-bold text-dash-accent-blue">{exportProgress}%</span>
                 </div>
                 <div className="w-full bg-[var(--dash-bg-overlay)] rounded-full h-2 overflow-hidden">
                   <div
@@ -354,7 +354,7 @@ export default function InventoryPDFExportModal({
               <button
                 onClick={handleExport}
                 disabled={isExporting || enabledColumnsCount === 0}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-2"
+                className="px-6 py-2 dash-btn-primary disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-2"
               >
                 {isExporting ? (
                   <>

@@ -606,7 +606,7 @@ export default function MergeCustomersModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <ArrowsRightLeftIcon className="h-6 w-6 text-blue-400" />
+                    <ArrowsRightLeftIcon className="h-6 w-6 text-dash-accent-blue" />
                     دمج حسابات العملاء
                   </Dialog.Title>
                   <button
@@ -623,7 +623,7 @@ export default function MergeCustomersModal({
                     onClick={() => { setActiveTab("merge"); setError(null); setSuccessMessage(null); }}
                     className={`flex-1 px-4 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                       activeTab === "merge"
-                        ? "text-blue-400 border-b-2 border-blue-400 bg-blue-500/10"
+                        ? "text-dash-accent-blue border-b-2 border-dash-accent-blue bg-dash-accent-blue-subtle"
                         : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50"
                     }`}
                   >
@@ -634,14 +634,14 @@ export default function MergeCustomersModal({
                     onClick={() => { setActiveTab("pending"); setError(null); setSuccessMessage(null); }}
                     className={`flex-1 px-4 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                       activeTab === "pending"
-                        ? "text-yellow-400 border-b-2 border-yellow-400 bg-yellow-500/10"
+                        ? "text-dash-accent-orange border-b-2 border-dash-accent-orange bg-dash-accent-orange-subtle"
                         : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50"
                     }`}
                   >
                     <ClockIcon className="h-4 w-4" />
                     الدمجات المعلقة
                     {pendingMerges.length > 0 && (
-                      <span className="bg-yellow-500 text-black text-xs px-1.5 py-0.5 rounded-full font-bold">
+                      <span className="bg-dash-accent-orange text-black text-xs px-1.5 py-0.5 rounded-full font-bold">
                         {pendingMerges.length}
                       </span>
                     )}
@@ -653,7 +653,7 @@ export default function MergeCustomersModal({
                   <div>
                     {/* Success Message */}
                     {successMessage && (
-                      <div className="mx-6 mt-4 p-3 bg-green-500/10 border border-green-500/50 rounded-lg flex items-center gap-2 text-green-400">
+                      <div className="mx-6 mt-4 p-3 bg-dash-accent-green-subtle border border-dash-accent-green rounded-lg flex items-center gap-2 text-dash-accent-green">
                         <CheckCircleIcon className="h-5 w-5 flex-shrink-0" />
                         <span className="text-sm">{successMessage}</span>
                       </div>
@@ -661,15 +661,15 @@ export default function MergeCustomersModal({
 
                     {/* Error Message */}
                     {error && (
-                      <div className="mx-6 mt-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2 text-red-400">
+                      <div className="mx-6 mt-4 p-3 bg-dash-accent-red-subtle border border-dash-accent-red rounded-lg flex items-center gap-2 text-dash-accent-red">
                         <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0" />
                         <span className="text-sm">{error}</span>
                       </div>
                     )}
 
                     {/* Info Box */}
-                    <div className="mx-6 mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
-                      <p className="text-sm text-yellow-400">
+                    <div className="mx-6 mt-4 p-4 bg-dash-accent-orange-subtle border border-dash-accent-orange rounded-xl">
+                      <p className="text-sm text-dash-accent-orange">
                         يمكنك فك الدمج واسترجاع الحسابات المدمجة خلال 24 ساعة من وقت الدمج.
                         بعد انتهاء المهلة، يصبح الدمج نهائياً.
                       </p>
@@ -679,12 +679,12 @@ export default function MergeCustomersModal({
                     <div className="p-6 max-h-[400px] overflow-y-auto scrollbar-hide">
                       {pendingLoading ? (
                         <div className="flex flex-col items-center justify-center py-12">
-                          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
+                          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-dash-accent-blue mb-4"></div>
                           <p className="text-[var(--dash-text-muted)]">جاري التحميل...</p>
                         </div>
                       ) : pendingMerges.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-12">
-                          <CheckCircleIcon className="h-16 w-16 text-green-500 mb-4" />
+                          <CheckCircleIcon className="h-16 w-16 text-dash-accent-green mb-4" />
                           <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد دمجات معلقة</p>
                           <p className="text-[var(--dash-text-disabled)] text-sm">جميع الدمجات السابقة أصبحت نهائية</p>
                         </div>
@@ -708,15 +708,15 @@ export default function MergeCustomersModal({
                                     {/* Customers Info */}
                                     <div className="flex items-center gap-3 mb-3">
                                       <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
-                                          <UserIcon className="h-4 w-4 text-red-400" />
+                                        <div className="w-8 h-8 rounded-full bg-dash-accent-red-subtle flex items-center justify-center">
+                                          <UserIcon className="h-4 w-4 text-dash-accent-red" />
                                         </div>
                                         <span className="text-[var(--dash-text-primary)] font-medium">{mergedData?.name || "عميل محذوف"}</span>
                                       </div>
                                       <span className="text-[var(--dash-text-disabled)]">→</span>
                                       <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                                          <UserIcon className="h-4 w-4 text-green-400" />
+                                        <div className="w-8 h-8 rounded-full bg-dash-accent-green-subtle flex items-center justify-center">
+                                          <UserIcon className="h-4 w-4 text-dash-accent-green" />
                                         </div>
                                         <span className="text-[var(--dash-text-primary)] font-medium">
                                           {merge.primary_customer?.name || "عميل"}
@@ -734,7 +734,7 @@ export default function MergeCustomersModal({
                                       </span>
                                       <span>
                                         الرصيد:{" "}
-                                        <span className={merge.merged_account_balance >= 0 ? "text-green-400" : "text-red-400"}>
+                                        <span className={merge.merged_account_balance >= 0 ? "text-dash-accent-green" : "text-dash-accent-red"}>
                                           {merge.merged_account_balance.toLocaleString()} ج.م
                                         </span>
                                       </span>
@@ -742,8 +742,8 @@ export default function MergeCustomersModal({
 
                                     {/* Time Info */}
                                     <div className="flex items-center gap-2 text-sm">
-                                      <ClockIcon className="h-4 w-4 text-yellow-500" />
-                                      <span className={stillCanUndo ? "text-yellow-400" : "text-[var(--dash-text-disabled)]"}>
+                                      <ClockIcon className="h-4 w-4 text-dash-accent-orange" />
+                                      <span className={stillCanUndo ? "text-dash-accent-orange" : "text-[var(--dash-text-disabled)]"}>
                                         {stillCanUndo ? (
                                           <>المتبقي: {getTimeRemaining(merge.can_undo_until)}</>
                                         ) : (
@@ -759,7 +759,7 @@ export default function MergeCustomersModal({
                                     disabled={!stillCanUndo || undoingId === merge.id}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                                       stillCanUndo && undoingId !== merge.id
-                                        ? "bg-orange-600 hover:bg-orange-700 text-white"
+                                        ? "bg-dash-accent-orange hover:brightness-90 text-white"
                                         : "bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed"
                                     }`}
                                   >
@@ -796,12 +796,12 @@ export default function MergeCustomersModal({
                 ) : mergeSuccess ? (
                   /* Success State */
                   <div className="p-8 flex flex-col items-center justify-center">
-                    <CheckCircleIcon className="h-20 w-20 text-green-500 mb-4" />
+                    <CheckCircleIcon className="h-20 w-20 text-dash-accent-green mb-4" />
                     <h3 className="text-xl font-bold text-[var(--dash-text-primary)] mb-2">تم الدمج بنجاح!</h3>
                     <p className="text-[var(--dash-text-muted)] text-center mb-4">
                       تم دمج حساب "{customerToMerge?.name}" في حساب "{primaryCustomer?.name}"
                     </p>
-                    <div className="flex items-center gap-2 text-yellow-500 bg-yellow-500/10 px-4 py-2 rounded-lg">
+                    <div className="flex items-center gap-2 text-dash-accent-orange bg-dash-accent-orange-subtle px-4 py-2 rounded-lg">
                       <ClockIcon className="h-5 w-5" />
                       <span className="text-sm">يمكن فك الدمج خلال 24 ساعة</span>
                     </div>
@@ -816,18 +816,18 @@ export default function MergeCustomersModal({
                         <div
                           className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                             selectingFor === "merge"
-                              ? "border-blue-500 bg-blue-500/10"
+                              ? "border-dash-accent-blue bg-dash-accent-blue-subtle"
                               : customerToMerge
-                                ? "border-red-500/50 bg-red-500/10"
+                                ? "border-dash-accent-red bg-dash-accent-red-subtle"
                                 : "border-[var(--dash-border-default)] bg-[var(--dash-bg-base)]"
                           }`}
                           onClick={() => setSelectingFor("merge")}
                         >
-                          <div className="text-xs text-red-400 mb-2 font-medium">الحساب المدموج (سيتم تعطيله)</div>
+                          <div className="text-xs text-dash-accent-red mb-2 font-medium">الحساب المدموج (سيتم تعطيله)</div>
                           {customerToMerge ? (
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
-                                <UserIcon className="h-5 w-5 text-red-400" />
+                              <div className="w-10 h-10 rounded-full bg-dash-accent-red-subtle flex items-center justify-center">
+                                <UserIcon className="h-5 w-5 text-dash-accent-red" />
                               </div>
                               <div>
                                 <div className="font-semibold text-[var(--dash-text-primary)]">{customerToMerge.name}</div>
@@ -859,18 +859,18 @@ export default function MergeCustomersModal({
                         <div
                           className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                             selectingFor === "primary"
-                              ? "border-blue-500 bg-blue-500/10"
+                              ? "border-dash-accent-blue bg-dash-accent-blue-subtle"
                               : primaryCustomer
-                                ? "border-green-500/50 bg-green-500/10"
+                                ? "border-dash-accent-green bg-dash-accent-green-subtle"
                                 : "border-[var(--dash-border-default)] bg-[var(--dash-bg-base)]"
                           }`}
                           onClick={() => setSelectingFor("primary")}
                         >
-                          <div className="text-xs text-green-400 mb-2 font-medium">الحساب الأساسي (سيبقى)</div>
+                          <div className="text-xs text-dash-accent-green mb-2 font-medium">الحساب الأساسي (سيبقى)</div>
                           {primaryCustomer ? (
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                                <UserIcon className="h-5 w-5 text-green-400" />
+                              <div className="w-10 h-10 rounded-full bg-dash-accent-green-subtle flex items-center justify-center">
+                                <UserIcon className="h-5 w-5 text-dash-accent-green" />
                               </div>
                               <div>
                                 <div className="font-semibold text-[var(--dash-text-primary)]">{primaryCustomer.name}</div>
@@ -925,7 +925,7 @@ export default function MergeCustomersModal({
                     <div className="max-h-[300px] overflow-y-auto scrollbar-hide">
                       {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-12">
-                          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
+                          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-dash-accent-blue mb-4"></div>
                           <p className="text-[var(--dash-text-muted)]">جاري تحميل العملاء...</p>
                         </div>
                       ) : filteredCustomers.length > 0 ? (
@@ -944,24 +944,24 @@ export default function MergeCustomersModal({
                                     ? "bg-[var(--dash-bg-overlay)]/20 border-[var(--dash-border-subtle)] cursor-not-allowed opacity-50"
                                     : isSelected
                                       ? customerToMerge?.id === customer.id
-                                        ? "bg-red-500/10 border-red-500/50"
-                                        : "bg-green-500/10 border-green-500/50"
+                                        ? "bg-dash-accent-red-subtle border-dash-accent-red"
+                                        : "bg-dash-accent-green-subtle border-dash-accent-green"
                                       : "bg-[var(--dash-bg-surface)] border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-[var(--dash-border-default)]"
                                 } text-gray-200`}
                               >
                                 <div className="flex items-center gap-3">
                                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                                     customerToMerge?.id === customer.id
-                                      ? "bg-red-500/20"
+                                      ? "bg-dash-accent-red-subtle"
                                       : primaryCustomer?.id === customer.id
-                                        ? "bg-green-500/20"
+                                        ? "bg-dash-accent-green-subtle"
                                         : "bg-[var(--dash-bg-raised)]"
                                   }`}>
                                     <UserIcon className={`h-5 w-5 ${
                                       customerToMerge?.id === customer.id
-                                        ? "text-red-400"
+                                        ? "text-dash-accent-red"
                                         : primaryCustomer?.id === customer.id
-                                          ? "text-green-400"
+                                          ? "text-dash-accent-green"
                                           : ""
                                     }`} />
                                   </div>
@@ -983,9 +983,9 @@ export default function MergeCustomersModal({
                                 <div className="text-left">
                                   <div className={`font-medium ${
                                     (customerBalances[customer.id] ?? 0) > 0
-                                      ? "text-red-400"
+                                      ? "text-dash-accent-red"
                                       : (customerBalances[customer.id] ?? 0) < 0
-                                        ? "text-green-400"
+                                        ? "text-dash-accent-green"
                                         : "text-[var(--dash-text-muted)]"
                                   }`}>
                                     {(customerBalances[customer.id] ?? 0).toLocaleString()} ج.م
@@ -1005,7 +1005,7 @@ export default function MergeCustomersModal({
 
                     {/* Error Message */}
                     {error && (
-                      <div className="mx-4 mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2 text-red-400">
+                      <div className="mx-4 mb-4 p-3 bg-dash-accent-red-subtle border border-dash-accent-red rounded-lg flex items-center gap-2 text-dash-accent-red">
                         <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0" />
                         <span className="text-sm">{error}</span>
                       </div>
@@ -1024,7 +1024,7 @@ export default function MergeCustomersModal({
                         disabled={!customerToMerge || !primaryCustomer}
                         className={`px-6 py-2.5 rounded-xl font-medium transition-all ${
                           customerToMerge && primaryCustomer
-                            ? "bg-blue-600 hover:bg-blue-700 text-white"
+                            ? "dash-btn-primary"
                             : "bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed"
                         }`}
                       >
@@ -1037,11 +1037,11 @@ export default function MergeCustomersModal({
                   <>
                     <div className="p-6">
                       {/* Warning */}
-                      <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/50 rounded-xl flex items-start gap-3">
-                        <ExclamationTriangleIcon className="h-6 w-6 text-yellow-500 flex-shrink-0 mt-0.5" />
+                      <div className="mb-6 p-4 bg-dash-accent-orange-subtle border border-dash-accent-orange/50 rounded-xl flex items-start gap-3">
+                        <ExclamationTriangleIcon className="h-6 w-6 text-dash-accent-orange flex-shrink-0 mt-0.5" />
                         <div>
-                          <h4 className="font-semibold text-yellow-500 mb-1">تنبيه مهم</h4>
-                          <p className="text-sm text-yellow-400/80">
+                          <h4 className="font-semibold text-dash-accent-orange mb-1">تنبيه مهم</h4>
+                          <p className="text-sm text-dash-accent-orange/80">
                             سيتم نقل جميع الفواتير والمدفوعات والرصيد من حساب "{customerToMerge?.name}"
                             إلى حساب "{primaryCustomer?.name}". يمكنك فك الدمج خلال 24 ساعة فقط.
                           </p>
@@ -1051,11 +1051,11 @@ export default function MergeCustomersModal({
                       {/* Merge Summary */}
                       <div className="grid grid-cols-2 gap-6">
                         {/* From Customer */}
-                        <div className="bg-red-500/5 border border-red-500/30 rounded-xl p-4">
-                          <div className="text-xs text-red-400 mb-3 font-medium">سيتم نقل من:</div>
+                        <div className="bg-dash-accent-red/5 border border-dash-accent-red/30 rounded-xl p-4">
+                          <div className="text-xs text-dash-accent-red mb-3 font-medium">سيتم نقل من:</div>
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
-                              <UserIcon className="h-6 w-6 text-red-400" />
+                            <div className="w-12 h-12 rounded-full bg-dash-accent-red-subtle flex items-center justify-center">
+                              <UserIcon className="h-6 w-6 text-dash-accent-red" />
                             </div>
                             <div>
                               <div className="font-bold text-[var(--dash-text-primary)] text-lg">{customerToMerge?.name}</div>
@@ -1064,47 +1064,47 @@ export default function MergeCustomersModal({
                           </div>
 
                           <div className="space-y-2 text-sm">
-                            <div className="flex items-center justify-between py-2 border-t border-red-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-red/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <DocumentTextIcon className="h-4 w-4" />
                                 الفواتير
                               </span>
                               <span className="text-[var(--dash-text-primary)] font-medium">{mergeStats?.salesCount || 0}</span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-t border-red-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-red/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <CurrencyDollarIcon className="h-4 w-4" />
                                 المدفوعات
                               </span>
                               <span className="text-[var(--dash-text-primary)] font-medium">{mergeStats?.paymentsCount || 0}</span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-t border-red-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-red/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <CurrencyDollarIcon className="h-4 w-4" />
                                 الرصيد
                               </span>
                               <span className={`font-medium ${
-                                (mergeStats?.calculatedBalance || 0) > 0 ? "text-red-400" : (mergeStats?.calculatedBalance || 0) < 0 ? "text-green-400" : "text-[var(--dash-text-muted)]"
+                                (mergeStats?.calculatedBalance || 0) > 0 ? "text-dash-accent-red" : (mergeStats?.calculatedBalance || 0) < 0 ? "text-dash-accent-green" : "text-[var(--dash-text-muted)]"
                               }`}>
                                 {(mergeStats?.calculatedBalance || 0).toLocaleString()} ج.م
                               </span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-t border-red-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-red/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <StarIcon className="h-4 w-4" />
                                 النقاط
                               </span>
-                              <span className="text-yellow-400 font-medium">{customerToMerge?.loyalty_points || 0}</span>
+                              <span className="text-dash-accent-orange font-medium">{customerToMerge?.loyalty_points || 0}</span>
                             </div>
                           </div>
                         </div>
 
                         {/* To Customer */}
-                        <div className="bg-green-500/5 border border-green-500/30 rounded-xl p-4">
-                          <div className="text-xs text-green-400 mb-3 font-medium">سيتم الدمج في:</div>
+                        <div className="bg-dash-accent-green/5 border border-dash-accent-green/30 rounded-xl p-4">
+                          <div className="text-xs text-dash-accent-green mb-3 font-medium">سيتم الدمج في:</div>
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
-                              <UserIcon className="h-6 w-6 text-green-400" />
+                            <div className="w-12 h-12 rounded-full bg-dash-accent-green-subtle flex items-center justify-center">
+                              <UserIcon className="h-6 w-6 text-dash-accent-green" />
                             </div>
                             <div>
                               <div className="font-bold text-[var(--dash-text-primary)] text-lg">{primaryCustomer?.name}</div>
@@ -1113,7 +1113,7 @@ export default function MergeCustomersModal({
                           </div>
 
                           <div className="space-y-2 text-sm">
-                            <div className="flex items-center justify-between py-2 border-t border-green-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-green/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <DocumentTextIcon className="h-4 w-4" />
                                 الفواتير (بعد الدمج)
@@ -1122,7 +1122,7 @@ export default function MergeCustomersModal({
                                 {(primaryStats?.salesCount || 0) + (mergeStats?.salesCount || 0)}
                               </span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-t border-green-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-green/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <CurrencyDollarIcon className="h-4 w-4" />
                                 المدفوعات (بعد الدمج)
@@ -1131,27 +1131,27 @@ export default function MergeCustomersModal({
                                 {(primaryStats?.paymentsCount || 0) + (mergeStats?.paymentsCount || 0)}
                               </span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-t border-green-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-green/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <CurrencyDollarIcon className="h-4 w-4" />
                                 الرصيد (بعد الدمج)
                               </span>
                               <span className={`font-medium ${
                                 ((primaryStats?.calculatedBalance || 0) + (mergeStats?.calculatedBalance || 0)) > 0
-                                  ? "text-red-400"
+                                  ? "text-dash-accent-red"
                                   : ((primaryStats?.calculatedBalance || 0) + (mergeStats?.calculatedBalance || 0)) < 0
-                                    ? "text-green-400"
+                                    ? "text-dash-accent-green"
                                     : "text-[var(--dash-text-muted)]"
                               }`}>
                                 {((primaryStats?.calculatedBalance || 0) + (mergeStats?.calculatedBalance || 0)).toLocaleString()} ج.م
                               </span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-t border-green-500/20">
+                            <div className="flex items-center justify-between py-2 border-t border-dash-accent-green/20">
                               <span className="text-[var(--dash-text-muted)] flex items-center gap-2">
                                 <StarIcon className="h-4 w-4" />
                                 النقاط (بعد الدمج)
                               </span>
-                              <span className="text-yellow-400 font-medium">
+                              <span className="text-dash-accent-orange font-medium">
                                 {(primaryCustomer?.loyalty_points || 0) + (customerToMerge?.loyalty_points || 0)}
                               </span>
                             </div>
@@ -1160,10 +1160,10 @@ export default function MergeCustomersModal({
                       </div>
 
                       {/* Undo Notice */}
-                      <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl flex items-center gap-3">
-                        <ClockIcon className="h-6 w-6 text-blue-400 flex-shrink-0" />
+                      <div className="mt-6 p-4 bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-xl flex items-center gap-3">
+                        <ClockIcon className="h-6 w-6 text-dash-accent-blue flex-shrink-0" />
                         <div>
-                          <p className="text-sm text-blue-400">
+                          <p className="text-sm text-dash-accent-blue">
                             <span className="font-semibold">ملاحظة:</span> يمكنك فك الدمج واسترجاع الحسابين منفصلين خلال 24 ساعة فقط من الآن.
                             بعد انتهاء هذه المدة، يصبح الدمج نهائياً ولا يمكن التراجع عنه.
                           </p>
@@ -1173,7 +1173,7 @@ export default function MergeCustomersModal({
 
                     {/* Error Message */}
                     {error && (
-                      <div className="mx-6 mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2 text-red-400">
+                      <div className="mx-6 mb-4 p-3 bg-dash-accent-red-subtle border border-dash-accent-red rounded-lg flex items-center gap-2 text-dash-accent-red">
                         <ExclamationTriangleIcon className="h-5 w-5 flex-shrink-0" />
                         <span className="text-sm">{error}</span>
                       </div>
@@ -1194,7 +1194,7 @@ export default function MergeCustomersModal({
                         className={`px-8 py-2.5 rounded-xl font-medium transition-all flex items-center gap-2 ${
                           isMerging
                             ? "bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed"
-                            : "bg-green-600 hover:bg-green-700 text-white"
+                            : "dash-btn-green"
                         }`}
                       >
                         {isMerging ? (

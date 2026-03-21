@@ -66,7 +66,7 @@ export default function HourlySalesChart({ dateFilter, height = 300 }: HourlySal
     return (
       <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
         <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">المبيعات بالساعة</h3>
-        <div className="flex items-center justify-center text-red-400" style={{ height }}>
+        <div className="flex items-center justify-center text-dash-accent-red" style={{ height }}>
           {error}
         </div>
       </div>
@@ -101,7 +101,7 @@ export default function HourlySalesChart({ dateFilter, height = 300 }: HourlySal
           <p className="text-[var(--dash-text-secondary)]">الإجمالي: {formatCurrencyAr(item.totalSales)}</p>
           <p className="text-[var(--dash-text-secondary)]">عدد العمليات: {item.saleCount}</p>
           <p className="text-[var(--dash-text-secondary)]">المتوسط: {formatCurrencyAr(item.avgSale)}</p>
-          <p className="text-blue-400">النسبة: {item.percentage.toFixed(1)}%</p>
+          <p className="text-dash-accent-blue">النسبة: {item.percentage.toFixed(1)}%</p>
         </div>
       );
     }
@@ -117,7 +117,7 @@ export default function HourlySalesChart({ dateFilter, height = 300 }: HourlySal
         {peakHour && (
           <div className="text-sm">
             <span className="text-[var(--dash-text-muted)]">ساعة الذروة: </span>
-            <span className="text-green-400 font-medium">{peakHour.hourLabel}</span>
+            <span className="text-dash-accent-green font-medium">{peakHour.hourLabel}</span>
           </div>
         )}
         <h3 className="text-[var(--dash-text-primary)] font-semibold text-right">المبيعات بالساعة</h3>

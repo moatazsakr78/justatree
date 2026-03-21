@@ -900,7 +900,7 @@ export default function ProductDetailsModal({
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backgroundColor: '#c0c0c0'}}>
         <div className="text-center">
-          <div className="text-red-600 text-6xl mb-4">⚠️</div>
+          <div className="text-dash-accent-red text-6xl mb-4">⚠️</div>
           <h1 className="text-2xl font-bold mb-2 text-gray-800">خطأ</h1>
           <p className="text-lg mb-4 text-gray-800">{error || 'المنتج غير موجود'}</p>
           <button 
@@ -971,7 +971,7 @@ export default function ProductDetailsModal({
           <div className="px-8 flex items-center justify-between" style={{minHeight: '80px'}}>
             <button
               onClick={onClose}
-              className="text-white hover:text-red-300 transition-colors p-3 text-lg flex items-center"
+              className="text-white hover:text-dash-accent-red transition-colors p-3 text-lg flex items-center"
             >
               <svg className="w-8 h-8 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -1003,7 +1003,7 @@ export default function ProductDetailsModal({
           <div className="px-3 flex items-center justify-between min-h-[60px]">
             <button
               onClick={onClose}
-              className="text-white hover:text-red-300 transition-colors p-2"
+              className="text-white hover:text-dash-accent-red transition-colors p-2"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -1093,7 +1093,7 @@ export default function ProductDetailsModal({
                           setSelectedVideo(null);
                         }}
                         className={`flex-shrink-0 w-12 h-12 rounded border-2 overflow-hidden ${
-                          selectedImage === index && !selectedVideo ? 'border-red-500' : 'border-gray-300'
+                          selectedImage === index && !selectedVideo ? 'border-dash-accent-red' : 'border-gray-300'
                         }`}
                       >
                         <img src={img} alt={`${index + 1}`} className="w-full h-full object-cover" />
@@ -1109,7 +1109,7 @@ export default function ProductDetailsModal({
                           setSelectedImage(-1);
                         }}
                         className={`relative flex-shrink-0 w-12 h-12 rounded border-2 overflow-hidden bg-black ${
-                          selectedVideo === video.video_url ? 'border-red-500' : 'border-gray-300'
+                          selectedVideo === video.video_url ? 'border-dash-accent-red' : 'border-gray-300'
                         }`}
                       >
                         <video
@@ -1172,7 +1172,7 @@ export default function ProductDetailsModal({
                             }
                           }}
                           className={`w-6 h-6 rounded-full border-2 transition-all ${
-                            selectedColor?.id === color.id ? 'border-red-500 scale-110' : 'border-gray-300'
+                            selectedColor?.id === color.id ? 'border-dash-accent-red scale-110' : 'border-gray-300'
                           }`}
                           style={{ backgroundColor: color.hex }}
                           title={color.name}
@@ -1204,7 +1204,7 @@ export default function ProductDetailsModal({
                           disabled={!size.available}
                           className={`px-2 py-1 border rounded text-xs ${
                             selectedSize?.id === size.id
-                              ? 'border-red-500 bg-red-50 text-red-600'
+                              ? 'border-dash-accent-red bg-dash-accent-red-subtle text-dash-accent-red'
                               : size.available
                               ? 'border-gray-300 bg-white'
                               : 'border-gray-200 bg-gray-100 text-gray-400'
@@ -1232,7 +1232,7 @@ export default function ProductDetailsModal({
                       value={quantity}
                       min="1"
                       onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="text-sm font-semibold px-2 py-1 w-12 text-center border border-gray-300 rounded focus:outline-none focus:border-red-500"
+                      className="text-sm font-semibold px-2 py-1 w-12 text-center border border-gray-300 rounded focus:outline-none focus:border-dash-accent-red"
                     />
                     <button
                       onClick={() => setQuantity(quantity + 1)}
@@ -1373,7 +1373,7 @@ export default function ProductDetailsModal({
                         }}
                         className={`relative w-24 aspect-square rounded border-2 overflow-hidden transition-all duration-200 ${
                           (media.type === 'video' ? selectedVideo === media.url : selectedImage === media.imageIndex && !selectedVideo)
-                            ? 'border-red-500 ring-1 ring-red-500'
+                            ? 'border-dash-accent-red ring-1 ring-red-500'
                             : 'border-gray-300 hover:border-red-300'
                         }`}
                       >
@@ -1428,7 +1428,7 @@ export default function ProductDetailsModal({
                         }}
                         className={`relative w-24 aspect-square rounded border-2 overflow-hidden transition-all duration-200 ${
                           (media.type === 'video' ? selectedVideo === media.url : selectedImage === media.imageIndex && !selectedVideo)
-                            ? 'border-red-500 ring-1 ring-red-500'
+                            ? 'border-dash-accent-red ring-1 ring-red-500'
                             : 'border-gray-300 hover:border-red-300'
                         }`}
                       >
@@ -1490,7 +1490,7 @@ export default function ProductDetailsModal({
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className={i < Math.floor(productDetails.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}>
+                    <span key={i} className={i < Math.floor(productDetails.rating || 0) ? 'text-dash-accent-orange' : 'text-gray-300'}>
                       ⭐
                     </span>
                   ))}
@@ -1542,7 +1542,7 @@ export default function ProductDetailsModal({
                       }}
                       className={`relative w-8 h-8 rounded-full border-2 transition-all ${
                         selectedColor?.id === color.id
-                          ? 'border-red-500 shadow-lg scale-110'
+                          ? 'border-dash-accent-red shadow-lg scale-110'
                           : 'border-gray-300 hover:border-red-300'
                       }`}
                       style={{ backgroundColor: color.hex }}
@@ -1594,7 +1594,7 @@ export default function ProductDetailsModal({
                       disabled={!shape.available}
                       className={`relative border-2 rounded-lg transition-all overflow-hidden ${
                         selectedShape?.id === shape.id
-                          ? 'border-red-500 shadow-lg'
+                          ? 'border-dash-accent-red shadow-lg'
                           : shape.available
                           ? 'border-gray-300 hover:border-red-300'
                           : 'border-gray-200 opacity-50 cursor-not-allowed'
@@ -1611,7 +1611,7 @@ export default function ProductDetailsModal({
                           />
                           {/* Checkmark when selected */}
                           {selectedShape?.id === shape.id && (
-                            <div className="absolute top-0 right-0 bg-red-500 rounded-bl-lg p-0.5">
+                            <div className="absolute top-0 right-0 bg-dash-accent-red rounded-bl-lg p-0.5">
                               <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                               </svg>
@@ -1622,9 +1622,9 @@ export default function ProductDetailsModal({
                         /* Show text if no image */
                         <div className={`px-3 py-1 text-sm ${
                           selectedShape?.id === shape.id
-                            ? 'bg-red-50 text-red-600 font-semibold'
+                            ? 'bg-dash-accent-red-subtle text-dash-accent-red font-semibold'
                             : shape.available
-                            ? 'bg-white hover:bg-red-50'
+                            ? 'bg-white hover:bg-dash-accent-red-subtle'
                             : 'bg-gray-100 text-gray-400'
                         }`}>
                           {shape.name || 'شكل'}
@@ -1689,9 +1689,9 @@ export default function ProductDetailsModal({
                       disabled={!size.available}
                       className={`px-3 py-1 border-2 rounded-lg transition-all text-base ${
                         selectedSize?.id === size.id
-                          ? 'border-red-500 bg-red-50 text-red-600 font-semibold'
+                          ? 'border-dash-accent-red bg-dash-accent-red-subtle text-dash-accent-red font-semibold'
                           : size.available
-                          ? 'border-gray-300 hover:border-red-300 bg-white hover:bg-red-50'
+                          ? 'border-gray-300 hover:border-red-300 bg-white hover:bg-dash-accent-red-subtle'
                           : 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
                       }`}
                       title={size.type === 'related_product' ? `${size.name} - ${formatPrice(size.price || 0)}` : size.name}
@@ -1740,7 +1740,7 @@ export default function ProductDetailsModal({
                   }}
                   onFocus={(e) => (e.target as HTMLInputElement).select()}
                   onClick={(e) => (e.target as HTMLInputElement).select()}
-                  className="text-lg font-semibold px-3 py-1 w-16 text-center border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="text-lg font-semibold px-3 py-1 w-16 text-center border border-gray-300 rounded-lg focus:outline-none focus:border-dash-accent-red [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <button
                   onClick={() => setQuantity(quantity + 1)}
@@ -1846,7 +1846,7 @@ export default function ProductDetailsModal({
                           className="w-full h-48 object-cover rounded-lg"
                         />
                         {product.isOnSale && (
-                          <span className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                          <span className="absolute top-2 right-2 bg-dash-accent-red text-white px-2 py-1 rounded-full text-xs font-bold">
                             -{product.discount}%
                           </span>
                         )}
@@ -1864,7 +1864,7 @@ export default function ProductDetailsModal({
                       <div className="flex items-center justify-between">
                         {showRatings && (
                           <div className="flex items-center gap-1">
-                            <span className="text-yellow-400">⭐</span>
+                            <span className="text-dash-accent-orange">⭐</span>
                             <span className="text-sm text-gray-400">{product.rating} ({product.reviews})</span>
                           </div>
                         )}
@@ -1933,8 +1933,8 @@ export default function ProductDetailsModal({
                   {currentGallery.length > 0 && (
                     <div className="mb-8">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <div className="w-6 h-6 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                          <svg className="w-4 h-4 text-dash-accent-blue" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                           </svg>
                         </div>
@@ -1950,7 +1950,7 @@ export default function ProductDetailsModal({
                             }}
                             className={`aspect-square rounded-md overflow-hidden border-2 transition-all ${
                               !selectedVideo && selectedImage === index
-                                ? 'border-blue-500 shadow-lg'
+                                ? 'border-dash-accent-blue shadow-lg'
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >
@@ -1969,8 +1969,8 @@ export default function ProductDetailsModal({
                   {productVideos.length > 0 && (
                     <div>
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="w-6 h-6 bg-red-100 rounded-lg flex items-center justify-center">
-                          <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <div className="w-6 h-6 bg-dash-accent-red-subtle rounded-lg flex items-center justify-center">
+                          <svg className="w-4 h-4 text-dash-accent-red" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
                           </svg>
                         </div>
@@ -1983,7 +1983,7 @@ export default function ProductDetailsModal({
                             onClick={() => setSelectedVideo(video.video_url)}
                             className={`aspect-video rounded-md overflow-hidden border-2 transition-all relative ${
                               selectedVideo === video.video_url
-                                ? 'border-red-500 shadow-lg'
+                                ? 'border-dash-accent-red shadow-lg'
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >

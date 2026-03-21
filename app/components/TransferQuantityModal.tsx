@@ -73,12 +73,12 @@ export default function TransferQuantityModal({
           {/* Header */}
           <div className="px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-dash-accent-purple rounded-full flex items-center justify-center">
                 <ArrowsRightLeftIcon className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-[var(--dash-text-primary)]">تحويل كمية</h2>
-                <p className="text-sm text-purple-400">{product.name}</p>
+                <p className="text-sm text-dash-accent-purple">{product.name}</p>
               </div>
             </div>
             <button
@@ -104,8 +104,8 @@ export default function TransferQuantityModal({
                 <div className="mt-2 flex justify-between items-center text-sm px-1">
                   <span className="text-[var(--dash-text-muted)]">الكمية الحالية</span>
                   <span className={`font-bold ${
-                    fromCurrentQuantity < 0 ? 'text-red-400' :
-                    fromCurrentQuantity === 0 ? 'text-gray-400' : 'text-green-400'
+                    fromCurrentQuantity < 0 ? 'text-dash-accent-red' :
+                    fromCurrentQuantity === 0 ? 'text-gray-400' : 'text-dash-accent-green'
                   }`}>
                     {fromCurrentQuantity}
                   </span>
@@ -115,8 +115,8 @@ export default function TransferQuantityModal({
 
             {/* Arrow separator */}
             <div className="flex justify-center">
-              <div className="w-8 h-8 bg-purple-600/20 rounded-full flex items-center justify-center">
-                <ArrowsRightLeftIcon className="h-4 w-4 text-purple-400" />
+              <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-full flex items-center justify-center">
+                <ArrowsRightLeftIcon className="h-4 w-4 text-dash-accent-purple" />
               </div>
             </div>
 
@@ -128,7 +128,7 @@ export default function TransferQuantityModal({
               <select
                 value={toBranchId}
                 onChange={(e) => setToBranchId(e.target.value)}
-                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] focus:outline-none focus:ring-2 focus:ring-dash-accent-purple focus:border-transparent"
               >
                 <option value="">اختر فرع الوجهة...</option>
                 {destinationBranches.map(branch => (
@@ -141,8 +141,8 @@ export default function TransferQuantityModal({
                 <div className="mt-2 flex justify-between items-center text-sm px-1">
                   <span className="text-[var(--dash-text-muted)]">الكمية الحالية</span>
                   <span className={`font-bold ${
-                    toCurrentQuantity < 0 ? 'text-red-400' :
-                    toCurrentQuantity === 0 ? 'text-gray-400' : 'text-green-400'
+                    toCurrentQuantity < 0 ? 'text-dash-accent-red' :
+                    toCurrentQuantity === 0 ? 'text-gray-400' : 'text-dash-accent-green'
                   }`}>
                     {toCurrentQuantity}
                   </span>
@@ -159,7 +159,7 @@ export default function TransferQuantityModal({
                 type="number"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
-                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-dash-accent-purple focus:border-transparent"
                 placeholder="أدخل الكمية المراد تحويلها..."
                 min="1"
                 autoFocus
@@ -170,26 +170,26 @@ export default function TransferQuantityModal({
             {quantity && numQuantity > 0 && currentBranch && toBranchId && (
               <div className="space-y-2">
                 {/* Source result */}
-                <div className="bg-red-600/10 border border-red-600/20 rounded-lg p-3">
+                <div className="bg-dash-accent-red-subtle border border-dash-accent-red/20 rounded-lg p-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-red-400 text-sm">{currentBranch.name} (المصدر)</span>
+                    <span className="text-dash-accent-red text-sm">{currentBranch.name} (المصدر)</span>
                     <div className="flex items-center gap-2">
                       <span className="text-[var(--dash-text-muted)] text-sm">{fromCurrentQuantity}</span>
                       <span className="text-[var(--dash-text-disabled)]">←</span>
-                      <span className={`font-bold ${fromResult < 0 ? 'text-red-400' : 'text-red-300'}`}>
+                      <span className={`font-bold ${fromResult < 0 ? 'text-dash-accent-red' : 'text-dash-accent-red'}`}>
                         {fromResult}
                       </span>
                     </div>
                   </div>
                 </div>
                 {/* Destination result */}
-                <div className="bg-green-600/10 border border-green-600/20 rounded-lg p-3">
+                <div className="bg-dash-accent-green-subtle border border-dash-accent-green/20 rounded-lg p-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-green-400 text-sm">{toBranch?.name} (الوجهة)</span>
+                    <span className="text-dash-accent-green text-sm">{toBranch?.name} (الوجهة)</span>
                     <div className="flex items-center gap-2">
                       <span className="text-[var(--dash-text-muted)] text-sm">{toCurrentQuantity}</span>
                       <span className="text-[var(--dash-text-disabled)]">←</span>
-                      <span className="text-green-300 font-bold">
+                      <span className="text-dash-accent-green font-bold">
                         {toResult}
                       </span>
                     </div>
@@ -207,7 +207,7 @@ export default function TransferQuantityModal({
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 rows={2}
-                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg text-[var(--dash-text-primary)] placeholder-[var(--dash-text-disabled)] focus:outline-none focus:ring-2 focus:ring-dash-accent-purple focus:border-transparent resize-none"
                 placeholder="اكتب سبب التحويل..."
               />
             </div>
@@ -224,7 +224,7 @@ export default function TransferQuantityModal({
             <button
               onClick={handleSubmit}
               disabled={!isValid}
-              className="px-6 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors font-medium"
+              className="px-6 py-2 dash-btn-purple disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors font-medium"
             >
               تأكيد التحويل
             </button>

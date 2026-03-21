@@ -32,7 +32,7 @@ export default function PurchasesStatsCard({ data, loading = false }: PurchasesS
   const branches = data?.branches || [];
 
   return (
-    <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm dash-card-hover p-5 bg-green-500/10 transition-colors">
+    <div className="bg-[var(--dash-card-bg)] rounded-xl border border-[var(--dash-border-subtle)] shadow-dash-sm dash-card-hover p-5 bg-dash-accent-green-subtle transition-colors">
       <div className="flex items-center justify-between gap-4">
         <div className="flex-1 min-w-0">
           <p className="text-[var(--dash-text-muted)] text-sm font-medium mb-2">مشتريات الفترة</p>
@@ -44,9 +44,9 @@ export default function PurchasesStatsCard({ data, loading = false }: PurchasesS
                 const isBranch = location.type === 'branch';
                 return (
                   <div key={`${location.type}:${location.id}`} className="flex items-center gap-2">
-                    <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${isBranch ? 'bg-emerald-400' : 'bg-blue-400'}`}></span>
+                    <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${isBranch ? 'bg-emerald-400' : 'bg-dash-accent-blue'}`}></span>
                     <span className="text-[var(--dash-text-primary)] text-xs truncate">{location.name}</span>
-                    <span className={`text-xs font-bold mr-auto truncate ${isBranch ? 'text-emerald-400' : 'text-blue-400'}`}>
+                    <span className={`text-xs font-bold mr-auto truncate ${isBranch ? 'text-emerald-400' : 'text-dash-accent-blue'}`}>
                       {formatCurrencyAr(location.capital)}
                     </span>
                     <span className="text-[var(--dash-text-muted)] text-xs flex-shrink-0">({percentage.toFixed(0)}%)</span>
@@ -56,8 +56,8 @@ export default function PurchasesStatsCard({ data, loading = false }: PurchasesS
             </div>
           )}
         </div>
-        <div className="p-3 rounded-xl bg-green-500/20 flex-shrink-0">
-          <BanknotesIcon className="w-8 h-8 text-green-400" />
+        <div className="p-3 rounded-xl bg-dash-accent-green-subtle flex-shrink-0">
+          <BanknotesIcon className="w-8 h-8 text-dash-accent-green" />
         </div>
       </div>
     </div>

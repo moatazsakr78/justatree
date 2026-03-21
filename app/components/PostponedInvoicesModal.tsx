@@ -95,7 +95,7 @@ export default function PostponedInvoicesModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <ClockIcon className="h-6 w-6 text-orange-400" />
+                    <ClockIcon className="h-6 w-6 text-dash-accent-orange" />
                     الفواتير المؤجلة
                     {isRefreshing && (
                       <ArrowPathIcon className="h-4 w-4 text-[var(--dash-text-muted)] animate-spin" />
@@ -124,14 +124,14 @@ export default function PostponedInvoicesModal({
                       {postponedTabs.map((tab) => (
                         <div
                           key={tab.id}
-                          className="bg-[var(--dash-bg-surface)] rounded-xl border border-[var(--dash-border-default)] overflow-hidden hover:border-orange-500/50 transition-colors"
+                          className="bg-[var(--dash-bg-surface)] rounded-xl border border-[var(--dash-border-default)] overflow-hidden hover:border-dash-accent-orange/50 transition-colors"
                         >
                           {/* Invoice Header */}
                           <div className="p-4 border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]/50">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                                  <ShoppingCartIcon className="h-5 w-5 text-orange-400" />
+                                <div className="w-10 h-10 rounded-lg bg-dash-accent-orange-subtle flex items-center justify-center">
+                                  <ShoppingCartIcon className="h-5 w-5 text-dash-accent-orange" />
                                 </div>
                                 <div>
                                   <h3 className="text-[var(--dash-text-primary)] font-semibold">
@@ -144,7 +144,7 @@ export default function PostponedInvoicesModal({
                                 </div>
                               </div>
                               <div className="text-left">
-                                <p className="text-orange-400 font-bold text-lg">
+                                <p className="text-dash-accent-orange font-bold text-lg">
                                   {calculateTotal(tab.cartItems).toFixed(2)} ج.م
                                 </p>
                                 <p className="text-[var(--dash-text-muted)] text-sm">
@@ -160,13 +160,13 @@ export default function PostponedInvoicesModal({
                             <div className="flex flex-wrap gap-4 text-sm">
                               {tab.selections?.customer && (
                                 <div className="flex items-center gap-2 text-[var(--dash-text-secondary)]">
-                                  <UserIcon className="h-4 w-4 text-blue-400" />
+                                  <UserIcon className="h-4 w-4 text-dash-accent-blue" />
                                   <span>{tab.selections.customer.name}</span>
                                 </div>
                               )}
                               {tab.selections?.branch && (
                                 <div className="flex items-center gap-2 text-[var(--dash-text-secondary)]">
-                                  <BuildingOfficeIcon className="h-4 w-4 text-green-400" />
+                                  <BuildingOfficeIcon className="h-4 w-4 text-dash-accent-green" />
                                   <span>{tab.selections.branch.name}</span>
                                 </div>
                               )}
@@ -201,14 +201,14 @@ export default function PostponedInvoicesModal({
                             <div className="flex gap-2 pt-2">
                               <button
                                 onClick={() => handleRestore(tab.id)}
-                                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors"
+                                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-dash-accent-orange hover:bg-dash-accent-orange text-white rounded-lg font-medium transition-colors"
                               >
                                 <ArrowPathIcon className="h-4 w-4" />
                                 استعادة الفاتورة
                               </button>
                               <button
                                 onClick={() => onDeleteTab(tab.id)}
-                                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors"
+                                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-dash-accent-red-subtle hover:bg-dash-accent-red/30 text-dash-accent-red rounded-lg transition-colors"
                               >
                                 <TrashIcon className="h-4 w-4" />
                               </button>

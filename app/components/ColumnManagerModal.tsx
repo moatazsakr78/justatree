@@ -170,13 +170,13 @@ export default function ColumnManagerModal({
           <div className="flex gap-2 justify-center">
             <button
               onClick={deselectAll}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded transition-colors font-medium"
+              className="px-4 py-2 dash-btn-red text-sm rounded transition-colors font-medium"
             >
               إلغاء تحديد الكل
             </button>
             <button
               onClick={selectAll}
-              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded transition-colors font-medium"
+              className="px-4 py-2 dash-btn-green text-sm rounded transition-colors font-medium"
             >
               تحديد الكل
             </button>
@@ -209,7 +209,7 @@ export default function ColumnManagerModal({
                       onClick={() => toggleColumnVisibility(column.id)}
                       className={`w-5 h-5 rounded border-2 cursor-pointer transition-colors flex items-center justify-center ${
                         column.visible
-                          ? 'bg-blue-600 border-blue-600'
+                          ? 'bg-dash-accent-blue border-dash-accent-blue'
                           : 'bg-transparent border-gray-400 hover:border-gray-300'
                       }`}
                     >
@@ -229,7 +229,7 @@ export default function ColumnManagerModal({
         {/* Status and Footer */}
         <div className="px-4 py-3">
           <div className="text-center mb-3">
-            <span className="text-blue-400 text-sm">
+            <span className="text-dash-accent-blue text-sm">
               الأعمدة المعروضة {visibleCount} من أصل {totalCount}
             </span>
           </div>
@@ -243,7 +243,7 @@ export default function ColumnManagerModal({
             <button
               onClick={saveSettings}
               disabled={loading}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded transition-colors font-medium flex items-center justify-center gap-2"
+              className="px-6 py-2 dash-btn-primary disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded transition-colors font-medium flex items-center justify-center gap-2"
             >
               {loading && (
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">

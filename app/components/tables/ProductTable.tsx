@@ -198,8 +198,8 @@ export default function ProductTable({ showActions = false, showQuantityColumn =
               <td className="py-3 px-4 text-sm">
                 <span className={`px-2 py-1 rounded text-xs ${
                   product.status === 'active' 
-                    ? 'bg-green-600 text-white' 
-                    : 'bg-red-600 text-white'
+                    ? 'bg-dash-accent-green text-white' 
+                    : 'bg-dash-accent-red text-white'
                 }`}>
                   {product.quantity}
                 </span>
@@ -207,10 +207,10 @@ export default function ProductTable({ showActions = false, showQuantityColumn =
               <td className="py-3 px-4">
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${
-                    product.status === 'active' ? 'bg-green-500' : 'bg-red-500'
+                    product.status === 'active' ? 'bg-dash-accent-green' : 'bg-dash-accent-red'
                   }`} />
                   <span className={`text-xs ${
-                    product.status === 'active' ? 'text-green-500' : 'text-red-500'
+                    product.status === 'active' ? 'text-dash-accent-green' : 'text-dash-accent-red'
                   }`}>
                     {product.status === 'active' ? `متاح ${product.quantity}` : `غير متاح 0`}
                   </span>
@@ -228,7 +228,7 @@ export default function ProductTable({ showActions = false, showQuantityColumn =
               <td className="py-3 px-4 text-sm text-[var(--dash-text-primary)]">{product.barcode || '-'}</td>
               {showQuantityColumn && (
                 <td className="py-3 px-4 text-sm">
-                  <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">
+                  <span className="bg-dash-accent-green text-white px-2 py-1 rounded text-xs">
                     0 مطابق
                   </span>
                 </td>

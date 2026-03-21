@@ -67,7 +67,7 @@ export default function TopProductsBarChart({ dateFilter, height = 300, limit = 
     return (
       <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
         <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">أفضل 10 منتجات</h3>
-        <div className="flex items-center justify-center text-red-400" style={{ height }}>
+        <div className="flex items-center justify-center text-dash-accent-red" style={{ height }}>
           {error}
         </div>
       </div>
@@ -105,8 +105,8 @@ export default function TopProductsBarChart({ dateFilter, height = 300, limit = 
           <p className="text-[var(--dash-text-muted)] text-xs mb-2">{item.categoryName}</p>
           <p className="text-[var(--dash-text-secondary)]">الإجمالي: {formatCurrencyAr(item.totalRevenue)}</p>
           <p className="text-[var(--dash-text-secondary)]">الكمية: {item.totalQuantity}</p>
-          <p className="text-green-400">الربح: {formatCurrencyAr(item.totalProfit)}</p>
-          <p className="text-blue-400">هامش الربح: {item.profitMargin.toFixed(1)}%</p>
+          <p className="text-dash-accent-green">الربح: {formatCurrencyAr(item.totalProfit)}</p>
+          <p className="text-dash-accent-blue">هامش الربح: {item.profitMargin.toFixed(1)}%</p>
         </div>
       );
     }

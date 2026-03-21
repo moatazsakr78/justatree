@@ -248,7 +248,7 @@ export default function CustomerGroupSidebar({ isOpen, onClose, customerGroups, 
                           onClick={() => handleParentSelect(group.id, group.name)}
                           className={`w-full px-3 py-2 text-right hover:bg-[var(--dash-bg-raised)] transition-colors ${
                             isRootCustomers 
-                              ? 'font-medium text-blue-400 cursor-default' 
+                              ? 'font-medium text-dash-accent-blue cursor-default' 
                               : 'text-[var(--dash-text-primary)]'
                           }`}
                           disabled={false}

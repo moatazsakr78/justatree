@@ -339,6 +339,48 @@
   --dash-shadow-glow-blue: 0 0 20px rgba(245,158,11,0.15), 0 0 6px rgba(245,158,11,0.10);
 }
 
+/* Wardy theme — elegant pink/rose */
+[data-dash-theme="wardy"] {
+  --dash-bg-deepest: #1A0A12;
+  --dash-bg-base: #231218;
+  --dash-bg-surface: #2E1A22;
+  --dash-bg-raised: #3A222C;
+  --dash-bg-overlay: #4A2E3A;
+  --dash-bg-highlight: #5C3A48;
+  --dash-border-subtle: rgba(225, 130, 170, 0.08);
+  --dash-border-default: rgba(225, 130, 170, 0.15);
+  --dash-border-strong: rgba(225, 130, 170, 0.25);
+  --dash-border-focus: #E84393;
+  --dash-text-primary: #FDF2F8;
+  --dash-text-secondary: #F9A8D4;
+  --dash-text-muted: #BE6B8E;
+  --dash-text-disabled: #5C3A48;
+  --dash-accent-blue: #E84393;
+  --dash-accent-green: #34D399;
+  --dash-accent-red: #F87171;
+  --dash-accent-orange: #FBBF24;
+  --dash-accent-purple: #C084FC;
+  --dash-accent-cyan: #22D3EE;
+  --dash-accent-blue-subtle: rgba(232, 67, 147, 0.12);
+  --dash-accent-green-subtle: rgba(52, 211, 153, 0.10);
+  --dash-accent-red-subtle: rgba(248, 113, 113, 0.10);
+  --dash-accent-orange-subtle: rgba(251, 191, 36, 0.10);
+  --dash-accent-purple-subtle: rgba(192, 132, 252, 0.10);
+  --dash-accent-cyan-subtle: rgba(34, 211, 238, 0.10);
+  --dash-header-bg: #231218;
+  --dash-sidebar-bg: #1A0A12;
+  --dash-card-bg: #2E1A22;
+  --dash-input-bg: #231218;
+  --dash-table-header-bg: #2E1A22;
+  --dash-modal-bg: #2E1A22;
+  --dash-modal-backdrop: rgba(0, 0, 0, 0.65);
+  --dash-tooltip-bg: #3A222C;
+  --dash-shadow-sm: 0 1px 2px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.18);
+  --dash-shadow-md: 0 4px 6px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.22);
+  --dash-shadow-lg: 0 10px 25px rgba(0,0,0,0.45), 0 6px 10px rgba(0,0,0,0.28);
+  --dash-shadow-glow-blue: 0 0 20px rgba(232,67,147,0.15), 0 0 6px rgba(232,67,147,0.10);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -356,6 +398,42 @@ body {
     )
     rgb(var(--background-start-rgb));
   direction: rtl;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Dashboard Button Components
+   ══════════════════════════════════════════════════════════ */
+
+@layer components {
+  .dash-btn-primary {
+    background-color: var(--dash-accent-blue);
+    color: var(--dash-text-primary);
+  }
+  .dash-btn-primary:hover { filter: brightness(0.88); }
+
+  .dash-btn-green {
+    background-color: var(--dash-accent-green);
+    color: var(--dash-text-primary);
+  }
+  .dash-btn-green:hover { filter: brightness(0.88); }
+
+  .dash-btn-red {
+    background-color: var(--dash-accent-red);
+    color: var(--dash-text-primary);
+  }
+  .dash-btn-red:hover { filter: brightness(0.88); }
+
+  .dash-btn-purple {
+    background-color: var(--dash-accent-purple);
+    color: var(--dash-text-primary);
+  }
+  .dash-btn-purple:hover { filter: brightness(0.88); }
+
+  .dash-btn-cyan {
+    background-color: var(--dash-accent-cyan);
+    color: var(--dash-text-primary);
+  }
+  .dash-btn-cyan:hover { filter: brightness(0.88); }
 }
 
 /* ══════════════════════════════════════════════════════════

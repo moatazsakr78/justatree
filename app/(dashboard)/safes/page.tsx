@@ -353,14 +353,14 @@ export default function SafesPage() {
 
   const getTransactionTypeBadge = (type: string | null) => {
     const styles: Record<string, { bg: string, text: string, label: string }> = {
-      'sale': { bg: 'bg-green-900', text: 'text-green-300', label: 'بيع' },
-      'return': { bg: 'bg-orange-900', text: 'text-orange-300', label: 'مرتجع' },
-      'withdrawal': { bg: 'bg-red-900', text: 'text-red-300', label: 'سحب' },
-      'deposit': { bg: 'bg-green-900', text: 'text-green-300', label: 'إضافه' },
-      'expense': { bg: 'bg-red-900', text: 'text-red-300', label: 'مصروفات' },
-      'adjustment': { bg: 'bg-purple-900', text: 'text-purple-300', label: 'تسوية' },
-      'transfer_in': { bg: 'bg-cyan-900', text: 'text-cyan-300', label: 'تحويل' },
-      'transfer_out': { bg: 'bg-cyan-900', text: 'text-cyan-300', label: 'تحويل' }
+      'sale': { bg: 'bg-dash-accent-green-subtle', text: 'text-dash-accent-green', label: 'بيع' },
+      'return': { bg: 'bg-dash-accent-orange-subtle', text: 'text-dash-accent-orange', label: 'مرتجع' },
+      'withdrawal': { bg: 'bg-dash-accent-red-subtle', text: 'text-dash-accent-red', label: 'سحب' },
+      'deposit': { bg: 'bg-dash-accent-green-subtle', text: 'text-dash-accent-green', label: 'إضافه' },
+      'expense': { bg: 'bg-dash-accent-red-subtle', text: 'text-dash-accent-red', label: 'مصروفات' },
+      'adjustment': { bg: 'bg-dash-accent-purple-subtle', text: 'text-dash-accent-purple', label: 'تسوية' },
+      'transfer_in': { bg: 'bg-dash-accent-cyan-subtle', text: 'text-dash-accent-cyan', label: 'تحويل' },
+      'transfer_out': { bg: 'bg-dash-accent-cyan-subtle', text: 'text-dash-accent-cyan', label: 'تحويل' }
     }
 
     const style = styles[type || ''] || { bg: 'bg-[var(--dash-bg-raised)]', text: 'text-[var(--dash-text-secondary)]', label: type || '-' }
@@ -376,7 +376,7 @@ export default function SafesPage() {
     if (amount === null) return '-'
     const isPositive = amount >= 0
     return (
-      <span className={isPositive ? 'text-green-400' : 'text-red-400'}>
+      <span className={isPositive ? 'text-dash-accent-green' : 'text-dash-accent-red'}>
         {isPositive ? '+' : ''}{formatPrice(amount)}
       </span>
     )
@@ -676,7 +676,7 @@ export default function SafesPage() {
         {/* Header */}
         <div className="bg-pos-darker p-4 flex items-center justify-between border-b border-[var(--dash-border-subtle)]">
           <div className="flex items-center gap-4">
-            <BanknotesIcon className="h-6 w-6 text-blue-500" />
+            <BanknotesIcon className="h-6 w-6 text-dash-accent-blue" />
             <h1 className="text-xl font-bold">الخزن والمالية</h1>
             <h1 className="text-xl font-medium text-[var(--dash-text-secondary)]">
               إدارة الخزن والسجلات وطرق الدفع
@@ -685,16 +685,16 @@ export default function SafesPage() {
           <div className="flex items-center gap-3">
             {/* Offline Indicator */}
             {!isOnline && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-orange-900/50 border border-orange-600 rounded-lg">
-                <ExclamationTriangleIcon className="h-4 w-4 text-orange-400" />
-                <span className="text-orange-300 text-sm font-medium">وضع عدم الاتصال</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-dash-accent-orange-subtle border border-dash-accent-orange rounded-lg">
+                <ExclamationTriangleIcon className="h-4 w-4 text-dash-accent-orange" />
+                <span className="text-dash-accent-orange text-sm font-medium">وضع عدم الاتصال</span>
               </div>
             )}
             {/* Pending Sales Badge */}
             {pendingSalesCount > 0 && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-yellow-900/50 border border-yellow-600 rounded-lg">
-                <CloudIcon className="h-4 w-4 text-yellow-400" />
-                <span className="text-yellow-300 text-sm font-medium">{pendingSalesCount} فاتورة معلقة</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-dash-accent-orange-subtle border border-dash-accent-orange rounded-lg">
+                <CloudIcon className="h-4 w-4 text-dash-accent-orange" />
+                <span className="text-dash-accent-orange text-sm font-medium">{pendingSalesCount} فاتورة معلقة</span>
               </div>
             )}
           </div>
@@ -710,7 +710,7 @@ export default function SafesPage() {
                 onClick={() => setActiveTab('safes')}
                 className={`px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 ${
                   activeTab === 'safes'
-                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -721,7 +721,7 @@ export default function SafesPage() {
                 onClick={() => setActiveTab('records')}
                 className={`px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 ${
                   activeTab === 'records'
-                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -732,7 +732,7 @@ export default function SafesPage() {
                 onClick={() => setActiveTab('payment_methods')}
                 className={`px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 ${
                   activeTab === 'payment_methods'
-                    ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                    ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
               >
@@ -748,7 +748,7 @@ export default function SafesPage() {
                 <div className="relative" ref={safeFilterRef}>
                   <button
                     onClick={() => setIsSafeFilterOpen(!isSafeFilterOpen)}
-                    className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-3 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm flex items-center gap-2 min-w-[160px]"
+                    className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-3 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue text-sm flex items-center gap-2 min-w-[160px]"
                   >
                     <BanknotesIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                     {transactionFilters.safeIds.length === 0
@@ -766,7 +766,7 @@ export default function SafesPage() {
                             safes.forEach(s => allIds.push(s.id))
                             setTransactionFilters(prev => ({ ...prev, safeIds: allIds }))
                           }}
-                          className="text-xs text-blue-400 hover:text-blue-300"
+                          className="text-xs text-dash-accent-blue hover:text-dash-accent-blue"
                         >
                           تحديد الكل
                         </button>
@@ -790,7 +790,7 @@ export default function SafesPage() {
                                 : prev.safeIds.filter(id => id !== 'no_safe')
                             }))
                           }}
-                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-blue-500"
+                          className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-dash-accent-blue"
                         />
                         <span className="text-[var(--dash-text-secondary)] text-sm">لا يوجد</span>
                       </label>
@@ -812,7 +812,7 @@ export default function SafesPage() {
                                       : prev.safeIds.filter(id => id !== mainSafe.id)
                                   }))
                                 }}
-                                className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-blue-500"
+                                className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-dash-accent-blue"
                               />
                               <span className="text-[var(--dash-text-primary)] text-sm font-medium">{mainSafe.name}</span>
                               <span className="text-[var(--dash-text-disabled)] text-xs mr-auto">{formatPrice(safeBalances[mainSafe.id] || 0)}</span>
@@ -831,9 +831,9 @@ export default function SafesPage() {
                                         : prev.safeIds.filter(id => id !== child.id)
                                     }))
                                   }}
-                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-cyan-600 focus:ring-cyan-500"
+                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-cyan focus:ring-dash-accent-cyan"
                                 />
-                                <span className="text-cyan-300 text-xs">{child.name}</span>
+                                <span className="text-dash-accent-cyan text-xs">{child.name}</span>
                                 <span className="text-[var(--dash-text-disabled)] text-xs mr-auto">{formatPrice(safeBalances[child.id] || 0)}</span>
                               </label>
                             ))}
@@ -846,7 +846,7 @@ export default function SafesPage() {
                 <select
                   value={transactionFilters.transactionType}
                   onChange={(e) => setTransactionFilters(prev => ({ ...prev, transactionType: e.target.value as TransactionType }))}
-                  className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-3 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-3 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue text-sm"
                 >
                   <option value="all">جميع العمليات</option>
                   <option value="sale">بيع</option>
@@ -860,7 +860,7 @@ export default function SafesPage() {
                 <select
                   value={transactionFilters.paymentMethod}
                   onChange={(e) => setTransactionFilters(prev => ({ ...prev, paymentMethod: e.target.value }))}
-                  className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-3 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-3 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue text-sm"
                 >
                   <option value="all">جميع طرق الدفع</option>
                   {paymentMethods.map(method => (
@@ -893,7 +893,7 @@ export default function SafesPage() {
                 placeholder="البحث في السجلات..."
                 value={transactionSearchTerm}
                 onChange={(e) => setTransactionSearchTerm(e.target.value)}
-                className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-56 text-sm"
+                className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue w-full sm:w-56 text-sm"
               />
               <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--dash-text-muted)]" />
             </div>
@@ -912,8 +912,8 @@ export default function SafesPage() {
                     <p className="text-[var(--dash-text-muted)] text-sm">الرصيد الإجمالي</p>
                     <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">{formatPrice(totalBalance)}</p>
                   </div>
-                  <div className="bg-blue-600/20 p-3 rounded-lg">
-                    <span className="text-blue-400 text-2xl">$</span>
+                  <div className="bg-dash-accent-blue-subtle p-3 rounded-lg">
+                    <span className="text-dash-accent-blue text-2xl">$</span>
                   </div>
                 </div>
               </div>
@@ -925,8 +925,8 @@ export default function SafesPage() {
                     <p className="text-[var(--dash-text-muted)] text-sm">الخزن الرئيسية</p>
                     <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">{safes.filter(s => s.safe_type !== 'sub').length}</p>
                   </div>
-                  <div className="bg-purple-600/20 p-3 rounded-lg">
-                    <BanknotesIcon className="h-6 w-6 text-purple-400" />
+                  <div className="bg-dash-accent-purple-subtle p-3 rounded-lg">
+                    <BanknotesIcon className="h-6 w-6 text-dash-accent-purple" />
                   </div>
                 </div>
               </div>
@@ -938,8 +938,8 @@ export default function SafesPage() {
                     <p className="text-[var(--dash-text-muted)] text-sm">الأدراج</p>
                     <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">{safes.filter(s => s.safe_type === 'sub').length}</p>
                   </div>
-                  <div className="bg-cyan-600/20 p-3 rounded-lg">
-                    <span className="text-cyan-400 text-2xl">#</span>
+                  <div className="bg-dash-accent-cyan-subtle p-3 rounded-lg">
+                    <span className="text-dash-accent-cyan text-2xl">#</span>
                   </div>
                 </div>
               </div>
@@ -951,8 +951,8 @@ export default function SafesPage() {
                     <p className="text-[var(--dash-text-muted)] text-sm">النشطة</p>
                     <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">{activeSafesCount}</p>
                   </div>
-                  <div className="bg-green-600/20 p-3 rounded-lg">
-                    <span className="text-green-400 text-2xl">✓</span>
+                  <div className="bg-dash-accent-green-subtle p-3 rounded-lg">
+                    <span className="text-dash-accent-green text-2xl">✓</span>
                   </div>
                 </div>
               </div>
@@ -981,7 +981,7 @@ export default function SafesPage() {
                 <div className="flex items-center gap-4">
                   <button
                     onClick={openAddSafeModal}
-                    className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-green-700 transition-colors"
+                    className="px-4 py-2 dash-btn-green rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
                   >
                     <PlusIcon className="h-4 w-4" />
                     إضافة خزنة جديدة
@@ -993,7 +993,7 @@ export default function SafesPage() {
                   <div className="relative" ref={combinedPickerRef}>
                     <button
                       onClick={() => setIsCombinedPickerOpen(!isCombinedPickerOpen)}
-                      className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-4 py-2 rounded-lg border border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm flex items-center gap-2 transition-colors"
+                      className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] px-4 py-2 rounded-lg border border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue text-sm flex items-center gap-2 transition-colors"
                     >
                       <BanknotesIcon className="h-4 w-4 text-[var(--dash-text-muted)]" />
                       {combinedSafeIds.length === 0
@@ -1011,7 +1011,7 @@ export default function SafesPage() {
                               safes.forEach(s => allIds.push(s.id))
                               setCombinedSafeIds(allIds)
                             }}
-                            className="text-xs text-blue-400 hover:text-blue-300"
+                            className="text-xs text-dash-accent-blue hover:text-dash-accent-blue"
                           >
                             تحديد الكل
                           </button>
@@ -1039,7 +1039,7 @@ export default function SafesPage() {
                                         : prev.filter(id => id !== mainSafe.id)
                                     )
                                   }}
-                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-blue-500"
+                                  className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-dash-accent-blue"
                                 />
                                 <span className="text-[var(--dash-text-primary)] text-sm font-medium">{mainSafe.name}</span>
                                 <span className="text-[var(--dash-text-disabled)] text-xs mr-auto">{formatPrice(safeBalances[mainSafe.id] || 0)}</span>
@@ -1057,7 +1057,7 @@ export default function SafesPage() {
                                           : prev.filter(id => id !== child.id)
                                       )
                                     }}
-                                    className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-blue-600 focus:ring-blue-500"
+                                    className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)] text-dash-accent-blue focus:ring-dash-accent-blue"
                                   />
                                   <span className="text-[var(--dash-text-secondary)] text-sm">{child.name}</span>
                                   <span className="text-[var(--dash-text-disabled)] text-xs mr-auto">{formatPrice(safeBalances[child.id] || 0)}</span>
@@ -1080,7 +1080,7 @@ export default function SafesPage() {
                               setIsSafeDetailsModalOpen(true)
                               setIsCombinedPickerOpen(false)
                             }}
-                            className="w-full px-4 py-2 bg-blue-600 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-4 py-2 dash-btn-primary rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             الذهاب ({combinedSafeIds.length} خزن)
                           </button>
@@ -1096,7 +1096,7 @@ export default function SafesPage() {
                       placeholder="البحث في الخزن..."
                       value={safesSearchTerm}
                       onChange={(e) => setSafesSearchTerm(e.target.value)}
-                      className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64 md:w-80"
+                      className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue w-full sm:w-64 md:w-80"
                     />
                     <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--dash-text-muted)]" />
                   </div>
@@ -1126,24 +1126,24 @@ export default function SafesPage() {
                       return (
                         <div
                           key={mainSafe.id}
-                          className="bg-pos-darker rounded-xl border border-[var(--dash-border-subtle)] hover:border-blue-500/50 transition-colors cursor-pointer group flex flex-col"
+                          className="bg-pos-darker rounded-xl border border-[var(--dash-border-subtle)] hover:border-dash-accent-blue transition-colors cursor-pointer group flex flex-col"
                           onDoubleClick={() => openSafeDetails(mainSafe)}
                         >
                           {/* Card Header */}
                           <div className="p-4 pb-3">
                             <div className="flex items-start justify-between mb-3">
                               <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shrink-0`}>
+                                <div className={`w-10 h-10 bg-dash-accent-blue rounded-lg flex items-center justify-center shrink-0`}>
                                   <BanknotesIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                                 </div>
                                 <div>
                                   <h3 className="text-[var(--dash-text-primary)] font-bold text-base">{mainSafe.name}</h3>
                                   <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] bg-blue-900/50 text-blue-300">رئيسية</span>
+                                    <span className="px-2 py-0.5 rounded-full text-[10px] bg-dash-accent-blue-subtle text-dash-accent-blue">رئيسية</span>
                                     {mainSafe.supports_drawers && (
-                                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-cyan-900/50 text-cyan-300">أدراج</span>
+                                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-dash-accent-cyan-subtle text-dash-accent-cyan">أدراج</span>
                                     )}
-                                    <span className={`px-2 py-0.5 rounded-full text-[10px] ${mainSafe.is_active ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'}`}>
+                                    <span className={`px-2 py-0.5 rounded-full text-[10px] ${mainSafe.is_active ? 'bg-dash-accent-green-subtle text-dash-accent-green' : 'bg-dash-accent-red-subtle text-dash-accent-red'}`}>
                                       {mainSafe.is_active ? 'نشطة' : 'غير نشطة'}
                                     </span>
                                   </div>
@@ -1175,24 +1175,24 @@ export default function SafesPage() {
                                   {children.map((child) => (
                                     <div
                                       key={child.id}
-                                      className="bg-cyan-600/10 border border-cyan-600/30 rounded-lg px-4 py-3 cursor-pointer hover:bg-cyan-600/20 hover:border-cyan-500/50 transition-colors flex items-center justify-between"
+                                      className="bg-dash-accent-cyan-subtle border border-dash-accent-cyan rounded-lg px-4 py-3 cursor-pointer hover:bg-dash-accent-cyan-subtle hover:border-dash-accent-cyan transition-colors flex items-center justify-between"
                                       onDoubleClick={(e) => { e.stopPropagation(); openSafeDetails(child) }}
                                     >
                                       <div>
-                                        <p className="text-cyan-300 text-sm font-bold">{child.name}</p>
+                                        <p className="text-dash-accent-cyan text-sm font-bold">{child.name}</p>
                                         <p className="text-[var(--dash-text-primary)] text-base font-bold mt-0.5">{formatPrice(safeBalances[child.id] || 0)}</p>
                                       </div>
                                       <div className="flex items-center gap-1.5">
                                         <button
                                           onClick={(e) => { e.stopPropagation(); openEditSafeModal(child) }}
-                                          className="p-1.5 text-blue-400 hover:bg-blue-600/20 rounded-lg transition-colors"
+                                          className="p-1.5 text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-lg transition-colors"
                                           title="تعديل الدرج"
                                         >
                                           <PencilIcon className="h-4 w-4" />
                                         </button>
                                         <button
                                           onClick={(e) => { e.stopPropagation(); handleDeleteSafe(child) }}
-                                          className="p-1.5 text-red-400 hover:bg-red-600/20 rounded-lg transition-colors"
+                                          className="p-1.5 text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-lg transition-colors"
                                           title="حذف الدرج"
                                         >
                                           <TrashIcon className="h-4 w-4" />
@@ -1202,9 +1202,9 @@ export default function SafesPage() {
                                   ))}
                                   {/* Transfers row */}
                                   {ownBalance !== 0 && (
-                                    <div className="bg-blue-600/10 border border-blue-600/30 rounded-lg px-4 py-3 flex items-center justify-between">
+                                    <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue rounded-lg px-4 py-3 flex items-center justify-between">
                                       <div>
-                                        <p className="text-blue-300 text-sm font-bold">التحويلات</p>
+                                        <p className="text-dash-accent-blue text-sm font-bold">التحويلات</p>
                                         <p className="text-[var(--dash-text-primary)] text-base font-bold mt-0.5">{formatPrice(ownBalance)}</p>
                                       </div>
                                     </div>
@@ -1219,12 +1219,12 @@ export default function SafesPage() {
                           {/* Cash/Transfers breakdown for non-drawer safes */}
                           {!mainSafe.supports_drawers && mainSafe.show_transfers !== false && (transferBalances[mainSafe.id] || 0) > 0 && (
                             <div className="px-4 pb-3 space-y-2">
-                              <div className="bg-green-600/10 border border-green-600/30 rounded-lg px-4 py-2">
-                                <p className="text-green-300 text-xs font-bold">في الخزنة</p>
+                              <div className="bg-dash-accent-green-subtle border border-dash-accent-green rounded-lg px-4 py-2">
+                                <p className="text-dash-accent-green text-xs font-bold">في الخزنة</p>
                                 <p className="text-[var(--dash-text-primary)] text-sm font-bold">{formatPrice(ownBalance - (transferBalances[mainSafe.id] || 0))}</p>
                               </div>
-                              <div className="bg-blue-600/10 border border-blue-600/30 rounded-lg px-4 py-2">
-                                <p className="text-blue-300 text-xs font-bold">التحويلات</p>
+                              <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue rounded-lg px-4 py-2">
+                                <p className="text-dash-accent-blue text-xs font-bold">التحويلات</p>
                                 <p className="text-[var(--dash-text-primary)] text-sm font-bold">{formatPrice(transferBalances[mainSafe.id] || 0)}</p>
                               </div>
                             </div>
@@ -1235,7 +1235,7 @@ export default function SafesPage() {
                             {mainSafe.supports_drawers && (
                               <button
                                 onClick={(e) => { e.stopPropagation(); setAddSubSafeParent(mainSafe); setIsAddSafeModalOpen(true) }}
-                                className="px-2.5 py-1.5 text-xs bg-cyan-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-cyan-700 transition-colors flex items-center gap-1"
+                                className="px-2.5 py-1.5 text-xs dash-btn-cyan rounded-lg transition-colors flex items-center gap-1"
                                 title="إضافة درج"
                               >
                                 <PlusIcon className="h-3.5 w-3.5" />
@@ -1244,14 +1244,14 @@ export default function SafesPage() {
                             )}
                             <button
                               onClick={(e) => { e.stopPropagation(); openEditSafeModal(mainSafe) }}
-                              className="px-2.5 py-1.5 text-xs bg-blue-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-blue-700 transition-colors"
+                              className="px-2.5 py-1.5 text-xs dash-btn-primary rounded-lg transition-colors"
                               title="تعديل"
                             >
                               <PencilIcon className="h-3.5 w-3.5" />
                             </button>
                             <button
                               onClick={(e) => { e.stopPropagation(); handleDeleteSafe(mainSafe) }}
-                              className="px-2.5 py-1.5 text-xs bg-red-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-red-700 transition-colors"
+                              className="px-2.5 py-1.5 text-xs dash-btn-red rounded-lg transition-colors"
                               title="حذف"
                             >
                               <TrashIcon className="h-3.5 w-3.5" />
@@ -1273,9 +1273,9 @@ export default function SafesPage() {
             {/* Transactions Table */}
             {/* Offline Mode Notice */}
             {isUsingOfflineData && (
-              <div className="mb-4 p-3 bg-orange-900/30 border border-orange-600 rounded-lg flex items-center gap-2">
-                <ExclamationTriangleIcon className="h-5 w-5 text-orange-400" />
-                <span className="text-orange-300 text-sm">
+              <div className="mb-4 p-3 bg-dash-accent-orange-subtle border border-dash-accent-orange rounded-lg flex items-center gap-2">
+                <ExclamationTriangleIcon className="h-5 w-5 text-dash-accent-orange" />
+                <span className="text-dash-accent-orange text-sm">
                   أنت في وضع عدم الاتصال. يتم عرض البيانات المحفوظة من آخر مزامنة.
                 </span>
               </div>
@@ -1285,7 +1285,7 @@ export default function SafesPage() {
               {isLoadingTransactions && !isUsingOfflineData ? (
                 <div className="p-8 text-center text-[var(--dash-text-muted)]">
                   <div className="flex items-center justify-center gap-2">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue"></div>
                     جاري تحميل السجلات...
                   </div>
                 </div>
@@ -1307,14 +1307,14 @@ export default function SafesPage() {
                           <th className="py-2 px-3 text-right font-medium">التاريخ</th>
                         </tr>
                       </thead>
-                      <tbody className="bg-pos-darker divide-y divide-gray-700">
+                      <tbody className="bg-pos-darker divide-y divide-dash-border">
                         {filteredTransactions.length > 0 ? (
                           filteredTransactions.map((tx, index) => {
                             const isPending = tx.id.startsWith('pending_')
                             return (
                               <tr
                                 key={tx.id}
-                                className={`hover:bg-[var(--dash-bg-overlay)] transition-colors cursor-pointer ${isPending ? 'bg-yellow-900/20' : ''}`}
+                                className={`hover:bg-[var(--dash-bg-overlay)] transition-colors cursor-pointer ${isPending ? 'bg-dash-accent-orange-subtle' : ''}`}
                                 onContextMenu={(e) => !isPending && handleContextMenu(e, tx)}
                               >
                                 <td className="py-2 px-3 text-[var(--dash-text-primary)] font-medium">{index + 1}</td>
@@ -1322,19 +1322,19 @@ export default function SafesPage() {
                                   <div className="flex items-center gap-2">
                                     {getTransactionTypeBadge(tx.transaction_type)}
                                     {isPending && (
-                                      <span className="px-2 py-0.5 rounded-full text-xs bg-yellow-900 text-yellow-300 border border-yellow-600">
+                                      <span className="px-2 py-0.5 rounded-full text-xs bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange">
                                         معلق
                                       </span>
                                     )}
                                   </div>
                                 </td>
                                 <td className="py-2 px-3">
-                                  <span className="text-blue-400 text-xs">{tx.payment_method || 'cash'}</span>
+                                  <span className="text-dash-accent-blue text-xs">{tx.payment_method || 'cash'}</span>
                                 </td>
                                 <td className="py-2 px-3 text-[var(--dash-text-primary)]">{tx.safe_name}</td>
                                 <td className="py-2 px-3">{formatAmount(tx.amount)}</td>
                                 <td className="py-2 px-3 text-[var(--dash-text-secondary)]">
-                                  {isPending ? <span className="text-yellow-400">-</span> : formatPrice(tx.balance_after || 0)}
+                                  {isPending ? <span className="text-dash-accent-orange">-</span> : formatPrice(tx.balance_after || 0)}
                                 </td>
                                 <td className="py-2 px-3 text-[var(--dash-text-muted)] max-w-[200px] truncate" title={tx.notes || ''}>
                                   {tx.notes || '-'}
@@ -1360,7 +1360,7 @@ export default function SafesPage() {
                   {/* Loading more indicator */}
                   {isLoadingMoreTransactions && (
                     <div className="flex items-center justify-center py-4 border-t border-[var(--dash-border-subtle)]">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500 mr-2"></div>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-dash-accent-blue mr-2"></div>
                       <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                     </div>
                   )}
@@ -1388,8 +1388,8 @@ export default function SafesPage() {
                     <p className="text-[var(--dash-text-muted)] text-sm">إجمالي طرق الدفع</p>
                     <p className="text-2xl font-bold text-[var(--dash-text-primary)] mt-1">{paymentMethods.length}</p>
                   </div>
-                  <div className="bg-blue-600/20 p-3 rounded-lg">
-                    <CreditCardIcon className="h-6 w-6 text-blue-400" />
+                  <div className="bg-dash-accent-blue-subtle p-3 rounded-lg">
+                    <CreditCardIcon className="h-6 w-6 text-dash-accent-blue" />
                   </div>
                 </div>
               </div>
@@ -1403,8 +1403,8 @@ export default function SafesPage() {
                       {paymentMethods.filter(method => method.is_active === true).length}
                     </p>
                   </div>
-                  <div className="bg-green-600/20 p-3 rounded-lg">
-                    <span className="text-green-400 text-2xl">✓</span>
+                  <div className="bg-dash-accent-green-subtle p-3 rounded-lg">
+                    <span className="text-dash-accent-green text-2xl">✓</span>
                   </div>
                 </div>
               </div>
@@ -1418,8 +1418,8 @@ export default function SafesPage() {
                       {paymentMethods.find(method => method.is_default === true)?.name || 'غير محدد'}
                     </p>
                   </div>
-                  <div className="bg-purple-600/20 p-3 rounded-lg">
-                    <span className="text-purple-400 text-2xl">★</span>
+                  <div className="bg-dash-accent-purple-subtle p-3 rounded-lg">
+                    <span className="text-dash-accent-purple text-2xl">★</span>
                   </div>
                 </div>
               </div>
@@ -1431,7 +1431,7 @@ export default function SafesPage() {
                 <div className="flex items-center gap-4">
                   <button
                     onClick={openAddPaymentMethodModal}
-                    className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-green-700 transition-colors"
+                    className="px-4 py-2 dash-btn-green rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
                   >
                     <PlusIcon className="h-4 w-4" />
                     إضافة طريقة دفع جديدة
@@ -1444,7 +1444,7 @@ export default function SafesPage() {
                     placeholder="البحث في طرق الدفع..."
                     value={paymentMethodSearchTerm}
                     onChange={(e) => setPaymentMethodSearchTerm(e.target.value)}
-                    className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64 md:w-80"
+                    className="bg-[var(--dash-bg-raised)] text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] pl-10 pr-4 py-2 rounded-lg border border-[var(--dash-border-default)] focus:outline-none focus:ring-2 focus:ring-dash-accent-blue w-full sm:w-64 md:w-80"
                   />
                   <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--dash-text-muted)]" />
                 </div>
@@ -1465,7 +1465,7 @@ export default function SafesPage() {
                     <th className="p-3 text-right font-medium">الإجراءات</th>
                   </tr>
                 </thead>
-                <tbody className="bg-pos-darker divide-y divide-gray-700">
+                <tbody className="bg-pos-darker divide-y divide-dash-border">
                   {filteredPaymentMethods.length > 0 ? (
                     filteredPaymentMethods.map((method, index) => (
                       <tr
@@ -1475,24 +1475,24 @@ export default function SafesPage() {
                         <td className="p-3 text-[var(--dash-text-primary)] font-medium">{index + 1}</td>
                         <td className="p-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                            <div className="w-8 h-8 bg-dash-accent-blue rounded flex items-center justify-center">
                               <CreditCardIcon className="h-5 w-5 text-[var(--dash-text-primary)]" />
                             </div>
                             <span className="text-[var(--dash-text-primary)] font-medium">{method.name}</span>
                             {method.is_default === true && (
-                              <span className="px-2 py-1 bg-purple-900 text-purple-300 rounded-full text-xs mr-2">
+                              <span className="px-2 py-1 bg-dash-accent-purple-subtle text-dash-accent-purple rounded-full text-xs mr-2">
                                 افتراضية
                               </span>
                             )}
                             {method.name.toLowerCase() === 'cash' && (
-                              <span className="px-2 py-1 bg-orange-900 text-orange-300 rounded-full text-xs mr-2">
+                              <span className="px-2 py-1 bg-dash-accent-orange-subtle text-dash-accent-orange rounded-full text-xs mr-2">
                                 أساسية
                               </span>
                             )}
                             <span className={`px-2 py-1 rounded-full text-xs mr-2 ${
                               (method as any).is_physical !== false
-                                ? 'bg-green-900/50 text-green-400'
-                                : 'bg-blue-900/50 text-blue-400'
+                                ? 'bg-dash-accent-green-subtle text-dash-accent-green'
+                                : 'bg-dash-accent-blue-subtle text-dash-accent-blue'
                             }`}>
                               {(method as any).is_physical !== false ? 'فعلي' : 'رقمي'}
                             </span>
@@ -1501,8 +1501,8 @@ export default function SafesPage() {
                         <td className="p-3">
                           <span className={`px-2 py-1 rounded-full text-xs ${
                             method.is_active === true
-                              ? 'bg-green-900 text-green-300'
-                              : 'bg-red-900 text-red-300'
+                              ? 'bg-dash-accent-green-subtle text-dash-accent-green'
+                              : 'bg-dash-accent-red-subtle text-dash-accent-red'
                           }`}>
                             {method.is_active === true ? 'نشط' : 'غير نشط'}
                           </span>
@@ -1510,7 +1510,7 @@ export default function SafesPage() {
                         <td className="p-3">
                           <span className={`px-2 py-1 rounded-full text-xs ${
                             method.is_default === true
-                              ? 'bg-purple-900 text-purple-300'
+                              ? 'bg-dash-accent-purple-subtle text-dash-accent-purple'
                               : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-muted)]'
                           }`}>
                             {method.is_default === true ? 'نعم' : 'لا'}
@@ -1521,7 +1521,7 @@ export default function SafesPage() {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => openEditPaymentMethodModal(method)}
-                              className="px-3 py-1 text-xs bg-blue-600 text-[var(--dash-text-primary)] rounded hover:bg-blue-700 transition-colors flex items-center gap-1"
+                              className="px-3 py-1 text-xs dash-btn-primary rounded transition-colors flex items-center gap-1"
                             >
                               <PencilIcon className="h-3 w-3" />
                               تعديل
@@ -1529,7 +1529,7 @@ export default function SafesPage() {
                             {method.name.toLowerCase() !== 'cash' && (
                               <button
                                 onClick={() => handleDeletePaymentMethod(method)}
-                                className="px-3 py-1 text-xs bg-red-600 text-[var(--dash-text-primary)] rounded hover:bg-red-700 transition-colors flex items-center gap-1"
+                                className="px-3 py-1 text-xs dash-btn-red rounded transition-colors flex items-center gap-1"
                               >
                                 <TrashIcon className="h-3 w-3" />
                                 حذف

@@ -18,26 +18,26 @@ interface ActivityLogsListProps {
 }
 
 const actionConfig: Record<string, { icon: typeof PlusCircleIcon; color: string; bg: string }> = {
-  create: { icon: PlusCircleIcon, color: 'text-green-400', bg: 'bg-green-500/10' },
-  update: { icon: PencilSquareIcon, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-  delete: { icon: TrashIcon, color: 'text-red-400', bg: 'bg-red-500/10' },
+  create: { icon: PlusCircleIcon, color: 'text-dash-accent-green', bg: 'bg-dash-accent-green-subtle' },
+  update: { icon: PencilSquareIcon, color: 'text-dash-accent-blue', bg: 'bg-dash-accent-blue-subtle' },
+  delete: { icon: TrashIcon, color: 'text-dash-accent-red', bg: 'bg-dash-accent-red-subtle' },
 };
 
 const entityLabels: Record<string, { label: string; color: string }> = {
-  product: { label: 'المنتجات', color: 'bg-purple-500/20 text-purple-400' },
-  sale: { label: 'المبيعات', color: 'bg-green-500/20 text-green-400' },
-  customer: { label: 'العملاء', color: 'bg-blue-500/20 text-blue-400' },
-  supplier: { label: 'الموردين', color: 'bg-orange-500/20 text-orange-400' },
-  inventory: { label: 'المخزون', color: 'bg-yellow-500/20 text-yellow-400' },
-  purchase: { label: 'المشتريات', color: 'bg-cyan-500/20 text-cyan-400' },
-  order: { label: 'الطلبات', color: 'bg-indigo-500/20 text-indigo-400' },
-  expense: { label: 'المصروفات', color: 'bg-red-500/20 text-red-400' },
-  cash_drawer: { label: 'الخزن', color: 'bg-emerald-500/20 text-emerald-400' },
-  payment_method: { label: 'الدفع', color: 'bg-teal-500/20 text-teal-400' },
-  category: { label: 'الأصناف', color: 'bg-pink-500/20 text-pink-400' },
-  setting: { label: 'الإعدادات', color: 'bg-gray-500/20 text-gray-400' },
-  permission: { label: 'الصلاحيات', color: 'bg-amber-500/20 text-amber-400' },
-  user: { label: 'المستخدمين', color: 'bg-sky-500/20 text-sky-400' },
+  product: { label: 'المنتجات', color: 'bg-dash-accent-purple-subtle text-dash-accent-purple' },
+  sale: { label: 'المبيعات', color: 'bg-dash-accent-green-subtle text-dash-accent-green' },
+  customer: { label: 'العملاء', color: 'bg-dash-accent-blue-subtle text-dash-accent-blue' },
+  supplier: { label: 'الموردين', color: 'bg-dash-accent-orange-subtle text-dash-accent-orange' },
+  inventory: { label: 'المخزون', color: 'bg-dash-accent-orange-subtle text-dash-accent-orange' },
+  purchase: { label: 'المشتريات', color: 'bg-dash-accent-cyan-subtle text-dash-accent-cyan' },
+  order: { label: 'الطلبات', color: 'bg-dash-accent-blue-subtle text-dash-accent-blue' },
+  expense: { label: 'المصروفات', color: 'bg-dash-accent-red-subtle text-dash-accent-red' },
+  cash_drawer: { label: 'الخزن', color: 'bg-dash-accent-green-subtle text-dash-accent-green' },
+  payment_method: { label: 'الدفع', color: 'bg-dash-accent-cyan-subtle text-dash-accent-cyan' },
+  category: { label: 'الأصناف', color: 'bg-dash-accent-purple-subtle text-dash-accent-purple' },
+  setting: { label: 'الإعدادات', color: 'bg-dash-accent-blue-subtle text-dash-accent-blue' },
+  permission: { label: 'الصلاحيات', color: 'bg-dash-accent-orange-subtle text-dash-accent-orange' },
+  user: { label: 'المستخدمين', color: 'bg-dash-accent-cyan-subtle text-dash-accent-cyan' },
 };
 
 const formatRelativeTime = (dateString: string) => {
@@ -104,7 +104,7 @@ export default function ActivityLogsList({
         {logs.map((log) => {
           const config = actionConfig[log.action_type] || actionConfig.update;
           const Icon = config.icon;
-          const entity = entityLabels[log.entity_type] || { label: log.entity_type, color: 'bg-gray-500/20 text-gray-400' };
+          const entity = entityLabels[log.entity_type] || { label: log.entity_type, color: 'bg-dash-accent-blue-subtle text-dash-accent-blue' };
 
           return (
             <div
@@ -160,7 +160,7 @@ export default function ActivityLogsList({
                   onClick={() => onPageChange(pageNum)}
                   className={`w-8 h-8 text-sm rounded-lg transition-colors ${
                     page === pageNum
-                      ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                      ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                       : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                   }`}
                 >

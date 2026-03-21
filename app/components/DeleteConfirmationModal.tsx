@@ -39,8 +39,8 @@ export default function DeleteConfirmationModal({
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-600/20 rounded-lg">
-                <ExclamationTriangleIcon className="h-6 w-6 text-red-400" />
+              <div className="p-2 bg-dash-accent-red-subtle rounded-lg">
+                <ExclamationTriangleIcon className="h-6 w-6 text-dash-accent-red" />
               </div>
               <h3 className="text-lg font-medium text-[var(--dash-text-primary)]">{title}</h3>
             </div>
@@ -61,7 +61,7 @@ export default function DeleteConfirmationModal({
             <div className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]">
               <p className="text-[var(--dash-text-primary)] font-medium text-right">{itemName}</p>
             </div>
-            <p className="text-red-400 text-sm text-right mt-3">
+            <p className="text-dash-accent-red text-sm text-right mt-3">
               تحذير: هذا الإجراء لا يمكن التراجع عنه!
             </p>
           </div>
@@ -78,7 +78,7 @@ export default function DeleteConfirmationModal({
             <button
               onClick={onConfirm}
               disabled={isDeleting}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)] rounded transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 dash-btn-red rounded transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isDeleting ? (
                 <>

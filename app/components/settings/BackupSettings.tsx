@@ -471,7 +471,7 @@ export default function BackupSettings() {
       {/* Section A: Export */}
       <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 border border-[var(--dash-border-subtle)]">
         <div className="flex items-center gap-3 mb-4">
-          <ArrowDownTrayIcon className="w-6 h-6 text-blue-400" />
+          <ArrowDownTrayIcon className="w-6 h-6 text-dash-accent-blue" />
           <h3 className="text-[var(--dash-text-primary)] text-lg font-bold">تصدير نسخة احتياطية</h3>
         </div>
 
@@ -486,7 +486,7 @@ export default function BackupSettings() {
               type="checkbox"
               checked={includeWhatsapp}
               onChange={(e) => setIncludeWhatsapp(e.target.checked)}
-              className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] text-blue-500 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] text-dash-accent-blue focus:ring-dash-accent-blue"
             />
             <span className="text-[var(--dash-text-secondary)] text-sm">تضمين رسائل WhatsApp</span>
           </label>
@@ -495,7 +495,7 @@ export default function BackupSettings() {
               type="checkbox"
               checked={includeAuth}
               onChange={(e) => setIncludeAuth(e.target.checked)}
-              className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] text-blue-500 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] text-dash-accent-blue focus:ring-dash-accent-blue"
             />
             <span className="text-[var(--dash-text-secondary)] text-sm">تضمين جلسات المصادقة (sessions)</span>
           </label>
@@ -505,7 +505,7 @@ export default function BackupSettings() {
         <button
           onClick={handleExport}
           disabled={isOperationRunning}
-          className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-6 py-2.5 dash-btn-primary disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
         >
           {isExporting ? (
             <>
@@ -524,9 +524,9 @@ export default function BackupSettings() {
         </button>
 
         {exportError && (
-          <div className="mt-3 p-3 bg-red-900/30 border border-red-700 rounded-lg flex items-center gap-2">
-            <XCircleIcon className="w-5 h-5 text-red-400 flex-shrink-0" />
-            <span className="text-red-300 text-sm">{exportError}</span>
+          <div className="mt-3 p-3 bg-dash-accent-red-subtle border border-dash-accent-red rounded-lg flex items-center gap-2">
+            <XCircleIcon className="w-5 h-5 text-dash-accent-red flex-shrink-0" />
+            <span className="text-dash-accent-red text-sm">{exportError}</span>
           </div>
         )}
       </div>
@@ -536,11 +536,11 @@ export default function BackupSettings() {
         <div className="bg-[var(--dash-bg-base)] rounded-lg p-4 border border-[var(--dash-border-subtle)]">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[var(--dash-text-secondary)] text-sm">{progress.phase}</span>
-            <span className="text-blue-400 text-sm font-mono">{progress.progress}%</span>
+            <span className="text-dash-accent-blue text-sm font-mono">{progress.progress}%</span>
           </div>
           <div className="w-full bg-[var(--dash-bg-raised)] rounded-full h-2.5">
             <div
-              className="bg-blue-500 h-2.5 rounded-full transition-all duration-300"
+              className="bg-dash-accent-blue h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${progress.progress}%` }}
             />
           </div>
@@ -556,14 +556,14 @@ export default function BackupSettings() {
       {/* Section B: Import */}
       <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 border border-[var(--dash-border-subtle)]">
         <div className="flex items-center gap-3 mb-4">
-          <ArrowUpTrayIcon className="w-6 h-6 text-green-400" />
+          <ArrowUpTrayIcon className="w-6 h-6 text-dash-accent-green" />
           <h3 className="text-[var(--dash-text-primary)] text-lg font-bold">استيراد نسخة احتياطية</h3>
         </div>
 
         {/* Warning */}
-        <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-700/50 rounded-lg flex items-start gap-2">
-          <ExclamationTriangleIcon className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-          <span className="text-yellow-300 text-sm">
+        <div className="mb-4 p-3 bg-dash-accent-orange-subtle border border-dash-accent-orange/50 rounded-lg flex items-start gap-2">
+          <ExclamationTriangleIcon className="w-5 h-5 text-dash-accent-orange flex-shrink-0 mt-0.5" />
+          <span className="text-dash-accent-orange text-sm">
             الاستعادة ستحل محل كل البيانات الحالية. تأكد من أخذ نسخة احتياطية قبل المتابعة.
           </span>
         </div>
@@ -576,7 +576,7 @@ export default function BackupSettings() {
           onClick={() => fileInputRef.current?.click()}
           className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
             isDragging
-              ? 'border-blue-400 bg-blue-900/20'
+              ? 'border-dash-accent-blue bg-dash-accent-blue-subtle'
               : 'border-[var(--dash-border-default)] hover:border-gray-500 hover:bg-[var(--dash-bg-surface)]/50'
           }`}
         >
@@ -624,7 +624,7 @@ export default function BackupSettings() {
             {validation.summary && (
               <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg space-y-1">
                 <div className="flex items-center gap-2 text-sm">
-                  <InformationCircleIcon className="w-4 h-4 text-blue-400" />
+                  <InformationCircleIcon className="w-4 h-4 text-dash-accent-blue" />
                   <span className="text-[var(--dash-text-secondary)]">تاريخ النسخة: {formatDate(validation.summary.created_at)}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -640,24 +640,24 @@ export default function BackupSettings() {
             {/* Errors */}
             {validation.errors.map((err, i) => (
               <div key={`err-${i}`} className="flex items-center gap-2 text-sm">
-                <XCircleIcon className="w-4 h-4 text-red-400 flex-shrink-0" />
-                <span className="text-red-300">{err}</span>
+                <XCircleIcon className="w-4 h-4 text-dash-accent-red flex-shrink-0" />
+                <span className="text-dash-accent-red">{err}</span>
               </div>
             ))}
 
             {/* Warnings */}
             {validation.warnings.map((warn, i) => (
               <div key={`warn-${i}`} className="flex items-center gap-2 text-sm">
-                <ExclamationTriangleIcon className="w-4 h-4 text-yellow-400 flex-shrink-0" />
-                <span className="text-yellow-300">{warn}</span>
+                <ExclamationTriangleIcon className="w-4 h-4 text-dash-accent-orange flex-shrink-0" />
+                <span className="text-dash-accent-orange">{warn}</span>
               </div>
             ))}
 
             {/* Valid checkmark */}
             {validation.valid && (
               <div className="flex items-center gap-2 text-sm">
-                <CheckCircleIcon className="w-4 h-4 text-green-400" />
-                <span className="text-green-300">الملف صالح وجاهز للاستيراد</span>
+                <CheckCircleIcon className="w-4 h-4 text-dash-accent-green" />
+                <span className="text-dash-accent-green">الملف صالح وجاهز للاستيراد</span>
               </div>
             )}
 
@@ -666,7 +666,7 @@ export default function BackupSettings() {
               <button
                 onClick={() => setShowConfirm(true)}
                 disabled={isOperationRunning}
-                className="mt-2 flex items-center gap-2 px-6 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
+                className="mt-2 flex items-center gap-2 px-6 py-2.5 dash-btn-green disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded-lg transition-colors text-sm font-medium"
               >
                 <ArrowUpTrayIcon className="w-4 h-4" />
                 استعادة النسخة
@@ -675,10 +675,10 @@ export default function BackupSettings() {
 
             {/* Confirmation dialog */}
             {showConfirm && !isImporting && (
-              <div className="p-4 bg-red-900/20 border border-red-700/50 rounded-lg space-y-3">
+              <div className="p-4 bg-dash-accent-red-subtle/20 border border-red-700/50 rounded-lg space-y-3">
                 <div className="flex items-center gap-2">
-                  <ShieldCheckIcon className="w-5 h-5 text-red-400" />
-                  <span className="text-red-300 text-sm font-medium">
+                  <ShieldCheckIcon className="w-5 h-5 text-dash-accent-red" />
+                  <span className="text-dash-accent-red text-sm font-medium">
                     هل أنت متأكد؟ سيتم استبدال جميع البيانات الحالية.
                   </span>
                 </div>
@@ -699,7 +699,7 @@ export default function BackupSettings() {
                   <button
                     onClick={handleImport}
                     disabled={confirmText !== 'تأكيد'}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded transition-colors text-sm"
+                    className="flex items-center gap-2 px-4 py-2 dash-btn-red disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] rounded transition-colors text-sm"
                   >
                     تأكيد الاستعادة
                   </button>
@@ -716,16 +716,16 @@ export default function BackupSettings() {
         )}
 
         {importError && (
-          <div className="mt-3 p-3 bg-red-900/30 border border-red-700 rounded-lg flex items-center gap-2">
-            <XCircleIcon className="w-5 h-5 text-red-400 flex-shrink-0" />
-            <span className="text-red-300 text-sm">{importError}</span>
+          <div className="mt-3 p-3 bg-dash-accent-red-subtle/30 border border-red-700 rounded-lg flex items-center gap-2">
+            <XCircleIcon className="w-5 h-5 text-dash-accent-red flex-shrink-0" />
+            <span className="text-dash-accent-red text-sm">{importError}</span>
           </div>
         )}
 
         {/* Import results */}
         {importResult && (
           <div className="mt-4 space-y-3">
-            <div className={`flex items-center gap-2 text-sm font-medium ${importResult.success ? 'text-green-400' : 'text-yellow-400'}`}>
+            <div className={`flex items-center gap-2 text-sm font-medium ${importResult.success ? 'text-dash-accent-green' : 'text-dash-accent-orange'}`}>
               {importResult.success ? (
                 <CheckCircleIcon className="w-5 h-5" />
               ) : (
@@ -742,7 +742,7 @@ export default function BackupSettings() {
                   .filter((r) => r.status !== 'ok')
                   .map((r) => (
                     <div key={r.table} className="flex items-center gap-2 text-xs">
-                      <span className={r.status === 'error' ? 'text-red-400' : 'text-yellow-400'}>
+                      <span className={r.status === 'error' ? 'text-dash-accent-red' : 'text-dash-accent-orange'}>
                         {r.table}
                       </span>
                       <span className="text-[var(--dash-text-disabled)]">
@@ -758,11 +758,11 @@ export default function BackupSettings() {
             <div className="p-3 bg-[var(--dash-bg-surface)] rounded-lg">
               <p className="text-[var(--dash-text-muted)] text-xs font-medium mb-2">نتائج التحقق:</p>
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-green-400">
+                <span className="text-dash-accent-green">
                   ✓ {importResult.verification.filter((v) => v.match).length} متطابق
                 </span>
                 {importResult.verification.filter((v) => !v.match).length > 0 && (
-                  <span className="text-yellow-400">
+                  <span className="text-dash-accent-orange">
                     ⚠ {importResult.verification.filter((v) => !v.match).length} غير متطابق
                   </span>
                 )}
@@ -783,7 +783,7 @@ export default function BackupSettings() {
           <li>• الصور والفيديوهات لا يتم تضمينها - فقط روابطها (URLs)</li>
           <li>• حجم النسخة المتوقع: 5-15 ميجابايت</li>
           <li>• المستخدم الحالي لا يتم مسحه أثناء الاستعادة</li>
-          <li className="text-yellow-400/80">• الاستعادة ستحل محل كل البيانات الحالية في قاعدة البيانات</li>
+          <li className="text-dash-accent-orange/80">• الاستعادة ستحل محل كل البيانات الحالية في قاعدة البيانات</li>
         </ul>
       </div>
     </div>

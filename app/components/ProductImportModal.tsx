@@ -322,7 +322,7 @@ export default function ProductImportModal({
                   className={`border-2 border-dashed rounded-lg p-8 text-center ${
                     isImporting
                       ? 'border-gray-300 bg-gray-50 cursor-not-allowed'
-                      : 'border-green-300 hover:border-green-500 hover:bg-green-50 cursor-pointer'
+                      : 'border-green-300 hover:border-dash-accent-green hover:bg-dash-accent-green-subtle cursor-pointer'
                   } transition-colors`}
                 >
                   <CloudArrowUpIcon className="h-16 w-16 mx-auto mb-4 text-green-600" />
@@ -349,9 +349,9 @@ export default function ProductImportModal({
               </div>
 
               {/* Instructions */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="bg-dash-accent-blue-subtle border border-blue-200 rounded-lg p-4 mb-6">
                 <h3 className="font-semibold text-blue-900 mb-2">تعليمات الاستيراد:</h3>
-                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+                <ul className="text-sm text-dash-accent-blue space-y-1 list-disc list-inside">
                   <li>يجب أن يكون الملف بصيغة JSON</li>
                   <li>يجب أن يحتوي الملف على مصفوفة من المنتجات</li>
                   <li>كل منتج يجب أن يحتوي على حقل "name" على الأقل</li>
@@ -369,7 +369,7 @@ export default function ProductImportModal({
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                     <div
-                      className="bg-green-600 h-3 transition-all duration-300 rounded-full"
+                      className="bg-dash-accent-green h-3 transition-all duration-300 rounded-full"
                       style={{ width: `${importProgress}%` }}
                     ></div>
                   </div>
@@ -380,24 +380,24 @@ export default function ProductImportModal({
             /* Import Results */
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                <div className="bg-dash-accent-blue-subtle border border-blue-200 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-blue-900">{importResults.total}</div>
-                  <div className="text-sm text-blue-700">إجمالي</div>
+                  <div className="text-sm text-dash-accent-blue">إجمالي</div>
                 </div>
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                <div className="bg-dash-accent-green-subtle border border-green-200 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-green-900">{importResults.success}</div>
-                  <div className="text-sm text-green-700">نجح</div>
+                  <div className="text-sm text-dash-accent-green">نجح</div>
                 </div>
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                <div className="bg-dash-accent-red-subtle border border-red-200 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-red-900">{importResults.failed}</div>
-                  <div className="text-sm text-red-700">فشل</div>
+                  <div className="text-sm text-dash-accent-red">فشل</div>
                 </div>
               </div>
 
               {importResults.errors.length > 0 && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 max-h-64 overflow-y-auto">
+                <div className="bg-dash-accent-red-subtle border border-red-200 rounded-lg p-4 max-h-64 overflow-y-auto">
                   <h4 className="font-semibold text-red-900 mb-2">الأخطاء:</h4>
-                  <ul className="text-sm text-red-800 space-y-1 list-disc list-inside">
+                  <ul className="text-sm text-dash-accent-red space-y-1 list-disc list-inside">
                     {importResults.errors.map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -406,8 +406,8 @@ export default function ProductImportModal({
               )}
 
               {importResults.success > 0 && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                  <p className="text-green-800 font-medium">
+                <div className="bg-dash-accent-green-subtle border border-green-200 rounded-lg p-4 text-center">
+                  <p className="text-dash-accent-green font-medium">
                     ✓ تم استيراد {importResults.success} منتج بنجاح!
                   </p>
                 </div>
@@ -432,7 +432,7 @@ export default function ProductImportModal({
               className={`px-6 py-2 text-white rounded-lg flex items-center gap-2 ${
                 !selectedFile || isImporting
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-green-600 hover:bg-green-700'
+                  : 'dash-btn-green'
               }`}
             >
               {isImporting ? (

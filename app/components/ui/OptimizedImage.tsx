@@ -124,7 +124,7 @@ export default function OptimizedImage({
       {/* Loading overlay */}
       {isLoading && (
         <div className={`absolute inset-0 flex items-center justify-center bg-[var(--dash-bg-base)]/50`}>
-          <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-4 h-4 border-2 border-dash-accent-blue border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
     </div>
@@ -203,7 +203,7 @@ export function ProductThumbnail({
     <button
       onClick={onClick}
       className={`w-full h-16 bg-[var(--dash-bg-surface)] rounded-md overflow-hidden border-2 transition-colors relative ${
-        isSelected ? 'border-blue-500' : 'border-[var(--dash-border-default)]/50 hover:border-[var(--dash-border-subtle)]'
+        isSelected ? 'border-dash-accent-blue' : 'border-[var(--dash-border-default)]/50 hover:border-[var(--dash-border-subtle)]'
       }`}
     >
       <OptimizedImage

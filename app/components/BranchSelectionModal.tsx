@@ -105,7 +105,7 @@ export default function BranchSelectionModal({
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <BuildingOfficeIcon className="h-6 w-6 text-blue-400" />
+                    <BuildingOfficeIcon className="h-6 w-6 text-dash-accent-blue" />
                     اختيار فرع البيع
                   </Dialog.Title>
                   <button
@@ -120,16 +120,16 @@ export default function BranchSelectionModal({
                 <div className="space-y-2 max-h-[400px] overflow-y-auto scrollbar-hide">
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-dash-accent-blue mb-4"></div>
                       <p className="text-[var(--dash-text-muted)]">جاري تحميل الفروع...</p>
                     </div>
                   ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <BuildingOfficeIcon className="h-12 w-12 text-red-500 mb-4" />
-                      <p className="text-red-400 mb-2">{error}</p>
+                      <BuildingOfficeIcon className="h-12 w-12 text-dash-accent-red mb-4" />
+                      <p className="text-dash-accent-red mb-2">{error}</p>
                       <button
                         onClick={fetchBranches}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg text-sm transition-colors"
+                        className="px-4 py-2 dash-btn-primary text-[var(--dash-text-primary)] rounded-lg text-sm transition-colors"
                       >
                         إعادة المحاولة
                       </button>

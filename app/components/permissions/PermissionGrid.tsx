@@ -59,7 +59,7 @@ export default function PermissionGrid({
               px-3 py-1.5 text-sm rounded-lg transition-colors
               ${disabled || restrictedCount === totalCount
                 ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
-                : 'bg-red-600 hover:bg-red-700 text-[var(--dash-text-primary)]'
+                : 'dash-btn-red'
               }
             `}
           >
@@ -72,7 +72,7 @@ export default function PermissionGrid({
               px-3 py-1.5 text-sm rounded-lg transition-colors
               ${disabled || restrictedCount === 0
                 ? 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-muted)] cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700 text-[var(--dash-text-primary)]'
+                : 'dash-btn-green'
               }
             `}
           >
@@ -86,20 +86,20 @@ export default function PermissionGrid({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-dash-accent-red" />
               <span className="text-[var(--dash-text-secondary)] text-sm">ممنوع: {restrictedCount}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-dash-accent-green" />
               <span className="text-[var(--dash-text-secondary)] text-sm">مسموح: {totalCount - restrictedCount}</span>
             </div>
           </div>
 
           <div className="text-[var(--dash-text-muted)] text-sm">
             {restrictedCount === 0 ? (
-              <span className="text-green-400">كل الميزات مسموحة لهذا الدور</span>
+              <span className="text-dash-accent-green">كل الميزات مسموحة لهذا الدور</span>
             ) : restrictedCount === totalCount ? (
-              <span className="text-red-400">كل الميزات ممنوعة عن هذا الدور</span>
+              <span className="text-dash-accent-red">كل الميزات ممنوعة عن هذا الدور</span>
             ) : (
               <span>عدد القيود: {restrictedCount}</span>
             )}

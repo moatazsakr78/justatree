@@ -48,9 +48,9 @@ export default function BranchSwitcher() {
   // Show warning if no branch is selected
   if (!currentBranch) {
     return (
-      <div className="flex items-center gap-1 px-3 py-1.5 bg-yellow-500/20 rounded-lg">
-        <BuildingStorefrontIcon className="h-4 w-4 text-yellow-400" />
-        <span className="text-sm text-yellow-300">لم يتم تحديد فرع</span>
+      <div className="flex items-center gap-1 px-3 py-1.5 bg-dash-accent-orange-subtle rounded-lg">
+        <BuildingStorefrontIcon className="h-4 w-4 text-dash-accent-orange" />
+        <span className="text-sm text-dash-accent-orange">لم يتم تحديد فرع</span>
       </div>
     );
   }
@@ -58,9 +58,9 @@ export default function BranchSwitcher() {
   // If only one branch, show it without dropdown
   if (!hasMultipleBranches) {
     return (
-      <div className="flex items-center gap-1 px-3 py-1.5 bg-blue-500/20 rounded-lg">
-        <BuildingStorefrontIcon className="h-4 w-4 text-blue-400" />
-        <span className="text-sm text-blue-300 font-medium">{currentBranch.name}</span>
+      <div className="flex items-center gap-1 px-3 py-1.5 bg-dash-accent-blue-subtle rounded-lg">
+        <BuildingStorefrontIcon className="h-4 w-4 text-dash-accent-blue" />
+        <span className="text-sm text-dash-accent-blue font-medium">{currentBranch.name}</span>
       </div>
     );
   }
@@ -70,12 +70,12 @@ export default function BranchSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1 px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-colors"
+        className="flex items-center gap-1 px-3 py-1.5 bg-dash-accent-blue-subtle hover:bg-dash-accent-blue-subtle rounded-lg transition-colors"
         title="تغيير الفرع"
       >
-        <BuildingStorefrontIcon className="h-4 w-4 text-blue-400" />
-        <span className="text-sm text-blue-300 font-medium">{currentBranch.name}</span>
-        <ChevronDownIcon className={`h-4 w-4 text-blue-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <BuildingStorefrontIcon className="h-4 w-4 text-dash-accent-blue" />
+        <span className="text-sm text-dash-accent-blue font-medium">{currentBranch.name}</span>
+        <ChevronDownIcon className={`h-4 w-4 text-dash-accent-blue transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown menu */}
@@ -95,7 +95,7 @@ export default function BranchSwitcher() {
                   {branch.name}
                 </span>
                 {branch.id === currentBranch.id && (
-                  <CheckIcon className="h-4 w-4 text-blue-400 flex-shrink-0" />
+                  <CheckIcon className="h-4 w-4 text-dash-accent-blue flex-shrink-0" />
                 )}
               </button>
             ))}

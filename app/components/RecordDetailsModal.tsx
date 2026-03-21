@@ -1410,7 +1410,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: '⏰ الساعة', 
       accessor: 'time', 
       width: 80,
-      render: (value: string) => <span className="text-blue-400">{value}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value}</span>
     },
     { 
       id: 'description', 
@@ -1427,12 +1427,12 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       render: (value: string) => (
         <span className={`px-2 py-1 rounded text-xs font-medium ${
           value === 'قيد محاسبي' 
-            ? 'bg-purple-600/20 text-purple-400 border border-purple-600' 
+            ? 'bg-dash-accent-purple-subtle text-dash-accent-purple border border-dash-accent-purple' 
             : value === 'تحويل'
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-600'
+            ? 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue'
             : value === 'تسوية'
-            ? 'bg-orange-600/20 text-orange-400 border border-orange-600'
-            : 'bg-green-600/20 text-green-400 border border-green-600'
+            ? 'bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange'
+            : 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green'
         }`}>
           {value}
         </span>
@@ -1446,8 +1446,8 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       render: (value: string) => (
         <span className={`font-medium ${
           value && value.includes('+') 
-            ? 'text-green-400' 
-            : 'text-red-400'
+            ? 'text-dash-accent-green' 
+            : 'text-dash-accent-red'
         }`}>
           {value}
         </span>
@@ -1458,7 +1458,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: 'الرصيد',
       accessor: 'balance',
       width: 140,
-      render: (value: string) => <span className="text-blue-400 font-medium">{value}</span>
+      render: (value: string) => <span className="text-dash-accent-blue font-medium">{value}</span>
     }
   ].filter(col => visibleStatementColumns.includes(col.id))
 
@@ -1479,9 +1479,9 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       width: 180,
       render: (value: string, item: any) => (
         <span className={`flex items-center gap-1 ${item.status === 'cancelled' ? 'opacity-60' : ''}`}>
-          <span className="text-blue-400">{value}</span>
+          <span className="text-dash-accent-blue">{value}</span>
           {item.status === 'cancelled' && (
-            <span className="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded">ملغاة</span>
+            <span className="text-[10px] bg-dash-accent-red-subtle text-dash-accent-red px-1.5 py-0.5 rounded">ملغاة</span>
           )}
         </span>
       )
@@ -1504,7 +1504,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       render: (value: string) => {
         if (!value) return <span className="text-[var(--dash-text-muted)]">-</span>
         const timeOnly = value.substring(0, 5)
-        return <span className="text-blue-400 font-mono">{timeOnly}</span>
+        return <span className="text-dash-accent-blue font-mono">{timeOnly}</span>
       }
     },
     { 
@@ -1532,14 +1532,14 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: 'المبلغ الإجمالي', 
       accessor: 'total_amount', 
       width: 150,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value, 'system')}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value, 'system')}</span>
     },
     { 
       id: 'payment_method', 
       header: 'طريقة الدفع', 
       accessor: 'payment_method', 
       width: 120,
-      render: (value: string) => <span className="text-blue-400">{value || 'نقد'}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value || 'نقد'}</span>
     },
     { 
       id: 'invoice_type', 
@@ -1572,21 +1572,21 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
         const getInvoiceTypeColor = (invoiceType: string, transactionType: string, notes: string) => {
           // Check if this is a transfer invoice by looking for [TRANSFER] prefix in notes
           if (notes && notes.startsWith('[TRANSFER]')) {
-            return 'bg-orange-600/20 text-orange-400 border border-orange-600'
+            return 'bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange'
           }
           
           if (transactionType === 'purchase') {
             switch (invoiceType) {
-              case 'Purchase Invoice': return 'bg-blue-600/20 text-blue-400 border border-blue-600'
-              case 'Purchase Return': return 'bg-purple-600/20 text-purple-400 border border-purple-600'
-              default: return 'bg-blue-600/20 text-blue-400 border border-blue-600'
+              case 'Purchase Invoice': return 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue'
+              case 'Purchase Return': return 'bg-dash-accent-purple-subtle text-dash-accent-purple border border-dash-accent-purple'
+              default: return 'bg-dash-accent-blue-subtle text-dash-accent-blue border border-dash-accent-blue'
             }
           } else {
             switch (invoiceType) {
               case 'sale': 
-              case 'Sale Invoice': return 'bg-green-600/20 text-green-400 border border-green-600'
-              case 'Sale Return': return 'bg-orange-600/20 text-orange-400 border border-orange-600'
-              default: return 'bg-green-600/20 text-green-400 border border-green-600'
+              case 'Sale Invoice': return 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green'
+              case 'Sale Return': return 'bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange'
+              default: return 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green'
             }
           }
         }
@@ -1635,14 +1635,14 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: '⏰ الساعة', 
       accessor: 'time', 
       width: 80,
-      render: (value: string) => <span className="text-blue-400">{value}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value}</span>
     },
     { 
       id: 'amount', 
       header: 'المبلغ', 
       accessor: 'amount', 
       width: 140,
-      render: (value: string) => <span className="text-green-400 font-medium">{value}</span>
+      render: (value: string) => <span className="text-dash-accent-green font-medium">{value}</span>
     },
     {
       id: 'notes',
@@ -1671,7 +1671,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       render: (value: string, item: any) => {
         const isHighlighted = highlightedProductId === item.product?.id
         return (
-          <span className={`${isHighlighted ? 'bg-yellow-500/40 px-2 py-1 rounded text-yellow-100 font-semibold' : 'text-purple-400'}`}>
+          <span className={`${isHighlighted ? 'bg-dash-accent-orange/40 px-2 py-1 rounded text-yellow-100 font-semibold' : 'text-dash-accent-purple'}`}>
             {item.product?.category?.name || 'غير محدد'}
           </span>
         )
@@ -1685,8 +1685,8 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       render: (value: string, item: any) => {
         const isHighlighted = highlightedProductId === item.product?.id
         return (
-          <div className={`flex items-center gap-2 ${isHighlighted ? 'bg-yellow-500/40 px-2 py-1 rounded' : ''}`}>
-            {isHighlighted && <span className="text-yellow-300 text-lg">★</span>}
+          <div className={`flex items-center gap-2 ${isHighlighted ? 'bg-dash-accent-orange/40 px-2 py-1 rounded' : ''}`}>
+            {isHighlighted && <span className="text-dash-accent-orange text-lg">★</span>}
             <span className={`font-medium ${isHighlighted ? 'text-yellow-100 font-bold' : 'text-[var(--dash-text-primary)]'}`}>
               {item.product?.name || 'منتج محذوف'}
             </span>
@@ -1699,7 +1699,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       header: 'الكمية', 
       accessor: 'quantity', 
       width: 80,
-      render: (value: number) => <span className="text-blue-400 font-medium">{value}</span>
+      render: (value: number) => <span className="text-dash-accent-blue font-medium">{value}</span>
     },
     { 
       id: 'barcode', 
@@ -1717,7 +1717,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       width: 100,
       render: (value: number, item: any) => {
         const price = item.itemType === 'purchase' ? item.unit_purchase_price : item.unit_price
-        return <span className="text-green-400 font-medium">{price ? price.toFixed(2) : '0.00'}</span>
+        return <span className="text-dash-accent-green font-medium">{price ? price.toFixed(2) : '0.00'}</span>
       }
     },
     { 
@@ -1727,7 +1727,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
       width: 80,
       render: (value: number, item: any) => {
         const discount = item.itemType === 'purchase' ? item.discount_amount : item.discount
-        return <span className="text-orange-400 font-medium">{discount ? discount.toFixed(2) : '0.00'}</span>
+        return <span className="text-dash-accent-orange font-medium">{discount ? discount.toFixed(2) : '0.00'}</span>
       }
     },
     { 
@@ -1744,7 +1744,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
           // For sale items, calculate from unit_price
           total = (item.quantity * item.unit_price) - (item.discount || 0)
         }
-        return <span className="text-green-400 font-bold">{total.toFixed(2)}</span>
+        return <span className="text-dash-accent-green font-bold">{total.toFixed(2)}</span>
       }
     },
     {
@@ -1790,7 +1790,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                       }
                     }}
                     disabled={allTransactions.length === 0 || selectedTransaction >= allTransactions.length || (allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' && allTransactions[selectedTransaction]?.status === 'cancelled')}
-                    className={`flex flex-col items-center p-2 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors ${allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' ? 'text-orange-400 hover:text-orange-300' : 'text-red-400 hover:text-red-300'}`}
+                    className={`flex flex-col items-center p-2 disabled:text-[var(--dash-text-disabled)] disabled:cursor-not-allowed cursor-pointer min-w-[80px] transition-colors ${allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' ? 'text-dash-accent-orange hover:text-dash-accent-orange' : 'text-dash-accent-red hover:text-dash-accent-red'}`}
                   >
                     {allTransactions.length > 0 && selectedTransaction < allTransactions.length && allTransactions[selectedTransaction]?.transactionType === 'sale' ? (
                       <XCircleIcon className="h-5 w-5 mb-1" />
@@ -1815,7 +1815,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     onClick={() => setActiveTab('payments')}
                     className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'payments' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                        ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle' 
                         : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
@@ -1825,7 +1825,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     onClick={() => setActiveTab('statement')}
                     className={`px-6 py-3 text-base font-medium border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'statement' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                        ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle' 
                         : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
@@ -1835,7 +1835,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     onClick={() => setActiveTab('transactions')}
                     className={`px-6 py-3 text-base font-semibold border-b-2 rounded-t-lg transition-all duration-200 ${
                       activeTab === 'transactions' 
-                        ? 'text-blue-400 border-blue-400 bg-blue-600/10' 
+                        ? 'text-dash-accent-blue border-dash-accent-blue bg-dash-accent-blue-subtle' 
                         : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] border-transparent hover:border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]/20'
                     }`}
                   >
@@ -1850,7 +1850,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                       onClick={() => setViewMode('records-only')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'records-only'
-                          ? 'bg-blue-600 text-white shadow-sm'
+                          ? 'bg-dash-accent-blue text-white shadow-sm'
                           : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض فواتير السجل فقط"
@@ -1861,7 +1861,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                       onClick={() => setViewMode('split')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'split'
-                          ? 'bg-blue-600 text-white shadow-sm'
+                          ? 'bg-dash-accent-blue text-white shadow-sm'
                           : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض مقسم"
@@ -1872,7 +1872,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                       onClick={() => setViewMode('details-only')}
                       className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                         viewMode === 'details-only'
-                          ? 'bg-blue-600 text-white shadow-sm'
+                          ? 'bg-dash-accent-blue text-white shadow-sm'
                           : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/50'
                       }`}
                       title="عرض تفاصيل الفاتورة فقط"
@@ -1913,7 +1913,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                 
                 {/* Record Balance */}
                 <div className="p-4 border-b border-[var(--dash-border-default)]">
-                  <div className="bg-purple-600 rounded p-4 text-center">
+                  <div className="bg-dash-accent-purple rounded p-4 text-center">
                     <div className="text-2xl font-bold text-white">{formatPrice(recordBalance, 'system')}</div>
                     <div className="text-purple-200 text-sm">رصيد السجل</div>
                   </div>
@@ -1935,7 +1935,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-blue-400 flex items-center gap-1">
+                    <span className="text-dash-accent-blue flex items-center gap-1">
                       <span>
                         {dateFilter.type === 'today' && 'اليوم'}
                         {dateFilter.type === 'current_week' && 'الأسبوع الحالي'}
@@ -1980,11 +1980,11 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     <span className="text-[var(--dash-text-muted)] text-sm">عدد المعاملات</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-green-400">{formatPrice(sales.reduce((sum, sale) => sum + (sale.total_amount || 0), 0), 'system')}</span>
+                    <span className="text-dash-accent-green">{formatPrice(sales.reduce((sum, sale) => sum + (sale.total_amount || 0), 0), 'system')}</span>
                     <span className="text-[var(--dash-text-muted)] text-sm">إجمالي المدين</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-red-400">{formatPrice(purchaseInvoices.reduce((sum, purchase) => sum + (purchase.total_amount || 0), 0), 'system')}</span>
+                    <span className="text-dash-accent-red">{formatPrice(purchaseInvoices.reduce((sum, purchase) => sum + (purchase.total_amount || 0), 0), 'system')}</span>
                     <span className="text-[var(--dash-text-muted)] text-sm">إجمالي الدائن</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -2003,7 +2003,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
               <div className="p-4 border-t border-[var(--dash-border-default)]">
                 <button
                   onClick={() => setShowDateFilter(true)}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
+                  className="w-full dash-btn-purple px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
                 >
                   <CalendarDaysIcon className="h-5 w-5" />
                   <span>التاريخ</span>
@@ -2012,7 +2012,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                 {/* Current Filter Display */}
                 {dateFilter.type !== 'all' && (
                   <div className="mt-2 text-center">
-                    <span className="text-xs text-purple-400">
+                    <span className="text-xs text-dash-accent-purple">
                       {dateFilter.type === 'today' && 'عرض فواتير اليوم'}
                       {dateFilter.type === 'current_week' && 'عرض فواتير الأسبوع الحالي'}
                       {dateFilter.type === 'last_week' && 'عرض فواتير الأسبوع الماضي'}
@@ -2031,23 +2031,23 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
             <div className="flex-1 flex flex-col min-w-0 relative">
               
               {/* Search Bar */}
-              <div className={`bg-[var(--dash-bg-raised)] border-b p-4 transition-colors ${searchQuery ? 'border-blue-500' : 'border-[var(--dash-border-default)]'}`}>
+              <div className={`bg-[var(--dash-bg-raised)] border-b p-4 transition-colors ${searchQuery ? 'border-dash-accent-blue' : 'border-[var(--dash-border-default)]'}`}>
                 {searchQuery && (
                   <div className="mb-2 text-xs flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-blue-400">
+                    <div className="flex items-center gap-2 text-dash-accent-blue">
                       <span>🔍</span>
                       <span>البحث نشط - عرض الفواتير التي تحتوي على المنتج المحدد فقط</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-[var(--dash-text-muted)]">النتائج:</span>
-                      <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-medium">
+                      <span className="bg-dash-accent-blue text-white px-2 py-0.5 rounded font-medium">
                         {allTransactions.length}
                       </span>
                     </div>
                   </div>
                 )}
                 <div className="relative">
-                  <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-blue-400' : 'text-[var(--dash-text-muted)]'}`} />
+                  <MagnifyingGlassIcon className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-colors ${searchQuery ? 'text-dash-accent-blue' : 'text-[var(--dash-text-muted)]'}`} />
                   <input
                     type="text"
                     placeholder="ابحث عن منتج (اسم المنتج أو الباركود)..."
@@ -2088,7 +2088,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                   <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex gap-1">
                     <button
                       onClick={() => searchProductInInvoices(searchQuery)}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors"
+                      className="px-3 py-1 dash-btn-primary text-xs rounded transition-colors"
                     >
                       بحث
                     </button>
@@ -2114,7 +2114,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     {/* Account Statement Header */}
                     <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] p-4">
                       <div className="flex items-center justify-between">
-                        <div className="bg-purple-600 text-white px-4 py-2 rounded text-sm font-medium">
+                        <div className="bg-dash-accent-purple text-white px-4 py-2 rounded text-sm font-medium">
                           رصيد {formatPrice(190322)}
                         </div>
                         <div className="text-[var(--dash-text-primary)] text-lg font-medium">كشف حساب السجل</div>
@@ -2150,7 +2150,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     >
                       {isLoadingSales ? (
                         <div className="flex items-center justify-center h-full">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                           <span className="text-[var(--dash-text-muted)]">جاري تحميل الفواتير...</span>
                         </div>
                       ) : allTransactions.length === 0 && searchQuery ? (
@@ -2174,7 +2174,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     {/* Resizable Divider - Only show in split mode */}
                     {viewMode === 'split' && (
                       <div
-                        className="absolute left-0 right-0 h-2 bg-[var(--dash-border-default)] hover:bg-blue-500 cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
+                        className="absolute left-0 right-0 h-2 bg-[var(--dash-border-default)] hover:bg-dash-accent-blue cursor-row-resize z-30 flex items-center justify-center transition-colors duration-200"
                         style={{ top: `${dividerPosition}%`, transform: 'translateY(-50%)' }}
                         onMouseDown={handleMouseDown}
                       >
@@ -2200,13 +2200,13 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                             const items = currentTransaction?.transactionType === 'sale' ? saleItems : purchaseInvoiceItems
                             printReceipt(currentTransaction, items)
                           }}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
+                          className="dash-btn-primary px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors"
                           disabled={isLoadingItems || (saleItems.length === 0 && purchaseInvoiceItems.length === 0)}
                         >
                           <PrinterIcon className="h-4 w-4" />
                           طباعة الريسيت
                         </button>
-                        <h3 className="text-blue-400 font-medium text-lg">
+                        <h3 className="text-dash-accent-blue font-medium text-lg">
                           تفاصيل الفاتورة {allTransactions[selectedTransaction]?.invoice_number || ''}
                         </h3>
                       </div>
@@ -2214,7 +2214,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                       <div className="flex-1 min-h-0 px-4 pb-4">
                         {isLoadingItems ? (
                           <div className="flex items-center justify-center h-full">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-3"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
                             <span className="text-[var(--dash-text-muted)]">جاري تحميل العناصر...</span>
                           </div>
                         ) : (
@@ -2236,7 +2236,7 @@ export default function RecordDetailsModal({ isOpen, onClose, record }: RecordDe
                     <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] p-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors">
+                          <button className="dash-btn-purple px-4 py-2 rounded text-sm font-medium flex items-center gap-2 transition-colors">
                             <PlusIcon className="h-4 w-4" />
                             إضافة تحويل
                           </button>

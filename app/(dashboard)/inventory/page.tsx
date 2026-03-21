@@ -326,7 +326,7 @@ export default function InventoryPage() {
             toggleProductSelection(item.id)
           }}
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
-          className="w-4 h-4 rounded border-gray-500 bg-[var(--dash-bg-surface)] text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer accent-blue-600"
+          className="w-4 h-4 rounded border-gray-500 bg-[var(--dash-bg-surface)] text-dash-accent-blue focus:ring-dash-accent-blue focus:ring-2 cursor-pointer accent-[var(--dash-accent-blue)]"
         />
       )
     }] : []),
@@ -375,9 +375,9 @@ export default function InventoryPage() {
         
         // Determine color based on stock status
         const stockStatus = getStockStatus(item)
-        let colorClass = 'text-green-400' // Good - Green
-        if (stockStatus === 'low') colorClass = 'text-yellow-400' // Low - Yellow  
-        if (stockStatus === 'zero') colorClass = 'text-red-400' // Zero - Red
+        let colorClass = 'text-dash-accent-green' // Good - Green
+        if (stockStatus === 'low') colorClass = 'text-dash-accent-orange' // Low - Yellow
+        if (stockStatus === 'zero') colorClass = 'text-dash-accent-red' // Zero - Red
         
         return (
           <span className={`${colorClass} font-medium`}>قطعة {totalQuantity}</span>
@@ -456,11 +456,11 @@ export default function InventoryPage() {
         const minStock = inventoryData?.min_stock || 0
         
         // Determine color based on quantity status for this specific branch
-        let colorClass = 'text-green-400' // Good - Green
+        let colorClass = 'text-dash-accent-green' // Good - Green
         if (quantity <= 0) {
-          colorClass = 'text-red-400' // Zero - Red
+          colorClass = 'text-dash-accent-red' // Zero - Red
         } else if (quantity <= minStock && minStock > 0) {
-          colorClass = 'text-yellow-400' // Low - Yellow
+          colorClass = 'text-dash-accent-orange' // Low - Yellow
         }
         
         return (
@@ -488,7 +488,7 @@ export default function InventoryPage() {
         const isLowStock = quantity <= minStock && minStock > 0
         
         return (
-          <span className={`font-medium ${isLowStock ? 'text-red-400' : 'text-yellow-400'}`}>
+          <span className={`font-medium ${isLowStock ? 'text-dash-accent-red' : 'text-dash-accent-orange'}`}>
             {minStock} قطعة
           </span>
         )
@@ -600,10 +600,10 @@ export default function InventoryPage() {
           
           const getStatusColor = (status: string) => {
             switch(status) {
-              case 'تام الجرد': return 'bg-green-600 text-[var(--dash-text-primary)]'
-              case 'استعد': return 'bg-yellow-600 text-[var(--dash-text-primary)]'
-              case 'غير مجرود': return 'bg-red-600 text-[var(--dash-text-primary)]'
-              default: return 'bg-red-600 text-[var(--dash-text-primary)]'
+              case 'تام الجرد': return 'bg-dash-accent-green text-[var(--dash-text-primary)]'
+              case 'استعد': return 'bg-dash-accent-orange text-[var(--dash-text-primary)]'
+              case 'غير مجرود': return 'bg-dash-accent-red text-[var(--dash-text-primary)]'
+              default: return 'bg-dash-accent-red text-[var(--dash-text-primary)]'
             }
           }
           
@@ -1397,15 +1397,15 @@ export default function InventoryPage() {
 
             {/* Selection indicator - يظهر فقط في وضع التحديد */}
             {isSelectionMode && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-blue-600/20 border border-blue-500/30 rounded-lg mr-2">
-                <span className="text-blue-400 text-sm font-medium">
+              <div className="flex items-center gap-2 px-3 py-1 bg-dash-accent-blue-subtle border border-dash-accent-blue/30 rounded-lg mr-2">
+                <span className="text-dash-accent-blue text-sm font-medium">
                   {selectedProductIds.length > 0
                     ? `تم تحديد ${selectedProductIds.length} منتج`
                     : 'وضع التحديد - اختر المنتجات'}
                 </span>
                 <button
                   onClick={clearSelection}
-                  className="text-blue-300 hover:text-[var(--dash-text-primary)] transition-colors"
+                  className="text-dash-accent-blue hover:text-[var(--dash-text-primary)] transition-colors"
                   title="إلغاء وضع التحديد"
                 >
                   <XMarkIcon className="h-4 w-4" />
@@ -1430,30 +1430,30 @@ export default function InventoryPage() {
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-xl z-50 min-w-[160px] py-1">
                   <button
                     onClick={() => handleQuantityAction('add')}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-green-600/20 hover:text-green-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-green-subtle hover:text-dash-accent-green transition-colors"
                   >
-                    <PlusIcon className="h-4 w-4 text-green-400" />
+                    <PlusIcon className="h-4 w-4 text-dash-accent-green" />
                     <span className="text-sm">إضافة</span>
                   </button>
                   <button
                     onClick={() => handleQuantityAction('subtract')}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-red-600/20 hover:text-red-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-red-subtle hover:text-dash-accent-red transition-colors"
                   >
-                    <MinusIcon className="h-4 w-4 text-red-400" />
+                    <MinusIcon className="h-4 w-4 text-dash-accent-red" />
                     <span className="text-sm">خصم</span>
                   </button>
                   <button
                     onClick={() => handleQuantityAction('edit')}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-blue-600/20 hover:text-blue-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-blue-subtle hover:text-dash-accent-blue transition-colors"
                   >
-                    <PencilSquareIcon className="h-4 w-4 text-blue-400" />
+                    <PencilSquareIcon className="h-4 w-4 text-dash-accent-blue" />
                     <span className="text-sm">تعديل</span>
                   </button>
                   <button
                     onClick={() => handleTransferAction()}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-purple-600/20 hover:text-purple-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[var(--dash-text-secondary)] hover:bg-dash-accent-purple-subtle hover:text-dash-accent-purple transition-colors"
                   >
-                    <ArrowsRightLeftIcon className="h-4 w-4 text-purple-400" />
+                    <ArrowsRightLeftIcon className="h-4 w-4 text-dash-accent-purple" />
                     <span className="text-sm">تحويل</span>
                   </button>
                 </div>
@@ -1475,7 +1475,7 @@ export default function InventoryPage() {
 
             <button
               onClick={() => setShowTransferHistoryModal(true)}
-              className="flex flex-col items-center p-2 text-green-400 hover:text-green-300 cursor-pointer min-w-[80px]"
+              className="flex flex-col items-center p-2 text-dash-accent-green hover:text-dash-accent-green cursor-pointer min-w-[80px]"
             >
               <ArrowsRightLeftIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">حركة النقل</span>
@@ -1489,12 +1489,12 @@ export default function InventoryPage() {
               onClick={() => handleAuditStatusToggle('تام الجرد')}
               className={`flex flex-col items-center min-w-[70px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 auditStatusFilters['تام الجرد']
-                  ? 'bg-green-600/20 text-green-400'
+                  ? 'bg-dash-accent-green-subtle text-dash-accent-green'
                   : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                auditStatusFilters['تام الجرد'] ? 'bg-green-500' : 'bg-[var(--dash-bg-highlight)]'
+                auditStatusFilters['تام الجرد'] ? 'bg-dash-accent-green' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>تام الجرد</span>
             </button>
@@ -1502,12 +1502,12 @@ export default function InventoryPage() {
               onClick={() => handleAuditStatusToggle('استعد')}
               className={`flex flex-col items-center min-w-[70px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 auditStatusFilters['استعد']
-                  ? 'bg-yellow-600/20 text-yellow-400'
+                  ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
                   : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                auditStatusFilters['استعد'] ? 'bg-yellow-500' : 'bg-[var(--dash-bg-highlight)]'
+                auditStatusFilters['استعد'] ? 'bg-dash-accent-orange' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>استعد</span>
             </button>
@@ -1515,12 +1515,12 @@ export default function InventoryPage() {
               onClick={() => handleAuditStatusToggle('غير مجرود')}
               className={`flex flex-col items-center min-w-[70px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 auditStatusFilters['غير مجرود']
-                  ? 'bg-red-600/20 text-red-400'
+                  ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                   : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                auditStatusFilters['غير مجرود'] ? 'bg-red-500' : 'bg-[var(--dash-bg-highlight)]'
+                auditStatusFilters['غير مجرود'] ? 'bg-dash-accent-red' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>غير مجرود</span>
             </button>
@@ -1529,7 +1529,7 @@ export default function InventoryPage() {
             <select
               value={selectedAuditBranch}
               onChange={(e) => setSelectedAuditBranch(e.target.value)}
-              className="px-2 py-1.5 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-2 py-1.5 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md text-[var(--dash-text-primary)] text-xs focus:outline-none focus:ring-2 focus:ring-dash-accent-blue"
             >
               <option value="">جميع الفروع</option>
               {branches.map(branch => (
@@ -1545,12 +1545,12 @@ export default function InventoryPage() {
               onClick={() => handleStockStatusToggle('good')}
               className={`flex flex-col items-center min-w-[60px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 stockStatusFilters.good
-                  ? 'text-green-400'
+                  ? 'text-dash-accent-green'
                   : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                stockStatusFilters.good ? 'bg-green-500' : 'bg-[var(--dash-bg-highlight)]'
+                stockStatusFilters.good ? 'bg-dash-accent-green' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>جيد</span>
             </button>
@@ -1558,12 +1558,12 @@ export default function InventoryPage() {
               onClick={() => handleStockStatusToggle('low')}
               className={`flex flex-col items-center min-w-[60px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 stockStatusFilters.low
-                  ? 'text-yellow-400'
+                  ? 'text-dash-accent-orange'
                   : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                stockStatusFilters.low ? 'bg-yellow-500' : 'bg-[var(--dash-bg-highlight)]'
+                stockStatusFilters.low ? 'bg-dash-accent-orange' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>منخفض</span>
             </button>
@@ -1571,12 +1571,12 @@ export default function InventoryPage() {
               onClick={() => handleStockStatusToggle('zero')}
               className={`flex flex-col items-center min-w-[60px] p-1.5 rounded-md text-xs font-medium transition-all ${
                 stockStatusFilters.zero
-                  ? 'text-red-400'
+                  ? 'text-dash-accent-red'
                   : 'text-[var(--dash-text-disabled)] opacity-50'
               }`}
             >
               <div className={`h-3 w-3 rounded-full mb-1 ${
-                stockStatusFilters.zero ? 'bg-red-500' : 'bg-[var(--dash-bg-highlight)]'
+                stockStatusFilters.zero ? 'bg-dash-accent-red' : 'bg-[var(--dash-bg-highlight)]'
               }`}></div>
               <span>صفر</span>
             </button>
@@ -1605,7 +1605,7 @@ export default function InventoryPage() {
                   <div className="relative branches-dropdown">
                     <button 
                       onClick={() => setShowBranchesDropdown(!showBranchesDropdown)}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-[var(--dash-text-primary)] text-sm font-medium transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 dash-btn-primary rounded-md text-sm font-medium transition-colors"
                     >
                       <span>{selectedGroup}</span>
                       <ChevronDownIcon className={`h-4 w-4 transition-transform ${showBranchesDropdown ? 'rotate-180' : ''}`} />
@@ -1626,12 +1626,12 @@ export default function InventoryPage() {
                                   type="checkbox"
                                   checked={selectedBranches[branch.id] || false}
                                   onChange={() => handleBranchToggle(branch.id)}
-                                  className="w-5 h-5 text-blue-600 bg-[var(--dash-bg-surface)] border-2 border-blue-500 rounded focus:ring-blue-500 focus:ring-2 accent-blue-600"
+                                  className="w-5 h-5 text-dash-accent-blue bg-[var(--dash-bg-surface)] border-2 border-dash-accent-blue rounded focus:ring-dash-accent-blue focus:ring-2 accent-[var(--dash-accent-blue)]"
                                 />
                                 <span className="text-[var(--dash-text-primary)] text-base font-medium flex-1 text-right">
                                   {branch.name}
                                 </span>
-                                <span className="text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-600/30">
+                                <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-1 rounded border border-dash-accent-blue/30">
                                   {branch.name.includes('مخزن') || branch.name.includes('شاكوس') ? 'مخزن' : 'فرع'}
                                 </span>
                               </label>
@@ -1642,7 +1642,7 @@ export default function InventoryPage() {
                         {/* Simple Summary at Bottom */}
                         <div className="px-4 py-2 border-t border-[var(--dash-border-default)] bg-[var(--dash-bg-raised)]">
                           <div className="text-center">
-                            <span className="text-blue-400 font-medium text-sm">
+                            <span className="text-dash-accent-blue font-medium text-sm">
                               {Object.values(selectedBranches).filter(Boolean).length} من أصل {branches.length} محدد
                             </span>
                           </div>
@@ -1656,18 +1656,18 @@ export default function InventoryPage() {
                     <button 
                       onClick={() => setViewMode('grid')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'grid' 
-                          ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                        viewMode === 'grid'
+                          ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                           : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
                       <Squares2X2Icon className="h-4 w-4" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => setViewMode('table')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'table' 
-                          ? 'bg-blue-600 text-[var(--dash-text-primary)]' 
+                        viewMode === 'table'
+                          ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                           : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                       }`}
                     >
@@ -1680,7 +1680,7 @@ export default function InventoryPage() {
                     onClick={toggleAuditBadges}
                     className={`p-2 rounded-md transition-colors ${
                       showAuditBadges
-                        ? 'bg-blue-600 text-[var(--dash-text-primary)]'
+                        ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
                         : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)] bg-[var(--dash-bg-surface)]'
                     }`}
                     title="إظهار/إخفاء حالة الجرد"
@@ -1700,7 +1700,7 @@ export default function InventoryPage() {
                 {/* Right Side - Capital Display */}
                 <div className="flex items-center gap-2">
                   {/* Total Capital Badge */}
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-600/20 to-emerald-600/20 border border-blue-500/30 rounded-lg">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-dash-accent-blue-subtle to-dash-accent-green-subtle border border-dash-accent-blue/30 rounded-lg">
                     <BanknotesIcon className="h-4 w-4 text-emerald-400" />
                     <span className="text-xs text-[var(--dash-text-muted)]">رأس المال:</span>
                     <span className="text-sm font-bold text-emerald-400">
@@ -1715,7 +1715,7 @@ export default function InventoryPage() {
                       className="flex items-center gap-1.5 px-2 py-1 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)]/50 rounded-md"
                     >
                       <span className="text-xs text-[var(--dash-text-muted)]">{branch.name}:</span>
-                      <span className="text-xs font-semibold text-blue-300">
+                      <span className="text-xs font-semibold text-dash-accent-blue">
                         {branch.capital.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                       </span>
                     </div>
@@ -1732,7 +1732,7 @@ export default function InventoryPage() {
                 </div>
               ) : error ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="text-red-400">خطأ: {error}</div>
+                  <div className="text-dash-accent-red">خطأ: {error}</div>
                 </div>
               ) : viewMode === 'table' ? (
                 <ResizableTable
@@ -1771,9 +1771,9 @@ export default function InventoryPage() {
                         }}
                         className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 relative group ${
                           selectedProduct?.id === product.id
-                            ? 'border-blue-500 bg-[#434E61]'
+                            ? 'border-dash-accent-blue bg-[#434E61]'
                             : selectedProductIds.includes(product.id)
-                            ? 'border-blue-400/50 bg-[#3a4a5e]'
+                            ? 'border-dash-accent-blue/50 bg-[#3a4a5e]'
                             : 'border-transparent hover:border-gray-500 hover:bg-[#434E61]'
                         }`}
                       >
@@ -1788,7 +1788,7 @@ export default function InventoryPage() {
                                 toggleProductSelection(product.id)
                               }}
                               onClick={(e) => e.stopPropagation()}
-                              className="w-4 h-4 rounded border-gray-500 bg-[var(--dash-bg-surface)] text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer accent-blue-600"
+                              className="w-4 h-4 rounded border-gray-500 bg-[var(--dash-bg-surface)] text-dash-accent-blue focus:ring-dash-accent-blue focus:ring-2 cursor-pointer accent-[var(--dash-accent-blue)]"
                             />
                           </div>
                         )}
@@ -1813,10 +1813,10 @@ export default function InventoryPage() {
                                   (() => {
                                     const status = (product.inventoryData[currentBranch.id] as any)?.audit_status || 'غير مجرود'
                                     switch(status) {
-                                      case 'تام الجرد': return 'bg-green-600 text-[var(--dash-text-primary)]'
-                                      case 'استعد': return 'bg-yellow-600 text-[var(--dash-text-primary)]'
-                                      case 'غير مجرود': return 'bg-red-600 text-[var(--dash-text-primary)]'
-                                      default: return 'bg-red-600 text-[var(--dash-text-primary)]'
+                                      case 'تام الجرد': return 'bg-dash-accent-green text-[var(--dash-text-primary)]'
+                                      case 'استعد': return 'bg-dash-accent-orange text-[var(--dash-text-primary)]'
+                                      case 'غير مجرود': return 'bg-dash-accent-red text-[var(--dash-text-primary)]'
+                                      default: return 'bg-dash-accent-red text-[var(--dash-text-primary)]'
                                     }
                                   })()
                                 }`}
@@ -1856,7 +1856,7 @@ export default function InventoryPage() {
                         <div className="space-y-1 text-xs">
                           {/* Selling Price */}
                           <div className="flex justify-center mb-2">
-                            <span className="text-blue-400 font-medium text-sm">
+                            <span className="text-dash-accent-blue font-medium text-sm">
                               {(product.price || 0).toFixed(2)}
                             </span>
                           </div>
@@ -1866,9 +1866,9 @@ export default function InventoryPage() {
                             <span className={`font-medium ${
                               (() => {
                                 const stockStatus = getStockStatus(product)
-                                if (stockStatus === 'zero') return 'text-red-400'
-                                if (stockStatus === 'low') return 'text-yellow-400'
-                                return 'text-green-400'
+                                if (stockStatus === 'zero') return 'text-dash-accent-red'
+                                if (stockStatus === 'low') return 'text-dash-accent-orange'
+                                return 'text-dash-accent-green'
                               })()
                             }`}>
                               {calculateTotalQuantity(product)}
@@ -1887,11 +1887,11 @@ export default function InventoryPage() {
                             const minStock = inventory?.min_stock || 0
                             
                             // Determine color based on quantity status for this specific branch
-                            let colorClass = 'text-green-400' // Good - Green
+                            let colorClass = 'text-dash-accent-green' // Good - Green
                             if (quantity <= 0) {
-                              colorClass = 'text-red-400' // Zero - Red
+                              colorClass = 'text-dash-accent-red' // Zero - Red
                             } else if (quantity <= minStock && minStock > 0) {
-                              colorClass = 'text-yellow-400' // Low - Yellow
+                              colorClass = 'text-dash-accent-orange' // Low - Yellow
                             }
                             
                             return (
@@ -1916,7 +1916,7 @@ export default function InventoryPage() {
                     <div className="flex justify-center py-6">
                       <button
                         onClick={() => setShowAllProducts(true)}
-                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors shadow-lg"
+                        className="px-6 py-3 dash-btn-primary rounded-lg font-medium transition-colors shadow-lg"
                       >
                         تحميل كل المنتجات ({filteredProducts.length - VISIBLE_PRODUCTS_LIMIT} منتج إضافي)
                       </button>
@@ -1971,14 +1971,14 @@ export default function InventoryPage() {
                       {modalProduct.main_image_url ? (
                         <img src={modalProduct.main_image_url} alt={modalProduct.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+                        <div className="w-full h-full bg-dash-accent-blue flex items-center justify-center">
                           <span className="text-[var(--dash-text-primary)] font-bold text-lg">📦</span>
                         </div>
                       )}
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-[var(--dash-text-primary)]">تفاصيل المنتج</h2>
-                      <p className="text-blue-400 font-medium">{modalProduct.name}</p>
+                      <p className="text-dash-accent-blue font-medium">{modalProduct.name}</p>
                     </div>
                   </div>
                   <button
@@ -1999,8 +1999,8 @@ export default function InventoryPage() {
                       {/* Basic Info Card */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-blue-400 text-sm">ℹ️</span>
+                          <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-blue text-sm">ℹ️</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">معلومات المنتج</h3>
                         </div>
@@ -2027,15 +2027,15 @@ export default function InventoryPage() {
                       {/* Pricing Card */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-green-400 text-sm">💰</span>
+                          <div className="w-8 h-8 bg-dash-accent-green-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-green text-sm">💰</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الأسعار</h3>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر البيع</p>
-                            <p className="text-green-400 font-bold text-xl">{(modalProduct.price || 0).toFixed(2)}</p>
+                            <p className="text-dash-accent-green font-bold text-xl">{(modalProduct.price || 0).toFixed(2)}</p>
                           </div>
                           <div
                             onClick={() => setShowPurchasePrice(!showPurchasePrice)}
@@ -2044,7 +2044,7 @@ export default function InventoryPage() {
                             {showPurchasePrice ? (
                               <>
                                 <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر الشراء</p>
-                                <p className="text-orange-400 font-bold text-xl">{(modalProduct.cost_price || 0).toFixed(2)}</p>
+                                <p className="text-dash-accent-orange font-bold text-xl">{(modalProduct.cost_price || 0).toFixed(2)}</p>
                               </>
                             ) : (
                               <div className="flex items-center justify-center h-full min-h-[52px]">
@@ -2054,11 +2054,11 @@ export default function InventoryPage() {
                           </div>
                           <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر الجملة</p>
-                            <p className="text-blue-400 font-bold text-lg">{(modalProduct.wholesale_price || 0).toFixed(2)}</p>
+                            <p className="text-dash-accent-blue font-bold text-lg">{(modalProduct.wholesale_price || 0).toFixed(2)}</p>
                           </div>
                           <div className="bg-[var(--dash-bg-surface)] rounded-lg p-4 text-center">
                             <p className="text-[var(--dash-text-muted)] text-sm mb-1">سعر 1</p>
-                            <p className="text-purple-400 font-bold text-lg">{(modalProduct.price1 || 0).toFixed(2)}</p>
+                            <p className="text-dash-accent-purple font-bold text-lg">{(modalProduct.price1 || 0).toFixed(2)}</p>
                           </div>
                         </div>
                       </div>
@@ -2067,8 +2067,8 @@ export default function InventoryPage() {
                       {modalProduct.description && (
                         <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                              <span className="text-purple-400 text-sm">📝</span>
+                            <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                              <span className="text-dash-accent-purple text-sm">📝</span>
                             </div>
                             <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">وصف المنتج</h3>
                           </div>
@@ -2083,16 +2083,16 @@ export default function InventoryPage() {
                       {/* Total Inventory Card */}
                       <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                            <span className="text-blue-400 text-sm">📊</span>
+                          <div className="w-8 h-8 bg-dash-accent-blue-subtle rounded-lg flex items-center justify-center">
+                            <span className="text-dash-accent-blue text-sm">📊</span>
                           </div>
                           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">المخازن والفروع</h3>
                         </div>
 
                         {/* Total Quantity Display */}
-                        <div className="bg-blue-600/10 rounded-lg p-4 mb-4 text-center border border-blue-600/20">
-                          <p className="text-blue-400 text-sm mb-1">الكمية الإجمالية</p>
-                          <p className="text-blue-400 font-bold text-3xl">
+                        <div className="bg-dash-accent-blue-subtle rounded-lg p-4 mb-4 text-center border border-dash-accent-blue/20">
+                          <p className="text-dash-accent-blue text-sm mb-1">الكمية الإجمالية</p>
+                          <p className="text-dash-accent-blue font-bold text-3xl">
                             {calculateTotalQuantity(modalProduct)}
                           </p>
                         </div>
@@ -2109,11 +2109,11 @@ export default function InventoryPage() {
                               <div key={locationId} className="bg-[var(--dash-bg-surface)] rounded-lg p-4 border border-[var(--dash-border-default)]/30">
                                 <div className="flex justify-between items-center mb-2">
                                   <span className="text-[var(--dash-text-primary)] font-medium">{locationName}</span>
-                                  <span className="text-blue-400 font-bold text-lg">{inventory?.quantity || 0}</span>
+                                  <span className="text-dash-accent-blue font-bold text-lg">{inventory?.quantity || 0}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
                                   <span className="text-[var(--dash-text-muted)]">الحد الأدنى</span>
-                                  <span className="text-orange-400">{inventory?.min_stock || 0}</span>
+                                  <span className="text-dash-accent-orange">{inventory?.min_stock || 0}</span>
                                 </div>
                               </div>
                             )
@@ -2125,8 +2125,8 @@ export default function InventoryPage() {
                       {modalProduct.variantsData && Object.keys(modalProduct.variantsData).length > 0 && (
                         <div className="bg-[var(--dash-bg-raised)] rounded-xl p-6 border border-[var(--dash-border-default)]">
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                              <span className="text-purple-400 text-sm">🎨</span>
+                            <div className="w-8 h-8 bg-dash-accent-purple-subtle rounded-lg flex items-center justify-center">
+                              <span className="text-dash-accent-purple text-sm">🎨</span>
                             </div>
                             <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">الألوان والأشكال</h3>
                           </div>
@@ -2381,9 +2381,9 @@ export default function InventoryPage() {
             return availableStatuses.map((status) => {
               const getStatusColor = (status: string) => {
                 switch(status) {
-                  case 'تام الجرد': return 'hover:bg-green-600/20 text-green-400'
-                  case 'استعد': return 'hover:bg-yellow-600/20 text-yellow-400'
-                  case 'غير مجرود': return 'hover:bg-red-600/20 text-red-400'
+                  case 'تام الجرد': return 'hover:bg-dash-accent-green-subtle text-dash-accent-green'
+                  case 'استعد': return 'hover:bg-dash-accent-orange-subtle text-dash-accent-orange'
+                  case 'غير مجرود': return 'hover:bg-dash-accent-red-subtle text-dash-accent-red'
                   default: return 'hover:bg-[var(--dash-bg-overlay)]/20 text-[var(--dash-text-muted)]'
                 }
               }

@@ -126,11 +126,11 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
   const getCategoryColor = (category: 'button' | 'feature' | 'view') => {
     switch (category) {
       case 'button':
-        return 'text-blue-400'
+        return 'text-dash-accent-blue'
       case 'feature':
-        return 'text-purple-400'
+        return 'text-dash-accent-purple'
       case 'view':
-        return 'text-green-400'
+        return 'text-dash-accent-green'
       default:
         return 'text-gray-400'
     }
@@ -140,7 +140,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
 
   return (
     <div className={`bg-[var(--dash-bg-surface)] rounded-lg border overflow-hidden transition-all ${
-      isSelected ? 'border-blue-500 shadow-lg shadow-blue-500/20' : 'border-[var(--dash-border-default)]'
+      isSelected ? 'border-dash-accent-blue shadow-lg shadow-blue-500/20' : 'border-[var(--dash-border-default)]'
     }`}>
       {/* Header */}
       <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)]">
@@ -174,7 +174,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
                 key={permission.id}
                 className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${
                   permission.enabled
-                    ? 'bg-[var(--dash-bg-raised)] border-blue-500/30 shadow-sm'
+                    ? 'bg-[var(--dash-bg-raised)] border-dash-accent-blue/30 shadow-sm'
                     : 'bg-[var(--dash-bg-raised)]/30 border-[var(--dash-border-default)]'
                 }`}
               >
@@ -183,7 +183,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
                   onClick={() => togglePermission(permission.id)}
                   className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                     permission.enabled
-                      ? 'bg-blue-600 border-blue-600'
+                      ? 'bg-dash-accent-blue border-dash-accent-blue'
                       : 'border-[var(--dash-text-disabled)] hover:border-[var(--dash-text-muted)]'
                   }`}
                 >
@@ -215,7 +215,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
 
                 {/* Status Indicator */}
                 <div className={`w-2 h-2 rounded-full ${
-                  permission.enabled ? 'bg-green-500' : 'bg-[var(--dash-bg-highlight)]'
+                  permission.enabled ? 'bg-dash-accent-green' : 'bg-[var(--dash-bg-highlight)]'
                 }`}></div>
               </div>
             ))}
@@ -227,7 +227,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
       <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-t border-[var(--dash-border-default)]">
         <div className="flex items-center justify-between">
           <div className="text-sm text-[var(--dash-text-muted)]">
-            <span className="text-green-400 font-medium">{enabledCount}</span> مفعلة من أصل{' '}
+            <span className="text-dash-accent-green font-medium">{enabledCount}</span> مفعلة من أصل{' '}
             <span className="text-[var(--dash-text-primary)] font-medium">{permissions.length}</span> صلاحية
           </div>
           <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ export default function PermissionDetails({ pageName, pageId, onClose, isSelecte
               onClick={() => {
                 setPermissions(prev => prev.map(p => ({ ...p, enabled: true })))
               }}
-              className="text-sm px-3 py-1 bg-green-600 text-[var(--dash-text-primary)] rounded-md hover:bg-green-700 transition-colors"
+              className="text-sm px-3 py-1 bg-dash-accent-green text-[var(--dash-text-primary)] rounded-md hover:brightness-90 transition-colors"
             >
               تفعيل الكل
             </button>

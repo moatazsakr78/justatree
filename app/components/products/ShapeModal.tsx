@@ -139,7 +139,7 @@ export function ShapeModal({ isOpen, onClose, onSave, shape }: ShapeModalProps) 
                   type="button"
                   onClick={handleRemoveImage}
                   disabled={loading}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg disabled:opacity-50 transition-colors text-sm font-medium"
+                  className="w-full dash-btn-red py-2 rounded-lg disabled:opacity-50 transition-colors text-sm font-medium"
                 >
                   إزالة الصورة
                 </button>
@@ -163,7 +163,7 @@ export function ShapeModal({ isOpen, onClose, onSave, shape }: ShapeModalProps) 
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   <p className="text-sm text-[var(--dash-text-muted)] text-center">
-                    <span className="font-medium text-blue-400">اضغط لاختيار صورة</span>
+                    <span className="font-medium text-dash-accent-blue">اضغط لاختيار صورة</span>
                     <br />
                     <span className="text-xs">الحد الأقصى: 1 ميجابايت</span>
                   </p>
@@ -173,14 +173,14 @@ export function ShapeModal({ isOpen, onClose, onSave, shape }: ShapeModalProps) 
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm">{error}</div>
+            <div className="text-dash-accent-red text-sm">{error}</div>
           )}
 
           <div className="flex gap-3 pt-4">
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] py-2 rounded-lg disabled:opacity-50 transition-colors font-medium"
+              className="flex-1 dash-btn-primary py-2 rounded-lg disabled:opacity-50 transition-colors font-medium"
             >
               {loading ? 'جاري الحفظ...' : (shape ? 'تحديث' : 'إضافة')}
             </button>

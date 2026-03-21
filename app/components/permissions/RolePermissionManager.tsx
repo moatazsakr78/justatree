@@ -133,7 +133,7 @@ export default function RolePermissionManager({
                         }}
                         className={`
                           w-full px-4 py-2 text-right hover:bg-[var(--dash-bg-overlay)] transition-colors
-                          ${selectedRoleId === role.id ? 'bg-blue-600 text-white' : 'text-[var(--dash-text-secondary)]'}
+                          ${selectedRoleId === role.id ? 'bg-dash-accent-blue text-white' : 'text-[var(--dash-text-secondary)]'}
                         `}
                       >
                         {role.name}
@@ -147,7 +147,7 @@ export default function RolePermissionManager({
             {selectedRole && (
               <div className="text-sm">
                 {isAdminRole ? (
-                  <span className="text-green-400">الأدمن الرئيسي له كل الصلاحيات</span>
+                  <span className="text-dash-accent-green">الأدمن الرئيسي له كل الصلاحيات</span>
                 ) : (
                   <span className="text-[var(--dash-text-muted)]">
                     عدد القيود: {restrictions.length}
@@ -171,8 +171,8 @@ export default function RolePermissionManager({
         {/* Admin Role Warning */}
         {selectedRoleId && isAdminRole && (
           <div className="flex-1 flex items-center justify-center text-[var(--dash-text-muted)] min-h-[400px]">
-            <div className="text-center bg-green-500/10 border border-green-500/30 rounded-lg p-6">
-              <p className="text-lg text-green-400 mb-2">الأدمن الرئيسي</p>
+            <div className="text-center bg-dash-accent-green-subtle border border-dash-accent-green/30 rounded-lg p-6">
+              <p className="text-lg text-dash-accent-green mb-2">الأدمن الرئيسي</p>
               <p className="text-sm text-[var(--dash-text-secondary)]">
                 هذا الدور له كل الصلاحيات ولا يمكن تعديل قيوده
               </p>
@@ -185,7 +185,7 @@ export default function RolePermissionManager({
           <>
             {loading ? (
               <div className="flex items-center justify-center min-h-[400px]">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-dash-accent-blue" />
               </div>
             ) : (
               <PermissionGrid

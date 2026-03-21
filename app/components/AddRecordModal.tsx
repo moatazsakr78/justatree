@@ -92,7 +92,7 @@ export default function AddRecordModal({ isOpen, onClose, onRecordAdded }: AddRe
           <button
             onClick={handleSave}
             disabled={!recordName.trim() || isLoading}
-            className="px-4 py-2 bg-green-600 text-[var(--dash-text-primary)] rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-dash-accent-green text-[var(--dash-text-primary)] rounded-lg hover:brightness-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'جاري الحفظ...' : 'حفظ'}
           </button>

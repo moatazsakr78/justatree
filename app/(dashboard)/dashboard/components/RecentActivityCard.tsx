@@ -24,9 +24,9 @@ interface RecentActivityCardProps {
 }
 
 const actionConfig: Record<string, { icon: typeof PlusCircleIcon; color: string }> = {
-  create: { icon: PlusCircleIcon, color: 'text-green-400' },
-  update: { icon: PencilSquareIcon, color: 'text-blue-400' },
-  delete: { icon: TrashIcon, color: 'text-red-400' },
+  create: { icon: PlusCircleIcon, color: 'text-dash-accent-green' },
+  update: { icon: PencilSquareIcon, color: 'text-dash-accent-blue' },
+  delete: { icon: TrashIcon, color: 'text-dash-accent-red' },
 };
 
 const entityLabels: Record<string, string> = {
@@ -140,7 +140,7 @@ export default function RecentActivityCard({ activities, loading = false }: Rece
 
       <Link
         href="/activity-logs"
-        className="flex items-center justify-center gap-2 mt-4 py-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+        className="flex items-center justify-center gap-2 mt-4 py-2 text-dash-accent-blue hover:text-dash-accent-blue text-sm font-medium transition-colors"
       >
         <span>عرض المزيد</span>
         <ArrowLeftIcon className="w-4 h-4" />

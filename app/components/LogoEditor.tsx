@@ -197,7 +197,7 @@ export default function LogoEditor({ imageFile, onSave, onCancel }: LogoEditorPr
                   onClick={() => setShape('square')}
                   className={`px-6 py-3 rounded-lg border-2 transition-all ${
                     shape === 'square'
-                      ? 'border-blue-500 bg-blue-500/20 text-white'
+                      ? 'border-dash-accent-blue bg-dash-accent-blue-subtle text-white'
                       : 'border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:border-[var(--dash-border-subtle)]'
                   }`}
                 >
@@ -211,7 +211,7 @@ export default function LogoEditor({ imageFile, onSave, onCancel }: LogoEditorPr
                   onClick={() => setShape('circle')}
                   className={`px-6 py-3 rounded-lg border-2 transition-all ${
                     shape === 'circle'
-                      ? 'border-blue-500 bg-blue-500/20 text-white'
+                      ? 'border-dash-accent-blue bg-dash-accent-blue-subtle text-white'
                       : 'border-[var(--dash-border-default)] text-[var(--dash-text-secondary)] hover:border-[var(--dash-border-subtle)]'
                   }`}
                 >
@@ -256,11 +256,11 @@ export default function LogoEditor({ imageFile, onSave, onCancel }: LogoEditorPr
             {/* Instructions */}
             <div className="bg-[var(--dash-bg-raised)] rounded-lg p-4 border border-[var(--dash-border-default)]">
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-dash-accent-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <p className="text-blue-300 text-sm font-medium mb-1">كيفية الاستخدام:</p>
+                  <p className="text-dash-accent-blue text-sm font-medium mb-1">كيفية الاستخدام:</p>
                   <ul className="text-[var(--dash-text-secondary)] text-xs space-y-1">
                     <li>• استخدم الفأرة لسحب الصورة وتحريكها</li>
                     <li>• استخدم شريط التكبير لضبط حجم الصورة</li>
@@ -281,7 +281,7 @@ export default function LogoEditor({ imageFile, onSave, onCancel }: LogoEditorPr
             </button>
             <button
               onClick={handleSave}
-              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+              className="px-6 py-2.5 dash-btn-primary rounded-lg transition-colors font-medium"
             >
               حفظ الشعار
             </button>

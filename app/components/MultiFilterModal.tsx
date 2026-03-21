@@ -147,7 +147,7 @@ export default function MultiFilterModal({
         {/* Header */}
         <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-dash-accent-green rounded-full flex items-center justify-center">
               <FunnelIcon className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -171,7 +171,7 @@ export default function MultiFilterModal({
               <span className="mr-3 text-[var(--dash-text-secondary)]">جاري التحميل...</span>
             </div>
           ) : error ? (
-            <div className="text-red-400 text-center py-10">{error}</div>
+            <div className="text-dash-accent-red text-center py-10">{error}</div>
           ) : (
             <div className="space-y-3">
 
@@ -313,7 +313,7 @@ export default function MultiFilterModal({
             {totalSelectedCount > 0 && (
               <button
                 onClick={handleClear}
-                className="text-red-400 hover:text-red-300 text-sm"
+                className="text-dash-accent-red hover:text-dash-accent-red text-sm"
               >
                 إلغاء الكل
               </button>
@@ -328,7 +328,7 @@ export default function MultiFilterModal({
             </button>
             <button
               onClick={handleApply}
-              className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-colors font-medium"
+              className="px-6 py-2 dash-btn-green rounded transition-colors font-medium"
             >
               تطبيق
             </button>
@@ -386,7 +386,7 @@ function FilterSection({
           <span className="text-[var(--dash-text-secondary)]">{icon}</span>
           <span className="text-white font-medium">{label}</span>
           {selectedCount > 0 && (
-            <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded">
+            <span className="text-xs bg-dash-accent-green-subtle text-dash-accent-green px-2 py-0.5 rounded">
               {selectedCount} محدد
             </span>
           )}
@@ -413,18 +413,18 @@ function FilterSection({
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder="بحث..."
-                className="w-full pl-3 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-white text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full pl-3 pr-10 py-2 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded text-white text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:ring-2 focus:ring-dash-accent-green"
               />
             </div>
             <button
               onClick={onSelectAll}
-              className="px-2 py-1 text-xs bg-green-600/20 text-green-400 hover:bg-green-600/30 rounded whitespace-nowrap"
+              className="px-2 py-1 text-xs bg-dash-accent-green-subtle text-dash-accent-green hover:bg-dash-accent-green/30 rounded whitespace-nowrap"
             >
               تحديد الكل
             </button>
             <button
               onClick={onDeselectAll}
-              className="px-2 py-1 text-xs bg-red-600/20 text-red-400 hover:bg-red-600/30 rounded whitespace-nowrap"
+              className="px-2 py-1 text-xs bg-dash-accent-red-subtle text-dash-accent-red hover:bg-dash-accent-red/30 rounded whitespace-nowrap"
             >
               إلغاء الكل
             </button>
@@ -439,7 +439,7 @@ function FilterSection({
                     key={option.id}
                     className={`flex items-center gap-2 p-2 rounded cursor-pointer transition-colors ${
                       selectedSet.has(option.id)
-                        ? 'bg-green-600/20 border border-green-500/50'
+                        ? 'bg-dash-accent-green-subtle border border-dash-accent-green/50'
                         : 'bg-[var(--dash-bg-surface)] border border-transparent hover:border-[var(--dash-border-subtle)]'
                     }`}
                   >
@@ -452,7 +452,7 @@ function FilterSection({
                       />
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                         selectedSet.has(option.id)
-                          ? 'bg-green-600 border-green-600'
+                          ? 'bg-dash-accent-green border-dash-accent-green'
                           : 'bg-transparent border-[var(--dash-text-muted)]'
                       }`}>
                         {selectedSet.has(option.id) && (

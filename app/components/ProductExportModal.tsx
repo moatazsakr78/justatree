@@ -394,7 +394,7 @@ export default function ProductExportModal({
                   name="exportMode"
                   checked={exportMode === 'all'}
                   onChange={() => setExportMode('all')}
-                  className="w-4 h-4 text-blue-600"
+                  className="w-4 h-4 text-dash-accent-blue"
                 />
                 <span className="text-gray-700">جميع المنتجات ({products.length})</span>
               </label>
@@ -404,7 +404,7 @@ export default function ProductExportModal({
                   name="exportMode"
                   checked={exportMode === 'selected'}
                   onChange={() => setExportMode('selected')}
-                  className="w-4 h-4 text-blue-600"
+                  className="w-4 h-4 text-dash-accent-blue"
                   disabled={selectedProductIds.length === 0}
                 />
                 <span className={selectedProductIds.length === 0 ? 'text-gray-400' : 'text-gray-700'}>
@@ -421,7 +421,7 @@ export default function ProductExportModal({
                   onClose()
                 }
               }}
-              className="w-full px-4 py-2.5 bg-blue-50 text-blue-700 border-2 border-blue-300 rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2 font-medium"
+              className="w-full px-4 py-2.5 bg-dash-accent-blue-subtle text-dash-accent-blue border-2 border-blue-300 rounded-lg hover:bg-dash-accent-blue-subtle transition-colors flex items-center justify-center gap-2 font-medium"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -434,13 +434,13 @@ export default function ProductExportModal({
           <div className="mb-4 flex gap-2">
             <button
               onClick={() => toggleAllOptions(true)}
-              className="px-3 py-1.5 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200"
+              className="px-3 py-1.5 text-sm bg-dash-accent-green-subtle text-dash-accent-green rounded hover:bg-green-200"
             >
               تحديد الكل
             </button>
             <button
               onClick={() => toggleAllOptions(false)}
-              className="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
+              className="px-3 py-1.5 text-sm bg-dash-accent-red-subtle text-dash-accent-red rounded hover:bg-red-200"
             >
               إلغاء الكل
             </button>
@@ -457,7 +457,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.name}
                     onChange={(e) => setExportOptions({ ...exportOptions, name: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">اسم المنتج</span>
                 </label>
@@ -466,7 +466,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.code}
                     onChange={(e) => setExportOptions({ ...exportOptions, code: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الكود / الباركود</span>
                 </label>
@@ -475,7 +475,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.barcode}
                     onChange={(e) => setExportOptions({ ...exportOptions, barcode: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الباركود</span>
                 </label>
@@ -484,7 +484,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.description}
                     onChange={(e) => setExportOptions({ ...exportOptions, description: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الوصف</span>
                 </label>
@@ -500,7 +500,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.purchasePrice}
                     onChange={(e) => setExportOptions({ ...exportOptions, purchasePrice: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">سعر الشراء</span>
                 </label>
@@ -509,7 +509,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.salePrice}
                     onChange={(e) => setExportOptions({ ...exportOptions, salePrice: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">سعر البيع</span>
                 </label>
@@ -518,7 +518,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.wholesalePrice}
                     onChange={(e) => setExportOptions({ ...exportOptions, wholesalePrice: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">سعر الجملة</span>
                 </label>
@@ -527,7 +527,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.price1}
                     onChange={(e) => setExportOptions({ ...exportOptions, price1: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">السعر 1</span>
                 </label>
@@ -536,7 +536,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.price2}
                     onChange={(e) => setExportOptions({ ...exportOptions, price2: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">السعر 2</span>
                 </label>
@@ -545,7 +545,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.price3}
                     onChange={(e) => setExportOptions({ ...exportOptions, price3: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">السعر 3</span>
                 </label>
@@ -554,7 +554,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.price4}
                     onChange={(e) => setExportOptions({ ...exportOptions, price4: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">السعر 4</span>
                 </label>
@@ -570,7 +570,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.mainImage}
                     onChange={(e) => setExportOptions({ ...exportOptions, mainImage: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الصورة الرئيسية</span>
                 </label>
@@ -579,7 +579,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.additionalImages}
                     onChange={(e) => setExportOptions({ ...exportOptions, additionalImages: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الصور الفرعية</span>
                 </label>
@@ -588,7 +588,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.videos}
                     onChange={(e) => setExportOptions({ ...exportOptions, videos: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الفيديوهات</span>
                 </label>
@@ -604,7 +604,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.colors}
                     onChange={(e) => setExportOptions({ ...exportOptions, colors: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الألوان</span>
                 </label>
@@ -613,7 +613,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.variants}
                     onChange={(e) => setExportOptions({ ...exportOptions, variants: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">الأشكال (المتغيرات)</span>
                 </label>
@@ -629,7 +629,7 @@ export default function ProductExportModal({
                     type="checkbox"
                     checked={exportOptions.isActive}
                     onChange={(e) => setExportOptions({ ...exportOptions, isActive: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-dash-accent-blue rounded"
                   />
                   <span className="text-sm text-gray-700">حالة المنتج (نشط/غير نشط)</span>
                 </label>
@@ -647,7 +647,7 @@ export default function ProductExportModal({
                 <span className="text-sm font-medium text-gray-700">
                   جاري التصدير... ({processedCount} من {totalCount})
                 </span>
-                <span className="text-sm font-bold text-blue-600">{exportProgress}%</span>
+                <span className="text-sm font-bold text-dash-accent-blue">{exportProgress}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                 <div
@@ -681,7 +681,7 @@ export default function ProductExportModal({
               className={`px-6 py-2 rounded-lg flex items-center gap-2 transition-all ${
                 isExporting
                   ? 'bg-blue-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700'
+                  : 'dash-btn-primary'
               } text-white`}
             >
               {isExporting ? (

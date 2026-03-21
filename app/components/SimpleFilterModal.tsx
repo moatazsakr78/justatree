@@ -102,7 +102,7 @@ export default function SimpleFilterModal({
         {/* Header */}
         <div className="bg-[var(--dash-bg-raised)] px-6 py-4 border-b border-[var(--dash-border-default)] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-dash-accent-blue rounded-full flex items-center justify-center">
               <FunnelIcon className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -122,11 +122,11 @@ export default function SimpleFilterModal({
         <div className="p-6 overflow-y-auto max-h-[60vh]">
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
               <span className="mr-3 text-[var(--dash-text-secondary)]">جاري التحميل...</span>
             </div>
           ) : error ? (
-            <div className="text-red-400 text-center py-10">{error}</div>
+            <div className="text-dash-accent-red text-center py-10">{error}</div>
           ) : (
             <div className="space-y-4">
 
@@ -216,7 +216,7 @@ export default function SimpleFilterModal({
             {activeFiltersCount > 0 && (
               <button
                 onClick={handleClear}
-                className="text-red-400 hover:text-red-300 text-sm"
+                className="text-dash-accent-red hover:text-dash-accent-red text-sm"
               >
                 إلغاء الكل
               </button>
@@ -231,7 +231,7 @@ export default function SimpleFilterModal({
             </button>
             <button
               onClick={handleApply}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors font-medium"
+              className="px-6 py-2 dash-btn-primary rounded transition-colors font-medium"
             >
               تطبيق
             </button>
@@ -326,7 +326,7 @@ function SearchableSelect({
           onClick={() => setIsOpen(!isOpen)}
           className={`w-full bg-[var(--dash-bg-raised)] border rounded-md px-4 py-2.5 text-right flex items-center justify-between cursor-pointer transition-colors ${
             isOpen
-              ? 'border-blue-500 ring-2 ring-blue-500/20'
+              ? 'border-dash-accent-blue ring-2 ring-blue-500/20'
               : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-subtle)]'
           }`}
         >
@@ -353,7 +353,7 @@ function SearchableSelect({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="ابحث..."
-                  className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded px-9 py-2 text-white text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded px-9 py-2 text-white text-sm placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-dash-accent-blue"
                 />
               </div>
             </div>
@@ -365,7 +365,7 @@ function SearchableSelect({
                 onClick={handleClear}
                 className={`px-4 py-2.5 cursor-pointer transition-colors ${
                   !value
-                    ? 'bg-blue-600/20 text-blue-400'
+                    ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
                     : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/30'
                 }`}
               >
@@ -380,7 +380,7 @@ function SearchableSelect({
                     onClick={() => handleSelect(option.id)}
                     className={`px-4 py-2.5 cursor-pointer transition-colors ${
                       value === option.id
-                        ? 'bg-blue-600/20 text-blue-400'
+                        ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
                         : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-overlay)]/30'
                     }`}
                   >

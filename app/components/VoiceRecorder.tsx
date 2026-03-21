@@ -126,14 +126,14 @@ export default function VoiceRecorder({
         {/* Cancel Button */}
         <button
           onClick={cancelRecording}
-          className="p-2 text-red-400 hover:text-red-300 transition-colors"
+          className="p-2 text-dash-accent-red hover:text-dash-accent-red transition-colors"
         >
           <XMarkIcon className="w-6 h-6" />
         </button>
 
         {/* Recording Indicator */}
         <div className="flex items-center gap-2 flex-1">
-          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+          <div className="w-3 h-3 bg-dash-accent-red rounded-full animate-pulse" />
           <span className="text-white text-sm font-mono">{formatTime(recordingTime)}</span>
 
           {/* Waveform Animation */}
@@ -154,7 +154,7 @@ export default function VoiceRecorder({
         {/* Stop Button */}
         <button
           onClick={stopRecording}
-          className="p-2 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+          className="p-2 bg-dash-accent-red hover:bg-dash-accent-red rounded-full transition-colors"
         >
           <StopIcon className="w-5 h-5 text-white" />
         </button>
@@ -169,14 +169,14 @@ export default function VoiceRecorder({
         {/* Cancel Button */}
         <button
           onClick={cancelRecording}
-          className="p-2 text-red-400 hover:text-red-300 transition-colors"
+          className="p-2 text-dash-accent-red hover:text-dash-accent-red transition-colors"
         >
           <XMarkIcon className="w-6 h-6" />
         </button>
 
         {/* Audio Preview */}
         <div className="flex items-center gap-2 flex-1">
-          <MicrophoneIcon className="w-5 h-5 text-green-400" />
+          <MicrophoneIcon className="w-5 h-5 text-dash-accent-green" />
           <span className="text-white text-sm">{formatTime(recordingTime)}</span>
           <audio
             src={URL.createObjectURL(audioBlob)}
@@ -189,7 +189,7 @@ export default function VoiceRecorder({
         {/* Send Button */}
         <button
           onClick={sendRecording}
-          className="p-2 bg-green-500 hover:bg-green-600 rounded-full transition-colors"
+          className="p-2 bg-dash-accent-green hover:bg-dash-accent-green rounded-full transition-colors"
         >
           <PaperAirplaneIcon className="w-5 h-5 text-white -rotate-45" />
         </button>
@@ -201,7 +201,7 @@ export default function VoiceRecorder({
   return (
     <button
       onClick={startRecording}
-      className="p-2 text-[var(--dash-text-muted)] hover:text-green-400 transition-colors"
+      className="p-2 text-[var(--dash-text-muted)] hover:text-dash-accent-green transition-colors"
       title="تسجيل رسالة صوتية"
     >
       <MicrophoneIcon className="w-6 h-6" />

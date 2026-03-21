@@ -33,8 +33,8 @@ export default function PermissionCard({
         relative flex flex-col p-4 rounded-xl border transition-all duration-200
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-[1.02]'}
         ${isRestricted
-          ? 'bg-red-500/10 border-red-500/40 hover:border-red-500'
-          : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)]/50 hover:border-blue-500/50'
+          ? 'bg-dash-accent-red-subtle border-dash-accent-red/40 hover:border-dash-accent-red'
+          : 'bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)]/50 hover:border-dash-accent-blue/50'
         }
       `}
     >
@@ -42,7 +42,7 @@ export default function PermissionCard({
       <div
         className={`
           absolute top-3 left-3 w-2 h-2 rounded-full
-          ${isRestricted ? 'bg-red-500' : 'bg-green-500'}
+          ${isRestricted ? 'bg-dash-accent-red' : 'bg-dash-accent-green'}
         `}
       />
 
@@ -54,7 +54,7 @@ export default function PermissionCard({
             flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center
             transition-colors duration-200
             ${isRestricted
-              ? 'bg-red-500 border-red-500'
+              ? 'bg-dash-accent-red border-dash-accent-red'
               : 'border-[var(--dash-text-disabled)] bg-transparent hover:border-[var(--dash-text-muted)]'
             }
           `}
@@ -81,11 +81,11 @@ export default function PermissionCard({
       {/* Status Text */}
       <div className="mt-3 mr-9">
         {isRestricted ? (
-          <span className="text-xs text-red-400 font-medium">
+          <span className="text-xs text-dash-accent-red font-medium">
             ممنوع
           </span>
         ) : (
-          <span className="text-xs text-green-400 font-medium">
+          <span className="text-xs text-dash-accent-green font-medium">
             مسموح
           </span>
         )}

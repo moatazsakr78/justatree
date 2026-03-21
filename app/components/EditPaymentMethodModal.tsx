@@ -171,7 +171,7 @@ export default function EditPaymentMethodModal({
                 type="checkbox"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
-                className="w-4 h-4 text-blue-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-[var(--dash-accent-blue)]"
+                className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-[var(--dash-accent-blue)]"
               />
               <span className="text-sm text-[var(--dash-text-secondary)]">نشط</span>
             </label>
@@ -192,7 +192,7 @@ export default function EditPaymentMethodModal({
                   type="checkbox"
                   checked={isPhysical}
                   onChange={(e) => setIsPhysical(e.target.checked)}
-                  className="w-4 h-4 text-green-600 bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-green-500"
+                  className="w-4 h-4 text-dash-accent-green bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] rounded focus:ring-green-500"
                 />
                 <span className="text-sm text-[var(--dash-text-secondary)]">طريقة دفع فعلية</span>
               </label>
@@ -217,7 +217,7 @@ export default function EditPaymentMethodModal({
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex-1 px-4 py-2 dash-btn-primary text-white rounded-lg font-medium transition-colors disabled:opacity-50"
             >
               {isLoading ? 'جاري الحفظ...' : 'حفظ التغييرات'}
             </button>
@@ -241,7 +241,7 @@ export default function EditPaymentMethodModal({
                   key={index}
                   type="button"
                   onClick={() => handleSuggestionClick(method)}
-                  className="px-2 py-1 text-xs bg-blue-900 text-blue-300 rounded hover:bg-blue-800 transition-colors"
+                  className="px-2 py-1 text-xs bg-dash-accent-blue-subtle text-dash-accent-blue rounded hover:bg-dash-accent-blue-subtle transition-colors"
                 >
                   {method}
                 </button>

@@ -119,7 +119,7 @@ export default function DiscountModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-[var(--dash-border-default)]">
                   <Dialog.Title className="text-xl font-bold text-white flex items-center gap-2">
-                    <ReceiptPercentIcon className="h-6 w-6 text-orange-400" />
+                    <ReceiptPercentIcon className="h-6 w-6 text-dash-accent-orange" />
                     إضافة خصم
                   </Dialog.Title>
                   <button
@@ -137,7 +137,7 @@ export default function DiscountModal({
                       className={({ selected }) =>
                         `flex-1 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                           selected
-                            ? "text-orange-400 border-b-2 border-orange-400 bg-orange-400/10"
+                            ? "text-dash-accent-orange border-b-2 border-orange-400 bg-orange-400/10"
                             : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-raised)]/50"
                         }`
                       }
@@ -149,7 +149,7 @@ export default function DiscountModal({
                       className={({ selected }) =>
                         `flex-1 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                           selected
-                            ? "text-orange-400 border-b-2 border-orange-400 bg-orange-400/10"
+                            ? "text-dash-accent-orange border-b-2 border-orange-400 bg-orange-400/10"
                             : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-raised)]/50"
                         }`
                       }
@@ -201,7 +201,7 @@ export default function DiscountModal({
                               {selectedItem.discount && (
                                 <div className="flex justify-between items-center text-sm mt-1">
                                   <span className="text-[var(--dash-text-muted)]">الخصم الحالي:</span>
-                                  <span className="text-orange-400">
+                                  <span className="text-dash-accent-orange">
                                     {selectedItem.discount}{selectedItem.discountType === "percentage" ? "%" : " ج.م"}
                                   </span>
                                 </div>
@@ -237,7 +237,7 @@ export default function DiscountModal({
                             {cartDiscount > 0 && (
                               <div className="flex justify-between items-center text-sm mt-1">
                                 <span className="text-[var(--dash-text-muted)]">الخصم الحالي:</span>
-                                <span className="text-orange-400">
+                                <span className="text-dash-accent-orange">
                                   {cartDiscount}{cartDiscountType === "percentage" ? "%" : " ج.م"}
                                 </span>
                               </div>
@@ -260,7 +260,7 @@ export default function DiscountModal({
                           onClick={() => setDiscountType("percentage")}
                           className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
                             discountType === "percentage"
-                              ? "bg-orange-500 text-white"
+                              ? "bg-dash-accent-orange text-white"
                               : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
@@ -270,7 +270,7 @@ export default function DiscountModal({
                           onClick={() => setDiscountType("fixed")}
                           className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
                             discountType === "fixed"
-                              ? "bg-orange-500 text-white"
+                              ? "bg-dash-accent-orange text-white"
                               : "text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
                           }`}
                         >
@@ -293,7 +293,7 @@ export default function DiscountModal({
                           min="0"
                           max={discountType === "percentage" ? "100" : undefined}
                         />
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 font-medium">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-dash-accent-orange font-medium">
                           {discountType === "percentage" ? "%" : "ج.م"}
                         </span>
                       </div>
@@ -305,7 +305,7 @@ export default function DiscountModal({
                       {((selectedTab === 0 && selectedItem?.discount) || (selectedTab === 1 && cartDiscount > 0)) && (
                         <button
                           onClick={handleRemoveDiscount}
-                          className="flex items-center justify-center gap-2 px-4 py-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-colors"
+                          className="flex items-center justify-center gap-2 px-4 py-3 bg-dash-accent-red-subtle hover:bg-dash-accent-red/30 text-dash-accent-red rounded-xl transition-colors"
                         >
                           <TrashIcon className="h-5 w-5" />
                           إزالة
@@ -316,7 +316,7 @@ export default function DiscountModal({
                       <button
                         onClick={handleApplyDiscount}
                         disabled={!discountValue || parseFloat(discountValue) <= 0}
-                        className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
+                        className="flex-1 py-3 bg-dash-accent-orange hover:bg-dash-accent-orange disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
                       >
                         تطبيق الخصم
                       </button>

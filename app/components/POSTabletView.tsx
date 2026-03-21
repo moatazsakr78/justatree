@@ -236,7 +236,7 @@ export default function POSTabletView({
       width: 80,
       render: (value: boolean) => (
         <div className="flex justify-center">
-          <div className={`w-3 h-3 rounded-full ${value ? 'bg-green-500' : 'bg-red-500'}`}></div>
+          <div className={`w-3 h-3 rounded-full ${value ? 'bg-dash-accent-green' : 'bg-dash-accent-red'}`}></div>
         </div>
       ),
     },
@@ -298,7 +298,7 @@ export default function POSTabletView({
                 onClick={() => {
                   clearSelections()
                 }}
-                className="text-xs text-[var(--dash-text-muted)] hover:text-red-400 transition-colors px-1.5 py-0.5 rounded whitespace-nowrap"
+                className="text-xs text-[var(--dash-text-muted)] hover:text-dash-accent-red transition-colors px-1.5 py-0.5 rounded whitespace-nowrap"
               >
                 مسح الكل
               </button>
@@ -332,7 +332,7 @@ export default function POSTabletView({
                       e.stopPropagation()
                       closeTab(tab.id)
                     }}
-                    className="ml-0.5 p-0.5 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                    className="ml-0.5 p-0.5 hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded transition-colors"
                     title="إغلاق"
                   >
                     <XMarkIcon className="w-3 h-3" />
@@ -344,7 +344,7 @@ export default function POSTabletView({
             {/* Add New Tab Button - Opens customer selection to create new tab */}
             <button
               onClick={() => setShowNewTabCustomerModal(true)}
-              className="px-1.5 py-0.5 text-green-400 hover:text-green-300 hover:bg-green-500/10 transition-colors flex items-center gap-0.5 border-l border-[var(--dash-border-default)]"
+              className="px-1.5 py-0.5 text-dash-accent-green hover:text-dash-accent-green hover:bg-dash-accent-green-subtle transition-colors flex items-center gap-0.5 border-l border-[var(--dash-border-default)]"
               title="إضافة نافذة بيع جديدة"
             >
               <PlusIcon className="w-3 h-3" />
@@ -359,7 +359,7 @@ export default function POSTabletView({
             <button
               onClick={() => setIsRecordsModalOpen(true)}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all relative ${
-                selections.record ? 'text-green-400 hover:text-green-300 hover:bg-green-500/10' : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
+                selections.record ? 'text-dash-accent-green hover:text-dash-accent-green hover:bg-dash-accent-green-subtle' : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
               <BanknotesIcon className="h-4 w-4" />
@@ -369,13 +369,13 @@ export default function POSTabletView({
                     <>
                       <span>{selections.record.name}</span>
                       {' '}
-                      <span className="text-yellow-400">{selections.subSafe.name}</span>
+                      <span className="text-dash-accent-orange">{selections.subSafe.name}</span>
                     </>
                   ) : selections.record.name
                 ) : 'الخزنة'}
               </span>
               {!selections.record && (
-                <div className="w-1.5 h-1.5 bg-red-400 rounded-full absolute top-1 right-1"></div>
+                <div className="w-1.5 h-1.5 bg-dash-accent-red rounded-full absolute top-1 right-1"></div>
               )}
             </button>
 
@@ -386,9 +386,9 @@ export default function POSTabletView({
               <UserIcon className="h-4 w-4" />
               <span>{isPurchaseMode ? 'المورد' : 'العميل'}</span>
               {isPurchaseMode ? (
-                !selectedSupplier && <div className="w-1.5 h-1.5 bg-red-400 rounded-full absolute top-1 right-1"></div>
+                !selectedSupplier && <div className="w-1.5 h-1.5 bg-dash-accent-red rounded-full absolute top-1 right-1"></div>
               ) : (
-                !selections.customer && <div className="w-1.5 h-1.5 bg-red-400 rounded-full absolute top-1 right-1"></div>
+                !selections.customer && <div className="w-1.5 h-1.5 bg-dash-accent-red rounded-full absolute top-1 right-1"></div>
               )}
             </button>
 
@@ -426,7 +426,7 @@ export default function POSTabletView({
               }}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 !isPurchaseMode && !isTransferMode && !isReturnMode
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-dash-accent-blue text-white'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
@@ -438,7 +438,7 @@ export default function POSTabletView({
               onClick={() => setShowPurchaseModeConfirm(true)}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 isPurchaseMode && !isTransferMode && !isReturnMode
-                  ? 'bg-purple-600 text-white'
+                  ? 'bg-dash-accent-purple text-white'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
@@ -455,7 +455,7 @@ export default function POSTabletView({
               }}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 isTransferMode && !isReturnMode
-                  ? 'bg-green-600 text-white'
+                  ? 'bg-dash-accent-green text-white'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
@@ -467,7 +467,7 @@ export default function POSTabletView({
               onClick={() => setIsReturnMode(!isReturnMode)}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-md transition-all ${
                 isReturnMode
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-dash-accent-red text-white'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
               }`}
             >
@@ -500,7 +500,7 @@ export default function POSTabletView({
                 onClick={() => setViewMode('grid')}
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-dash-accent-blue text-white'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 title="عرض الصور"
@@ -511,7 +511,7 @@ export default function POSTabletView({
                 onClick={() => setViewMode('table')}
                 className={`p-2 transition-colors ${
                   viewMode === 'table'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-dash-accent-blue text-white'
                     : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
                 }`}
                 title="عرض الجداول"
@@ -541,7 +541,7 @@ export default function POSTabletView({
               </div>
             ) : error ? (
               <div className="flex items-center justify-center h-full">
-                <div className="text-red-400">خطأ: {error}</div>
+                <div className="text-dash-accent-red">خطأ: {error}</div>
               </div>
             ) : (
               <>
@@ -572,7 +572,7 @@ export default function POSTabletView({
                           onClick={() => handleProductClick(product)}
                           className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 cursor-pointer transition-all duration-200 border-2 ${
                             selectedProduct?.id === product.id
-                              ? 'border-blue-500 bg-[#434E61]'
+                              ? 'border-dash-accent-blue bg-[#434E61]'
                               : 'border-transparent hover:border-[var(--dash-text-disabled)] hover:bg-[#434E61]'
                           }`}
                         >
@@ -602,7 +602,7 @@ export default function POSTabletView({
 
                           {/* Product Price */}
                           <div className="text-center">
-                            <span className="text-blue-400 font-medium text-sm">
+                            <span className="text-dash-accent-blue font-medium text-sm">
                               {formatPrice(product.price || 0, 'system')}
                             </span>
                           </div>
@@ -639,14 +639,14 @@ export default function POSTabletView({
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
                           <span className="text-[var(--dash-text-primary)] font-medium text-sm">السلة</span>
-                          <span className="bg-blue-600 px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]">
+                          <span className="bg-dash-accent-blue px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]">
                             {cartItems.length}
                           </span>
                         </div>
                         {cartItems.length > 0 && (
                           <button
                             onClick={() => clearCart()}
-                            className="text-red-400 hover:text-red-300 text-xs"
+                            className="text-dash-accent-red hover:text-dash-accent-red text-xs"
                             title="مسح السلة"
                           >
                             مسح الكل
@@ -686,7 +686,7 @@ export default function POSTabletView({
                                 </h4>
                                 <button
                                   onClick={() => removeFromCart(item.id)}
-                                  className="text-red-400 hover:text-red-300 p-1 ml-2 flex-shrink-0"
+                                  className="text-dash-accent-red hover:text-dash-accent-red p-1 ml-2 flex-shrink-0"
                                   title="إزالة من السلة"
                                 >
                                   <XMarkIcon className="h-4 w-4" />
@@ -756,7 +756,7 @@ export default function POSTabletView({
 
                           {/* Total Price */}
                           <div className="text-right">
-                            <span className="text-green-400 font-bold text-sm">
+                            <span className="text-dash-accent-green font-bold text-sm">
                               {formatPrice(item.totalPrice || (item.price * item.quantity) || 0, 'system')}
                             </span>
                           </div>
@@ -789,13 +789,13 @@ export default function POSTabletView({
                     {!isTransferMode ? (
                       <div className="text-right">
                         <div className="text-[var(--dash-text-primary)] text-xs font-medium">الإجمالي:</div>
-                        <div className="text-green-400 font-bold text-lg">
+                        <div className="text-dash-accent-green font-bold text-lg">
                           {formatPrice(cartTotal, 'system')}
                         </div>
                       </div>
                     ) : (
                       <div className="text-right">
-                        <div className="text-green-400 text-xs font-medium">وضع النقل</div>
+                        <div className="text-dash-accent-green text-xs font-medium">وضع النقل</div>
                         <div className="text-[var(--dash-text-primary)] font-bold text-lg">
                           {cartItems.reduce((sum, item) => sum + item.quantity, 0)} قطعة
                         </div>
@@ -812,12 +812,12 @@ export default function POSTabletView({
                     }
                     className={`flex-1 py-2 px-4 rounded-lg font-medium text-xs transition-colors disabled:bg-[var(--dash-bg-overlay)] disabled:cursor-not-allowed text-[var(--dash-text-primary)] ${
                       isTransferMode
-                        ? 'bg-green-600 hover:bg-green-700'
+                        ? 'dash-btn-green'
                         : isReturnMode
-                          ? 'bg-red-600 hover:bg-red-700'
+                          ? 'dash-btn-red'
                           : isPurchaseMode
-                            ? 'bg-purple-600 hover:bg-purple-700'
-                            : 'bg-blue-600 hover:bg-blue-700'
+                            ? 'dash-btn-purple'
+                            : 'dash-btn-primary'
                     }`}
                     onClick={handleCreateInvoice}
                   >

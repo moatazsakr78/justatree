@@ -59,7 +59,7 @@ export default function PermissionCategorySidebar({
                 w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg
                 transition-all duration-200 text-right
                 ${isSelected
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-dash-accent-blue text-white'
                   : 'text-[var(--dash-text-secondary)] hover:bg-[var(--dash-bg-raised)] hover:text-[var(--dash-text-primary)]'
                 }
               `}
@@ -76,7 +76,7 @@ export default function PermissionCategorySidebar({
                     ${isSelected
                       ? 'bg-white/20 text-white'
                       : stats.restricted > 0
-                        ? 'bg-red-500/20 text-red-400'
+                        ? 'bg-dash-accent-red-subtle text-dash-accent-red'
                         : 'bg-[var(--dash-bg-overlay)] text-[var(--dash-text-secondary)]'
                     }
                   `}

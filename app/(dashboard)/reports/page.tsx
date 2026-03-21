@@ -62,7 +62,7 @@ function ColumnsControlModalWrapper({
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 text-[var(--dash-text-primary)]">
           <div className="flex items-center gap-3">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-400"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue"></div>
             <span>جاري تحميل إعدادات الأعمدة...</span>
           </div>
         </div>
@@ -189,9 +189,9 @@ const getTableColumns = (formatPrice: (value: number) => string) => [
     render: (value: string) => (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
         value === 'مكتمل' 
-          ? 'bg-green-500/20 text-green-400' 
+          ? 'bg-dash-accent-green-subtle text-dash-accent-green' 
           : value === 'مراجعة'
-          ? 'bg-yellow-500/20 text-yellow-400'
+          ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
           : 'bg-[var(--dash-bg-highlight)]/20 text-[var(--dash-text-muted)]'
       }`}>
         {value}
@@ -291,7 +291,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'invoice_count',
     width: 100,
     visible: true,
-    render: (value: number) => <span className="text-blue-400 font-medium">{value || 0}</span>
+    render: (value: number) => <span className="text-dash-accent-blue font-medium">{value || 0}</span>
   },
   {
     id: 'total_amount',
@@ -299,7 +299,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     accessor: 'total_amount',
     width: 120,
     visible: true,
-    render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value || 0)}</span>
+    render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value || 0)}</span>
   },
   {
     id: 'total_profit',
@@ -309,7 +309,7 @@ const getCustomersTableColumns = (formatPrice: (value: number) => string) => [
     visible: true,
     render: (value: number) => {
       const profit = value || 0;
-      const colorClass = profit >= 0 ? 'text-green-400' : 'text-red-400';
+      const colorClass = profit >= 0 ? 'text-dash-accent-green' : 'text-dash-accent-red';
       return <span className={`${colorClass} font-medium`}>{formatPrice(profit)}</span>;
     }
   }
@@ -442,9 +442,9 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const total = quantity * price;
       return (
         <span className="text-[var(--dash-text-primary)]">
-          <span className="text-blue-400">{quantity}</span>
+          <span className="text-dash-accent-blue">{quantity}</span>
           <span className="text-[var(--dash-text-secondary)]">*</span>
-          <span className="text-green-400">{price.toFixed(2)}</span>
+          <span className="text-dash-accent-green">{price.toFixed(2)}</span>
           <span className="text-[var(--dash-text-secondary)]"> = </span>
           <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
@@ -469,9 +469,9 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const total = quantity * price;
       return (
         <span className="text-[var(--dash-text-primary)]">
-          <span className="text-blue-400">{quantity}</span>
+          <span className="text-dash-accent-blue">{quantity}</span>
           <span className="text-[var(--dash-text-secondary)]">*</span>
-          <span className="text-green-400">{price.toFixed(2)}</span>
+          <span className="text-dash-accent-green">{price.toFixed(2)}</span>
           <span className="text-[var(--dash-text-secondary)]"> = </span>
           <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
@@ -496,9 +496,9 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const total = quantity * price;
       return (
         <span className="text-[var(--dash-text-primary)]">
-          <span className="text-blue-400">{quantity}</span>
+          <span className="text-dash-accent-blue">{quantity}</span>
           <span className="text-[var(--dash-text-secondary)]">*</span>
-          <span className="text-green-400">{price.toFixed(2)}</span>
+          <span className="text-dash-accent-green">{price.toFixed(2)}</span>
           <span className="text-[var(--dash-text-secondary)]"> = </span>
           <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
@@ -523,9 +523,9 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const total = quantity * price;
       return (
         <span className="text-[var(--dash-text-primary)]">
-          <span className="text-blue-400">{quantity}</span>
+          <span className="text-dash-accent-blue">{quantity}</span>
           <span className="text-[var(--dash-text-secondary)]">*</span>
-          <span className="text-green-400">{price.toFixed(2)}</span>
+          <span className="text-dash-accent-green">{price.toFixed(2)}</span>
           <span className="text-[var(--dash-text-secondary)]"> = </span>
           <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
@@ -550,9 +550,9 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const total = quantity * price;
       return (
         <span className="text-[var(--dash-text-primary)]">
-          <span className="text-blue-400">{quantity}</span>
+          <span className="text-dash-accent-blue">{quantity}</span>
           <span className="text-[var(--dash-text-secondary)]">*</span>
-          <span className="text-green-400">{price.toFixed(2)}</span>
+          <span className="text-dash-accent-green">{price.toFixed(2)}</span>
           <span className="text-[var(--dash-text-secondary)]"> = </span>
           <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
@@ -577,9 +577,9 @@ const getProductsTableColumns = (formatPrice: (value: number) => string) => [
       const total = quantity * price;
       return (
         <span className="text-[var(--dash-text-primary)]">
-          <span className="text-blue-400">{quantity}</span>
+          <span className="text-dash-accent-blue">{quantity}</span>
           <span className="text-[var(--dash-text-secondary)]">*</span>
-          <span className="text-green-400">{price.toFixed(2)}</span>
+          <span className="text-dash-accent-green">{price.toFixed(2)}</span>
           <span className="text-[var(--dash-text-secondary)]"> = </span>
           <span className="text-[var(--dash-text-primary)]">{total.toFixed(2)}</span>
         </span>
@@ -717,7 +717,7 @@ function ReportsPageContent() {
       accessor: 'total_invoices',
       width: 120,
       visible: true,
-      render: (value: number) => <span className="text-blue-400 font-medium">{(value || 0).toLocaleString()}</span>
+      render: (value: number) => <span className="text-dash-accent-blue font-medium">{(value || 0).toLocaleString()}</span>
     },
     {
       id: 'total_amount',
@@ -735,7 +735,7 @@ function ReportsPageContent() {
       visible: true,
       render: (value: number) => {
         const profit = value || 0;
-        const colorClass = profit >= 0 ? 'text-green-400' : 'text-red-400';
+        const colorClass = profit >= 0 ? 'text-dash-accent-green' : 'text-dash-accent-red';
         return <span className={`${colorClass} font-medium`}>{`EGP ${profit.toFixed(2)}`}</span>;
       }
     }
@@ -838,8 +838,8 @@ function ReportsPageContent() {
       visible: true,
       render: (value: number) => {
         if (!value || value === 0) return <span className="text-[var(--dash-text-muted)]">-</span>;
-        if (value === 1) return <span className="text-green-400">يومياً</span>;
-        return <span className="text-blue-400">كل {Math.round(value)} يوم</span>;
+        if (value === 1) return <span className="text-dash-accent-green">يومياً</span>;
+        return <span className="text-dash-accent-blue">كل {Math.round(value)} يوم</span>;
       }
     },
     {
@@ -856,7 +856,7 @@ function ReportsPageContent() {
       accessor: 'invoice_count',
       width: 110,
       visible: true,
-      render: (value: number) => <span className="text-blue-400 font-medium">{value || 0}</span>
+      render: (value: number) => <span className="text-dash-accent-blue font-medium">{value || 0}</span>
     },
     {
       id: 'total_items_quantity',
@@ -864,7 +864,7 @@ function ReportsPageContent() {
       accessor: 'total_items_quantity',
       width: 120,
       visible: true,
-      render: (value: number) => <span className="text-purple-400 font-medium">{value || 0}</span>
+      render: (value: number) => <span className="text-dash-accent-purple font-medium">{value || 0}</span>
     },
     {
       id: 'total_amount',
@@ -872,7 +872,7 @@ function ReportsPageContent() {
       accessor: 'total_amount',
       width: 130,
       visible: true,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value || 0)}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value || 0)}</span>
     },
     {
       id: 'balance',
@@ -882,7 +882,7 @@ function ReportsPageContent() {
       visible: true,
       render: (value: number) => {
         const balance = value || 0;
-        const colorClass = balance > 0 ? 'text-red-400' : balance < 0 ? 'text-green-400' : 'text-[var(--dash-text-muted)]';
+        const colorClass = balance > 0 ? 'text-dash-accent-red' : balance < 0 ? 'text-dash-accent-green' : 'text-[var(--dash-text-muted)]';
         return <span className={`${colorClass} font-medium`}>{formatPrice(balance)}</span>;
       }
     }
@@ -915,7 +915,7 @@ function ReportsPageContent() {
       accessor: 'day_name',
       width: 100,
       visible: true,
-      render: (value: string) => <span className="text-blue-400">{value || '-'}</span>
+      render: (value: string) => <span className="text-dash-accent-blue">{value || '-'}</span>
     },
     {
       id: 'invoice_count',
@@ -923,7 +923,7 @@ function ReportsPageContent() {
       accessor: 'invoice_count',
       width: 110,
       visible: true,
-      render: (value: number) => <span className="text-purple-400 font-medium">{value || 0}</span>
+      render: (value: number) => <span className="text-dash-accent-purple font-medium">{value || 0}</span>
     },
     {
       id: 'total_sales',
@@ -931,7 +931,7 @@ function ReportsPageContent() {
       accessor: 'total_sales',
       width: 150,
       visible: true,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value || 0)}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value || 0)}</span>
     },
     {
       id: 'avg_sale',
@@ -966,7 +966,7 @@ function ReportsPageContent() {
       accessor: 'total_sales',
       width: 150,
       visible: true,
-      render: (value: number) => <span className="text-green-400 font-medium">{formatPrice(value || 0)}</span>
+      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value || 0)}</span>
     },
     {
       id: 'sales_count',
@@ -974,7 +974,7 @@ function ReportsPageContent() {
       accessor: 'sales_count',
       width: 120,
       visible: true,
-      render: (value: number) => <span className="text-blue-400 font-medium">{value || 0}</span>
+      render: (value: number) => <span className="text-dash-accent-blue font-medium">{value || 0}</span>
     },
     {
       id: 'avg_sale',
@@ -990,7 +990,7 @@ function ReportsPageContent() {
       accessor: 'percentage',
       width: 100,
       visible: true,
-      render: (value: number) => <span className="text-yellow-400 font-medium">{(value || 0).toFixed(2)}%</span>
+      render: (value: number) => <span className="text-dash-accent-orange font-medium">{(value || 0).toFixed(2)}%</span>
     }
   ], [formatPrice]);
 
@@ -1017,7 +1017,7 @@ function ReportsPageContent() {
       accessor: 'quantity',
       width: 90,
       visible: true,
-      render: (value: number) => <span className="text-blue-400 font-medium">{value || 0}</span>
+      render: (value: number) => <span className="text-dash-accent-blue font-medium">{value || 0}</span>
     },
     {
       id: 'cost_price',
@@ -1043,7 +1043,7 @@ function ReportsPageContent() {
       visible: true,
       render: (value: number) => {
         const profit = value || 0;
-        const colorClass = profit >= 0 ? 'text-green-400' : 'text-red-400';
+        const colorClass = profit >= 0 ? 'text-dash-accent-green' : 'text-dash-accent-red';
         return <span className={`${colorClass} font-medium`}>{formatPrice(profit)}</span>;
       }
     },
@@ -1055,7 +1055,7 @@ function ReportsPageContent() {
       visible: true,
       render: (value: number) => {
         const margin = value || 0;
-        const colorClass = margin >= 20 ? 'text-green-400' : margin >= 10 ? 'text-yellow-400' : 'text-red-400';
+        const colorClass = margin >= 20 ? 'text-dash-accent-green' : margin >= 10 ? 'text-dash-accent-orange' : 'text-dash-accent-red';
         return <span className={`${colorClass} font-medium`}>{margin.toFixed(2)}%</span>;
       }
     }
@@ -2956,7 +2956,7 @@ function ReportsPageContent() {
               onClick={() => setCurrentView('main')}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 currentView === 'main' 
-                  ? 'text-blue-400 bg-blue-500/10' 
+                  ? 'text-dash-accent-blue bg-dash-accent-blue-subtle' 
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
@@ -2979,14 +2979,14 @@ function ReportsPageContent() {
               onClick={() => setShowSimpleFilter(true)}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 activeFilterType === 'simple' && getSimpleFiltersCount(simpleFilters) > 0
-                  ? 'text-blue-400 bg-blue-500/10'
+                  ? 'text-dash-accent-blue bg-dash-accent-blue-subtle'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               <FunnelIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">فلتر بسيط</span>
               {activeFilterType === 'simple' && getSimpleFiltersCount(simpleFilters) > 0 && (
-                <span className="text-xs bg-blue-500/20 text-blue-400 px-1 rounded">
+                <span className="text-xs bg-dash-accent-blue-subtle text-dash-accent-blue px-1 rounded">
                   {getSimpleFiltersCount(simpleFilters)}
                 </span>
               )}
@@ -2997,14 +2997,14 @@ function ReportsPageContent() {
               onClick={() => setShowMultiFilter(true)}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 activeFilterType === 'multi' && getMultiFiltersCount(multiFilters) > 0
-                  ? 'text-green-400 bg-green-500/10'
+                  ? 'text-dash-accent-green bg-dash-accent-green-subtle'
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
               <FunnelIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">فلتر متعدد</span>
               {activeFilterType === 'multi' && getMultiFiltersCount(multiFilters) > 0 && (
-                <span className="text-xs bg-green-500/20 text-green-400 px-1 rounded">
+                <span className="text-xs bg-dash-accent-green-subtle text-dash-accent-green px-1 rounded">
                   {getMultiFiltersCount(multiFilters)}
                 </span>
               )}
@@ -3038,7 +3038,7 @@ function ReportsPageContent() {
               onClick={handlePeriodicReportsClick}
               className={`flex flex-col items-center p-2 cursor-pointer min-w-[80px] ${
                 currentView === 'periodic' 
-                  ? 'text-blue-400 bg-blue-500/10' 
+                  ? 'text-dash-accent-blue bg-dash-accent-blue-subtle' 
                   : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)]'
               }`}
             >
@@ -3086,7 +3086,7 @@ function ReportsPageContent() {
                   <>
                       {/* Balance Section */}
                       <div className="p-3 border-b border-[var(--dash-border-default)] flex-shrink-0">
-                        <div className="bg-blue-600 rounded-lg p-3 text-center text-[var(--dash-text-primary)]">
+                        <div className="bg-dash-accent-blue rounded-lg p-3 text-center text-[var(--dash-text-primary)]">
                           <div className="text-xl font-bold mb-1">EGP {totalSalesAmount}</div>
                           <div className="text-xs opacity-90">{showProductsReport ? 'إجمالي المبيعات' : 'رصيد الحساب'}</div>
                         </div>
@@ -3151,7 +3151,7 @@ function ReportsPageContent() {
                       <div className="p-2 border-t border-[var(--dash-border-default)] flex-shrink-0 bg-[#3B4754]">
                         <button
                           onClick={() => setShowDateFilter(true)}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-[var(--dash-text-primary)] px-3 py-2 rounded font-medium flex items-center justify-center gap-2 transition-colors text-sm"
+                          className="w-full dash-btn-primary text-[var(--dash-text-primary)] px-3 py-2 rounded font-medium flex items-center justify-center gap-2 transition-colors text-sm"
                         >
                           <CalendarDaysIcon className="h-4 w-4" />
                           <span>التاريخ</span>
@@ -3160,7 +3160,7 @@ function ReportsPageContent() {
                         {/* Current Filter Display */}
                         {dateFilter.type !== 'all' && (
                           <div className="mt-1.5 text-center">
-                            <span className="text-xs text-blue-400 break-words leading-tight">
+                            <span className="text-xs text-dash-accent-blue break-words leading-tight">
                               {dateFilter.type === 'today' && 'عرض تقارير اليوم'}
                               {dateFilter.type === 'current_week' && 'عرض تقارير الأسبوع الحالي'}
                               {dateFilter.type === 'last_week' && 'عرض تقارير الأسبوع الماضي'}
@@ -3198,7 +3198,7 @@ function ReportsPageContent() {
                               activeTab === 'profit_margin' ? 'بحث باسم المنتج...' :
                               'بحث...'
                             }
-                            className="w-56 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md py-1.5 px-3 pr-8 text-sm text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                            className="w-56 bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-md py-1.5 px-3 pr-8 text-sm text-[var(--dash-text-primary)] placeholder-[var(--dash-text-muted)] focus:outline-none focus:border-dash-accent-blue focus:ring-1 focus:ring-dash-accent-blue"
                             dir="rtl"
                           />
                           <MagnifyingGlassIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--dash-text-muted)]" />
@@ -3217,7 +3217,7 @@ function ReportsPageContent() {
                     {openTabs.map((tab) => (
                       <div key={tab.id} className={`flex items-center border-r border-[var(--dash-border-default)] ${
                         tab.active
-                          ? 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] border-b-2 border-blue-400'
+                          ? 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-primary)] border-b-2 border-dash-accent-blue'
                           : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[#4B5563]'
                       }`}>
                         <button
@@ -3240,7 +3240,7 @@ function ReportsPageContent() {
                               setCurrentReportType(tab.id === 'main' ? 'main' : tab.id);
                               setShowColumnsModal(true);
                             }}
-                            className="ml-1 p-1 hover:text-blue-400 hover:bg-blue-500/10 rounded transition-colors"
+                            className="ml-1 p-1 hover:text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded transition-colors"
                             title="إدارة الأعمدة"
                           >
                             <TableCellsIcon className="w-4 h-4" />
@@ -3254,7 +3254,7 @@ function ReportsPageContent() {
                               e.stopPropagation();
                               closeTab(tab.id);
                             }}
-                            className="ml-1 p-1 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                            className="ml-1 p-1 hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded transition-colors"
                             title="إغلاق"
                           >
                             <XMarkIcon className="w-4 h-4" />
@@ -3467,7 +3467,7 @@ function ReportsPageContent() {
                         {/* Sales Reports */}
                         <div>
                           <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
-                            <ChartBarIcon className="h-5 w-5 text-blue-400" />
+                            <ChartBarIcon className="h-5 w-5 text-dash-accent-blue" />
                             المبيعات
                           </h2>
                           <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
@@ -3516,7 +3516,7 @@ function ReportsPageContent() {
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
-                                  <DocumentChartBarIcon className="w-4 h-4 text-blue-400" />
+                                  <DocumentChartBarIcon className="w-4 h-4 text-dash-accent-blue" />
                                 </div>
 
                                 {/* Center - Report name */}
@@ -3526,8 +3526,8 @@ function ReportsPageContent() {
 
                                 {/* Right side - Star for favorites */}
                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <div className="p-1 hover:bg-yellow-500/20 rounded transition-colors cursor-pointer">
-                                    <StarIcon className="w-4 h-4 text-yellow-400" />
+                                  <div className="p-1 hover:bg-dash-accent-orange-subtle rounded transition-colors cursor-pointer">
+                                    <StarIcon className="w-4 h-4 text-dash-accent-orange" />
                                   </div>
                                 </div>
                               </button>
@@ -3538,7 +3538,7 @@ function ReportsPageContent() {
                         {/* Purchase Reports */}
                         <div>
                           <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
-                            <ShoppingCartIcon className="h-5 w-5 text-green-400" />
+                            <ShoppingCartIcon className="h-5 w-5 text-dash-accent-green" />
                             المشتريات
                           </h2>
                           <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
@@ -3557,7 +3557,7 @@ function ReportsPageContent() {
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
-                                  <DocumentChartBarIcon className="w-4 h-4 text-blue-400" />
+                                  <DocumentChartBarIcon className="w-4 h-4 text-dash-accent-blue" />
                                 </div>
 
                                 {/* Center - Report name */}
@@ -3567,8 +3567,8 @@ function ReportsPageContent() {
 
                                 {/* Right side - Star for favorites */}
                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <div className="p-1 hover:bg-yellow-500/20 rounded transition-colors cursor-pointer">
-                                    <StarIcon className="w-4 h-4 text-yellow-400" />
+                                  <div className="p-1 hover:bg-dash-accent-orange-subtle rounded transition-colors cursor-pointer">
+                                    <StarIcon className="w-4 h-4 text-dash-accent-orange" />
                                   </div>
                                 </div>
                               </button>
@@ -3579,7 +3579,7 @@ function ReportsPageContent() {
                         {/* Loss and Damage */}
                         <div>
                           <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
-                            <ArchiveBoxIcon className="h-5 w-5 text-red-400" />
+                            <ArchiveBoxIcon className="h-5 w-5 text-dash-accent-red" />
                             Loss and damage
                           </h2>
                           <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
@@ -3592,7 +3592,7 @@ function ReportsPageContent() {
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
-                                  <DocumentChartBarIcon className="w-4 h-4 text-blue-400" />
+                                  <DocumentChartBarIcon className="w-4 h-4 text-dash-accent-blue" />
                                 </div>
 
                                 {/* Center - Report name */}
@@ -3602,8 +3602,8 @@ function ReportsPageContent() {
 
                                 {/* Right side - Star for favorites */}
                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <div className="p-1 hover:bg-yellow-500/20 rounded transition-colors cursor-pointer">
-                                    <StarIcon className="w-4 h-4 text-yellow-400" />
+                                  <div className="p-1 hover:bg-dash-accent-orange-subtle rounded transition-colors cursor-pointer">
+                                    <StarIcon className="w-4 h-4 text-dash-accent-orange" />
                                   </div>
                                 </div>
                               </button>
@@ -3614,7 +3614,7 @@ function ReportsPageContent() {
                         {/* Inventory Control */}
                         <div>
                           <h2 className="text-lg font-semibold text-[var(--dash-text-primary)] mb-3 text-right flex items-center gap-2">
-                            <ArchiveBoxIcon className="h-5 w-5 text-orange-400" />
+                            <ArchiveBoxIcon className="h-5 w-5 text-dash-accent-orange" />
                             مراقبة المخزون
                           </h2>
                           <div className="bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-lg overflow-hidden">
@@ -3628,7 +3628,7 @@ function ReportsPageContent() {
                               >
                                 {/* Left side - Report icon */}
                                 <div className="flex items-center gap-2">
-                                  <DocumentChartBarIcon className="w-4 h-4 text-blue-400" />
+                                  <DocumentChartBarIcon className="w-4 h-4 text-dash-accent-blue" />
                                 </div>
 
                                 {/* Center - Report name */}
@@ -3638,8 +3638,8 @@ function ReportsPageContent() {
 
                                 {/* Right side - Star for favorites */}
                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <div className="p-1 hover:bg-yellow-500/20 rounded transition-colors cursor-pointer">
-                                    <StarIcon className="w-4 h-4 text-yellow-400" />
+                                  <div className="p-1 hover:bg-dash-accent-orange-subtle rounded transition-colors cursor-pointer">
+                                    <StarIcon className="w-4 h-4 text-dash-accent-orange" />
                                   </div>
                                 </div>
                               </button>

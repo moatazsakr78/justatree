@@ -156,7 +156,7 @@ export default function SafesSelectionModal({
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                   <Dialog.Title className="text-xl font-bold text-[var(--dash-text-primary)] flex items-center gap-2">
-                    <BanknotesIcon className="h-6 w-6 text-blue-400" />
+                    <BanknotesIcon className="h-6 w-6 text-dash-accent-blue" />
                     اختيار الدرج / الخزنة
                   </Dialog.Title>
                   <button
@@ -194,16 +194,16 @@ export default function SafesSelectionModal({
 
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-dash-accent-blue mb-4"></div>
                       <p className="text-[var(--dash-text-muted)]">جاري تحميل الخزن...</p>
                     </div>
                   ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                      <BanknotesIcon className="h-12 w-12 text-red-500 mb-4" />
-                      <p className="text-red-400 mb-2">{error}</p>
+                      <BanknotesIcon className="h-12 w-12 text-dash-accent-red mb-4" />
+                      <p className="text-dash-accent-red mb-2">{error}</p>
                       <button
                         onClick={fetchSafes}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
+                        className="px-4 py-2 dash-btn-primary rounded-lg text-sm transition-colors"
                       >
                         إعادة المحاولة
                       </button>
@@ -232,10 +232,10 @@ export default function SafesSelectionModal({
                                   onClick={() =>
                                     handleSelectSubSafe(mainSafe, child)
                                   }
-                                  className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-cyan-500/50"
+                                  className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-dash-accent-cyan/50"
                                 >
-                                  <div className="w-8 h-8 rounded-full bg-cyan-600/20 flex items-center justify-center flex-shrink-0">
-                                    <span className="text-cyan-400 text-xs font-bold">
+                                  <div className="w-8 h-8 rounded-full bg-dash-accent-cyan-subtle flex items-center justify-center flex-shrink-0">
+                                    <span className="text-dash-accent-cyan text-xs font-bold">
                                       #
                                     </span>
                                   </div>

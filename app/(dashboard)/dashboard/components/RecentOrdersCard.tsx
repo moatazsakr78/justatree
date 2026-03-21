@@ -12,12 +12,12 @@ interface RecentOrdersCardProps {
 
 // Order status configuration
 const statusConfig: Record<string, { label: string; bg: string; text: string }> = {
-  pending: { label: 'معلق', bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
-  processing: { label: 'جاري التجهيز', bg: 'bg-blue-500/20', text: 'text-blue-400' },
-  ready: { label: 'جاهز', bg: 'bg-green-500/20', text: 'text-green-400' },
-  shipped: { label: 'تم الشحن', bg: 'bg-purple-500/20', text: 'text-purple-400' },
+  pending: { label: 'معلق', bg: 'bg-dash-accent-orange-subtle', text: 'text-dash-accent-orange' },
+  processing: { label: 'جاري التجهيز', bg: 'bg-dash-accent-blue-subtle', text: 'text-dash-accent-blue' },
+  ready: { label: 'جاهز', bg: 'bg-dash-accent-green-subtle', text: 'text-dash-accent-green' },
+  shipped: { label: 'تم الشحن', bg: 'bg-dash-accent-purple-subtle', text: 'text-dash-accent-purple' },
   delivered: { label: 'تم التسليم', bg: 'bg-[var(--dash-bg-highlight)]/20', text: 'text-[var(--dash-text-muted)]' },
-  cancelled: { label: 'ملغي', bg: 'bg-red-500/20', text: 'text-red-400' },
+  cancelled: { label: 'ملغي', bg: 'bg-dash-accent-red-subtle', text: 'text-dash-accent-red' },
 };
 
 // Format relative time in Arabic
@@ -108,7 +108,7 @@ export default function RecentOrdersCard({ orders, loading = false }: RecentOrde
                   <span className="whitespace-nowrap">{formatRelativeTime(order.created_at)}</span>
                 </div>
               </div>
-              <div className="text-green-400 font-semibold text-sm whitespace-nowrap mr-2">
+              <div className="text-dash-accent-green font-semibold text-sm whitespace-nowrap mr-2">
                 {formatCurrencyAr(order.total_amount)}
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function RecentOrdersCard({ orders, loading = false }: RecentOrde
 
       <Link
         href="/customer-orders"
-        className="flex items-center justify-center gap-2 mt-4 py-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+        className="flex items-center justify-center gap-2 mt-4 py-2 text-dash-accent-blue hover:text-dash-accent-blue text-sm font-medium transition-colors"
       >
         <span>عرض جميع الطلبات</span>
         <ArrowLeftIcon className="w-4 h-4" />

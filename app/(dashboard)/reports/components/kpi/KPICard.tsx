@@ -62,7 +62,7 @@ export default function KPICard({
           <div className="text-3xl font-bold text-[var(--dash-text-primary)] mb-1">
             {formatAsCurrency ? formatPrice(value) : value.toLocaleString('ar-EG')}
           </div>
-          <div className={`flex items-center gap-1 justify-end ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+          <div className={`flex items-center gap-1 justify-end ${isPositive ? 'text-dash-accent-green' : 'text-dash-accent-red'}`}>
             {isPositive ? (
               <ArrowTrendingUpIcon className="h-4 w-4" />
             ) : (

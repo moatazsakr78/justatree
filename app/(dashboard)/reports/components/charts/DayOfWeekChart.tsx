@@ -71,7 +71,7 @@ export default function DayOfWeekChart({ dateFilter, height = 300 }: DayOfWeekCh
     return (
       <div className="bg-[var(--dash-bg-raised)] rounded-lg border border-[var(--dash-border-default)] p-4">
         <h3 className="text-[var(--dash-text-primary)] font-semibold mb-4 text-right">أفضل يوم في الأسبوع</h3>
-        <div className="flex items-center justify-center text-red-400" style={{ height }}>
+        <div className="flex items-center justify-center text-dash-accent-red" style={{ height }}>
           {error}
         </div>
       </div>
@@ -105,12 +105,12 @@ export default function DayOfWeekChart({ dateFilter, height = 300 }: DayOfWeekCh
         >
           <div className="flex items-center gap-2 mb-2">
             <p className="text-[var(--dash-text-primary)] font-semibold">{item.dayName}</p>
-            {isBestDay && <TrophyIcon className="h-4 w-4 text-yellow-400" />}
+            {isBestDay && <TrophyIcon className="h-4 w-4 text-dash-accent-orange" />}
           </div>
           <p className="text-[var(--dash-text-secondary)]">الإجمالي: {formatCurrencyAr(item.totalSales)}</p>
           <p className="text-[var(--dash-text-secondary)]">عدد الفواتير: {item.saleCount}</p>
           <p className="text-[var(--dash-text-secondary)]">المتوسط: {formatCurrencyAr(item.avgSale)}</p>
-          <p className="text-blue-400">النسبة: {item.percentage.toFixed(1)}%</p>
+          <p className="text-dash-accent-blue">النسبة: {item.percentage.toFixed(1)}%</p>
         </div>
       );
     }
@@ -125,9 +125,9 @@ export default function DayOfWeekChart({ dateFilter, height = 300 }: DayOfWeekCh
       <div className="flex items-center justify-between mb-4">
         {bestDay && (
           <div className="flex items-center gap-2 text-sm">
-            <TrophyIcon className="h-5 w-5 text-yellow-400" />
+            <TrophyIcon className="h-5 w-5 text-dash-accent-orange" />
             <span className="text-[var(--dash-text-muted)]">أفضل يوم: </span>
-            <span className="text-green-400 font-bold">{bestDay.dayName}</span>
+            <span className="text-dash-accent-green font-bold">{bestDay.dayName}</span>
             <span className="text-[var(--dash-text-muted)]">({formatCurrencyAr(bestDay.totalSales)})</span>
           </div>
         )}
