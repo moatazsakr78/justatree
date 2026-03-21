@@ -154,7 +154,7 @@ export default function AddStorageModal({ isOpen, onClose, onWarehouseCreated, e
       {/* Sidebar - starts below header with exact dark theme colors */}
       <div className={`fixed top-12 right-0 h-[calc(100vh-3rem)] w-96 bg-[var(--dash-bg-surface)] z-50 transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
-      } shadow-[var(--dash-shadow-lg)] animate-dash-scale-in`}>
+      } shadow-[var(--dash-shadow-lg)] ${isOpen ? 'animate-dash-scale-in' : ''}`}>
         
         {/* Header - dark gray header matching design */}
         <div className="bg-[var(--dash-bg-surface)] px-4 py-3 flex items-center justify-start border-b border-[var(--dash-border-default)]">
