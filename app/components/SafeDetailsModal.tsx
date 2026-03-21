@@ -3432,12 +3432,12 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     {/* Balance Card - Clickable to toggle */}
                     <button
                       onClick={() => setIsMobileInfoExpanded(!isMobileInfoExpanded)}
-                      className="flex-1 bg-purple-600 rounded-lg px-4 py-2 text-center"
+                      className="flex-1 bg-dash-accent-blue rounded-lg px-4 py-2 text-center"
                     >
                       <div className="font-bold text-[var(--dash-text-primary)] text-xl">
                         {formatPrice(displayedBalance)}
                       </div>
-                      <div className="text-purple-200 text-[10px]">
+                      <div className="text-dash-accent-blue text-[10px]">
                         رصيد الخزنة
                       </div>
                     </button>
@@ -3445,7 +3445,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     {/* Withdraw Button */}
                     <button
                       onClick={openWithdrawModal}
-                      className="bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] rounded-lg px-3 py-2 flex flex-col items-center justify-center transition-colors"
+                      className="bg-dash-accent-blue hover:brightness-[0.88] text-[var(--dash-text-primary)] rounded-lg px-3 py-2 flex flex-col items-center justify-center transition-colors"
                     >
                       <span className="text-base">💰</span>
                       <span className="text-[10px] font-medium">سحب</span>
@@ -3650,7 +3650,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       {/* Date Filter Button */}
                       <button
                         onClick={() => setShowDateFilter(true)}
-                        className="w-full bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+                        className="w-full bg-dash-accent-blue hover:brightness-[0.88] text-[var(--dash-text-primary)] rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
                       >
                         <CalendarDaysIcon className="h-4 w-4" />
                         <span>التاريخ</span>
@@ -4255,9 +4255,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
                 {/* Record Balance */}
                 <div className="p-4 border-b border-[var(--dash-border-default)]">
-                  <div className="bg-purple-600 rounded p-4 text-center">
+                  <div className="bg-dash-accent-blue rounded p-4 text-center">
                     <div className="text-2xl font-bold text-[var(--dash-text-primary)]">{formatPrice(displayedBalance, 'system')}</div>
-                    <div className="text-purple-200 text-sm">رصيد الخزنة</div>
+                    <div className="text-dash-accent-blue text-sm">رصيد الخزنة</div>
                   </div>
                 </div>
 
@@ -4468,7 +4468,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                 <div className="p-4 border-t border-[var(--dash-border-default)]">
                   <button
                     onClick={() => setShowDateFilter(true)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-[var(--dash-text-primary)] px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
+                    className="w-full bg-dash-accent-blue hover:brightness-[0.88] text-[var(--dash-text-primary)] px-4 py-3 rounded font-medium flex items-center justify-center gap-2 transition-colors"
                   >
                     <CalendarDaysIcon className="h-5 w-5" />
                     <span>التاريخ</span>
