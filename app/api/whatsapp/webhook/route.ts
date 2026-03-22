@@ -20,6 +20,19 @@ const supabaseForBroadcast = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+// Persistent broadcast channel - subscribe once at module load
+let broadcastChannel: ReturnType<typeof supabaseForBroadcast.channel> | null = null;
+
+function getBroadcastChannel() {
+  if (!broadcastChannel) {
+    broadcastChannel = supabaseForBroadcast.channel('whatsapp_global');
+    broadcastChannel.subscribe((status) => {
+      console.log('📡 Webhook broadcast channel status:', status);
+    });
+  }
+  return broadcastChannel;
+}
+
 // GET - Webhook verification
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -191,8 +204,7 @@ export async function POST(request: NextRequest) {
             // إرسال broadcast لجميع الـ clients المتصلين
             // Use 'new_message' for outgoing, 'incoming_message' for incoming
             const broadcastEvent = isOutgoing ? 'new_message' : 'incoming_message';
-            supabaseForBroadcast
-              .channel('whatsapp_global')
+            getBroadcastChannel()
               .send({
                 type: 'broadcast',
                 event: broadcastEvent,
@@ -212,8 +224,7 @@ export async function POST(request: NextRequest) {
                   console.log('📷 Contact profile picture synced:', contact.profile_picture_url);
 
                   // Broadcast profile picture update to all clients
-                  supabaseForBroadcast
-                    .channel('whatsapp_global')
+                  getBroadcastChannel()
                     .send({
                       type: 'broadcast',
                       event: 'profile_picture_updated',
@@ -464,6 +475,50 @@ async function parseWasenderMessage(msgData: any, isOutgoing: boolean = false): 
             console.log('📤 Step 6 - LID resolved to phone:', lid, '→', from);
           } else {
             console.log('📤 Step 6 - No LID mapping found for:', lid, '- Error:', mappingError?.message || 'none');
+          }
+        }
+      }
+
+      // 7. Step 7: Reverse lookup from existing messages using suffix matching
+      // If all previous steps failed, try to find a known phone number
+      // that shares the same last 10 digits as the JID number
+      if (!from && key.remoteJid) {
+        const rawJid = key.remoteJid.replace(/@.*$/, '');
+        const digitsOnly = rawJid.replace(/[^\d]/g, '');
+
+        if (digitsOnly.length >= 10) {
+          const suffix = digitsOnly.slice(-10);
+          console.log('📤 Step 7 - Searching existing messages for suffix:', suffix);
+
+          const { data: existingMsg } = await supabase
+            .schema('elfaroukgroup')
+            .from('whatsapp_messages')
+            .select('from_number')
+            .like('from_number', `%${suffix}`)
+            .limit(1)
+            .single();
+
+          if (existingMsg?.from_number && isValidPhoneNumber(existingMsg.from_number)) {
+            from = existingMsg.from_number;
+            console.log('📤 Step 7 - Resolved via message history:', from);
+
+            // Save this LID mapping for future use
+            const lidMatch = key.remoteJid.match(/(\d{14,})@/);
+            if (lidMatch) {
+              supabase
+                .schema('elfaroukgroup')
+                .from('whatsapp_lid_mappings')
+                .upsert({
+                  lid: lidMatch[1],
+                  phone_number: from,
+                  customer_name: msgData.pushName || from,
+                  updated_at: new Date().toISOString()
+                }, { onConflict: 'lid' })
+                .then(({ error }) => {
+                  if (!error) console.log('✅ Retroactive LID mapping saved');
+                  else console.error('❌ Error saving retroactive LID mapping:', error.message);
+                });
+            }
           }
         }
       }

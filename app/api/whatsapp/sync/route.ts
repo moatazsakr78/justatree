@@ -53,7 +53,11 @@ export async function GET(request: NextRequest) {
     if (phoneNumber) {
       const cleanedPhone = cleanPhoneNumber(phoneNumber);
       logsToSync = messageLogs.filter(log => {
-        const logPhone = cleanPhoneNumber(log.from || log.to);
+        // For outgoing messages (fromMe): match the recipient (to)
+        // For incoming messages: match the sender (from)
+        const logPhone = log.fromMe
+          ? cleanPhoneNumber(log.to || log.from)
+          : cleanPhoneNumber(log.from || log.to);
         return logPhone === cleanedPhone;
       });
       console.log(`📱 Filtered to ${logsToSync.length} messages for ${cleanedPhone}`);
