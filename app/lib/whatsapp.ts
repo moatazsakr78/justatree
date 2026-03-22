@@ -933,20 +933,40 @@ export async function fetchMessageLogs(limit: number = 100): Promise<{ logs: Mes
     // WasenderAPI returns data in { success: true, data: [...] } format
     const logs = data.data || data.logs || data.messages || [];
 
-    // Map to our interface
-    const mappedLogs = logs.map((log: any) => ({
-      id: log.id || log.key?.id || log.messageId,
-      msgId: log.msgId || log.msg_id,
-      from: log.from || log.key?.remoteJid?.replace('@s.whatsapp.net', '').replace('@c.us', '') || '',
-      to: log.to || '',
-      fromMe: log.fromMe === true || log.key?.fromMe === true,
-      messageBody: log.messageBody || log.body || log.message?.conversation || log.message?.extendedTextMessage?.text || '',
-      messageType: log.messageType || log.type || 'text',
-      timestamp: log.timestamp || log.messageTimestamp || Date.now() / 1000,
-      status: log.status,
-      pushName: log.pushName || log.notifyName,
-      mediaUrl: log.mediaUrl,
-    }));
+    // Map to our interface - handle both flattened API format and raw Baileys format
+    const mappedLogs = logs.map((log: any) => {
+      const key = log.key || {};
+      const message = log.message || {};
+
+      // remoteJid is ALWAYS the other party (recipient for outgoing, sender for incoming)
+      const remoteJid = key.remoteJid || '';
+      const remoteNumber = remoteJid.replace(/@.*$/, '');
+
+      // ID: try multiple sources (skip messages without any ID)
+      const id = log.id || key.id || log.messageId || (log.msg_id ? String(log.msg_id) : undefined);
+
+      // from: for flattened format use log.from, for Baileys use remoteJid (skip LID)
+      const from = log.from || (remoteNumber && !remoteJid.includes('@lid') ? remoteNumber : '') || '';
+
+      // Message body: try all possible locations
+      const messageBody = log.messageBody || log.body || log.text ||
+        message.conversation || message.extendedTextMessage?.text ||
+        message.imageMessage?.caption || message.videoMessage?.caption || '';
+
+      return {
+        id,
+        msgId: log.msgId || log.msg_id,
+        from,
+        to: log.to || '',
+        fromMe: log.fromMe === true || key.fromMe === true,
+        messageBody,
+        messageType: log.messageType || log.type || 'text',
+        timestamp: log.timestamp || log.messageTimestamp || Date.now() / 1000,
+        status: log.status,
+        pushName: log.pushName || log.notifyName || key.pushName,
+        mediaUrl: log.mediaUrl,
+      };
+    }).filter((log: any) => log.id);
 
     debug.mappedCount = mappedLogs.length;
     return { logs: mappedLogs, debug };

@@ -66,6 +66,21 @@ export async function POST(request: NextRequest) {
 
     console.log('📩 Webhook received:', JSON.stringify(body, null, 2));
 
+    // Log webhook event to DB for diagnostics (fire-and-forget)
+    const messagesData = body.data?.messages;
+    const msgKey = Array.isArray(messagesData) ? messagesData[0]?.key : messagesData?.key;
+    supabase
+      .schema('elfaroukgroup')
+      .from('whatsapp_webhook_logs')
+      .insert({
+        event_type: body.event || body.type || 'unknown',
+        is_outgoing: msgKey?.fromMe === true,
+        raw_data: JSON.stringify(body).substring(0, 2000),
+        created_at: new Date().toISOString()
+      })
+      .then(() => {})
+      .catch((err) => console.error('Webhook log error:', err));
+
     // WasenderAPI webhook format
     const event = body.event || body.type;
 

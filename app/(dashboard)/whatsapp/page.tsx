@@ -471,15 +471,20 @@ export default function WhatsAppPage() {
   // Background sync function (silent - no UI updates except for new messages)
   const syncMessagesInBackground = useCallback(async (phoneNumber: string) => {
     try {
-      const response = await fetch(`/api/whatsapp/sync?phone=${encodeURIComponent(phoneNumber)}&limit=50`)
+      // Sync ALL recent messages (not filtered by phone)
+      // This catches outgoing messages from mobile WhatsApp app
+      // regardless of from/to field format in the API response
+      const response = await fetch('/api/whatsapp/sync?limit=50')
       const data = await response.json()
 
       if (data.success && data.synced > 0) {
-        console.log(`🔄 Background sync: ${data.synced} new messages for ${phoneNumber}`)
-        // Only refresh if new messages were synced
-        await fetchConversationMessages(phoneNumber)
+        console.log(`🔄 Background sync: ${data.synced} new messages`)
         fetchConversationsRef.current()
       }
+
+      // ALWAYS refresh from DB - catches messages stored by webhook
+      // even when API sync finds nothing new
+      await fetchConversationMessages(phoneNumber)
     } catch (error) {
       // Silent - no error shown to user for background sync
       console.error('🔄 Background sync error:', error)
@@ -886,7 +891,7 @@ export default function WhatsAppPage() {
         console.log('🔄 Fallback polling for messages (every 30s)...')
         fetchConversationMessages(selectedConversation)
       }
-    }, 30000) // ✅ كل 30 ثانية بدلاً من 5 ثواني - fallback فقط
+    }, 10000) // كل 10 ثواني - fallback للرسائل اللي ممكن تتخزن من الـ webhook
 
     return () => {
       clearInterval(pollInterval)
