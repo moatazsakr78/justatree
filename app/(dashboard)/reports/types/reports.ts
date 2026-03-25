@@ -179,3 +179,128 @@ export interface ChartDataPoint {
   value: number;
   [key: string]: string | number;
 }
+
+// ==================== Report-Specific Data Interfaces ====================
+
+// Payment Methods Report
+export interface PaymentMethodReportData {
+  payment_method: string;
+  payment_method_ar: string;
+  invoice_count: number;
+  total_amount: number;
+  percentage: number;
+  avg_invoice: number;
+}
+
+// Returns Report
+export interface ReturnReportData {
+  sale_id: string;
+  invoice_number: string;
+  created_at: string;
+  customer_name: string;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  total_amount: number;
+  cashier_name: string;
+}
+
+// Purchase Items Report
+export interface PurchaseItemReportData {
+  product_name: string;
+  category_name: string;
+  total_quantity: number;
+  avg_unit_price: number;
+  total_amount: number;
+  supplier_name: string;
+  last_purchase_date: string;
+}
+
+// Purchase Supplier Report
+export interface PurchaseSupplierReportData {
+  supplier_name: string;
+  phone: string;
+  invoice_count: number;
+  total_amount: number;
+  discount_amount: number;
+  net_amount: number;
+  last_invoice_date: string;
+}
+
+// Purchase Invoice Report
+export interface PurchaseInvoiceReportData {
+  invoice_number: string;
+  invoice_date: string;
+  supplier_name: string;
+  total_amount: number;
+  discount_amount: number;
+  tax_amount: number;
+  net_amount: number;
+  payment_status: string;
+  invoice_type: string;
+}
+
+// Customer Balance Report
+export interface CustomerBalanceReportData {
+  customer_name: string;
+  phone: string;
+  city: string;
+  account_balance: number;
+  credit_limit: number;
+  payment_count: number;
+  last_payment_date: string | null;
+}
+
+// Supplier Balance Report
+export interface SupplierBalanceReportData {
+  supplier_name: string;
+  phone: string;
+  account_balance: number;
+  payment_count: number;
+  last_payment_date: string | null;
+}
+
+// Cash Drawer Report
+export interface CashDrawerReportData {
+  created_at: string;
+  transaction_type: string;
+  transaction_type_ar: string;
+  amount: number;
+  balance_after: number;
+  payment_method: string;
+  notes: string;
+  performed_by: string;
+}
+
+// Customer Payment Report
+export interface CustomerPaymentReportData {
+  created_at: string;
+  customer_name: string;
+  amount: number;
+  payment_method: string;
+  reference_number: string;
+  notes: string;
+}
+
+// Low Stock Report
+export interface LowStockReportData {
+  product_name: string;
+  category_name: string;
+  current_stock: number;
+  min_stock: number;
+  deficit: number;
+  cost_price: number;
+  sale_price: number;
+}
+
+// Inventory Valuation Report
+export interface InventoryValuationReportData {
+  product_name: string;
+  category_name: string;
+  barcode: string;
+  current_stock: number;
+  cost_price: number;
+  sale_price: number;
+  cost_value: number;
+  retail_value: number;
+}
