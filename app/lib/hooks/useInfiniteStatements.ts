@@ -22,6 +22,7 @@ export interface StatementItem {
   employee_name?: string | null
   payment_method?: string | null
   paymentBreakdown?: { method: string; amount: number }[]
+  safe_name?: string | null
   index?: number
 }
 
@@ -39,6 +40,7 @@ export interface UseInfiniteStatementsOptions {
   pageSize?: number // Number of records per page (default 200)
   excludeTransferTypes?: boolean // If true, exclude transfer_in/transfer_out transactions
   transferTypesOnly?: boolean // If true, only include transfer_in/transfer_out transactions
+  safes?: Array<{ id: string; name: string }> // Safe list for resolving record_id to name
 }
 
 // Return type for the hook
@@ -83,7 +85,8 @@ export function useInfiniteStatements(
   const processTransactionToStatement = useCallback((
     tx: any,
     salesMap: Map<string, any>,
-    index: number
+    index: number,
+    safes?: Array<{ id: string; name: string }>
   ): StatementItem => {
     const amount = parseFloat(String(tx.amount || 0)) || 0
     const balanceAfter = parseFloat(String(tx.balance_after || 0)) || 0
@@ -141,6 +144,13 @@ export function useInfiniteStatements(
     const salePaymentMethod = saleData?.payment_method || null
     const paymentMethod = tx.payment_method || salePaymentMethod || null
 
+    // Resolve record_id to safe name
+    let safeName: string | null = null
+    if (tx.record_id && safes) {
+      const matched = safes.find((s: { id: string; name: string }) => s.id === tx.record_id)
+      safeName = matched?.name || null
+    }
+
     return {
       id: tx.id,
       sale_id: tx.sale_id || null,
@@ -155,6 +165,7 @@ export function useInfiniteStatements(
       isPositive,
       employee_name: employeeName,
       payment_method: paymentMethod,
+      safe_name: safeName,
       index: index + 1
     }
   }, [])
@@ -250,7 +261,7 @@ export function useInfiniteStatements(
 
     let query = supabase
       .from('cash_drawer_transactions')
-      .select('id, sale_id, amount, balance_after, transaction_type, notes, created_at, performed_by, payment_method')
+      .select('id, sale_id, amount, balance_after, transaction_type, notes, created_at, performed_by, payment_method, record_id')
 
     // Apply safe filter
     if (currentRecordIds.length === 1) {
@@ -325,7 +336,7 @@ export function useInfiniteStatements(
 
       // Process transactions into statements
       const processedStatements = transactionsData.map((tx: any, index: number) =>
-        processTransactionToStatement(tx, salesMap, index)
+        processTransactionToStatement(tx, salesMap, index, optionsRef.current.safes)
       )
       const mergedStatements = mergeStatementsBySale(processedStatements)
 
@@ -379,7 +390,7 @@ export function useInfiniteStatements(
       // Process transactions into statements with correct index
       const currentCount = statements.length
       const processedStatements = transactionsData.map((tx: any, index: number) =>
-        processTransactionToStatement(tx, salesMap, currentCount + index)
+        processTransactionToStatement(tx, salesMap, currentCount + index, optionsRef.current.safes)
       )
       const mergedStatements = mergeStatementsBySale(processedStatements)
 

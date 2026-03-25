@@ -159,10 +159,27 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [reserveToDelete, setReserveToDelete] = useState<any>(null)
   const [isDeletingReserve, setIsDeletingReserve] = useState(false)
 
+  // Build safes list for name mapping (used by statements, transfers, invoices, and operations tabs)
+  // Main safes with drawers show as "تحويلات - [name]" to distinguish from sub-safes
+  const safesForMapping = useMemo(() => {
+    const list: Array<{ id: string; name: string }> = []
+    if (safe?.id) {
+      const displayName = childSafes.length > 0 ? `تحويلات - ${safe.name}` : (safe.name || 'التحويلات')
+      list.push({ id: safe.id, name: displayName })
+    }
+    childSafes.forEach(c => list.push({ id: c.id, name: safe?.name ? `${c.name} - ${safe.name}` : c.name }))
+    allSafes.forEach(s => {
+      if (!list.find(l => l.id === s.id)) {
+        // For other main safes (not the currently viewed one), check if they have children
+        const hasChildren = allSafes.some(child => child.parent_id === s.id)
+        const displayName = hasChildren ? `تحويلات - ${s.name}` : s.name
+        list.push({ id: s.id, name: displayName })
+      }
+    })
+    return list
+  }, [safe?.id, safe?.name, childSafes, allSafes])
+
   // Account statement - using infinite scroll hook
-  // The old state-based approach is replaced with the hook
-  // const [accountStatementData, setAccountStatementData] = useState<any[]>([])
-  // const [isLoadingStatement, setIsLoadingStatement] = useState(false)
   const {
     statements: accountStatementData,
     isLoading: isLoadingStatement,
@@ -176,7 +193,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     enabled: isOpen && activeTab === 'statement' && !isLoadingPreferences,
     pageSize: 200,
     excludeTransferTypes: nonDrawerExcludeTransfers,
-    transferTypesOnly: nonDrawerTransfersOnly
+    transferTypesOnly: nonDrawerTransfersOnly,
+    safes: safesForMapping
   })
 
   // Scroll detection for infinite scroll
@@ -211,7 +229,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     enabled: isOpen && activeTab === 'payments' && !isLoadingPreferences,
     pageSize: 200,
     excludeSales: true, // Only get non-sale transactions (transfers, deposits, withdrawals)
-    excludeTransferTypes: nonDrawerExcludeTransfers
+    excludeTransferTypes: nonDrawerExcludeTransfers,
+    safes: safesForMapping
   })
 
   // Scroll detection for transfers infinite scroll
@@ -222,17 +241,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   })
 
   // Operations tab - reuse same data source as payments (non-sale transactions)
-  // Build safes list for name mapping (childSafes + main safe + allSafes)
-  const safesForMapping = useMemo(() => {
-    const list: Array<{ id: string; name: string }> = []
-    if (safe?.id) list.push({ id: safe.id, name: safe.name || 'التحويلات' })
-    childSafes.forEach(c => list.push({ id: c.id, name: c.name }))
-    allSafes.forEach(s => {
-      if (!list.find(l => l.id === s.id)) list.push({ id: s.id, name: s.name })
-    })
-    return list
-  }, [safe?.id, safe?.name, childSafes, allSafes])
-
   const {
     transactions: operationsTransactions,
     isLoading: isLoadingOperations,
@@ -279,6 +287,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     purchaseInvoices: invoicesPurchases,
     paidAmounts,
     paymentBreakdowns,
+    drawerRecordIds,
     saleItemsCache,
     purchaseItemsCache,
     isLoading: isLoadingInvoices,
@@ -2818,6 +2827,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       }
     },
     {
+      id: 'safe_name',
+      header: 'الخزنة',
+      accessor: 'safe_name',
+      width: 120,
+      render: (value: string) => <span className="text-dash-accent-cyan text-xs">{value || '-'}</span>
+    },
+    {
       id: 'balance',
       header: 'الرصيد',
       accessor: 'balance',
@@ -2950,10 +2966,22 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         return <span className={getMethodColor(value || 'نقد')}>{value || 'نقد'}</span>
       }
     },
-    { 
-      id: 'invoice_type', 
-      header: 'نوع الفاتورة', 
-      accessor: 'invoice_type', 
+    {
+      id: 'drawer_name',
+      header: 'الخزنة',
+      accessor: 'id',
+      width: 120,
+      render: (value: string, item: any) => {
+        const recordIds = drawerRecordIds[item.id] || []
+        const names = recordIds.map((rid: string) => safesForMapping.find(s => s.id === rid)?.name || 'التحويلات')
+        const uniqueNames = Array.from(new Set(names))
+        return <span className="text-dash-accent-cyan text-xs">{uniqueNames.join(', ') || '-'}</span>
+      }
+    },
+    {
+      id: 'invoice_type',
+      header: 'نوع الفاتورة',
+      accessor: 'invoice_type',
       width: 120,
       render: (value: string, item: any) => {
         const getInvoiceTypeText = (invoiceType: string, transactionType: string, notes: string) => {
@@ -3103,6 +3131,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: 'payment_method',
       width: 120,
       render: (value: string) => <span className="text-dash-accent-blue">{value || '-'}</span>
+    },
+    {
+      id: 'safe_name',
+      header: 'الخزنة',
+      accessor: 'safe_name',
+      width: 120,
+      render: (value: string) => <span className="text-dash-accent-cyan text-xs">{value || '-'}</span>
     },
     {
       id: 'notes',

@@ -29,6 +29,7 @@ export interface UseInfiniteSafeInvoicesReturn {
   purchaseInvoices: any[]
   paidAmounts: Record<string, number>
   paymentBreakdowns: Record<string, { method: string; amount: number }[]>
+  drawerRecordIds: Record<string, string[]>
   saleItemsCache: Record<string, any[]>
   purchaseItemsCache: Record<string, any[]>
   isLoading: boolean
@@ -50,6 +51,7 @@ export function useInfiniteSafeInvoices(
   const [purchaseInvoices, setPurchaseInvoices] = useState<any[]>([])
   const [paidAmounts, setPaidAmounts] = useState<Record<string, number>>({})
   const [paymentBreakdowns, setPaymentBreakdowns] = useState<Record<string, { method: string; amount: number }[]>>({})
+  const [drawerRecordIds, setDrawerRecordIds] = useState<Record<string, string[]>>({})
   const [saleItemsCache, setSaleItemsCache] = useState<Record<string, any[]>>({})
   const [purchaseItemsCache, setPurchaseItemsCache] = useState<Record<string, any[]>>({})
   const [isLoading, setIsLoading] = useState(false)
@@ -246,12 +248,13 @@ export function useInfiniteSafeInvoices(
     const { filteredRecordIds, nonDrawerExcludeTransfers, nonDrawerTransfersOnly } = optionsRef.current
     const newAmounts: Record<string, number> = {}
     const newBreakdowns: Record<string, { method: string; amount: number }[]> = {}
+    const newDrawerRecordIds: Record<string, string[]> = {}
 
     // Fetch for sales
     if (saleIds.length > 0) {
       let txQuery = supabase
         .from('cash_drawer_transactions')
-        .select('sale_id, amount, payment_method')
+        .select('sale_id, amount, payment_method, record_id')
         .in('sale_id', saleIds)
         .in('record_id', filteredRecordIds)
 
@@ -269,6 +272,10 @@ export function useInfiniteSafeInvoices(
             newAmounts[t.sale_id] = (newAmounts[t.sale_id] || 0) + Math.abs(t.amount || 0)
             if (!newBreakdowns[t.sale_id]) newBreakdowns[t.sale_id] = []
             newBreakdowns[t.sale_id].push({ method: t.payment_method || 'نقد', amount: Math.abs(t.amount || 0) })
+            if (t.record_id) {
+              if (!newDrawerRecordIds[t.sale_id]) newDrawerRecordIds[t.sale_id] = []
+              if (!newDrawerRecordIds[t.sale_id].includes(t.record_id)) newDrawerRecordIds[t.sale_id].push(t.record_id)
+            }
           }
         })
       }
@@ -278,7 +285,7 @@ export function useInfiniteSafeInvoices(
     if (purchaseIds.length > 0) {
       let purchaseTxQuery = supabase
         .from('cash_drawer_transactions')
-        .select('purchase_invoice_id, amount, payment_method')
+        .select('purchase_invoice_id, amount, payment_method, record_id')
         .in('purchase_invoice_id', purchaseIds)
         .in('record_id', filteredRecordIds)
 
@@ -296,12 +303,16 @@ export function useInfiniteSafeInvoices(
             newAmounts[t.purchase_invoice_id] = (newAmounts[t.purchase_invoice_id] || 0) + Math.abs(t.amount || 0)
             if (!newBreakdowns[t.purchase_invoice_id]) newBreakdowns[t.purchase_invoice_id] = []
             newBreakdowns[t.purchase_invoice_id].push({ method: t.payment_method || 'نقد', amount: Math.abs(t.amount || 0) })
+            if (t.record_id) {
+              if (!newDrawerRecordIds[t.purchase_invoice_id]) newDrawerRecordIds[t.purchase_invoice_id] = []
+              if (!newDrawerRecordIds[t.purchase_invoice_id].includes(t.record_id)) newDrawerRecordIds[t.purchase_invoice_id].push(t.record_id)
+            }
           }
         })
       }
     }
 
-    return { newAmounts, newBreakdowns }
+    return { newAmounts, newBreakdowns, newDrawerRecordIds }
   }, [])
 
   // Fetch items cache for a batch
@@ -410,13 +421,14 @@ export function useInfiniteSafeInvoices(
       const saleIds = newSales.map((s: any) => s.id)
       const purchaseIds = newPurchases.map((p: any) => p.id)
 
-      const [{ newAmounts, newBreakdowns }, { newSaleItems, newPurchaseItems }] = await Promise.all([
+      const [{ newAmounts, newBreakdowns, newDrawerRecordIds }, { newSaleItems, newPurchaseItems }] = await Promise.all([
         fetchPaidAmountsForBatch(saleIds, purchaseIds),
         fetchItemsForBatch(saleIds, purchaseIds)
       ])
 
       setPaidAmounts(newAmounts)
       setPaymentBreakdowns(newBreakdowns)
+      setDrawerRecordIds(newDrawerRecordIds)
       setSaleItemsCache(newSaleItems)
       setPurchaseItemsCache(newPurchaseItems)
 
@@ -478,13 +490,14 @@ export function useInfiniteSafeInvoices(
 
       // Fetch secondary data for the new batch
       if (newSaleIds.length > 0 || newPurchaseIds.length > 0) {
-        const [{ newAmounts, newBreakdowns }, { newSaleItems, newPurchaseItems }] = await Promise.all([
+        const [{ newAmounts, newBreakdowns, newDrawerRecordIds }, { newSaleItems, newPurchaseItems }] = await Promise.all([
           fetchPaidAmountsForBatch(newSaleIds, newPurchaseIds),
           fetchItemsForBatch(newSaleIds, newPurchaseIds)
         ])
 
         setPaidAmounts(prev => ({ ...prev, ...newAmounts }))
         setPaymentBreakdowns(prev => ({ ...prev, ...newBreakdowns }))
+        setDrawerRecordIds(prev => ({ ...prev, ...newDrawerRecordIds }))
         setSaleItemsCache(prev => ({ ...prev, ...newSaleItems }))
         setPurchaseItemsCache(prev => ({ ...prev, ...newPurchaseItems }))
       }
@@ -525,6 +538,7 @@ export function useInfiniteSafeInvoices(
     purchaseInvoices,
     paidAmounts,
     paymentBreakdowns,
+    drawerRecordIds,
     saleItemsCache,
     purchaseItemsCache,
     isLoading,
