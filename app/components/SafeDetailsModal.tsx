@@ -565,6 +565,19 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     finally { setIsLoadingReserves(false) }
   }
 
+  // Centralized refresh: call after ANY mutation to ensure all tabs and balances update immediately
+  const refreshAllData = () => {
+    refreshStatements()
+    refreshInvoices()
+    refreshTransfers()
+    refreshOperations()
+    fetchCashDrawerBalance()
+    fetchPaymentBreakdown()
+    fetchNonDrawerTransferBalance()
+    fetchChildSafes()
+    fetchReserves()
+  }
+
   // Load all safes for name mapping when operations tab is opened
   useEffect(() => {
     if (isOpen && activeTab === 'operations' && allSafes.length === 0) {
@@ -1506,10 +1519,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   }
 
   const handleInvoiceUpdated = () => {
-    // إعادة تحميل البيانات بعد التعديل
-    refreshStatements()
-    fetchCashDrawerBalance()
-    fetchPaymentBreakdown()
+    // إعادة تحميل جميع البيانات فوراً بعد التعديل
+    refreshAllData()
+    onSafeUpdated?.()
   }
 
   // Handle delete transaction
@@ -1568,8 +1580,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       setShowDeleteModal(false)
       setTransactionToDelete(null)
 
-      // Refresh data (real-time will handle it but this ensures immediate update)
-      refreshInvoices()
+      // Refresh all data immediately after delete/cancel
+      refreshAllData()
+      onSafeUpdated?.()
 
       // Reset selected transaction if needed
       if (selectedTransaction >= allTransactions.length - 1) {
@@ -1865,11 +1878,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
           }
         }
 
-        // Refresh balances
-        fetchCashDrawerBalance()
-        fetchChildSafes()
-        fetchNonDrawerTransferBalance()
-        fetchReserves()
+        // Refresh all data immediately
+        refreshAllData()
 
         // Reset form
         setWithdrawAmount('')
@@ -2062,11 +2072,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             .delete().eq('record_id', safe.id)
         }
 
-        // Refresh balances
-        fetchCashDrawerBalance()
-        fetchChildSafes()
-        fetchNonDrawerTransferBalance()
-        fetchReserves()
+        // Refresh all data immediately
+        refreshAllData()
 
         // Reset form
         setWithdrawAmount('')
@@ -2150,10 +2157,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
             })
         }
 
-        // Refresh balances
-        fetchCashDrawerBalance()
-        fetchChildSafes()
-        fetchNonDrawerTransferBalance()
+        // Refresh all data immediately
+        refreshAllData()
 
         // Reset form
         setWithdrawAmount('')
@@ -2383,10 +2388,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         }
       }
 
-      // 5. Refresh balances
-      fetchCashDrawerBalance()
-      fetchChildSafes() // Refresh drawer balances
-      fetchNonDrawerTransferBalance()
+      // 5. Refresh all data immediately
+      refreshAllData()
 
       // 6. Reset form
       setWithdrawAmount('')
