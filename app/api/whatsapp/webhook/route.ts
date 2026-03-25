@@ -263,6 +263,29 @@ export async function POST(request: NextRequest) {
     } else if (event === 'messages.update' || event === 'message.update') {
       // Message status update (delivered, read, etc.)
       console.log('📊 Message status update:', body.data);
+
+      // Save LID mapping from incoming status updates
+      // These events carry both cleanedSenderPn (phone) and senderLid (LID)
+      const updateKey = body.data?.key || {};
+      if (!updateKey.fromMe && updateKey.cleanedSenderPn && updateKey.senderLid) {
+        const senderPhone = cleanPhoneNumber(updateKey.cleanedSenderPn);
+        const lidMatch = updateKey.senderLid.match(/(\d{14,})@/);
+        if (lidMatch && isValidPhoneNumber(senderPhone)) {
+          supabase
+            .schema('elfaroukgroup')
+            .from('whatsapp_lid_mappings')
+            .upsert({
+              lid: lidMatch[1],
+              phone_number: senderPhone,
+              customer_name: updateKey.pushName || senderPhone,
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'lid' })
+            .then(({ error }) => {
+              if (!error) console.log('✅ LID mapping saved from status update:', lidMatch![1], '→', senderPhone);
+              else console.error('❌ LID mapping save error:', error.message);
+            });
+        }
+      }
     } else if (event === 'connection.update' || event === 'session.update') {
       // Session status update
       console.log('🔗 Connection update:', body.data);
@@ -569,33 +592,51 @@ async function parseWasenderMessage(msgData: any, isOutgoing: boolean = false): 
       }
 
       // === SAVE LID MAPPING ===
-      // لما تيجي رسالة واردة، لو الـ remoteJid فيه LID نحفظ الـ mapping
+      // لما تيجي رسالة واردة، نحفظ الـ LID mapping من مصادر مختلفة
       // ده هيساعدنا نربط الرسائل الصادرة اللي بترجع بـ LID بدل رقم الهاتف
-      if (key.remoteJid) {
-        const lidMatch = key.remoteJid.match(/(\d{14,})@/);
-        if (lidMatch) {
-          const lid = lidMatch[1];
-          // Only save if we found a valid phone number
-          if (from && isValidPhoneNumber(from)) {
-            console.log('📥 Found LID in incoming message:', lid, '→', from);
+      if (from && isValidPhoneNumber(from)) {
+        const customerName = msgData.pushName || key.pushName || msgData.notifyName || from;
 
-            // Save the LID mapping (upsert to handle updates)
-            const customerName = msgData.pushName || key.pushName || msgData.notifyName || from;
+        // Source 1: remoteJid (if it contains a 14+ digit LID)
+        if (key.remoteJid) {
+          const lidMatch = key.remoteJid.match(/(\d{14,})@/);
+          if (lidMatch) {
+            console.log('📥 Found LID in remoteJid:', lidMatch[1], '→', from);
             supabase
               .schema('elfaroukgroup')
               .from('whatsapp_lid_mappings')
               .upsert({
-                lid: lid,
+                lid: lidMatch[1],
                 phone_number: from,
                 customer_name: customerName,
                 updated_at: new Date().toISOString()
               }, { onConflict: 'lid' })
               .then(({ error }) => {
-                if (error) {
-                  console.error('❌ Error saving LID mapping:', error.message);
-                } else {
-                  console.log('✅ LID mapping saved:', lid, '→', from);
-                }
+                if (error) console.error('❌ LID mapping error:', error.message);
+                else console.log('✅ LID mapping saved from remoteJid:', lidMatch![1], '→', from);
+              });
+          }
+        }
+
+        // Source 2: senderLid (critical for LID addressing mode)
+        // Incoming messages have phone-based remoteJid but senderLid has the LID
+        // This LID is what outgoing messages will use as remoteJid
+        if (key.senderLid) {
+          const lidMatch = key.senderLid.match(/(\d{14,})@/);
+          if (lidMatch) {
+            console.log('📥 Found senderLid:', lidMatch[1], '→', from);
+            supabase
+              .schema('elfaroukgroup')
+              .from('whatsapp_lid_mappings')
+              .upsert({
+                lid: lidMatch[1],
+                phone_number: from,
+                customer_name: customerName,
+                updated_at: new Date().toISOString()
+              }, { onConflict: 'lid' })
+              .then(({ error }) => {
+                if (error) console.error('❌ senderLid mapping error:', error.message);
+                else console.log('✅ LID mapping saved from senderLid:', lidMatch![1], '→', from);
               });
           }
         }

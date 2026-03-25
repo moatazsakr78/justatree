@@ -396,7 +396,11 @@
       "Bash(find /c/Users/pc/Desktop/elfaroukgroup/app/api -type f \\\\\\(-name *whatsapp* -o -name *message* \\\\\\))",
       "Bash(npx tailwindcss:*)",
       "Bash(mcp__supabase__list_tables --project_id=\"hecedrbnbknohssgaoso\" --schemas='[\"\"\"\"elfaroukgroup\"\"\"\"]' --verbose=true)",
-      "Bash(sort -t: -k2 -nr)"
+      "Bash(sort -t: -k2 -nr)",
+      "Bash(npm i:*)",
+      "Bash(vercel:*)",
+      "Bash(winget install:*)",
+      "Bash(where gh:*)"
     ],
     "deny": [],
     "additionalDirectories": [

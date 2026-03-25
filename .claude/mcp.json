@@ -9,11 +9,11 @@
         "sbp_8a045fb2a74ce7645ac3d71d8999ba374b35016e"
       ]
     },
-    "playwright": {
+    "sequential-thinking": {
       "command": "C:\\Program Files\\nodejs\\npx.cmd",
       "args": [
         "-y",
-        "@executeautomation/playwright-mcp-server"
+        "@modelcontextprotocol/server-sequential-thinking"
       ]
     }
   }

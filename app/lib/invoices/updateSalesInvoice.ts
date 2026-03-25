@@ -192,6 +192,12 @@ export async function updateSalesInvoice({
         old_value: oldRecordId,
         new_value: newRecordId
       })
+
+      // Update customer_payments safe_id for this sale
+      await supabase
+        .from('customer_payments')
+        .update({ safe_id: newRecordId })
+        .eq('sale_id', saleId)
     }
 
     // 4. تعديل العميل (إذا تم تغييره)
@@ -209,6 +215,14 @@ export async function updateSalesInvoice({
         old_value: sale.customer_id,
         new_value: newCustomerId
       })
+
+      // Reassign customer_payments to the new customer
+      if (newCustomerId) {
+        await supabase
+          .from('customer_payments')
+          .update({ customer_id: newCustomerId })
+          .eq('sale_id', saleId)
+      }
     }
 
     // 5. تعديل الفرع (إذا تم تغييره)
@@ -402,7 +416,16 @@ export async function updateSalesInvoice({
         new_value: newPaymentMethod
       })
 
-      // Look up is_physical for the new payment method to determine correct transaction_type
+      // Look up is_physical for the OLD payment method
+      let oldIsPhysical = true
+      const { data: oldPmRow } = await supabase
+        .from('payment_methods')
+        .select('is_physical')
+        .eq('name', sale.payment_method)
+        .maybeSingle()
+      if (oldPmRow) oldIsPhysical = oldPmRow.is_physical !== false
+
+      // Look up is_physical for the NEW payment method
       let newIsPhysical = true
       const { data: pmRow } = await supabase
         .from('payment_methods')
@@ -416,13 +439,170 @@ export async function updateSalesInvoice({
         ? (newIsPhysical ? 'return' : 'transfer_out')
         : (newIsPhysical ? 'sale' : 'transfer_in')
 
-      // Update transaction_type and payment_method on all related cash_drawer_transactions
-      for (const tx of transactions) {
-        await supabase
-          .from('cash_drawer_transactions')
-          .update({ transaction_type: newTransactionType, payment_method: newPaymentMethod })
-          .eq('id', tx.id)
+      // Check if physical nature changed AND section 3 didn't already handle the move
+      const physicalNatureChanged = oldIsPhysical !== newIsPhysical
+      const safeAlreadyChanged = !!changes.record
+      const transactionsWithDrawers = transactions.filter((tx: any) => tx.drawer_id)
+
+      if (physicalNatureChanged && !safeAlreadyChanged && transactionsWithDrawers.length > 0) {
+        // Need to move transactions between drawers
+        // Determine the new target record based on physical nature change
+        let targetRecordId: string | null = null
+
+        if (newIsPhysical) {
+          // Non-physical → Physical: move from main safe to a sub-safe (drawer)
+          const currentRecordId = transactionsWithDrawers[0].record_id
+          if (currentRecordId) {
+            const { data: subSafes } = await supabase
+              .from('records')
+              .select('id')
+              .eq('parent_id', currentRecordId)
+              .eq('safe_type', 'sub')
+              .eq('is_active', true)
+              .order('created_at', { ascending: true })
+              .limit(1)
+
+            if (subSafes && subSafes.length > 0) {
+              targetRecordId = subSafes[0].id
+            }
+          }
+        } else {
+          // Physical → Non-physical: move from sub-safe to parent main safe
+          const currentRecordId = transactionsWithDrawers[0].record_id
+          if (currentRecordId) {
+            const { data: currentRecord } = await supabase
+              .from('records')
+              .select('parent_id')
+              .eq('id', currentRecordId)
+              .single()
+
+            if (currentRecord?.parent_id) {
+              targetRecordId = currentRecord.parent_id
+            }
+          }
+        }
+
+        if (targetRecordId && targetRecordId !== transactionsWithDrawers[0].record_id) {
+          // Move money: reverse from old drawer, add to new drawer
+          const pmCompletedReversals: { drawerId: string; delta: number }[] = []
+
+          for (const tx of transactionsWithDrawers) {
+            const delta = -getSignedAmount(tx.amount || 0, tx.transaction_type)
+            try {
+              const { error: rpcErr } = await supabase.rpc(
+                'atomic_adjust_drawer_balance' as any,
+                { p_drawer_id: tx.drawer_id, p_change: delta }
+              )
+              if (rpcErr) throw new Error(`Failed to reverse drawer: ${rpcErr.message}`)
+              pmCompletedReversals.push({ drawerId: tx.drawer_id, delta })
+            } catch (reversalError: any) {
+              // Rollback completed reversals
+              for (const completed of pmCompletedReversals) {
+                try {
+                  await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+                    p_drawer_id: completed.drawerId, p_change: -completed.delta
+                  })
+                } catch (rollbackErr) {
+                  console.error(`CRITICAL: Failed to rollback drawer ${completed.drawerId}:`, rollbackErr)
+                }
+              }
+              return { success: false, message: `فشل في عكس معاملات الخزنة عند تغيير طريقة الدفع: ${reversalError.message}` }
+            }
+          }
+
+          // Get or create drawer for new target
+          let newTargetDrawer: any = null
+          const { data: existingDrawer, error: drawerError } = await supabase
+            .from('cash_drawers')
+            .select('*')
+            .eq('record_id', targetRecordId)
+            .single()
+
+          if (drawerError && drawerError.code === 'PGRST116') {
+            const { data: createdDrawer } = await supabase
+              .from('cash_drawers')
+              .insert({ record_id: targetRecordId, current_balance: 0 })
+              .select()
+              .single()
+            newTargetDrawer = createdDrawer
+          } else {
+            newTargetDrawer = existingDrawer
+          }
+
+          if (newTargetDrawer) {
+            // Calculate total signed amount with NEW transaction type
+            const newTotalAmount = transactions.reduce((sum: number, tx: any) =>
+              sum + getSignedAmount(tx.amount || 0, newTransactionType), 0)
+
+            const { data: newRpcResult, error: newRpcErr } = await supabase.rpc(
+              'atomic_adjust_drawer_balance' as any,
+              { p_drawer_id: newTargetDrawer.id, p_change: newTotalAmount }
+            )
+
+            if (newRpcErr) {
+              // Rollback all reversals
+              for (const completed of pmCompletedReversals) {
+                try {
+                  await supabase.rpc('atomic_adjust_drawer_balance' as any, {
+                    p_drawer_id: completed.drawerId, p_change: -completed.delta
+                  })
+                } catch (rollbackErr) {
+                  console.error(`CRITICAL: Failed to rollback drawer ${completed.drawerId}:`, rollbackErr)
+                }
+              }
+              return { success: false, message: `فشل في تحديث الخزنة الجديدة عند تغيير طريقة الدفع: ${newRpcErr.message}` }
+            }
+
+            const newTargetBalance = newRpcResult?.[0]?.new_balance ?? roundMoney((newTargetDrawer.current_balance || 0) + newTotalAmount)
+
+            // Update all transaction records with new drawer, type, and payment method
+            for (const tx of transactions) {
+              await supabase
+                .from('cash_drawer_transactions')
+                .update({
+                  transaction_type: newTransactionType,
+                  payment_method: newPaymentMethod,
+                  record_id: targetRecordId,
+                  drawer_id: newTargetDrawer.id,
+                  balance_after: newTargetBalance
+                })
+                .eq('id', tx.id)
+            }
+
+            console.log(`✅ نقل المعاملات من الخزنة القديمة إلى ${targetRecordId} عند تغيير طريقة الدفع، الرصيد الجديد: ${newTargetBalance}`)
+          } else {
+            // Couldn't find/create new drawer - just update labels
+            for (const tx of transactions) {
+              await supabase
+                .from('cash_drawer_transactions')
+                .update({ transaction_type: newTransactionType, payment_method: newPaymentMethod })
+                .eq('id', tx.id)
+            }
+          }
+        } else {
+          // No target change needed (no sub-safe found or same record) - just update labels
+          for (const tx of transactions) {
+            await supabase
+              .from('cash_drawer_transactions')
+              .update({ transaction_type: newTransactionType, payment_method: newPaymentMethod })
+              .eq('id', tx.id)
+          }
+        }
+      } else {
+        // Physical nature didn't change OR section 3 already handled the move - just update labels
+        for (const tx of transactions) {
+          await supabase
+            .from('cash_drawer_transactions')
+            .update({ transaction_type: newTransactionType, payment_method: newPaymentMethod })
+            .eq('id', tx.id)
+        }
       }
+
+      // Update customer_payments payment_method for this sale
+      await supabase
+        .from('customer_payments')
+        .update({ payment_method: newPaymentMethod })
+        .eq('sale_id', saleId)
     }
 
     // 7. تحديث الفاتورة في جدول sales
