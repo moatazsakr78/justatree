@@ -400,7 +400,12 @@
       "Bash(npm i:*)",
       "Bash(vercel:*)",
       "Bash(winget install:*)",
-      "Bash(where gh:*)"
+      "Bash(where gh:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh api:*)",
+      "Bash(git fetch:*)",
+      "Bash(git clone:*)",
+      "Bash(bash sync-from-elfaroukgroup.sh)"
     ],
     "deny": [],
     "additionalDirectories": [
