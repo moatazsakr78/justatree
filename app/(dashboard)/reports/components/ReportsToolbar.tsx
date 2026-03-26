@@ -21,6 +21,8 @@ interface ReportsToolbarProps {
   onMultiFilterClick: () => void;
   onDateFilterClick: () => void;
   onRefresh: () => void;
+  onToggleChart: () => void;
+  isChartMode: boolean;
   activeFilterType: ActiveFilterType;
   simpleFilters: SimpleFiltersResult;
   multiFilters: MultiFiltersResult;
@@ -33,6 +35,8 @@ export default function ReportsToolbar({
   onMultiFilterClick,
   onDateFilterClick,
   onRefresh,
+  onToggleChart,
+  isChartMode,
   activeFilterType,
   simpleFilters,
   multiFilters,
@@ -119,10 +123,12 @@ export default function ReportsToolbar({
           <span className="text-sm">تواريخ</span>
         </button>
 
-        {/* عرض بياني - disabled */}
+        {/* عرض بياني */}
         <button
-          className={`${buttonBase} ${disabledClass}`}
-          title="قريبا"
+          onClick={onToggleChart}
+          className={`${buttonBase} cursor-pointer ${
+            isChartMode ? activeClass : inactiveClass
+          }`}
         >
           <PresentationChartBarIcon className="h-5 w-5 mb-1" />
           <span className="text-sm">عرض بياني</span>

@@ -56,6 +56,7 @@ import ReportsSidebar from './components/ReportsSidebar';
 import ReportsMenu from './components/ReportsMenu';
 import ReportTabBar from './components/ReportTabBar';
 import ReportTableView from './components/ReportTableView';
+import ReportChartView from './components/ReportChartView';
 
 // ==================== Fetcher Registry ====================
 const FETCHER_MAP: Record<string, (params: ReportFetchParams) => Promise<any[]>> = {
@@ -187,7 +188,10 @@ function ReportsPageContent() {
   const [currentReportType, setCurrentReportType] = useState<string>('');
 
   // Tab management
-  const { openTabs, activeTab, switchTab, openReport, closeTab } = useReportTabs();
+  const { openTabs, activeTab, switchTab, openReport, closeTab, toggleViewMode } = useReportTabs();
+
+  // Get current tab's view mode
+  const activeViewMode = openTabs.find(t => t.id === activeTab)?.viewMode || 'table';
 
   // Clear search when switching tabs
   useEffect(() => {
@@ -458,6 +462,8 @@ function ReportsPageContent() {
           onMultiFilterClick={() => setShowMultiFilter(true)}
           onDateFilterClick={() => setShowDateFilter(true)}
           onRefresh={refreshCurrentReport}
+          onToggleChart={() => activeTab !== 'main' && toggleViewMode(activeTab)}
+          isChartMode={activeViewMode === 'chart'}
           activeFilterType={activeFilterType}
           simpleFilters={simpleFilters}
           multiFilters={multiFilters}
@@ -513,12 +519,19 @@ function ReportsPageContent() {
                     setCurrentReportType(reportId);
                     setShowColumnsModal(true);
                   }}
+                  onToggleViewMode={toggleViewMode}
                 />
 
                 {/* Content Area */}
                 <div className="flex-1 overflow-hidden bg-[var(--dash-bg-surface)]">
                   {activeTab === 'main' ? (
                     <ReportsMenu onReportClick={handleReportClick} />
+                  ) : activeViewMode === 'chart' ? (
+                    <ReportChartView
+                      reportId={activeTab}
+                      data={reportData[activeTab] || []}
+                      loading={loading}
+                    />
                   ) : (
                     <ReportTableView
                       reportId={activeTab}

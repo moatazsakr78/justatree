@@ -6,11 +6,12 @@ export interface TabState {
   id: string;
   title: string;
   active: boolean;
+  viewMode: 'table' | 'chart';
 }
 
 export function useReportTabs() {
   const [openTabs, setOpenTabs] = useState<TabState[]>([
-    { id: 'main', title: 'التقارير', active: true }
+    { id: 'main', title: 'التقارير', active: true, viewMode: 'table' }
   ]);
   const [activeTab, setActiveTab] = useState<string>('main');
 
@@ -26,13 +27,11 @@ export function useReportTabs() {
     setOpenTabs(prev => {
       const exists = prev.some(tab => tab.id === reportId);
       if (exists) {
-        // Switch to existing tab
         return prev.map(tab => ({ ...tab, active: tab.id === reportId }));
       }
-      // Add new tab
       return [
         ...prev.map(tab => ({ ...tab, active: false })),
-        { id: reportId, title: titleAr, active: true }
+        { id: reportId, title: titleAr, active: true, viewMode: 'table' as const }
       ];
     });
     setActiveTab(reportId);
@@ -51,7 +50,6 @@ export function useReportTabs() {
           ...tab,
           active: tab.id === lastTab.id
         }));
-        // Update activeTab to the last remaining tab
         setActiveTab(lastTab.id);
         return updated;
       }
@@ -60,5 +58,14 @@ export function useReportTabs() {
     });
   }, []);
 
-  return { openTabs, activeTab, switchTab, openReport, closeTab };
+  const toggleViewMode = useCallback((tabId: string) => {
+    if (tabId === 'main') return;
+    setOpenTabs(prev => prev.map(tab =>
+      tab.id === tabId
+        ? { ...tab, viewMode: tab.viewMode === 'table' ? 'chart' : 'table' }
+        : tab
+    ));
+  }, []);
+
+  return { openTabs, activeTab, switchTab, openReport, closeTab, toggleViewMode };
 }

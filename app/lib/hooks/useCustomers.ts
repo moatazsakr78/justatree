@@ -28,6 +28,8 @@ export interface Customer {
   user_id: string | null
   profile_image_url: string | null
   governorate: string | null
+  default_record_id: string | null
+  default_price_type: string | null
 }
 
 // Default customer ID that should never be deleted

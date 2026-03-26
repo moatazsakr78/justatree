@@ -221,10 +221,12 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
     const title = isDefaultCustomer ? 'نقطة البيع' : (customer?.name || 'فاتورة جديدة');
 
-    // Always keep the user's explicitly selected record (safe)
-    // Customer's default_record_id should NOT override the user's selection
-    let customerRecord = inheritedSelections?.record || null;
-    const customerSubSafe = inheritedSelections?.subSafe || null;
+    // If customer has a default record (safe), use it; otherwise inherit from current selections
+    let customerRecord = customer?.default_record_id
+      ? (customer.default_record || { id: customer.default_record_id, name: customer.default_record_name || '' })
+      : (inheritedSelections?.record || null);
+    // Clear subSafe when switching to customer's default record
+    const customerSubSafe = customer?.default_record_id ? null : (inheritedSelections?.subSafe || null);
 
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
@@ -262,10 +264,12 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const DEFAULT_CUSTOMER_ID = '00000000-0000-0000-0000-000000000001';
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
 
-    // Always keep the user's explicitly selected record (safe)
-    // Customer's default_record_id should NOT override the user's selection
-    let customerRecord = inheritedSelections?.record || null;
-    const customerSubSafe = inheritedSelections?.subSafe || null;
+    // If customer has a default record (safe), use it; otherwise inherit from current selections
+    let customerRecord = customer?.default_record_id
+      ? (customer.default_record || { id: customer.default_record_id, name: customer.default_record_name || '' })
+      : (inheritedSelections?.record || null);
+    // Clear subSafe when switching to customer's default record
+    const customerSubSafe = customer?.default_record_id ? null : (inheritedSelections?.subSafe || null);
 
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
@@ -313,10 +317,12 @@ export function usePOSTabs(): UsePOSTabsReturn {
     const isDefaultCustomer = customer?.id === DEFAULT_CUSTOMER_ID || customer?.name === 'عميل';
     const tabTitle = isDefaultCustomer ? 'نقطة البيع' : (customer?.name || 'فاتورة جديدة');
 
-    // Always keep the user's explicitly selected record (safe)
-    // Customer's default_record_id should NOT override the user's selection
-    let customerRecord = inheritedSelections?.record || null;
-    const customerSubSafe = inheritedSelections?.subSafe || null;
+    // If customer has a default record (safe), use it; otherwise inherit from current selections
+    let customerRecord = customer?.default_record_id
+      ? (customer.default_record || { id: customer.default_record_id, name: customer.default_record_name || '' })
+      : (inheritedSelections?.record || null);
+    // Clear subSafe when switching to customer's default record
+    const customerSubSafe = customer?.default_record_id ? null : (inheritedSelections?.subSafe || null);
 
     // Get customer's default price type if set
     const customerPriceType = customer?.default_price_type || inheritedSelections?.priceType || 'price';
@@ -372,8 +378,12 @@ export function usePOSTabs(): UsePOSTabsReturn {
     setTabs(prev => {
       const newTabs = prev.map(tab => {
         if (tab.id === tabId) {
-          // Keep existing record (safe should only change via explicit record select)
-          let customerRecord = tab.selections.record;
+          // If customer has a default record (safe), use it; otherwise keep existing
+          let customerRecord = customer?.default_record_id
+            ? (customer.default_record || { id: customer.default_record_id, name: customer.default_record_name || '' })
+            : tab.selections.record;
+          // Clear subSafe when switching to customer's default record
+          const customerSubSafe = customer?.default_record_id ? null : tab.selections.subSafe;
 
           // Get customer's default price type if set, otherwise keep existing
           const customerPriceType = customer?.default_price_type || tab.selections.priceType || 'price';
@@ -385,6 +395,7 @@ export function usePOSTabs(): UsePOSTabsReturn {
               ...tab.selections,
               customer: customer,
               record: customerRecord,
+              subSafe: customerSubSafe,
               priceType: customerPriceType as any,
             },
           };

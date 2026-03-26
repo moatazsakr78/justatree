@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { MagnifyingGlassIcon, XMarkIcon, TableCellsIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, XMarkIcon, TableCellsIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import { TabState } from '../hooks/useReportTabs';
 import { getReportById } from '../config/reportRegistry';
 
@@ -12,6 +12,7 @@ interface ReportTabBarProps {
   onSwitchTab: (tabId: string) => void;
   onCloseTab: (tabId: string) => void;
   onColumnsClick: (reportId: string) => void;
+  onToggleViewMode: (tabId: string) => void;
 }
 
 export default function ReportTabBar({
@@ -22,6 +23,7 @@ export default function ReportTabBar({
   onSwitchTab,
   onCloseTab,
   onColumnsClick,
+  onToggleViewMode,
 }: ReportTabBarProps) {
   // Get search placeholder from registry for active tab
   const activeReport = getReportById(activeTab);
@@ -77,8 +79,42 @@ export default function ReportTabBar({
               <span>{tab.title}</span>
             </button>
 
-            {/* Column Manager Button - Only for non-main tabs */}
+            {/* View Mode Toggle - Only for non-main tabs */}
             {tab.id !== 'main' && (
+              <div className="flex items-center mr-1 bg-[var(--dash-bg-surface)] rounded overflow-hidden border border-[var(--dash-border-default)]">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (tab.viewMode !== 'table') onToggleViewMode(tab.id);
+                  }}
+                  className={`p-1 transition-colors ${
+                    tab.viewMode === 'table'
+                      ? 'bg-dash-accent-blue text-white'
+                      : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
+                  }`}
+                  title="عرض جدول"
+                >
+                  <TableCellsIcon className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (tab.viewMode !== 'chart') onToggleViewMode(tab.id);
+                  }}
+                  className={`p-1 transition-colors ${
+                    tab.viewMode === 'chart'
+                      ? 'bg-dash-accent-blue text-white'
+                      : 'text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]'
+                  }`}
+                  title="عرض بياني"
+                >
+                  <ChartBarIcon className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
+            {/* Column Manager Button - Only for non-main tabs in table view */}
+            {tab.id !== 'main' && tab.viewMode === 'table' && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();

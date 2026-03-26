@@ -17,6 +17,7 @@ import { useCustomerGroups, CustomerGroup } from '../../lib/hooks/useCustomerGro
 import { useCustomers, Customer, DEFAULT_CUSTOMER_ID } from '../../lib/hooks/useCustomers'
 import CustomersGridView from '../../components/CustomersGridView'
 import MergeCustomersModal from '../../components/MergeCustomersModal'
+import CustomerFilterModal, { filterCustomersByMissingData } from '../../components/CustomerFilterModal'
 import {
   ArrowPathIcon,
   FolderPlusIcon,
@@ -37,7 +38,8 @@ import {
   FolderIcon,
   FolderOpenIcon,
   UserPlusIcon,
-  ArrowsRightLeftIcon
+  ArrowsRightLeftIcon,
+  FunnelIcon
 } from '@heroicons/react/24/outline'
 import { ranks } from '@/app/lib/data/ranks'
 import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
@@ -262,6 +264,11 @@ export default function CustomersPage() {
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid')
   const [isGroupsHidden, setIsGroupsHidden] = useState(true)
   const [isMergeModalOpen, setIsMergeModalOpen] = useState(false)
+  const [showFilterModal, setShowFilterModal] = useState(false)
+  const [customerFilter, setCustomerFilter] = useState<Set<string>>(new Set())
+  const [customerFilterMode, setCustomerFilterMode] = useState<'OR' | 'AND'>('OR')
+  const [safeFilter, setSafeFilter] = useState('')
+  const [priceTypeFilter, setPriceTypeFilter] = useState('')
   // Use the real-time hooks for customer groups and customers
   const { groups, isLoading: groupsLoading, error: groupsError, toggleGroup } = useCustomerGroups()
   const { customers, isLoading: customersLoading, error: customersError, isDefaultCustomer, refetch } = useCustomers()
@@ -553,28 +560,45 @@ export default function CustomersPage() {
   };
 
   // فلترة العملاء حسب المجموعة المحددة والبحث
-  const filteredCustomers = customers.filter(customer => {
+  let filteredCustomers = customers.filter(customer => {
     // فلترة البحث أولاً - يدعم البحث بكلمات متعددة
     const matchesSearch = matchesMultiWordSearch(searchQuery, customer.name, customer.phone, customer.city)
-    
+
     // إذا لم يكن هناك مجموعة محددة، إظهار جميع العملاء
     if (!selectedCustomerGroup) {
       return matchesSearch
     }
-    
+
     // إذا كانت المجموعة المحددة هي المجموعة الرئيسية "عملاء"، إظهار جميع العملاء
     if (selectedCustomerGroup.name === 'عملاء') {
       return matchesSearch
     }
-    
+
     // الحصول على جميع المجموعات الفرعية للمجموعة المحددة
     const allGroupIds = getAllSubGroupIds(selectedCustomerGroup.id, groups)
-    
+
     // فلترة العملاء الذين ينتمون للمجموعة أو مجموعاتها الفرعية
     const matchesGroup = customer.group_id && allGroupIds.includes(customer.group_id)
-    
+
     return matchesSearch && matchesGroup
   })
+
+  // تطبيق فلتر البيانات الناقصة
+  if (customerFilter.size > 0) {
+    filteredCustomers = filterCustomersByMissingData(filteredCustomers, customerFilter, customerFilterMode)
+  }
+  // تطبيق فلتر الخزنة
+  if (safeFilter) {
+    if (safeFilter === 'none') {
+      filteredCustomers = filteredCustomers.filter(c => !c.default_record_id)
+    } else {
+      filteredCustomers = filteredCustomers.filter(c => c.default_record_id === safeFilter)
+    }
+  }
+  // تطبيق فلتر نوع السعر
+  if (priceTypeFilter) {
+    filteredCustomers = filteredCustomers.filter(c => c.default_price_type === priceTypeFilter)
+  }
 
   return (
     <div className="h-screen bg-[var(--dash-bg-surface)] overflow-hidden">
@@ -707,6 +731,20 @@ export default function CustomersPage() {
             >
               <ArrowsRightLeftIcon className="h-4 w-4" />
               <span className="text-sm">دمج العملاء</span>
+            </button>
+
+            <button
+              onClick={() => setShowFilterModal(true)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap transition-colors ${
+                (customerFilter.size > 0 || safeFilter || priceTypeFilter)
+                  ? 'text-dash-accent-orange hover:text-dash-accent-orange'
+                  : 'text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]/30'
+              }`}
+            >
+              <FunnelIcon className="h-4 w-4" />
+              <span className="text-sm">
+                تصفية العملاء {(customerFilter.size + (safeFilter ? 1 : 0) + (priceTypeFilter ? 1 : 0)) > 0 ? `(${customerFilter.size + (safeFilter ? 1 : 0) + (priceTypeFilter ? 1 : 0)})` : ''}
+              </span>
             </button>
 
             {viewMode === 'table' && (
@@ -1025,6 +1063,21 @@ export default function CustomersPage() {
           setSelectedCustomer(null)
         }}
         preSelectedCustomer={selectedCustomer}
+      />
+
+      <CustomerFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onApply={(filters, mode, safe, priceType) => {
+          setCustomerFilter(filters)
+          setCustomerFilterMode(mode)
+          setSafeFilter(safe)
+          setPriceTypeFilter(priceType)
+        }}
+        initialFilters={customerFilter}
+        initialFilterMode={customerFilterMode}
+        initialSafeFilter={safeFilter}
+        initialPriceTypeFilter={priceTypeFilter}
       />
 
     </div>

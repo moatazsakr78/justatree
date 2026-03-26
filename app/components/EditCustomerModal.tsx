@@ -80,11 +80,14 @@ export default function EditCustomerModal({ isOpen, onClose, customer }: EditCus
     { id: 'sales', label: 'ربط البيع' }
   ]
 
-  // Convert records to options format
-  const recordOptions = records.map(record => ({
-    value: record.id,
-    label: record.name
-  }))
+  // Convert records to options format (with "no link" option at top)
+  const recordOptions = [
+    { value: '', label: 'لا يوجد ربط' },
+    ...records.map(record => ({
+      value: record.id,
+      label: record.name
+    }))
+  ]
 
   // Convert customer groups to options format
   const customerGroupOptions = groups.flatMap(group => {
