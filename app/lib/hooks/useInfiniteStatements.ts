@@ -24,6 +24,7 @@ export interface StatementItem {
   paymentBreakdown?: { method: string; amount: number }[]
   safe_name?: string | null
   index?: number
+  status?: string | null
 }
 
 // Cursor for pagination
@@ -101,8 +102,10 @@ export function useInfiniteStatements(
       const sale = salesMap.get(tx.sale_id)
       invoiceValue = parseFloat(String(sale.total_amount || 0)) || 0
 
-      // Determine type based on sale invoice_type
-      if (sale.invoice_type === 'Sale Return') {
+      // Determine type based on sale status and invoice_type
+      if (sale.status === 'cancelled') {
+        typeName = 'فاتورة ملغاة'
+      } else if (sale.invoice_type === 'Sale Return') {
         typeName = 'مرتجع بيع'
       } else {
         typeName = 'فاتورة بيع'
@@ -166,7 +169,8 @@ export function useInfiniteStatements(
       employee_name: employeeName,
       payment_method: paymentMethod,
       safe_name: safeName,
-      index: index + 1
+      index: index + 1,
+      status: saleData?.status || null
     }
   }, [])
 
@@ -236,7 +240,7 @@ export function useInfiniteStatements(
     const { data: salesData } = await supabase
       .from('sales')
       .select(`
-        id, invoice_number, total_amount, payment_method, invoice_type, created_at, time, notes,
+        id, invoice_number, total_amount, payment_method, invoice_type, created_at, time, notes, status,
         cashier:user_profiles(full_name)
       `)
       .in('id', saleIds)

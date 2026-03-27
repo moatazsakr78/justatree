@@ -273,16 +273,14 @@ export async function cancelSalesInvoice({
         .neq('transaction_type', 'invoice_cancel')
     }
 
-    // 6. Delete customer payments linked to this invoice
+    // 6. Cancel customer payments linked to this invoice (mark as cancelled, don't delete)
     const { error: paymentsError } = await supabase
       .from('customer_payments')
-      .delete()
+      .update({ status: 'cancelled' } as any)
       .eq('sale_id', saleId)
 
     if (paymentsError) {
-      console.error('Failed to delete customer payments by sale_id:', paymentsError.message)
-      // Do NOT fallback to string matching — it could delete unrelated payments
-      // Log the error for manual investigation
+      console.error('Failed to cancel customer payments by sale_id:', paymentsError.message)
     }
 
     // 7. Mark the sale as cancelled + record in update_history

@@ -405,7 +405,8 @@
       "Bash(gh api:*)",
       "Bash(git fetch:*)",
       "Bash(git clone:*)",
-      "Bash(bash sync-from-elfaroukgroup.sh)"
+      "Bash(bash sync-from-elfaroukgroup.sh)",
+      "Bash(ls -la /c/Users/pc/Desktop/elfaroukgroup/app/\\\\\\(dashboard\\\\\\)/)"
     ],
     "deny": [],
     "additionalDirectories": [

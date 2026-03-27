@@ -25,6 +25,7 @@ export interface CustomerStatementItem {
   payment_method?: string | null
   userNotes?: string | null
   index?: number
+  status?: string | null
 }
 
 // Cursor for pagination
@@ -115,7 +116,7 @@ export function useInfiniteCustomerStatement(
     let salesQuery = supabase
       .from('sales')
       .select(`
-        id, invoice_number, total_amount, payment_method, invoice_type, created_at, time,
+        id, invoice_number, total_amount, payment_method, invoice_type, created_at, time, status,
         record:records(name),
         cashier:user_profiles(full_name)
       `)
@@ -140,7 +141,7 @@ export function useInfiniteCustomerStatement(
 
     if (salesError) throw salesError
 
-    // Fetch payments (newest first)
+    // Fetch payments (newest first, exclude cancelled)
     let paymentsQuery = supabase
       .from('customer_payments')
       .select(`
@@ -149,6 +150,7 @@ export function useInfiniteCustomerStatement(
       `)
       .eq('customer_id', currentCustomerId)
       .is('sale_id', null) // Only standalone payments
+      .neq('status', 'cancelled')
 
     if (startDate) {
       paymentsQuery = paymentsQuery.gte('created_at', startDate.toISOString())
@@ -229,11 +231,12 @@ export function useInfiniteCustomerStatement(
         }
       }
 
-      // Also check for linked payments
+      // Also check for linked payments (exclude cancelled)
       const { data: linkedPayments } = await supabase
         .from('customer_payments')
         .select('sale_id, amount')
         .in('sale_id', saleIds)
+        .neq('status', 'cancelled')
 
       if (linkedPayments) {
         linkedPayments.forEach(payment => {
@@ -289,24 +292,27 @@ export function useInfiniteCustomerStatement(
     pageItems.forEach((item, index) => {
       if (item.type === 'sale') {
         const sale = item.item
+        const isCancelled = sale.status === 'cancelled'
         const isReturn = sale.invoice_type === 'Sale Return'
         const invoiceAmount = Math.abs(sale.total_amount)
-        const paidAmount = Math.abs(paidAmountsMap.get(sale.id) || 0)
+        const paidAmount = isCancelled ? 0 : Math.abs(paidAmountsMap.get(sale.id) || 0)
         const saleTx = saleTransactionsMap.get(sale.id)
 
-        // Net effect on balance
+        // Net effect on balance (cancelled = 0 effect)
         const hasPaidAmount = paidAmount > 0
         let operationType: string
-        if (isReturn) {
+        if (isCancelled) {
+          operationType = 'فاتورة ملغاة'
+        } else if (isReturn) {
           operationType = hasPaidAmount ? 'مرتجع بيع - دفعة' : 'مرتجع بيع'
         } else {
           operationType = hasPaidAmount ? 'فاتورة بيع - دفعة' : 'فاتورة بيع'
         }
 
-        // Calculate what balance change this transaction caused
-        const netAmount = isReturn
+        // Cancelled invoices have zero balance effect
+        const netAmount = isCancelled ? 0 : (isReturn
           ? -invoiceAmount + paidAmount
-          : invoiceAmount - paidAmount
+          : invoiceAmount - paidAmount)
 
         // Balance AFTER this transaction
         const balanceAfter = balance
@@ -327,7 +333,8 @@ export function useInfiniteCustomerStatement(
           isNegative: isReturn,
           safe_name: (sale as any).record?.name || saleTx?.record?.name || null,
           employee_name: (sale as any).cashier?.full_name || saleTx?.performed_by || null,
-          payment_method: sale.payment_method || saleTx?.payment_method || null
+          payment_method: sale.payment_method || saleTx?.payment_method || null,
+          status: sale.status || null
         })
       } else if (item.type === 'payment') {
         const payment = item.item

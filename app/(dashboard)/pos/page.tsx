@@ -3041,6 +3041,9 @@ function POSPageContent() {
           };
         });
 
+        // Save customer balance BEFORE invoice creation (for receipt)
+        const balanceBefore = selections.customer?.calculated_balance || 0;
+
         const result = await createSalesInvoice({
           cartItems: salesCartItems,
           selections: {
@@ -3079,16 +3082,18 @@ function POSPageContent() {
             .eq('id', selections.customer.id)
             .single();
 
-          // Calculate customer balance from sales and payments
+          // Calculate customer balance from sales and payments (exclude cancelled)
           const [salesRes, paymentsRes] = await Promise.all([
             supabase
               .from('sales')
               .select('total_amount')
-              .eq('customer_id', selections.customer.id),
+              .eq('customer_id', selections.customer.id)
+              .neq('status', 'cancelled'),
             supabase
               .from('customer_payments')
               .select('amount, notes')
               .eq('customer_id', selections.customer.id)
+              .neq('status', 'cancelled')
           ]);
 
           const salesTotal = (salesRes.data || []).reduce((sum, s) => sum + (s.total_amount || 0), 0);
@@ -3142,6 +3147,8 @@ function POSPageContent() {
           cashTendered: parseFloat(paidAmount) || 0,
           primaryPaymentMethod: paymentSplitData[0]?.paymentMethodName || 'كاش',
           isDefaultCustomer: selections.customer?.id === defaultCustomer?.id,
+          balanceBefore: balanceBefore,
+          balanceAfter: calculatedBalance,
         });
 
         // Show print confirmation modal
@@ -3806,7 +3813,7 @@ function POSPageContent() {
             } else {
               paymentRows = `<div class="pay-row pay-row-border"><div class="pay-cell">${dataToUse.totalAmount.toFixed(0)}</div><div class="pay-sep"></div><div class="pay-cell">${dataToUse.primaryPaymentMethod || 'كاش'}</div></div><div class="pay-hline"></div>`
             }
-            if (hasCreditAmount) {
+            if (hasCreditAmount && !isNonDefaultCustomer) {
               paymentRows += `<div class="pay-row pay-row-border"><div class="pay-cell" style="color: #c00;">${(dataToUse.creditAmount || 0).toFixed(0)}</div><div class="pay-sep"></div><div class="pay-cell" style="color: #c00;">آجل</div></div><div class="pay-hline"></div>`
             }
             if (dataToUse.isDefaultCustomer && cashTendered > 0) {
@@ -3831,9 +3838,10 @@ function POSPageContent() {
               ${paymentRows}
               <div class="pay-hline-thick"></div>
             </div>
-            ${isNonDefaultCustomer && hasCreditAmount ? `
-            <div style="margin-top: 4px; font-size: 11px;">
-              إجمالي الدين: <strong>${(dataToUse.customer?.calculatedBalance || 0).toFixed(0)}</strong>
+            ${isNonDefaultCustomer ? `
+            <div style="margin-top: 6px; font-size: 11px; text-align: center;">
+              <div>الرصيد السابق: <strong>${(dataToUse.balanceBefore || 0).toFixed(0)}</strong></div>
+              <div>الرصيد الحالي: <strong>${(dataToUse.balanceAfter || 0).toFixed(0)}</strong></div>
             </div>
             ` : ''}
           </div>`

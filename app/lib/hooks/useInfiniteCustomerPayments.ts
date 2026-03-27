@@ -18,6 +18,7 @@ export interface CustomerPayment {
   safe_id: string | null
   safe_name?: string | null
   employee_name?: string | null
+  status?: string | null
 }
 
 // Cursor for pagination
@@ -96,7 +97,7 @@ export function useInfiniteCustomerPayments(
     let query = supabase
       .from('customer_payments')
       .select(`
-        id, amount, payment_method, reference_number, notes, payment_date, created_at, created_by, safe_id,
+        id, amount, payment_method, reference_number, notes, payment_date, created_at, created_by, safe_id, status,
         creator:user_profiles(full_name)
       `)
       .eq('customer_id', currentCustomerId)

@@ -402,18 +402,20 @@ export async function calculateCustomerBalanceWithLinked(customerId: string): Pr
 
     const openingBalance = Number(customer?.opening_balance) || 0;
 
-    // Get sales total
+    // Get sales total (exclude cancelled invoices)
     const { data: sales } = await supabase
       .from('sales')
       .select('total_amount')
-      .eq('customer_id', customerId);
+      .eq('customer_id', customerId)
+      .neq('status', 'cancelled');
     const salesTotal = (sales || []).reduce((sum, s) => sum + (Number(s.total_amount) || 0), 0);
 
-    // Get payments (separate loans and regular payments)
+    // Get payments (separate loans and regular payments, exclude cancelled)
     const { data: payments } = await supabase
       .from('customer_payments')
       .select('amount, notes')
-      .eq('customer_id', customerId);
+      .eq('customer_id', customerId)
+      .neq('status', 'cancelled');
 
     let paymentsTotal = 0;
     let loansTotal = 0;
@@ -507,18 +509,20 @@ export async function calculateSupplierBalanceWithLinked(supplierId: string): Pr
     let linkedCustomerLoans = 0;
 
     if (supplier?.linked_customer_id) {
-      // Get linked customer sales
+      // Get linked customer sales (exclude cancelled invoices)
       const { data: sales } = await supabase
         .from('sales')
         .select('total_amount')
-        .eq('customer_id', supplier.linked_customer_id);
+        .eq('customer_id', supplier.linked_customer_id)
+        .neq('status', 'cancelled');
       linkedSalesTotal = (sales || []).reduce((sum, s) => sum + (Number(s.total_amount) || 0), 0);
 
-      // Get linked customer payments (important: was missing before!)
+      // Get linked customer payments (exclude cancelled)
       const { data: customerPayments } = await supabase
         .from('customer_payments')
         .select('amount, notes')
-        .eq('customer_id', supplier.linked_customer_id);
+        .eq('customer_id', supplier.linked_customer_id)
+        .neq('status', 'cancelled');
 
       // Separate loans (سلفة) from regular payments (دفعة) and discounts (خصم)
       (customerPayments || []).forEach(p => {

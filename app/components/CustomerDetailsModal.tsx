@@ -2122,34 +2122,81 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
     }
   }
 
-  // Handle delete payment
+  // Handle cancel payment
   const handleDeletePayment = (payment: any) => {
+    if (payment.status === 'cancelled') return // Already cancelled
     setSelectedPayment(payment)
     setShowDeletePaymentModal(true)
   }
 
-  // Cancel delete payment
+  // Cancel the cancel-payment modal
   const cancelDeletePayment = () => {
     setShowDeletePaymentModal(false)
     setSelectedPayment(null)
   }
 
-  // Confirm delete payment
+  // Confirm cancel payment (mark as cancelled instead of deleting)
   const confirmDeletePayment = async () => {
     if (!selectedPayment) return
 
     try {
       setIsDeletingPayment(true)
 
-      // حذف الدفعة من قاعدة البيانات
+      // Reverse cash drawer transaction if exists
+      const { data: drawerTx } = await supabase
+        .from('cash_drawer_transactions')
+        .select('id, drawer_id, amount, transaction_type, record_id')
+        .eq('notes', `دفعة من عميل: ${customer?.name}`)
+        .eq('amount', selectedPayment.amount)
+        .limit(1)
+
+      if (!drawerTx || drawerTx.length === 0) {
+        // Try loan pattern
+        const { data: loanTx } = await supabase
+          .from('cash_drawer_transactions')
+          .select('id, drawer_id, amount, transaction_type, record_id')
+          .eq('notes', `سلفة لعميل: ${customer?.name}`)
+          .eq('amount', selectedPayment.amount)
+          .limit(1)
+        if (loanTx && loanTx.length > 0) {
+          drawerTx?.push(...loanTx)
+        }
+      }
+
+      if (drawerTx && drawerTx.length > 0) {
+        const tx = drawerTx[0]
+        const isDeposit = tx.transaction_type === 'deposit'
+        const delta = isDeposit ? -tx.amount : tx.amount
+
+        const { data: rpcResult } = await supabase.rpc(
+          'atomic_adjust_drawer_balance' as any,
+          { p_drawer_id: tx.drawer_id, p_change: delta }
+        )
+        const newBalance = (rpcResult as any)?.[0]?.new_balance || 0
+
+        // Insert cancellation record
+        await supabase
+          .from('cash_drawer_transactions')
+          .insert({
+            drawer_id: tx.drawer_id,
+            record_id: tx.record_id,
+            transaction_type: 'payment_cancel',
+            amount: tx.amount,
+            balance_after: newBalance,
+            notes: `إلغاء دفعة عميل: ${customer?.name}`,
+            performed_by: user?.name || 'system'
+          } as any)
+      }
+
+      // Mark payment as cancelled (don't delete)
       const { error } = await supabase
         .from('customer_payments')
-        .delete()
+        .update({ status: 'cancelled' } as any)
         .eq('id', selectedPayment.id)
 
       if (error) {
-        console.error('Error deleting payment:', error)
-        alert('حدث خطأ أثناء حذف الدفعة')
+        console.error('Error cancelling payment:', error)
+        alert('حدث خطأ أثناء إلغاء الدفعة')
         return
       }
 
@@ -2163,8 +2210,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       refreshStatements()
 
     } catch (error) {
-      console.error('Error deleting payment:', error)
-      alert('حدث خطأ أثناء حذف الدفعة')
+      console.error('Error cancelling payment:', error)
+      alert('حدث خطأ أثناء إلغاء الدفعة')
     } finally {
       setIsDeletingPayment(false)
     }
@@ -2227,8 +2274,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
   // العميل الافتراضي
   const isDefaultCustomer = customer.id === '00000000-0000-0000-0000-000000000001'
 
-  // Calculate total payments amount
-  const totalPayments = customerPayments.reduce((sum, payment) => sum + (payment.amount || 0), 0)
+  // Calculate total payments amount (exclude cancelled)
+  const totalPayments = customerPayments.filter(p => p.status !== 'cancelled').reduce((sum, payment) => sum + (payment.amount || 0), 0)
 
   // حساب مجموع الفواتير المعروضة (للعميل الافتراضي - يتغير حسب الفلتر)
   // المبيعات موجبة والمرتجعات سالبة في قاعدة البيانات
@@ -2317,9 +2364,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       width: 120,
       render: (value: string, item: any) => (
         <span className={`px-2 py-1 rounded text-xs font-medium ${
-          item.amount >= 0
-            ? 'bg-amber-600/20 text-amber-400 border border-amber-600'
-            : 'bg-[var(--dash-bg-overlay)]/20 text-[var(--dash-text-muted)] border border-[var(--dash-border-default)]'
+          item.status === 'cancelled'
+            ? 'bg-red-600/20 text-red-400 border border-red-600 line-through'
+            : item.amount >= 0
+              ? 'bg-amber-600/20 text-amber-400 border border-amber-600'
+              : 'bg-[var(--dash-bg-overlay)]/20 text-[var(--dash-text-muted)] border border-[var(--dash-border-default)]'
         }`}>
           {value}
         </span>
@@ -2744,7 +2793,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'المبلغ',
       accessor: 'amount',
       width: 140,
-      render: (value: number) => <span className="text-dash-accent-green font-medium">{formatPrice(value, 'system')}</span>
+      render: (value: number, item: any) => <span className={`font-medium ${item.status === 'cancelled' ? 'text-red-400 line-through' : 'text-dash-accent-green'}`}>{formatPrice(value, 'system')}</span>
     },
     {
       id: 'payment_method',
@@ -2766,7 +2815,12 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       header: 'البيان',
       accessor: 'notes',
       width: 200,
-      render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
+      render: (value: string, item: any) => (
+        <span className="text-[var(--dash-text-muted)] flex items-center gap-1">
+          {item.status === 'cancelled' && <span className="text-xs bg-red-600/20 text-red-400 px-1.5 py-0.5 rounded border border-red-600">ملغاة</span>}
+          {value || '-'}
+        </span>
+      )
     },
     {
       id: 'safe_name',
@@ -3361,13 +3415,17 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                     customerPayments.map((payment) => (
                       <div
                         key={payment.id}
-                        className="bg-[var(--dash-bg-raised)] rounded-lg p-4"
+                        className={`bg-[var(--dash-bg-raised)] rounded-lg p-4 ${payment.status === 'cancelled' ? 'opacity-60' : ''}`}
                       >
                         <div className="flex justify-between items-start mb-2">
-                          <span className="px-2 py-0.5 rounded text-xs font-medium bg-dash-accent-green-subtle text-dash-accent-green">
-                            دفعة
+                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                            payment.status === 'cancelled'
+                              ? 'bg-red-600/20 text-red-400 line-through'
+                              : 'bg-dash-accent-green-subtle text-dash-accent-green'
+                          }`}>
+                            {payment.status === 'cancelled' ? 'دفعة ملغاة' : 'دفعة'}
                           </span>
-                          <span className="font-bold text-lg text-dash-accent-green">
+                          <span className={`font-bold text-lg ${payment.status === 'cancelled' ? 'text-red-400 line-through' : 'text-dash-accent-green'}`}>
                             {formatPrice(payment.amount || 0, 'system')}
                           </span>
                         </div>
@@ -3430,33 +3488,37 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           className={`bg-[var(--dash-bg-raised)] rounded-lg p-3 transition-colors ${
                             statement.saleId ? 'cursor-pointer active:bg-[#4B5563]' : ''
                           } ${
-                            statement.type === 'فاتورة بيع'
-                              ? 'border-2 border-dash-accent-green/50'
-                              : statement.type === 'فاتورة شراء'
-                                ? 'border-2 border-dash-accent-blue/50'
-                                : statement.type === 'مرتجع بيع'
-                                  ? 'border-2 border-dash-accent-red/50'
-                                  : statement.type === 'مرتجع شراء'
-                                    ? 'border-2 border-dash-accent-orange/50'
-                                    : statement.type === 'دفعة'
-                                      ? 'border-2 border-emerald-700/50'
-                                      : 'border-2 border-[var(--dash-border-default)]/50'
+                            statement.status === 'cancelled'
+                              ? 'border-2 border-red-600/50 opacity-60'
+                              : statement.type === 'فاتورة بيع'
+                                ? 'border-2 border-dash-accent-green/50'
+                                : statement.type === 'فاتورة شراء'
+                                  ? 'border-2 border-dash-accent-blue/50'
+                                  : statement.type === 'مرتجع بيع'
+                                    ? 'border-2 border-dash-accent-red/50'
+                                    : statement.type === 'مرتجع شراء'
+                                      ? 'border-2 border-dash-accent-orange/50'
+                                      : statement.type === 'دفعة'
+                                        ? 'border-2 border-emerald-700/50'
+                                        : 'border-2 border-[var(--dash-border-default)]/50'
                           }`}
                         >
                           {/* الصف العلوي: نوع العملية + التاريخ */}
                           <div className="flex justify-between items-center mb-2">
                             <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                              statement.type === 'فاتورة بيع'
-                                ? 'bg-dash-accent-green-subtle text-dash-accent-green'
-                                : statement.type === 'فاتورة شراء'
-                                  ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
-                                  : statement.type === 'مرتجع بيع'
-                                    ? 'bg-dash-accent-red-subtle text-dash-accent-red'
-                                    : statement.type === 'مرتجع شراء'
-                                      ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
-                                      : statement.type === 'دفعة'
-                                        ? 'bg-emerald-900 text-emerald-300'
-                                        : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]'
+                              statement.status === 'cancelled'
+                                ? 'bg-red-600/20 text-red-400 line-through'
+                                : statement.type === 'فاتورة بيع'
+                                  ? 'bg-dash-accent-green-subtle text-dash-accent-green'
+                                  : statement.type === 'فاتورة شراء'
+                                    ? 'bg-dash-accent-blue-subtle text-dash-accent-blue'
+                                    : statement.type === 'مرتجع بيع'
+                                      ? 'bg-dash-accent-red-subtle text-dash-accent-red'
+                                      : statement.type === 'مرتجع شراء'
+                                        ? 'bg-dash-accent-orange-subtle text-dash-accent-orange'
+                                        : statement.type === 'دفعة'
+                                          ? 'bg-emerald-900 text-emerald-300'
+                                          : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-secondary)]'
                             }`}>
                               {statement.type}
                             </span>
@@ -4644,7 +4706,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                       )}
 
                       {/* Context Menu for Payment */}
-                      {contextMenu && (
+                      {contextMenu && contextMenu.payment?.status !== 'cancelled' && (
                         <div
                           className="fixed bg-[var(--dash-bg-surface)] border border-[var(--dash-border-default)] rounded-lg shadow-xl py-1 z-[100]"
                           style={{
@@ -4660,7 +4722,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                             className="w-full px-4 py-2 text-right text-dash-accent-red hover:bg-dash-accent-red-subtle hover:text-dash-accent-red flex items-center gap-2 transition-colors"
                           >
                             <TrashIcon className="h-4 w-4" />
-                            <span>حذف الدفعة</span>
+                            <span>إلغاء الدفعة</span>
                           </button>
                         </div>
                       )}
@@ -4693,8 +4755,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         onClose={cancelDeletePayment}
         onConfirm={confirmDeletePayment}
         isDeleting={isDeletingPayment}
-        title="تأكيد حذف الدفعة"
-        message="هل أنت متأكد أنك تريد حذف هذه الدفعة؟"
+        title="تأكيد إلغاء الدفعة"
+        message="هل أنت متأكد أنك تريد إلغاء هذه الدفعة؟"
         itemName={selectedPayment ? `دفعة بمبلغ: ${formatPrice(selectedPayment.amount, 'system')}` : ''}
       />
 

@@ -2756,9 +2756,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       header: 'نوع العملية',
       accessor: 'type',
       width: 120,
-      render: (value: string) => (
+      render: (value: string, item: any) => (
         <span className={`px-2 py-1 rounded text-xs font-medium ${
-          value === 'فاتورة بيع'
+          value === 'فاتورة ملغاة' || item.status === 'cancelled'
+            ? 'bg-red-600/20 text-red-400 border border-red-600 line-through'
+            : value === 'فاتورة بيع'
             ? 'bg-dash-accent-green-subtle text-dash-accent-green border border-dash-accent-green'
             : value === 'مرتجع بيع'
             ? 'bg-dash-accent-orange-subtle text-dash-accent-orange border border-dash-accent-orange'
