@@ -36,7 +36,7 @@ import {
   PrinterIcon,
   DocumentArrowDownIcon,
   TagIcon,
-  ArrowsUpDownIcon,
+  ArrowsUpDownIcon as HeroArrowsUpDownIcon,
   ArrowDownTrayIcon,
   ArrowUpTrayIcon,
   TableCellsIcon,
@@ -47,6 +47,7 @@ import {
   EyeSlashIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline'
+import ProductSortDropdown, { useSortOrder, sortProducts } from '../../components/ui/ProductSortDropdown'
 
 
 // Database category interface
@@ -99,6 +100,7 @@ export default function ProductsPage() {
   const [showHideProductConfirm, setShowHideProductConfirm] = useState(false)
   const [isHidingProduct, setIsHidingProduct] = useState(false)
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid')
+  const [sortOrder, setSortOrder] = useSortOrder('products-sort-order')
   const [showProductModal, setShowProductModal] = useState(false)
   const [modalProduct, setModalProduct] = useState<Product | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
@@ -977,8 +979,11 @@ export default function ProductsPage() {
       filtered = filterProductsByMissingData(filtered, missingDataFilter, missingDataFilterMode)
     }
 
+    // Apply sorting
+    filtered = sortProducts(filtered, sortOrder)
+
     return filtered
-  }, [products, debouncedSearchQuery, searchMode, searchIndex, selectedCategory, categories, getAllSubcategoryIds, missingDataFilter, missingDataFilterMode])
+  }, [products, debouncedSearchQuery, searchMode, searchIndex, selectedCategory, categories, getAllSubcategoryIds, missingDataFilter, missingDataFilterMode, sortOrder])
 
   // ✨ PERFORMANCE: Limit visible products to reduce DOM nodes (like POS page)
   const visibleProducts = useMemo(() => {
@@ -1145,7 +1150,7 @@ export default function ProductsPage() {
             </button>
 
             <button className="flex flex-col items-center p-2 text-[var(--dash-text-secondary)] hover:text-[var(--dash-text-primary)] cursor-pointer min-w-[80px]">
-              <ArrowsUpDownIcon className="h-5 w-5 mb-1" />
+              <HeroArrowsUpDownIcon className="h-5 w-5 mb-1" />
               <span className="text-sm">ترتيب</span>
             </button>
 
@@ -1343,6 +1348,13 @@ export default function ProductsPage() {
                       <ListBulletIcon className="h-4 w-4" />
                     </button>
                   </div>
+
+                  {/* Sort Order */}
+                  <ProductSortDropdown
+                    storageKey="products-sort-order"
+                    sortOrder={sortOrder}
+                    onSortChange={setSortOrder}
+                  />
 
                   {/* Search */}
                   <POSSearchInput

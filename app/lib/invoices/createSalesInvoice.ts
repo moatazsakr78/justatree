@@ -606,6 +606,17 @@ export async function createSalesInvoice({
       const mainSafeId = hasNoSafe ? null : selections.record.id
       const subSafeId = selections.subSafe?.id || null
 
+      // Check if parent safe has show_transfers enabled (affects payment routing)
+      let parentShowTransfers = true
+      if (mainSafeId && subSafeId) {
+        const { data: safeData } = await supabase
+          .from('records')
+          .select('show_transfers')
+          .eq('id', mainSafeId)
+          .maybeSingle()
+        if (safeData) parentShowTransfers = (safeData as any).show_transfers !== false
+      }
+
       // Fetch is_physical flag for all payment methods used in this invoice
       let physicalMap = new Map<string, boolean>()
       if (paymentMethodIds.length > 0) {
@@ -646,9 +657,10 @@ export async function createSalesInvoice({
           let amount = isReturn ? -payment.amount : payment.amount
 
           // Determine target: physical → subSafe (if exists), digital → mainSafe
+          // When show_transfers=false, ALL payments go to the selected drawer
           let targetRecordId: string | null = null
           if (!hasNoSafe) {
-            if (isPhysical && subSafeId) {
+            if (subSafeId && (isPhysical || !parentShowTransfers)) {
               targetRecordId = subSafeId
             } else {
               targetRecordId = mainSafeId
@@ -695,7 +707,7 @@ export async function createSalesInvoice({
         }
 
         const amount = totalToDrawer
-        let targetRecordId = hasNoSafe ? null : (singleIsPhysical ? (subSafeId || mainSafeId) : mainSafeId)
+        let targetRecordId = hasNoSafe ? null : ((singleIsPhysical || !parentShowTransfers) ? (subSafeId || mainSafeId) : mainSafeId)
 
         const txData: any = {
           transaction_type: isReturn

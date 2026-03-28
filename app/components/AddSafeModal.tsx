@@ -43,7 +43,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
           parent_id: parentSafe?.id || null,
           safe_type: isSubSafe ? 'sub' : 'main',
           supports_drawers: isSubSafe ? false : supportsDrawers,
-          show_transfers: isSubSafe ? true : (supportsDrawers ? true : showTransfers),
+          show_transfers: isSubSafe ? true : showTransfers,
         } as any)
         .select('id')
         .single()
@@ -216,7 +216,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
           )}
 
           {/* Show Transfers Toggle - only for non-drawer main safes */}
-          {!isSubSafe && !supportsDrawers && (
+          {!isSubSafe && (
             <div>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
@@ -251,7 +251,7 @@ export default function AddSafeModal({ isOpen, onClose, onSafeAdded, parentSafe 
           </div>
 
           {/* Balance Destination - only when balance > 0 and transfers are enabled */}
-          {(parseFloat(initialBalance) || 0) > 0 && (supportsDrawers || showTransfers) && (
+          {(parseFloat(initialBalance) || 0) > 0 && showTransfers && (
             <div>
               <label className="block text-sm font-medium text-[var(--dash-text-secondary)] mb-2">
                 وجهة الرصيد الافتتاحي

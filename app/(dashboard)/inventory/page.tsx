@@ -48,6 +48,7 @@ import {
   CubeIcon,
   ArrowsRightLeftIcon
 } from '@heroicons/react/24/outline'
+import ProductSortDropdown, { useSortOrder, sortProducts } from '../../components/ui/ProductSortDropdown'
 
 // Database category interface for type safety
 interface Category {
@@ -87,6 +88,7 @@ export default function InventoryPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid')
+  const [sortOrder, setSortOrder] = useSortOrder('inventory-sort-order')
   const [showProductModal, setShowProductModal] = useState(false)
   const [modalProduct, setModalProduct] = useState<any>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
@@ -860,8 +862,9 @@ export default function InventoryPage() {
       }
     })
 
-    return filtered;
-  }, [products, debouncedSearchQuery, searchMode, searchIndex, stockStatusFilters, auditStatusFilters, selectedAuditBranch, selectedBranches, getStockStatus, selectedCategory, categories, getAllSubcategoryIds])
+    // Apply sorting
+    return sortProducts(filtered, sortOrder);
+  }, [products, debouncedSearchQuery, searchMode, searchIndex, stockStatusFilters, auditStatusFilters, selectedAuditBranch, selectedBranches, getStockStatus, selectedCategory, categories, getAllSubcategoryIds, sortOrder])
 
   // ✨ PERFORMANCE: Limit visible products to reduce DOM nodes (like POS page)
   const visibleProducts = useMemo(() => {
@@ -1687,6 +1690,13 @@ export default function InventoryPage() {
                   >
                     <ClipboardDocumentListIcon className="h-4 w-4" />
                   </button>
+
+                  {/* Sort Order */}
+                  <ProductSortDropdown
+                    storageKey="inventory-sort-order"
+                    sortOrder={sortOrder}
+                    onSortChange={setSortOrder}
+                  />
 
                   {/* Search */}
                   <POSSearchInput

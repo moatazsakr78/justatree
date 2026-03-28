@@ -19,6 +19,7 @@ interface Record {
   parent_id: string | null;
   safe_type: string | null;
   supports_drawers: boolean | null;
+  show_transfers?: boolean | null;
   branch?: {
     name: string;
   } | null;
@@ -58,6 +59,7 @@ export default function RecordsSelectionModal({
           parent_id,
           safe_type,
           supports_drawers,
+          show_transfers,
           branch:branches(name)
         `
         )
@@ -276,8 +278,8 @@ export default function RecordsSelectionModal({
                                       </div>
                                     </button>
                                   ))}
-                                  {/* تحويلات - only show when paymentIsPhysical is undefined (POS backward compat) */}
-                                  {paymentIsPhysical === undefined && (
+                                  {/* تحويلات - only show when paymentIsPhysical is undefined and safe has separate transfers */}
+                                  {paymentIsPhysical === undefined && mainRecord.show_transfers !== false && (
                                     <button
                                       onClick={() =>
                                         handleSelectSubSafe(mainRecord, { ...mainRecord, name: 'تحويلات' })

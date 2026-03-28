@@ -168,6 +168,7 @@ import {
   TrashIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
+import ProductSortDropdown, { useSortOrder, sortProducts } from "../../components/ui/ProductSortDropdown";
 
 function POSPageContent() {
   // OPTIMIZED: Performance monitoring for POS page
@@ -258,6 +259,7 @@ function POSPageContent() {
   const [isCategoriesModalOpen, setIsCategoriesModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
+  const [sortOrder, setSortOrder] = useSortOrder('pos-sort-order');
 
   // Search Mode: all = الكل, name = الاسم, code = الكود, barcode = الباركود
   type SearchMode = 'all' | 'name' | 'code' | 'barcode';
@@ -1965,12 +1967,14 @@ function POSPageContent() {
     } else {
       filtered = productsWithComputedInventory.filter(p => filteredProductIds.has(p.id));
     }
+    // Apply sorting
+    filtered = sortProducts(filtered, sortOrder);
     // When no filter is applied, limit to VISIBLE_PRODUCTS_LIMIT unless user wants all
     if (filteredProductIds === null && !showAllProducts && filtered.length > VISIBLE_PRODUCTS_LIMIT) {
       return filtered.slice(0, VISIBLE_PRODUCTS_LIMIT);
     }
     return filtered;
-  }, [productsWithComputedInventory, filteredProductIds, showAllProducts]);
+  }, [productsWithComputedInventory, filteredProductIds, showAllProducts, sortOrder]);
 
   // Reset showAllProducts when filter changes
   useEffect(() => {
@@ -5895,6 +5899,13 @@ function POSPageContent() {
                     <ListBulletIcon className="h-4 w-4" />
                   </button>
                 </div>
+
+                {/* Sort Order */}
+                <ProductSortDropdown
+                  storageKey="pos-sort-order"
+                  sortOrder={sortOrder}
+                  onSortChange={setSortOrder}
+                />
               </div>
 
               {/* Right Side - Change Calculator + Secret Info */}
@@ -5991,6 +6002,14 @@ function POSPageContent() {
                   <ListBulletIcon className="h-4 w-4" />
                 </button>
               </div>
+
+              {/* Sort Order (Mobile) */}
+              <ProductSortDropdown
+                storageKey="pos-sort-order"
+                sortOrder={sortOrder}
+                onSortChange={setSortOrder}
+                className="flex-shrink-0"
+              />
             </div>
           </div>
 

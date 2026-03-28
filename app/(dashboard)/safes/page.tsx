@@ -80,6 +80,7 @@ export default function SafesPage() {
   const [activeTab, setActiveTab] = useState<TabType>('safes')
 
   // Safes Tab State
+  const [isEditMode, setIsEditMode] = useState(false)
   const [isSafeDetailsModalOpen, setIsSafeDetailsModalOpen] = useState(false)
   const [isAddSafeModalOpen, setIsAddSafeModalOpen] = useState(false)
   const [isEditSafeModalOpen, setIsEditSafeModalOpen] = useState(false)
@@ -937,6 +938,19 @@ export default function SafesPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
+                  {/* Edit Mode Toggle */}
+                  <button
+                    onClick={() => setIsEditMode(!isEditMode)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors border ${
+                      isEditMode
+                        ? 'bg-dash-accent-blue text-white border-dash-accent-blue'
+                        : 'bg-[var(--dash-bg-raised)] text-[var(--dash-text-muted)] border-[var(--dash-border-default)] hover:bg-[var(--dash-bg-overlay)]'
+                    }`}
+                  >
+                    <PencilIcon className="h-4 w-4" />
+                    وضع التعديل
+                  </button>
+
                   {/* Combined Safes Picker */}
                   <div className="relative" ref={combinedPickerRef}>
                     <button
@@ -1097,23 +1111,25 @@ export default function SafesPage() {
                                   </div>
                                 </div>
                               </div>
-                              {/* Always-visible edit/delete buttons */}
-                              <div className="flex items-center gap-1">
-                                <button
-                                  onClick={(e) => { e.stopPropagation(); openEditSafeModal(mainSafe) }}
-                                  className="p-1.5 text-[var(--dash-text-muted)] hover:text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-lg transition-colors"
-                                  title="تعديل"
-                                >
-                                  <PencilIcon className="h-4 w-4" />
-                                </button>
-                                <button
-                                  onClick={(e) => { e.stopPropagation(); handleDeleteSafe(mainSafe) }}
-                                  className="p-1.5 text-[var(--dash-text-muted)] hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-lg transition-colors"
-                                  title="حذف"
-                                >
-                                  <TrashIcon className="h-4 w-4" />
-                                </button>
-                              </div>
+                              {/* Edit/delete buttons - only in edit mode */}
+                              {isEditMode && (
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); openEditSafeModal(mainSafe) }}
+                                    className="p-1.5 text-[var(--dash-text-muted)] hover:text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-lg transition-colors"
+                                    title="تعديل"
+                                  >
+                                    <PencilIcon className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); handleDeleteSafe(mainSafe) }}
+                                    className="p-1.5 text-[var(--dash-text-muted)] hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-lg transition-colors"
+                                    title="حذف"
+                                  >
+                                    <TrashIcon className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              )}
                             </div>
 
                             {/* Balance Display */}
@@ -1147,26 +1163,28 @@ export default function SafesPage() {
                                         <p className="text-dash-accent-cyan text-sm font-bold">{child.name}</p>
                                         <p className="text-[var(--dash-text-primary)] text-base font-bold mt-0.5">{formatPrice(safeBalances[child.id] || 0)}</p>
                                       </div>
-                                      <div className="flex items-center gap-1.5">
-                                        <button
-                                          onClick={(e) => { e.stopPropagation(); openEditSafeModal(child) }}
-                                          className="p-1.5 text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-lg transition-colors"
-                                          title="تعديل الدرج"
-                                        >
-                                          <PencilIcon className="h-4 w-4" />
-                                        </button>
-                                        <button
-                                          onClick={(e) => { e.stopPropagation(); handleDeleteSafe(child) }}
-                                          className="p-1.5 text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-lg transition-colors"
-                                          title="حذف الدرج"
-                                        >
-                                          <TrashIcon className="h-4 w-4" />
-                                        </button>
-                                      </div>
+                                      {isEditMode && (
+                                        <div className="flex items-center gap-1.5">
+                                          <button
+                                            onClick={(e) => { e.stopPropagation(); openEditSafeModal(child) }}
+                                            className="p-1.5 text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-lg transition-colors"
+                                            title="تعديل الدرج"
+                                          >
+                                            <PencilIcon className="h-4 w-4" />
+                                          </button>
+                                          <button
+                                            onClick={(e) => { e.stopPropagation(); handleDeleteSafe(child) }}
+                                            className="p-1.5 text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-lg transition-colors"
+                                            title="حذف الدرج"
+                                          >
+                                            <TrashIcon className="h-4 w-4" />
+                                          </button>
+                                        </div>
+                                      )}
                                     </div>
                                   ))}
-                                  {/* Transfers row */}
-                                  {ownBalance !== 0 && (
+                                  {/* Transfers row - only for safes with show_transfers enabled */}
+                                  {mainSafe.show_transfers !== false && ownBalance !== 0 && (
                                     <div className="bg-dash-accent-blue-subtle border border-dash-accent-blue rounded-lg px-4 py-3 flex items-center justify-between">
                                       <div>
                                         <p className="text-dash-accent-blue text-sm font-bold">التحويلات</p>
@@ -1182,7 +1200,7 @@ export default function SafesPage() {
                           )}
 
                           {/* Cash/Transfers breakdown for non-drawer safes */}
-                          {!mainSafe.supports_drawers && mainSafe.show_transfers !== false && (transferBalances[mainSafe.id] || 0) > 0 && (
+                          {!mainSafe.supports_drawers && mainSafe.show_transfers !== false && (
                             <div className="px-4 pb-3 space-y-2">
                               <div className="bg-dash-accent-green-subtle border border-dash-accent-green rounded-lg px-4 py-2">
                                 <p className="text-dash-accent-green text-xs font-bold">في الخزنة</p>
@@ -1195,8 +1213,8 @@ export default function SafesPage() {
                             </div>
                           )}
 
-                          {/* Add Drawer Button */}
-                          {mainSafe.supports_drawers && (
+                          {/* Add Drawer Button - only in edit mode */}
+                          {isEditMode && mainSafe.supports_drawers && (
                             <div className="px-4 pb-4">
                               <button
                                 onClick={(e) => { e.stopPropagation(); setAddSubSafeParent(mainSafe); setIsAddSafeModalOpen(true) }}

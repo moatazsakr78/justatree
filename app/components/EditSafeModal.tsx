@@ -355,8 +355,8 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
             </div>
           )}
 
-          {/* Show Transfers Toggle - only for non-drawer main safes */}
-          {safe?.safe_type !== 'sub' && !supportsDrawers && (
+          {/* Show Transfers Toggle - for main safes */}
+          {safe?.safe_type !== 'sub' && (
             <div>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
