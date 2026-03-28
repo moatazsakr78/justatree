@@ -59,7 +59,7 @@ export default function Toast({
   return (
     <div className="fixed top-4 right-4 z-[100]">
       <div className={`
-        flex items-center gap-3 px-4 py-3 rounded-dash-md border-r-[3px] border-y-0 border-l-0 shadow-dash-lg backdrop-blur-sm
+        flex items-center gap-3 px-4 py-3 rounded-dash-md border-r-[3px] border-y-0 border-l-0 shadow-dash-lg
         transform transition-all duration-300 ease-in-out
         ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
         ${getToastStyles()}

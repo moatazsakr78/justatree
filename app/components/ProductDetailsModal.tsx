@@ -1322,7 +1322,7 @@ export default function ProductDetailsModal({
               )}
               {/* Zoom hint - only show for images, not videos */}
               {!isZooming && !selectedVideo && (
-                <div className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">
+                <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
                   مرر للتكبير
                 </div>
               )}
@@ -1904,7 +1904,7 @@ export default function ProductDetailsModal({
       {/* Elegant White Video/Image Modal */}
       {showVideoModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
           onClick={() => setShowVideoModal(false)}
         >
           <div

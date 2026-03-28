@@ -155,7 +155,7 @@ export default function AddBranchModal({ isOpen, onClose, onBranchCreated, editB
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-black/70 z-40"
           onClick={onClose}
         />
       )}

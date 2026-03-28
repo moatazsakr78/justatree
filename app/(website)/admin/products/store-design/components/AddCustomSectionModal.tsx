@@ -290,7 +290,7 @@ export default function AddCustomSectionModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end md:items-center justify-center md:p-4">
+    <div className="fixed inset-0 bg-black/65 z-50 flex items-end md:items-center justify-center md:p-4">
       <div className="bg-white rounded-t-2xl md:rounded-2xl shadow-2xl w-full md:max-w-5xl h-[95vh] md:h-auto md:max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-gray-200">

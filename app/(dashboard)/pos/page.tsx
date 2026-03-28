@@ -4844,7 +4844,7 @@ function POSPageContent() {
 
         {/* Add Tab Modal */}
         {showAddTabModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setShowAddTabModal(false)}>
+          <div className="fixed inset-0 bg-black/65 z-50 flex items-center justify-center" onClick={() => setShowAddTabModal(false)}>
             <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
               <h3 className="text-[var(--dash-text-primary)] text-lg font-medium mb-4">إضافة نافذة بيع جديدة</h3>
               <input
@@ -4908,7 +4908,7 @@ function POSPageContent() {
         {showPurchaseModeConfirm && (
           <>
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/70 z-50"
               onClick={() => setShowPurchaseModeConfirm(false)}
             />
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -4973,7 +4973,7 @@ function POSPageContent() {
         {showPrintReceiptModal && (
           <>
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/70 z-50"
               onClick={() => setShowPrintReceiptModal(false)}
             />
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -7261,7 +7261,7 @@ function POSPageContent() {
 
           {/* Desktop Backdrop */}
           <div
-            className="hidden md:block fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="hidden md:block fixed inset-0 bg-black/70 z-50"
             onClick={() => setShowProductModal(false)}
           />
 
@@ -7807,7 +7807,7 @@ function POSPageContent() {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/70 z-50"
             onClick={() => setShowPurchaseModeConfirm(false)}
           />
 
@@ -7890,7 +7890,7 @@ function POSPageContent() {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/70 z-50"
             onClick={cancelCloseTab}
           />
 
@@ -7952,7 +7952,7 @@ function POSPageContent() {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]"
+            className="fixed inset-0 bg-black/70 z-[60]"
             onClick={() => setShowClearCartConfirm(false)}
           />
 
@@ -8007,7 +8007,7 @@ function POSPageContent() {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/70 z-50"
             onClick={() => setShowPrintReceiptModal(false)}
           />
 
@@ -8173,7 +8173,7 @@ function POSPageContent() {
 
       {/* Add Tab Modal */}
       {showAddTabModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setShowAddTabModal(false)}>
+        <div className="fixed inset-0 bg-black/65 z-50 flex items-center justify-center" onClick={() => setShowAddTabModal(false)}>
           <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-[var(--dash-text-primary)] text-lg font-medium mb-4">إضافة نافذة بيع جديدة</h3>
             <input

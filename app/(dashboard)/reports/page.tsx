@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import Sidebar from '@/app/components/layout/Sidebar';
 import TopHeader from '@/app/components/layout/TopHeader';
-import SimpleDateFilterModal, { DateFilter } from '@/app/components/SimpleDateFilterModal';
+import type { DateFilter } from '@/app/components/SimpleDateFilterModal';
 import { supabase } from '@/app/lib/supabase/client';
-import SimpleFilterModal from '@/app/components/SimpleFilterModal';
-import MultiFilterModal from '@/app/components/MultiFilterModal';
 import {
   SimpleFiltersResult,
   MultiFiltersResult,
@@ -14,7 +13,11 @@ import {
   initialMultiFilters,
   ActiveFilterType
 } from '@/app/types/filters';
-import ColumnsControlModal from '@/app/components/ColumnsControlModal';
+
+const SimpleDateFilterModal = dynamic(() => import('@/app/components/SimpleDateFilterModal'), { ssr: false });
+const SimpleFilterModal = dynamic(() => import('@/app/components/SimpleFilterModal'), { ssr: false });
+const MultiFilterModal = dynamic(() => import('@/app/components/MultiFilterModal'), { ssr: false });
+const ColumnsControlModal = dynamic(() => import('@/app/components/ColumnsControlModal'), { ssr: false });
 import { useFormatPrice } from '@/lib/hooks/useCurrency';
 import ToastProvider, { useToast } from '@/app/components/ui/ToastProvider';
 import {
@@ -137,7 +140,7 @@ function ColumnsControlModalWrapper({
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black/65 z-50 flex items-center justify-center">
         <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 text-[var(--dash-text-primary)]">
           <div className="flex items-center gap-3">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue"></div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import POSSearchInput from '@/app/components/pos/POSSearchInput'
 import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
 import { useCurrentBranch } from '@/lib/contexts/CurrentBranchContext'
@@ -13,15 +14,16 @@ import { ProductGridImage, ProductModalImage, ProductThumbnail } from '../../com
 import ResizableTable from '../../components/tables/ResizableTable'
 import Sidebar from '../../components/layout/Sidebar'
 import TopHeader from '../../components/layout/TopHeader'
-import AddBranchModal from '../../components/AddBranchModal'
-import AddStorageModal from '../../components/AddStorageModal'
-import ManagementModal from '../../components/ManagementModal'
 import CategoriesTreeView from '../../components/CategoriesTreeView'
-import ColumnsControlModal from '../../components/ColumnsControlModal'
-import QuantityAdjustmentModal from '../../components/QuantityAdjustmentModal'
-import TransferQuantityModal from '../../components/TransferQuantityModal'
-import InventoryPDFExportModal from '../../components/InventoryPDFExportModal'
-import TransferHistoryModal from '../../components/TransferHistoryModal'
+
+const AddBranchModal = dynamic(() => import('../../components/AddBranchModal'), { ssr: false })
+const AddStorageModal = dynamic(() => import('../../components/AddStorageModal'), { ssr: false })
+const ManagementModal = dynamic(() => import('../../components/ManagementModal'), { ssr: false })
+const ColumnsControlModal = dynamic(() => import('../../components/ColumnsControlModal'), { ssr: false })
+const QuantityAdjustmentModal = dynamic(() => import('../../components/QuantityAdjustmentModal'), { ssr: false })
+const TransferQuantityModal = dynamic(() => import('../../components/TransferQuantityModal'), { ssr: false })
+const InventoryPDFExportModal = dynamic(() => import('../../components/InventoryPDFExportModal'), { ssr: false })
+const TransferHistoryModal = dynamic(() => import('../../components/TransferHistoryModal'), { ssr: false })
 import { useProductsAdmin } from '../../../lib/hooks/useProductsAdmin'
 import { supabase } from '../../lib/supabase/client'
 import { revalidateProductPage } from '../../../lib/utils/revalidate'
@@ -1616,7 +1618,7 @@ export default function InventoryPage() {
                     
                     {/* Branches Dropdown */}
                     {showBranchesDropdown && (
-                      <div className="absolute top-full right-0 mt-2 w-72 bg-[var(--dash-bg-surface)] border-2 border-[var(--dash-border-default)] rounded-xl shadow-2xl z-[9999] overflow-hidden backdrop-blur-sm">
+                      <div className="absolute top-full right-0 mt-2 w-72 bg-[var(--dash-bg-surface)] border-2 border-[var(--dash-border-default)] rounded-xl shadow-2xl z-[9999] overflow-hidden">
                         {/* Branches List - Simple and Clean */}
                         <div className="p-3">
                           <div className="space-y-2">
@@ -1969,7 +1971,7 @@ export default function InventoryPage() {
       {showProductModal && modalProduct && (
           <>
             {/* Backdrop */}
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={() => setShowProductModal(false)} />
+            <div className="fixed inset-0 bg-black/70 z-50" onClick={() => setShowProductModal(false)} />
 
             {/* Modal */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

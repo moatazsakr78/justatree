@@ -652,7 +652,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
       )}
 
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 no-print" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/80 z-50 no-print" onClick={onClose} />
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 no-print">
@@ -1176,7 +1176,7 @@ export default function BarcodePrintModal({ isOpen, onClose, products, branches 
       {showPreview && (
         <>
           {/* Backdrop */}
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999]" onClick={() => {
+          <div className="fixed inset-0 bg-black/85 z-[9999]" onClick={() => {
             setShowPreview(false)
             // Hide print container
             const printContainer = document.getElementById('barcode-print-container')

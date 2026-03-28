@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import dynamic from 'next/dynamic'
 
 // Local storage key for suppliers column visibility
 const SUPPLIERS_COLUMN_VISIBILITY_KEY = 'suppliers-column-visibility-v2'
@@ -8,13 +9,14 @@ import { supabase } from '../../lib/supabase/client'
 import ResizableTable from '../../components/tables/ResizableTable'
 import Sidebar from '../../components/layout/Sidebar'
 import TopHeader from '../../components/layout/TopHeader'
-import AddSupplierModal from '../../components/AddSupplierModal'
-import EditSupplierModal from '../../components/EditSupplierModal'
 import SupplierGroupSidebar from '../../components/SupplierGroupSidebar'
-import SupplierDetailsModal from '../../components/SupplierDetailsModal'
-import ColumnsControlModal from '../../components/ColumnsControlModal'
 import SuppliersGridView from '../../components/SuppliersGridView'
-import MergeSuppliersModal from '../../components/MergeSuppliersModal'
+
+const AddSupplierModal = dynamic(() => import('../../components/AddSupplierModal'), { ssr: false })
+const EditSupplierModal = dynamic(() => import('../../components/EditSupplierModal'), { ssr: false })
+const SupplierDetailsModal = dynamic(() => import('../../components/SupplierDetailsModal'), { ssr: false })
+const ColumnsControlModal = dynamic(() => import('../../components/ColumnsControlModal'), { ssr: false })
+const MergeSuppliersModal = dynamic(() => import('../../components/MergeSuppliersModal'), { ssr: false })
 import { useSupplierGroups, SupplierGroup } from '../../lib/hooks/useSupplierGroups'
 import { useSuppliers, Supplier, DEFAULT_SUPPLIER_ID } from '../../lib/hooks/useSuppliers'
 import {

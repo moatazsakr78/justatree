@@ -2,11 +2,7 @@
 
 import { useEffect } from 'react'
 import { SessionProvider } from 'next-auth/react'
-import { EditOrderProvider } from '@/lib/contexts/EditOrderContext'
-import { BackgroundProductProvider } from '@/lib/contexts/BackgroundProductContext'
 import { FavoritesProvider } from '@/lib/contexts/FavoritesContext'
-import { CurrentBranchProvider } from '@/lib/contexts/CurrentBranchContext'
-import { AutoSelectInputProvider } from './components/AutoSelectInputProvider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // Unregister service workers in development to prevent stale cached JS
@@ -26,15 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
       <FavoritesProvider>
-        <CurrentBranchProvider>
-          <EditOrderProvider>
-            <BackgroundProductProvider>
-              <AutoSelectInputProvider>
-                {children}
-              </AutoSelectInputProvider>
-            </BackgroundProductProvider>
-          </EditOrderProvider>
-        </CurrentBranchProvider>
+        {children}
       </FavoritesProvider>
     </SessionProvider>
   )

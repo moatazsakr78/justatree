@@ -314,7 +314,7 @@ export default function EditInvoiceModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]" dir="rtl">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]" dir="rtl">
       <div className="bg-[var(--dash-bg-base)] rounded-lg w-full max-w-lg mx-4 shadow-[var(--dash-shadow-lg)]">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-subtle)]">

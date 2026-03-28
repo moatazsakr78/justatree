@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef, Component, ErrorInfo, ReactNode } from 'react'
+import dynamic from 'next/dynamic'
 
 // Local storage key for customers column visibility
 const CUSTOMERS_COLUMN_VISIBILITY_KEY = 'customers-column-visibility-v2'
@@ -8,16 +9,18 @@ import { supabase } from '../../lib/supabase/client'
 import ResizableTable from '../../components/tables/ResizableTable'
 import Sidebar from '../../components/layout/Sidebar'
 import TopHeader from '../../components/layout/TopHeader'
-import AddCustomerModal from '../../components/AddCustomerModal'
-import EditCustomerModal from '../../components/EditCustomerModal'
 import CustomerGroupSidebar from '../../components/CustomerGroupSidebar'
-import CustomerDetailsModal from '../../components/CustomerDetailsModal'
-import ColumnsControlModal from '../../components/ColumnsControlModal'
 import { useCustomerGroups, CustomerGroup } from '../../lib/hooks/useCustomerGroups'
 import { useCustomers, Customer, DEFAULT_CUSTOMER_ID } from '../../lib/hooks/useCustomers'
 import CustomersGridView from '../../components/CustomersGridView'
-import MergeCustomersModal from '../../components/MergeCustomersModal'
-import CustomerFilterModal, { filterCustomersByMissingData } from '../../components/CustomerFilterModal'
+import { filterCustomersByMissingData } from '../../components/CustomerFilterModal'
+
+const AddCustomerModal = dynamic(() => import('../../components/AddCustomerModal'), { ssr: false })
+const EditCustomerModal = dynamic(() => import('../../components/EditCustomerModal'), { ssr: false })
+const CustomerDetailsModal = dynamic(() => import('../../components/CustomerDetailsModal'), { ssr: false })
+const ColumnsControlModal = dynamic(() => import('../../components/ColumnsControlModal'), { ssr: false })
+const MergeCustomersModal = dynamic(() => import('../../components/MergeCustomersModal'), { ssr: false })
+const CustomerFilterModal = dynamic(() => import('../../components/CustomerFilterModal'), { ssr: false })
 import {
   ArrowPathIcon,
   FolderPlusIcon,

@@ -79,7 +79,7 @@ export default function ActivityLogFilters({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/70" onClick={onClose} />
       <div className="relative bg-[var(--dash-bg-raised)] rounded-xl border border-[var(--dash-border-default)] w-full max-w-sm mx-4 max-h-[80vh] flex flex-col shadow-[var(--dash-shadow-lg)]">
         <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <h3 className="text-lg font-semibold text-[var(--dash-text-primary)]">

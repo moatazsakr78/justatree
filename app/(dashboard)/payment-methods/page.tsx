@@ -8,12 +8,14 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { supabase } from '../../lib/supabase/client'
 import Sidebar from '../../components/layout/Sidebar'
 import TopHeader from '../../components/layout/TopHeader'
-import AddPaymentMethodModal from '../../components/AddPaymentMethodModal'
-import EditPaymentMethodModal from '../../components/EditPaymentMethodModal'
+
+const AddPaymentMethodModal = dynamic(() => import('../../components/AddPaymentMethodModal'), { ssr: false })
+const EditPaymentMethodModal = dynamic(() => import('../../components/EditPaymentMethodModal'), { ssr: false })
 
 interface PaymentMethod {
   id: string

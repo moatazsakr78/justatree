@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import PrepareOrderModal from '../../components/PrepareOrderModal';
+import dynamic from 'next/dynamic';
 import OrderPaymentReceipts from '../../components/OrderPaymentReceipts';
+
+const PrepareOrderModal = dynamic(() => import('../../components/PrepareOrderModal'), { ssr: false });
 import { useFormatPrice } from '@/lib/hooks/useCurrency';
 import { supabase } from '../../lib/supabase/client';
 import { useCompanySettings } from '@/lib/hooks/useCompanySettings';

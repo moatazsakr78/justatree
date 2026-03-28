@@ -10,6 +10,7 @@ const MobileProductDetailsModal = dynamic(
 )
 import POSSearchInput from './pos/POSSearchInput'
 import type { SearchMode } from './pos/POSSearchInput'
+import ProductSortDropdown, { useSortOrder, sortProducts } from './ui/ProductSortDropdown'
 import ResizableTable from './tables/ResizableTable'
 import Sidebar from './layout/Sidebar'
 import TopHeader from './layout/TopHeader'
@@ -111,6 +112,7 @@ export default function InventoryTabletView({
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid')
+  const [sortOrder, setSortOrder] = useSortOrder('inventory-sort-order')
   const [showProductModal, setShowProductModal] = useState(false)
   const [modalProduct, setModalProduct] = useState<any>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
@@ -773,11 +775,14 @@ export default function InventoryTabletView({
       filtered = filtered.filter(p => matchingIds.has(p.id))
     }
 
-    return filtered.filter(item => {
+    filtered = filtered.filter(item => {
       const stockStatus = getStockStatus(item)
       return stockStatusFilters[stockStatus as keyof typeof stockStatusFilters]
     })
-  }, [products, debouncedSearchQuery, searchMode, searchIndex, stockStatusFilters, getStockStatus])
+
+    // Apply sorting
+    return sortProducts(filtered, sortOrder)
+  }, [products, debouncedSearchQuery, searchMode, searchIndex, stockStatusFilters, getStockStatus, sortOrder])
 
   // PERFORMANCE: Limit visible products to reduce DOM nodes
   const visibleProducts = useMemo(() => {
@@ -1193,6 +1198,14 @@ export default function InventoryTabletView({
             >
               <ClipboardDocumentListIcon className="h-4 w-4" />
             </button>
+
+            {/* Sort Order */}
+            <ProductSortDropdown
+              storageKey="inventory-sort-order"
+              sortOrder={sortOrder}
+              onSortChange={setSortOrder}
+              className="flex-shrink-0"
+            />
 
             {/* 4. Categories Toggle Button */}
             <button

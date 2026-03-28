@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import TopHeader from '@/app/components/layout/TopHeader';
 import Sidebar from '@/app/components/layout/Sidebar';
-import SimpleDateFilterModal from '@/app/components/SimpleDateFilterModal';
+
+const SimpleDateFilterModal = dynamic(() => import('@/app/components/SimpleDateFilterModal'), { ssr: false });
 import ActivityLogsHeader from './components/ActivityLogsHeader';
 import ActivityLogsList from './components/ActivityLogsList';
 import ActivityLogFilters from './components/ActivityLogFilters';

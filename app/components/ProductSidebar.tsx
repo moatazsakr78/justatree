@@ -2400,7 +2400,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
           <div className="space-y-4">
             {/* Cost Override Confirmation Modal */}
             {showCostOverrideConfirm && (
-              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
+              <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
                 <div className="bg-[var(--dash-bg-base)] rounded-xl p-6 max-w-md mx-4 border border-[var(--dash-border-default)] shadow-xl">
                   <div className="text-center">
                     <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-dash-accent-orange-subtle/30 mb-4">

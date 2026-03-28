@@ -1,14 +1,20 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { Cairo } from 'next/font/google'
 import './globals.css'
-import TopHeader from './components/layout/TopHeader'
+
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+})
+
 import ServiceWorkerRegister from './components/ServiceWorkerRegister'
 import { CurrencyProvider } from '@/lib/hooks/useCurrency'
 import { SystemSettingsProvider } from '@/lib/hooks/useSystemSettings'
 import { CartProvider } from '@/lib/contexts/CartContext'
 import { UserProfileProvider } from '@/lib/contexts/UserProfileContext'
 import { ThemeProvider } from '@/lib/contexts/ThemeContext'
-import { PermissionsProvider } from '@/lib/contexts/PermissionsContext'
 import { Providers } from './providers'
 import { CLIENT_CONFIG } from '@/client.config'
 
@@ -54,24 +60,17 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('dash-theme');if(t&&t!=='modern')document.documentElement.setAttribute('data-dash-theme',t)}catch(e){}})()`,
           }}
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body className="font-arabic bg-dash-deepest text-dash-text-primary">
+      <body className={`${cairo.className} bg-dash-deepest text-dash-text-primary`}>
         <Providers>
           <ThemeProvider>
             <SystemSettingsProvider>
               <CurrencyProvider>
                 <UserProfileProvider>
-                  <PermissionsProvider>
-                    <CartProvider>
-                      <ServiceWorkerRegister />
-                      <TopHeader />
-                      {children}
-                    </CartProvider>
-                  </PermissionsProvider>
+                  <CartProvider>
+                    <ServiceWorkerRegister />
+                    {children}
+                  </CartProvider>
                 </UserProfileProvider>
               </CurrencyProvider>
             </SystemSettingsProvider>

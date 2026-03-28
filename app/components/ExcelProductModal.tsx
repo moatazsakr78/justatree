@@ -542,7 +542,7 @@ export default function ExcelProductModal({
   // ==================== RENDER ====================
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-[var(--dash-bg-surface)] rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-[var(--dash-shadow-lg)]">
         {/* Header */}
         <div className="bg-[var(--dash-bg-raised)] px-6 py-4 flex items-center justify-between border-b border-[var(--dash-border-default)]">
@@ -829,7 +829,7 @@ export default function ExcelProductModal({
 
               {/* Success Message Popup */}
               {showSuccessMessage && importResults && importResults.success > 0 && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60]">
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60]">
                   <div className="bg-[var(--dash-bg-surface)] rounded-2xl p-8 text-center max-w-md mx-4 animate-pulse-once shadow-[var(--dash-shadow-lg)] border border-dash-accent-green/30">
                     <div className="w-20 h-20 bg-dash-accent-green-subtle rounded-full flex items-center justify-center mx-auto mb-4">
                       <CheckCircleIcon className="w-12 h-12 text-dash-accent-green" />

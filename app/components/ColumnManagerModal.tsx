@@ -151,7 +151,7 @@ export default function ColumnManagerModal({
   const totalCount = localColumns.length;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" dir="rtl">
       <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-md mx-4 max-h-[80vh] flex flex-col animate-dash-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--dash-border-default)]">

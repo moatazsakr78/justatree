@@ -1,15 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { Bars3Icon, GlobeAltIcon, CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { SignalIcon, SignalSlashIcon } from '@heroicons/react/24/solid';
 import { useOfflineStatus } from '@/app/lib/hooks/useOfflineStatus';
 import { triggerManualSync, isSyncInProgress } from '@/app/lib/offline/syncManager';
-import PendingSalesModal from '../PendingSalesModal';
-import BackgroundProductsModal from '../BackgroundProductsModal';
 import BranchSwitcher from '../BranchSwitcher';
 import { useBackgroundProduct } from '@/lib/contexts/BackgroundProductContext';
+
+const PendingSalesModal = dynamic(() => import('../PendingSalesModal'), { ssr: false });
+const BackgroundProductsModal = dynamic(() => import('../BackgroundProductsModal'), { ssr: false });
 
 interface TopHeaderProps {
   onMenuClick?: () => void;
@@ -107,7 +109,7 @@ export default function TopHeader({ onMenuClick, isMenuOpen = false, pageTitle }
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-12 bg-[var(--dash-header-bg)] border-b border-[var(--dash-border-default)] backdrop-blur-md px-4 shadow-dash-sm">
+    <div className="fixed top-0 left-0 right-0 z-50 h-12 bg-[var(--dash-header-bg)] border-b border-[var(--dash-border-default)] px-4 shadow-dash-sm">
       <div className="flex items-center justify-between h-full">
         {/* Left side (يظهر يمين الشاشة في RTL) - Menu + Branch Switcher */}
         <div className="flex items-center gap-2">

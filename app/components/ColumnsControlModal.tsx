@@ -76,7 +76,7 @@ export default function ColumnsControlModal({
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={handleCancel} />
+      <div className="fixed inset-0 bg-black/70 z-50" onClick={handleCancel} />
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

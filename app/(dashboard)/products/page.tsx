@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import POSSearchInput from '@/app/components/pos/POSSearchInput'
 import ProductsTabletView from '../../components/ProductsTabletView'
 import { supabase } from '../../lib/supabase/client'
@@ -11,15 +12,17 @@ import TopHeader from '../../components/layout/TopHeader'
 import CategorySidebar from '../../components/CategorySidebar'
 import ProductSidebar from '../../components/ProductSidebar'
 import CategoriesTreeView from '../../components/CategoriesTreeView'
-import ColorAssignmentModal from '../../components/ColorAssignmentModal'
-import ColorAssignmentModalNew from '../../components/ColorAssignmentModalNew'
-import ColorChangeModal from '../../components/ColorChangeModal'
-import ColumnsControlModal from '../../components/ColumnsControlModal'
-import ProductExportModal from '../../components/ProductExportModal'
-import ProductImportModal from '../../components/ProductImportModal'
-import ExcelProductModal from '../../components/ExcelProductModal'
-import BarcodePrintModal from '../../components/BarcodePrintModal'
-import MissingDataFilterModal, { filterProductsByMissingData } from '../../components/MissingDataFilterModal'
+import { filterProductsByMissingData } from '../../components/MissingDataFilterModal'
+
+const ColorAssignmentModal = dynamic(() => import('../../components/ColorAssignmentModal'), { ssr: false })
+const ColorAssignmentModalNew = dynamic(() => import('../../components/ColorAssignmentModalNew'), { ssr: false })
+const ColorChangeModal = dynamic(() => import('../../components/ColorChangeModal'), { ssr: false })
+const ColumnsControlModal = dynamic(() => import('../../components/ColumnsControlModal'), { ssr: false })
+const ProductExportModal = dynamic(() => import('../../components/ProductExportModal'), { ssr: false })
+const ProductImportModal = dynamic(() => import('../../components/ProductImportModal'), { ssr: false })
+const ExcelProductModal = dynamic(() => import('../../components/ExcelProductModal'), { ssr: false })
+const BarcodePrintModal = dynamic(() => import('../../components/BarcodePrintModal'), { ssr: false })
+const MissingDataFilterModal = dynamic(() => import('../../components/MissingDataFilterModal'), { ssr: false })
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useActivityLogger } from "@/app/lib/hooks/useActivityLogger"
 import { useBranches, Branch, ProductVariant } from '../../lib/hooks/useBranches'
@@ -1286,7 +1289,7 @@ export default function ProductsPage() {
                     
                     {/* Branches Dropdown - Desktop */}
                     {showBranchesDropdown && !isMobile && (
-                      <div className="absolute top-full right-0 mt-2 w-72 bg-[var(--dash-bg-surface)] border-2 border-[var(--dash-border-default)] rounded-xl shadow-2xl z-[9999] overflow-hidden backdrop-blur-sm">
+                      <div className="absolute top-full right-0 mt-2 w-72 bg-[var(--dash-bg-surface)] border-2 border-[var(--dash-border-default)] rounded-xl shadow-2xl z-[9999] overflow-hidden">
                         {/* Branches List - Simple and Clean */}
                         <div className="p-3">
                           <div className="space-y-2">
@@ -1834,7 +1837,7 @@ export default function ProductsPage() {
       {showProductModal && modalProduct && (
           <>
             {/* Backdrop */}
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={() => setShowProductModal(false)} />
+            <div className="fixed inset-0 bg-black/70 z-50" onClick={() => setShowProductModal(false)} />
 
             {/* Modal */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

@@ -115,7 +115,7 @@ export function useOfflineStatus() {
       if (navigator.onLine) {
         testConnectionQuality()
       }
-    }, 30000) // Every 30 seconds
+    }, 60000) // Every 60 seconds (online/offline events provide instant detection)
 
     return () => {
       window.removeEventListener('online', handleOnline)

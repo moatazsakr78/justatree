@@ -3265,7 +3265,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-black/70 z-40"
           onClick={onClose}
         />
       )}
@@ -5194,7 +5194,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
 
       {/* Withdraw Modal */}
       {showWithdrawModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60]">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60]">
           <div className="bg-[var(--dash-bg-surface)] rounded-lg w-full max-w-md mx-4 shadow-xl animate-dash-scale-in">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
@@ -5498,7 +5498,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       {/* Reserve Add/Edit Modal */}
       {showReserveModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowReserveModal(false)} />
+          <div className="absolute inset-0 bg-black/70" onClick={() => setShowReserveModal(false)} />
           <div className="relative bg-[var(--dash-bg-base)] rounded-lg shadow-xl w-full max-w-md mx-4 animate-dash-scale-in">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">

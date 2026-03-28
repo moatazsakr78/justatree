@@ -97,7 +97,7 @@ export default function AddPaymentMethodModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-full max-w-md mx-4 shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)]" dir="rtl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

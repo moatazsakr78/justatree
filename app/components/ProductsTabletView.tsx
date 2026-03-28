@@ -16,6 +16,7 @@ import ProductSidebar from './ProductSidebar'
 import CategoriesTreeView from './CategoriesTreeView'
 import POSSearchInput from './pos/POSSearchInput'
 import type { SearchMode } from './pos/POSSearchInput'
+import ProductSortDropdown, { useSortOrder, sortProducts } from './ui/ProductSortDropdown'
 import ColorAssignmentModal from './ColorAssignmentModal'
 import ColorChangeModal from './ColorChangeModal'
 import ColumnsControlModal from './ColumnsControlModal'
@@ -93,6 +94,7 @@ export default function ProductsTabletView({
   const [showDeleteProductConfirm, setShowDeleteProductConfirm] = useState(false)
   const [isDeletingProduct, setIsDeletingProduct] = useState(false)
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid')
+  const [sortOrder, setSortOrder] = useSortOrder('products-sort-order')
   const [showProductModal, setShowProductModal] = useState(false)
   const [modalProduct, setModalProduct] = useState<Product | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
@@ -736,8 +738,11 @@ export default function ProductsTabletView({
       filtered = filterProductsByMissingData(filtered, missingDataFilter, missingDataFilterMode)
     }
 
+    // Apply sorting
+    filtered = sortProducts(filtered, sortOrder)
+
     return filtered
-  }, [products, debouncedSearchQuery, searchMode, searchIndex, missingDataFilter, missingDataFilterMode])
+  }, [products, debouncedSearchQuery, searchMode, searchIndex, missingDataFilter, missingDataFilterMode, sortOrder])
 
   // PERFORMANCE: Limit visible products to reduce DOM nodes
   const visibleProducts = useMemo(() => {
@@ -990,6 +995,14 @@ export default function ProductsTabletView({
                   </button>
                 </div>
 
+              {/* Sort Order */}
+              <ProductSortDropdown
+                storageKey="products-sort-order"
+                sortOrder={sortOrder}
+                onSortChange={setSortOrder}
+                className="flex-shrink-0"
+              />
+
               {/* 4. Categories Toggle Button */}
                 <button
                   onClick={toggleCategoriesVisibility}
@@ -1230,7 +1243,7 @@ export default function ProductsTabletView({
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <>
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={cancelDeleteCategory} />
+          <div className="fixed inset-0 bg-black/70 z-50" onClick={cancelDeleteCategory} />
           
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-md w-full">
@@ -1274,7 +1287,7 @@ export default function ProductsTabletView({
       {/* Product Delete Confirmation Modal */}
       {showDeleteProductConfirm && (
         <>
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={cancelDeleteProduct} />
+          <div className="fixed inset-0 bg-black/70 z-50" onClick={cancelDeleteProduct} />
           
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] border border-[var(--dash-border-default)] max-w-md w-full">
@@ -1395,7 +1408,7 @@ export default function ProductsTabletView({
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999]"
+            className="fixed inset-0 bg-black/70 z-[9999]"
             onClick={cancelBranchSelection}
           />
 

@@ -92,7 +92,7 @@ export default function SimpleFilterModal({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+        className="fixed inset-0 bg-black/70 z-50"
         onClick={onClose}
       />
 

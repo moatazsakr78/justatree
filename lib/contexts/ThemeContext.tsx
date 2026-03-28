@@ -13,6 +13,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const STORE_THEME_CACHE_KEY = 'store-theme-cache';
+
     // Set CSS variables on the document root
     const setThemeVariables = (theme: any) => {
       const root = document.documentElement;
@@ -30,15 +32,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.removeAttribute('data-dash-theme');
     }
 
-    // Set default theme immediately (before fetching from DB)
-    setThemeVariables({
-      primary_color: '#5d1f1f',
-      primary_hover_color: '#4A1616',
-      button_color: '#5d1f1f',
-      button_hover_color: '#4A1616',
-    });
+    // Apply cached store theme instantly (no network wait on repeat visits)
+    const cachedTheme = localStorage.getItem(STORE_THEME_CACHE_KEY);
+    if (cachedTheme) {
+      try {
+        setThemeVariables(JSON.parse(cachedTheme));
+      } catch {}
+    } else {
+      // Set default theme if no cache (before fetching from DB)
+      setThemeVariables({
+        primary_color: '#5d1f1f',
+        primary_hover_color: '#4A1616',
+        button_color: '#5d1f1f',
+        button_hover_color: '#4A1616',
+      });
+    }
 
-    // Fetch active theme from database
+    // Fetch active theme from database in background
     const fetchActiveTheme = async () => {
       try {
         // Fetch store theme
@@ -50,6 +60,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
         if (data && !error) {
           setThemeVariables(data);
+          // Cache for instant load on next visit
+          localStorage.setItem(STORE_THEME_CACHE_KEY, JSON.stringify({
+            primary_color: data.primary_color,
+            primary_hover_color: data.primary_hover_color,
+            button_color: data.button_color,
+            button_hover_color: data.button_hover_color,
+          }));
         }
 
         // Sync dashboard theme from DB settings

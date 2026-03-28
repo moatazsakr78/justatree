@@ -14,17 +14,20 @@ import {
   ChevronDownIcon
 } from '@heroicons/react/24/outline'
 import { useState, useEffect, useCallback, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { supabase } from '../../lib/supabase/client'
 import Sidebar from '../../components/layout/Sidebar'
 import TopHeader from '../../components/layout/TopHeader'
-import SafeDetailsModal from '../../components/SafeDetailsModal'
-import AddSafeModal from '../../components/AddSafeModal'
-import EditSafeModal from '../../components/EditSafeModal'
-import AddPaymentMethodModal from '../../components/AddPaymentMethodModal'
-import EditPaymentMethodModal from '../../components/EditPaymentMethodModal'
-import SimpleDateFilterModal, { DateFilter } from '../../components/SimpleDateFilterModal'
 import ContextMenu, { createEditContextMenuItems } from '../../components/ContextMenu'
-import EditInvoiceModal from '../../components/EditInvoiceModal'
+import type { DateFilter } from '../../components/SimpleDateFilterModal'
+
+const SafeDetailsModal = dynamic(() => import('../../components/SafeDetailsModal'), { ssr: false })
+const AddSafeModal = dynamic(() => import('../../components/AddSafeModal'), { ssr: false })
+const EditSafeModal = dynamic(() => import('../../components/EditSafeModal'), { ssr: false })
+const AddPaymentMethodModal = dynamic(() => import('../../components/AddPaymentMethodModal'), { ssr: false })
+const EditPaymentMethodModal = dynamic(() => import('../../components/EditPaymentMethodModal'), { ssr: false })
+const SimpleDateFilterModal = dynamic(() => import('../../components/SimpleDateFilterModal'), { ssr: false })
+const EditInvoiceModal = dynamic(() => import('../../components/EditInvoiceModal'), { ssr: false })
 import { useFormatPrice } from '@/lib/hooks/useCurrency'
 import { useOfflineStatus } from '../../lib/hooks/useOfflineStatus'
 import { useOfflineData } from '../../lib/hooks/useOfflineData'

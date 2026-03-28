@@ -150,7 +150,7 @@ export default function LogoEditor({ imageFile, onSave, onCancel }: LogoEditorPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[200]">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[200]">
       <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-full max-w-2xl border border-[var(--dash-border-default)] shadow-[var(--dash-shadow-lg)]">
         <h3 className="text-[var(--dash-text-primary)] text-xl font-bold mb-6 text-center">تعديل شعار الشركة</h3>
 

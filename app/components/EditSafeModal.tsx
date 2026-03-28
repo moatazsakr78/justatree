@@ -207,7 +207,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
   // Confirmation step for disabling drawers
   if (step === 'confirm-disable') {
     return (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" dir="rtl">
         <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-[480px] max-w-lg mx-4 max-h-[90vh] overflow-y-auto scrollbar-hide shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
@@ -308,7 +308,7 @@ export default function EditSafeModal({ isOpen, onClose, onSafeUpdated, safe, cu
 
   // Normal edit step
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" dir="rtl">
       <div className="bg-[var(--dash-bg-base)] rounded-lg p-6 w-96 max-w-md mx-4 shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">

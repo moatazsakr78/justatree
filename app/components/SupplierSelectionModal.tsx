@@ -56,7 +56,7 @@ export default function SupplierSelectionModal({ isOpen, onClose, onSelect, sele
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/70 z-50" onClick={onClose} />
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

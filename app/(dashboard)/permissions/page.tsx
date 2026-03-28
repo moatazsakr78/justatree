@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import {
   UserGroupIcon,
   UserPlusIcon,
@@ -36,8 +37,9 @@ import TopHeader from '@/app/components/layout/TopHeader';
 import Sidebar from '@/app/components/layout/Sidebar';
 import TreeView, { TreeNode } from '@/app/components/TreeView';
 import ResizableTable from '@/app/components/tables/ResizableTable';
-import AddPermissionModal from '@/app/components/AddPermissionModal';
 import PermissionDetails from '@/app/components/PermissionDetails';
+
+const AddPermissionModal = dynamic(() => import('@/app/components/AddPermissionModal'), { ssr: false });
 import { RolePermissionManager } from '@/app/components/permissions';
 import PermissionGrid from '@/app/components/permissions/PermissionGrid';
 import { supabase } from '@/app/lib/supabase/client';

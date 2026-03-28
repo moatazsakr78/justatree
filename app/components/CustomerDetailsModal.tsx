@@ -2928,7 +2928,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-black/70 z-40"
           onClick={onClose}
         />
       )}
@@ -4791,7 +4791,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
         <div className="fixed inset-0 z-[60] flex items-center justify-center">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70"
             onClick={() => setShowColumnManager(false)}
           />
 

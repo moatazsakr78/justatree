@@ -57,7 +57,7 @@ export default function AddPermissionModal({ isOpen, onClose, onPermissionAdded 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" dir="rtl">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" dir="rtl">
       <div className="bg-[var(--dash-bg-raised)] rounded-lg p-6 w-[500px] max-w-md mx-4 border border-[var(--dash-border-default)] shadow-[var(--dash-shadow-lg)] animate-dash-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

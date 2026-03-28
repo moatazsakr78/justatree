@@ -72,7 +72,7 @@ export default function ContextMenu({ x, y, isOpen, onClose, items }: ContextMen
   return (
     <div
       ref={menuRef}
-      className="fixed z-[9999] bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-dash-md shadow-dash-lg py-1 min-w-[160px] animate-dash-scale-in backdrop-blur-sm"
+      className="fixed z-[9999] bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-dash-md shadow-dash-lg py-1 min-w-[160px] animate-dash-scale-in"
       style={{ left: x, top: y }}
     >
       {items.map((item, index) => (

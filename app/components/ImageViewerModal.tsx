@@ -36,7 +36,7 @@ export default function ImageViewerModal({
 
   return (
     <div
-      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
       onClick={onClose}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -45,14 +45,14 @@ export default function ImageViewerModal({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors backdrop-blur-sm"
+          className="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
         >
           <XMarkIcon className="w-6 h-6" />
         </button>
 
         {/* Image Counter */}
         {images.length > 1 && (
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/10 text-white px-4 py-2 rounded-full">
             <span className="font-semibold">{currentIndex + 1}</span>
             <span className="text-[var(--dash-text-secondary)] mx-1">/</span>
             <span className="text-[var(--dash-text-secondary)]">{images.length}</span>
@@ -66,7 +66,7 @@ export default function ImageViewerModal({
               e.stopPropagation();
               handlePrevious();
             }}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors backdrop-blur-sm"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
           >
             <ChevronRightIcon className="w-8 h-8" />
           </button>
@@ -91,7 +91,7 @@ export default function ImageViewerModal({
               e.stopPropagation();
               handleNext();
             }}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors backdrop-blur-sm"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
           >
             <ChevronLeftIcon className="w-8 h-8" />
           </button>
@@ -99,7 +99,7 @@ export default function ImageViewerModal({
 
         {/* Thumbnail Preview (if multiple images) */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 bg-white/10 backdrop-blur-sm p-2 rounded-lg max-w-full overflow-x-auto">
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 bg-white/10 p-2 rounded-lg max-w-full overflow-x-auto">
             {images.map((img, index) => (
               <button
                 key={index}

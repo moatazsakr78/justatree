@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import TopHeader from '@/app/components/layout/TopHeader';
 import Sidebar from '@/app/components/layout/Sidebar';
 import {
@@ -24,17 +25,26 @@ import {
   RecentActivityCard,
 } from './components';
 
-// Report Charts (reusing from reports module)
-import SalesTrendChart from '../reports/components/charts/SalesTrendChart';
-import CategoryPieChart from '../reports/components/charts/CategoryPieChart';
-import TopProductsBarChart from '../reports/components/charts/TopProductsBarChart';
+// Report Charts (reusing from reports module) - dynamic with loading skeletons
+const SalesTrendChart = dynamic(() => import('../reports/components/charts/SalesTrendChart'), {
+  ssr: false,
+  loading: () => <div className="h-64 bg-[var(--dash-bg-surface)] rounded-lg animate-pulse" />
+});
+const CategoryPieChart = dynamic(() => import('../reports/components/charts/CategoryPieChart'), {
+  ssr: false,
+  loading: () => <div className="h-64 bg-[var(--dash-bg-surface)] rounded-lg animate-pulse" />
+});
+const TopProductsBarChart = dynamic(() => import('../reports/components/charts/TopProductsBarChart'), {
+  ssr: false,
+  loading: () => <div className="h-64 bg-[var(--dash-bg-surface)] rounded-lg animate-pulse" />
+});
 
 // Date Filter Modal
-import SimpleDateFilterModal from '@/app/components/SimpleDateFilterModal';
+const SimpleDateFilterModal = dynamic(() => import('@/app/components/SimpleDateFilterModal'), { ssr: false });
 
 // Filter Modals
-import SimpleFilterModal from '@/app/components/SimpleFilterModal';
-import MultiFilterModal from '@/app/components/MultiFilterModal';
+const SimpleFilterModal = dynamic(() => import('@/app/components/SimpleFilterModal'), { ssr: false });
+const MultiFilterModal = dynamic(() => import('@/app/components/MultiFilterModal'), { ssr: false });
 
 // Custom Hook
 import { useDashboardData } from './hooks/useDashboardData';

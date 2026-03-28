@@ -88,7 +88,7 @@ export function ShapeModal({ isOpen, onClose, onSave, shape }: ShapeModalProps) 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 w-full max-w-md mx-4 shadow-[var(--dash-shadow-lg)]">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-[var(--dash-text-primary)]">
