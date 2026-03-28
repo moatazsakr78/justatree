@@ -86,8 +86,8 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
   const completedCount = tasks.filter(t => t.status === 'completed').length
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-2xl max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-[var(--dash-bg-surface)] rounded-lg shadow-[var(--dash-shadow-lg)] w-full max-w-2xl max-h-[90vh] overflow-hidden" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-[var(--dash-border-default)]">
           <div className="flex items-center gap-3">
@@ -205,6 +205,12 @@ export default function BackgroundProductsModal({ isOpen, onClose }: BackgroundP
               الإجمالي: {tasks.length} | مكتمل: {completedCount} | فشل: {tasks.filter(t => t.status === 'failed').length}
             </span>
           </div>
+          <button
+            onClick={onClose}
+            className="mt-3 w-full py-2.5 text-sm font-medium text-white bg-[var(--dash-bg-raised)] hover:bg-[var(--dash-border-default)] rounded-lg transition-colors"
+          >
+            إغلاق
+          </button>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, Component, ErrorInfo, ReactNode } from 'react'
 
 // Local storage key for customers column visibility
 const CUSTOMERS_COLUMN_VISIBILITY_KEY = 'customers-column-visibility-v2'
@@ -48,6 +48,40 @@ import Image from 'next/image'
 // Customer groups interface is now imported from the hook
 
 // Customer data is now loaded from the database via useCustomers hook
+
+// Error Boundary to catch modal errors without crashing the entire page
+class ModalErrorBoundary extends Component<{ children: ReactNode; onError?: () => void }, { hasError: boolean; error: Error | null }> {
+  constructor(props: any) {
+    super(props)
+    this.state = { hasError: false, error: null }
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error }
+  }
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Modal Error Boundary caught error:', error, errorInfo)
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center" dir="rtl">
+          <div className="bg-[var(--dash-bg-surface)] rounded-lg p-6 max-w-md text-center">
+            <div className="text-dash-accent-red text-4xl mb-3">⚠</div>
+            <h3 className="text-lg font-bold text-[var(--dash-text-primary)] mb-2">حدث خطأ</h3>
+            <p className="text-[var(--dash-text-muted)] text-sm mb-2">{this.state.error?.message}</p>
+            <button
+              onClick={() => { this.setState({ hasError: false, error: null }); this.props.onError?.() }}
+              className="px-4 py-2 dash-btn-primary rounded-lg text-sm mt-2"
+            >
+              إغلاق
+            </button>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 // Table columns matching the design exactly
 const tableColumns = [
@@ -269,10 +303,42 @@ export default function CustomersPage() {
   const [customerFilterMode, setCustomerFilterMode] = useState<'OR' | 'AND'>('OR')
   const [safeFilter, setSafeFilter] = useState('')
   const [priceTypeFilter, setPriceTypeFilter] = useState('')
+  const [customerBalances, setCustomerBalances] = useState<{[key: string]: number}>({})
   // Use the real-time hooks for customer groups and customers
   const { groups, isLoading: groupsLoading, error: groupsError, toggleGroup } = useCustomerGroups()
   const { customers, isLoading: customersLoading, error: customersError, isDefaultCustomer, refetch } = useCustomers()
   const activityLog = useActivityLogger()
+
+  // Fetch all customer balances using server-side RPC
+  // Formula: openingBalance + sales + loans - payments - linkedPurchases
+  const fetchAllCustomerBalances = useCallback(async () => {
+    if (customers.length === 0) return
+
+    try {
+      const { data, error } = await supabase.rpc('calculate_all_customer_balances' as any)
+
+      if (error) {
+        console.error('Error fetching customer balances:', error)
+        return
+      }
+
+      const balances: {[key: string]: number} = {}
+      for (const row of (data || [])) {
+        balances[row.customer_id] = Number(row.balance) || 0
+      }
+
+      setCustomerBalances(balances)
+    } catch (error) {
+      console.error('Error calculating customer balances:', error)
+    }
+  }, [customers])
+
+  // Fetch balances when customers change
+  useEffect(() => {
+    if (customers.length > 0) {
+      fetchAllCustomerBalances()
+    }
+  }, [customers, fetchAllCustomerBalances])
 
   // Get all columns for columns control modal
   const getAllColumns = () => {
@@ -881,6 +947,7 @@ export default function CustomersPage() {
                     }}
                     onCustomerDoubleClick={openCustomerDetails}
                     isDefaultCustomer={isDefaultCustomer}
+                    customerBalances={customerBalances}
                   />
                 </div>
               ) : (
@@ -945,11 +1012,13 @@ export default function CustomersPage() {
       />
 
       {/* Customer Details Modal */}
-      <CustomerDetailsModal 
-        isOpen={isCustomerDetailsModalOpen} 
-        onClose={closeCustomerDetails}
-        customer={selectedCustomer}
-      />
+      <ModalErrorBoundary onError={closeCustomerDetails}>
+        <CustomerDetailsModal
+          isOpen={isCustomerDetailsModalOpen}
+          onClose={closeCustomerDetails}
+          customer={selectedCustomer}
+        />
+      </ModalErrorBoundary>
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (

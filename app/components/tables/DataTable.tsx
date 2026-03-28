@@ -74,7 +74,7 @@ export default function DataTable<T extends { id: string | number }>({
           {data.map((item) => (
             <tr 
               key={item.id}
-              className={`hover:bg-[var(--dash-bg-overlay)] transition-colors ${
+              className={`hover:bg-[var(--dash-bg-overlay)] ${
                 isRowSelected(item.id) ? 'bg-[var(--dash-accent-blue-subtle)]' : ''
               }`}
             >

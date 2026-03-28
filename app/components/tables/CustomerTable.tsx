@@ -73,7 +73,7 @@ export default function CustomerTable({ showActions = false }: CustomerTableProp
           {mockCustomers.map((customer) => (
             <tr 
               key={customer.id}
-              className={`hover:bg-[var(--dash-bg-overlay)] transition-colors ${
+              className={`hover:bg-[var(--dash-bg-overlay)] ${
                 selectedRows.includes(customer.id) ? 'bg-[var(--dash-accent-blue-subtle)]' : ''
               }`}
             >

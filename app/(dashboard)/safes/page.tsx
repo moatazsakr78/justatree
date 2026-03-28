@@ -1264,7 +1264,7 @@ export default function SafesPage() {
                             return (
                               <tr
                                 key={tx.id}
-                                className={`hover:bg-[var(--dash-bg-overlay)] transition-colors cursor-pointer ${isPending ? 'bg-dash-accent-orange-subtle' : ''}`}
+                                className={`hover:bg-[var(--dash-bg-overlay)] cursor-pointer ${isPending ? 'bg-dash-accent-orange-subtle' : ''}`}
                                 onContextMenu={(e) => !isPending && handleContextMenu(e, tx)}
                               >
                                 <td className="py-2 px-3 text-[var(--dash-text-primary)] font-medium">{index + 1}</td>
@@ -1420,7 +1420,7 @@ export default function SafesPage() {
                     filteredPaymentMethods.map((method, index) => (
                       <tr
                         key={method.id}
-                        className="hover:bg-[var(--dash-bg-overlay)] transition-colors"
+                        className="hover:bg-[var(--dash-bg-overlay)]"
                       >
                         <td className="p-3 text-[var(--dash-text-primary)] font-medium">{index + 1}</td>
                         <td className="p-3">

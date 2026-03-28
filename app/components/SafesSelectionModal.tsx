@@ -6,6 +6,7 @@ import {
   XMarkIcon,
   BanknotesIcon,
   BuildingOfficeIcon,
+  ArrowsRightLeftIcon,
 } from "@heroicons/react/24/outline";
 import { supabase } from "../lib/supabase/client";
 
@@ -128,7 +129,7 @@ export default function SafesSelectionModal({
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
+      <Dialog as="div" className="relative z-[80]" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -246,6 +247,22 @@ export default function SafesSelectionModal({
                                   </div>
                                 </button>
                               ))}
+                              {/* تحويلات - main safe's own cash drawer */}
+                              <button
+                                onClick={() =>
+                                  handleSelectSubSafe(mainSafe, { ...mainSafe, name: 'تحويلات' })
+                                }
+                                className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-dash-accent-blue/50"
+                              >
+                                <div className="w-8 h-8 rounded-full bg-dash-accent-blue-subtle flex items-center justify-center flex-shrink-0">
+                                  <ArrowsRightLeftIcon className="h-4 w-4 text-dash-accent-blue" />
+                                </div>
+                                <div className="text-right min-w-0">
+                                  <div className="font-medium text-sm truncate text-dash-accent-blue">
+                                    تحويلات
+                                  </div>
+                                </div>
+                              </button>
                             </div>
                           </div>
                         );

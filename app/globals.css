@@ -450,9 +450,6 @@ body {
 }
 
 /* Table row hover */
-.dash-row-hover {
-  transition: background-color var(--dash-transition-fast) ease;
-}
 .dash-row-hover:hover {
   background-color: var(--dash-bg-overlay);
 }

@@ -12,7 +12,7 @@ import {
   MapPinIcon,
   CalendarIcon,
   StarIcon,
-  TrophyIcon
+  CurrencyDollarIcon
 } from '@heroicons/react/24/outline'
 interface CustomersGridViewProps {
   customers: Customer[]
@@ -20,6 +20,7 @@ interface CustomersGridViewProps {
   onCustomerClick: (customer: Customer) => void
   onCustomerDoubleClick: (customer: Customer) => void
   isDefaultCustomer: (customerId: string) => boolean
+  customerBalances?: {[key: string]: number}
 }
 
 export default function CustomersGridView({
@@ -27,7 +28,8 @@ export default function CustomersGridView({
   selectedCustomer,
   onCustomerClick,
   onCustomerDoubleClick,
-  isDefaultCustomer
+  isDefaultCustomer,
+  customerBalances = {}
 }: CustomersGridViewProps) {
 
   const formatDate = (dateString: string | null) => {
@@ -225,12 +227,12 @@ export default function CustomersGridView({
                 </div>
               )}
 
-              {/* Loyalty Points */}
+              {/* Account Balance */}
               <div className="flex items-center gap-2">
-                <TrophyIcon className="h-3 w-3 text-dash-accent-blue flex-shrink-0" />
-                <span className="text-xs text-[var(--dash-text-secondary)]">النقاط:</span>
-                <span className="text-[var(--dash-text-primary)] font-medium text-xs">
-                  {(customer.loyalty_points || 0).toLocaleString()}
+                <CurrencyDollarIcon className={`h-3 w-3 flex-shrink-0 ${(customerBalances[customer.id] || 0) > 0 ? 'text-dash-accent-red' : 'text-dash-accent-green'}`} />
+                <span className="text-xs text-[var(--dash-text-secondary)]">الرصيد:</span>
+                <span className={`font-medium text-xs ${(customerBalances[customer.id] || 0) > 0 ? 'text-dash-accent-red' : 'text-dash-accent-green'}`}>
+                  {(customerBalances[customer.id] || 0).toLocaleString('ar-SA')} جنيه
                 </span>
               </div>
 

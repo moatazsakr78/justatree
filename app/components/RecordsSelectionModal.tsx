@@ -6,6 +6,7 @@ import {
   XMarkIcon,
   BanknotesIcon,
   BuildingOfficeIcon,
+  ArrowsRightLeftIcon,
 } from "@heroicons/react/24/outline";
 import { supabase } from "../lib/supabase/client";
 
@@ -27,12 +28,14 @@ interface RecordsSelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectRecord?: (record: any, subSafe?: any) => void;
+  paymentIsPhysical?: boolean; // true = show drawers only, false = show main safes only, undefined = show all
 }
 
 export default function RecordsSelectionModal({
   isOpen,
   onClose,
   onSelectRecord,
+  paymentIsPhysical,
 }: RecordsSelectionModalProps) {
   const [records, setRecords] = useState<Record[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -126,7 +129,7 @@ export default function RecordsSelectionModal({
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
+      <Dialog as="div" className="relative z-[80]" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -208,66 +211,18 @@ export default function RecordsSelectionModal({
                     </div>
                   ) : records.length > 0 ? (
                     <>
-                      {/* Records WITH drawers */}
-                      {recordsWithDrawers.map((mainRecord) => {
-                        const children = getChildren(mainRecord.id);
-                        return (
-                          <div key={mainRecord.id}>
-                            <div className="flex items-center gap-2 px-3 py-2 mt-2">
-                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
-                              <span className="text-xs text-[var(--dash-text-muted)] font-medium flex items-center gap-1">
-                                <BanknotesIcon className="h-3.5 w-3.5" />
-                                {mainRecord.name}
-                              </span>
-                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 px-1">
-                              {children.map((child) => (
-                                <button
-                                  key={child.id}
-                                  onClick={() =>
-                                    handleSelectSubSafe(mainRecord, child)
-                                  }
-                                  className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-dash-accent-cyan/50"
-                                >
-                                  <div className="w-8 h-8 rounded-full bg-dash-accent-cyan-subtle flex items-center justify-center flex-shrink-0">
-                                    <span className="text-dash-accent-cyan text-xs font-bold">
-                                      #
-                                    </span>
-                                  </div>
-                                  <div className="text-right min-w-0">
-                                    <div className="font-medium text-sm truncate">
-                                      {child.name}
-                                    </div>
-                                  </div>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      })}
-
-                      {/* Records WITHOUT drawers */}
-                      {recordsWithoutDrawers.length > 0 && (
+                      {/* === Transfer mode: show only main safe names === */}
+                      {paymentIsPhysical === false ? (
                         <>
-                          {recordsWithDrawers.length > 0 && (
-                            <div className="flex items-center gap-2 px-3 py-2 mt-2">
-                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
-                              <span className="text-xs text-[var(--dash-text-muted)] font-medium">
-                                خزن بدون أدراج
-                              </span>
-                              <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
-                            </div>
-                          )}
-                          {recordsWithoutDrawers.map((record) => (
+                          {mainRecords.map((record) => (
                             <button
                               key={record.id}
                               onClick={() => handleSelectMainRecord(record)}
-                              className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-[var(--dash-border-default)]"
+                              className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-dash-accent-blue/50"
                             >
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-[var(--dash-bg-raised)] flex items-center justify-center">
-                                  <BanknotesIcon className="h-5 w-5" />
+                                <div className="w-10 h-10 rounded-full bg-dash-accent-blue-subtle flex items-center justify-center">
+                                  <ArrowsRightLeftIcon className="h-5 w-5 text-dash-accent-blue" />
                                 </div>
                                 <div className="text-right">
                                   <div className="font-semibold flex items-center gap-2">
@@ -283,6 +238,105 @@ export default function RecordsSelectionModal({
                               </div>
                             </button>
                           ))}
+                        </>
+                      ) : (
+                        <>
+                          {/* === Physical mode OR default (POS): show drawers === */}
+                          {/* Records WITH drawers */}
+                          {recordsWithDrawers.map((mainRecord) => {
+                            const children = getChildren(mainRecord.id);
+                            return (
+                              <div key={mainRecord.id}>
+                                <div className="flex items-center gap-2 px-3 py-2 mt-2">
+                                  <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
+                                  <span className="text-xs text-[var(--dash-text-muted)] font-medium flex items-center gap-1">
+                                    <BanknotesIcon className="h-3.5 w-3.5" />
+                                    {mainRecord.name}
+                                  </span>
+                                  <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 px-1">
+                                  {children.map((child) => (
+                                    <button
+                                      key={child.id}
+                                      onClick={() =>
+                                        handleSelectSubSafe(mainRecord, child)
+                                      }
+                                      className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-dash-accent-cyan/50"
+                                    >
+                                      <div className="w-8 h-8 rounded-full bg-dash-accent-cyan-subtle flex items-center justify-center flex-shrink-0">
+                                        <span className="text-dash-accent-cyan text-xs font-bold">
+                                          #
+                                        </span>
+                                      </div>
+                                      <div className="text-right min-w-0">
+                                        <div className="font-medium text-sm truncate">
+                                          {child.name}
+                                        </div>
+                                      </div>
+                                    </button>
+                                  ))}
+                                  {/* تحويلات - only show when paymentIsPhysical is undefined (POS backward compat) */}
+                                  {paymentIsPhysical === undefined && (
+                                    <button
+                                      onClick={() =>
+                                        handleSelectSubSafe(mainRecord, { ...mainRecord, name: 'تحويلات' })
+                                      }
+                                      className="flex items-center gap-2 p-3 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-dash-accent-blue/50"
+                                    >
+                                      <div className="w-8 h-8 rounded-full bg-dash-accent-blue-subtle flex items-center justify-center flex-shrink-0">
+                                        <ArrowsRightLeftIcon className="h-4 w-4 text-dash-accent-blue" />
+                                      </div>
+                                      <div className="text-right min-w-0">
+                                        <div className="font-medium text-sm truncate text-dash-accent-blue">
+                                          تحويلات
+                                        </div>
+                                      </div>
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          {/* Records WITHOUT drawers */}
+                          {recordsWithoutDrawers.length > 0 && (
+                            <>
+                              {recordsWithDrawers.length > 0 && (
+                                <div className="flex items-center gap-2 px-3 py-2 mt-2">
+                                  <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
+                                  <span className="text-xs text-[var(--dash-text-muted)] font-medium">
+                                    خزن بدون أدراج
+                                  </span>
+                                  <div className="h-px flex-1 bg-[var(--dash-border-default)]"></div>
+                                </div>
+                              )}
+                              {recordsWithoutDrawers.map((record) => (
+                                <button
+                                  key={record.id}
+                                  onClick={() => handleSelectMainRecord(record)}
+                                  className="w-full flex items-center justify-between p-4 rounded-xl transition-all bg-[var(--dash-bg-surface)] text-[var(--dash-text-secondary)] border-2 border-transparent hover:bg-[var(--dash-bg-raised)] hover:border-[var(--dash-border-default)]"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-[var(--dash-bg-raised)] flex items-center justify-center">
+                                      <BanknotesIcon className="h-5 w-5" />
+                                    </div>
+                                    <div className="text-right">
+                                      <div className="font-semibold flex items-center gap-2">
+                                        {record.name}
+                                      </div>
+                                      {record.branch?.name && (
+                                        <div className="text-sm text-[var(--dash-text-muted)] flex items-center gap-1">
+                                          <BuildingOfficeIcon className="h-3.5 w-3.5" />
+                                          {record.branch.name}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </button>
+                              ))}
+                            </>
+                          )}
                         </>
                       )}
                     </>

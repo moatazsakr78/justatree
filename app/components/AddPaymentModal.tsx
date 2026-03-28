@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { supabase } from '../lib/supabase/client'
 import { useFormatPrice } from '@/lib/hooks/useCurrency'
 import { useAuth } from '@/lib/useAuth'
 import { roundMoney } from '../lib/utils/money'
+import RecordsSelectionModal from './RecordsSelectionModal'
 
 interface AddPaymentModalProps {
   isOpen: boolean
@@ -32,48 +33,23 @@ export default function AddPaymentModal({
   const { user } = useAuth()
   const [amount, setAmount] = useState('')
   const [recordId, setRecordId] = useState('')
+  const [selectedSafeName, setSelectedSafeName] = useState('لا يوجد')
+  const [isSafesModalOpen, setIsSafesModalOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('cash')
   const [notes, setNotes] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [records, setRecords] = useState<any[]>([])
-  const [isLoadingRecords, setIsLoadingRecords] = useState(false)
   const [paymentType, setPaymentType] = useState<'payment' | 'loan' | 'discount'>(initialPaymentType)
   const [paymentMethods, setPaymentMethods] = useState<any[]>([])
   const [isLoadingPaymentMethods, setIsLoadingPaymentMethods] = useState(false)
 
-  // Fetch records and payment methods
+  // Fetch payment methods
   useEffect(() => {
-    const fetchRecords = async () => {
-      setIsLoadingRecords(true)
-      try {
-        const { data, error } = await supabase
-          .from('records')
-          .select('id, name, is_active')
-          .eq('is_active', true)
-          .order('name', { ascending: true })
-
-        if (error) {
-          console.error('Error fetching records:', error)
-          return
-        }
-
-        setRecords(data || [])
-
-        // لا نختار خزنة تلقائياً - نبدأ بـ "لا يوجد"
-        setRecordId('')
-      } catch (error) {
-        console.error('Error fetching records:', error)
-      } finally {
-        setIsLoadingRecords(false)
-      }
-    }
-
     const fetchPaymentMethods = async () => {
       setIsLoadingPaymentMethods(true)
       try {
         const { data, error } = await supabase
           .from('payment_methods')
-          .select('id, name, is_default, is_active')
+          .select('id, name, is_default, is_active, is_physical')
           .eq('is_active', true)
           .order('is_default', { ascending: false })
 
@@ -97,7 +73,6 @@ export default function AddPaymentModal({
     }
 
     if (isOpen) {
-      fetchRecords()
       fetchPaymentMethods()
     }
   }, [isOpen])
@@ -109,8 +84,36 @@ export default function AddPaymentModal({
       setNotes('')
       setPaymentMethod('cash')
       setPaymentType(initialPaymentType)
+      setRecordId('')
+      setSelectedSafeName('لا يوجد')
     }
   }, [isOpen, initialPaymentType])
+
+  // Derive is_physical from selected payment method
+  const selectedMethodIsPhysical = paymentMethods.find(m => m.name === paymentMethod)?.is_physical !== false
+
+  // Reset safe selection when payment method changes (physical vs transfer shows different options)
+  const [prevIsPhysical, setPrevIsPhysical] = useState<boolean | null>(null)
+  useEffect(() => {
+    if (prevIsPhysical !== null && prevIsPhysical !== selectedMethodIsPhysical) {
+      setRecordId('')
+      setSelectedSafeName('لا يوجد')
+    }
+    setPrevIsPhysical(selectedMethodIsPhysical)
+  }, [selectedMethodIsPhysical])
+
+  const handleRecordSelect = (record: any, subSafe?: any) => {
+    if (subSafe) {
+      setRecordId(subSafe.id)
+      setSelectedSafeName(`${record.name} → ${subSafe.name}`)
+    } else if (record.id) {
+      setRecordId(record.id)
+      setSelectedSafeName(record.name)
+    } else {
+      setRecordId('')
+      setSelectedSafeName('لا يوجد')
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -176,7 +179,7 @@ export default function AddPaymentModal({
 
         // Record payment in the selected safe (if a safe was selected)
         // للدفعة: إيداع في الخزنة / للسلفة: سحب من الخزنة / للخصم: لا حركة نقدية
-        if (recordId && paymentMethod === 'cash' && paymentType !== 'discount') {
+        if (recordId && paymentType !== 'discount') {
           try {
             // Get or create drawer for this record
             let { data: drawer, error: drawerError } = await supabase
@@ -202,6 +205,15 @@ export default function AddPaymentModal({
               // للدفعة: إضافة للخزنة / للسلفة: خصم من الخزنة
               const drawerChange = paymentType === 'loan' ? -paymentAmount : paymentAmount
 
+              // Determine transaction type based on is_physical
+              // Physical: deposit/withdrawal | Transfer: transfer_in/transfer_out
+              let transactionType: string
+              if (selectedMethodIsPhysical) {
+                transactionType = paymentType === 'loan' ? 'withdrawal' : 'deposit'
+              } else {
+                transactionType = paymentType === 'loan' ? 'transfer_out' : 'transfer_in'
+              }
+
               // Atomic balance update (prevents race conditions)
               const { data: rpcResult, error: rpcErr } = await supabase.rpc(
                 'atomic_adjust_drawer_balance' as any,
@@ -219,13 +231,14 @@ export default function AddPaymentModal({
                   .insert({
                     drawer_id: drawer.id,
                     record_id: recordId,
-                    transaction_type: paymentType === 'loan' ? 'withdrawal' : 'deposit',
+                    transaction_type: transactionType,
                     amount: paymentAmount,
                     balance_after: roundMoney(newBalance),
                     notes: paymentType === 'loan'
                       ? `سلفة لعميل: ${entityName}${notes ? ` - ${notes}` : ''}`
                       : `دفعة من عميل: ${entityName}${notes ? ` - ${notes}` : ''}`,
-                    performed_by: user?.name || 'system'
+                    performed_by: user?.name || 'system',
+                    payment_method: paymentMethod,
                   })
 
                 console.log(`✅ Cash drawer updated with customer ${paymentType}: ${drawerChange}, new balance: ${newBalance}`)
@@ -267,7 +280,7 @@ export default function AddPaymentModal({
 
         // Record payment in the selected safe (if a safe was selected)
         // للدفعة: المال يخرج من الخزنة (سلبي) / للسلفة: المال يدخل للخزنة (إيجابي) / للخصم: لا حركة نقدية
-        if (recordId && paymentMethod === 'cash' && paymentType !== 'discount') {
+        if (recordId && paymentType !== 'discount') {
           try {
             // Get or create drawer for this record
             let { data: drawer, error: drawerError } = await supabase
@@ -293,6 +306,15 @@ export default function AddPaymentModal({
               // للدفعة: خصم من الخزنة / للسلفة: إضافة للخزنة
               const drawerChange = paymentType === 'loan' ? paymentAmount : -paymentAmount
 
+              // Determine transaction type based on is_physical
+              // Physical: deposit/withdrawal | Transfer: transfer_in/transfer_out
+              let transactionType: string
+              if (selectedMethodIsPhysical) {
+                transactionType = paymentType === 'loan' ? 'deposit' : 'withdrawal'
+              } else {
+                transactionType = paymentType === 'loan' ? 'transfer_in' : 'transfer_out'
+              }
+
               // Atomic balance update (prevents race conditions)
               const { data: rpcResult, error: rpcErr } = await supabase.rpc(
                 'atomic_adjust_drawer_balance' as any,
@@ -310,13 +332,14 @@ export default function AddPaymentModal({
                   .insert({
                     drawer_id: drawer.id,
                     record_id: recordId,
-                    transaction_type: paymentType === 'loan' ? 'deposit' : 'withdrawal',
+                    transaction_type: transactionType,
                     amount: paymentAmount,
                     balance_after: roundMoney(newBalance),
                     notes: paymentType === 'loan'
                       ? `سلفة من مورد: ${entityName}${notes ? ` - ${notes}` : ''}`
                       : `دفعة لمورد: ${entityName}${notes ? ` - ${notes}` : ''}`,
-                    performed_by: user?.name || 'system'
+                    performed_by: user?.name || 'system',
+                    payment_method: paymentMethod,
                   })
 
                 console.log(`✅ Cash drawer updated with supplier ${paymentType}: ${drawerChange}, new balance: ${newBalance}`)
@@ -498,32 +521,9 @@ export default function AddPaymentModal({
               </div>
             )}
 
-            {/* الخزنة وطريقة الدفع - جنب بعض */}
+            {/* طريقة الدفع والخزنة - طريقة الدفع أولاً */}
             <div className="flex gap-4">
-              {/* Record Selection - الخزنة */}
-              <div className="flex-1">
-                <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
-                  الخزنة
-                </label>
-                {isLoadingRecords ? (
-                  <div className="text-[var(--dash-text-muted)] text-sm text-center py-2">جاري تحميل الخزنات...</div>
-                ) : (
-                  <select
-                    value={recordId}
-                    onChange={(e) => setRecordId(e.target.value)}
-                    className="w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)]"
-                  >
-                    <option value="">لا يوجد</option>
-                    {records.map((record) => (
-                      <option key={record.id} value={record.id}>
-                        {record.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-
-              {/* Payment Method - طريقة الدفع */}
+              {/* Payment Method - طريقة الدفع (أولاً) */}
               <div className="flex-1">
                 <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
                   طريقة الدفع
@@ -543,6 +543,21 @@ export default function AddPaymentModal({
                     ))}
                   </select>
                 )}
+              </div>
+
+              {/* Record Selection - الخزنة (ثانياً) */}
+              <div className="flex-1">
+                <label className="block text-[var(--dash-text-secondary)] text-sm font-medium mb-2 text-right">
+                  {selectedMethodIsPhysical ? 'الدرج / الخزنة' : 'الخزنة'}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsSafesModalOpen(true)}
+                  className="w-full px-4 py-2 bg-[var(--dash-bg-base)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-right focus:outline-none focus:ring-2 focus:ring-[var(--dash-accent-blue)] flex items-center justify-between gap-2"
+                >
+                  <ChevronDownIcon className="h-4 w-4 text-[var(--dash-text-muted)] flex-shrink-0" />
+                  <span className="truncate">{selectedSafeName}</span>
+                </button>
               </div>
             </div>
 
@@ -597,6 +612,14 @@ export default function AddPaymentModal({
           </form>
         </div>
       </div>
+
+      {/* Safe Selection Modal */}
+      <RecordsSelectionModal
+        isOpen={isSafesModalOpen}
+        onClose={() => setIsSafesModalOpen(false)}
+        onSelectRecord={handleRecordSelect}
+        paymentIsPhysical={selectedMethodIsPhysical}
+      />
     </>
   )
 }

@@ -73,7 +73,7 @@ export default function SupplierTable({ showActions = false }: SupplierTableProp
           {mockSuppliers.map((supplier) => (
             <tr 
               key={supplier.id}
-              className={`hover:bg-[var(--dash-bg-overlay)] transition-colors ${
+              className={`hover:bg-[var(--dash-bg-overlay)] ${
                 selectedRows.includes(supplier.id) ? 'bg-[var(--dash-accent-blue-subtle)]' : ''
               }`}
             >

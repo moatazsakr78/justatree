@@ -179,8 +179,8 @@ export default function ResizableTable({
   // Stabilize initialColumns to prevent re-initialization on parent re-renders
   const stableColumnsRef = useRef<Column[]>(initialColumns)
   const stableInitialColumns = useMemo(() => {
-    const newKey = JSON.stringify(initialColumns.map(c => ({ id: c.id, header: c.header, accessor: c.accessor, width: c.width, minWidth: c.minWidth })))
-    const oldKey = JSON.stringify(stableColumnsRef.current.map(c => ({ id: c.id, header: c.header, accessor: c.accessor, width: c.width, minWidth: c.minWidth })))
+    const newKey = JSON.stringify(initialColumns.map(c => ({ id: c.id, accessor: c.accessor, width: c.width, minWidth: c.minWidth })))
+    const oldKey = JSON.stringify(stableColumnsRef.current.map(c => ({ id: c.id, accessor: c.accessor, width: c.width, minWidth: c.minWidth })))
     if (newKey !== oldKey) {
       stableColumnsRef.current = initialColumns
     }
@@ -707,7 +707,7 @@ export default function ResizableTable({
               return (
               <tr
                 key={item.id || rowIndex}
-                className={`border-b border-[var(--dash-border-subtle)] cursor-pointer transition-colors ${
+                className={`border-b border-[var(--dash-border-subtle)] cursor-pointer ${
                   selectedRowId === item.id
                     ? 'bg-[var(--dash-accent-blue-subtle)] hover:bg-[var(--dash-accent-blue-subtle)]'
                     : customRowClass || 'dash-row-hover'
