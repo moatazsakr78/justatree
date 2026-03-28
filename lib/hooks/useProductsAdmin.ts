@@ -173,6 +173,10 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
             categories (
               id,
               name
+            ),
+            product_images (
+              image_url,
+              sort_order
             )
           `)
           .eq('is_active', true)
@@ -436,7 +440,7 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
           }
         });
 
-        // ✨ Process product images (main + sub + additional + variants)
+        // ✨ Process product images (main + sub + additional + product_images table + variants)
         const allProductImages: string[] = [];
         if (product.main_image_url) allProductImages.push(product.main_image_url);
         if (product.sub_image_url) allProductImages.push(product.sub_image_url);
@@ -451,6 +455,16 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
           });
         }
 
+        // ✨ Add images from product_images table (sorted by sort_order)
+        const productImagesData = (product as any).product_images;
+        if (productImagesData && Array.isArray(productImagesData)) {
+          productImagesData
+            .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
+            .forEach((img: any) => {
+              if (img.image_url) allProductImages.push(img.image_url);
+            });
+        }
+
         // Add variant images
         productVariants.forEach((variant: any) => {
           if (variant.image_url) allProductImages.push(variant.image_url);
@@ -458,6 +472,9 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
 
         // Remove duplicates
         const allImages = Array.from(new Set(allProductImages.filter(img => img && img.trim() !== '')));
+
+        // Fallback: use first available image if main_image_url is null
+        const effectiveMainImage = product.main_image_url || allImages[0] || null;
 
         // Calculate discount information
         const now = new Date();
@@ -488,6 +505,7 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
 
         return {
           ...product,
+          main_image_url: effectiveMainImage, // Use first available image if main is null
           totalQuantity,
           inventoryData,
           variantsData,
