@@ -113,6 +113,9 @@ const withPWA = require('next-pwa')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Smaller image sizes for mobile grid thumbnails
+    imageSizes: [64, 128, 192, 256, 384],
+    deviceSizes: [640, 750, 828, 1080, 1200],
     // Using wildcard pattern to support any Supabase project
     domains: ['images.unsplash.com', 'via.placeholder.com'],
     remotePatterns: [

@@ -134,12 +134,12 @@ export default function OptimizedImage({
 
 // Specialized components for different use cases
 
-export function ProductGridImage({ 
-  src, 
-  alt, 
+export function ProductGridImage({
+  src,
+  alt,
   priority = false,
-  onError 
-}: { 
+  onError
+}: {
   src: string | null | undefined
   alt: string
   priority?: boolean
@@ -151,7 +151,8 @@ export function ProductGridImage({
       alt={alt}
       fill
       priority={priority}
-      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+      quality={60}
+      sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 20vw"
       className="object-cover"
       containerClassName="w-full h-40 bg-[var(--dash-bg-surface)] rounded-md overflow-hidden relative z-0"
       onError={onError}
@@ -211,11 +212,11 @@ export function ProductThumbnail({
         src={src}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 25vw, 10vw"
+        quality={50}
+        sizes="(max-width: 768px) 20vw, 10vw"
         className="object-cover"
         containerClassName="w-full h-full"
         onError={onError}
-        unoptimized={true}
         fallbackIcon={
           <div className="w-full h-full bg-[var(--dash-bg-overlay)] flex items-center justify-center">
             <span className="text-[var(--dash-text-muted)] text-xs">🖼️</span>

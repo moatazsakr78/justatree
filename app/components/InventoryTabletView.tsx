@@ -1495,10 +1495,10 @@ export default function InventoryTabletView({
                             src={product.main_image_url}
                             alt={product.name}
                             fill
-                            sizes="(max-width: 768px) 50vw, 33vw"
+                            quality={60}
+                            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 25vw"
                             className="object-cover"
                             containerClassName="w-full h-full relative"
-                            unoptimized={true}
                           />
                         </div>
 
