@@ -87,6 +87,20 @@ export function BackgroundProductProvider({ children }: { children: React.ReactN
     }
     createProductFnRef.current.delete(taskId)
     updateProductFnRef.current.delete(taskId)
+
+    // Auto-dismiss completed task after 3 seconds
+    setTimeout(() => {
+      setTasks(prev => {
+        const task = prev.find(t => t.id === taskId)
+        if (task && task.status === 'completed') {
+          createProductFnRef.current.delete(taskId)
+          updateProductFnRef.current.delete(taskId)
+          onCompleteFnRef.current.delete(taskId)
+          return prev.filter(t => t.id !== taskId)
+        }
+        return prev
+      })
+    }, 3000)
   }, [])
 
   const handleError = useCallback((taskId: string, error: string) => {
