@@ -55,8 +55,9 @@ export default function OptimizedImage({
   // Start with isLoading=false if image is already preloaded in our cache
   const [isLoading, setIsLoading] = useState(() => !isImagePreloaded(src))
 
-  // Update loading state when src changes
+  // Reset error and loading state when src changes
   useEffect(() => {
+    setHasError(false)
     if (src && isImagePreloaded(src)) {
       setIsLoading(false)
     } else if (src) {

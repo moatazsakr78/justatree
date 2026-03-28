@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { ProductGridImage } from './ui/OptimizedImage'
+import OptimizedImage, { ProductGridImage } from './ui/OptimizedImage'
 
 const MobileProductDetailsModal = dynamic(
   () => import("@/app/components/pos/MobileProductDetailsModal"),
@@ -1490,22 +1490,16 @@ export default function InventoryTabletView({
                         )}
 
                         {/* Product Image - Larger on tablets */}
-                        <div className="w-full h-36 sm:h-44 md:h-48 bg-[var(--dash-bg-surface)] rounded-md mb-3 flex items-center justify-center overflow-hidden">
-                          {product.main_image_url ? (
-                            <img
-                              src={product.main_image_url}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement
-                                target.style.display = 'none'
-                                target.nextElementSibling?.classList.remove('hidden')
-                              }}
-                            />
-                          ) : null}
-                          <div className={`w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center ${product.main_image_url ? 'hidden' : ''}`}>
-                            <span className="text-2xl">📦</span>
-                          </div>
+                        <div className="w-full h-36 sm:h-44 md:h-48 bg-[var(--dash-bg-surface)] rounded-md mb-3 overflow-hidden relative">
+                          <OptimizedImage
+                            src={product.main_image_url}
+                            alt={product.name}
+                            fill
+                            sizes="(max-width: 768px) 50vw, 33vw"
+                            className="object-cover"
+                            containerClassName="w-full h-full relative"
+                            unoptimized={true}
+                          />
                         </div>
 
                         {/* Product Name */}
