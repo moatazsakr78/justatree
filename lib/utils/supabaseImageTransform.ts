@@ -1,7 +1,11 @@
 /**
- * Supabase Image Transform Utility
- * Converts Supabase storage URLs to use Image Transforms (Pro Plan feature)
- * This serves resized/WebP images server-side, dramatically reducing image size
+ * Supabase Image URL Utility
+ *
+ * DISABLED: Supabase Image Transforms were consuming 1,863% of the Pro Plan quota
+ * (100 transforms/month limit). Functions now return original storage URLs.
+ * Next.js/Vercel image optimization handles resizing where <Image> is used.
+ *
+ * Presets and types are kept for potential future use or migration to next/image sizes.
  */
 
 export type ImagePreset = 'card_desktop' | 'card_tablet' | 'card_mobile' | 'search_thumb'
@@ -23,41 +27,15 @@ const PRESETS: Record<ImagePreset, TransformOptions> = {
 };
 
 /**
- * Convert a Supabase storage URL to use Image Transforms
- *
- * Transforms:
- *   .../storage/v1/object/public/bucket/image.jpg
- * To:
- *   .../storage/v1/render/image/public/bucket/image.jpg?width=400&quality=75
- *
- * Non-Supabase URLs are returned as-is.
+ * Returns the original image URL without Supabase Image Transforms.
+ * Previously converted URLs to /render/image/ path — disabled due to quota overuse.
  */
 export function getTransformedImageUrl(
   src: string | null | undefined,
   presetOrOptions: ImagePreset | TransformOptions
 ): string {
   if (!src) return '/placeholder-product.svg';
-
-  // Only transform Supabase storage URLs
-  if (!src.includes('supabase.co') || !src.includes('/storage/v1/object/public/')) {
-    return src;
-  }
-
-  const options = typeof presetOrOptions === 'string'
-    ? PRESETS[presetOrOptions]
-    : presetOrOptions;
-
-  const { width, quality = 75 } = options;
-
-  // Replace /object/public/ with /render/image/public/
-  const transformedUrl = src.replace(
-    '/storage/v1/object/public/',
-    '/storage/v1/render/image/public/'
-  );
-
-  // Add transform query parameters
-  const separator = transformedUrl.includes('?') ? '&' : '?';
-  return `${transformedUrl}${separator}width=${width}&quality=${quality}&resize=contain`;
+  return src;
 }
 
 /**
