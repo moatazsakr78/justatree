@@ -46,8 +46,6 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
   })
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const statementScrollRef = useRef<HTMLDivElement>(null)
-  const statementScrollPositionRef = useRef<number>(0)
 
   // Device Detection - Mobile and Tablet
   const [isTabletDevice, setIsTabletDevice] = useState(false)
@@ -820,9 +818,6 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
     if (statement.type !== 'فاتورة بيع' && statement.type !== 'مرتجع بيع') {
       return
     }
-
-    // Save scroll position before navigating to invoice details
-    statementScrollPositionRef.current = statementScrollRef.current?.scrollTop || 0
 
     // Find the index of this invoice in the invoice statements
     const index = invoiceStatements.findIndex(s => s.id === statement.id)
@@ -2069,18 +2064,6 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       }
     }
   }, [selectedTransaction, sales])
-
-  // Restore statement scroll position when returning from invoice details
-  useEffect(() => {
-    if (!showStatementInvoiceDetails && statementScrollPositionRef.current > 0) {
-      const timer = setTimeout(() => {
-        if (statementScrollRef.current) {
-          statementScrollRef.current.scrollTop = statementScrollPositionRef.current
-        }
-      }, 50)
-      return () => clearTimeout(timer)
-    }
-  }, [showStatementInvoiceDetails])
 
   // Reset statement invoice details when changing tabs
   useEffect(() => {
@@ -4163,7 +4146,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
               <div className="flex-1 overflow-y-auto scrollbar-hide relative">
                 {activeTab === 'statement' && (
                   <div className="h-full flex flex-col">
-                    {showStatementInvoiceDetails ? (
+                    {showStatementInvoiceDetails && (
                       <div className="flex flex-col h-full bg-[var(--dash-bg-base)]">
                         {/* Top Bar with Back Button and Print Actions */}
                         <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-4 py-2 flex items-center justify-between">
@@ -4426,50 +4409,47 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                           </div>
                         </div>
                       </div>
-                    ) : (
-                      <>
-                        {/* Statement Table with Infinite Scroll */}
-                        <div className="flex-1 flex flex-col overflow-hidden">
-                          {isLoadingStatements ? (
-                            <div className="flex items-center justify-center h-full">
-                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
-                              <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
-                            </div>
-                          ) : accountStatements.length === 0 ? (
-                            <div className="flex items-center justify-center h-full">
-                              <span className="text-[var(--dash-text-muted)]">لا توجد عمليات مسجلة</span>
-                            </div>
-                          ) : (
-                            <div ref={statementScrollRef} className="flex-1 overflow-auto scrollbar-hide">
-                              <ResizableTable
-                                className="h-full w-full"
-                                columns={statementColumns}
-                                data={accountStatements.map((item, idx, arr) => ({
-                                  ...item,
-                                  index: idx + 1,
-                                  displayDate: item.date ? new Date(item.date).toLocaleDateString('en-GB') : '-',
-                                  displayTime: item.date ? new Date(item.date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase() : '-',
-                                  isFirstRow: idx === 0
-                                }))}
-                                selectedRowId={accountStatements[selectedStatementRow]?.id?.toString() || null}
-                                onRowClick={(_item: any, index: number) => setSelectedStatementRow(index)}
-                                onRowDoubleClick={handleStatementRowDoubleClick}
-                                reportType="CUSTOMER_STATEMENT_REPORT"
-                              />
-                              {/* Sentinel element for infinite scroll */}
-                              <div ref={statementsSentinelRef} className="h-4" />
-                              {/* Loading more indicator */}
-                              {isLoadingMoreStatements && (
-                                <div className="flex items-center justify-center py-4">
-                                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
-                                  <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
-                                </div>
-                              )}
+                    )}
+                    {/* Statement Table — always mounted, hidden when viewing invoice details */}
+                    <div className="flex-1 flex flex-col overflow-hidden" style={{ display: showStatementInvoiceDetails ? 'none' : undefined }}>
+                      {isLoadingStatements ? (
+                        <div className="flex items-center justify-center h-full">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
+                          <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
+                        </div>
+                      ) : accountStatements.length === 0 ? (
+                        <div className="flex items-center justify-center h-full">
+                          <span className="text-[var(--dash-text-muted)]">لا توجد عمليات مسجلة</span>
+                        </div>
+                      ) : (
+                        <div className="flex-1 overflow-auto scrollbar-hide">
+                          <ResizableTable
+                            className="h-full w-full"
+                            columns={statementColumns}
+                            data={accountStatements.map((item, idx, arr) => ({
+                              ...item,
+                              index: idx + 1,
+                              displayDate: item.date ? new Date(item.date).toLocaleDateString('en-GB') : '-',
+                              displayTime: item.date ? new Date(item.date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase() : '-',
+                              isFirstRow: idx === 0
+                            }))}
+                            selectedRowId={accountStatements[selectedStatementRow]?.id?.toString() || null}
+                            onRowClick={(_item: any, index: number) => setSelectedStatementRow(index)}
+                            onRowDoubleClick={handleStatementRowDoubleClick}
+                            reportType="CUSTOMER_STATEMENT_REPORT"
+                          />
+                          {/* Sentinel element for infinite scroll */}
+                          <div ref={statementsSentinelRef} className="h-4" />
+                          {/* Loading more indicator */}
+                          {isLoadingMoreStatements && (
+                            <div className="flex items-center justify-center py-4">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
+                              <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
                         </div>
-                      </>
-                    )}
+                      )}
+                    </div>
                   </div>
                 )}
                 

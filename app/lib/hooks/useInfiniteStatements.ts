@@ -20,6 +20,7 @@ export interface StatementItem {
   created_at: string
   isPositive: boolean
   employee_name?: string | null
+  customer_name?: string | null
   payment_method?: string | null
   paymentBreakdown?: { method: string; amount: number }[]
   safe_name?: string | null
@@ -139,9 +140,10 @@ export function useInfiniteStatements(
 
     const createdDate = tx.created_at ? new Date(tx.created_at) : new Date()
 
-    // Get employee name from sale if available
+    // Get employee name and customer name from sale if available
     const saleData = tx.sale_id ? salesMap.get(tx.sale_id) : null
     const employeeName = saleData?.cashier?.full_name || tx.performed_by || null
+    const customerName = saleData?.customer?.name || null
 
     // Get payment method - prefer from transaction, fallback to sale
     const salePaymentMethod = saleData?.payment_method || null
@@ -167,6 +169,7 @@ export function useInfiniteStatements(
       created_at: tx.created_at || new Date().toISOString(),
       isPositive,
       employee_name: employeeName,
+      customer_name: customerName,
       payment_method: paymentMethod,
       safe_name: safeName,
       index: index + 1,
@@ -241,7 +244,8 @@ export function useInfiniteStatements(
       .from('sales')
       .select(`
         id, invoice_number, total_amount, payment_method, invoice_type, created_at, time, notes, status,
-        cashier:user_profiles(full_name)
+        cashier:user_profiles(full_name),
+        customer:customers(name)
       `)
       .in('id', saleIds)
 

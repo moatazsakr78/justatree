@@ -39,8 +39,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [dividerPosition, setDividerPosition] = useState(50) // Percentage
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const statementScrollRef = useRef<HTMLDivElement>(null)
-  const statementScrollPositionRef = useRef<number>(0)
 
   // Device Detection - Mobile and Tablet
   const [isTabletDevice, setIsTabletDevice] = useState(false)
@@ -591,18 +589,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   }
 
   // Load all safes for name mapping when operations tab is opened
-  // Restore statement scroll position when returning from invoice details
-  useEffect(() => {
-    if (!showStatementInvoiceDetails && statementScrollPositionRef.current > 0) {
-      const timer = setTimeout(() => {
-        if (statementScrollRef.current) {
-          statementScrollRef.current.scrollTop = statementScrollPositionRef.current
-        }
-      }, 50)
-      return () => clearTimeout(timer)
-    }
-  }, [showStatementInvoiceDetails])
-
   useEffect(() => {
     if (isOpen && activeTab === 'operations' && allSafes.length === 0) {
       loadAllSafes()
@@ -798,9 +784,6 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     if (statement.type !== 'فاتورة بيع' && statement.type !== 'مرتجع بيع') {
       return
     }
-
-    // Save scroll position before navigating to invoice details
-    statementScrollPositionRef.current = statementScrollRef.current?.scrollTop || 0
 
     // Find the index of this invoice in the invoice statements
     const index = invoiceStatements.findIndex(s => s.id === statement.id)
@@ -2729,6 +2712,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       render: (value: string) => <span className="text-[var(--dash-text-primary)]">{value}</span>
     },
     {
+      id: 'customer_name',
+      header: 'العميل / المورد',
+      accessor: 'customer_name',
+      width: 140,
+      render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || '-'}</span>
+    },
+    {
       id: 'type',
       header: 'نوع العملية',
       accessor: 'type',
@@ -3124,6 +3114,13 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
       accessor: 'notes',
       width: 250,
       render: (value: string) => <span className="text-[var(--dash-text-muted)]">{value || '-'}</span>
+    },
+    {
+      id: 'customer_name',
+      header: 'العميل / المورد',
+      accessor: 'customer_name',
+      width: 140,
+      render: (value: string) => <span className="text-[var(--dash-text-secondary)]">{value || '-'}</span>
     },
     {
       id: 'employee_name',
@@ -4596,7 +4593,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
               <div className="flex-1 overflow-y-auto scrollbar-hide relative">
                 {activeTab === 'statement' && (
                   <div className="h-full flex flex-col">
-                    {showStatementInvoiceDetails ? (
+                    {showStatementInvoiceDetails && (
                       <div className="flex flex-col h-full bg-[var(--dash-bg-base)]">
                         {/* Top Bar with Back Button and Print Actions */}
                         <div className="bg-[var(--dash-bg-surface)] border-b border-[var(--dash-border-default)] px-4 py-2 flex items-center justify-between">
@@ -4795,47 +4792,44 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           </div>
                         </div>
                       </div>
-                    ) : (
-                      <>
-                        {/* Account Statement Table with Infinite Scroll */}
-                        <div className="flex-1 flex flex-col overflow-hidden">
-                          {isLoadingStatement ? (
-                            <div className="flex items-center justify-center h-full">
-                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
-                              <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
-                            </div>
-                          ) : recalculatedStatements.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full p-8">
-                              <div className="text-6xl mb-4">📊</div>
-                              <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد عمليات في كشف الحساب</p>
-                              <p className="text-[var(--dash-text-disabled)] text-sm">سيتم عرض العمليات هنا عند إجرائها</p>
-                            </div>
-                          ) : (
-                            <div ref={statementScrollRef} className="flex-1 overflow-auto scrollbar-hide">
-                              <ResizableTable
-                                className="h-full w-full"
-                                columns={statementColumns}
-                                data={recalculatedStatements}
-                                reportType="RECORD_STATEMENT_REPORT"
-                                selectedRowId={recalculatedStatements[selectedStatementRow]?.id?.toString() || null}
-                                onRowClick={(_item: any, index: number) => setSelectedStatementRow(index)}
-                                onRowDoubleClick={handleStatementRowDoubleClick}
-                                onRowContextMenu={handleStatementContextMenu}
-                              />
-                              {/* Sentinel element for infinite scroll */}
-                              <div ref={statementSentinelRef} className="h-4" />
-                              {/* Loading more indicator */}
-                              {isLoadingMoreStatements && (
-                                <div className="flex items-center justify-center py-4">
-                                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
-                                  <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
-                                </div>
-                              )}
+                    )}
+                    {/* Account Statement Table — always mounted, hidden when viewing invoice details */}
+                    <div className="flex-1 flex flex-col overflow-hidden" style={{ display: showStatementInvoiceDetails ? 'none' : undefined }}>
+                      {isLoadingStatement ? (
+                        <div className="flex items-center justify-center h-full">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
+                          <span className="text-[var(--dash-text-muted)]">جاري تحميل كشف الحساب...</span>
+                        </div>
+                      ) : recalculatedStatements.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full p-8">
+                          <div className="text-6xl mb-4">📊</div>
+                          <p className="text-[var(--dash-text-muted)] text-lg mb-2">لا توجد عمليات في كشف الحساب</p>
+                          <p className="text-[var(--dash-text-disabled)] text-sm">سيتم عرض العمليات هنا عند إجرائها</p>
+                        </div>
+                      ) : (
+                        <div className="flex-1 overflow-auto scrollbar-hide">
+                          <ResizableTable
+                            className="h-full w-full"
+                            columns={statementColumns}
+                            data={recalculatedStatements}
+                            reportType="RECORD_STATEMENT_REPORT"
+                            selectedRowId={recalculatedStatements[selectedStatementRow]?.id?.toString() || null}
+                            onRowClick={(_item: any, index: number) => setSelectedStatementRow(index)}
+                            onRowDoubleClick={handleStatementRowDoubleClick}
+                            onRowContextMenu={handleStatementContextMenu}
+                          />
+                          {/* Sentinel element for infinite scroll */}
+                          <div ref={statementSentinelRef} className="h-4" />
+                          {/* Loading more indicator */}
+                          {isLoadingMoreStatements && (
+                            <div className="flex items-center justify-center py-4">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dash-accent-blue mr-2"></div>
+                              <span className="text-[var(--dash-text-muted)] text-sm">جاري تحميل المزيد...</span>
                             </div>
                           )}
                         </div>
-                      </>
-                    )}
+                      )}
+                    </div>
                   </div>
                 )}
                 
