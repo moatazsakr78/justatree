@@ -591,6 +591,10 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
       const additionalImagesValue = (productData as any).additional_images || productData.additional_images_urls
       const videoUrlValue = (productData as any).actualVideoUrl !== undefined ? (productData as any).actualVideoUrl : (productData as any).video_url
 
+      // التأكد إن null بتوصل للداتابيز مش undefined
+      const mainImageValue = productData.main_image_url !== undefined ? productData.main_image_url : null
+      const subImageValue = productData.sub_image_url !== undefined ? productData.sub_image_url : null
+
       const { data, error } = await supabase
         .from('products')
         .update({
@@ -609,8 +613,8 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
           quantity_per_carton: productData.quantity_per_carton,
           category_id: productData.category_id,
           product_code: productData.product_code,
-          main_image_url: productData.main_image_url,
-          sub_image_url: productData.sub_image_url,
+          main_image_url: mainImageValue,
+          sub_image_url: subImageValue,
           additional_images_urls: additionalImagesValue,
           video_url: videoUrlValue,
           barcodes: productData.barcodes,

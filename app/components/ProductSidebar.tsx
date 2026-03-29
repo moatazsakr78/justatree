@@ -1821,7 +1821,11 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
     try {
       // For edit mode (sync only), upload images immediately using versioned upload
       // In background edit mode, images are uploaded by executeProductUpdate
-      let mainImageUrl = isEditMode ? editProduct?.main_image_url : ''
+      let mainImageUrl: string | null = isEditMode ? (editProduct?.main_image_url || null) : ''
+      // إذا المستخدم شال الصورة الرئيسية → مسحها من الداتابيز
+      if (isEditMode && !isBackgroundEdit && mainProductImages.length === 0) {
+        mainImageUrl = null
+      }
       if (isEditMode && !isBackgroundEdit && mainProductImages.length > 0 && mainProductImages[0].id !== 'main-existing') {
         const productId = editProduct?.id
         if (productId) {
@@ -1899,7 +1903,8 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
         quantity_per_carton: formData.quantityPerCarton ? parseInt(formData.quantityPerCarton) : null,
         category_id: formData.categoryId || undefined,
         product_code: formData.code.trim() || undefined,
-        main_image_url: mainImageUrl || undefined,
+        main_image_url: mainImageUrl,
+        sub_image_url: null,
         additional_images: isEditMode
           ? (additionalImagesJson ? JSON.parse(additionalImagesJson) : [])
           : (additionalImagesJson ? JSON.parse(additionalImagesJson) : undefined),
@@ -1947,7 +1952,7 @@ export default function ProductSidebar({ isOpen, onClose, onProductCreated, crea
             : null
           const existingMainImageUrl = (mainProductImages.length > 0 && mainProductImages[0].id === 'main-existing')
             ? mainProductImages[0].preview
-            : editProduct.main_image_url || undefined
+            : (mainProductImages.length === 0 ? null : (editProduct.main_image_url || null))
 
           // Step 3: Separate additional images into existing URLs vs new Files
           const additionalExistingImageUrls: string[] = []

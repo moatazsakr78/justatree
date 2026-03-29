@@ -565,6 +565,10 @@ export function useProducts() {
       const additionalImagesValue = productData.additional_images || productData.additional_images_urls
       const videoUrlValue = productData.actualVideoUrl !== undefined ? productData.actualVideoUrl : productData.video_url
 
+      // التأكد إن null بتوصل للداتابيز مش undefined (Supabase بتتجاهل undefined)
+      const mainImageValue = productData.main_image_url !== undefined ? productData.main_image_url : null
+      const subImageValue = productData.sub_image_url !== undefined ? productData.sub_image_url : null
+
       const { data, error } = await supabase
         .from('products')
         .update({
@@ -583,8 +587,8 @@ export function useProducts() {
           quantity_per_carton: productData.quantity_per_carton,
           category_id: productData.category_id,
           product_code: productData.product_code,
-          main_image_url: productData.main_image_url,
-          sub_image_url: productData.sub_image_url,
+          main_image_url: mainImageValue,
+          sub_image_url: subImageValue,
           additional_images_urls: additionalImagesValue, // ✨ الحقل الجديد للصور الإضافية
           video_url: videoUrlValue, // ✨ فقط للفيديوهات
           barcodes: productData.barcodes || [],

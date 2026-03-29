@@ -618,49 +618,8 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     }
   }, [isOpen, allRecordIds.join(',')])
 
-  // Auto-cleanup reserves when TOTAL balance drops below TOTAL reserved amount
-  // CRITICAL: Uses unfilteredSafeBalance and totalReservedAll to avoid wiping reserves when filter changes
-  const isCleaningReserves = useRef(false)
-  useEffect(() => {
-    const cleanup = async () => {
-      if (!safe?.id || isLoadingReserves || cashDrawerBalance === null) return
-      if (reserves.length === 0 || totalReservedAll <= unfilteredSafeBalance) return
-      if (isCleaningReserves.current) return
-      isCleaningReserves.current = true
-
-      try {
-        if (unfilteredSafeBalance <= 0) {
-          // Delete all reserves
-          await (supabase as any).from('cash_drawer_reserves')
-            .delete().in('id', reserves.map(r => r.id))
-        } else {
-          // Delete oldest reserves until total fits within balance
-          const sorted = [...reserves].sort((a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-          )
-          let excess = totalReservedAll - unfilteredSafeBalance
-          for (const reserve of sorted) {
-            if (excess <= 0) break
-            if (reserve.amount <= excess) {
-              await (supabase as any).from('cash_drawer_reserves').delete().eq('id', reserve.id)
-              excess -= reserve.amount
-            } else {
-              // Reduce this reserve's amount to fit
-              await (supabase as any).from('cash_drawer_reserves')
-                .update({ amount: roundMoney(reserve.amount - excess) }).eq('id', reserve.id)
-              excess = 0
-            }
-          }
-        }
-        fetchReserves()
-      } catch (e) {
-        console.error('Error auto-cleaning reserves:', e)
-      } finally {
-        isCleaningReserves.current = false
-      }
-    }
-    cleanup()
-  }, [cashDrawerBalance, unfilteredSafeBalance, totalReservedAll, reserves.length])
+  // تحذير: المجنب أكبر من الرصيد (بدل المسح التلقائي)
+  const reserveExceedsBalance = reserves.length > 0 && cashDrawerBalance !== null && totalReservedAll > unfilteredSafeBalance
 
   // Device detection for mobile layout
   useEffect(() => {
@@ -3639,6 +3598,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                           <h4 className="text-[var(--dash-text-primary)] font-medium text-sm">التجنيب</h4>
                         </div>
 
+                        {reserveExceedsBalance && (
+                          <div className="bg-dash-accent-orange/10 border border-dash-accent-orange/30 rounded p-2 mb-2">
+                            <p className="text-dash-accent-orange text-xs text-center">
+                              تحذير: المجنب ({formatPrice(totalReservedAll)}) أكبر من رصيد الخزنة ({formatPrice(unfilteredSafeBalance)})
+                            </p>
+                          </div>
+                        )}
+
                         {filteredReserves.length > 0 && (
                           <div className="space-y-1 mb-2">
                             <div className="flex justify-between items-center">
@@ -4455,6 +4422,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     ) : <div />}
                     <h4 className="text-[var(--dash-text-primary)] font-medium text-sm">التجنيب</h4>
                   </div>
+
+                  {reserveExceedsBalance && (
+                    <div className="bg-dash-accent-orange/10 border border-dash-accent-orange/30 rounded p-2 mb-2">
+                      <p className="text-dash-accent-orange text-xs text-center">
+                        تحذير: المجنب ({formatPrice(totalReservedAll)}) أكبر من رصيد الخزنة ({formatPrice(unfilteredSafeBalance)})
+                      </p>
+                    </div>
+                  )}
 
                   {filteredReserves.length > 0 && (
                     <div className="space-y-1.5 mb-3">
