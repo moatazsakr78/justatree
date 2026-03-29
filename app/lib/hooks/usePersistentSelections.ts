@@ -115,6 +115,10 @@ export function usePersistentSelections(userProfileBranchId?: string | null) {
           branch_id,
           is_primary,
           is_active,
+          parent_id,
+          safe_type,
+          supports_drawers,
+          show_transfers,
           branch:branches(name)
         `)
         .eq('id', recordId)

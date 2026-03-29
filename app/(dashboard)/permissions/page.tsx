@@ -2049,6 +2049,7 @@ export default function PermissionsPage() {
                         <ResizableTable
                           columns={templateColumns}
                           data={filteredTemplates}
+                          reportType="PERMISSIONS_TEMPLATES_REPORT"
                           selectedRowId={selectedTemplateId || undefined}
                           onRowClick={(item) => {
                             if (selectedTemplateId === item.id) {
@@ -2080,6 +2081,7 @@ export default function PermissionsPage() {
                 <ResizableTable
                   columns={getCurrentColumns()}
                   data={getCurrentData()}
+                  reportType="PERMISSIONS_ROLES_REPORT"
                   selectedRowId={activeView === 'roles' ? selectedRoleId : undefined}
                   onRowClick={(item) => {
                     if (activeView === 'roles') {

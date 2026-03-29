@@ -15,10 +15,25 @@ import { roundMoney } from "../lib/utils/money";
 interface ExpenseAdditionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  record: { id: string; name: string } | null;
+  record: {
+    id: string;
+    name: string;
+    supports_drawers?: boolean | null;
+    show_transfers?: boolean | null;
+    safe_type?: string | null;
+  } | null;
 }
 
 type OperationType = "expense" | "deposit";
+
+type BalanceSource = {
+  id: string;           // drawer ID to deduct from
+  recordId: string;     // record ID for the transaction
+  label: string;        // display name
+  balance: number;      // available balance
+  txTypeExpense: string; // transaction_type for expense
+  txTypeDeposit: string; // transaction_type for deposit
+};
 
 export default function ExpenseAdditionModal({
   isOpen,
@@ -35,6 +50,9 @@ export default function ExpenseAdditionModal({
   const [notes, setNotes] = useState<string>("");
   const [notesError, setNotesError] = useState(false);
 
+  const [balanceSources, setBalanceSources] = useState<BalanceSource[]>([]);
+  const [selectedSourceIndex, setSelectedSourceIndex] = useState<number>(0);
+
   // Fetch drawer data when modal opens
   useEffect(() => {
     if (isOpen && record?.id) {
@@ -44,6 +62,8 @@ export default function ExpenseAdditionModal({
       setNotes("");
       setNotesError(false);
       setOperationType("expense");
+      setSelectedSourceIndex(0);
+      setBalanceSources([]);
     }
   }, [isOpen, record?.id]);
 
@@ -52,37 +72,187 @@ export default function ExpenseAdditionModal({
 
     setIsLoading(true);
     try {
-      // Get or create drawer for this record
-      let { data: drawer, error: drawerError } = await supabase
-        .from("cash_drawers")
-        .select("*")
-        .eq("record_id", record.id)
-        .single();
+      // Determine safe configuration — fetch from DB if props are missing
+      let supportsDrawers = record.supports_drawers;
+      let showTransfers = record.show_transfers;
+      let safeType = record.safe_type;
 
-      if (drawerError && drawerError.code === "PGRST116") {
-        // Drawer doesn't exist, create it
-        const { data: newDrawer, error: createError } = await supabase
+      if (supportsDrawers === undefined || showTransfers === undefined) {
+        const { data: details } = await supabase
+          .from("records")
+          .select("supports_drawers, show_transfers, safe_type")
+          .eq("id", record.id)
+          .single();
+        if (details) {
+          supportsDrawers = details.supports_drawers;
+          showTransfers = details.show_transfers;
+          safeType = details.safe_type;
+        }
+      }
+
+      const sources: BalanceSource[] = [];
+
+      if (supportsDrawers && safeType !== "sub") {
+        // ── Drawers mode: fetch child safes + main safe transfers ──
+        const { data: children } = await supabase
+          .from("records")
+          .select("id, name")
+          .eq("parent_id", record.id)
+          .eq("safe_type", "sub" as any);
+
+        const childIds = (children || []).map((c: any) => c.id);
+        const allIds = [record.id, ...childIds];
+
+        const { data: drawers } = await supabase
           .from("cash_drawers")
-          .insert({ record_id: record.id, current_balance: 0 })
-          .select()
+          .select("id, record_id, current_balance")
+          .in("record_id", allIds);
+
+        const drawerMap = new Map<string, { id: string; balance: number }>();
+        for (const d of drawers || []) {
+          drawerMap.set(d.record_id, { id: d.id, balance: d.current_balance || 0 });
+        }
+
+        // Child drawers first
+        for (const child of children || []) {
+          const info = drawerMap.get(child.id);
+          if (info) {
+            sources.push({
+              id: info.id,
+              recordId: child.id,
+              label: child.name,
+              balance: info.balance,
+              txTypeExpense: "expense",
+              txTypeDeposit: "deposit",
+            });
+          }
+        }
+
+        // Main safe = transfers
+        const mainInfo = drawerMap.get(record.id);
+        if (mainInfo) {
+          sources.push({
+            id: mainInfo.id,
+            recordId: record.id,
+            label: "التحويلات",
+            balance: mainInfo.balance,
+            txTypeExpense: "transfer_out",
+            txTypeDeposit: "transfer_in",
+          });
+        }
+      } else if (showTransfers !== false && safeType !== "sub") {
+        // ── Transfers mode: single drawer, split by transaction type ──
+        let { data: drawer, error: drawerError } = await supabase
+          .from("cash_drawers")
+          .select("*")
+          .eq("record_id", record.id)
           .single();
 
-        if (createError) throw createError;
-        drawer = newDrawer;
-      } else if (drawerError) {
-        throw drawerError;
+        if (drawerError && drawerError.code === "PGRST116") {
+          const { data: newDrawer, error: createError } = await supabase
+            .from("cash_drawers")
+            .insert({ record_id: record.id, current_balance: 0 })
+            .select()
+            .single();
+          if (createError) throw createError;
+          drawer = newDrawer;
+        } else if (drawerError) {
+          throw drawerError;
+        }
+
+        if (!drawer) throw new Error("Failed to get or create drawer");
+
+        const totalBalance = drawer.current_balance || 0;
+
+        // Compute transfer balance (running balance that never goes below 0)
+        const { data: txns } = await supabase
+          .from("cash_drawer_transactions")
+          .select("amount, transaction_type")
+          .eq("record_id", record.id)
+          .in("transaction_type", ["transfer_in", "transfer_out"])
+          .order("created_at", { ascending: true });
+
+        let transferBalance = 0;
+        for (const t of txns || []) {
+          const amt = parseFloat(String(t.amount)) || 0;
+          if (t.transaction_type === "transfer_in") {
+            transferBalance += amt;
+          } else {
+            transferBalance = Math.max(0, transferBalance - amt);
+          }
+        }
+        transferBalance = roundMoney(transferBalance);
+
+        const cappedTransferBalance = Math.min(transferBalance, Math.max(0, totalBalance));
+        const regularBalance = roundMoney(Math.max(0, totalBalance - cappedTransferBalance));
+
+        sources.push({
+          id: drawer.id,
+          recordId: record.id,
+          label: "الخزنة",
+          balance: regularBalance,
+          txTypeExpense: "expense",
+          txTypeDeposit: "deposit",
+        });
+        sources.push({
+          id: drawer.id,
+          recordId: record.id,
+          label: "التحويلات",
+          balance: cappedTransferBalance,
+          txTypeExpense: "transfer_out",
+          txTypeDeposit: "transfer_in",
+        });
+      } else {
+        // ── Simple mode: single source ──
+        let { data: drawer, error: drawerError } = await supabase
+          .from("cash_drawers")
+          .select("*")
+          .eq("record_id", record.id)
+          .single();
+
+        if (drawerError && drawerError.code === "PGRST116") {
+          const { data: newDrawer, error: createError } = await supabase
+            .from("cash_drawers")
+            .insert({ record_id: record.id, current_balance: 0 })
+            .select()
+            .single();
+          if (createError) throw createError;
+          drawer = newDrawer;
+        } else if (drawerError) {
+          throw drawerError;
+        }
+
+        if (!drawer) throw new Error("Failed to get or create drawer");
+
+        sources.push({
+          id: drawer.id,
+          recordId: record.id,
+          label: record.name,
+          balance: drawer.current_balance || 0,
+          txTypeExpense: "expense",
+          txTypeDeposit: "deposit",
+        });
       }
 
-      if (!drawer) {
-        throw new Error("Failed to get or create drawer");
+      setBalanceSources(sources);
+      setSelectedSourceIndex(0);
+      if (sources.length > 0) {
+        setDrawerId(sources[0].id);
+        setCurrentBalance(sources[0].balance);
       }
-
-      setDrawerId(drawer.id);
-      setCurrentBalance(drawer.current_balance || 0);
     } catch (error) {
       console.error("Error fetching drawer data:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSourceChange = (index: number) => {
+    setSelectedSourceIndex(index);
+    const source = balanceSources[index];
+    if (source) {
+      setDrawerId(source.id);
+      setCurrentBalance(source.balance);
     }
   };
 
@@ -105,7 +275,8 @@ export default function ExpenseAdditionModal({
       return;
     }
 
-    if (!drawerId || !record?.id) {
+    const selectedSource = balanceSources[selectedSourceIndex];
+    if (!selectedSource || !record?.id) {
       alert("خطأ: لم يتم العثور على الدرج");
       return;
     }
@@ -115,22 +286,27 @@ export default function ExpenseAdditionModal({
       const isExpense = operationType === "expense";
       const balanceDelta = isExpense ? -parsedAmount : parsedAmount;
 
-      // Atomic balance update (prevents race conditions)
+      // Atomic balance update
       const { data: rpcResult, error: rpcErr } = await supabase.rpc(
         'atomic_adjust_drawer_balance' as any,
-        { p_drawer_id: drawerId, p_change: balanceDelta }
+        { p_drawer_id: selectedSource.id, p_change: balanceDelta }
       );
 
       if (rpcErr) throw rpcErr;
       const newBalance = rpcResult?.[0]?.new_balance ?? roundMoney(currentBalance + balanceDelta);
 
+      // Determine transaction type based on source
+      const transactionType = isExpense
+        ? selectedSource.txTypeExpense
+        : selectedSource.txTypeDeposit;
+
       // Create transaction record
       const { error: txnError } = await supabase
         .from("cash_drawer_transactions")
         .insert({
-          drawer_id: drawerId,
-          record_id: record.id,
-          transaction_type: isExpense ? "expense" : "deposit",
+          drawer_id: selectedSource.id,
+          record_id: selectedSource.recordId,
+          transaction_type: transactionType,
           amount: parsedAmount,
           balance_after: roundMoney(newBalance),
           notes: notes.trim(),
@@ -140,7 +316,7 @@ export default function ExpenseAdditionModal({
       if (txnError) {
         // Reverse balance change if transaction record fails
         await supabase.rpc('atomic_adjust_drawer_balance' as any, {
-          p_drawer_id: drawerId, p_change: -balanceDelta
+          p_drawer_id: selectedSource.id, p_change: -balanceDelta
         });
         throw txnError;
       }
@@ -161,6 +337,8 @@ export default function ExpenseAdditionModal({
       setIsProcessing(false);
     }
   };
+
+  const selectedSource = balanceSources[selectedSourceIndex];
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -216,7 +394,11 @@ export default function ExpenseAdditionModal({
                       <div className="bg-gradient-to-r from-blue-900/40 to-blue-800/20 rounded-xl p-4 mb-6 border border-blue-700/50">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-[var(--dash-text-muted)] text-sm mb-1">الرصيد الحالي</p>
+                            <p className="text-[var(--dash-text-muted)] text-sm mb-1">
+                              {balanceSources.length > 1 && selectedSource
+                                ? `رصيد ${selectedSource.label}`
+                                : "الرصيد الحالي"}
+                            </p>
                             <p className="text-2xl font-bold text-dash-accent-blue">
                               {currentBalance.toFixed(2)}
                             </p>
@@ -224,6 +406,44 @@ export default function ExpenseAdditionModal({
                           <BanknotesIcon className="h-12 w-12 text-dash-accent-blue/30" />
                         </div>
                       </div>
+
+                      {/* Source Selector — only when multiple sources */}
+                      {balanceSources.length > 1 && (
+                        <div className="mb-4">
+                          <label className="text-[var(--dash-text-muted)] text-sm block mb-2">مصدر الرصيد</label>
+                          <div className="flex flex-col gap-2">
+                            {balanceSources.map((source, index) => (
+                              <label
+                                key={`${source.recordId}-${index}`}
+                                onClick={() => handleSourceChange(index)}
+                                className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-2.5 border transition-colors ${
+                                  selectedSourceIndex === index
+                                    ? "bg-blue-900/30 border-dash-accent-blue"
+                                    : "bg-[var(--dash-bg-surface)] border-[var(--dash-border-default)] hover:border-[var(--dash-border-hover)]"
+                                }`}
+                              >
+                                <span className={`text-sm font-bold ${
+                                  selectedSourceIndex === index ? "text-dash-accent-blue" : "text-[var(--dash-text-muted)]"
+                                }`}>
+                                  {source.balance.toFixed(2)}
+                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm text-[var(--dash-text-secondary)]">
+                                    {source.label}
+                                  </span>
+                                  <input
+                                    type="radio"
+                                    name="balanceSource"
+                                    checked={selectedSourceIndex === index}
+                                    onChange={() => handleSourceChange(index)}
+                                    className="w-4 h-4 text-dash-accent-blue bg-[var(--dash-bg-raised)] border-[var(--dash-border-default)] focus:ring-[var(--dash-accent-blue)] focus:ring-2 cursor-pointer"
+                                  />
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Operation Type Tabs */}
                       <div className="flex gap-2 mb-6">

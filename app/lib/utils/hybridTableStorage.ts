@@ -46,7 +46,23 @@ const REPORT_TYPE_MAP = {
   'RECORD_TRANSACTION_DETAILS_REPORT': 'record_transaction_details',
   'RECORD_PAYMENTS_REPORT': 'record_payments',
   'TRANSFER_INVOICES_REPORT': 'transfer_invoices',
-  'TRANSFER_ITEMS_REPORT': 'transfer_items'
+  'TRANSFER_ITEMS_REPORT': 'transfer_items',
+  'USERS_REPORT': 'users',
+  'PAYMENT_METHODS_REPORT': 'payment_methods',
+  'RETURNS_REPORT': 'returns',
+  'PURCHASE_ITEMS_REPORT': 'purchase_items',
+  'PURCHASE_SUPPLIERS_REPORT': 'purchase_suppliers',
+  'PURCHASE_INVOICES_REPORT': 'purchase_invoices',
+  'CUSTOMER_BALANCES_REPORT': 'customer_balances',
+  'SUPPLIER_BALANCES_REPORT': 'supplier_balances',
+  'LOW_STOCK_REPORT': 'low_stock',
+  'INVENTORY_VALUATION_REPORT': 'inventory_valuation',
+  'SUPPLIERS_REPORT': 'suppliers',
+  'INVENTORY_REPORT': 'inventory',
+  'POS_PRODUCTS_REPORT': 'pos_products',
+  'PERMISSIONS_TEMPLATES_REPORT': 'permissions_templates',
+  'PERMISSIONS_ROLES_REPORT': 'permissions_roles',
+  'CASH_DRAWER_REPORT': 'cash_drawer'
 } as const;
 
 type ReportType = keyof typeof REPORT_TYPE_MAP;
@@ -76,7 +92,23 @@ class HybridTableStorage {
     RECORD_TRANSACTION_DETAILS_REPORT: 'pos-reports-record-transaction-details-table-config',
     RECORD_PAYMENTS_REPORT: 'pos-reports-record-payments-table-config',
     TRANSFER_INVOICES_REPORT: 'pos-transfer-invoices-table-config',
-    TRANSFER_ITEMS_REPORT: 'pos-transfer-items-table-config'
+    TRANSFER_ITEMS_REPORT: 'pos-transfer-items-table-config',
+    USERS_REPORT: 'pos-reports-users-table-config',
+    PAYMENT_METHODS_REPORT: 'pos-reports-payment-methods-table-config',
+    RETURNS_REPORT: 'pos-reports-returns-table-config',
+    PURCHASE_ITEMS_REPORT: 'pos-reports-purchase-items-table-config',
+    PURCHASE_SUPPLIERS_REPORT: 'pos-reports-purchase-suppliers-table-config',
+    PURCHASE_INVOICES_REPORT: 'pos-reports-purchase-invoices-table-config',
+    CUSTOMER_BALANCES_REPORT: 'pos-reports-customer-balances-table-config',
+    SUPPLIER_BALANCES_REPORT: 'pos-reports-supplier-balances-table-config',
+    LOW_STOCK_REPORT: 'pos-reports-low-stock-table-config',
+    INVENTORY_VALUATION_REPORT: 'pos-reports-inventory-valuation-table-config',
+    SUPPLIERS_REPORT: 'pos-reports-suppliers-table-config',
+    INVENTORY_REPORT: 'pos-reports-inventory-table-config',
+    POS_PRODUCTS_REPORT: 'pos-products-table-config',
+    PERMISSIONS_TEMPLATES_REPORT: 'pos-permissions-templates-table-config',
+    PERMISSIONS_ROLES_REPORT: 'pos-permissions-roles-table-config',
+    CASH_DRAWER_REPORT: 'pos-cash-drawer-table-config'
   } as const;
 
   private readonly CONFIG_VERSION = '2.1.0';

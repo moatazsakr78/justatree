@@ -964,6 +964,7 @@ export default function SuppliersPage() {
                   className="h-full w-full"
                   columns={visibleTableColumns}
                   data={filteredSuppliers}
+                  reportType="SUPPLIERS_REPORT"
                   selectedRowId={selectedSupplier?.id || null}
                   onRowClick={(supplier, index) => {
                     // Toggle selection: if already selected, deselect it

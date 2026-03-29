@@ -33,6 +33,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
   const systemCurrency = useSystemCurrency();
   const formatPrice = useFormatPrice();
   const [selectedTransaction, setSelectedTransaction] = useState(0) // First row selected (index 0)
+  const [selectedStatementRow, setSelectedStatementRow] = useState<number>(0)
   const [showCustomerDetails, setShowCustomerDetails] = useState(true)
   const [activeTab, setActiveTab] = useState('invoices') // 'invoices', 'payments', 'statement'
   const [viewMode, setViewMode] = useState<ViewMode>('split')
@@ -45,6 +46,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
   })
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const statementScrollRef = useRef<HTMLDivElement>(null)
+  const statementScrollPositionRef = useRef<number>(0)
 
   // Device Detection - Mobile and Tablet
   const [isTabletDevice, setIsTabletDevice] = useState(false)
@@ -817,6 +820,9 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
     if (statement.type !== 'فاتورة بيع' && statement.type !== 'مرتجع بيع') {
       return
     }
+
+    // Save scroll position before navigating to invoice details
+    statementScrollPositionRef.current = statementScrollRef.current?.scrollTop || 0
 
     // Find the index of this invoice in the invoice statements
     const index = invoiceStatements.findIndex(s => s.id === statement.id)
@@ -2063,6 +2069,18 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
       }
     }
   }, [selectedTransaction, sales])
+
+  // Restore statement scroll position when returning from invoice details
+  useEffect(() => {
+    if (!showStatementInvoiceDetails && statementScrollPositionRef.current > 0) {
+      const timer = setTimeout(() => {
+        if (statementScrollRef.current) {
+          statementScrollRef.current.scrollTop = statementScrollPositionRef.current
+        }
+      }, 50)
+      return () => clearTimeout(timer)
+    }
+  }, [showStatementInvoiceDetails])
 
   // Reset statement invoice details when changing tabs
   useEffect(() => {
@@ -4422,7 +4440,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                               <span className="text-[var(--dash-text-muted)]">لا توجد عمليات مسجلة</span>
                             </div>
                           ) : (
-                            <div className="flex-1 overflow-auto scrollbar-hide">
+                            <div ref={statementScrollRef} className="flex-1 overflow-auto scrollbar-hide">
                               <ResizableTable
                                 className="h-full w-full"
                                 columns={statementColumns}
@@ -4433,6 +4451,8 @@ export default function CustomerDetailsModal({ isOpen, onClose, customer }: Cust
                                   displayTime: item.date ? new Date(item.date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase() : '-',
                                   isFirstRow: idx === 0
                                 }))}
+                                selectedRowId={accountStatements[selectedStatementRow]?.id?.toString() || null}
+                                onRowClick={(_item: any, index: number) => setSelectedStatementRow(index)}
                                 onRowDoubleClick={handleStatementRowDoubleClick}
                                 reportType="CUSTOMER_STATEMENT_REPORT"
                               />

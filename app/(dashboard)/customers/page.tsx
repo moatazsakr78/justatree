@@ -958,6 +958,7 @@ export default function CustomersPage() {
                   className="h-full w-full"
                   columns={visibleTableColumns}
                   data={filteredCustomers}
+                  reportType="CUSTOMERS_REPORT"
                   selectedRowId={selectedCustomer?.id || null}
                   onRowClick={(customer, index) => {
                     // Toggle selection: if already selected, deselect it

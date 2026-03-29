@@ -125,6 +125,11 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
     isLoading: isLoadingMoreStatements
   })
 
+  // Statement row selection and scroll preservation
+  const [selectedStatementRow, setSelectedStatementRow] = useState<number>(0)
+  const statementScrollRef = useRef<HTMLDivElement>(null)
+  const statementScrollPositionRef = useRef<number>(0)
+
   // Statement invoice details state
   const [showStatementInvoiceDetails, setShowStatementInvoiceDetails] = useState(false)
   const [selectedStatementInvoice, setSelectedStatementInvoice] = useState<any>(null)
@@ -730,6 +735,9 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       return
     }
 
+    // Save scroll position before navigating to invoice details
+    statementScrollPositionRef.current = statementScrollRef.current?.scrollTop || 0
+
     // Find the index of this invoice in the invoice statements
     const index = invoiceStatements.findIndex(s => s.id === statement.id)
     if (index !== -1) {
@@ -1130,6 +1138,18 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       }
     }
   }, [selectedTransaction, purchaseInvoices])
+
+  // Restore statement scroll position when returning from invoice details
+  useEffect(() => {
+    if (!showStatementInvoiceDetails && statementScrollPositionRef.current > 0) {
+      const timer = setTimeout(() => {
+        if (statementScrollRef.current) {
+          statementScrollRef.current.scrollTop = statementScrollPositionRef.current
+        }
+      }, 50)
+      return () => clearTimeout(timer)
+    }
+  }, [showStatementInvoiceDetails])
 
   // Reset statement invoice details when changing tabs
   useEffect(() => {
@@ -3597,7 +3617,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                         </div>
                       </div>
                     ) : (
-                      <div className="flex-1 overflow-auto scrollbar-hide">
+                      <div ref={statementScrollRef} className="flex-1 overflow-auto scrollbar-hide">
                         {isLoadingStatements ? (
                           <div className="flex items-center justify-center h-full">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue mr-3"></div>
@@ -3619,6 +3639,8 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
                                 displayTime: item.date ? new Date(item.date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase() : '-',
                                 isFirstRow: idx === 0
                               }))}
+                              selectedRowId={accountStatements[selectedStatementRow]?.id?.toString() || null}
+                              onRowClick={(_item: any, index: number) => setSelectedStatementRow(index)}
                               onRowDoubleClick={handleStatementRowDoubleClick}
                               reportType="SUPPLIER_STATEMENT_REPORT"
                             />

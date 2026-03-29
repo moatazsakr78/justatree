@@ -32,12 +32,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const formatPrice = useFormatPrice();
   const { user } = useAuth();
   const [selectedTransaction, setSelectedTransaction] = useState(0) // First row selected (index 0)
+  const [selectedStatementRow, setSelectedStatementRow] = useState<number>(0)
   const [showSafeDetails, setShowSafeDetails] = useState(true)
   const [activeTab, setActiveTab] = useState('transactions') // 'transactions', 'payments', 'statement'
   const [viewMode, setViewMode] = useState<ViewMode>('split')
   const [dividerPosition, setDividerPosition] = useState(50) // Percentage
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const statementScrollRef = useRef<HTMLDivElement>(null)
+  const statementScrollPositionRef = useRef<number>(0)
 
   // Device Detection - Mobile and Tablet
   const [isTabletDevice, setIsTabletDevice] = useState(false)
@@ -588,6 +591,18 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   }
 
   // Load all safes for name mapping when operations tab is opened
+  // Restore statement scroll position when returning from invoice details
+  useEffect(() => {
+    if (!showStatementInvoiceDetails && statementScrollPositionRef.current > 0) {
+      const timer = setTimeout(() => {
+        if (statementScrollRef.current) {
+          statementScrollRef.current.scrollTop = statementScrollPositionRef.current
+        }
+      }, 50)
+      return () => clearTimeout(timer)
+    }
+  }, [showStatementInvoiceDetails])
+
   useEffect(() => {
     if (isOpen && activeTab === 'operations' && allSafes.length === 0) {
       loadAllSafes()
@@ -783,6 +798,9 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
     if (statement.type !== 'فاتورة بيع' && statement.type !== 'مرتجع بيع') {
       return
     }
+
+    // Save scroll position before navigating to invoice details
+    statementScrollPositionRef.current = statementScrollRef.current?.scrollTop || 0
 
     // Find the index of this invoice in the invoice statements
     const index = invoiceStatements.findIndex(s => s.id === statement.id)
@@ -4793,11 +4811,14 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                               <p className="text-[var(--dash-text-disabled)] text-sm">سيتم عرض العمليات هنا عند إجرائها</p>
                             </div>
                           ) : (
-                            <div className="flex-1 overflow-auto scrollbar-hide">
+                            <div ref={statementScrollRef} className="flex-1 overflow-auto scrollbar-hide">
                               <ResizableTable
                                 className="h-full w-full"
                                 columns={statementColumns}
                                 data={recalculatedStatements}
+                                reportType="RECORD_STATEMENT_REPORT"
+                                selectedRowId={recalculatedStatements[selectedStatementRow]?.id?.toString() || null}
+                                onRowClick={(_item: any, index: number) => setSelectedStatementRow(index)}
                                 onRowDoubleClick={handleStatementRowDoubleClick}
                                 onRowContextMenu={handleStatementContextMenu}
                               />
@@ -4849,6 +4870,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             className="h-full w-full"
                             columns={transactionColumns}
                             data={allTransactions}
+                            reportType="RECORD_TRANSACTIONS_REPORT"
                             selectedRowId={allTransactions[selectedTransaction]?.id?.toString() || null}
                             onRowClick={(transaction: any, index: number) => setSelectedTransaction(index)}
                           />
@@ -4915,6 +4937,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             className="h-full w-full"
                             columns={transactionDetailsColumns}
                             data={allTransactionItems}
+                            reportType="RECORD_TRANSACTION_DETAILS_REPORT"
                             getRowClassName={(item) =>
                               highlightedProductId === item.product?.id
                                 ? 'bg-yellow-500/30 hover:bg-yellow-500/40'
@@ -4960,6 +4983,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                             className="h-full w-full"
                             columns={paymentsColumns}
                             data={transfers}
+                            reportType="RECORD_PAYMENTS_REPORT"
                           />
                           {/* Sentinel element for infinite scroll */}
                           <div ref={transfersSentinelRef} className="h-4" />
@@ -5041,6 +5065,7 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                         <div className="flex-1 overflow-auto scrollbar-hide">
                           <ResizableTable
                             className="h-full w-full"
+                            reportType="CASH_DRAWER_REPORT"
                             columns={[
                               {
                                 id: 'index',

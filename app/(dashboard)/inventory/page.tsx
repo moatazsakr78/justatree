@@ -1751,6 +1751,7 @@ export default function InventoryPage() {
                   className="h-full w-full"
                   columns={dynamicTableColumns}
                   data={visibleProducts}
+                  reportType="INVENTORY_REPORT"
                   selectedRowId={selectedProduct?.id || null}
                   onRowClick={(item, index) => {
                     // Toggle selection: if already selected, deselect it

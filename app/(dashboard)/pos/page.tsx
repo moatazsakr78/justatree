@@ -6484,6 +6484,7 @@ function POSPageContent() {
                         className="h-full w-full"
                         columns={visibleTableColumns}
                         data={filteredProducts}
+                        reportType="POS_PRODUCTS_REPORT"
                         onRowClick={(product, index) => {
                           handleProductClick(product);
                         }}
