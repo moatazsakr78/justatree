@@ -71,6 +71,16 @@ export default function SafeAutomationBadges({
   }
 
   const handleExecuteNow = async (id: string) => {
+    const auto = automations.find(a => a.id === id)
+    if (!auto) return
+
+    const confirmWord = OPERATION_LABELS[auto.operation_type] || 'سحب'
+    const input = prompt(`هذا الإجراء سينفذ عملية ${confirmWord} فوراً.\n\nاكتب "${confirmWord}" للتأكيد:`)
+    if (input !== confirmWord) {
+      if (input !== null) alert('الكلمة غير صحيحة. تم إلغاء العملية.')
+      return
+    }
+
     setIsExecuting(id)
     try {
       await onExecuteNow(id)
