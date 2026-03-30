@@ -17,6 +17,9 @@ import { useInfiniteStatements, type StatementItem } from '../lib/hooks/useInfin
 import { useInfiniteTransactions } from '../lib/hooks/useInfiniteTransactions'
 import { useScrollDetection } from '../lib/hooks/useScrollDetection'
 import { useInfiniteSafeInvoices } from '../lib/hooks/useInfiniteSafeInvoices'
+import { useSafeAutomations, type SafeAutomation } from '../lib/hooks/useSafeAutomations'
+import SafeAutomationDialog from './SafeAutomationDialog'
+import SafeAutomationBadges from './SafeAutomationBadges'
 
 interface SafeDetailsModalProps {
   isOpen: boolean
@@ -141,6 +144,11 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
   const [withdrawSourceId, setWithdrawSourceId] = useState<string>('')
   const [showWithdrawSuggestions, setShowWithdrawSuggestions] = useState(false)
   const [withdrawAllMode, setWithdrawAllMode] = useState<'full' | 'excluding_reserves' | null>(null)
+
+  // Automation state
+  const [showAutomationDialog, setShowAutomationDialog] = useState(false)
+  const [editingAutomation, setEditingAutomation] = useState<SafeAutomation | null>(null)
+  const { automations, createAutomation, updateAutomation, deleteAutomation, toggleActive, executeNow, refresh: refreshAutomations } = useSafeAutomations(safe?.id || null)
 
   // Operations tab state
   const [operationsTypeFilter, setOperationsTypeFilter] = useState<string>('all')
@@ -3464,6 +3472,15 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                       <span className="text-base">💰</span>
                       <span className="text-[10px] font-medium">سحب</span>
                     </button>
+
+                    {/* Automation Button */}
+                    <button
+                      onClick={() => { setEditingAutomation(null); loadAllSafes(); setShowAutomationDialog(true) }}
+                      className="bg-[var(--dash-bg-surface)] border border-dash-accent-cyan/40 hover:brightness-[0.88] text-dash-accent-cyan rounded-lg px-3 py-2 flex flex-col items-center justify-center transition-colors"
+                    >
+                      <span className="text-base">⏰</span>
+                      <span className="text-[10px] font-medium">أتمتة</span>
+                    </button>
                   </div>
 
                   {/* Expandable Content */}
@@ -4161,6 +4178,16 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                     <span className="text-sm">سحب الخزنة</span>
                   </button>
 
+                  <button
+                    onClick={() => { setEditingAutomation(null); loadAllSafes(); setShowAutomationDialog(true) }}
+                    className="flex flex-col items-center p-2 text-dash-accent-cyan hover:text-dash-accent-cyan cursor-pointer min-w-[80px] transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-sm">أتمتة</span>
+                  </button>
+
                 </div>
 
                 {/* Tab Navigation - Same row */}
@@ -4588,6 +4615,19 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
                   </div>
                 </div>
               </div>
+
+              {/* Automation Badges */}
+              {automations.length > 0 && (
+                <div className="px-4 py-2 border-b border-[var(--dash-border-subtle)]">
+                  <SafeAutomationBadges
+                    automations={automations}
+                    onEdit={(auto) => { setEditingAutomation(auto); loadAllSafes(); setShowAutomationDialog(true) }}
+                    onToggleActive={async (id) => { await toggleActive(id); refreshAutomations() }}
+                    onDelete={async (id) => { await deleteAutomation(id) }}
+                    onExecuteNow={async (id) => { await executeNow(id); onSafeUpdated?.() }}
+                  />
+                </div>
+              )}
 
               {/* Conditional Content Based on Active Tab and View Mode */}
               <div className="flex-1 overflow-y-auto scrollbar-hide relative">
@@ -5630,6 +5670,21 @@ export default function SafeDetailsModal({ isOpen, onClose, safe, additionalSafe
         onInvoiceUpdated={handleInvoiceUpdated}
         saleId={statementToEdit?.sale_id || null}
         initialRecordId={safe?.id}  // الخزنة الحالية هي الخزنة المعروضة
+      />
+
+      {/* Safe Automation Dialog */}
+      <SafeAutomationDialog
+        isOpen={showAutomationDialog}
+        onClose={() => { setShowAutomationDialog(false); setEditingAutomation(null) }}
+        safe={safe}
+        childSafes={childSafes}
+        allSafes={allSafes}
+        mainSafeOwnBalance={mainSafeOwnBalance}
+        nonDrawerTransferBalance={nonDrawerTransferBalance}
+        editing={editingAutomation}
+        onSave={async (data) => { await createAutomation(data); refreshAutomations() }}
+        onUpdate={async (id, data) => { await updateAutomation(id, data); refreshAutomations() }}
+        userName={user?.name}
       />
     </>
   )
