@@ -5,7 +5,8 @@ import {
   getCustomSections,
   getCompanySettings,
   getStoreTheme,
-  getProductDisplaySettings
+  getProductDisplaySettings,
+  getActiveWebsiteTheme
 } from '@/lib/data/products';
 
 /**
@@ -37,14 +38,16 @@ export default async function HomePage() {
     sections,
     settings,
     theme,
-    displaySettings
+    displaySettings,
+    websiteThemeId
   ] = await Promise.all([
     getWebsiteProducts(),
     getStoreCategoriesWithProducts(),
     getCustomSections(),
     getCompanySettings(),
     getStoreTheme(),
-    getProductDisplaySettings()
+    getProductDisplaySettings(),
+    getActiveWebsiteTheme()
   ]);
 
   // Pass pre-fetched data to client component
@@ -60,6 +63,7 @@ export default async function HomePage() {
         theme,
         display: displaySettings
       }}
+      websiteThemeId={websiteThemeId}
     />
   );
 }

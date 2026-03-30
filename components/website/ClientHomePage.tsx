@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, ComponentType } from 'react';
 import { detectDeviceClient, DeviceInfo } from '@/lib/device-detection';
-import { ACTIVE_TEMPLATE } from '@/template.config';
-// Import template components dynamically based on active template
-import { DesktopHome, TabletHome, MobileHome } from '@/templates/default';
+import { getThemeLoader } from '@/templates/_shared/ThemeRegistry';
+import type { ThemeHomeProps } from '@/templates/_shared/ThemeContract';
 import { useRealCart } from '@/lib/useRealCart';
 import { useAuth } from '@/lib/useAuth';
 import { UserInfo } from '@/components/website/shared/types';
@@ -14,24 +12,31 @@ import { PreFetchedDataProvider } from '@/lib/contexts/PreFetchedDataContext';
 
 /**
  * Client-side wrapper for the home page
- * Handles device detection and cart management
+ * Handles device detection, cart management, and dynamic theme loading
  * Receives pre-fetched data from Server Component for better performance
  */
 interface ClientHomePageProps {
-  // Pre-fetched data from server (for initial render)
   initialProducts?: any[];
   initialCategories?: any[];
   initialSections?: any[];
   initialSettings?: any;
+  websiteThemeId?: string;
 }
+
+// Cache loaded theme components to avoid re-importing on re-renders
+const themeCache: Record<string, {
+  DesktopHome: ComponentType<ThemeHomeProps>;
+  TabletHome: ComponentType<ThemeHomeProps>;
+  MobileHome: ComponentType<ThemeHomeProps>;
+}> = {};
 
 export default function ClientHomePage({
   initialProducts = [],
   initialCategories = [],
   initialSections = [],
-  initialSettings = null
+  initialSettings = null,
+  websiteThemeId = 'default'
 }: ClientHomePageProps) {
-  const router = useRouter();
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>({
     type: 'desktop',
     userAgent: '',
@@ -40,6 +45,12 @@ export default function ClientHomePage({
     isDesktop: true
   });
   const [isClient, setIsClient] = useState(false);
+  const [themeComponents, setThemeComponents] = useState<{
+    DesktopHome: ComponentType<ThemeHomeProps>;
+    TabletHome: ComponentType<ThemeHomeProps>;
+    MobileHome: ComponentType<ThemeHomeProps>;
+  } | null>(themeCache[websiteThemeId] || null);
+  const [themeError, setThemeError] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: '1',
     name: 'عميل تجريبي',
@@ -52,10 +63,60 @@ export default function ClientHomePage({
     userId: user?.id || null
   });
 
+  // Load theme components dynamically
   useEffect(() => {
-    // Set client flag first
+    // Already cached
+    if (themeCache[websiteThemeId]) {
+      setThemeComponents(themeCache[websiteThemeId]);
+      return;
+    }
+
+    const loadTheme = async () => {
+      const loader = getThemeLoader(websiteThemeId);
+      if (!loader) {
+        console.error(`Theme "${websiteThemeId}" not found in registry, falling back to default`);
+        // Fallback to default
+        const defaultLoader = getThemeLoader('default');
+        if (defaultLoader) {
+          try {
+            const mod = await defaultLoader();
+            themeCache['default'] = mod;
+            setThemeComponents(mod);
+          } catch (err) {
+            console.error('Failed to load default theme:', err);
+            setThemeError(true);
+          }
+        }
+        return;
+      }
+
+      try {
+        const mod = await loader();
+        themeCache[websiteThemeId] = mod;
+        setThemeComponents(mod);
+      } catch (err) {
+        console.error(`Failed to load theme "${websiteThemeId}":`, err);
+        // Fallback to default on error
+        const defaultLoader = getThemeLoader('default');
+        if (defaultLoader && websiteThemeId !== 'default') {
+          try {
+            const defaultMod = await defaultLoader();
+            themeCache['default'] = defaultMod;
+            setThemeComponents(defaultMod);
+          } catch {
+            setThemeError(true);
+          }
+        } else {
+          setThemeError(true);
+        }
+      }
+    };
+
+    loadTheme();
+  }, [websiteThemeId]);
+
+  useEffect(() => {
     setIsClient(true);
-    // Client-side device detection
     const detected = detectDeviceClient();
     setDeviceInfo(detected);
   }, []);
@@ -75,7 +136,7 @@ export default function ClientHomePage({
     }
   }, [isClient, refreshCart]);
 
-  // Add effect to refresh cart when component mounts or becomes visible
+  // Refresh cart on focus/visibility
   useEffect(() => {
     const handleFocus = () => {
       refreshCart();
@@ -111,7 +172,6 @@ export default function ClientHomePage({
     category: ''
   }));
 
-  // Calculate cart count from real cart data
   const realCartCount = getCartItemsCount();
 
   const updatedUserInfo = {
@@ -119,12 +179,25 @@ export default function ClientHomePage({
     id: isAuthenticated ? user?.id || '1' : '1',
     name: isAuthenticated ? user?.name || 'عميل مسجل' : 'عميل تجريبي',
     email: isAuthenticated ? user?.email || 'user@example.com' : 'customer@example.com',
-    cart: compatibleCart, // Compatible cart data format
-    cartCount: realCartCount // Real cart count for display
+    cart: compatibleCart,
+    cartCount: realCartCount
   };
 
-  // Show loading screen during hydration to prevent mismatch
-  if (!isClient) {
+  const cartCallbacks = {
+    onCartUpdate: handleCartUpdate,
+    onRemoveFromCart: (productId: string | number) => {
+      const item = cart.find(item => item.product_id === String(productId));
+      if (item) removeFromCart(item.id);
+    },
+    onUpdateQuantity: (productId: string | number, quantity: number) => {
+      const item = cart.find(item => item.product_id === String(productId));
+      if (item) updateQuantity(item.id, quantity);
+    },
+    onClearCart: clearCart
+  };
+
+  // Show loading screen during hydration or theme loading
+  if (!isClient || !themeComponents) {
     return (
       <CartProvider>
         <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#c0c0c0'}}>
@@ -136,6 +209,26 @@ export default function ClientHomePage({
       </CartProvider>
     );
   }
+
+  if (themeError) {
+    return (
+      <CartProvider>
+        <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#c0c0c0'}}>
+          <div className="text-center">
+            <p className="text-red-600 text-lg mb-2">حدث خطأ في تحميل القالب</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              إعادة المحاولة
+            </button>
+          </div>
+        </div>
+      </CartProvider>
+    );
+  }
+
+  const { DesktopHome, TabletHome, MobileHome } = themeComponents;
 
   // Render appropriate component based on device type
   return (
@@ -154,16 +247,7 @@ export default function ClientHomePage({
         return (
           <MobileHome
             userInfo={updatedUserInfo}
-            onCartUpdate={handleCartUpdate}
-            onRemoveFromCart={(productId: string | number) => {
-              const item = cart.find(item => item.product_id === String(productId));
-              if (item) removeFromCart(item.id);
-            }}
-            onUpdateQuantity={(productId: string | number, quantity: number) => {
-              const item = cart.find(item => item.product_id === String(productId));
-              if (item) updateQuantity(item.id, quantity);
-            }}
-            onClearCart={clearCart}
+            {...cartCallbacks}
           />
         );
 
@@ -171,16 +255,7 @@ export default function ClientHomePage({
         return (
           <TabletHome
             userInfo={updatedUserInfo}
-            onCartUpdate={handleCartUpdate}
-            onRemoveFromCart={(productId: string | number) => {
-              const item = cart.find(item => item.product_id === String(productId));
-              if (item) removeFromCart(item.id);
-            }}
-            onUpdateQuantity={(productId: string | number, quantity: number) => {
-              const item = cart.find(item => item.product_id === String(productId));
-              if (item) updateQuantity(item.id, quantity);
-            }}
-            onClearCart={clearCart}
+            {...cartCallbacks}
           />
         );
 
@@ -189,16 +264,7 @@ export default function ClientHomePage({
         return (
           <DesktopHome
             userInfo={updatedUserInfo}
-            onCartUpdate={handleCartUpdate}
-            onRemoveFromCart={(productId: string | number) => {
-              const item = cart.find(item => item.product_id === String(productId));
-              if (item) removeFromCart(item.id);
-            }}
-            onUpdateQuantity={(productId: string | number, quantity: number) => {
-              const item = cart.find(item => item.product_id === String(productId));
-              if (item) updateQuantity(item.id, quantity);
-            }}
-            onClearCart={clearCart}
+            {...cartCallbacks}
           />
         );
           }

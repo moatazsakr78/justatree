@@ -634,6 +634,31 @@ export async function getProductDisplaySettings() {
 }
 
 /**
+ * Get active website theme ID
+ * Returns the theme_id string (folder name) of the currently active layout theme
+ */
+export async function getActiveWebsiteTheme(): Promise<string> {
+  try {
+    const { data, error } = await (supabase as any)
+      .from('website_themes')
+      .select('theme_id')
+      .eq('is_active', true)
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching active website theme:', error);
+      return 'default';
+    }
+
+    return data?.theme_id || 'default';
+  } catch (err) {
+    console.error('Error in getActiveWebsiteTheme:', err);
+    return 'default';
+  }
+}
+
+/**
  * Get catalog products for the public catalog page
  * Only returns products with name and quantity_per_carton > 0
  * Supports Static Generation with ISR

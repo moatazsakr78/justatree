@@ -10,6 +10,7 @@ import {
   BuildingOfficeIcon,
   PhotoIcon,
   BuildingStorefrontIcon,
+  ComputerDesktopIcon,
   KeyIcon,
   EyeIcon,
   EyeSlashIcon,
@@ -30,6 +31,7 @@ import { useRatingsDisplay } from '@/lib/hooks/useRatingSettings';
 import { useStoreDisplaySettings } from '@/lib/hooks/useStoreDisplaySettings';
 import { useCompanySettings } from '@/lib/hooks/useCompanySettings';
 import { useStoreThemes } from '@/lib/hooks/useStoreTheme';
+import { useWebsiteThemes } from '@/lib/hooks/useWebsiteThemes';
 import { supabase } from '@/app/lib/supabase/client';
 import { clearSettingsCache } from '@/lib/hooks/useProductFilter';
 import LogoEditor from '@/app/components/LogoEditor';
@@ -222,6 +224,12 @@ const settingsCategories: SettingsCategory[] = [
     icon: SwatchIcon,
     description: 'تخصيص مظهر وألوان النظام'
   },
+  {
+    id: 'website-template',
+    name: 'مظهر المتجر',
+    icon: ComputerDesktopIcon,
+    description: 'اختيار وإدارة قالب تصميم الموقع الإلكتروني'
+  },
 ];
 
 
@@ -307,6 +315,11 @@ export default function SettingsPage() {
     deleteTheme,
     updateTheme
   } = useStoreThemes();
+
+  // Website themes management
+  const { themes: websiteThemes, isLoading: isLoadingWebsiteThemes, activateTheme: activateWebsiteTheme, deleteTheme: deleteWebsiteTheme } = useWebsiteThemes();
+  const [activatingWebsiteThemeId, setActivatingWebsiteThemeId] = useState<string | null>(null);
+  const [deletingWebsiteThemeId, setDeletingWebsiteThemeId] = useState<string | null>(null);
 
   // Local state for pending changes (not saved until user clicks save)
   const [companyName, setCompanyName] = useState(dbCompanyName);
@@ -2166,6 +2179,157 @@ export default function SettingsPage() {
     );
   };
 
+  const renderWebsiteTemplateSettings = () => {
+    const handleActivate = async (themeId: string) => {
+      setActivatingWebsiteThemeId(themeId);
+      try {
+        await activateWebsiteTheme(themeId);
+        // Revalidate ISR pages so the new theme loads
+        await revalidateAll();
+        alert('تم تفعيل القالب بنجاح! سيتم تحديث الموقع خلال لحظات.');
+      } catch (error) {
+        console.error('Error activating website theme:', error);
+        alert('حدث خطأ أثناء تفعيل القالب');
+      } finally {
+        setActivatingWebsiteThemeId(null);
+      }
+    };
+
+    const handleDelete = async (themeId: string, themeName: string) => {
+      if (!confirm(`هل أنت متأكد من حذف القالب "${themeName}"؟`)) return;
+      setDeletingWebsiteThemeId(themeId);
+      try {
+        await deleteWebsiteTheme(themeId);
+        alert('تم حذف القالب بنجاح');
+      } catch (error: any) {
+        console.error('Error deleting website theme:', error);
+        alert(error.message || 'حدث خطأ أثناء حذف القالب');
+      } finally {
+        setDeletingWebsiteThemeId(null);
+      }
+    };
+
+    if (isLoadingWebsiteThemes) {
+      return (
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent-blue"></div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6 max-w-4xl">
+        <h3 className="text-[var(--dash-text-primary)] font-medium text-lg mb-2">قالب الموقع الإلكتروني</h3>
+        <p className="text-sm text-[var(--dash-text-muted)] mb-6">
+          اختر قالب التصميم للموقع الإلكتروني. كل قالب يوفر شكل مختلف تماماً للموقع مع الحفاظ على نفس الوظائف.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {websiteThemes.map((theme) => {
+            const isActive = theme.is_active;
+            const isActivating = activatingWebsiteThemeId === theme.id;
+            const isDeleting = deletingWebsiteThemeId === theme.id;
+
+            return (
+              <div
+                key={theme.id}
+                className={`relative rounded-xl border-2 transition-all overflow-hidden ${
+                  isActive
+                    ? 'border-[var(--dash-accent-blue)] bg-[var(--dash-accent-blue-subtle)]'
+                    : 'border-[var(--dash-border-default)] hover:border-[var(--dash-border-strong)] bg-[var(--dash-bg-raised)]'
+                }`}
+              >
+                {/* Thumbnail */}
+                <div className="w-full h-40 bg-[var(--dash-bg-overlay)] flex items-center justify-center overflow-hidden">
+                  {theme.thumbnail_url ? (
+                    <img
+                      src={theme.thumbnail_url}
+                      alt={theme.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <ComputerDesktopIcon className="w-16 h-16 text-[var(--dash-text-disabled)]" />
+                  )}
+                </div>
+
+                {/* Active badge */}
+                {isActive && (
+                  <div className="absolute top-3 left-3">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-[var(--dash-accent-blue)] text-white text-xs font-medium rounded-full">
+                      <CheckCircleIcon className="w-3.5 h-3.5" />
+                      نشط
+                    </span>
+                  </div>
+                )}
+
+                {/* Content */}
+                <div className="p-4">
+                  <h4 className="text-[var(--dash-text-primary)] font-medium text-base">{theme.name}</h4>
+                  <p className="text-[var(--dash-text-muted)] text-xs mt-1">{theme.description || 'بدون وصف'}</p>
+
+                  {/* Actions */}
+                  <div className="flex gap-2 mt-4">
+                    {!isActive && (
+                      <button
+                        onClick={() => handleActivate(theme.id)}
+                        disabled={isActivating}
+                        className="flex-1 px-3 py-1.5 text-xs font-medium bg-dash-accent-blue text-white rounded hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-1"
+                      >
+                        {isActivating ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                            جاري التفعيل...
+                          </>
+                        ) : (
+                          'تفعيل القالب'
+                        )}
+                      </button>
+                    )}
+                    {!isActive && (
+                      <button
+                        onClick={() => handleDelete(theme.id, theme.name)}
+                        disabled={isDeleting}
+                        className="px-3 py-1.5 text-xs font-medium text-[var(--dash-accent-red)] border border-[var(--dash-accent-red)] rounded hover:bg-[var(--dash-accent-red)] hover:text-white transition-all disabled:opacity-50"
+                      >
+                        {isDeleting ? '...' : 'حذف'}
+                      </button>
+                    )}
+                    {isActive && (
+                      <span className="flex-1 text-center px-3 py-1.5 text-xs font-medium text-[var(--dash-accent-blue)]">
+                        القالب النشط حالياً
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {websiteThemes.length === 0 && (
+          <div className="text-center py-10 text-[var(--dash-text-muted)]">
+            <ComputerDesktopIcon className="w-12 h-12 mx-auto mb-3 text-[var(--dash-text-disabled)]" />
+            <p>لا توجد قوالب متاحة</p>
+          </div>
+        )}
+
+        <div className="p-4 bg-dash-accent-blue-subtle border border-dash-accent-blue rounded-lg">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-dash-accent-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-dash-accent-blue text-sm font-medium">ملاحظة</p>
+              <p className="text-[var(--dash-text-muted)] text-xs mt-1">
+                عند تغيير القالب سيتم تحديث شكل الموقع الإلكتروني بالكامل. ألوان المتجر (في قسم "المظهر") تعمل مع أي قالب.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderAppearanceSettings = () => {
     const { getSetting, updateSettings: updateSystemSettings } = useSystemSettings();
     const currentTheme = getSetting<string>('ui.dashboard_theme', 'modern');
@@ -2294,6 +2458,8 @@ export default function SettingsPage() {
         return renderCompanySettings();
       case 'store':
         return renderStoreSettings();
+      case 'website-template':
+        return renderWebsiteTemplateSettings();
       case 'security':
         return renderSecuritySettings();
       case 'backup':

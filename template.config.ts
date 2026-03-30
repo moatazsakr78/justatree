@@ -1,18 +1,15 @@
 /**
- * Template Configuration
+ * @deprecated This file is deprecated.
+ * Website themes are now managed via the database (website_themes table)
+ * and loaded dynamically through templates/_shared/ThemeRegistry.ts
  *
- * This file controls which template is active for the store.
- * Templates allow complete customization of the store design
- * while keeping the engine logic separate.
- *
- * IMPORTANT: This file should NOT be changed during git rebase
- * to preserve your custom template selection.
+ * To change the active theme, use the Settings page → "قالب الموقع"
+ * or update the website_themes table in the database.
  */
 
-// Active template name - change this to switch templates
+// Kept for backward compatibility - not used by the theme system anymore
 export const ACTIVE_TEMPLATE = 'default';
 
-// Template metadata type
 export interface TemplateInfo {
   name: string;
   description: string;
@@ -20,7 +17,6 @@ export interface TemplateInfo {
   version?: string;
 }
 
-// Available templates registry
 export const TEMPLATES: Record<string, TemplateInfo> = {
   default: {
     name: 'Default Template',
@@ -29,18 +25,3 @@ export const TEMPLATES: Record<string, TemplateInfo> = {
     version: '1.0.0'
   }
 };
-
-/**
- * Get template components dynamically
- * Use this function to load template components at runtime
- */
-export async function getTemplateComponents() {
-  return import(`./templates/${ACTIVE_TEMPLATE}`);
-}
-
-/**
- * Get current template info
- */
-export function getCurrentTemplateInfo(): TemplateInfo {
-  return TEMPLATES[ACTIVE_TEMPLATE] || TEMPLATES.default;
-}
