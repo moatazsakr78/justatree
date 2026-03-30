@@ -301,7 +301,7 @@ export default function ExpenseAdditionModal({
         : selectedSource.txTypeDeposit;
 
       // Create transaction record
-      const { error: txnError } = await supabase
+      const { data: txnData, error: txnError } = await supabase
         .from("cash_drawer_transactions")
         .insert({
           drawer_id: selectedSource.id,
@@ -311,7 +311,9 @@ export default function ExpenseAdditionModal({
           balance_after: roundMoney(newBalance),
           notes: notes.trim(),
           performed_by: user?.name || user?.email || "user",
-        });
+        })
+        .select('id')
+        .single();
 
       if (txnError) {
         // Reverse balance change if transaction record fails
@@ -319,6 +321,27 @@ export default function ExpenseAdditionModal({
           p_drawer_id: selectedSource.id, p_change: -balanceDelta
         });
         throw txnError;
+      }
+
+      // Also create expense record for tracking (only for expense operations)
+      if (isExpense && txnData) {
+        const DEFAULT_MISC_CATEGORY_ID = 'a0000001-0000-0000-0000-000000000000';
+        await supabase
+          .from("expenses")
+          .insert({
+            amount: parsedAmount,
+            description: notes.trim(),
+            category_id: DEFAULT_MISC_CATEGORY_ID,
+            record_id: selectedSource.recordId,
+            drawer_id: selectedSource.id,
+            transaction_id: (txnData as any).id,
+            user_id: (user as any)?.id || null,
+            performed_by: user?.name || user?.email || "user",
+            status: 'completed',
+          } as any)
+          .then(({ error: expErr }) => {
+            if (expErr) console.error('Failed to create expense record:', expErr);
+          });
       }
 
       const label = isExpense ? "مصروفات" : "إضافه";

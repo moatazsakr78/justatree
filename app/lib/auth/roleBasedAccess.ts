@@ -50,6 +50,7 @@ export const rolePermissions: Record<UserRole, string[]> = {
     '/suppliers',
     '/whatsapp',
     '/safes',
+    '/expenses',
     '/reports',
     '/activity-logs',
     '/permissions',
@@ -77,6 +78,7 @@ export const rolePermissions: Record<UserRole, string[]> = {
     '/suppliers',
     '/whatsapp', // محادثات واتساب
     '/safes',
+    '/expenses',
     '/reports',
     '/activity-logs',
     '/permissions', // الصلاحيات (للأدمن الرئيسي فقط)

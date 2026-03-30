@@ -18,7 +18,8 @@ import {
   ClipboardDocumentListIcon,
   ClipboardDocumentCheckIcon,
   CogIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  ReceiptPercentIcon
 } from '@heroicons/react/24/outline'
 import { hasPageAccess, type UserRole } from '@/app/lib/auth/roleBasedAccess'
 import { usePermissionsContext } from '@/lib/contexts/PermissionsContext'
@@ -34,6 +35,7 @@ const allSidebarItems = [
   { href: '/customer-orders', label: 'طلبات العملاء', icon: ClipboardDocumentListIcon },
   { href: '/whatsapp', label: 'محادثات واتساب', icon: ChatBubbleLeftRightIcon },
   { href: '/safes', label: 'الخزن', icon: BanknotesIcon },
+  { href: '/expenses', label: 'المصروفات', icon: ReceiptPercentIcon },
   { href: '/reports', label: 'التقارير', icon: ChartBarIcon },
   { href: '/activity-logs', label: 'سجل النشاط', icon: ClipboardDocumentCheckIcon },
   { href: '/permissions', label: 'الصلاحيات', icon: ShieldCheckIcon },

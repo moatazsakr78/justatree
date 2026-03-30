@@ -213,6 +213,7 @@ export const PAGE_ACCESS_MAP: Record<string, string> = {
   '/customer-orders': 'page_access.customer_orders',
   '/whatsapp': 'page_access.whatsapp',
   '/safes': 'page_access.safes',
+  '/expenses': 'page_access.expenses',
   '/reports': 'page_access.reports',
   '/permissions': 'page_access.permissions',
   '/settings': 'page_access.settings',

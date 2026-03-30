@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expenses Page Design</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0f1319; color: #e5e7eb; font-family: 'Cairo', 'Segoe UI', sans-serif; direction: rtl; }
+
+  .container { display: flex; height: 100vh; }
+
+  /* Sidebar */
+  .sidebar { width: 220px; background: #1a1f2e; border-left: 1px solid #2d3548; padding: 16px 0; flex-shrink: 0; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #9ca3af; font-size: 13px; cursor: pointer; }
+  .sidebar-item:hover { background: rgba(59,130,246,0.1); color: #e5e7eb; }
+  .sidebar-item.active { background: rgba(59,130,246,0.15); color: #3b82f6; border-right: 3px solid #3b82f6; }
+  .sidebar-icon { width: 18px; height: 18px; background: currentColor; border-radius: 3px; opacity: 0.5; flex-shrink: 0; }
+  .sidebar-item.active .sidebar-icon { opacity: 1; }
+  .sidebar-label { font-size: 11px; color: #6b7280; padding: 20px 20px 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Main Content */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Top Header */
+  .top-header { background: #1a1f2e; border-bottom: 1px solid #2d3548; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .page-title { font-size: 20px; font-weight: 700; color: #fff; }
+  .add-btn { background: #3b82f6; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+  /* KPI Cards */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 20px 24px; }
+  .kpi-card { background: #1a1f2e; border: 1px solid #2d3548; border-radius: 12px; padding: 16px; }
+  .kpi-label { font-size: 12px; color: #9ca3af; margin-bottom: 8px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #fff; }
+  .kpi-change { font-size: 11px; margin-top: 6px; }
+  .kpi-change.up { color: #10b981; }
+  .kpi-change.down { color: #ef4444; }
+  .kpi-card.profit { border-color: #10b981; }
+  .kpi-card.expense { border-color: #ef4444; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 0; padding: 0 24px; background: #1a1f2e; border-bottom: 1px solid #2d3548; }
+  .tab { padding: 12px 20px; font-size: 13px; color: #9ca3af; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab:hover { color: #e5e7eb; }
+  .tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+
+  /* Content Area */
+  .content { flex: 1; overflow-y: auto; padding: 20px 24px; }
+
+  /* Filter Bar */
+  .filter-bar { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+  .filter-chip { background: #2d3548; border: 1px solid #3d4558; border-radius: 8px; padding: 6px 14px; font-size: 12px; color: #e5e7eb; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .filter-chip.active { background: rgba(59,130,246,0.2); border-color: #3b82f6; color: #93c5fd; }
+  .search-input { background: #2d3548; border: 1px solid #3d4558; border-radius: 8px; padding: 6px 14px; font-size: 12px; color: #e5e7eb; flex: 1; max-width: 250px; outline: none; }
+
+  /* Table */
+  .table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .table th { background: #1a1f2e; padding: 10px 14px; font-size: 12px; color: #9ca3af; text-align: right; border-bottom: 1px solid #2d3548; font-weight: 600; position: sticky; top: 0; }
+  .table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid #1e2433; }
+  .table tr:hover td { background: rgba(59,130,246,0.05); }
+
+  .category-badge { background: rgba(59,130,246,0.15); color: #93c5fd; padding: 3px 10px; border-radius: 6px; font-size: 11px; display: inline-block; }
+  .amount-red { color: #ef4444; font-weight: 600; }
+  .safe-badge { background: rgba(16,185,129,0.15); color: #6ee7b7; padding: 3px 10px; border-radius: 6px; font-size: 11px; display: inline-block; }
+
+  /* Section Label */
+  .section-title { font-size: 14px; font-weight: 600; color: #e5e7eb; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title span { color: #3b82f6; }
+
+  /* Design Label */
+  .design-label { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(59,130,246,0.9); color: #fff; padding: 8px 20px; border-radius: 20px; font-size: 13px; z-index: 100; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-label">القائمة الرئيسية</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>لوحة التحكم</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>نقطة البيع</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>المنتجات</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>المخزون</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>العملاء</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>الموردين</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>الخزائن</div>
+    <div class="sidebar-item active"><div class="sidebar-icon"></div>المصروفات ★</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>التقارير</div>
+    <div class="sidebar-item"><div class="sidebar-icon"></div>الإعدادات</div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="page-title">المصروفات</div>
+      <div class="add-btn">+ إضافة مصروف</div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">إجمالي الإيرادات</div>
+        <div class="kpi-value">152,340 ج</div>
+        <div class="kpi-change up">▲ 12% عن الشهر السابق</div>
+      </div>
+      <div class="kpi-card expense">
+        <div class="kpi-label">إجمالي المصروفات</div>
+        <div class="kpi-value">38,750 ج</div>
+        <div class="kpi-change down">▲ 8% عن الشهر السابق</div>
+      </div>
+      <div class="kpi-card profit">
+        <div class="kpi-label">صافي الربح</div>
+        <div class="kpi-value">113,590 ج</div>
+        <div class="kpi-change up">▲ 15% عن الشهر السابق</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">عدد المصروفات</div>
+        <div class="kpi-value">47</div>
+        <div class="kpi-change">هذا الشهر</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active">المصروفات</div>
+      <div class="tab">التصنيفات</div>
+      <div class="tab">المتكررة</div>
+      <div class="tab">التحليلات</div>
+      <div class="tab">ملخص مالي</div>
+      <div class="tab">ميزانيات</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-chip active">📅 هذا الشهر</div>
+        <div class="filter-chip">📁 كل التصنيفات</div>
+        <div class="filter-chip">🏦 كل الخزائن</div>
+        <input class="search-input" placeholder="بحث في المصروفات..." />
+      </div>
+
+      <!-- Table -->
+      <table class="table">
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>الوصف</th>
+            <th>التصنيف</th>
+            <th>المبلغ</th>
+            <th>الخزنة</th>
+            <th>بواسطة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>30 مارس 2026</td>
+            <td>فاتورة كهرباء مارس</td>
+            <td><span class="category-badge">فواتير / كهرباء</span></td>
+            <td class="amount-red">- 1,250 ج</td>
+            <td><span class="safe-badge">الخزنة الرئيسية</span></td>
+            <td>أحمد</td>
+          </tr>
+          <tr>
+            <td>28 مارس 2026</td>
+            <td>إعلان ممول فيسبوك</td>
+            <td><span class="category-badge">دعايا وإعلانات</span></td>
+            <td class="amount-red">- 3,500 ج</td>
+            <td><span class="safe-badge">الخزنة الرئيسية</span></td>
+            <td>محمد</td>
+          </tr>
+          <tr>
+            <td>27 مارس 2026</td>
+            <td>مرتب أحمد - مارس</td>
+            <td><span class="category-badge">مرتبات</span></td>
+            <td class="amount-red">- 8,000 ج</td>
+            <td><span class="safe-badge">خزنة المرتبات</span></td>
+            <td>محمد</td>
+          </tr>
+          <tr>
+            <td>25 مارس 2026</td>
+            <td>صيانة مكيف المحل</td>
+            <td><span class="category-badge">صيانة</span></td>
+            <td class="amount-red">- 750 ج</td>
+            <td><span class="safe-badge">الخزنة الرئيسية</span></td>
+            <td>أحمد</td>
+          </tr>
+          <tr>
+            <td>22 مارس 2026</td>
+            <td>إنفلونسر - حملة رمضان</td>
+            <td><span class="category-badge">دعايا وإعلانات / Bloggers</span></td>
+            <td class="amount-red">- 5,000 ج</td>
+            <td><span class="safe-badge">الخزنة الرئيسية</span></td>
+            <td>محمد</td>
+          </tr>
+          <tr>
+            <td>20 مارس 2026</td>
+            <td>اشتراك انترنت الشهري</td>
+            <td><span class="category-badge">فواتير / انترنت</span></td>
+            <td class="amount-red">- 450 ج</td>
+            <td><span class="safe-badge">الخزنة الرئيسية</span></td>
+            <td>أحمد</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="design-label">تصميم صفحة المصروفات - التاب الأول: قائمة المصروفات</div>
+
+</body>
+</html>
