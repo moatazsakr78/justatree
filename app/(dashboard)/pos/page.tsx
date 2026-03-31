@@ -281,6 +281,8 @@ function POSPageContent() {
   const [isPurchaseMode, setIsPurchaseMode] = useState(false);
   const [showPurchaseModeConfirm, setShowPurchaseModeConfirm] = useState(false);
   const [showClearCartConfirm, setShowClearCartConfirm] = useState(false);
+  const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
+  const [pendingCartProduct, setPendingCartProduct] = useState<{product: any, quantity: number, selectedColor?: string, selectedShape?: string, newPrice: number, existingPrice: number} | null>(null);
   const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
   const [isSupplierModalForNewPurchase, setIsSupplierModalForNewPurchase] = useState(false); // لتمييز إذا كان لبدء شراء جديد
   const [showQuickAddProductModal, setShowQuickAddProductModal] =
@@ -2166,6 +2168,10 @@ function POSPageContent() {
         branchName: currentBranch?.name,
       });
 
+      const newProductPrice = isPurchaseMode
+        ? (product.cost_price || 0)
+        : getProductPriceByType(product);
+
       setCartItems((prev) => {
         const existingItemIndex = prev.findIndex(
           (item) => item.product.id === product.id,
@@ -2173,77 +2179,64 @@ function POSPageContent() {
 
         let newCart;
         if (existingItemIndex >= 0) {
-          // Product already exists in cart
-          const newCartItems = [...prev];
-          const existingItem = { ...newCartItems[existingItemIndex] };
+          const existingItem = prev[existingItemIndex];
+          const existingPrice = existingItem.isCustomPrice && existingItem.totalPrice
+            ? existingItem.totalPrice / existingItem.quantity
+            : existingItem.price;
 
-          if (selectedColor) {
-            // Initialize selectedColors if it doesn't exist
-            if (!existingItem.selectedColors) {
-              existingItem.selectedColors = {};
+          // Same price → merge (increment quantity)
+          if (Math.abs(existingPrice - newProductPrice) < 0.01) {
+            const newCartItems = [...prev];
+            const updatedItem = { ...newCartItems[existingItemIndex] };
+
+            if (selectedColor) {
+              if (!updatedItem.selectedColors) updatedItem.selectedColors = {};
+              updatedItem.selectedColors[selectedColor] =
+                (updatedItem.selectedColors[selectedColor] || 0) + quantity;
+              const colorsTotal = updatedItem.selectedColors
+                ? Object.values(updatedItem.selectedColors).reduce(
+                    (total: number, colorQty) => total + (colorQty as number), 0)
+                : 0;
+              const shapesTotal = updatedItem.selectedShapes
+                ? Object.values(updatedItem.selectedShapes).reduce(
+                    (total: number, shapeQty) => total + (shapeQty as number), 0)
+                : 0;
+              updatedItem.quantity = colorsTotal + shapesTotal || updatedItem.quantity;
+            } else if (selectedShape) {
+              if (!updatedItem.selectedShapes) updatedItem.selectedShapes = {};
+              updatedItem.selectedShapes[selectedShape] =
+                (updatedItem.selectedShapes[selectedShape] || 0) + quantity;
+              const colorsTotal = updatedItem.selectedColors
+                ? Object.values(updatedItem.selectedColors).reduce(
+                    (total: number, colorQty) => total + (colorQty as number), 0)
+                : 0;
+              const shapesTotal = Object.values(updatedItem.selectedShapes).reduce(
+                (total: number, shapeQty) => total + (shapeQty as number), 0);
+              updatedItem.quantity = colorsTotal + shapesTotal || updatedItem.quantity;
+            } else {
+              updatedItem.quantity += quantity;
             }
 
-            // Add or update color quantity
-            existingItem.selectedColors[selectedColor] =
-              (existingItem.selectedColors[selectedColor] || 0) + quantity;
-
-            // Recalculate total quantity from all colors + shapes
-            const colorsTotal = existingItem.selectedColors
-              ? Object.values(existingItem.selectedColors).reduce(
-                  (total: number, colorQty) => total + (colorQty as number),
-                  0,
-                )
-              : 0;
-            const shapesTotal = existingItem.selectedShapes
-              ? Object.values(existingItem.selectedShapes).reduce(
-                  (total: number, shapeQty) => total + (shapeQty as number),
-                  0,
-                )
-              : 0;
-            existingItem.quantity = colorsTotal + shapesTotal || existingItem.quantity;
-          } else if (selectedShape) {
-            // Initialize selectedShapes if it doesn't exist
-            if (!existingItem.selectedShapes) {
-              existingItem.selectedShapes = {};
+            updatedItem.total = updatedItem.price * updatedItem.quantity;
+            if (updatedItem.isCustomPrice) {
+              updatedItem.totalPrice = existingPrice * updatedItem.quantity;
             }
-
-            // Add or update shape quantity
-            existingItem.selectedShapes[selectedShape] =
-              (existingItem.selectedShapes[selectedShape] || 0) + quantity;
-
-            // Recalculate total quantity from all colors + shapes
-            const colorsTotal = existingItem.selectedColors
-              ? Object.values(existingItem.selectedColors).reduce(
-                  (total: number, colorQty) => total + (colorQty as number),
-                  0,
-                )
-              : 0;
-            const shapesTotal = Object.values(existingItem.selectedShapes).reduce(
-              (total: number, shapeQty) => total + (shapeQty as number),
-              0,
-            );
-            existingItem.quantity = colorsTotal + shapesTotal || existingItem.quantity;
+            newCartItems[existingItemIndex] = updatedItem;
+            newCart = newCartItems;
           } else {
-            existingItem.quantity += quantity;
+            // Different price → show confirmation dialog
+            setPendingCartProduct({ product, quantity, selectedColor, selectedShape, newPrice: newProductPrice, existingPrice });
+            setShowDuplicateConfirm(true);
+            return prev; // Don't change cart yet
           }
-
-          // Update total price
-          existingItem.total = existingItem.price * existingItem.quantity;
-
-          newCartItems[existingItemIndex] = existingItem;
-          newCart = newCartItems;
         } else {
           // New product - create new cart item
-          // في وضع الشراء نستخدم cost_price، وإلا نستخدم السعر المحدد
-          const productPrice = isPurchaseMode
-            ? (product.cost_price || 0)
-            : getProductPriceByType(product);
           const newCartItem = {
             id: product.id.toString(),
             product: product,
             quantity: quantity,
-            price: productPrice,
-            total: productPrice * quantity,
+            price: newProductPrice,
+            total: newProductPrice * quantity,
             selectedColors: selectedColor
               ? { [selectedColor]: quantity }
               : undefined,
@@ -2251,7 +2244,6 @@ function POSPageContent() {
               ? { [selectedShape]: quantity }
               : undefined,
             color: selectedColor || null,
-            // إضافة معلومات الفرع للمنتج
             branch_id: currentBranch?.id || '',
             branch_name: currentBranch?.name || '',
           };
@@ -2266,6 +2258,38 @@ function POSPageContent() {
     },
     [updateActiveTabCart, getProductPriceByType, isPurchaseMode, currentBranch],
   );
+
+  // Confirm adding duplicate product with different price as separate entry
+  const confirmDuplicateAdd = useCallback(() => {
+    if (!pendingCartProduct) return;
+    const { product, quantity, selectedColor, selectedShape, newPrice } = pendingCartProduct;
+
+    setCartItems((prev) => {
+      const newItem = {
+        id: product.id.toString() + '-' + Date.now(),
+        product: product,
+        quantity: quantity,
+        price: newPrice,
+        total: newPrice * quantity,
+        selectedColors: selectedColor ? { [selectedColor]: quantity } : undefined,
+        selectedShapes: selectedShape ? { [selectedShape]: quantity } : undefined,
+        color: selectedColor || null,
+        branch_id: currentBranch?.id || '',
+        branch_name: currentBranch?.name || '',
+      };
+      const newCart = [...prev, newItem];
+      updateActiveTabCart(newCart);
+      return newCart;
+    });
+
+    setShowDuplicateConfirm(false);
+    setPendingCartProduct(null);
+  }, [pendingCartProduct, currentBranch, updateActiveTabCart]);
+
+  const cancelDuplicateAdd = useCallback(() => {
+    setShowDuplicateConfirm(false);
+    setPendingCartProduct(null);
+  }, []);
 
   // Ref to hold the latest handleAddToCart function to avoid re-renders
   const handleAddToCartRef = useRef(handleAddToCart);
@@ -6147,167 +6171,247 @@ function POSPageContent() {
                           className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0"
                           style={{ WebkitOverflowScrolling: 'touch' }}
                         >
-                          {cartItems.map((item) => (
-                            <div
-                              key={item.id}
-                              className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]"
-                            >
-                              <div className="flex gap-3 mb-2">
-                                {/* Product Image */}
-                                <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
-                                  <ProductThumbnail
-                                    src={item.product.main_image_url}
-                                    alt={item.product.name}
-                                  />
-                                </div>
+                          {(() => {
+                            // Group cart items by product.id for multi-price display
+                            const groups: { productId: string; items: typeof cartItems }[] = [];
+                            const groupMap = new Map<string, typeof cartItems>();
+                            cartItems.forEach((item) => {
+                              const pid = item.product.id;
+                              if (!groupMap.has(pid)) {
+                                const items: typeof cartItems = [];
+                                groupMap.set(pid, items);
+                                groups.push({ productId: pid, items });
+                              }
+                              groupMap.get(pid)!.push(item);
+                            });
 
-                                {/* Product Info */}
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex justify-between items-start mb-1">
-                                    <div className="flex items-center gap-2 min-w-0 flex-1">
-                                      <h4 className="font-medium text-[var(--dash-text-primary)] text-sm truncate">
-                                        {item.product.name}
-                                      </h4>
-                                      {/* إظهار اسم الفرع فقط لو فيه أكتر من فرع في السلة */}
-                                      {showBranchPerItem && item.branch_name && (
-                                        <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-0.5 rounded-full flex-shrink-0 border border-dash-accent-blue">
-                                          {item.branch_name}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <div className="flex items-center gap-1 flex-shrink-0">
-                                      {/* زر تعديل المنتج - يظهر فقط للمنتجات الجديدة في وضع الشراء */}
-                                      {isPurchaseMode && item.product?.isNewProduct && (
-                                        <button
-                                          onClick={() => {
-                                            setEditingCartItem(item);
-                                            setShowQuickAddProductModal(true);
-                                          }}
-                                          className="text-dash-accent-blue hover:text-dash-accent-blue p-1"
-                                          title="تعديل المنتج"
-                                        >
-                                          <PencilIcon className="h-4 w-4" />
-                                        </button>
-                                      )}
-                                      <button
-                                        onClick={() => removeFromCart(item.id)}
-                                        className="text-dash-accent-red hover:text-dash-accent-red p-1"
-                                        title="إزالة من السلة"
-                                      >
-                                        <XMarkIcon className="h-4 w-4" />
-                                      </button>
-                                    </div>
-                                  </div>
+                            return groups.map((group) => {
+                              const isMultiPrice = group.items.length > 1;
+                              const firstItem = group.items[0];
 
-                                  {/* Quantity and Price Controls */}
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-[var(--dash-text-muted)] text-xs">الكمية:</span>
-                                      <input
-                                        type="number"
-                                        min="1"
-                                        value={item.quantity}
-                                        onChange={(e) => {
-                                          const newQuantity = parseInt(e.target.value) || 1;
-                                          setCartItems((prev) => {
-                                            const newCart = prev.map((cartItem) => {
-                                              if (cartItem.id === item.id) {
-                                                const pricePerUnit =
-                                                  newQuantity / cartItem.quantity;
-
-                                                // Handle selected colors proportionally
-                                                let newSelectedColors = null;
-                                                if (cartItem.selectedColors) {
-                                                  newSelectedColors = Object.fromEntries(
-                                                    Object.entries(
-                                                      cartItem.selectedColors,
-                                                    ).map(([color, count]) => [
-                                                      color,
-                                                      Math.round(
-                                                        (count as number) *
-                                                          pricePerUnit,
-                                                      ),
-                                                    ]),
-                                                  );
-                                                }
-
-                                                // Handle selected shapes proportionally
-                                                let newSelectedShapes = null;
-                                                if (cartItem.selectedShapes) {
-                                                  newSelectedShapes = Object.fromEntries(
-                                                    Object.entries(
-                                                      cartItem.selectedShapes,
-                                                    ).map(([shape, count]) => [
-                                                      shape,
-                                                      Math.round(
-                                                        (count as number) *
-                                                          pricePerUnit,
-                                                      ),
-                                                    ]),
-                                                  );
-                                                }
-
-                                                // Calculate unit price from totalPrice if custom price was set
-                                                const unitPrice = cartItem.isCustomPrice && cartItem.totalPrice
-                                                  ? cartItem.totalPrice / cartItem.quantity
-                                                  : cartItem.price;
-                                                return {
-                                                  ...cartItem,
-                                                  quantity: newQuantity,
-                                                  selectedColors: newSelectedColors,
-                                                  selectedShapes: newSelectedShapes,
-                                                  totalPrice: unitPrice * newQuantity,
-                                                };
+                              // Helper to render quantity/price controls for a single cart entry
+                              const renderItemControls = (item: any, showRemove = true) => (
+                                <div key={item.id} className={`flex items-center justify-between ${isMultiPrice ? 'py-2 border-b border-[var(--dash-border-default)] last:border-b-0' : ''}`}>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[var(--dash-text-muted)] text-xs">الكمية:</span>
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      value={item.quantity}
+                                      onChange={(e) => {
+                                        const newQuantity = parseInt(e.target.value) || 1;
+                                        setCartItems((prev) => {
+                                          const newCart = prev.map((cartItem) => {
+                                            if (cartItem.id === item.id) {
+                                              const pricePerUnit = newQuantity / cartItem.quantity;
+                                              let newSelectedColors = null;
+                                              if (cartItem.selectedColors) {
+                                                newSelectedColors = Object.fromEntries(
+                                                  Object.entries(cartItem.selectedColors).map(([color, count]) => [
+                                                    color, Math.round((count as number) * pricePerUnit),
+                                                  ])
+                                                );
                                               }
-                                              return cartItem;
-                                            });
-                                            updateActiveTabCart(newCart);
-                                            return newCart;
+                                              let newSelectedShapes = null;
+                                              if (cartItem.selectedShapes) {
+                                                newSelectedShapes = Object.fromEntries(
+                                                  Object.entries(cartItem.selectedShapes).map(([shape, count]) => [
+                                                    shape, Math.round((count as number) * pricePerUnit),
+                                                  ])
+                                                );
+                                              }
+                                              const unitPrice = cartItem.isCustomPrice && cartItem.totalPrice
+                                                ? cartItem.totalPrice / cartItem.quantity
+                                                : cartItem.price;
+                                              return {
+                                                ...cartItem,
+                                                quantity: newQuantity,
+                                                selectedColors: newSelectedColors,
+                                                selectedShapes: newSelectedShapes,
+                                                totalPrice: unitPrice * newQuantity,
+                                              };
+                                            }
+                                            return cartItem;
                                           });
-                                        }}
-                                        className="w-16 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
-                                      />
-                                    </div>
+                                          updateActiveTabCart(newCart);
+                                          return newCart;
+                                        });
+                                      }}
+                                      className="w-16 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
+                                    />
+                                  </div>
 
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-[var(--dash-text-muted)] text-xs">السعر:</span>
-                                      <input
-                                        type="number"
-                                        min="0"
-                                        step="0.01"
-                                        value={((item.totalPrice || (item.price * item.quantity) || 0) / item.quantity).toFixed(2)}
-                                        onChange={(e) => {
-                                          const newPrice = parseFloat(e.target.value) || 0;
-                                          setCartItems((prev) => {
-                                            const newCart = prev.map((cartItem) =>
-                                              cartItem.id === item.id
-                                                ? {
-                                                    ...cartItem,
-                                                    isCustomPrice: true,
-                                                    totalPrice:
-                                                      cartItem.quantity * newPrice,
-                                                  }
-                                                : cartItem,
-                                            );
-                                            updateActiveTabCart(newCart);
-                                            return newCart;
-                                          });
-                                        }}
-                                        className="w-20 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
-                                      />
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[var(--dash-text-muted)] text-xs">السعر:</span>
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      step="0.01"
+                                      value={((item.totalPrice || (item.price * item.quantity) || 0) / item.quantity).toFixed(2)}
+                                      onChange={(e) => {
+                                        const newPrice = parseFloat(e.target.value) || 0;
+                                        setCartItems((prev) => {
+                                          const newCart = prev.map((cartItem) =>
+                                            cartItem.id === item.id
+                                              ? { ...cartItem, isCustomPrice: true, totalPrice: cartItem.quantity * newPrice }
+                                              : cartItem,
+                                          );
+                                          updateActiveTabCart(newCart);
+                                          return newCart;
+                                        });
+                                      }}
+                                      className="w-20 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
+                                    />
+                                  </div>
+
+                                  <span className="text-dash-accent-green font-bold text-xs">
+                                    {formatPrice(item.totalPrice || (item.price * item.quantity) || 0, "system")}
+                                  </span>
+
+                                  {showRemove && (
+                                    <button
+                                      onClick={() => removeFromCart(item.id)}
+                                      className="text-dash-accent-red hover:text-dash-accent-red p-0.5"
+                                      title="إزالة"
+                                    >
+                                      <XMarkIcon className="h-3.5 w-3.5" />
+                                    </button>
+                                  )}
+                                </div>
+                              );
+
+                              if (!isMultiPrice) {
+                                // Single item - render normally
+                                const item = firstItem;
+                                return (
+                                  <div
+                                    key={item.id}
+                                    className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]"
+                                  >
+                                    <div className="flex gap-3 mb-2">
+                                      <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
+                                        <ProductThumbnail src={item.product.main_image_url} alt={item.product.name} />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex justify-between items-start mb-1">
+                                          <div className="flex items-center gap-2 min-w-0 flex-1">
+                                            <h4 className="font-medium text-[var(--dash-text-primary)] text-sm truncate">{item.product.name}</h4>
+                                            {showBranchPerItem && item.branch_name && (
+                                              <span className="text-xs text-dash-accent-blue bg-dash-accent-blue-subtle px-2 py-0.5 rounded-full flex-shrink-0 border border-dash-accent-blue">{item.branch_name}</span>
+                                            )}
+                                          </div>
+                                          <div className="flex items-center gap-1 flex-shrink-0">
+                                            {isPurchaseMode && item.product?.isNewProduct && (
+                                              <button onClick={() => { setEditingCartItem(item); setShowQuickAddProductModal(true); }} className="text-dash-accent-blue hover:text-dash-accent-blue p-1" title="تعديل المنتج">
+                                                <PencilIcon className="h-4 w-4" />
+                                              </button>
+                                            )}
+                                            <button onClick={() => removeFromCart(item.id)} className="text-dash-accent-red hover:text-dash-accent-red p-1" title="إزالة من السلة">
+                                              <XMarkIcon className="h-4 w-4" />
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex items-center gap-2">
+                                            <span className="text-[var(--dash-text-muted)] text-xs">الكمية:</span>
+                                            <input type="number" min="1" value={item.quantity}
+                                              onChange={(e) => {
+                                                const newQuantity = parseInt(e.target.value) || 1;
+                                                setCartItems((prev) => {
+                                                  const newCart = prev.map((cartItem) => {
+                                                    if (cartItem.id === item.id) {
+                                                      const pricePerUnit = newQuantity / cartItem.quantity;
+                                                      let newSelectedColors = null;
+                                                      if (cartItem.selectedColors) {
+                                                        newSelectedColors = Object.fromEntries(Object.entries(cartItem.selectedColors).map(([color, count]) => [color, Math.round((count as number) * pricePerUnit)]));
+                                                      }
+                                                      let newSelectedShapes = null;
+                                                      if (cartItem.selectedShapes) {
+                                                        newSelectedShapes = Object.fromEntries(Object.entries(cartItem.selectedShapes).map(([shape, count]) => [shape, Math.round((count as number) * pricePerUnit)]));
+                                                      }
+                                                      const unitPrice = cartItem.isCustomPrice && cartItem.totalPrice ? cartItem.totalPrice / cartItem.quantity : cartItem.price;
+                                                      return { ...cartItem, quantity: newQuantity, selectedColors: newSelectedColors, selectedShapes: newSelectedShapes, totalPrice: unitPrice * newQuantity };
+                                                    }
+                                                    return cartItem;
+                                                  });
+                                                  updateActiveTabCart(newCart);
+                                                  return newCart;
+                                                });
+                                              }}
+                                              className="w-16 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
+                                            />
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <span className="text-[var(--dash-text-muted)] text-xs">السعر:</span>
+                                            <input type="number" min="0" step="0.01"
+                                              value={((item.totalPrice || (item.price * item.quantity) || 0) / item.quantity).toFixed(2)}
+                                              onChange={(e) => {
+                                                const newPrice = parseFloat(e.target.value) || 0;
+                                                setCartItems((prev) => {
+                                                  const newCart = prev.map((cartItem) => cartItem.id === item.id ? { ...cartItem, isCustomPrice: true, totalPrice: cartItem.quantity * newPrice } : cartItem);
+                                                  updateActiveTabCart(newCart);
+                                                  return newCart;
+                                                });
+                                              }}
+                                              className="w-20 px-2 py-1 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded text-[var(--dash-text-primary)] text-xs text-center"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="text-right">
+                                      <span className="text-dash-accent-green font-bold text-sm">
+                                        {formatPrice(item.totalPrice || (item.price * item.quantity) || 0, "system")}
+                                      </span>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
+                                );
+                              }
 
-                              {/* Total Price */}
-                              <div className="text-right">
-                                <span className="text-dash-accent-green font-bold text-sm">
-                                  {formatPrice(item.totalPrice || (item.price * item.quantity) || 0, "system")}
-                                </span>
-                              </div>
-                            </div>
-                          ))}
+                              // Multi-price group - distinct card with orange border
+                              const groupTotal = group.items.reduce((sum, item) => sum + (item.totalPrice || (item.price * item.quantity) || 0), 0);
+                              const totalQty = group.items.reduce((sum, item) => sum + item.quantity, 0);
+                              return (
+                                <div
+                                  key={group.productId}
+                                  className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border-2 border-dash-accent-orange"
+                                >
+                                  {/* Shared product header */}
+                                  <div className="flex gap-3 mb-2">
+                                    <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
+                                      <ProductThumbnail src={firstItem.product.main_image_url} alt={firstItem.product.name} />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                                          <h4 className="font-medium text-[var(--dash-text-primary)] text-sm truncate">{firstItem.product.name}</h4>
+                                          <span className="text-xs text-dash-accent-orange bg-dash-accent-orange-subtle px-2 py-0.5 rounded-full flex-shrink-0 border border-dash-accent-orange">
+                                            {group.items.length} أسعار
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div className="text-[var(--dash-text-muted)] text-xs mt-1">
+                                        إجمالي الكمية: {totalQty}
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Sub-rows for each price entry */}
+                                  <div className="bg-[var(--dash-bg-raised)] rounded-md px-2 mt-1">
+                                    {group.items.map((item) => renderItemControls(item, true))}
+                                  </div>
+
+                                  {/* Combined total */}
+                                  <div className="flex justify-between items-center mt-2 pt-2 border-t border-dash-accent-orange/30">
+                                    <span className="text-[var(--dash-text-muted)] text-xs">الإجمالي</span>
+                                    <span className="text-dash-accent-green font-bold text-sm">
+                                      {formatPrice(groupTotal, "system")}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            });
+                          })()}
                         </div>
                       </div>
                     )}
@@ -6707,216 +6811,191 @@ function POSPageContent() {
                     ref={cartContainerRef}
                     className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3 min-h-0"
                   >
-                    {cartItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]"
-                      >
-                        <div className="flex gap-3 mb-2">
-                          {/* Product Image - OPTIMIZED */}
-                          <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
-                            <ProductThumbnail
-                              src={item.product.main_image_url}
-                              alt={item.product.name}
-                            />
-                          </div>
+                    {(() => {
+                      // Group cart items by product.id for multi-price display (desktop)
+                      const groups: { productId: string; items: typeof cartItems }[] = [];
+                      const groupMap = new Map<string, typeof cartItems>();
+                      cartItems.forEach((item) => {
+                        const pid = item.product.id;
+                        if (!groupMap.has(pid)) {
+                          const items: typeof cartItems = [];
+                          groupMap.set(pid, items);
+                          groups.push({ productId: pid, items });
+                        }
+                        groupMap.get(pid)!.push(item);
+                      });
 
-                          <div className="flex-1 flex justify-between items-start">
-                            <h4 className="text-[var(--dash-text-primary)] text-sm font-medium leading-tight flex-1">
-                              {item.product.name}
-                            </h4>
-                            <div className="flex items-center gap-1 ml-2">
-                              {/* زر تعديل المنتج - يظهر فقط للمنتجات الجديدة في وضع الشراء */}
-                              {isPurchaseMode && item.product?.isNewProduct && (
-                                <button
-                                  onClick={() => {
-                                    setEditingCartItem(item);
-                                    setShowQuickAddProductModal(true);
-                                  }}
-                                  className="text-dash-accent-blue hover:text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-full p-1 transition-colors"
-                                  title="تعديل المنتج"
-                                >
-                                  <PencilIcon className="h-4 w-4" />
-                                </button>
+                      // Helper: render quantity/price/colors/shapes for a single entry (desktop)
+                      const renderDesktopEntry = (item: any, isMulti: boolean) => (
+                        <div key={item.id} className={isMulti ? 'py-2 border-b border-[var(--dash-border-default)] last:border-b-0' : ''}>
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[var(--dash-text-muted)] text-xs">الكمية:</span>
+                              <EditableField
+                                value={item.quantity}
+                                type="number"
+                                onUpdate={(newQuantity) => {
+                                  setCartItems((prev) => {
+                                    const newCart = prev.map((cartItem) => {
+                                      if (cartItem.id === item.id) {
+                                        const ratio = newQuantity / cartItem.quantity;
+                                        let updatedColors: { [key: string]: number } | null = null;
+                                        if (cartItem.selectedColors) {
+                                          updatedColors = {};
+                                          Object.entries(cartItem.selectedColors).forEach(([color, quantity]: [string, any]) => {
+                                            updatedColors![color] = Math.max(1, Math.round(quantity * ratio));
+                                          });
+                                        }
+                                        let updatedShapes: { [key: string]: number } | null = null;
+                                        if (cartItem.selectedShapes) {
+                                          updatedShapes = {};
+                                          Object.entries(cartItem.selectedShapes).forEach(([shape, quantity]: [string, any]) => {
+                                            updatedShapes![shape] = Math.max(1, Math.round(quantity * ratio));
+                                          });
+                                        }
+                                        const newTotal = isTransferMode ? 0 : cartItem.price * newQuantity;
+                                        return { ...cartItem, quantity: newQuantity, selectedColors: updatedColors, selectedShapes: updatedShapes, total: newTotal, totalPrice: newTotal };
+                                      }
+                                      return cartItem;
+                                    });
+                                    updateActiveTabCart(newCart);
+                                    return newCart;
+                                  });
+                                }}
+                                className="text-[var(--dash-text-primary)] font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {!isTransferMode && (
+                                <>
+                                  <span className="text-[var(--dash-text-muted)] text-xs">السعر:</span>
+                                  <EditableField
+                                    value={item.price}
+                                    type="number"
+                                    step="0.01"
+                                    onUpdate={(newPrice) => {
+                                      setCartItems((prev) => {
+                                        const newCart = prev.map((cartItem) => {
+                                          if (cartItem.id === item.id) {
+                                            const newTotal = cartItem.quantity * newPrice;
+                                            return { ...cartItem, price: newPrice, total: newTotal, totalPrice: newTotal };
+                                          }
+                                          return cartItem;
+                                        });
+                                        updateActiveTabCart(newCart);
+                                        return newCart;
+                                      });
+                                    }}
+                                    className="text-dash-accent-blue font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
+                                  />
+                                  <span className="text-dash-accent-blue text-xs">{systemCurrency}</span>
+                                </>
                               )}
-                              <button
-                                onClick={() => removeFromCart(item.id)}
-                                className="text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-full p-1 transition-colors text-lg leading-none"
-                                title="إزالة من السلة"
-                              >
-                                ×
-                              </button>
+                              {isMulti && (
+                                <button onClick={() => removeFromCart(item.id)} className="text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-full p-0.5 transition-colors text-sm leading-none" title="إزالة">×</button>
+                              )}
                             </div>
                           </div>
+                          {/* Colors */}
+                          {item.selectedColors && Object.keys(item.selectedColors).length > 0 && (
+                            <div className="mt-1">
+                              <div className="flex flex-wrap gap-1">
+                                {Object.entries(item.selectedColors).map(([color, quantity]: [string, any]) => (
+                                  <span key={color} className="bg-[var(--dash-bg-overlay)] px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]">{color}: {quantity}</span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {/* Shapes */}
+                          {item.selectedShapes && Object.keys(item.selectedShapes).length > 0 && (
+                            <div className="mt-1">
+                              <div className="flex flex-wrap gap-1">
+                                {Object.entries(item.selectedShapes).map(([shape, quantity]: [string, any]) => (
+                                  <span key={shape} className="bg-dash-accent-purple-subtle px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]">🔷 {shape}: {quantity}</span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {/* Per-entry total for multi-price */}
+                          {isMulti && !isTransferMode && (
+                            <div className="text-left mt-1">
+                              <span className="text-dash-accent-green text-xs">
+                                {(item.totalPrice || (item.price * item.quantity) || 0).toFixed(2)} {systemCurrency}
+                              </span>
+                            </div>
+                          )}
                         </div>
+                      );
 
-                        {/* Quantity and Price Row */}
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[var(--dash-text-muted)] text-xs">
-                              الكمية:
-                            </span>
-                            <EditableField
-                              value={item.quantity}
-                              type="number"
-                              onUpdate={(newQuantity) => {
-                                setCartItems((prev) => {
-                                  const newCart = prev.map((cartItem) => {
-                                    if (cartItem.id === item.id) {
-                                      // Calculate the ratio of change for proportional color updates
-                                      const ratio =
-                                        newQuantity / cartItem.quantity;
-                                      let updatedColors: {
-                                        [key: string]: number;
-                                      } | null = null;
+                      return groups.map((group) => {
+                        const isMultiPrice = group.items.length > 1;
+                        const firstItem = group.items[0];
 
-                                      // If we have selected colors, update them proportionally
-                                      if (cartItem.selectedColors) {
-                                        updatedColors = {};
-                                        Object.entries(
-                                          cartItem.selectedColors,
-                                        ).forEach(
-                                          ([color, quantity]: [
-                                            string,
-                                            any,
-                                          ]) => {
-                                            updatedColors![color] = Math.max(
-                                              1,
-                                              Math.round(quantity * ratio),
-                                            );
-                                          },
-                                        );
-                                      }
+                        if (!isMultiPrice) {
+                          // Single item - render normally
+                          const item = firstItem;
+                          return (
+                            <div key={item.id} className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                              <div className="flex gap-3 mb-2">
+                                <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
+                                  <ProductThumbnail src={item.product.main_image_url} alt={item.product.name} />
+                                </div>
+                                <div className="flex-1 flex justify-between items-start">
+                                  <h4 className="text-[var(--dash-text-primary)] text-sm font-medium leading-tight flex-1">{item.product.name}</h4>
+                                  <div className="flex items-center gap-1 ml-2">
+                                    {isPurchaseMode && item.product?.isNewProduct && (
+                                      <button onClick={() => { setEditingCartItem(item); setShowQuickAddProductModal(true); }} className="text-dash-accent-blue hover:text-dash-accent-blue hover:bg-dash-accent-blue-subtle rounded-full p-1 transition-colors" title="تعديل المنتج">
+                                        <PencilIcon className="h-4 w-4" />
+                                      </button>
+                                    )}
+                                    <button onClick={() => removeFromCart(item.id)} className="text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded-full p-1 transition-colors text-lg leading-none" title="إزالة من السلة">×</button>
+                                  </div>
+                                </div>
+                              </div>
+                              {renderDesktopEntry(item, false)}
+                              {!isTransferMode && (
+                                <div className="mt-2 text-left">
+                                  <span className="text-dash-accent-green font-bold text-sm">
+                                    {(item.totalPrice || (item.price * item.quantity) || 0).toFixed(2)} {systemCurrency}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
 
-                                      // If we have selected shapes, update them proportionally
-                                      let updatedShapes: {
-                                        [key: string]: number;
-                                      } | null = null;
-                                      if (cartItem.selectedShapes) {
-                                        updatedShapes = {};
-                                        Object.entries(
-                                          cartItem.selectedShapes,
-                                        ).forEach(
-                                          ([shape, quantity]: [
-                                            string,
-                                            any,
-                                          ]) => {
-                                            updatedShapes![shape] = Math.max(
-                                              1,
-                                              Math.round(quantity * ratio),
-                                            );
-                                          },
-                                        );
-                                      }
-
-                                      const newTotal = isTransferMode
-                                        ? 0
-                                        : cartItem.price * newQuantity;
-                                      return {
-                                        ...cartItem,
-                                        quantity: newQuantity,
-                                        selectedColors: updatedColors,
-                                        selectedShapes: updatedShapes,
-                                        total: newTotal,
-                                        totalPrice: newTotal,
-                                      };
-                                    }
-                                    return cartItem;
-                                  });
-                                  updateActiveTabCart(newCart);
-                                  return newCart;
-                                });
-                              }}
-                              className="text-[var(--dash-text-primary)] font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
-                            />
-                          </div>
-
-                          <div className="flex items-center gap-2">
+                        // Multi-price group
+                        const groupTotal = group.items.reduce((sum, item) => sum + (item.totalPrice || (item.price * item.quantity) || 0), 0);
+                        const totalQty = group.items.reduce((sum, item) => sum + item.quantity, 0);
+                        return (
+                          <div key={group.productId} className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border-2 border-dash-accent-orange">
+                            <div className="flex gap-3 mb-2">
+                              <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
+                                <ProductThumbnail src={firstItem.product.main_image_url} alt={firstItem.product.name} />
+                              </div>
+                              <div className="flex-1 flex justify-between items-start">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-[var(--dash-text-primary)] text-sm font-medium leading-tight">{firstItem.product.name}</h4>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className="text-xs text-dash-accent-orange bg-dash-accent-orange-subtle px-2 py-0.5 rounded-full border border-dash-accent-orange">{group.items.length} أسعار</span>
+                                    <span className="text-[var(--dash-text-muted)] text-xs">الكمية: {totalQty}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="bg-[var(--dash-bg-raised)] rounded-md px-2">
+                              {group.items.map((item) => renderDesktopEntry(item, true))}
+                            </div>
                             {!isTransferMode && (
-                              <>
-                                <span className="text-[var(--dash-text-muted)] text-xs">
-                                  السعر:
-                                </span>
-                                <EditableField
-                                  value={item.price}
-                                  type="number"
-                                  step="0.01"
-                                  onUpdate={(newPrice) => {
-                                    setCartItems((prev) => {
-                                      const newCart = prev.map((cartItem) => {
-                                        if (cartItem.id === item.id) {
-                                          const newTotal = cartItem.quantity * newPrice;
-                                          return {
-                                            ...cartItem,
-                                            price: newPrice,
-                                            total: newTotal,
-                                            totalPrice: newTotal,
-                                          };
-                                        }
-                                        return cartItem;
-                                      });
-                                      updateActiveTabCart(newCart);
-                                      return newCart;
-                                    });
-                                  }}
-                                  className="text-dash-accent-blue font-medium text-right bg-transparent border-none outline-none w-16 hover:bg-[var(--dash-bg-overlay)]/20 rounded px-1"
-                                />
-                                <span className="text-dash-accent-blue text-xs">
-                                  {systemCurrency}
-                                </span>
-                              </>
+                              <div className="flex justify-between items-center mt-2 pt-2 border-t border-dash-accent-orange/30">
+                                <span className="text-[var(--dash-text-muted)] text-xs">الإجمالي</span>
+                                <span className="text-dash-accent-green font-bold text-sm">{groupTotal.toFixed(2)} {systemCurrency}</span>
+                              </div>
                             )}
                           </div>
-                        </div>
-
-                        {/* Colors Display */}
-                        {item.selectedColors &&
-                          Object.keys(item.selectedColors).length > 0 && (
-                            <div className="mt-2 pt-2 border-t border-[var(--dash-border-default)]">
-                              <div className="flex flex-wrap gap-1">
-                                {Object.entries(item.selectedColors).map(
-                                  ([color, quantity]: [string, any]) => (
-                                    <span
-                                      key={color}
-                                      className="bg-[var(--dash-bg-overlay)] px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]"
-                                    >
-                                      {color}: {quantity}
-                                    </span>
-                                  ),
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                        {/* Shapes Display */}
-                        {item.selectedShapes &&
-                          Object.keys(item.selectedShapes).length > 0 && (
-                            <div className="mt-2 pt-2 border-t border-[var(--dash-border-default)]">
-                              <div className="flex flex-wrap gap-1">
-                                {Object.entries(item.selectedShapes).map(
-                                  ([shape, quantity]: [string, any]) => (
-                                    <span
-                                      key={shape}
-                                      className="bg-dash-accent-purple-subtle px-2 py-1 rounded text-xs text-[var(--dash-text-primary)]"
-                                    >
-                                      🔷 {shape}: {quantity}
-                                    </span>
-                                  ),
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                        {/* Total */}
-                        {!isTransferMode && (
-                          <div className="mt-2 text-left">
-                            <span className="text-dash-accent-green font-bold text-sm">
-                              {(item.totalPrice || (item.price * item.quantity) || 0).toFixed(2)} {systemCurrency}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               )}
@@ -7996,6 +8075,56 @@ function POSPageContent() {
                   className="flex-1 px-4 py-2.5 dash-btn-red rounded-lg font-medium transition-colors"
                 >
                   مسح الكل
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Duplicate Product (Different Price) Confirmation Modal */}
+      {showDuplicateConfirm && pendingCartProduct && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/70 z-[60]"
+            onClick={cancelDuplicateAdd}
+          />
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="bg-[var(--dash-bg-surface)] rounded-2xl shadow-2xl border border-[var(--dash-border-default)] w-full max-w-sm">
+              <div className="flex items-center justify-center p-6 border-b border-[var(--dash-border-default)]">
+                <div className="w-12 h-12 bg-gradient-to-r from-dash-accent-orange to-dash-accent-orange rounded-full flex items-center justify-center">
+                  <ExclamationTriangleIcon className="h-6 w-6 text-[var(--dash-text-primary)]" />
+                </div>
+              </div>
+              <div className="p-6 text-center">
+                <h3 className="text-lg font-bold text-[var(--dash-text-primary)] mb-3">منتج موجود بسعر مختلف</h3>
+                <p className="text-[var(--dash-text-secondary)] text-sm mb-4">
+                  المنتج <span className="font-bold text-[var(--dash-text-primary)]">{pendingCartProduct.product.name}</span> موجود بالفعل في السلة بسعر مختلف
+                </p>
+                <div className="flex justify-center gap-6 mb-2">
+                  <div className="text-center">
+                    <span className="text-[var(--dash-text-muted)] text-xs block mb-1">السعر الحالي</span>
+                    <span className="text-dash-accent-blue font-bold">{pendingCartProduct.existingPrice.toFixed(2)}</span>
+                  </div>
+                  <div className="text-[var(--dash-text-disabled)] flex items-end pb-1">←</div>
+                  <div className="text-center">
+                    <span className="text-[var(--dash-text-muted)] text-xs block mb-1">السعر الجديد</span>
+                    <span className="text-dash-accent-orange font-bold">{pendingCartProduct.newPrice.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-3 p-4 border-t border-[var(--dash-border-default)]">
+                <button
+                  onClick={cancelDuplicateAdd}
+                  className="flex-1 px-4 py-2.5 bg-[var(--dash-bg-overlay)] hover:bg-[var(--dash-bg-overlay)] text-[var(--dash-text-primary)] rounded-lg font-medium transition-colors"
+                >
+                  إلغاء
+                </button>
+                <button
+                  onClick={confirmDuplicateAdd}
+                  className="flex-1 px-4 py-2.5 bg-dash-accent-orange text-white rounded-lg font-medium transition-colors hover:opacity-90"
+                >
+                  إضافة كسطر منفصل
                 </button>
               </div>
             </div>
