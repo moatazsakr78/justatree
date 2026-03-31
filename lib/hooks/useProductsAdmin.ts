@@ -41,6 +41,7 @@ export interface ProductVideo {
 export interface Product {
   id: string;
   name: string;
+  created_at?: string | null;
   name_en?: string | null;
   barcode?: string | null;
   barcodes?: string[] | null;
@@ -142,6 +143,7 @@ export function useProductsAdmin(options?: { selectedBranches?: string[] }) {
           .select(`
             id,
             name,
+            created_at,
             barcode,
             barcodes,
             price,

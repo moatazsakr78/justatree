@@ -91,11 +91,7 @@ export default function ProductSortDropdown({ storageKey, sortOrder, onSortChang
     <div className={`relative ${className}`} ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-sm transition-colors ${
-          isActive
-            ? 'bg-dash-accent-blue text-[var(--dash-text-primary)]'
-            : 'bg-[var(--dash-bg-surface)] text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]'
-        }`}
+        className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm transition-colors bg-[var(--dash-bg-surface)] text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] hover:bg-[var(--dash-bg-overlay)]"
         title={`الترتيب: ${currentLabel}`}
       >
         <ArrowsUpDownIcon className="h-4 w-4" />
