@@ -249,6 +249,8 @@ function POSPageContent() {
 
   // Dedicated POS Cart State (separate from website cart)
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const cartItemsRef = useRef<any[]>([]);
+  useEffect(() => { cartItemsRef.current = cartItems; }, [cartItems]);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isRecordsModalOpen, setIsRecordsModalOpen] = useState(false);
@@ -282,7 +284,7 @@ function POSPageContent() {
   const [showPurchaseModeConfirm, setShowPurchaseModeConfirm] = useState(false);
   const [showClearCartConfirm, setShowClearCartConfirm] = useState(false);
   const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
-  const [pendingCartProduct, setPendingCartProduct] = useState<{product: any, quantity: number, selectedColor?: string, selectedShape?: string, newPrice: number, existingPrice: number} | null>(null);
+  const [pendingCartProduct, setPendingCartProduct] = useState<{product: any, quantity: number, selectedColor?: string, selectedShape?: string, newPrice: number, existingPrice: number, _colorSelections?: any, _shapeSelections?: any} | null>(null);
   const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
   const [isSupplierModalForNewPurchase, setIsSupplierModalForNewPurchase] = useState(false); // لتمييز إذا كان لبدء شراء جديد
   const [showQuickAddProductModal, setShowQuickAddProductModal] =
@@ -2172,6 +2174,24 @@ function POSPageContent() {
         ? (product.cost_price || 0)
         : getProductPriceByType(product);
 
+      // Check for existing item with different price BEFORE setCartItems
+      const currentCart = cartItemsRef.current;
+      const existingItem = currentCart.find((item) => item.product.id === product.id);
+
+      if (existingItem) {
+        const existingPrice = existingItem.totalPrice
+          ? existingItem.totalPrice / existingItem.quantity
+          : existingItem.price;
+
+        if (Math.abs(existingPrice - newProductPrice) >= 0.01) {
+          // Different price → show confirmation dialog (don't touch cart)
+          setPendingCartProduct({ product, quantity, selectedColor, selectedShape, newPrice: newProductPrice, existingPrice });
+          setShowDuplicateConfirm(true);
+          return;
+        }
+      }
+
+      // Same price or new product → proceed with cart update
       setCartItems((prev) => {
         const existingItemIndex = prev.findIndex(
           (item) => item.product.id === product.id,
@@ -2179,56 +2199,45 @@ function POSPageContent() {
 
         let newCart;
         if (existingItemIndex >= 0) {
-          const existingItem = prev[existingItemIndex];
-          const existingPrice = existingItem.isCustomPrice && existingItem.totalPrice
-            ? existingItem.totalPrice / existingItem.quantity
-            : existingItem.price;
-
           // Same price → merge (increment quantity)
-          if (Math.abs(existingPrice - newProductPrice) < 0.01) {
-            const newCartItems = [...prev];
-            const updatedItem = { ...newCartItems[existingItemIndex] };
+          const newCartItems = [...prev];
+          const updatedItem = { ...newCartItems[existingItemIndex] };
 
-            if (selectedColor) {
-              if (!updatedItem.selectedColors) updatedItem.selectedColors = {};
-              updatedItem.selectedColors[selectedColor] =
-                (updatedItem.selectedColors[selectedColor] || 0) + quantity;
-              const colorsTotal = updatedItem.selectedColors
-                ? Object.values(updatedItem.selectedColors).reduce(
-                    (total: number, colorQty) => total + (colorQty as number), 0)
-                : 0;
-              const shapesTotal = updatedItem.selectedShapes
-                ? Object.values(updatedItem.selectedShapes).reduce(
-                    (total: number, shapeQty) => total + (shapeQty as number), 0)
-                : 0;
-              updatedItem.quantity = colorsTotal + shapesTotal || updatedItem.quantity;
-            } else if (selectedShape) {
-              if (!updatedItem.selectedShapes) updatedItem.selectedShapes = {};
-              updatedItem.selectedShapes[selectedShape] =
-                (updatedItem.selectedShapes[selectedShape] || 0) + quantity;
-              const colorsTotal = updatedItem.selectedColors
-                ? Object.values(updatedItem.selectedColors).reduce(
-                    (total: number, colorQty) => total + (colorQty as number), 0)
-                : 0;
-              const shapesTotal = Object.values(updatedItem.selectedShapes).reduce(
-                (total: number, shapeQty) => total + (shapeQty as number), 0);
-              updatedItem.quantity = colorsTotal + shapesTotal || updatedItem.quantity;
-            } else {
-              updatedItem.quantity += quantity;
-            }
-
-            updatedItem.total = updatedItem.price * updatedItem.quantity;
-            if (updatedItem.isCustomPrice) {
-              updatedItem.totalPrice = existingPrice * updatedItem.quantity;
-            }
-            newCartItems[existingItemIndex] = updatedItem;
-            newCart = newCartItems;
+          if (selectedColor) {
+            if (!updatedItem.selectedColors) updatedItem.selectedColors = {};
+            updatedItem.selectedColors[selectedColor] =
+              (updatedItem.selectedColors[selectedColor] || 0) + quantity;
+            const colorsTotal = updatedItem.selectedColors
+              ? Object.values(updatedItem.selectedColors).reduce(
+                  (total: number, colorQty) => total + (colorQty as number), 0)
+              : 0;
+            const shapesTotal = updatedItem.selectedShapes
+              ? Object.values(updatedItem.selectedShapes).reduce(
+                  (total: number, shapeQty) => total + (shapeQty as number), 0)
+              : 0;
+            updatedItem.quantity = colorsTotal + shapesTotal || updatedItem.quantity;
+          } else if (selectedShape) {
+            if (!updatedItem.selectedShapes) updatedItem.selectedShapes = {};
+            updatedItem.selectedShapes[selectedShape] =
+              (updatedItem.selectedShapes[selectedShape] || 0) + quantity;
+            const colorsTotal = updatedItem.selectedColors
+              ? Object.values(updatedItem.selectedColors).reduce(
+                  (total: number, colorQty) => total + (colorQty as number), 0)
+              : 0;
+            const shapesTotal = Object.values(updatedItem.selectedShapes).reduce(
+              (total: number, shapeQty) => total + (shapeQty as number), 0);
+            updatedItem.quantity = colorsTotal + shapesTotal || updatedItem.quantity;
           } else {
-            // Different price → show confirmation dialog
-            setPendingCartProduct({ product, quantity, selectedColor, selectedShape, newPrice: newProductPrice, existingPrice });
-            setShowDuplicateConfirm(true);
-            return prev; // Don't change cart yet
+            updatedItem.quantity += quantity;
           }
+
+          updatedItem.total = updatedItem.price * updatedItem.quantity;
+          if (updatedItem.totalPrice) {
+            const unitPrice = updatedItem.totalPrice / (updatedItem.quantity - quantity);
+            updatedItem.totalPrice = unitPrice * updatedItem.quantity;
+          }
+          newCartItems[existingItemIndex] = updatedItem;
+          newCart = newCartItems;
         } else {
           // New product - create new cart item
           const newCartItem = {
@@ -2262,18 +2271,20 @@ function POSPageContent() {
   // Confirm adding duplicate product with different price as separate entry
   const confirmDuplicateAdd = useCallback(() => {
     if (!pendingCartProduct) return;
-    const { product, quantity, selectedColor, selectedShape, newPrice } = pendingCartProduct;
+    const { product, quantity, newPrice } = pendingCartProduct;
+    // Get color/shape data stored from handleColorSelection
+    const colorSelections = (pendingCartProduct as any)._colorSelections;
+    const shapeSelections = (pendingCartProduct as any)._shapeSelections;
 
     setCartItems((prev) => {
-      const newItem = {
+      const newItem: any = {
         id: product.id.toString() + '-' + Date.now(),
         product: product,
         quantity: quantity,
         price: newPrice,
         total: newPrice * quantity,
-        selectedColors: selectedColor ? { [selectedColor]: quantity } : undefined,
-        selectedShapes: selectedShape ? { [selectedShape]: quantity } : undefined,
-        color: selectedColor || null,
+        selectedColors: colorSelections || null,
+        selectedShapes: shapeSelections || null,
         branch_id: currentBranch?.id || '',
         branch_name: currentBranch?.name || '',
       };
@@ -2543,43 +2554,65 @@ function POSPageContent() {
           : getProductPriceByType(modalProduct),
     };
 
-    // نقل كل المنطق داخل setCartItems callback لتجنب مشكلة stale closure
+    const newPrice = productWithPrice.price || 0;
+
+    // Check for existing item with different price BEFORE modifying cart
+    const currentCart = cartItemsRef.current;
+    const existingCartItem = currentCart.find((item) => item.product.id === modalProduct.id);
+
+    if (existingCartItem) {
+      const existingUnitPrice = existingCartItem.totalPrice
+        ? existingCartItem.totalPrice / existingCartItem.quantity
+        : existingCartItem.price;
+
+      if (Math.abs(existingUnitPrice - newPrice) >= 0.01) {
+        // Different price → show confirmation dialog
+        setPendingCartProduct({
+          product: productWithPrice,
+          quantity: totalQuantity,
+          selectedColor: Object.keys(selections).length > 0 ? JSON.stringify(selections) : undefined,
+          selectedShape: shapeSelections && Object.keys(shapeSelections).length > 0 ? JSON.stringify(shapeSelections) : undefined,
+          newPrice,
+          existingPrice: existingUnitPrice,
+          // Store full data for confirmDuplicateAdd
+          _colorSelections: Object.keys(selections).length > 0 ? selections : null,
+          _shapeSelections: shapeSelections && Object.keys(shapeSelections).length > 0 ? shapeSelections : null,
+        });
+        setShowDuplicateConfirm(true);
+        // Close color modal but DON'T add to cart yet
+        setShowColorSelectionModal(false);
+        setModalProduct(null);
+        return;
+      }
+    }
+
+    // Same price or new product → proceed normally
     setCartItems((prev) => {
-      // البحث عن المنتج في السلة الحالية (prev) - وليس cartItems القديمة
       const existingItemIndex = prev.findIndex(
         (item) => item.product.id === modalProduct.id,
       );
 
       if (existingItemIndex >= 0) {
-        // المنتج موجود - تحديثه
+        // المنتج موجود بنفس السعر - دمج
         const newCartItems = [...prev];
         const existingItem = { ...newCartItems[existingItemIndex] };
 
-        // إضافة الكمية الجديدة للكمية الموجودة
         const hasColors = Object.keys(selections).length > 0;
         const hasShapes = shapeSelections && Object.keys(shapeSelections).length > 0;
 
         if (hasColors || hasShapes) {
-          // منتج بألوان/أشكال - دمج
           if (hasColors) {
-            if (!existingItem.selectedColors) {
-              existingItem.selectedColors = {};
-            }
+            if (!existingItem.selectedColors) existingItem.selectedColors = {};
             for (const [color, qty] of Object.entries(selections)) {
-              existingItem.selectedColors[color] =
-                (existingItem.selectedColors[color] || 0) + (qty as number);
+              existingItem.selectedColors[color] = (existingItem.selectedColors[color] || 0) + (qty as number);
             }
           }
           if (hasShapes) {
-            if (!existingItem.selectedShapes) {
-              existingItem.selectedShapes = {};
-            }
+            if (!existingItem.selectedShapes) existingItem.selectedShapes = {};
             for (const [shape, qty] of Object.entries(shapeSelections!)) {
-              existingItem.selectedShapes[shape] =
-                (existingItem.selectedShapes[shape] || 0) + (qty as number);
+              existingItem.selectedShapes[shape] = (existingItem.selectedShapes[shape] || 0) + (qty as number);
             }
           }
-          // حساب الكمية الإجمالية من مجموع الألوان + الأشكال
           const colorTotal = existingItem.selectedColors
             ? Object.values(existingItem.selectedColors).reduce((sum: number, q) => sum + (q as number), 0)
             : 0;
@@ -2588,25 +2621,23 @@ function POSPageContent() {
             : 0;
           existingItem.quantity = colorTotal + shapeTotal;
         } else {
-          // منتج بدون ألوان/أشكال - إضافة بسيطة
           existingItem.quantity += totalQuantity;
         }
-        existingItem.total = productWithPrice.price * existingItem.quantity;
+        existingItem.total = newPrice * existingItem.quantity;
 
         newCartItems[existingItemIndex] = existingItem;
         updateActiveTabCart(newCartItems);
         return newCartItems;
       } else {
-        // منتج جديد - إضافته مع الفرع الحالي
+        // منتج جديد
         const newCartItem: any = {
           id: productWithPrice.id.toString(),
           product: productWithPrice,
           quantity: totalQuantity,
           selectedColors: Object.keys(selections).length > 0 ? selections : null,
           selectedShapes: shapeSelections && Object.keys(shapeSelections).length > 0 ? shapeSelections : null,
-          price: productWithPrice.price || 0,
-          total: (productWithPrice.price || 0) * totalQuantity,
-          // إضافة معلومات الفرع للمنتج
+          price: newPrice,
+          total: newPrice * totalQuantity,
           branch_id: currentBranch?.id || '',
           branch_name: currentBranch?.name || '',
         };
