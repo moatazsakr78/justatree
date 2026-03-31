@@ -6608,10 +6608,10 @@ function POSPageContent() {
 
         {/* Shopping Cart Panel - Desktop: Sidebar, Mobile: Shows below search toolbar */}
         <div className="hidden md:flex">
-          <div className="w-80 bg-[var(--dash-bg-raised)] border-l-2 border-r-2 border-gray-500 flex flex-col h-screen flex-shrink-0"
+          <div className="w-80 bg-[var(--dash-bg-raised)] border-r border-[var(--dash-border-default)] flex flex-col h-screen flex-shrink-0"
           >
             {/* Cart Items Area - Full Height */}
-            <div className="flex-1 border-t-2 border-gray-500 overflow-hidden">
+            <div className="flex-1 overflow-hidden">
               {cartItems.length === 0 ? (
                 <div className="flex flex-col justify-center items-center h-full p-8">
                   <ShoppingCartIcon className="h-24 w-24 text-[var(--dash-text-disabled)] mb-8" />

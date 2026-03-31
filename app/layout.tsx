@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Cairo } from 'next/font/google'
 import './globals.css'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const cairo = Cairo({
   subsets: ['arabic', 'latin'],
@@ -76,6 +77,7 @@ export default function RootLayout({
             </SystemSettingsProvider>
           </ThemeProvider>
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   )
