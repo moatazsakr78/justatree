@@ -167,6 +167,7 @@ import {
   TruckIcon,
   TrashIcon,
   DocumentTextIcon,
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import ProductSortDropdown, { useSortOrder, sortProducts } from "../../components/ui/ProductSortDropdown";
 
@@ -251,6 +252,7 @@ function POSPageContent() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const cartItemsRef = useRef<any[]>([]);
   useEffect(() => { cartItemsRef.current = cartItems; }, [cartItems]);
+  const prevCartLengthRef = useRef(0);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isRecordsModalOpen, setIsRecordsModalOpen] = useState(false);
@@ -284,6 +286,10 @@ function POSPageContent() {
   const [showPurchaseModeConfirm, setShowPurchaseModeConfirm] = useState(false);
   const [showClearCartConfirm, setShowClearCartConfirm] = useState(false);
   const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
+  const [showCartSearch, setShowCartSearch] = useState(false);
+  const [cartSearchQuery, setCartSearchQuery] = useState('');
+  const [highlightedCartItemId, setHighlightedCartItemId] = useState<string | null>(null);
+  const cartSearchInputRef = useRef<HTMLInputElement>(null);
   const [pendingCartProduct, setPendingCartProduct] = useState<{product: any, quantity: number, selectedColor?: string, selectedShape?: string, newPrice: number, existingPrice: number, _colorSelections?: any, _shapeSelections?: any} | null>(null);
   const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
   const [isSupplierModalForNewPurchase, setIsSupplierModalForNewPurchase] = useState(false); // لتمييز إذا كان لبدء شراء جديد
@@ -2411,15 +2417,38 @@ function POSPageContent() {
     setPaidAmount("");
   }, [isPurchaseMode, selections.customer?.id]);
 
-  // Auto-scroll السلة لآخر منتج عند الإضافة
+  // Auto-scroll السلة لآخر منتج عند الإضافة فقط (مش عند التعديل أو الحذف)
   useEffect(() => {
-    if (cartContainerRef.current && cartItems.length > 0) {
-      // setTimeout لضمان تحديث DOM قبل الـ scroll
+    if (cartContainerRef.current && cartItems.length > prevCartLengthRef.current) {
       setTimeout(() => {
         if (cartContainerRef.current) {
           cartContainerRef.current.scrollTop = cartContainerRef.current.scrollHeight;
         }
       }, 50);
+    }
+    prevCartLengthRef.current = cartItems.length;
+  }, [cartItems.length]);
+
+  // Cart search: scroll to matching item and highlight it
+  const handleCartSearch = useCallback((query: string) => {
+    setCartSearchQuery(query);
+    if (!query.trim()) {
+      setHighlightedCartItemId(null);
+      return;
+    }
+    const match = cartItems.find((item) =>
+      item.product?.name?.toLowerCase().includes(query.toLowerCase())
+    );
+    if (match) {
+      setHighlightedCartItemId(match.id);
+      setTimeout(() => {
+        const el = document.getElementById(`cart-item-${match.id}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+      // Auto-clear highlight after 3 seconds
+      setTimeout(() => setHighlightedCartItemId(null), 3000);
+    } else {
+      setHighlightedCartItemId(null);
     }
   }, [cartItems]);
 
@@ -6124,64 +6153,43 @@ function POSPageContent() {
                               </button>
                               <span className="text-[var(--dash-text-primary)] font-medium text-sm">منتجات السلة: {cartItems.length}</span>
                             </div>
-                            {cartItems.length > 0 && (
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={() => {
-                                    // Save current cart items before any changes
-                                    const itemsToPostpone = [...cartItems];
-                                    const tabName = selections.customer?.name || 'فاتورة مؤجلة';
-                                    const customerToSave = selections.customer;
-                                    const branchToSave = selections.branch;
-                                    const recordToSave = selections.record;
-                                    const subSafeToSave = selections.subSafe;
-                                    const priceTypeToSave = selectedPriceType;
-
-                                    // Create new tab with the saved items
-                                    const newTabId = addTabWithCustomerAndCart(
-                                      customerToSave,
-                                      itemsToPostpone,
-                                      tabName,
-                                      {
-                                        branch: branchToSave,
-                                        record: recordToSave,
-                                        subSafe: subSafeToSave,
-                                        priceType: priceTypeToSave,
+                            <div className="flex items-center">
+                              {showCartSearch ? (
+                                <div className="flex items-center gap-1.5 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-md px-2 py-1">
+                                  <MagnifyingGlassIcon className="h-3.5 w-3.5 text-[var(--dash-text-disabled)] flex-shrink-0" />
+                                  <input
+                                    ref={cartSearchInputRef}
+                                    type="text"
+                                    value={cartSearchQuery}
+                                    onChange={(e) => handleCartSearch(e.target.value)}
+                                    placeholder="بحث في السلة..."
+                                    className="bg-transparent text-sm text-[var(--dash-text-primary)] placeholder:text-[var(--dash-text-disabled)] outline-none w-36"
+                                    autoFocus
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Escape') {
+                                        setShowCartSearch(false);
+                                        setCartSearchQuery('');
+                                        setHighlightedCartItemId(null);
                                       }
-                                    );
-
-                                    // Postpone the newly created tab
-                                    setTimeout(() => {
-                                      // Postpone the new tab (this switches to main tab)
-                                      handlePostponeTab(newTabId);
-
-                                      // Make sure main tab is selected
-                                      switchTab('main');
-
-                                      // Clear cart after a delay to ensure useEffect has run
-                                      setTimeout(() => {
-                                        setCartItems([]);
-                                        updateActiveTabCart([]);
-                                        resetToDefaultCustomer();
-                                      }, 150);
-                                    }, 100);
-                                  }}
-                                  className="text-dash-accent-orange hover:text-dash-accent-orange hover:bg-dash-accent-orange-subtle rounded px-1.5 py-0.5 transition-colors text-xs flex items-center gap-1"
-                                  title="تأجيل الفاتورة"
-                                >
-                                  <ClockIcon className="h-3 w-3" />
-                                  تأجيل
-                                </button>
-                                <span className="text-[var(--dash-text-disabled)]">|</span>
+                                    }}
+                                  />
+                                  <button
+                                    onClick={() => { setShowCartSearch(false); setCartSearchQuery(''); setHighlightedCartItemId(null); }}
+                                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
+                                  >
+                                    <XMarkIcon className="h-3.5 w-3.5" />
+                                  </button>
+                                </div>
+                              ) : (
                                 <button
-                                  onClick={() => setShowClearCartConfirm(true)}
-                                  className="text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded px-1.5 py-0.5 transition-colors text-xs"
-                                  title="مسح السلة"
+                                  onClick={() => { setShowCartSearch(true); setTimeout(() => cartSearchInputRef.current?.focus(), 100); }}
+                                  className="flex items-center gap-1.5 text-[var(--dash-text-disabled)] hover:text-[var(--dash-text-muted)] transition-colors text-xs"
                                 >
-                                  مسح الكل
+                                  <span>بحث</span>
+                                  <MagnifyingGlassIcon className="h-3.5 w-3.5" />
                                 </button>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
 
@@ -6317,7 +6325,8 @@ function POSPageContent() {
                                 return (
                                   <div
                                     key={item.id}
-                                    className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]"
+                                    id={`cart-item-${item.id}`}
+                                    className={`bg-[var(--dash-bg-surface)] rounded-lg p-3 border transition-all duration-300 ${highlightedCartItemId === item.id ? 'border-yellow-400 ring-2 ring-yellow-400 bg-yellow-400/10' : 'border-[var(--dash-border-default)]'}`}
                                   >
                                     <div className="flex gap-3 mb-2">
                                       <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
@@ -6402,10 +6411,12 @@ function POSPageContent() {
                               // Multi-price group - distinct card with orange border
                               const groupTotal = group.items.reduce((sum, item) => sum + (item.totalPrice || (item.price * item.quantity) || 0), 0);
                               const totalQty = group.items.reduce((sum, item) => sum + item.quantity, 0);
+                              const isGroupHighlighted = group.items.some(i => highlightedCartItemId === i.id);
                               return (
                                 <div
                                   key={group.productId}
-                                  className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border-2 border-dash-accent-orange"
+                                  id={`cart-item-${group.items[0].id}`}
+                                  className={`bg-[var(--dash-bg-surface)] rounded-lg p-3 border-2 transition-all duration-300 ${isGroupHighlighted ? 'border-yellow-400 ring-2 ring-yellow-400 bg-yellow-400/10' : 'border-dash-accent-orange'}`}
                                 >
                                   {/* Shared product header */}
                                   <div className="flex gap-3 mb-2">
@@ -6762,67 +6773,46 @@ function POSPageContent() {
               ) : (
                 <div className="h-full flex flex-col">
                   {/* Cart Header */}
-                  <div className="px-3 py-2 border-b border-[var(--dash-border-default)] flex-shrink-0">
+                  <div className="px-3 py-2.5 border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] flex-shrink-0 mt-12">
                     <div className="flex justify-between items-center">
                       <span className="text-[var(--dash-text-primary)] font-medium text-sm">منتجات السلة: {cartItems.length}</span>
-                      {cartItems.length > 0 && (
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => {
-                              // Save current cart items before any changes
-                              const itemsToPostpone = [...cartItems];
-                              const tabName = selections.customer?.name || 'فاتورة مؤجلة';
-                              const customerToSave = selections.customer;
-                              const branchToSave = selections.branch;
-                              const recordToSave = selections.record;
-                              const subSafeToSave = selections.subSafe;
-                              const priceTypeToSave = selectedPriceType;
-
-                              // Create new tab with the saved items
-                              const newTabId = addTabWithCustomerAndCart(
-                                customerToSave,
-                                itemsToPostpone,
-                                tabName,
-                                {
-                                  branch: branchToSave,
-                                  record: recordToSave,
-                                  subSafe: subSafeToSave,
-                                  priceType: priceTypeToSave,
+                      <div className="flex items-center">
+                        {showCartSearch ? (
+                          <div className="flex items-center gap-1.5 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-md px-2 py-1">
+                            <MagnifyingGlassIcon className="h-3.5 w-3.5 text-[var(--dash-text-disabled)] flex-shrink-0" />
+                            <input
+                              ref={cartSearchInputRef}
+                              type="text"
+                              value={cartSearchQuery}
+                              onChange={(e) => handleCartSearch(e.target.value)}
+                              placeholder="بحث في السلة..."
+                              className="bg-transparent text-sm text-[var(--dash-text-primary)] placeholder:text-[var(--dash-text-disabled)] outline-none w-36"
+                              autoFocus
+                              onKeyDown={(e) => {
+                                if (e.key === 'Escape') {
+                                  setShowCartSearch(false);
+                                  setCartSearchQuery('');
+                                  setHighlightedCartItemId(null);
                                 }
-                              );
-
-                              // Postpone the newly created tab
-                              setTimeout(() => {
-                                // Postpone the new tab (this switches to main tab)
-                                handlePostponeTab(newTabId);
-
-                                // Make sure main tab is selected
-                                switchTab('main');
-
-                                // Clear cart after a delay to ensure useEffect has run
-                                setTimeout(() => {
-                                  setCartItems([]);
-                                  updateActiveTabCart([]);
-                                  resetToDefaultCustomer();
-                                }, 150);
-                              }, 100);
-                            }}
-                            className="text-dash-accent-orange hover:text-dash-accent-orange hover:bg-dash-accent-orange-subtle rounded px-1.5 py-0.5 transition-colors text-xs flex items-center gap-1"
-                            title="تأجيل الفاتورة"
-                          >
-                            <ClockIcon className="h-3 w-3" />
-                            تأجيل
-                          </button>
-                          <span className="text-[var(--dash-text-disabled)]">|</span>
+                              }}
+                            />
+                            <button
+                              onClick={() => { setShowCartSearch(false); setCartSearchQuery(''); setHighlightedCartItemId(null); }}
+                              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
+                            >
+                              <XMarkIcon className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        ) : (
                           <button
-                            onClick={clearCart}
-                            className="text-dash-accent-red hover:text-dash-accent-red hover:bg-dash-accent-red-subtle rounded px-1.5 py-0.5 transition-colors text-xs"
-                            title="مسح السلة"
+                            onClick={() => { setShowCartSearch(true); setTimeout(() => cartSearchInputRef.current?.focus(), 100); }}
+                            className="flex items-center gap-1.5 text-[var(--dash-text-disabled)] hover:text-[var(--dash-text-muted)] transition-colors text-xs"
                           >
-                            مسح الكل
+                            <span>بحث</span>
+                            <MagnifyingGlassIcon className="h-3.5 w-3.5" />
                           </button>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -6966,7 +6956,7 @@ function POSPageContent() {
                           // Single item - render normally
                           const item = firstItem;
                           return (
-                            <div key={item.id} className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border border-[var(--dash-border-default)]">
+                            <div key={item.id} id={`cart-item-${item.id}`} className={`bg-[var(--dash-bg-surface)] rounded-lg p-3 border transition-all duration-300 ${highlightedCartItemId === item.id ? 'border-yellow-400 ring-2 ring-yellow-400 bg-yellow-400/10' : 'border-[var(--dash-border-default)]'}`}>
                               <div className="flex gap-3 mb-2">
                                 <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
                                   <ProductThumbnail src={item.product.main_image_url} alt={item.product.name} />
@@ -6998,8 +6988,9 @@ function POSPageContent() {
                         // Multi-price group
                         const groupTotal = group.items.reduce((sum, item) => sum + (item.totalPrice || (item.price * item.quantity) || 0), 0);
                         const totalQty = group.items.reduce((sum, item) => sum + item.quantity, 0);
+                        const isDesktopGroupHighlighted = group.items.some(i => highlightedCartItemId === i.id);
                         return (
-                          <div key={group.productId} className="bg-[var(--dash-bg-surface)] rounded-lg p-3 border-2 border-dash-accent-orange">
+                          <div key={group.productId} id={`cart-item-${group.items[0].id}`} className={`bg-[var(--dash-bg-surface)] rounded-lg p-3 border-2 transition-all duration-300 ${isDesktopGroupHighlighted ? 'border-yellow-400 ring-2 ring-yellow-400 bg-yellow-400/10' : 'border-dash-accent-orange'}`}>
                             <div className="flex gap-3 mb-2">
                               <div className="w-12 h-12 bg-[var(--dash-bg-raised)] rounded-lg overflow-hidden flex-shrink-0">
                                 <ProductThumbnail src={firstItem.product.main_image_url} alt={firstItem.product.name} />
