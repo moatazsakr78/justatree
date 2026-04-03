@@ -168,6 +168,8 @@ import {
   TrashIcon,
   DocumentTextIcon,
   MagnifyingGlassIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import ProductSortDropdown, { useSortOrder, sortProducts } from "../../components/ui/ProductSortDropdown";
 
@@ -289,6 +291,8 @@ function POSPageContent() {
   const [showCartSearch, setShowCartSearch] = useState(false);
   const [cartSearchQuery, setCartSearchQuery] = useState('');
   const [highlightedCartItemId, setHighlightedCartItemId] = useState<string | null>(null);
+  const [cartSearchMatchIds, setCartSearchMatchIds] = useState<string[]>([]);
+  const [cartSearchMatchIndex, setCartSearchMatchIndex] = useState(0);
   const cartSearchInputRef = useRef<HTMLInputElement>(null);
   const [pendingCartProduct, setPendingCartProduct] = useState<{product: any, quantity: number, selectedColor?: string, selectedShape?: string, newPrice: number, existingPrice: number, _colorSelections?: any, _shapeSelections?: any} | null>(null);
   const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
@@ -2434,23 +2438,40 @@ function POSPageContent() {
     setCartSearchQuery(query);
     if (!query.trim()) {
       setHighlightedCartItemId(null);
+      setCartSearchMatchIds([]);
+      setCartSearchMatchIndex(0);
       return;
     }
-    const match = cartItems.find((item) =>
+    const matches = cartItems.filter((item) =>
       item.product?.name?.toLowerCase().includes(query.toLowerCase())
     );
-    if (match) {
-      setHighlightedCartItemId(match.id);
+    const matchIds = matches.map((m) => m.id);
+    setCartSearchMatchIds(matchIds);
+    setCartSearchMatchIndex(0);
+    if (matchIds.length > 0) {
+      setHighlightedCartItemId(matchIds[0]);
       setTimeout(() => {
-        const el = document.getElementById(`cart-item-${match.id}`);
+        const el = document.getElementById(`cart-item-${matchIds[0]}`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 50);
-      // Auto-clear highlight after 3 seconds
-      setTimeout(() => setHighlightedCartItemId(null), 3000);
     } else {
       setHighlightedCartItemId(null);
     }
   }, [cartItems]);
+
+  const navigateCartSearchMatch = useCallback((direction: 'next' | 'prev') => {
+    if (cartSearchMatchIds.length === 0) return;
+    const newIndex = direction === 'next'
+      ? (cartSearchMatchIndex + 1) % cartSearchMatchIds.length
+      : (cartSearchMatchIndex - 1 + cartSearchMatchIds.length) % cartSearchMatchIds.length;
+    setCartSearchMatchIndex(newIndex);
+    const id = cartSearchMatchIds[newIndex];
+    setHighlightedCartItemId(id);
+    setTimeout(() => {
+      const el = document.getElementById(`cart-item-${id}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
+  }, [cartSearchMatchIds, cartSearchMatchIndex]);
 
   // =============================================
   // 🔍 useEffect للإضافة المباشرة عند مسح الباركود
@@ -6139,57 +6160,79 @@ function POSPageContent() {
                       <div className="flex-1 flex flex-col min-h-0">
                         {/* Cart Header */}
                         <div className="px-3 py-2 border-b border-[var(--dash-border-default)] flex-shrink-0">
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-2">
-                              {/* Close button for mobile */}
-                              <button
-                                onClick={() => setIsCartOpen(false)}
-                                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
-                                title="إغلاق السلة"
-                              >
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                              </button>
-                              <span className="text-[var(--dash-text-primary)] font-medium text-sm">منتجات السلة: {cartItems.length}</span>
-                            </div>
-                            <div className="flex items-center">
+                          <div className="flex items-center gap-2">
+                            {/* Close button for mobile */}
+                            <button
+                              onClick={() => setIsCartOpen(false)}
+                              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
+                              title="إغلاق السلة"
+                            >
+                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                            <div
+                              className="flex items-center gap-1.5 flex-1 cursor-text"
+                              onClick={() => { setShowCartSearch(true); setTimeout(() => cartSearchInputRef.current?.focus(), 100); }}
+                            >
+                              <MagnifyingGlassIcon className="h-3.5 w-3.5 text-[var(--dash-text-disabled)] flex-shrink-0" />
                               {showCartSearch ? (
-                                <div className="flex items-center gap-1.5 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-md px-2 py-1">
-                                  <MagnifyingGlassIcon className="h-3.5 w-3.5 text-[var(--dash-text-disabled)] flex-shrink-0" />
+                                <>
                                   <input
                                     ref={cartSearchInputRef}
                                     type="text"
                                     value={cartSearchQuery}
                                     onChange={(e) => handleCartSearch(e.target.value)}
                                     placeholder="بحث في السلة..."
-                                    className="bg-transparent text-sm text-[var(--dash-text-primary)] placeholder:text-[var(--dash-text-disabled)] outline-none w-36"
+                                    className="bg-transparent text-sm text-[var(--dash-text-primary)] placeholder:text-[var(--dash-text-disabled)] outline-none flex-1"
                                     autoFocus
+                                    onBlur={() => { if (!cartSearchQuery) { setShowCartSearch(false); setCartSearchMatchIds([]); setCartSearchMatchIndex(0); } }}
                                     onKeyDown={(e) => {
                                       if (e.key === 'Escape') {
                                         setShowCartSearch(false);
                                         setCartSearchQuery('');
                                         setHighlightedCartItemId(null);
+                                        setCartSearchMatchIds([]);
+                                        setCartSearchMatchIndex(0);
+                                        (e.target as HTMLInputElement).blur();
+                                      } else if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        navigateCartSearchMatch(e.shiftKey ? 'prev' : 'next');
                                       }
                                     }}
                                   />
-                                  <button
-                                    onClick={() => { setShowCartSearch(false); setCartSearchQuery(''); setHighlightedCartItemId(null); }}
-                                    className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
-                                  >
-                                    <XMarkIcon className="h-3.5 w-3.5" />
-                                  </button>
-                                </div>
+                                  {cartSearchQuery && cartSearchMatchIds.length > 0 && (
+                                    <div className="flex items-center gap-1 flex-shrink-0" onMouseDown={(e) => e.preventDefault()}>
+                                      <span className="text-[var(--dash-text-muted)] text-xs whitespace-nowrap">{cartSearchMatchIndex + 1}/{cartSearchMatchIds.length}</span>
+                                      <button
+                                        onClick={() => navigateCartSearchMatch('prev')}
+                                        className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] p-0.5"
+                                      >
+                                        <ChevronUpIcon className="h-3 w-3" />
+                                      </button>
+                                      <button
+                                        onClick={() => navigateCartSearchMatch('next')}
+                                        className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] p-0.5"
+                                      >
+                                        <ChevronDownIcon className="h-3 w-3" />
+                                      </button>
+                                    </div>
+                                  )}
+                                  {cartSearchQuery && (
+                                    <button
+                                      onMouseDown={(e) => e.preventDefault()}
+                                      onClick={() => { setCartSearchQuery(''); setHighlightedCartItemId(null); setCartSearchMatchIds([]); setCartSearchMatchIndex(0); cartSearchInputRef.current?.focus(); }}
+                                      className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
+                                    >
+                                      <XMarkIcon className="h-3.5 w-3.5" />
+                                    </button>
+                                  )}
+                                </>
                               ) : (
-                                <button
-                                  onClick={() => { setShowCartSearch(true); setTimeout(() => cartSearchInputRef.current?.focus(), 100); }}
-                                  className="flex items-center gap-1.5 text-[var(--dash-text-disabled)] hover:text-[var(--dash-text-muted)] transition-colors text-xs"
-                                >
-                                  <span>بحث</span>
-                                  <MagnifyingGlassIcon className="h-3.5 w-3.5" />
-                                </button>
+                                <span className="text-[var(--dash-text-disabled)] text-xs">بحث</span>
                               )}
                             </div>
+                            <span className="text-[var(--dash-text-primary)] font-medium text-sm whitespace-nowrap">منتجات السلة: {cartItems.length}</span>
                           </div>
                         </div>
 
@@ -6774,45 +6817,69 @@ function POSPageContent() {
                 <div className="h-full flex flex-col">
                   {/* Cart Header */}
                   <div className="px-3 py-2.5 border-b border-[var(--dash-border-default)] bg-[var(--dash-bg-surface)] flex-shrink-0 mt-12">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[var(--dash-text-primary)] font-medium text-sm">منتجات السلة: {cartItems.length}</span>
-                      <div className="flex items-center">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="flex items-center gap-1.5 flex-1 cursor-text"
+                        onClick={() => { setShowCartSearch(true); setTimeout(() => cartSearchInputRef.current?.focus(), 100); }}
+                      >
+                        <MagnifyingGlassIcon className="h-3.5 w-3.5 text-[var(--dash-text-disabled)] flex-shrink-0" />
                         {showCartSearch ? (
-                          <div className="flex items-center gap-1.5 bg-[var(--dash-bg-raised)] border border-[var(--dash-border-default)] rounded-md px-2 py-1">
-                            <MagnifyingGlassIcon className="h-3.5 w-3.5 text-[var(--dash-text-disabled)] flex-shrink-0" />
+                          <>
                             <input
                               ref={cartSearchInputRef}
                               type="text"
                               value={cartSearchQuery}
                               onChange={(e) => handleCartSearch(e.target.value)}
                               placeholder="بحث في السلة..."
-                              className="bg-transparent text-sm text-[var(--dash-text-primary)] placeholder:text-[var(--dash-text-disabled)] outline-none w-36"
+                              className="bg-transparent text-sm text-[var(--dash-text-primary)] placeholder:text-[var(--dash-text-disabled)] outline-none flex-1"
                               autoFocus
+                              onBlur={() => { if (!cartSearchQuery) { setShowCartSearch(false); setCartSearchMatchIds([]); setCartSearchMatchIndex(0); } }}
                               onKeyDown={(e) => {
                                 if (e.key === 'Escape') {
                                   setShowCartSearch(false);
                                   setCartSearchQuery('');
                                   setHighlightedCartItemId(null);
+                                  setCartSearchMatchIds([]);
+                                  setCartSearchMatchIndex(0);
+                                  (e.target as HTMLInputElement).blur();
+                                } else if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  navigateCartSearchMatch(e.shiftKey ? 'prev' : 'next');
                                 }
                               }}
                             />
-                            <button
-                              onClick={() => { setShowCartSearch(false); setCartSearchQuery(''); setHighlightedCartItemId(null); }}
-                              className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
-                            >
-                              <XMarkIcon className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
+                            {cartSearchQuery && cartSearchMatchIds.length > 0 && (
+                              <div className="flex items-center gap-1 flex-shrink-0" onMouseDown={(e) => e.preventDefault()}>
+                                <span className="text-[var(--dash-text-muted)] text-xs whitespace-nowrap">{cartSearchMatchIndex + 1}/{cartSearchMatchIds.length}</span>
+                                <button
+                                  onClick={() => navigateCartSearchMatch('prev')}
+                                  className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] p-0.5"
+                                >
+                                  <ChevronUpIcon className="h-3 w-3" />
+                                </button>
+                                <button
+                                  onClick={() => navigateCartSearchMatch('next')}
+                                  className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)] p-0.5"
+                                >
+                                  <ChevronDownIcon className="h-3 w-3" />
+                                </button>
+                              </div>
+                            )}
+                            {cartSearchQuery && (
+                              <button
+                                onMouseDown={(e) => e.preventDefault()}
+                                onClick={() => { setCartSearchQuery(''); setHighlightedCartItemId(null); setCartSearchMatchIds([]); setCartSearchMatchIndex(0); cartSearchInputRef.current?.focus(); }}
+                                className="text-[var(--dash-text-muted)] hover:text-[var(--dash-text-primary)]"
+                              >
+                                <XMarkIcon className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+                          </>
                         ) : (
-                          <button
-                            onClick={() => { setShowCartSearch(true); setTimeout(() => cartSearchInputRef.current?.focus(), 100); }}
-                            className="flex items-center gap-1.5 text-[var(--dash-text-disabled)] hover:text-[var(--dash-text-muted)] transition-colors text-xs"
-                          >
-                            <span>بحث</span>
-                            <MagnifyingGlassIcon className="h-3.5 w-3.5" />
-                          </button>
+                          <span className="text-[var(--dash-text-disabled)] text-xs">بحث</span>
                         )}
                       </div>
+                      <span className="text-[var(--dash-text-primary)] font-medium text-sm whitespace-nowrap">منتجات السلة: {cartItems.length}</span>
                     </div>
                   </div>
 

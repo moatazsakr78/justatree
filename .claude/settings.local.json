@@ -407,7 +407,8 @@
       "Bash(git clone:*)",
       "Bash(bash sync-from-elfaroukgroup.sh)",
       "Bash(ls -la /c/Users/pc/Desktop/elfaroukgroup/app/\\\\\\(dashboard\\\\\\)/)",
-      "mcp__plugin_playwright_playwright__browser_navigate"
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "Bash(npx -y tsc --noEmit --pretty app/\\\\\\(dashboard\\\\\\)/pos/page.tsx)"
     ],
     "deny": [],
     "additionalDirectories": [
