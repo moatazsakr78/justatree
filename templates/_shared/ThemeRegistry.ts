@@ -65,3 +65,16 @@ registerTheme(
   },
   () => import('@/templates/modern') as Promise<ThemeExports>
 );
+
+registerTheme(
+  {
+    id: 'just-a-tree',
+    name: 'مجرد شجرة',
+    nameEn: 'Just A Tree',
+    description: 'تصميم مستوحى من الطبيعة - أجواء نباتية فاخرة لمتاجر الأشجار والنباتات الزينة',
+    author: 'El Farouk Group',
+    version: '1.0.0',
+    thumbnail: '/themes/just-a-tree/thumbnail.png',
+  },
+  () => import('@/templates/just-a-tree') as Promise<ThemeExports>
+);
