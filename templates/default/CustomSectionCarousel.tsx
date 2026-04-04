@@ -6,6 +6,7 @@ import { Product } from '@/components/website/shared/types';
 import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useWebsiteCurrency } from '@/lib/hooks/useCurrency';
 import { useRatingsDisplay } from '@/lib/hooks/useRatingSettings';
+import { useStoreDisplaySettings } from '@/lib/hooks/useStoreDisplaySettings';
 import { getTransformedImageUrl } from '@/lib/utils/supabaseImageTransform';
 
 interface CustomSectionCarouselProps {
@@ -36,6 +37,7 @@ export default function CustomSectionCarousel({
 
   // Get rating settings
   const { showRatings } = useRatingsDisplay();
+  const { showProductDescription } = useStoreDisplaySettings();
 
   // Scroll to accordion when expanded
   useEffect(() => {
@@ -179,17 +181,19 @@ export default function CustomSectionCarousel({
               </div>
               <div onClick={() => hasClones(product) ? handleProductClick(product) : (onProductClick ? onProductClick(String(product.id)) : router.push(`/product/${product.id}`))}>
                 <h4 className="font-semibold mb-2 text-gray-800 truncate transition-colors group-hover:text-[var(--primary-color)]">{product.name}</h4>
-                <div className="h-10 mb-3">
-                  <p className="text-gray-600 text-sm overflow-hidden" style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    lineHeight: '1.25rem',
-                    maxHeight: '2.5rem'
-                  }}>
-                    {product.description || ''}
-                  </p>
-                </div>
+                {showProductDescription && (
+                  <div className="h-10 mb-3">
+                    <p className="text-gray-600 text-sm overflow-hidden" style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      lineHeight: '1.25rem',
+                      maxHeight: '2.5rem'
+                    }}>
+                      {product.description || ''}
+                    </p>
+                  </div>
+                )}
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">

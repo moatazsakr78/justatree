@@ -367,6 +367,7 @@ export default function SettingsPage() {
   const {
     showQuantityInStore,
     showProductStarRating,
+    showProductDescription,
     updateStoreDisplaySettings,
     isLoading: isLoadingStoreSettings
   } = useStoreDisplaySettings();
@@ -1615,6 +1616,8 @@ export default function SettingsPage() {
         await updateStoreDisplaySettings({ showQuantityInStore: value });
       } else if (settingKey === 'show_product_star_rating') {
         await updateStoreDisplaySettings({ showProductStarRating: value });
+      } else if (settingKey === 'show_product_description') {
+        await updateStoreDisplaySettings({ showProductDescription: value });
       }
     } catch (err) {
       console.error('Error saving store setting:', err);
@@ -1663,6 +1666,26 @@ export default function SettingsPage() {
                 type="checkbox"
                 checked={showProductStarRating}
                 onChange={(e) => handleStoreSettingChange('show_product_star_rating', e.target.checked)}
+                disabled={isLoadingStoreSettings}
+                className="sr-only peer"
+              />
+              <div className={`w-11 h-6 bg-[var(--dash-bg-overlay)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dash-accent-green ${isLoadingStoreSettings ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+            </label>
+          </div>
+
+          {/* Show Product Description Toggle */}
+          <div className="flex justify-between items-center p-3 bg-[var(--dash-bg-surface)] rounded-lg">
+            <div className="flex-1">
+              <label className="text-[var(--dash-text-primary)] text-sm font-medium">ظهور وصف المنتج</label>
+              <p className="text-xs text-[var(--dash-text-muted)] mt-1">
+                عند التفعيل، سيظهر وصف المنتج للعملاء في المتجر
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showProductDescription}
+                onChange={(e) => handleStoreSettingChange('show_product_description', e.target.checked)}
                 disabled={isLoadingStoreSettings}
                 className="sr-only peer"
               />

@@ -44,6 +44,16 @@ const THEME = {
   cardWhite: '#FFFFFF',
 };
 
+// Botanical card styling for InteractiveProductCard
+const BOTANICAL_CARD = {
+  className: 'rounded-2xl p-4 cursor-pointer group transition-all duration-300 hover:-translate-y-1',
+  style: {
+    backgroundColor: THEME.cardWhite,
+    border: `1px solid ${THEME.softEmerald}`,
+    boxShadow: '0 2px 12px rgba(27,58,45,0.06)',
+  } as React.CSSProperties,
+};
+
 // ============================================
 // Botanical Decorative Components
 // ============================================
@@ -1202,6 +1212,8 @@ export default function DesktopHome({
                           deviceType="desktop"
                           onProductClick={handleProductClick}
                           displaySettings={displaySettings}
+                          containerClassName={BOTANICAL_CARD.className}
+                          containerStyle={BOTANICAL_CARD.style}
                         />
                       ))}
                     </div>
@@ -1258,6 +1270,8 @@ export default function DesktopHome({
                         deviceType="desktop"
                         onProductClick={handleProductClick}
                         displaySettings={displaySettings}
+                        containerClassName={BOTANICAL_CARD.className}
+                        containerStyle={BOTANICAL_CARD.style}
                       />
                     </div>
                   ))}

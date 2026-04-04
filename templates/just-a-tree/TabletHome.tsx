@@ -44,6 +44,15 @@ const THEME = {
   cardWhite: '#FFFFFF',
 };
 
+const BOTANICAL_CARD_TABLET = {
+  className: 'rounded-2xl p-4 cursor-pointer group transition-all duration-300 hover:-translate-y-1',
+  style: {
+    backgroundColor: THEME.cardWhite,
+    border: `1px solid ${THEME.softEmerald}`,
+    boxShadow: '0 2px 12px rgba(27,58,45,0.06)',
+  } as React.CSSProperties,
+};
+
 // ============================================
 // Botanical Decorative Components
 // ============================================
@@ -1288,6 +1297,8 @@ export default function TabletHome({
                                   );
                                 } : handleProductClick}
                                 displaySettings={displaySettings}
+                                containerClassName={BOTANICAL_CARD_TABLET.className}
+                                containerStyle={BOTANICAL_CARD_TABLET.style}
                                 {...(hasClones ? {
                                   addToCartLabel: '\u0627\u062e\u062a\u0631 \u0627\u0644\u0634\u0643\u0644',
                                   imageBadge: `${product.clones.length} \u0634\u0643\u0644`
@@ -1429,6 +1440,8 @@ export default function TabletHome({
                         deviceType="tablet"
                         onProductClick={handleProductClick}
                         displaySettings={displaySettings}
+                        containerClassName={BOTANICAL_CARD_TABLET.className}
+                        containerStyle={BOTANICAL_CARD_TABLET.style}
                       />
                     </div>
                   ))}
@@ -1493,6 +1506,8 @@ export default function TabletHome({
                     deviceType="tablet"
                     onProductClick={handleProductClick}
                     displaySettings={displaySettings}
+                    containerClassName={BOTANICAL_CARD_TABLET.className}
+                    containerStyle={BOTANICAL_CARD_TABLET.style}
                   />
                 ))}
 

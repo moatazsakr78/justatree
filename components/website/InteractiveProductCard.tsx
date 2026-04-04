@@ -24,6 +24,8 @@ interface InteractiveProductCardProps {
   };
   addToCartLabel?: string;
   imageBadge?: string;
+  containerClassName?: string;
+  containerStyle?: React.CSSProperties;
 }
 
 export default function InteractiveProductCard({
@@ -33,7 +35,9 @@ export default function InteractiveProductCard({
   onProductClick,
   displaySettings,
   addToCartLabel,
-  imageBadge
+  imageBadge,
+  containerClassName,
+  containerStyle,
 }: InteractiveProductCardProps) {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -57,7 +61,7 @@ export default function InteractiveProductCard({
   const { showRatings } = useRatingsDisplay();
 
   // Get store display settings
-  const { showQuantityInStore, showProductStarRating } = useStoreDisplaySettings();
+  const { showQuantityInStore, showProductStarRating, showProductDescription } = useStoreDisplaySettings();
 
   // Vote modal state
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
@@ -336,7 +340,8 @@ export default function InteractiveProductCard({
 
   return (
     <div
-      className={`${classes.containerClass} flex flex-col`}
+      className={containerClassName ? `${containerClassName} flex flex-col` : `${classes.containerClass} flex flex-col`}
+      style={containerStyle}
       data-device-type={deviceType}
       onClick={() => {
         if (onProductClick) {
@@ -410,30 +415,32 @@ export default function InteractiveProductCard({
       <div className="flex flex-col">
         <h4 className={classes.titleClass}>{currentProduct.name}</h4>
         {/* Description with dynamic height based on colors, shapes and sizes availability */}
-        <div
-          className="mb-1"
-          style={{
-            minHeight: (product.colors && product.colors.length > 0) || (product.shapes && product.shapes.length > 0) || (product.sizes && product.sizes.length > 0)
-              ? (deviceType === 'tablet' ? '4.2rem' : '3.6rem')
-              : (deviceType === 'tablet' ? '4.5rem' : '4rem')
-          }}
-        >
+        {showProductDescription && (
           <div
-            className="text-sm text-gray-600"
+            className="mb-1"
             style={{
-              display: '-webkit-box',
-              WebkitLineClamp: (product.colors && product.colors.length > 0) || (product.shapes && product.shapes.length > 0) || (product.sizes && product.sizes.length > 0) ? 2 : 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              lineHeight: '1.4rem',
-              maxHeight: (product.colors && product.colors.length > 0) || (product.shapes && product.shapes.length > 0) || (product.sizes && product.sizes.length > 0) ? '2.8rem' : '4.2rem',
-              wordWrap: 'break-word'
+              minHeight: (product.colors && product.colors.length > 0) || (product.shapes && product.shapes.length > 0) || (product.sizes && product.sizes.length > 0)
+                ? (deviceType === 'tablet' ? '4.2rem' : '3.6rem')
+                : (deviceType === 'tablet' ? '4.5rem' : '4rem')
             }}
           >
-            {currentProduct.description}
+            <div
+              className="text-sm text-gray-600"
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: (product.colors && product.colors.length > 0) || (product.shapes && product.shapes.length > 0) || (product.sizes && product.sizes.length > 0) ? 2 : 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                lineHeight: '1.4rem',
+                maxHeight: (product.colors && product.colors.length > 0) || (product.shapes && product.shapes.length > 0) || (product.sizes && product.sizes.length > 0) ? '2.8rem' : '4.2rem',
+                wordWrap: 'break-word'
+              }}
+            >
+              {currentProduct.description}
+            </div>
           </div>
-        </div>
+        )}
         
         {/* Color Options - Horizontal Scroll for colors */}
         {product.colors && product.colors.length > 0 ? (

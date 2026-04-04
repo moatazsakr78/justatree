@@ -312,7 +312,7 @@ export default function ProductDetailContent({ productId, serverData }: ProductD
 
   const router = useRouter();
   const { showRatings } = useRatingsDisplay();
-  const { showProductStarRating } = useStoreDisplaySettings();
+  const { showProductStarRating, showProductDescription } = useStoreDisplaySettings();
   const { cartItems, addToCart } = useCart();
   const formatPrice = useFormatPrice();
   const [showCartModal, setShowCartModal] = useState(false);
@@ -1128,7 +1128,7 @@ export default function ProductDetailContent({ productId, serverData }: ProductD
           <div className="md:col-span-4 col-span-1 space-y-6 md:max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-hide md:pb-12 pb-8 md:pr-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">{productDetails.name}</h1>
-              <p className="text-gray-600" style={{whiteSpace: 'pre-line'}}>{productDetails.description}</p>
+              {showProductDescription && <p className="text-gray-600" style={{whiteSpace: 'pre-line'}}>{productDetails.description}</p>}
             </div>
 
             {/* Rating and Reviews - conditionally shown based on settings */}

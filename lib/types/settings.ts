@@ -31,6 +31,7 @@ export interface WebsiteSettings {
   // Store display settings
   show_quantity_in_store: boolean;
   show_product_star_rating: boolean;
+  show_product_description: boolean;
 }
 
 // UI/Theme settings
@@ -166,7 +167,8 @@ export const DEFAULT_SETTINGS: SystemSettingsObject = {
     enable_product_reviews: true,
     auto_approve_reviews: false,
     show_quantity_in_store: true,
-    show_product_star_rating: true
+    show_product_star_rating: true,
+    show_product_description: true
   },
   ui: {
     dashboard_theme: 'modern',

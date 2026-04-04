@@ -9,16 +9,19 @@ export function useStoreDisplaySettings() {
   // Get the current store display settings from the system settings
   const showQuantityInStore = getSetting('website.show_quantity_in_store', true);
   const showProductStarRating = getSetting('website.show_product_star_rating', true);
+  const showProductDescription = getSetting('website.show_product_description', true);
 
   const updateStoreDisplaySettings = async (settings: {
     showQuantityInStore?: boolean;
     showProductStarRating?: boolean;
+    showProductDescription?: boolean;
   }) => {
     try {
       await updateSettings({
         website: {
           ...(settings.showQuantityInStore !== undefined && { show_quantity_in_store: settings.showQuantityInStore }),
-          ...(settings.showProductStarRating !== undefined && { show_product_star_rating: settings.showProductStarRating })
+          ...(settings.showProductStarRating !== undefined && { show_product_star_rating: settings.showProductStarRating }),
+          ...(settings.showProductDescription !== undefined && { show_product_description: settings.showProductDescription })
         }
       });
     } catch (error) {
@@ -30,6 +33,7 @@ export function useStoreDisplaySettings() {
   return {
     showQuantityInStore,
     showProductStarRating,
+    showProductDescription,
     updateStoreDisplaySettings,
     isLoading
   };

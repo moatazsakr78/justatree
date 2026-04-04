@@ -44,6 +44,15 @@ const THEME = {
   cardWhite: '#FFFFFF',
 };
 
+const BOTANICAL_CARD_MOBILE = {
+  className: 'rounded-2xl p-3 cursor-pointer group transition-all duration-300',
+  style: {
+    backgroundColor: THEME.cardWhite,
+    border: `1px solid ${THEME.softEmerald}`,
+    boxShadow: '0 2px 8px rgba(27,58,45,0.05)',
+  } as React.CSSProperties,
+};
+
 // ============================================
 // Botanical Decorative Components
 // ============================================
@@ -1158,6 +1167,8 @@ export default function MobileHome({
                               );
                             } : handleProductClick}
                             displaySettings={displaySettings}
+                            containerClassName={BOTANICAL_CARD_MOBILE.className}
+                            containerStyle={BOTANICAL_CARD_MOBILE.style}
                             {...(hasClones ? {
                               addToCartLabel: 'اختر الشكل',
                               imageBadge: `${product.clones.length} شكل`
@@ -1271,6 +1282,8 @@ export default function MobileHome({
                       deviceType="mobile"
                       onProductClick={handleProductClick}
                       displaySettings={displaySettings}
+                      containerClassName={BOTANICAL_CARD_MOBILE.className}
+                      containerStyle={BOTANICAL_CARD_MOBILE.style}
                     />
                   </div>
                 ))}
@@ -1330,6 +1343,8 @@ export default function MobileHome({
                 deviceType="mobile"
                 onProductClick={handleProductClick}
                 displaySettings={displaySettings}
+                containerClassName={BOTANICAL_CARD_MOBILE.className}
+                containerStyle={BOTANICAL_CARD_MOBILE.style}
               />
             ))}
 
@@ -1745,6 +1760,8 @@ export default function MobileHome({
                         handleProductClick(productId);
                       }}
                       displaySettings={displaySettings}
+                      containerClassName={BOTANICAL_CARD_MOBILE.className}
+                      containerStyle={BOTANICAL_CARD_MOBILE.style}
                     />
                   ))}
                 </div>
