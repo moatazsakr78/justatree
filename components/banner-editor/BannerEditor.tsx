@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import type { HeroBanner, BannerElement, FallbackSlide } from './types';
-import { DEFAULT_ELEMENTS, PRESET_GRADIENTS, REFERENCE_CANVAS } from './constants';
+import type { HeroBanner, BannerElement, FallbackSlide, DeviceMode } from './types';
+import { DEFAULT_ELEMENTS, PRESET_GRADIENTS, REFERENCE_CANVAS, DEVICE_PRESETS } from './constants';
 import { useBannerData } from './useBannerData';
 import BannerRenderer from './BannerRenderer';
 import BannerElementWrapper from './BannerElementWrapper';
@@ -36,6 +36,7 @@ interface BannerEditorFullProps {
   theme: Record<string, string>;
   fallbackSlides?: FallbackSlide[];
   themeId?: string;
+  deviceType?: DeviceMode;
 }
 
 export default function BannerEditorFull({
@@ -45,26 +46,34 @@ export default function BannerEditorFull({
   theme,
   fallbackSlides,
   themeId = 'just-a-tree',
+  deviceType = 'desktop',
 }: BannerEditorFullProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [displayBanners, setDisplayBanners] = useState<HeroBanner[]>(initialBanners);
   const [editBanners, setEditBanners] = useState<HeroBanner[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
   const [showImagePicker, setShowImagePicker] = useState(false);
   const [showGradientPicker, setShowGradientPicker] = useState(false);
-  const [imagePickerTarget, setImagePickerTarget] = useState<string | null>(null); // element id
+  const [imagePickerTarget, setImagePickerTarget] = useState<string | null>(null);
+  const [deviceMode, setDeviceMode] = useState<DeviceMode>('desktop');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(REFERENCE_CANVAS.width);
+  const [canvasReady, setCanvasReady] = useState(false);
 
   const { saving, saveBanner, createBanner, deleteBanner, fetchBanners, saveAllBanners } = useBannerData(themeId);
 
-  const scaleFactor = height / REFERENCE_CANVAS.height;
+  // Editor uses deviceMode preview height; renderer uses actual device height
+  const editorHeight = isEditing ? DEVICE_PRESETS[deviceMode].height : height;
+  const scaleFactor = editorHeight / REFERENCE_CANVAS.height;
 
-  // Track container width
+  // Track container width — get initial width immediately to avoid position shift
   useEffect(() => {
     if (!containerRef.current) return;
+    setContainerWidth(containerRef.current.getBoundingClientRect().width);
+    setCanvasReady(true);
     const observer = new ResizeObserver(entries => {
       for (const entry of entries) {
         setContainerWidth(entry.contentRect.width);
@@ -72,10 +81,27 @@ export default function BannerEditorFull({
     });
     observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [isEditing]);
 
   // Current slide data
   const currentBanner = editBanners[activeSlide];
+
+  // Get elements for current device mode
+  const getElements = (banner: HeroBanner | undefined): BannerElement[] => {
+    if (!banner) return [];
+    if (deviceMode === 'mobile') return banner.mobile_elements || [];
+    if (deviceMode === 'tablet') return banner.tablet_elements || [];
+    return banner.elements || [];
+  };
+
+  // Set elements for current device mode
+  const setElements = (banner: HeroBanner, elements: BannerElement[]): HeroBanner => {
+    if (deviceMode === 'mobile') return { ...banner, mobile_elements: elements };
+    if (deviceMode === 'tablet') return { ...banner, tablet_elements: elements };
+    return { ...banner, elements };
+  };
+
+  const currentElements = getElements(currentBanner);
 
   const enterEditMode = useCallback(async () => {
     // Fetch latest from DB
@@ -95,6 +121,8 @@ export default function BannerEditorFull({
         canvas_width: REFERENCE_CANVAS.width,
         canvas_height: REFERENCE_CANVAS.height,
         elements: [],
+        tablet_elements: [],
+        mobile_elements: [],
         cta_link: null,
         created_at: null,
         updated_at: null,
@@ -131,6 +159,8 @@ export default function BannerEditorFull({
             canvas_width: banner.canvas_width,
             canvas_height: banner.canvas_height,
             elements: banner.elements,
+            tablet_elements: banner.tablet_elements || [],
+            mobile_elements: banner.mobile_elements || [],
             cta_link: banner.cta_link,
           });
           return !!created;
@@ -142,9 +172,13 @@ export default function BannerEditorFull({
 
     if (results.every(Boolean)) {
       setHasChanges(false);
-      // Refresh to get real IDs
+      // Refresh to get real IDs and update display
       const updated = await fetchBanners();
-      if (updated) setEditBanners(JSON.parse(JSON.stringify(updated)));
+      if (updated) {
+        const freshData = JSON.parse(JSON.stringify(updated));
+        setEditBanners(freshData);
+        setDisplayBanners(freshData);
+      }
       alert('تم حفظ البانر بنجاح!');
     } else {
       alert('حدث خطأ أثناء الحفظ');
@@ -173,10 +207,7 @@ export default function BannerEditorFull({
     }
 
     const updated = [...editBanners];
-    updated[activeSlide] = {
-      ...currentBanner,
-      elements: [...currentBanner.elements, newElement],
-    };
+    updated[activeSlide] = setElements(currentBanner, [...currentElements, newElement]);
     setEditBanners(updated);
     setSelectedElementId(newElement.id);
     setHasChanges(true);
@@ -186,7 +217,7 @@ export default function BannerEditorFull({
     if (!currentBanner) return;
 
     const updated = [...editBanners];
-    const elements = currentBanner.elements.map(el => {
+    const elements = currentElements.map(el => {
       if (el.id !== elementId) return el;
       return {
         ...el,
@@ -194,7 +225,7 @@ export default function BannerEditorFull({
         content: updates.content ? { ...el.content, ...updates.content } : el.content,
       };
     });
-    updated[activeSlide] = { ...currentBanner, elements };
+    updated[activeSlide] = setElements(currentBanner, elements);
     setEditBanners(updated);
     setHasChanges(true);
   };
@@ -203,10 +234,10 @@ export default function BannerEditorFull({
     if (!currentBanner || !selectedElementId) return;
 
     const updated = [...editBanners];
-    updated[activeSlide] = {
-      ...currentBanner,
-      elements: currentBanner.elements.filter(el => el.id !== selectedElementId),
-    };
+    updated[activeSlide] = setElements(
+      currentBanner,
+      currentElements.filter(el => el.id !== selectedElementId)
+    );
     setEditBanners(updated);
     setSelectedElementId(null);
     setHasChanges(true);
@@ -225,6 +256,8 @@ export default function BannerEditorFull({
       canvas_width: REFERENCE_CANVAS.width,
       canvas_height: REFERENCE_CANVAS.height,
       elements: [],
+      tablet_elements: [],
+      mobile_elements: [],
       cta_link: null,
       created_at: null,
       updated_at: null,
@@ -232,6 +265,17 @@ export default function BannerEditorFull({
     };
     setEditBanners([...editBanners, newBanner]);
     setActiveSlide(editBanners.length);
+    setSelectedElementId(null);
+    setHasChanges(true);
+  };
+
+  const copyFromDesktop = () => {
+    if (!currentBanner || deviceMode === 'desktop') return;
+    if (!confirm('سيتم استبدال التصميم الحالي بتصميم الكمبيوتر. متأكد؟')) return;
+    const desktopElements = JSON.parse(JSON.stringify(currentBanner.elements || []));
+    const updated = [...editBanners];
+    updated[activeSlide] = setElements(currentBanner, desktopElements);
+    setEditBanners(updated);
     setSelectedElementId(null);
     setHasChanges(true);
   };
@@ -278,18 +322,68 @@ export default function BannerEditorFull({
     }
   };
 
-  const selectedElement = currentBanner?.elements.find(el => el.id === selectedElementId) || null;
+  const selectedElement = currentElements.find(el => el.id === selectedElementId) || null;
+
+  // Keyboard shortcuts: ALT+wheel, ALT+±, Delete
+  useEffect(() => {
+    if (!isEditing) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (!e.altKey || !selectedElementId || !currentBanner) return;
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 2 : -2;
+      const el = currentBanner.elements.find(el => el.id === selectedElementId);
+      if (!el) return;
+      updateElement(selectedElementId, {
+        size: {
+          width: Math.max(5, el.size.width + delta),
+          height: Math.max(5, el.size.height + delta),
+        }
+      });
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedElementId || !currentBanner) return;
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      if (e.altKey && (e.key === '+' || e.key === '=' || e.key === '-')) {
+        e.preventDefault();
+        const delta = e.key === '-' ? -2 : 2;
+        const el = currentBanner.elements.find(el => el.id === selectedElementId);
+        if (!el) return;
+        updateElement(selectedElementId, {
+          size: {
+            width: Math.max(5, el.size.width + delta),
+            height: Math.max(5, el.size.height + delta),
+          }
+        });
+      }
+
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        deleteElement();
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isEditing, selectedElementId, currentBanner, updateElement, deleteElement]);
 
   // If not editing, show the regular renderer
   if (!isEditing) {
     return (
       <BannerRenderer
-        banners={initialBanners}
+        banners={displayBanners}
         height={height}
         isAdmin={isAdmin}
         theme={theme}
         fallbackSlides={fallbackSlides}
         onEditClick={enterEditMode}
+        deviceType={deviceType}
       />
     );
   }
@@ -297,10 +391,12 @@ export default function BannerEditorFull({
   // Editor mode
   return (
     <div className="relative" ref={containerRef}>
-      {/* Banner canvas */}
+      {/* Outer clip container — hides elements that overflow beyond the banner area */}
+      <div style={{ overflow: 'hidden', height: `${editorHeight}px`, position: 'relative' }}>
+      {/* Banner canvas — overflow visible inside for drag/resize freedom */}
       <section
-        className="relative overflow-hidden"
-        style={{ height: `${height}px` }}
+        className="relative"
+        style={{ height: `${editorHeight}px` }}
         onClick={() => setSelectedElementId(null)}
       >
         {/* Background */}
@@ -316,14 +412,14 @@ export default function BannerEditorFull({
           </div>
         )}
 
-        {/* Elements with drag/resize */}
+        {/* Elements with drag/resize — only render when canvas width is measured */}
         <div className="absolute inset-0 z-10">
-          {currentBanner?.elements.map((element) => (
+          {canvasReady && currentElements.map((element) => (
             <BannerElementWrapper
               key={element.id}
               element={element}
               containerWidth={containerWidth}
-              containerHeight={height}
+              containerHeight={editorHeight}
               scaleFactor={scaleFactor}
               isSelected={selectedElementId === element.id}
               onSelect={() => setSelectedElementId(element.id)}
@@ -358,6 +454,7 @@ export default function BannerEditorFull({
         {/* Bottom gradient */}
         <div className="absolute bottom-0 left-0 right-0 h-20" style={{ background: `linear-gradient(to top, ${theme.warmLinen || '#F7F5F0'}, transparent)` }}></div>
       </section>
+      </div>{/* End outer clip container */}
 
       {/* Editor UI overlays */}
       <BannerEditorToolbar
@@ -380,6 +477,12 @@ export default function BannerEditorFull({
           setActiveSlide((activeSlide - 1 + editBanners.length) % editBanners.length);
           setSelectedElementId(null);
         }}
+        deviceMode={deviceMode}
+        onDeviceModeChange={(mode) => {
+          setDeviceMode(mode);
+          setSelectedElementId(null);
+        }}
+        onCopyFromDesktop={copyFromDesktop}
       />
 
       <BannerElementProperties

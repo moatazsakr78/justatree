@@ -39,6 +39,8 @@ export function useBannerData(themeId: string = 'just-a-tree') {
           background_type: banner.background_type,
           background_value: banner.background_value,
           elements: banner.elements,
+          tablet_elements: banner.tablet_elements || [],
+          mobile_elements: banner.mobile_elements || [],
           cta_link: banner.cta_link,
           is_active: banner.is_active,
           display_order: banner.display_order,
@@ -75,6 +77,8 @@ export function useBannerData(themeId: string = 'just-a-tree') {
           canvas_width: banner.canvas_width,
           canvas_height: banner.canvas_height,
           elements: banner.elements,
+          tablet_elements: banner.tablet_elements || [],
+          mobile_elements: banner.mobile_elements || [],
           cta_link: banner.cta_link,
         })
         .select()
@@ -148,6 +152,8 @@ export function useBannerData(themeId: string = 'just-a-tree') {
             background_type: banner.background_type,
             background_value: banner.background_value,
             elements: banner.elements,
+            tablet_elements: banner.tablet_elements || [],
+            mobile_elements: banner.mobile_elements || [],
             cta_link: banner.cta_link,
             is_active: banner.is_active,
             display_order: banner.display_order,

@@ -1,8 +1,19 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import type { HeroBanner, BannerElement, FallbackSlide } from './types';
+import type { HeroBanner, BannerElement, FallbackSlide, DeviceMode } from './types';
 import { REFERENCE_CANVAS } from './constants';
+
+// Get the correct elements array for a device, with fallback to desktop
+function getDeviceElements(banner: HeroBanner, deviceType: DeviceMode): BannerElement[] {
+  if (deviceType === 'mobile' && banner.mobile_elements?.length > 0) {
+    return banner.mobile_elements;
+  }
+  if (deviceType === 'tablet' && banner.tablet_elements?.length > 0) {
+    return banner.tablet_elements;
+  }
+  return banner.elements || [];
+}
 
 interface BannerRendererProps {
   banners: HeroBanner[];
@@ -11,6 +22,7 @@ interface BannerRendererProps {
   theme: Record<string, string>;
   fallbackSlides?: FallbackSlide[];
   onEditClick?: () => void;
+  deviceType?: DeviceMode;
 }
 
 // Decorative SVG components
@@ -267,6 +279,7 @@ export default function BannerRenderer({
   theme,
   fallbackSlides,
   onEditClick,
+  deviceType = 'desktop',
 }: BannerRendererProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -356,7 +369,7 @@ export default function BannerRenderer({
 
         {/* Elements layer - render active slide's elements */}
         <div className="absolute inset-0 z-10">
-          {banners[activeSlide]?.elements?.map((element) => (
+          {(banners[activeSlide] ? getDeviceElements(banners[activeSlide], deviceType) : []).map((element) => (
             <RenderElement
               key={element.id}
               element={element}

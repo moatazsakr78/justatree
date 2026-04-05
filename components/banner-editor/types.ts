@@ -37,6 +37,8 @@ export interface BannerElement {
   content: BannerElementContent;
 }
 
+export type DeviceMode = 'desktop' | 'tablet' | 'mobile';
+
 export interface HeroBanner {
   id: string;
   name: string | null;
@@ -48,6 +50,8 @@ export interface HeroBanner {
   canvas_width: number;
   canvas_height: number;
   elements: BannerElement[];
+  tablet_elements: BannerElement[];
+  mobile_elements: BannerElement[];
   cta_link: string | null;
   created_at: string | null;
   updated_at: string | null;

@@ -16,6 +16,12 @@ export const REFERENCE_CANVAS = {
   height: 480,
 };
 
+export const DEVICE_PRESETS = {
+  desktop: { width: 1280, height: 480, label: 'كمبيوتر' },
+  tablet: { width: 900, height: 360, label: 'تابلت' },
+  mobile: { width: 430, height: 300, label: 'هاتف' },
+};
+
 export const DEFAULT_ELEMENTS = {
   text: {
     type: 'text' as const,

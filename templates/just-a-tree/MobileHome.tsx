@@ -914,6 +914,7 @@ export default function MobileHome({
             theme={THEME}
             fallbackSlides={HERO_SLIDES}
             themeId="just-a-tree"
+            deviceType="mobile"
           />
         )}
 

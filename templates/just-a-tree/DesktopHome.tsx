@@ -952,6 +952,7 @@ export default function DesktopHome({
             theme={THEME}
             fallbackSlides={HERO_SLIDES}
             themeId="just-a-tree"
+            deviceType="desktop"
           />
         )}
 

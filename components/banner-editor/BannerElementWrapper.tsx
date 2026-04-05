@@ -169,16 +169,11 @@ export default function BannerElementWrapper({
           position: { x: newX, y: newY },
         });
       }}
-      bounds="parent"
       style={{
         zIndex: element.zIndex,
         outline: isSelected ? '2px solid #3B82F6' : '1px dashed rgba(255,255,255,0.3)',
         borderRadius: '4px',
         cursor: 'move',
-      }}
-      onMouseDown={(e: any) => {
-        e.stopPropagation();
-        onSelect();
       }}
       enableResizing={{
         top: true,
@@ -201,7 +196,12 @@ export default function BannerElementWrapper({
         left: midHandleStyle,
       }}
     >
-      <ElementContent element={element} scaleFactor={scaleFactor} />
+      <div
+        onClick={(e) => { e.stopPropagation(); onSelect(); }}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <ElementContent element={element} scaleFactor={scaleFactor} />
+      </div>
     </Rnd>
   );
 }

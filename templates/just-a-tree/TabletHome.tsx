@@ -1018,6 +1018,7 @@ export default function TabletHome({
             theme={THEME}
             fallbackSlides={HERO_SLIDES}
             themeId="just-a-tree"
+            deviceType="tablet"
           />
         )}
 

@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import type { DeviceMode } from './types';
+import { DEVICE_PRESETS } from './constants';
 
 interface BannerEditorToolbarProps {
   onAddElement: (type: 'image' | 'text' | 'badge' | 'cta_button') => void;
@@ -16,6 +18,9 @@ interface BannerEditorToolbarProps {
   onDeleteSlide: () => void;
   onPrevSlide: () => void;
   onNextSlide: () => void;
+  deviceMode: DeviceMode;
+  onDeviceModeChange: (mode: DeviceMode) => void;
+  onCopyFromDesktop: () => void;
 }
 
 export default function BannerEditorToolbar({
@@ -32,6 +37,9 @@ export default function BannerEditorToolbar({
   onDeleteSlide,
   onPrevSlide,
   onNextSlide,
+  deviceMode,
+  onDeviceModeChange,
+  onCopyFromDesktop,
 }: BannerEditorToolbarProps) {
   return (
     <>
@@ -61,7 +69,38 @@ export default function BannerEditorToolbar({
         </div>
 
         <div className="flex items-center gap-3 text-white text-sm font-medium">
-          <span className="text-white/50">محرر البانر</span>
+          {/* Device toggle */}
+          <div className="flex items-center bg-white/5 rounded-lg p-0.5 gap-0.5">
+            {(['desktop', 'tablet', 'mobile'] as DeviceMode[]).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => onDeviceModeChange(mode)}
+                className={`p-1.5 rounded-md transition-all ${
+                  deviceMode === mode ? 'bg-blue-500 text-white' : 'text-white/50 hover:text-white hover:bg-white/10'
+                }`}
+                title={DEVICE_PRESETS[mode].label}
+              >
+                {mode === 'desktop' ? (
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                ) : mode === 'tablet' ? (
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                ) : (
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {deviceMode !== 'desktop' && (
+            <button
+              onClick={onCopyFromDesktop}
+              className="px-2 py-1 text-[10px] text-amber-400 hover:bg-amber-400/10 rounded-md transition-colors whitespace-nowrap"
+              title="نسخ تصميم الكمبيوتر"
+            >
+              نسخ من الكمبيوتر
+            </button>
+          )}
+
           <span className="text-white/30">|</span>
           <div className="flex items-center gap-1">
             <button onClick={onPrevSlide} className="p-1 hover:bg-white/10 rounded" disabled={totalSlides <= 1}>
