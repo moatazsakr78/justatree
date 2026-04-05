@@ -1,8 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import type { DeviceMode } from './types';
 import { DEVICE_PRESETS } from './constants';
+
+function useDraggable() {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const dragRef = useRef<{ startX: number; startY: number; origX: number; origY: number } | null>(null);
+
+  const onDragStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    dragRef.current = { startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y };
+    const onMove = (ev: MouseEvent) => {
+      if (!dragRef.current) return;
+      setPos({
+        x: dragRef.current.origX + (ev.clientX - dragRef.current.startX),
+        y: dragRef.current.origY + (ev.clientY - dragRef.current.startY),
+      });
+    };
+    const onUp = () => {
+      dragRef.current = null;
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  };
+
+  return { pos, onDragStart };
+}
 
 interface BannerEditorToolbarProps {
   onAddElement: (type: 'image' | 'text' | 'badge' | 'cta_button') => void;
@@ -21,6 +47,7 @@ interface BannerEditorToolbarProps {
   deviceMode: DeviceMode;
   onDeviceModeChange: (mode: DeviceMode) => void;
   onCopyFromDesktop: () => void;
+  isDevicePreview: boolean;
 }
 
 export default function BannerEditorToolbar({
@@ -40,13 +67,18 @@ export default function BannerEditorToolbar({
   deviceMode,
   onDeviceModeChange,
   onCopyFromDesktop,
+  isDevicePreview,
 }: BannerEditorToolbarProps) {
+  const fixedPos = isDevicePreview ? 'fixed' : 'absolute' as const;
+  const [toolbarCollapsed, setToolbarCollapsed] = useState(false);
+  const toolbar = useDraggable();
+
   return (
     <>
       {/* Top bar */}
       <div
-        className="absolute top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
-        style={{ backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)' }}
+        className="z-40 flex items-center justify-between px-4 py-2"
+        style={{ position: fixedPos, top: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)' }}
       >
         <div className="flex items-center gap-2">
           <button
@@ -139,51 +171,84 @@ export default function BannerEditorToolbar({
         </div>
       </div>
 
-      {/* Left toolbar - add elements */}
+      {/* Left toolbar - add elements (draggable + collapsible) */}
       <div
-        className="absolute left-3 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-2 p-2 rounded-xl"
-        style={{ backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)' }}
+        className="z-40 rounded-xl select-none"
+        style={{
+          position: fixedPos,
+          left: '12px',
+          top: '48px',
+          transform: `translate(${toolbar.pos.x}px, ${toolbar.pos.y}px)`,
+          backgroundColor: 'rgba(0,0,0,0.85)',
+          backdropFilter: 'blur(12px)',
+        }}
       >
-        <ToolbarButton
-          icon={<TextIcon />}
-          label="نص"
-          onClick={() => onAddElement('text')}
-        />
-        <ToolbarButton
-          icon={<ImageIcon />}
-          label="صورة"
-          onClick={() => onAddElement('image')}
-        />
-        <ToolbarButton
-          icon={<BadgeIcon />}
-          label="شارة"
-          onClick={() => onAddElement('badge')}
-        />
-        <ToolbarButton
-          icon={<ButtonIcon />}
-          label="زر"
-          onClick={() => onAddElement('cta_button')}
-        />
+        {/* Drag handle + collapse toggle */}
+        <div
+          className="flex items-center justify-between px-2 pt-2 pb-1 cursor-grab active:cursor-grabbing"
+          onMouseDown={toolbar.onDragStart}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); setToolbarCollapsed(!toolbarCollapsed); }}
+            className="p-0.5 text-white/40 hover:text-white transition-colors"
+            title={toolbarCollapsed ? 'إظهار الأدوات' : 'إخفاء الأدوات'}
+          >
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}
+              style={{ transform: toolbarCollapsed ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div className="flex gap-0.5">
+            <div className="w-1 h-1 rounded-full bg-white/20" />
+            <div className="w-1 h-1 rounded-full bg-white/20" />
+            <div className="w-1 h-1 rounded-full bg-white/20" />
+          </div>
+        </div>
 
-        <div className="h-px bg-white/10 my-1" />
+        {!toolbarCollapsed && (
+          <div className="flex flex-col gap-2 p-2 pt-0">
+            <ToolbarButton
+              icon={<TextIcon />}
+              label="نص"
+              onClick={() => onAddElement('text')}
+            />
+            <ToolbarButton
+              icon={<ImageIcon />}
+              label="صورة"
+              onClick={() => onAddElement('image')}
+            />
+            <ToolbarButton
+              icon={<BadgeIcon />}
+              label="شارة"
+              onClick={() => onAddElement('badge')}
+            />
+            <ToolbarButton
+              icon={<ButtonIcon />}
+              label="زر"
+              onClick={() => onAddElement('cta_button')}
+            />
 
-        <ToolbarButton
-          icon={<GradientIcon />}
-          label="خلفية"
-          onClick={onChangeBackground}
-        />
-        <ToolbarButton
-          icon={<PlusIcon />}
-          label="سلايد +"
-          onClick={onAddSlide}
-        />
-        {totalSlides > 1 && (
-          <ToolbarButton
-            icon={<TrashIcon />}
-            label="حذف سلايد"
-            onClick={onDeleteSlide}
-            danger
-          />
+            <div className="h-px bg-white/10 my-1" />
+
+            <ToolbarButton
+              icon={<GradientIcon />}
+              label="خلفية"
+              onClick={onChangeBackground}
+            />
+            <ToolbarButton
+              icon={<PlusIcon />}
+              label="سلايد +"
+              onClick={onAddSlide}
+            />
+            {totalSlides > 1 && (
+              <ToolbarButton
+                icon={<TrashIcon />}
+                label="حذف سلايد"
+                onClick={onDeleteSlide}
+                danger
+              />
+            )}
+          </div>
         )}
       </div>
     </>

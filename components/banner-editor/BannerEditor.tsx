@@ -135,10 +135,35 @@ export default function BannerEditorFull({
     setIsEditing(true);
   }, [fetchBanners, themeId]);
 
+  // Device preview: constrain document width for non-desktop devices
+  useEffect(() => {
+    if (!isEditing) return;
+
+    const resetStyles = () => {
+      document.documentElement.style.maxWidth = '';
+      document.documentElement.style.margin = '';
+      document.documentElement.style.boxShadow = '';
+      document.body.style.backgroundColor = '';
+    };
+
+    if (deviceMode !== 'desktop') {
+      const deviceWidth = DEVICE_PRESETS[deviceMode].width;
+      document.documentElement.style.maxWidth = deviceWidth + 'px';
+      document.documentElement.style.margin = '0 auto';
+      document.documentElement.style.boxShadow = '0 0 80px rgba(0,0,0,0.4)';
+      document.body.style.backgroundColor = '#111827';
+    } else {
+      resetStyles();
+    }
+
+    return resetStyles;
+  }, [isEditing, deviceMode]);
+
   const exitEditMode = () => {
     if (hasChanges) {
       if (!confirm('هل تريد الخروج بدون حفظ التغييرات؟')) return;
     }
+    setDeviceMode('desktop'); // Reset to desktop before closing
     setIsEditing(false);
     setSelectedElementId(null);
     setHasChanges(false);
@@ -483,6 +508,7 @@ export default function BannerEditorFull({
           setSelectedElementId(null);
         }}
         onCopyFromDesktop={copyFromDesktop}
+        isDevicePreview={deviceMode !== 'desktop'}
       />
 
       <BannerElementProperties
@@ -497,6 +523,7 @@ export default function BannerEditorFull({
             setShowImagePicker(true);
           }
         }}
+        isDevicePreview={deviceMode !== 'desktop'}
       />
 
       {/* Modals */}
