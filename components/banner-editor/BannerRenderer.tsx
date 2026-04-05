@@ -285,7 +285,10 @@ export default function BannerRenderer({
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(REFERENCE_CANVAS.width);
 
-  const slideCount = banners.length || (fallbackSlides?.length || 0);
+  // Only show hero-slot banners — other slots (promo_card, mid_banner) render in their own components
+  const heroBanners = banners.filter(b => b.slot === 'hero');
+
+  const slideCount = heroBanners.length || (fallbackSlides?.length || 0);
 
   // Auto-rotate slides
   useEffect(() => {
@@ -310,8 +313,8 @@ export default function BannerRenderer({
 
   const scaleFactor = height / REFERENCE_CANVAS.height;
 
-  // Use fallback if no banners from DB
-  if (!banners || banners.length === 0) {
+  // Use fallback if no hero banners from DB
+  if (!heroBanners || heroBanners.length === 0) {
     if (fallbackSlides && fallbackSlides.length > 0) {
       return (
         <div className="relative">
@@ -349,7 +352,7 @@ export default function BannerRenderer({
     <div className="relative" ref={containerRef}>
       <section className="relative overflow-hidden" style={{ height: `${height}px` }}>
         {/* Background layers */}
-        {banners.map((banner, index) => (
+        {heroBanners.map((banner, index) => (
           <div
             key={banner.id}
             className="absolute inset-0 transition-all duration-1000"
@@ -369,7 +372,7 @@ export default function BannerRenderer({
 
         {/* Elements layer - render active slide's elements */}
         <div className="absolute inset-0 z-10">
-          {(banners[activeSlide] ? getDeviceElements(banners[activeSlide], deviceType) : []).map((element) => (
+          {(heroBanners[activeSlide] ? getDeviceElements(heroBanners[activeSlide], deviceType) : []).map((element) => (
             <RenderElement
               key={element.id}
               element={element}
@@ -381,9 +384,9 @@ export default function BannerRenderer({
         </div>
 
         {/* Slide indicators */}
-        {banners.length > 1 && (
+        {heroBanners.length > 1 && (
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-3">
-            {banners.map((_, index) => (
+            {heroBanners.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setActiveSlide(index)}

@@ -50,8 +50,11 @@ export default function BannerEditorFull({
   deviceType = 'desktop',
   slot = 'hero',
 }: BannerEditorFullProps) {
+  // Only keep banners matching this editor's slot — other slots render in their own components
+  const filteredInitial = slot === 'hero' ? initialBanners.filter(b => b.slot === 'hero') : initialBanners;
+
   const [isEditing, setIsEditing] = useState(false);
-  const [displayBanners, setDisplayBanners] = useState<HeroBanner[]>(initialBanners);
+  const [displayBanners, setDisplayBanners] = useState<HeroBanner[]>(filteredInitial);
   const [editBanners, setEditBanners] = useState<HeroBanner[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
