@@ -8,7 +8,7 @@ function getEncryptionKey(): Buffer {
     return Buffer.from(key.padEnd(32, '0').slice(0, 32));
   }
   // Default key (should be set in production!)
-  return Buffer.from('elfaroukgroup-api-encryption-key'.slice(0, 32));
+  return Buffer.from('justatree-api-encryption-key'.slice(0, 32));
 }
 
 // Decrypt a value using AES-256-GCM
@@ -35,7 +35,7 @@ export async function getApiKey(keyName: string): Promise<string | null> {
     );
 
     const { data, error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('api_settings')
       .select('encrypted_value, iv, auth_tag, is_configured')
       .eq('setting_key', keyName)
@@ -62,7 +62,7 @@ export async function isApiKeyConfigured(keyName: string): Promise<boolean> {
     );
 
     const { data, error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('api_settings')
       .select('is_configured')
       .eq('setting_key', keyName)

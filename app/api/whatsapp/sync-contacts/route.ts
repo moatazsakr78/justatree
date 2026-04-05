@@ -12,7 +12,7 @@ const WASENDER_API_URL = 'https://www.wasenderapi.com/api';
 async function getApiToken(): Promise<string | null> {
   try {
     const { data } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('api_keys')
       .select('key_value')
       .eq('key_name', 'wasender_api_token')
@@ -92,7 +92,7 @@ export async function POST() {
 
     // Get all unique contacts from messages
     const { data: messagesContacts, error: msgError } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_messages')
       .select('from_number, customer_name')
       .order('created_at', { ascending: false });
@@ -123,7 +123,7 @@ export async function POST() {
       try {
         // Check if contact exists
         const { data: existing } = await supabase
-          .schema('elfaroukgroup')
+          .schema('justatree')
           .from('whatsapp_contacts')
           .select('id, profile_picture_url, last_picture_fetch')
           .eq('phone_number', phoneNumber)
@@ -149,7 +149,7 @@ export async function POST() {
 
         // Upsert contact
         const { error: upsertError } = await supabase
-          .schema('elfaroukgroup')
+          .schema('justatree')
           .from('whatsapp_contacts')
           .upsert({
             phone_number: phoneNumber,
@@ -196,7 +196,7 @@ export async function GET() {
   try {
     // Count total unique contacts from messages
     const { data: messages } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_messages')
       .select('from_number');
 
@@ -204,7 +204,7 @@ export async function GET() {
 
     // Count contacts with profile pictures
     const { data: contacts } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_contacts')
       .select('id, profile_picture_url');
 

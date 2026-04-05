@@ -953,7 +953,7 @@ export default function TabletHome({
               onClick={() => { setSelectedCategory('\u0627\u0644\u0643\u0644'); setSearchQuery(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             >
               <div className={`h-10 w-10 ${logoRoundingClass} overflow-hidden flex items-center justify-center`} style={{ backgroundColor: THEME.parchment, boxShadow: `0 0 0 2px ${THEME.antiqueGold}60` }}>
-                <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
               </div>
               <div>
                 <h1 className="text-base font-bold" style={{ color: THEME.charcoalInk }}>{companyName}</h1>
@@ -1520,7 +1520,7 @@ export default function TabletHome({
               <div>
                 <div className="flex items-center gap-2.5 mb-4">
                   <div className={`h-10 w-10 ${logoRoundingClass} overflow-hidden flex items-center justify-center`} style={{ backgroundColor: 'rgba(255,255,255,0.1)', boxShadow: `0 0 0 2px ${THEME.antiqueGold}40` }}>
-                    <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                    <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
                   </div>
                   <div>
                     <h5 className="font-bold text-base text-white">{companyName}</h5>

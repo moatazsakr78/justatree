@@ -1,5 +1,5 @@
 // Chart theme configuration for Recharts
-// Matches the dark theme of El Farouk Group POS
+// Matches the dark theme of Just A Tree POS
 
 export const CHART_COLORS = {
   primary: '#3B82F6',    // Blue - main accent

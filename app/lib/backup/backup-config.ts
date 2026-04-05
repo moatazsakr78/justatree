@@ -1,7 +1,7 @@
 // Backup system configuration - table ordering, types, constants
 
 export const BACKUP_VERSION = '2.0';
-export const BACKUP_FORMAT = 'elfaroukgroup-backup';
+export const BACKUP_FORMAT = 'justatree-backup';
 export const BATCH_INSERT_SIZE = 500;
 export const EXPORT_PAGE_SIZE = 1000;
 export const MAX_ROWS_PER_CHUNK = 2000;
@@ -15,7 +15,7 @@ export interface BackupMeta {
   format: string;
   created_at: string;
   created_by: string;
-  schema: 'elfaroukgroup';
+  schema: 'justatree';
   checksum: string;
   table_count: number;
   total_rows: number;

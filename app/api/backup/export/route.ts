@@ -136,7 +136,7 @@ export async function POST(request: Request) {
         format: BACKUP_FORMAT,
         created_at: new Date().toISOString(),
         created_by: session.user.email,
-        schema: 'elfaroukgroup',
+        schema: 'justatree',
         checksum: '', // Will be computed below
         table_count: tablesToExport.length,
         total_rows: totalRows,
@@ -164,7 +164,7 @@ export async function POST(request: Request) {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Content-Disposition': `attachment; filename="elfaroukgroup-backup-${new Date().toISOString().slice(0, 10)}.json"`,
+        'Content-Disposition': `attachment; filename="justatree-backup-${new Date().toISOString().slice(0, 10)}.json"`,
       },
     });
   } catch (error: any) {

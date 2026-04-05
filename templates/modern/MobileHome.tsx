@@ -654,7 +654,7 @@ export default function MobileHome({
           {/* Right: Logo + Name */}
           <div className="flex items-center gap-2.5">
             <div className={`h-9 w-9 ${logoRoundingClass} overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0`}>
-              <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+              <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
             </div>
             <span className="text-base font-bold text-gray-900 truncate max-w-[140px]">{companyName}</span>
           </div>
@@ -890,7 +890,7 @@ export default function MobileHome({
             {/* Company Info */}
             <div className="flex items-center gap-3">
               <div className={`h-10 w-10 ${logoRoundingClass} overflow-hidden flex-shrink-0`}>
-                <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
               </div>
               <div>
                 <h5 className="font-bold text-sm">{companyName}</h5>

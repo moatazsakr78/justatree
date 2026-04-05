@@ -40,7 +40,7 @@ export default function SocialMediaPage() {
             <div className="flex items-center gap-3">
               <div className="h-20 w-20 rounded-lg flex items-center justify-center">
                 <img
-                  src={logoUrl || '/assets/logo/El Farouk Group2.png'}
+                  src={logoUrl || '/assets/logo/justatree.png'}
                   alt="Logo"
                   className="h-full w-full object-contain rounded-lg"
                 />
@@ -120,7 +120,7 @@ export default function SocialMediaPage() {
 
       {/* Footer */}
       <footer className="mt-auto py-6 text-center text-gray-500 text-sm">
-        <p>© {new Date().getFullYear()} El Farouk Group</p>
+        <p>© {new Date().getFullYear()} Just A Tree</p>
       </footer>
     </div>
   )

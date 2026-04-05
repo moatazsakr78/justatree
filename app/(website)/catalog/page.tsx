@@ -21,7 +21,7 @@ export const revalidate = 3600; // 1 hour
 export const dynamic = 'force-static';
 
 export const metadata = {
-  title: 'كتالوج المنتجات | El Farouk Group',
+  title: 'كتالوج المنتجات | Just A Tree',
   description: 'تصفح كتالوج منتجاتنا المتنوعة بأسعار الجملة والقطعة',
 };
 

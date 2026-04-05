@@ -724,7 +724,7 @@ export default function DesktopHome({
             {/* Centered Logo and Name */}
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setSelectedCategory('الكل'); setSearchQuery(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               <div className={`h-12 w-12 ${logoRoundingClass} overflow-hidden bg-gray-100 flex items-center justify-center`}>
-                <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
               </div>
               <h1 className="text-xl font-bold text-gray-900">{companyName}</h1>
             </div>
@@ -886,7 +886,7 @@ export default function DesktopHome({
               <div>
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`h-10 w-10 ${logoRoundingClass} overflow-hidden bg-white/10 flex items-center justify-center`}>
-                    <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                    <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
                   </div>
                   <h5 className="font-bold text-lg text-white">{companyName}</h5>
                 </div>

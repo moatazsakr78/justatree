@@ -6,7 +6,7 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   db: {
-    schema: 'elfaroukgroup'
+    schema: 'justatree'
   }
 });
 

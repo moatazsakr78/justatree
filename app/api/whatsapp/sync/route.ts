@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
     for (let i = 0; i < messageIds.length; i += BATCH_SIZE) {
       const batch = messageIds.slice(i, i + BATCH_SIZE);
       const { data: existingMessages } = await supabase
-        .schema('elfaroukgroup')
+        .schema('justatree')
         .from('whatsapp_messages')
         .select('message_id')
         .in('message_id', batch);
@@ -159,13 +159,13 @@ export async function GET(request: NextRequest) {
           : new Date();
 
         const { error: insertError } = await supabase
-          .schema('elfaroukgroup')
+          .schema('justatree')
           .from('whatsapp_messages')
           .upsert({
             message_id: log.id,
             msg_id: log.msgId || null,
             from_number: fromNumber,
-            customer_name: log.fromMe ? 'الفاروق جروب' : (log.pushName || fromNumber),
+            customer_name: log.fromMe ? 'جست أ تري' : (log.pushName || fromNumber),
             message_text: messageText,
             message_type: log.fromMe ? 'outgoing' : 'incoming',
             media_type: mediaType,

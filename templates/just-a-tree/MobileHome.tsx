@@ -858,7 +858,7 @@ export default function MobileHome({
           {/* Right: Logo + Name */}
           <div className="flex items-center gap-2.5" onClick={() => { setSelectedCategory('الكل'); setSearchQuery(''); setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
             <div className={`h-9 w-9 ${logoRoundingClass} overflow-hidden flex items-center justify-center flex-shrink-0`} style={{ backgroundColor: THEME.parchment, boxShadow: `0 0 0 1px ${THEME.antiqueGold}60` }}>
-              <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+              <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
             </div>
             <div>
               <span className="text-base font-bold truncate max-w-[140px] block" style={{ color: THEME.charcoalInk }}>{companyName}</span>
@@ -1346,7 +1346,7 @@ export default function MobileHome({
             {/* Company Info */}
             <div className="flex items-center gap-3 mb-5">
               <div className={`h-10 w-10 ${logoRoundingClass} overflow-hidden flex-shrink-0`} style={{ backgroundColor: 'rgba(255,255,255,0.1)', boxShadow: `0 0 0 1px ${THEME.antiqueGold}40` }}>
-                <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
               </div>
               <div>
                 <h5 className="font-bold text-sm text-white">{companyName}</h5>

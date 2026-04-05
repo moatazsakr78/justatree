@@ -887,7 +887,7 @@ export default function DesktopHome({
               onClick={() => { setSelectedCategory('\u0627\u0644\u0643\u0644'); setSearchQuery(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             >
               <div className={`h-12 w-12 ${logoRoundingClass} overflow-hidden flex items-center justify-center`} style={{ backgroundColor: THEME.parchment, boxShadow: `0 0 0 2px ${THEME.antiqueGold}60` }}>
-                <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
               </div>
               <div>
                 <h1 className="text-lg font-bold" style={{ color: THEME.charcoalInk }}>{companyName}</h1>
@@ -1309,7 +1309,7 @@ export default function DesktopHome({
               <div>
                 <div className="flex items-center gap-3 mb-5">
                   <div className={`h-12 w-12 ${logoRoundingClass} overflow-hidden flex items-center justify-center`} style={{ backgroundColor: 'rgba(255,255,255,0.1)', boxShadow: `0 0 0 2px ${THEME.antiqueGold}40` }}>
-                    <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                    <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
                   </div>
                   <div>
                     <h5 className="font-bold text-lg text-white">{companyName}</h5>

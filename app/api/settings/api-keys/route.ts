@@ -16,7 +16,7 @@ function getEncryptionKey(): Buffer {
     return Buffer.from(key.padEnd(32, '0').slice(0, 32));
   }
   // Default key (should be set in production!)
-  return Buffer.from('elfaroukgroup-api-encryption-key'.slice(0, 32));
+  return Buffer.from('justatree-api-encryption-key'.slice(0, 32));
 }
 
 // Encrypt a value using AES-256-GCM
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { data, error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('api_settings')
       .select('setting_key, is_configured, updated_at')
       .eq('setting_key', keyName)
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
 
     // Check if key already exists
     const { data: existing } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('api_settings')
       .select('id')
       .eq('setting_key', key)
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     if (existing) {
       // Update existing key
       const { error } = await supabase
-        .schema('elfaroukgroup')
+        .schema('justatree')
         .from('api_settings')
         .update({
           encrypted_value: encrypted,
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
     } else {
       // Insert new key
       const { error } = await supabase
-        .schema('elfaroukgroup')
+        .schema('justatree')
         .from('api_settings')
         .insert({
           setting_key: key,
@@ -165,7 +165,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('api_settings')
       .delete()
       .eq('setting_key', keyName);

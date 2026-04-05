@@ -667,7 +667,7 @@ export default function TabletHome({
               {/* Logo + Name */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <div className={`h-9 w-9 ${logoRoundingClass} overflow-hidden flex items-center justify-center`}>
-                  <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                  <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
                 </div>
                 <span className="text-sm font-bold text-gray-800 hidden sm:inline">{companyName}</span>
               </div>
@@ -758,7 +758,7 @@ export default function TabletHome({
             {/* Logo + Brand */}
             <div className="flex items-center gap-3 flex-shrink-0">
               <div className={`h-11 w-11 ${logoRoundingClass} overflow-hidden flex items-center justify-center bg-gray-50`}>
-                <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
               </div>
               <h1 className="text-lg font-bold text-gray-800">{companyName}</h1>
             </div>
@@ -1056,7 +1056,7 @@ export default function TabletHome({
               <div>
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`h-10 w-10 ${logoRoundingClass} overflow-hidden flex items-center justify-center bg-white/10`}>
-                    <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-full w-full object-cover" />
+                    <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-full w-full object-cover" />
                   </div>
                   <h5 className="font-bold text-base text-white">{companyName}</h5>
                 </div>

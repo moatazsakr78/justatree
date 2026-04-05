@@ -12,7 +12,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 // Note: Using untyped client since these tables are new and not in generated types yet
 const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   db: {
-    schema: 'elfaroukgroup'
+    schema: 'justatree'
   },
   auth: {
     persistSession: false,

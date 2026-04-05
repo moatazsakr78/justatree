@@ -1321,7 +1321,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       .limit(1)
       .single()
 
-    const logoUrl = window.location.origin + '/assets/logo/El Farouk Group2.png'
+    const logoUrl = window.location.origin + '/assets/logo/justatree.png'
 
     const receiptContent = `
       <html dir="rtl" lang="ar">
@@ -1353,8 +1353,8 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
         </head>
         <body>
           <div class="receipt-header">
-            <img src="${logoUrl}" alt="El Farouk Group" class="company-logo" onerror="this.style.display='none'" />
-            <div class="company-name">El Farouk Group</div>
+            <img src="${logoUrl}" alt="Just A Tree" class="company-logo" onerror="this.style.display='none'" />
+            <div class="company-name">Just A Tree</div>
             <div class="receipt-date">${new Date(invoice.created_at).toLocaleDateString('ar-EG')} - ${new Date(invoice.created_at).toLocaleDateString('en-US')}</div>
             <div class="receipt-phone">${branchData?.phone || '01102862856'}</div>
           </div>
@@ -1433,7 +1433,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
       .limit(1)
       .single()
 
-    const logoUrl = window.location.origin + '/assets/logo/El Farouk Group2.png'
+    const logoUrl = window.location.origin + '/assets/logo/justatree.png'
     const currentDate = new Date().toLocaleDateString('ar-EG', {
       year: 'numeric',
       month: 'long',
@@ -1502,7 +1502,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
           <div class="invoice-container">
             <div class="invoice-header">
               <div class="company-info">
-                <div class="company-name">El Farouk Group</div>
+                <div class="company-name">Just A Tree</div>
                 <div class="company-details">${branchData?.name || 'الفرع الرئيسي'}<br>${branchData?.phone || '01102862856'}</div>
               </div>
               <img src="${logoUrl}" alt="Logo" class="company-logo" onerror="this.style.display='none'" />
@@ -1659,7 +1659,7 @@ export default function SupplierDetailsModal({ isOpen, onClose, supplier }: Supp
             <div class="invoice-container">
               <div class="invoice-header">
                 <div>
-                  <div class="company-name">El Farouk Group</div>
+                  <div class="company-name">Just A Tree</div>
                   <div class="company-details">${branchData?.name || 'الفرع الرئيسي'}<br>${branchData?.phone || '01102862856'}</div>
                 </div>
               </div>

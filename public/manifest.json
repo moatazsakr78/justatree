@@ -1,7 +1,7 @@
 {
-  "name": "El Farouk Group - POS System",
+  "name": "Just A Tree - POS System",
   "short_name": "POS",
-  "description": "نظام نقاط البيع - El Farouk Group",
+  "description": "نظام نقاط البيع - Just A Tree",
   "start_url": "/pos",
   "display": "standalone",
   "orientation": "any",
@@ -11,13 +11,13 @@
   "dir": "rtl",
   "icons": [
     {
-      "src": "/assets/logo/El Farouk Group2.png",
+      "src": "/assets/logo/justatree.png",
       "sizes": "any",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo/El Farouk Group2.png",
+      "src": "/assets/logo/justatree.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"

@@ -1,5 +1,5 @@
 // Reports Service - Data fetching from Supabase
-// All queries use elfaroukgroup schema
+// All queries use justatree schema
 
 import { supabase } from '@/app/lib/supabase/client';
 import { toEgyptDateString, toEgyptHour, toEgyptDayOfWeek } from '@/app/lib/utils/date-utils';

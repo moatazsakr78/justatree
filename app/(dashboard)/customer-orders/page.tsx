@@ -1264,7 +1264,7 @@ export default function CustomerOrdersPage() {
 
             {/* اللوجو - اليمين */}
             <div className="flex items-center">
-              <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt="الفاروق" className="h-12 w-12 md:h-16 md:w-16 object-contain" />
+              <img src={logoUrl || '/assets/logo/justatree.png'} alt="جست أ تري" className="h-12 w-12 md:h-16 md:w-16 object-contain" />
             </div>
 
           </div>
@@ -1767,7 +1767,7 @@ export default function CustomerOrdersPage() {
                                   onClick={async () => {
                                     setTrackingDropdownOrderId(null);
                                     const trackingUrl = `${window.location.origin}/track/${order.trackingToken}`;
-                                    const message = `مرحبا ${order.customerName}\nطلبك رقم ${order.id} في الفاروق جروب\nيمكنك متابعة وتعديل طلبك من خلال الرابط التالي:\n${trackingUrl}`;
+                                    const message = `مرحبا ${order.customerName}\nطلبك رقم ${order.id} في جست أ تري\nيمكنك متابعة وتعديل طلبك من خلال الرابط التالي:\n${trackingUrl}`;
                                     try {
                                       const res = await fetch('/api/whatsapp/send', {
                                         method: 'POST',
@@ -1795,7 +1795,7 @@ export default function CustomerOrdersPage() {
                                 <button
                                   onClick={async () => {
                                     const trackingUrl = `${window.location.origin}/track/${order.trackingToken}`;
-                                    const message = `مرحبا ${order.customerName}\nطلبك رقم ${order.id} في الفاروق جروب\nيمكنك متابعة وتعديل طلبك من خلال الرابط التالي:\n${trackingUrl}`;
+                                    const message = `مرحبا ${order.customerName}\nطلبك رقم ${order.id} في جست أ تري\nيمكنك متابعة وتعديل طلبك من خلال الرابط التالي:\n${trackingUrl}`;
                                     try {
                                       await navigator.clipboard.writeText(message);
                                       setCopiedTrackingOrderId(order.id);

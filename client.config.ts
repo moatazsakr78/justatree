@@ -3,13 +3,13 @@
 
 export const CLIENT_CONFIG = {
   // Database Schema
-  schema: 'elfaroukgroup' as const,
+  schema: 'justatree' as const,
   supabaseProjectId: 'hecedrbnbknohssgaoso',
 
   // Branding
-  appName: 'El Farouk Group Store',
-  shortName: 'elfaroukgroup',
-  companyName: 'El Farouk Group',
+  appName: 'Just A Tree Store',
+  shortName: 'justatree',
+  companyName: 'Just A Tree',
   description: 'متجرك المتكامل للحصول على أفضل المنتجات بأسعار مميزة وجودة عالية',
 
   // Theme Colors
@@ -19,7 +19,7 @@ export const CLIENT_CONFIG = {
   secondaryColor: '#10B981',
 
   // Logo
-  logoPath: '/assets/logo/El Farouk Group2.png',
+  logoPath: '/assets/logo/justatree.png',
 
   // Currency
   defaultCurrency: 'ريال',

@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     // Update all unread incoming messages from this phone number
     const { error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_messages')
       .update({ is_read: true })
       .eq('from_number', phoneNumber)

@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
       // Rare race condition: webhook arrives before this code runs
       if (result.msgId) {
         const { data: existingByMsgId } = await supabase
-          .schema('elfaroukgroup')
+          .schema('justatree')
           .from('whatsapp_messages')
           .select('message_id')
           .eq('msg_id', result.msgId)
@@ -206,11 +206,11 @@ export async function POST(request: NextRequest) {
       }
 
       // Store message in database
-      const { error: dbError } = await supabase.schema('elfaroukgroup').from('whatsapp_messages').insert({
+      const { error: dbError } = await supabase.schema('justatree').from('whatsapp_messages').insert({
         message_id: generatedMessageId,
         msg_id: result.msgId || null, // WasenderAPI integer ID for replyTo
         from_number: cleanNumber,
-        customer_name: 'الفاروق جروب',
+        customer_name: 'جست أ تري',
         message_text: messageText,
         message_type: 'outgoing',
         media_type: mediaType,

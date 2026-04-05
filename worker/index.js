@@ -223,8 +223,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: '/assets/logo/El Farouk Group2.png',
-    badge: '/assets/logo/El Farouk Group2.png',
+    icon: '/assets/logo/justatree.png',
+    badge: '/assets/logo/justatree.png',
     dir: 'rtl',
     lang: 'ar',
     vibrate: [100, 50, 100],

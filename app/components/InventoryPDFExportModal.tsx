@@ -107,7 +107,7 @@ export default function InventoryPDFExportModal({
           columns,
           priceType,
           includeImages,
-          title: 'جرد المخزون - El Farouk Group'
+          title: 'جرد المخزون - Just A Tree'
         },
         (current, total, productName) => {
           setProcessedCount(current)

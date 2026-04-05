@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     // ============================================
     if (conversationsOnly && !phoneNumber) {
       const { data: conversations, error } = await supabase
-        .schema('elfaroukgroup')
+        .schema('justatree')
         .rpc('get_whatsapp_conversations');
 
       if (error) {
@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
     // SPECIFIC PHONE: Fetch messages for one conversation
     // ============================================
     let query = supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_messages')
       .select('*')
       .order('created_at', { ascending: true });
@@ -156,7 +156,7 @@ export async function GET(request: NextRequest) {
       // Fetch reactions in batches
       const reactionsPromises = messageIdChunks.map(chunk =>
         supabase
-          .schema('elfaroukgroup')
+          .schema('justatree')
           .from('whatsapp_reactions')
           .select('message_id, emoji, from_number, is_from_me')
           .in('message_id', chunk)
@@ -214,7 +214,7 @@ export async function GET(request: NextRequest) {
         });
       } else {
         // Update customer name if this is an incoming message (to get the real customer name)
-        if (!isOutgoing && msg.customer_name && msg.customer_name !== 'الفاروق جروب') {
+        if (!isOutgoing && msg.customer_name && msg.customer_name !== 'جست أ تري') {
           existing.customerName = msg.customer_name;
         }
 

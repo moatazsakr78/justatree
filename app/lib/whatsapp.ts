@@ -638,7 +638,7 @@ export async function getOrCreateContact(
 
     // Try to get existing contact
     const { data: existing, error: selectError } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_contacts')
       .select('*')
       .eq('phone_number', cleanNumber)
@@ -648,7 +648,7 @@ export async function getOrCreateContact(
       // Update customer name if provided and different
       if (customerName && customerName !== existing.customer_name) {
         const { data: updated } = await supabase
-          .schema('elfaroukgroup')
+          .schema('justatree')
           .from('whatsapp_contacts')
           .update({
             customer_name: customerName,
@@ -664,7 +664,7 @@ export async function getOrCreateContact(
 
     // Create new contact
     const { data: newContact, error: insertError } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_contacts')
       .insert({
         phone_number: cleanNumber,
@@ -778,7 +778,7 @@ export async function updateContactProfilePicture(
     const cleanNumber = cleanPhoneNumber(phoneNumber);
 
     const { error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_contacts')
       .update({
         profile_picture_url: pictureUrl,
@@ -818,7 +818,7 @@ export async function syncContactWithProfilePicture(
       // Return updated contact
       const cleanNumber = cleanPhoneNumber(phoneNumber);
       const { data: updated } = await supabase
-        .schema('elfaroukgroup')
+        .schema('justatree')
         .from('whatsapp_contacts')
         .select('*')
         .eq('phone_number', cleanNumber)
@@ -838,7 +838,7 @@ export async function syncContactWithProfilePicture(
 export async function getAllContacts(): Promise<WhatsAppContact[]> {
   try {
     const { data, error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_contacts')
       .select('*')
       .order('updated_at', { ascending: false });

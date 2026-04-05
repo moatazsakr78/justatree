@@ -203,7 +203,7 @@ export default function CatalogView({ initialProducts, categories }: CatalogView
       {/* Footer */}
       <footer className="bg-[#2B3544] text-white py-4 px-4 mt-8">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-sm text-gray-400">© {new Date().getFullYear()} El Farouk Group - جميع الحقوق محفوظة</p>
+          <p className="text-sm text-gray-400">© {new Date().getFullYear()} Just A Tree - جميع الحقوق محفوظة</p>
         </div>
       </footer>
     </div>

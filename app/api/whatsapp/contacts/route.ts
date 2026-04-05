@@ -15,7 +15,7 @@ const supabase = createClient(
 export async function GET() {
   try {
     const { data, error } = await supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_contacts')
       .select('*')
       .order('updated_at', { ascending: false });

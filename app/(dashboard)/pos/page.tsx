@@ -3846,7 +3846,7 @@ function POSPageContent() {
         <body>
           <div class="receipt-header">
             <img
-              src="${logoUrl || (window.location.origin + '/assets/logo/El Farouk Group2.png')}"
+              src="${logoUrl || (window.location.origin + '/assets/logo/justatree.png')}"
               alt="${companyName}"
               class="company-logo"
               onerror="this.style.display='none'; document.querySelector('.company-logo-fallback').style.display='block';"
@@ -4269,7 +4269,7 @@ function POSPageContent() {
 
           <div class="receipt-header">
             <img
-              src="${logoUrl || (window.location.origin + '/assets/logo/El Farouk Group2.png')}"
+              src="${logoUrl || (window.location.origin + '/assets/logo/justatree.png')}"
               alt="${companyName}"
               class="company-logo"
               onerror="this.style.display='none'; document.querySelector('.company-logo-fallback').style.display='block';"
@@ -4666,7 +4666,7 @@ function POSPageContent() {
 
             <div class="receipt-header">
               <img
-                src="${logoUrl || (window.location.origin + '/assets/logo/El Farouk Group2.png')}"
+                src="${logoUrl || (window.location.origin + '/assets/logo/justatree.png')}"
                 alt="${companyName}"
                 class="company-logo"
                 onerror="this.style.display='none';"

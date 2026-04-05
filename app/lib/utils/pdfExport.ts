@@ -251,7 +251,7 @@ export async function generateInventoryPDF(
   doc.rect(0, 0, actualPageWidth, headerHeight, 'F')
 
   // 2. Add logo (on the left side)
-  const logoUrl = options.logoUrl || '/assets/logo/El Farouk Group2.png'
+  const logoUrl = options.logoUrl || '/assets/logo/justatree.png'
   const logoBase64 = imageCache.get('__logo__') || await imageToBase64(logoUrl)
   const logoSize = 18
   if (logoBase64) {
@@ -263,7 +263,7 @@ export async function generateInventoryPDF(
   }
 
   // 3. Add company name (next to logo on the left)
-  const companyName = options.companyName || 'El Farouk Group'
+  const companyName = options.companyName || 'Just A Tree'
   doc.setFont('Amiri')
   doc.setFontSize(18) // Increased from 16 to 18
   doc.setTextColor(255, 255, 255) // White

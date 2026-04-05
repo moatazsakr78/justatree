@@ -382,7 +382,7 @@ export default function MyInvoicesPage() {
       <body>
         <div class="header">
           <div class="title">${activeTab === 'invoices' ? 'فواتيري' : activeTab === 'statement' ? 'كشف الحساب' : 'الدفعات'}</div>
-          <img src="${logoUrl || '/assets/logo/El Farouk Group2.png'}" class="logo" />
+          <img src="${logoUrl || '/assets/logo/justatree.png'}" class="logo" />
         </div>
         <div class="customer-info">
           <h3>بيانات العميل</h3>
@@ -534,7 +534,7 @@ export default function MyInvoicesPage() {
 
             {/* Logo */}
             <div className="flex items-center">
-              <img src={logoUrl || '/assets/logo/El Farouk Group2.png'} alt={companyName} className="h-12 w-12 md:h-16 md:w-16 object-contain" />
+              <img src={logoUrl || '/assets/logo/justatree.png'} alt={companyName} className="h-12 w-12 md:h-16 md:w-16 object-contain" />
             </div>
           </div>
         </div>

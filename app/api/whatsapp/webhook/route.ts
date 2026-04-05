@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     const messagesData = body.data?.messages;
     const msgKey = Array.isArray(messagesData) ? messagesData[0]?.key : messagesData?.key;
     supabase
-      .schema('elfaroukgroup')
+      .schema('justatree')
       .from('whatsapp_webhook_logs')
       .insert({
         event_type: body.event || body.type || 'unknown',
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
           // Without this check, both get inserted (different message_id = no conflict).
           if (isOutgoing && message.msgId) {
             const { data: existingByMsgId } = await supabase
-              .schema('elfaroukgroup')
+              .schema('justatree')
               .from('whatsapp_messages')
               .select('id, message_id')
               .eq('msg_id', message.msgId)
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
             if (existingByMsgId) {
               // Row already exists from send API — update message_id to canonical WhatsApp ID
               if (existingByMsgId.message_id !== message.messageId) {
-                await supabase.schema('elfaroukgroup')
+                await supabase.schema('justatree')
                   .from('whatsapp_messages')
                   .update({ message_id: message.messageId })
                   .eq('id', existingByMsgId.id)
@@ -167,15 +167,15 @@ export async function POST(request: NextRequest) {
           // Use upsert to prevent duplicates (atomic operation)
           // Store both incoming and outgoing messages
           // For outgoing messages from real WhatsApp app, customer_name should be the recipient name
-          // but we use 'الفاروق جروب' as sender name for display consistency
+          // but we use 'جست أ تري' as sender name for display consistency
           const { error: dbError } = await supabase
-            .schema('elfaroukgroup')
+            .schema('justatree')
             .from('whatsapp_messages')
             .upsert({
               message_id: message.messageId,
               msg_id: message.msgId || null, // WasenderAPI integer ID for replyTo
               from_number: message.from,
-              customer_name: isOutgoing ? 'الفاروق جروب' : message.customerName,
+              customer_name: isOutgoing ? 'جست أ تري' : message.customerName,
               message_text: message.text,
               message_type: isOutgoing ? 'outgoing' : 'incoming',
               media_type: message.mediaType || 'text',
@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
               message_id: message.messageId,
               msg_id: message.msgId || null,
               from_number: message.from,
-              customer_name: isOutgoing ? 'الفاروق جروب' : message.customerName,
+              customer_name: isOutgoing ? 'جست أ تري' : message.customerName,
               message_text: message.text,
               message_type: isOutgoing ? 'outgoing' : 'incoming',
               media_type: message.mediaType || 'text',
@@ -272,7 +272,7 @@ export async function POST(request: NextRequest) {
         const lidMatch = updateKey.senderLid.match(/(\d{14,})@/);
         if (lidMatch && isValidPhoneNumber(senderPhone)) {
           supabase
-            .schema('elfaroukgroup')
+            .schema('justatree')
             .from('whatsapp_lid_mappings')
             .upsert({
               lid: lidMatch[1],
@@ -313,7 +313,7 @@ export async function POST(request: NextRequest) {
           // If emoji is empty or null, it means removing the reaction
           if (!emoji || emoji === '') {
             const { error: deleteError } = await supabase
-              .schema('elfaroukgroup')
+              .schema('justatree')
               .from('whatsapp_reactions')
               .delete()
               .eq('message_id', messageId)
@@ -327,7 +327,7 @@ export async function POST(request: NextRequest) {
           } else {
             // Add or update the reaction
             const { error: upsertError } = await supabase
-              .schema('elfaroukgroup')
+              .schema('justatree')
               .from('whatsapp_reactions')
               .upsert({
                 message_id: messageId,
@@ -502,7 +502,7 @@ async function parseWasenderMessage(msgData: any, isOutgoing: boolean = false): 
 
           // Look up in whatsapp_lid_mappings table
           const { data: mapping, error: mappingError } = await supabase
-            .schema('elfaroukgroup')
+            .schema('justatree')
             .from('whatsapp_lid_mappings')
             .select('phone_number, customer_name')
             .eq('lid', lid)
@@ -529,7 +529,7 @@ async function parseWasenderMessage(msgData: any, isOutgoing: boolean = false): 
           console.log('📤 Step 7 - Searching existing messages for suffix:', suffix);
 
           const { data: existingMsg } = await supabase
-            .schema('elfaroukgroup')
+            .schema('justatree')
             .from('whatsapp_messages')
             .select('from_number')
             .like('from_number', `%${suffix}`)
@@ -544,7 +544,7 @@ async function parseWasenderMessage(msgData: any, isOutgoing: boolean = false): 
             const lidMatch = key.remoteJid.match(/(\d{14,})@/);
             if (lidMatch) {
               supabase
-                .schema('elfaroukgroup')
+                .schema('justatree')
                 .from('whatsapp_lid_mappings')
                 .upsert({
                   lid: lidMatch[1],
@@ -603,7 +603,7 @@ async function parseWasenderMessage(msgData: any, isOutgoing: boolean = false): 
           if (lidMatch) {
             console.log('📥 Found LID in remoteJid:', lidMatch[1], '→', from);
             supabase
-              .schema('elfaroukgroup')
+              .schema('justatree')
               .from('whatsapp_lid_mappings')
               .upsert({
                 lid: lidMatch[1],
@@ -626,7 +626,7 @@ async function parseWasenderMessage(msgData: any, isOutgoing: boolean = false): 
           if (lidMatch) {
             console.log('📥 Found senderLid:', lidMatch[1], '→', from);
             supabase
-              .schema('elfaroukgroup')
+              .schema('justatree')
               .from('whatsapp_lid_mappings')
               .upsert({
                 lid: lidMatch[1],

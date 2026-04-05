@@ -59,7 +59,7 @@ export async function GET() {
     let webhookLogs: any[] = [];
     try {
       const { data: logs } = await supabase
-        .schema('elfaroukgroup')
+        .schema('justatree')
         .from('whatsapp_webhook_logs')
         .select('*')
         .order('created_at', { ascending: false })

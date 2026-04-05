@@ -21,7 +21,7 @@ export const TEMPLATES: Record<string, TemplateInfo> = {
   default: {
     name: 'Default Template',
     description: 'القالب الافتراضي للمتجر',
-    author: 'El Farouk Group',
+    author: 'Just A Tree',
     version: '1.0.0'
   }
 };
