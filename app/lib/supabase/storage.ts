@@ -181,6 +181,37 @@ export const uploadCustomSectionImage = async (file: File): Promise<string> => {
   }
 }
 
+// Upload banner image
+export const uploadBannerImage = async (file: File): Promise<string> => {
+  try {
+    const fileExt = file.name.split('.').pop() || 'jpg'
+    const timestamp = Date.now()
+    const uuid = Math.random().toString(36).substring(2, 15)
+    const fileName = `${timestamp}_${uuid}.${fileExt}`
+    const filePath = `banners/${fileName}`
+
+    const { error } = await getSupabaseAdmin().storage
+      .from('main-products-pos-images')
+      .upload(filePath, file, {
+        cacheControl: '31536000',
+        upsert: false
+      })
+
+    if (error) {
+      throw error
+    }
+
+    const { data: { publicUrl } } = getSupabaseAdmin().storage
+      .from('main-products-pos-images')
+      .getPublicUrl(filePath)
+
+    return publicUrl
+  } catch (error) {
+    console.error('Error uploading banner image:', error)
+    throw error
+  }
+}
+
 // ============== VIDEO UPLOAD FUNCTIONS ==============
 
 // Create the product videos bucket if it doesn't exist (manual operation only)

@@ -716,3 +716,25 @@ export async function getCatalogCategories() {
     return [];
   }
 }
+
+/**
+ * Get hero banners for a specific theme
+ * Used for the hero slider on the homepage (ISR)
+ */
+export async function getHeroBanners(themeId: string = 'just-a-tree') {
+  try {
+    const { data, error } = await (supabase as any)
+      .from('hero_banners')
+      .select('*')
+      .eq('theme_id', themeId)
+      .eq('is_active', true)
+      .order('display_order', { ascending: true });
+
+    if (error) throw error;
+
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching hero banners:', error);
+    return [];
+  }
+}

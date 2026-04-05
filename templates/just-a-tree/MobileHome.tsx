@@ -24,6 +24,8 @@ import WhatsAppFloatingButton from '@/app/components/WhatsAppFloatingButton';
 import { preloadImagesInBackground } from '@/lib/utils/imagePreloader';
 import { getTransformedUrls } from '@/lib/utils/supabaseImageTransform';
 import { useWebsiteCurrency } from '@/lib/hooks/useCurrency';
+import { usePreFetchedData } from '@/lib/contexts/PreFetchedDataContext';
+import BannerEditorFull from '@/components/banner-editor/BannerEditor';
 
 // ============================================
 // Theme Color Constants
@@ -239,6 +241,9 @@ export default function MobileHome({
 
   // Determine if user is admin or staff
   const isAdminOrStaff = profile?.role === 'أدمن رئيسي' || profile?.role === 'موظف';
+
+  // Get pre-fetched banner data
+  const { banners: preFetchedBanners } = usePreFetchedData();
 
   // Get social media links to find WhatsApp number
   const { links: socialLinks } = useSocialMediaPublic();
@@ -899,88 +904,17 @@ export default function MobileHome({
       <main className="pt-14 pb-20" style={{ backgroundColor: THEME.warmLinen }}>
 
         {/* ============================================ */}
-        {/* HERO BANNER - Auto-rotating slides          */}
+        {/* HERO BANNER - Dynamic Banner Editor         */}
         {/* ============================================ */}
         {isHomeView && (
-          <section className="relative overflow-hidden" style={{ height: '300px' }}>
-            {HERO_SLIDES.map((slide, index) => (
-              <div
-                key={index}
-                className="absolute inset-0 transition-all duration-1000"
-                style={{
-                  background: slide.gradient,
-                  opacity: activeHeroSlide === index ? 1 : 0,
-                  transform: activeHeroSlide === index ? 'scale(1)' : 'scale(1.05)',
-                }}
-              >
-                {/* Decorative leaf patterns */}
-                <LeafPattern className="absolute top-0 right-0 w-64 h-64" opacity={0.06} />
-                <LeafPattern className="absolute bottom-0 left-0 w-48 h-48 rotate-180" opacity={0.04} />
-                <TreeSilhouette className="absolute bottom-0 left-4 h-52 w-52" opacity={0.04} />
-                {/* Radial glow */}
-                <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(149,213,178,0.15) 0%, transparent 60%)' }}></div>
-              </div>
-            ))}
-
-            {/* Content */}
-            <div className="absolute inset-0 z-10 flex items-center justify-center text-center px-6">
-              <div style={{ animation: 'heroFadeIn 0.8s ease-out' }}>
-                {/* Badge */}
-                <span
-                  className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold mb-3"
-                  style={{ backgroundColor: `${THEME.antiqueGold}30`, color: THEME.antiqueGold, border: `1px solid ${THEME.antiqueGold}50` }}
-                >
-                  <LeafIcon size={10} color={THEME.antiqueGold} />
-                  {HERO_SLIDES[activeHeroSlide].badge}
-                </span>
-
-                {/* Title */}
-                <h2
-                  className="text-2xl font-black mb-2 leading-tight"
-                  style={{ color: '#FFFFFF', textShadow: '0 2px 16px rgba(0,0,0,0.2)' }}
-                  key={activeHeroSlide}
-                >
-                  {HERO_SLIDES[activeHeroSlide].title}
-                </h2>
-
-                {/* Subtitle */}
-                <p className="text-xs mb-5 leading-relaxed max-w-[280px] mx-auto" style={{ color: 'rgba(255,255,255,0.75)' }}>
-                  {HERO_SLIDES[activeHeroSlide].subtitle}
-                </p>
-
-                {/* CTA Button */}
-                <button
-                  className="w-full max-w-[220px] py-2.5 rounded-full font-bold text-sm transition-all"
-                  style={{ backgroundColor: THEME.antiqueGold, color: THEME.nightForest }}
-                >
-                  {HERO_SLIDES[activeHeroSlide].cta}
-                  <svg className="w-3.5 h-3.5 inline-block mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Slide indicators */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-2">
-              {HERO_SLIDES.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveHeroSlide(index)}
-                  className="transition-all duration-500"
-                  style={{
-                    width: activeHeroSlide === index ? '24px' : '8px',
-                    height: '8px',
-                    borderRadius: '4px',
-                    backgroundColor: activeHeroSlide === index ? THEME.antiqueGold : 'rgba(255,255,255,0.4)',
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Bottom gradient fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-12" style={{ background: `linear-gradient(to top, ${THEME.warmLinen}, transparent)` }}></div>
-          </section>
+          <BannerEditorFull
+            initialBanners={preFetchedBanners || []}
+            height={300}
+            isAdmin={isAdminOrStaff}
+            theme={THEME}
+            fallbackSlides={HERO_SLIDES}
+            themeId="just-a-tree"
+          />
         )}
 
         {/* ============================================ */}

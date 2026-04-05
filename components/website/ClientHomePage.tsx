@@ -21,6 +21,7 @@ interface ClientHomePageProps {
   initialSections?: any[];
   initialSettings?: any;
   websiteThemeId?: string;
+  initialBanners?: any[];
 }
 
 // Cache loaded theme components to avoid re-importing on re-renders
@@ -35,7 +36,8 @@ export default function ClientHomePage({
   initialCategories = [],
   initialSections = [],
   initialSettings = null,
-  websiteThemeId = 'default'
+  websiteThemeId = 'default',
+  initialBanners = []
 }: ClientHomePageProps) {
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>({
     type: 'desktop',
@@ -238,7 +240,8 @@ export default function ClientHomePage({
           products: initialProducts,
           categories: initialCategories,
           sections: initialSections,
-          settings: initialSettings
+          settings: initialSettings,
+          banners: initialBanners
         }}
       >
         {(() => {

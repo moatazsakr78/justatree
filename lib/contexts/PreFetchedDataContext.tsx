@@ -12,13 +12,15 @@ interface PreFetchedDataContextType {
   categories: any[];
   sections: any[];
   settings: any;
+  banners: any[];
 }
 
 const PreFetchedDataContext = createContext<PreFetchedDataContextType>({
   products: [],
   categories: [],
   sections: [],
-  settings: null
+  settings: null,
+  banners: []
 });
 
 export function PreFetchedDataProvider({

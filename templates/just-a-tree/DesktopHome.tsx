@@ -24,6 +24,8 @@ import { useSocialMediaPublic } from '@/lib/hooks/useSocialMedia';
 import WhatsAppFloatingButton from '@/app/components/WhatsAppFloatingButton';
 import { preloadImagesInBackground } from '@/lib/utils/imagePreloader';
 import { getTransformedUrls } from '@/lib/utils/supabaseImageTransform';
+import { usePreFetchedData } from '@/lib/contexts/PreFetchedDataContext';
+import BannerEditorFull from '@/components/banner-editor/BannerEditor';
 
 // ============================================
 // Theme Color Constants
@@ -233,6 +235,9 @@ export default function DesktopHome({
 
   // Check if user is admin or staff
   const isAdminOrStaff = profile?.role === '\u0623\u062f\u0645\u0646 \u0631\u0626\u064a\u0633\u064a' || profile?.role === '\u0645\u0648\u0638\u0641';
+
+  // Get pre-fetched banner data
+  const { banners: preFetchedBanners } = usePreFetchedData();
 
   // Get social media links to find WhatsApp number
   const { links: socialLinks } = useSocialMediaPublic();
@@ -937,96 +942,17 @@ export default function DesktopHome({
         {isCompactHeaderVisible && <div style={{ height: '120px' }}></div>}
 
         {/* ============================================ */}
-        {/* HERO BANNER - Auto-rotating slides          */}
+        {/* HERO BANNER - Dynamic Banner Editor         */}
         {/* ============================================ */}
         {isHomeView && (
-          <section className="relative overflow-hidden" style={{ height: '480px' }}>
-            {HERO_SLIDES.map((slide, index) => (
-              <div
-                key={index}
-                className="absolute inset-0 transition-all duration-1000"
-                style={{
-                  background: slide.gradient,
-                  opacity: activeHeroSlide === index ? 1 : 0,
-                  transform: activeHeroSlide === index ? 'scale(1)' : 'scale(1.05)',
-                }}
-              >
-                {/* Decorative leaf patterns */}
-                <LeafPattern className="absolute top-0 right-0 w-96 h-96" opacity={0.06} />
-                <LeafPattern className="absolute bottom-0 left-0 w-72 h-72 rotate-180" opacity={0.04} />
-                <TreeSilhouette className="absolute bottom-0 left-20 h-80 w-80" opacity={0.04} />
-
-                {/* Radial glow */}
-                <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 70% 50%, rgba(149,213,178,0.15) 0%, transparent 60%)' }}></div>
-              </div>
-            ))}
-
-            {/* Content - always visible, text changes with slide */}
-            <div className="absolute inset-0 z-10 flex items-center">
-              <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="max-w-xl" style={{ animation: 'heroFadeIn 0.8s ease-out' }}>
-                  {/* Badge */}
-                  <span
-                    className="inline-block px-4 py-1.5 rounded-full text-xs font-bold mb-6 tracking-wide"
-                    style={{ backgroundColor: `${THEME.antiqueGold}30`, color: THEME.antiqueGold, border: `1px solid ${THEME.antiqueGold}50` }}
-                  >
-                    <LeafIcon size={12} color={THEME.antiqueGold} />
-                    <span className="mr-1">{HERO_SLIDES[activeHeroSlide].badge}</span>
-                  </span>
-
-                  {/* Title */}
-                  <h2
-                    className="text-4xl md:text-5xl font-black mb-4 leading-tight"
-                    style={{ color: '#FFFFFF', textShadow: '0 2px 20px rgba(0,0,0,0.2)' }}
-                    key={activeHeroSlide}
-                  >
-                    {HERO_SLIDES[activeHeroSlide].title}
-                  </h2>
-
-                  {/* Subtitle */}
-                  <p className="text-lg mb-8 leading-relaxed" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                    {HERO_SLIDES[activeHeroSlide].subtitle}
-                  </p>
-
-                  {/* CTA Button */}
-                  <button
-                    className="px-8 py-3.5 rounded-full font-bold text-base transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
-                    style={{
-                      backgroundColor: THEME.antiqueGold,
-                      color: THEME.nightForest,
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = THEME.deepGold; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = THEME.antiqueGold; }}
-                  >
-                    {HERO_SLIDES[activeHeroSlide].cta}
-                    <svg className="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Slide indicators */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-3">
-              {HERO_SLIDES.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveHeroSlide(index)}
-                  className="transition-all duration-500"
-                  style={{
-                    width: activeHeroSlide === index ? '32px' : '10px',
-                    height: '10px',
-                    borderRadius: '5px',
-                    backgroundColor: activeHeroSlide === index ? THEME.antiqueGold : 'rgba(255,255,255,0.4)',
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Bottom gradient fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-20" style={{ background: `linear-gradient(to top, ${THEME.warmLinen}, transparent)` }}></div>
-          </section>
+          <BannerEditorFull
+            initialBanners={preFetchedBanners || []}
+            height={480}
+            isAdmin={isAdminOrStaff}
+            theme={THEME}
+            fallbackSlides={HERO_SLIDES}
+            themeId="just-a-tree"
+          />
         )}
 
         {/* ============================================ */}
