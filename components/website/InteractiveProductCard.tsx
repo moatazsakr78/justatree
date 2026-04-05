@@ -26,6 +26,7 @@ interface InteractiveProductCardProps {
   imageBadge?: string;
   containerClassName?: string;
   containerStyle?: React.CSSProperties;
+  imageFill?: boolean;
 }
 
 export default function InteractiveProductCard({
@@ -38,6 +39,7 @@ export default function InteractiveProductCard({
   imageBadge,
   containerClassName,
   containerStyle,
+  imageFill = false,
 }: InteractiveProductCardProps) {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -353,7 +355,7 @@ export default function InteractiveProductCard({
     >
       <div
         ref={imageRef}
-        className="relative mb-4"
+        className={`relative ${imageFill ? 'mb-0' : 'mb-4'}`}
         onClick={(e) => {
           if (deviceType === 'tablet') {
             e.stopPropagation();
@@ -369,7 +371,7 @@ export default function InteractiveProductCard({
           src={getTransformedImageUrl(getCurrentDisplayImage(), getPresetForDevice(deviceType))}
           alt={product.name}
           loading="lazy"
-          className={`${classes.imageClass} transition-opacity duration-200 ${isVotingMode && isOutOfStock ? 'opacity-50' : ''}`}
+          className={`${imageFill ? classes.imageClass.replace('rounded-lg', '') : classes.imageClass} transition-opacity duration-200 ${isVotingMode && isOutOfStock ? 'opacity-50' : ''}`}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             if (target.src !== '/placeholder-product.svg') {
@@ -412,7 +414,7 @@ export default function InteractiveProductCard({
 
       </div>
       
-      <div className="flex flex-col">
+      <div className={`flex flex-col ${imageFill ? 'px-4 pt-3 pb-4' : ''}`}>
         <h4 className={classes.titleClass}>{currentProduct.name}</h4>
         {/* Description with dynamic height based on colors, shapes and sizes availability */}
         {showProductDescription && (

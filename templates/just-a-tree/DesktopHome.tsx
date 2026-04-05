@@ -26,6 +26,8 @@ import { preloadImagesInBackground } from '@/lib/utils/imagePreloader';
 import { getTransformedUrls } from '@/lib/utils/supabaseImageTransform';
 import { usePreFetchedData } from '@/lib/contexts/PreFetchedDataContext';
 import BannerEditorFull from '@/components/banner-editor/BannerEditor';
+import PromoCardsRenderer from '@/components/banner-editor/PromoCardsRenderer';
+import MidBannerRenderer from '@/components/banner-editor/MidBannerRenderer';
 
 // ============================================
 // Theme Color Constants
@@ -48,9 +50,9 @@ const THEME = {
 
 // Botanical card styling for InteractiveProductCard
 const BOTANICAL_CARD = {
-  className: 'rounded-2xl p-4 cursor-pointer group transition-all duration-300 hover:-translate-y-1',
+  className: 'rounded-2xl overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1',
   style: {
-    backgroundColor: THEME.cardWhite,
+    backgroundColor: THEME.parchment,
     border: `1px solid ${THEME.softEmerald}`,
     boxShadow: '0 2px 12px rgba(27,58,45,0.06)',
   } as React.CSSProperties,
@@ -763,6 +765,19 @@ export default function DesktopHome({
         isOpen={isRightSidebarOpen}
         onClose={closeRightSidebar}
         onCategorySelect={(categoryName) => setSelectedCategory(categoryName)}
+        theme={{
+          bgColor: THEME.warmLinen,
+          headerBg: THEME.deepForest,
+          headerText: '#FFFFFF',
+          itemHoverBg: THEME.parchment,
+          iconBg: THEME.emerald,
+          iconHoverBg: THEME.darkEmerald,
+          textColor: THEME.charcoalInk,
+          subtextColor: THEME.mossGray,
+          borderColor: THEME.softEmerald,
+          footerBg: THEME.parchment,
+          accentColor: THEME.antiqueGold,
+        }}
       />
 
       <div className="min-h-screen" style={{ backgroundColor: THEME.warmLinen, color: THEME.charcoalInk }} dir="rtl">
@@ -797,23 +812,14 @@ export default function DesktopHome({
         {/* ============================================ */}
         <div className="w-full py-2.5" style={{ backgroundColor: THEME.nightForest, borderBottom: `2px solid ${THEME.antiqueGold}40` }}>
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <AuthButtons compact />
-            </div>
-            <div className="hidden md:flex items-center gap-2 text-xs" style={{ color: `${THEME.antiqueGold}cc` }}>
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-              </svg>
-              <span>شحن لجميع المحافظات</span>
-            </div>
             <div className="flex items-center gap-4">
               <button className="text-white/80 hover:text-white transition-colors" onClick={toggleRightSidebar} title="القائمة">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
               <button onClick={() => setIsCartModalOpen(true)} className="relative text-white/80 hover:text-white transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {cartBadgeCount > 0 && (
@@ -822,6 +828,15 @@ export default function DesktopHome({
                   </span>
                 )}
               </button>
+            </div>
+            <div className="hidden md:flex items-center gap-2 text-xs" style={{ color: `${THEME.antiqueGold}cc` }}>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+              </svg>
+              <span>شحن لجميع المحافظات</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <AuthButtons compact />
             </div>
           </div>
         </div>
@@ -841,17 +856,14 @@ export default function DesktopHome({
           {isCompactHeaderVisible && (
             <div className="w-full py-1.5" style={{ backgroundColor: THEME.nightForest, borderBottom: `2px solid ${THEME.antiqueGold}40` }}>
               <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <AuthButtons compact />
-                </div>
                 <div className="flex items-center gap-4">
                   <button className="text-white/80 hover:text-white transition-colors" onClick={toggleRightSidebar}>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </button>
                   <button onClick={() => setIsCartModalOpen(true)} className="relative text-white/80 hover:text-white transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                     {cartBadgeCount > 0 && (
@@ -860,6 +872,9 @@ export default function DesktopHome({
                       </span>
                     )}
                   </button>
+                </div>
+                <div className="flex items-center gap-3">
+                  <AuthButtons compact />
                 </div>
               </div>
             </div>
@@ -1064,43 +1079,16 @@ export default function DesktopHome({
         )}
 
         {/* ============================================ */}
-        {/* PROMOTIONAL BANNER GRID                     */}
+        {/* PROMOTIONAL BANNER GRID (Editable)          */}
         {/* ============================================ */}
         {isHomeView && (
-          <section className="py-10">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="grid grid-cols-3 gap-6">
-                {PROMO_BANNERS.map((banner, index) => (
-                  <div
-                    key={index}
-                    className="relative rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
-                    style={{ height: '220px', background: banner.gradient }}
-                  >
-                    {/* Decorative elements */}
-                    <LeafPattern className="absolute top-0 left-0 w-full h-full" opacity={0.08} />
-                    <div className="absolute top-4 left-4 w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                      <LeafIcon size={20} color="rgba(255,255,255,0.6)" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="absolute inset-0 flex flex-col justify-end p-6">
-                      <h4 className="text-xl font-black text-white mb-1">{banner.title}</h4>
-                      <p className="text-sm text-white/70 mb-4">{banner.subtitle}</p>
-                      <button
-                        className="self-start px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 group-hover:shadow-lg"
-                        style={{ backgroundColor: 'rgba(255,255,255,0.95)', color: THEME.darkEmerald }}
-                      >
-                        {banner.cta}
-                      </button>
-                    </div>
-
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.3), transparent)' }}></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+          <PromoCardsRenderer
+            banners={preFetchedBanners || []}
+            isAdmin={isAdminOrStaff}
+            theme={THEME}
+            themeId="just-a-tree"
+            deviceType="desktop"
+          />
         )}
 
         {/* ============================================ */}
@@ -1141,6 +1129,7 @@ export default function DesktopHome({
                           displaySettings={displaySettings}
                           containerClassName={BOTANICAL_CARD.className}
                           containerStyle={BOTANICAL_CARD.style}
+                          imageFill
                         />
                       ))}
                     </div>
@@ -1199,6 +1188,7 @@ export default function DesktopHome({
                         displaySettings={displaySettings}
                         containerClassName={BOTANICAL_CARD.className}
                         containerStyle={BOTANICAL_CARD.style}
+                        imageFill
                       />
                     </div>
                   ))}
@@ -1208,34 +1198,16 @@ export default function DesktopHome({
           )}
 
           {/* ============================================ */}
-          {/* MID-PAGE PROMOTIONAL BANNER                */}
+          {/* MID-PAGE PROMOTIONAL BANNER (Editable)     */}
           {/* ============================================ */}
           {isHomeView && (
-            <section className="mb-14 -mx-6 relative overflow-hidden" style={{ height: '200px', background: `linear-gradient(to left, ${THEME.emerald}, ${THEME.darkEmerald})` }}>
-              <LeafPattern className="absolute top-0 right-0 w-full h-full" opacity={0.06} />
-              <TreeSilhouette className="absolute bottom-0 right-20 h-48 w-48" color="white" opacity={0.05} />
-
-              <div className="absolute inset-0 flex items-center z-10">
-                <div className="max-w-7xl mx-auto px-6 w-full flex items-center justify-between">
-                  <div>
-                    <span className="text-sm font-medium mb-2 block" style={{ color: THEME.mintGlow }}>عروض لفترة محدودة</span>
-                    <h3 className="text-3xl font-black text-white mb-2">عروض نهاية الموسم</h3>
-                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>خصومات تصل إلى 50% على مجموعة مختارة من المنتجات</p>
-                  </div>
-                  <button
-                    className="px-8 py-3.5 rounded-full font-bold transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                    style={{ backgroundColor: THEME.antiqueGold, color: THEME.nightForest }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = THEME.deepGold; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = THEME.antiqueGold; }}
-                  >
-                    تسوق العروض
-                    <svg className="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </section>
+            <MidBannerRenderer
+              banners={preFetchedBanners || []}
+              isAdmin={isAdminOrStaff}
+              theme={THEME}
+              themeId="just-a-tree"
+              deviceType="desktop"
+            />
           )}
 
           {/* ============================================ */}
@@ -1265,6 +1237,9 @@ export default function DesktopHome({
                     deviceType="desktop"
                     onProductClick={handleProductClick}
                     displaySettings={displaySettings}
+                    containerClassName={BOTANICAL_CARD.className}
+                    containerStyle={BOTANICAL_CARD.style}
+                    imageFill
                   />
                 ))}
 
@@ -1512,6 +1487,12 @@ export default function DesktopHome({
       <CartModal
         isOpen={isCartModalOpen}
         onClose={() => setIsCartModalOpen(false)}
+        theme={{
+          headerBg: THEME.deepForest,
+          accentColor: THEME.emerald,
+          buttonBg: THEME.emerald,
+          buttonHoverBg: THEME.darkEmerald,
+        }}
       />
 
       {/* Quantity Modal */}

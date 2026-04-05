@@ -2,9 +2,9 @@
 
 import { useState, useCallback } from 'react';
 import { supabase } from '@/app/lib/supabase/client';
-import type { HeroBanner, BannerElement } from './types';
+import type { HeroBanner, BannerElement, BannerSlot } from './types';
 
-export function useBannerData(themeId: string = 'just-a-tree') {
+export function useBannerData(themeId: string = 'just-a-tree', slot?: BannerSlot) {
   const [banners, setBanners] = useState<HeroBanner[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -12,11 +12,13 @@ export function useBannerData(themeId: string = 'just-a-tree') {
   const fetchBanners = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase as any)
+      let query = (supabase as any)
         .from('hero_banners')
         .select('*')
-        .eq('theme_id', themeId)
-        .order('display_order', { ascending: true });
+        .eq('theme_id', themeId);
+      if (slot) query = query.eq('slot', slot);
+      query = query.order('display_order', { ascending: true });
+      const { data, error } = await query;
 
       if (error) throw error;
       setBanners(data || []);
@@ -72,6 +74,7 @@ export function useBannerData(themeId: string = 'just-a-tree') {
           display_order: banner.display_order,
           is_active: banner.is_active,
           theme_id: banner.theme_id,
+          slot: banner.slot || slot || 'hero',
           background_type: banner.background_type,
           background_value: banner.background_value,
           canvas_width: banner.canvas_width,

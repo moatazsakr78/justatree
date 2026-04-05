@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, ComponentType } from 'react';
+import React, { useState, useEffect, ComponentType } from 'react';
 import { detectDeviceClient, DeviceInfo } from '@/lib/device-detection';
 import { getThemeLoader } from '@/templates/_shared/ThemeRegistry';
 import type { ThemeHomeProps } from '@/templates/_shared/ThemeContract';
@@ -23,6 +23,46 @@ interface ClientHomePageProps {
   websiteThemeId?: string;
   initialBanners?: any[];
 }
+
+// Theme-specific loading screens — must match each theme's internal loader exactly
+// so the transition from ClientHomePage loader → theme loader is seamless
+const THEME_LOADERS: Record<string, { bg: string; content: React.ReactNode }> = {
+  'just-a-tree': {
+    bg: '#F7F5F0',
+    content: (
+      <div className="text-center">
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: '#2D6A4F', animationDelay: '0ms' }}></div>
+          <div className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: '#D4A574', animationDelay: '150ms' }}></div>
+          <div className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: '#2D6A4F', animationDelay: '300ms' }}></div>
+        </div>
+        <p className="text-sm font-medium" style={{ color: '#5C6B5E' }}>جاري تحميل المتجر...</p>
+      </div>
+    ),
+  },
+  'modern': {
+    bg: '#fafafa',
+    content: (
+      <div className="text-center">
+        <div className="flex items-center justify-center gap-1 mb-6">
+          <div className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: 'var(--primary-color, #3B82F6)', animationDelay: '0ms' }}></div>
+          <div className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: 'var(--primary-color, #3B82F6)', animationDelay: '150ms' }}></div>
+          <div className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: 'var(--primary-color, #3B82F6)', animationDelay: '300ms' }}></div>
+        </div>
+        <p className="text-gray-500 text-sm font-medium">جاري تحميل المتجر...</p>
+      </div>
+    ),
+  },
+  'default': {
+    bg: '#c0c0c0',
+    content: (
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-400 mx-auto mb-4"></div>
+        <p className="text-gray-600">جاري تحميل التطبيق...</p>
+      </div>
+    ),
+  },
+};
 
 // Cache loaded theme components to avoid re-importing on re-renders
 const themeCache: Record<string, {
@@ -199,23 +239,23 @@ export default function ClientHomePage({
   };
 
   // Show loading screen during hydration or theme loading
+  // Uses theme-specific loader so transition to theme's internal loader is seamless
   if (!isClient || !themeComponents) {
+    const loader = THEME_LOADERS[websiteThemeId] || THEME_LOADERS['default'];
     return (
       <CartProvider>
-        <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#c0c0c0'}}>
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{borderColor: 'var(--primary-color, #DC2626)'}}></div>
-            <p className="text-gray-600">جاري تحميل التطبيق...</p>
-          </div>
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: loader.bg }}>
+          {loader.content}
         </div>
       </CartProvider>
     );
   }
 
   if (themeError) {
+    const loader = THEME_LOADERS[websiteThemeId] || THEME_LOADERS['default'];
     return (
       <CartProvider>
-        <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#c0c0c0'}}>
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: loader.bg }}>
           <div className="text-center">
             <p className="text-red-600 text-lg mb-2">حدث خطأ في تحميل القالب</p>
             <button

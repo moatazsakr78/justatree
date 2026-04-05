@@ -817,7 +817,7 @@ export default function ProductDetailContent({ productId, serverData }: ProductD
   }
 
   return (
-    <div className="min-h-screen text-gray-800" style={{backgroundColor: '#c0c0c0'}}>
+    <div className="min-h-screen text-gray-800" style={{backgroundColor: '#c0c0c0', fontFamily: 'inherit'}}>
       {/* Hide system blue header */}
       <style jsx global>{`
         body {

@@ -19,13 +19,28 @@ import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useCompanySettings } from '@/lib/hooks/useCompanySettings';
 import { useStoreCategoriesWithProducts } from '@/lib/hooks/useStoreCategories';
 
+interface SidebarTheme {
+  bgColor: string;
+  headerBg: string;
+  headerText: string;
+  itemHoverBg: string;
+  iconBg: string;
+  iconHoverBg: string;
+  textColor: string;
+  subtextColor: string;
+  borderColor: string;
+  footerBg: string;
+  accentColor: string;
+}
+
 interface RightSidebarProps {
   isOpen: boolean;
   onClose: () => void;
   onCategorySelect?: (categoryName: string) => void;
+  theme?: SidebarTheme;
 }
 
-export default function RightSidebar({ isOpen, onClose, onCategorySelect }: RightSidebarProps) {
+export default function RightSidebar({ isOpen, onClose, onCategorySelect, theme }: RightSidebarProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { profile, isAdmin, loading } = useUserProfile();
   const { companyName } = useCompanySettings();
@@ -99,32 +114,47 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`fixed top-20 right-0 h-[calc(100vh-80px)] w-96 bg-[#eaeaea] border-l border-gray-400 shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-20 right-0 h-[calc(100vh-80px)] w-96 shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        style={{
+          backgroundColor: theme?.bgColor || '#eaeaea',
+          borderLeft: `1px solid ${theme?.borderColor || '#9ca3af'}`,
+        }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-dash-accent-red bg-[var(--primary-color)]">
+        <div className="flex items-center justify-between p-4 border-b" style={{ backgroundColor: theme?.headerBg || 'var(--primary-color)', borderBottomColor: theme?.accentColor ? `${theme.accentColor}60` : 'var(--dash-accent-red)' }}>
           {showCategories ? (
             <>
               <button
                 onClick={() => setShowCategories(false)}
-                className="p-2 text-gray-200 hover:text-white hover:bg-gray-600 rounded-full transition-colors"
+                className="p-2 rounded-full transition-colors"
+                style={{ color: theme?.headerText ? `${theme.headerText}cc` : '#e5e7eb', }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = theme?.headerText || '#fff'; e.currentTarget.style.backgroundColor = theme ? `${theme.accentColor}30` : '#4b5563'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = theme?.headerText ? `${theme.headerText}cc` : '#e5e7eb'; e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 <ArrowRightIcon className="h-5 w-5" />
               </button>
-              <h2 className="text-lg font-bold text-white">الفئات</h2>
+              <h2 className="text-lg font-bold" style={{ color: theme?.headerText || '#fff' }}>الفئات</h2>
             </>
           ) : (
-            <h2 className="text-lg font-bold text-white">القائمة الرئيسية</h2>
+            <h2 className="text-lg font-bold" style={{ color: theme?.headerText || '#fff' }}>القائمة الرئيسية</h2>
           )}
           <button
             onClick={onClose}
-            className="p-2 text-gray-200 hover:text-white hover:bg-gray-600 rounded-full transition-colors"
+            className="p-2 rounded-full transition-colors"
+            style={{ color: theme?.headerText ? `${theme.headerText}cc` : '#e5e7eb' }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = theme?.headerText || '#fff'; e.currentTarget.style.backgroundColor = theme ? `${theme.accentColor}30` : '#4b5563'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = theme?.headerText ? `${theme.headerText}cc` : '#e5e7eb'; e.currentTarget.style.backgroundColor = 'transparent'; }}
           >
             <XMarkIcon className="h-5 w-5" />
           </button>
         </div>
+
+        {/* Decorative accent line */}
+        {theme?.accentColor && (
+          <div className="h-0.5" style={{ background: `linear-gradient(to left, transparent, ${theme.accentColor}60, ${theme.iconBg}40, ${theme.accentColor}60, transparent)` }}></div>
+        )}
 
         {/* Categories View */}
         {showCategories ? (
@@ -140,11 +170,12 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                   <button
                     key={category.id}
                     onClick={() => handleCategorySelect(category.is_all_category ? 'الكل' : category.name)}
-                    className={`flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group ${
-                      category.is_all_category ? 'bg-gray-200' : ''
-                    }`}
+                    className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000', backgroundColor: category.is_all_category ? (theme?.itemHoverBg || '#e5e7eb') : 'transparent' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = category.is_all_category ? (theme?.itemHoverBg || '#e5e7eb') : 'transparent'; }}
                   >
-                    <div className="h-12 w-12 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+                    <div className="h-12 w-12 rounded-lg overflow-hidden flex-shrink-0" style={{ backgroundColor: theme?.itemHoverBg || '#e5e7eb' }}>
                       {category.image_url ? (
                         <img
                           src={category.image_url}
@@ -152,17 +183,17 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <div className="h-full w-full flex items-center justify-center bg-[var(--primary-color)]">
+                        <div className="h-full w-full flex items-center justify-center" style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}>
                           <Squares2X2Icon className="h-6 w-6 text-white" />
                         </div>
                       )}
                     </div>
                     <div className="flex-1 text-right">
-                      <h3 className="font-semibold text-base text-black">{category.name}</h3>
+                      <h3 className="font-semibold text-base" style={{ color: theme?.textColor || '#000' }}>{category.name}</h3>
                       {category.is_all_category ? (
-                        <p className="text-xs text-gray-600">{category.description || 'عرض جميع المنتجات'}</p>
+                        <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>{category.description || 'عرض جميع المنتجات'}</p>
                       ) : category.products && (
-                        <p className="text-xs text-gray-600">{category.products.length} منتج</p>
+                        <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>{category.products.length} منتج</p>
                       )}
                     </div>
                   </button>
@@ -197,14 +228,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/customer-orders';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <UsersIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">طلبات العملاء</h3>
-                    <p className="text-xs text-gray-600">إدارة ومراجعة طلبات جميع العملاء</p>
+                    <h3 className="font-semibold text-base">طلبات العملاء</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>إدارة ومراجعة طلبات جميع العملاء</p>
                   </div>
                 </button>
 
@@ -215,14 +252,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/admin/products';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <BuildingStorefrontIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">إدارة المتجر</h3>
-                    <p className="text-xs text-gray-600">إدارة المنتجات والفئات وإعدادات المتجر</p>
+                    <h3 className="font-semibold text-base">إدارة المتجر</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>إدارة المنتجات والفئات وإعدادات المتجر</p>
                   </div>
                 </button>
 
@@ -232,14 +275,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/pos';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <CubeIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">الانتقال للنظام</h3>
-                    <p className="text-xs text-gray-600">الانتقال إلى نظام نقاط البيع</p>
+                    <h3 className="font-semibold text-base">الانتقال للنظام</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>الانتقال إلى نظام نقاط البيع</p>
                   </div>
                 </button>
 
@@ -249,14 +298,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/shipping';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <MapIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">تفاصيل الشحن</h3>
-                    <p className="text-xs text-gray-600">إدارة شركات الشحن وأسعار المحافظات</p>
+                    <h3 className="font-semibold text-base">تفاصيل الشحن</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>إدارة شركات الشحن وأسعار المحافظات</p>
                   </div>
                 </button>
 
@@ -266,14 +321,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/social-media';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <ShareIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">تابعنا</h3>
-                    <p className="text-xs text-gray-600">حساباتنا على السوشيال ميديا</p>
+                    <h3 className="font-semibold text-base">تابعنا</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>حساباتنا على السوشيال ميديا</p>
                   </div>
                 </button>
 
@@ -283,28 +344,40 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/catalog';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <BookOpenIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">كتالوج</h3>
-                    <p className="text-xs text-gray-600">عرض كتالوج المنتجات بالأسعار</p>
+                    <h3 className="font-semibold text-base">كتالوج</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>عرض كتالوج المنتجات بالأسعار</p>
                   </div>
                 </button>
 
                 {/* Categories - الفئات */}
                 <button
                   onClick={() => setShowCategories(true)}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <Squares2X2Icon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">الفئات</h3>
-                    <p className="text-xs text-gray-600">تصفح جميع فئات المنتجات</p>
+                    <h3 className="font-semibold text-base">الفئات</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>تصفح جميع فئات المنتجات</p>
                   </div>
                 </button>
 
@@ -321,14 +394,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/profile';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <UserIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">الملف الشخصي</h3>
-                    <p className="text-xs text-gray-600">إعدادات الحساب والمعلومات الشخصية</p>
+                    <h3 className="font-semibold text-base">الملف الشخصي</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>إعدادات الحساب والمعلومات الشخصية</p>
                   </div>
                 </button>
 
@@ -339,14 +418,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/my-orders';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <ClipboardDocumentListIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">قائمة الطلبات</h3>
-                    <p className="text-xs text-gray-600">عرض وإدارة جميع الطلبات</p>
+                    <h3 className="font-semibold text-base">قائمة الطلبات</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>عرض وإدارة جميع الطلبات</p>
                   </div>
                 </button>
 
@@ -356,14 +441,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/my-invoices';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <ReceiptPercentIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">فواتيري</h3>
-                    <p className="text-xs text-gray-600">الفواتير والدفعات وكشف الحساب</p>
+                    <h3 className="font-semibold text-base">فواتيري</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>الفواتير والدفعات وكشف الحساب</p>
                   </div>
                 </button>
 
@@ -373,14 +464,20 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/social-media';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <ShareIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">تابعنا</h3>
-                    <p className="text-xs text-gray-600">حساباتنا على السوشيال ميديا</p>
+                    <h3 className="font-semibold text-base">تابعنا</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>حساباتنا على السوشيال ميديا</p>
                   </div>
                 </button>
 
@@ -390,28 +487,40 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
                     window.location.href = '/catalog';
                     onClose();
                   }}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <BookOpenIcon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">كتالوج</h3>
-                    <p className="text-xs text-gray-600">عرض كتالوج المنتجات بالأسعار</p>
+                    <h3 className="font-semibold text-base">كتالوج</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>عرض كتالوج المنتجات بالأسعار</p>
                   </div>
                 </button>
 
                 {/* Categories - الفئات */}
                 <button
                   onClick={() => setShowCategories(true)}
-                  className="flex items-center gap-3 w-full p-3 text-black hover:bg-gray-300 rounded-lg transition-colors text-right group"
+                  className="flex items-center gap-3 w-full p-3 rounded-lg transition-colors text-right group"
+                    style={{ color: theme?.textColor || '#000' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.itemHoverBg || '#d1d5db'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  <div className="p-2 bg-[var(--primary-color)] rounded-full group-hover:bg-[var(--interactive-color)] transition-colors">
+                  <div className="p-2 rounded-full transition-colors"
+                      style={{ backgroundColor: theme?.iconBg || 'var(--primary-color)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = theme?.iconHoverBg || 'var(--interactive-color)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = theme?.iconBg || 'var(--primary-color)'; }}>
                     <Squares2X2Icon className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="font-semibold text-base text-black">الفئات</h3>
-                    <p className="text-xs text-gray-600">تصفح جميع فئات المنتجات</p>
+                    <h3 className="font-semibold text-base">الفئات</h3>
+                    <p className="text-xs" style={{ color: theme?.subtextColor || '#4b5563' }}>تصفح جميع فئات المنتجات</p>
                   </div>
                 </button>
               </>
@@ -422,8 +531,8 @@ export default function RightSidebar({ isOpen, onClose, onCategorySelect }: Righ
         )}
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-400 bg-[#eaeaea]">
-          <p className="text-center text-black text-xs">
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t" style={{ backgroundColor: theme?.footerBg || '#eaeaea', borderTopColor: theme?.borderColor || '#9ca3af' }}>
+          <p className="text-center text-xs" style={{ color: theme?.subtextColor || '#000' }}>
             {companyName}
           </p>
         </div>

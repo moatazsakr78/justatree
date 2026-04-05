@@ -47,9 +47,9 @@ const THEME = {
 };
 
 const BOTANICAL_CARD_TABLET = {
-  className: 'rounded-2xl p-4 cursor-pointer group transition-all duration-300 hover:-translate-y-1',
+  className: 'rounded-2xl overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-1',
   style: {
-    backgroundColor: THEME.cardWhite,
+    backgroundColor: THEME.parchment,
     border: `1px solid ${THEME.softEmerald}`,
     boxShadow: '0 2px 12px rgba(27,58,45,0.06)',
   } as React.CSSProperties,
@@ -819,6 +819,19 @@ export default function TabletHome({
         isOpen={isRightSidebarOpen}
         onClose={closeRightSidebar}
         onCategorySelect={(categoryName) => setSelectedCategory(categoryName)}
+        theme={{
+          bgColor: THEME.warmLinen,
+          headerBg: THEME.deepForest,
+          headerText: '#FFFFFF',
+          itemHoverBg: THEME.parchment,
+          iconBg: THEME.emerald,
+          iconHoverBg: THEME.darkEmerald,
+          textColor: THEME.charcoalInk,
+          subtextColor: THEME.mossGray,
+          borderColor: THEME.softEmerald,
+          footerBg: THEME.parchment,
+          accentColor: THEME.antiqueGold,
+        }}
       />
 
       <div dir="rtl" className="min-h-screen" style={{ backgroundColor: THEME.warmLinen, color: THEME.charcoalInk }}>
@@ -866,7 +879,21 @@ export default function TabletHome({
         <div className="w-full py-2" style={{ backgroundColor: THEME.nightForest, borderBottom: `2px solid ${THEME.antiqueGold}40` }}>
           <div className="max-w-[96%] mx-auto px-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <AuthButtons compact />
+              <button className="text-white/80 hover:text-white transition-colors" onClick={toggleRightSidebar} title={'\u0627\u0644\u0642\u0627\u0626\u0645\u0629'}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <button onClick={() => setIsCartModalOpen(true)} className="relative text-white/80 hover:text-white transition-colors">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                {cartBadgeCount > 0 && (
+                  <span className="absolute -top-2 -left-2 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold text-white" style={{ backgroundColor: THEME.antiqueGold }}>
+                    {cartBadgeCount}
+                  </span>
+                )}
+              </button>
             </div>
             <div className="flex items-center gap-2 text-xs" style={{ color: `${THEME.antiqueGold}cc` }}>
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -875,21 +902,7 @@ export default function TabletHome({
               <span>{'\u0634\u062d\u0646 \u0644\u062c\u0645\u064a\u0639 \u0627\u0644\u0645\u062d\u0627\u0641\u0638\u0627\u062a'}</span>
             </div>
             <div className="flex items-center gap-3">
-              <button className="text-white/80 hover:text-white transition-colors" onClick={toggleRightSidebar} title={'\u0627\u0644\u0642\u0627\u0626\u0645\u0629'}>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-              <button onClick={() => setIsCartModalOpen(true)} className="relative text-white/80 hover:text-white transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                {cartBadgeCount > 0 && (
-                  <span className="absolute -top-2 -left-2 w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold text-white" style={{ backgroundColor: THEME.antiqueGold }}>
-                    {cartBadgeCount}
-                  </span>
-                )}
-              </button>
+              <AuthButtons compact />
             </div>
           </div>
         </div>
@@ -910,24 +923,24 @@ export default function TabletHome({
             <div className="w-full py-1.5" style={{ backgroundColor: THEME.nightForest, borderBottom: `2px solid ${THEME.antiqueGold}40` }}>
               <div className="max-w-[96%] mx-auto px-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <AuthButtons compact />
-                </div>
-                <div className="flex items-center gap-3">
                   <button className="text-white/80 hover:text-white transition-colors" onClick={toggleRightSidebar}>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </button>
                   <button onClick={() => setIsCartModalOpen(true)} className="relative text-white/80 hover:text-white transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                     {cartBadgeCount > 0 && (
-                      <span className="absolute -top-2 -left-2 w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold text-white" style={{ backgroundColor: THEME.antiqueGold }}>
+                      <span className="absolute -top-2 -left-2 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold text-white" style={{ backgroundColor: THEME.antiqueGold }}>
                         {cartBadgeCount}
                       </span>
                     )}
                   </button>
+                </div>
+                <div className="flex items-center gap-3">
+                  <AuthButtons compact />
                 </div>
               </div>
             </div>
@@ -1226,6 +1239,7 @@ export default function TabletHome({
                                 displaySettings={displaySettings}
                                 containerClassName={BOTANICAL_CARD_TABLET.className}
                                 containerStyle={BOTANICAL_CARD_TABLET.style}
+                                imageFill
                                 {...(hasClones ? {
                                   addToCartLabel: '\u0627\u062e\u062a\u0631 \u0627\u0644\u0634\u0643\u0644',
                                   imageBadge: `${product.clones.length} \u0634\u0643\u0644`
@@ -1369,6 +1383,7 @@ export default function TabletHome({
                         displaySettings={displaySettings}
                         containerClassName={BOTANICAL_CARD_TABLET.className}
                         containerStyle={BOTANICAL_CARD_TABLET.style}
+                                imageFill
                       />
                     </div>
                   ))}
@@ -1435,6 +1450,7 @@ export default function TabletHome({
                     displaySettings={displaySettings}
                     containerClassName={BOTANICAL_CARD_TABLET.className}
                     containerStyle={BOTANICAL_CARD_TABLET.style}
+                                imageFill
                   />
                 ))}
 
@@ -1669,6 +1685,12 @@ export default function TabletHome({
       <CartModal
         isOpen={isCartModalOpen}
         onClose={() => setIsCartModalOpen(false)}
+        theme={{
+          headerBg: THEME.deepForest,
+          accentColor: THEME.emerald,
+          buttonBg: THEME.emerald,
+          buttonHoverBg: THEME.darkEmerald,
+        }}
       />
 
       {/* Success Message Toast */}

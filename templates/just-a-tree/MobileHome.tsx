@@ -47,9 +47,9 @@ const THEME = {
 };
 
 const BOTANICAL_CARD_MOBILE = {
-  className: 'rounded-2xl p-3 cursor-pointer group transition-all duration-300',
+  className: 'rounded-2xl overflow-hidden cursor-pointer group transition-all duration-300',
   style: {
-    backgroundColor: THEME.cardWhite,
+    backgroundColor: THEME.parchment,
     border: `1px solid ${THEME.softEmerald}`,
     boxShadow: '0 2px 8px rgba(27,58,45,0.05)',
   } as React.CSSProperties,
@@ -1104,6 +1104,7 @@ export default function MobileHome({
                             displaySettings={displaySettings}
                             containerClassName={BOTANICAL_CARD_MOBILE.className}
                             containerStyle={BOTANICAL_CARD_MOBILE.style}
+                                imageFill
                             {...(hasClones ? {
                               addToCartLabel: 'اختر الشكل',
                               imageBadge: `${product.clones.length} شكل`
@@ -1219,6 +1220,7 @@ export default function MobileHome({
                       displaySettings={displaySettings}
                       containerClassName={BOTANICAL_CARD_MOBILE.className}
                       containerStyle={BOTANICAL_CARD_MOBILE.style}
+                                imageFill
                     />
                   </div>
                 ))}
@@ -1280,6 +1282,7 @@ export default function MobileHome({
                 displaySettings={displaySettings}
                 containerClassName={BOTANICAL_CARD_MOBILE.className}
                 containerStyle={BOTANICAL_CARD_MOBILE.style}
+                                imageFill
               />
             ))}
 
@@ -1697,6 +1700,7 @@ export default function MobileHome({
                       displaySettings={displaySettings}
                       containerClassName={BOTANICAL_CARD_MOBILE.className}
                       containerStyle={BOTANICAL_CARD_MOBILE.style}
+                                imageFill
                     />
                   ))}
                 </div>
@@ -1954,6 +1958,12 @@ export default function MobileHome({
       <CartModal
         isOpen={isCartModalOpen}
         onClose={() => setIsCartModalOpen(false)}
+        theme={{
+          headerBg: THEME.deepForest,
+          accentColor: THEME.emerald,
+          buttonBg: THEME.emerald,
+          buttonHoverBg: THEME.darkEmerald,
+        }}
       />
 
       {/* ===== WHATSAPP FLOATING BUTTON ===== */}

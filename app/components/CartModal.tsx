@@ -38,13 +38,21 @@ interface ShippingArea {
 
 type DeliveryMethod = 'pickup' | 'delivery';
 
+interface CartModalTheme {
+  headerBg: string;
+  accentColor: string;
+  buttonBg: string;
+  buttonHoverBg: string;
+}
+
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCartChange?: () => void;
+  theme?: CartModalTheme;
 }
 
-const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
+const CartModal = ({ isOpen, onClose, onCartChange, theme: cartTheme }: CartModalProps) => {
   const router = useRouter();
   const formatPrice = useFormatPrice();
   const { logoUrl, companyName } = useCompanySettings();
@@ -680,12 +688,12 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          fontFamily: "'Cairo', Arial, sans-serif"
+          fontFamily: 'inherit'
         }}
         dir="rtl"
       >
         {/* Responsive Header */}
-        <header className="border-b border-[var(--dash-border-default)] py-0 flex-shrink-0" style={{backgroundColor: 'var(--primary-color)'}}>
+        <header className="border-b border-[var(--dash-border-default)] py-0 flex-shrink-0" style={{backgroundColor: cartTheme?.headerBg || 'var(--primary-color)'}}>
           {/* Desktop/Tablet Header */}
           <div className="hidden md:block">
             <div className="px-8 flex items-center justify-between" style={{minHeight: '80px'}}>
@@ -1219,11 +1227,11 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                               ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                               : 'text-white hover:opacity-90'
                           }`}
-                          style={cartItems.length > 0 && !isLoading ? {backgroundColor: 'var(--primary-color)'} : {}}
+                          style={cartItems.length > 0 && !isLoading ? {backgroundColor: cartTheme?.buttonBg || 'var(--primary-color)'} : {}}
                         >
                           {isLoading ? 'جاري إرسال الطلب...' : `تأكيد الطلب (${Object.keys(groupedCartItems).length} منتج)`}
                         </button>
-                        
+
                         <button
                           onClick={handleClearCart}
                           disabled={cartItems.length === 0}
@@ -1848,11 +1856,11 @@ const CartModal = ({ isOpen, onClose, onCartChange }: CartModalProps) => {
                           ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                           : 'text-white hover:opacity-90'
                       }`}
-                      style={cartItems.length > 0 && !isLoading ? {backgroundColor: 'var(--primary-color)'} : {}}
+                      style={cartItems.length > 0 && !isLoading ? {backgroundColor: cartTheme?.buttonBg || 'var(--primary-color)'} : {}}
                     >
                       {isLoading ? 'جاري إرسال الطلب...' : `تأكيد الطلب (${Object.keys(groupedCartItems).length} منتج)`}
                     </button>
-                    
+
                     <button
                       onClick={handleClearCart}
                       disabled={cartItems.length === 0}

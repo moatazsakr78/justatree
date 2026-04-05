@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import type { HeroBanner, BannerElement, FallbackSlide, DeviceMode } from './types';
+import type { HeroBanner, BannerElement, FallbackSlide, DeviceMode, BannerSlot } from './types';
 import { DEFAULT_ELEMENTS, PRESET_GRADIENTS, REFERENCE_CANVAS, DEVICE_PRESETS } from './constants';
 import { useBannerData } from './useBannerData';
 import BannerRenderer from './BannerRenderer';
@@ -37,6 +37,7 @@ interface BannerEditorFullProps {
   fallbackSlides?: FallbackSlide[];
   themeId?: string;
   deviceType?: DeviceMode;
+  slot?: BannerSlot;
 }
 
 export default function BannerEditorFull({
@@ -47,6 +48,7 @@ export default function BannerEditorFull({
   fallbackSlides,
   themeId = 'just-a-tree',
   deviceType = 'desktop',
+  slot = 'hero',
 }: BannerEditorFullProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [displayBanners, setDisplayBanners] = useState<HeroBanner[]>(initialBanners);
@@ -63,7 +65,7 @@ export default function BannerEditorFull({
   const [containerWidth, setContainerWidth] = useState(REFERENCE_CANVAS.width);
   const [canvasReady, setCanvasReady] = useState(false);
 
-  const { saving, saveBanner, createBanner, deleteBanner, fetchBanners, saveAllBanners } = useBannerData(themeId);
+  const { saving, saveBanner, createBanner, deleteBanner, fetchBanners, saveAllBanners } = useBannerData(themeId, slot);
 
   // Editor uses deviceMode preview height; renderer uses actual device height
   const editorHeight = isEditing ? DEVICE_PRESETS[deviceMode].height : height;
@@ -89,8 +91,12 @@ export default function BannerEditorFull({
   // Get elements for current device mode
   const getElements = (banner: HeroBanner | undefined): BannerElement[] => {
     if (!banner) return [];
-    if (deviceMode === 'mobile') return banner.mobile_elements || [];
-    if (deviceMode === 'tablet') return banner.tablet_elements || [];
+    if (deviceMode === 'mobile') {
+      return banner.mobile_elements?.length > 0 ? banner.mobile_elements : banner.elements || [];
+    }
+    if (deviceMode === 'tablet') {
+      return banner.tablet_elements?.length > 0 ? banner.tablet_elements : banner.elements || [];
+    }
     return banner.elements || [];
   };
 
@@ -116,6 +122,7 @@ export default function BannerEditorFull({
         display_order: 0,
         is_active: true,
         theme_id: themeId,
+        slot,
         background_type: 'gradient',
         background_value: PRESET_GRADIENTS[0].value,
         canvas_width: REFERENCE_CANVAS.width,
@@ -179,6 +186,7 @@ export default function BannerEditorFull({
             display_order: banner.display_order,
             is_active: banner.is_active,
             theme_id: banner.theme_id,
+            slot: banner.slot || slot,
             background_type: banner.background_type,
             background_value: banner.background_value,
             canvas_width: banner.canvas_width,
@@ -276,6 +284,7 @@ export default function BannerEditorFull({
       display_order: editBanners.length,
       is_active: true,
       theme_id: themeId,
+      slot,
       background_type: 'gradient',
       background_value: PRESET_GRADIENTS[editBanners.length % PRESET_GRADIENTS.length].value,
       canvas_width: REFERENCE_CANVAS.width,

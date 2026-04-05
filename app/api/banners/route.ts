@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
           display_order: banner.display_order ?? 0,
           is_active: banner.is_active ?? true,
           theme_id: banner.theme_id || 'just-a-tree',
+          slot: banner.slot || 'hero',
           background_type: banner.background_type || 'gradient',
           background_value: banner.background_value,
           canvas_width: banner.canvas_width || 1280,

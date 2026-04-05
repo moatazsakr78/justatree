@@ -38,6 +38,7 @@ export interface BannerElement {
 }
 
 export type DeviceMode = 'desktop' | 'tablet' | 'mobile';
+export type BannerSlot = 'hero' | 'promo_card' | 'mid_banner';
 
 export interface HeroBanner {
   id: string;
@@ -45,6 +46,7 @@ export interface HeroBanner {
   display_order: number;
   is_active: boolean;
   theme_id: string;
+  slot: BannerSlot;
   background_type: 'gradient' | 'color' | 'image';
   background_value: string;
   canvas_width: number;
