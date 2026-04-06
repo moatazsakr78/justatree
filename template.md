@@ -9,7 +9,7 @@
 ## الهيكل
 
 ```
-elfaroukgroup/
+justatree/
 ├── templates/                    # مجلد القوالب
 │   └── default/                  # القالب الافتراضي
 │       ├── index.ts              # تصدير كل الـ components

@@ -112,7 +112,7 @@
 
 ● ممتاز! تم الموافقة على الخطة. دعني أبدأ التنفيذ.
 
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && npm install react-window react-virtualized-auto-sizer @types/react-window)
+● Bash(cd /c/Users/pc/Desktop/justatree && npm install react-window react-virtualized-auto-sizer @types/react-window)
   ⎿  added 3 packages, and audited 879 packages in 20s
 
      184 packages are looking for funding                                                                                                                                                                           
@@ -133,7 +133,7 @@
                                                                                                                                                                                                                     
 ● Search(pattern: "import.*Product.*from", path: "app\(dashboard)\pos\page.tsx", output_mode: "content")                                                                                                              ⎿  Found 4 lines (ctrl+o to expand)
                                                                                                                                                                                                                     
-● Search(pattern: "export interface Branch", path: "~\Desktop\elfaroukgroup", output_mode: "content")                                                                                                                 ⎿  Found 7 lines (ctrl+o to expand)                                                                                                                                                                               
+● Search(pattern: "export interface Branch", path: "~\Desktop\justatree", output_mode: "content")                                                                                                                 ⎿  Found 7 lines (ctrl+o to expand)                                                                                                                                                                               
                                                                                                                                                                                                                     
 ● الآن دعني أنشئ مكون VirtualizedProductGrid.                                                                                                                                                                                                                                                                                                                                                                                           
 ● Write(app\components\ui\VirtualizedProductGrid.tsx)                                                                                                                                                               
@@ -305,10 +305,10 @@
 
 ● دعني أتحقق من عدم وجود أخطاء TypeScript.                                 
     
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && npx tsc --noEmit --skipLibCheck 2>&1 | grep -E "(pos/page|VirtualizedProductGrid)" | head -20)
+● Bash(cd /c/Users/pc/Desktop/justatree && npx tsc --noEmit --skipLibCheck 2>&1 | grep -E "(pos/page|VirtualizedProductGrid)" | head -20)
   ⎿ app/components/ui/VirtualizedProductGrid.tsx(4,10): error TS2305: Module '"react-window"' has no exported member 'FixedSizeGrid'.
     app/components/ui/VirtualizedProductGrid.tsx(4,33): error TS2724: '"react-window"' has no exported member named 'GridChildComponentProps'. Did you mean 'CellComponentProps'?
-    app/components/ui/VirtualizedProductGrid.tsx(5,8): error TS2613: Module '"C:/Users/pc/Desktop/elfaroukgroup/node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer"' has no default ex
+    app/components/ui/VirtualizedProductGrid.tsx(5,8): error TS2613: Module '"C:/Users/pc/Desktop/justatree/node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer"' has no default ex
     … +3 lines (ctrl+o to expand)                                                                                                                                                                                      
                                                                                                                                                                                                                     
 ● هناك بعض الأخطاء. دعني أصلحها.
@@ -316,22 +316,22 @@
 ● Read(app\components\ui\VirtualizedProductGrid.tsx)                                                                                                                                                                
   ⎿  Read 30 lines                                                                                                                                                                                                  
                                                                                                                                                                                                                     
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && cat node_modules/react-window/dist/index.d.ts 2>/dev/null | head -100 || npm show react-window) timeout: 30s                                                         
+● Bash(cd /c/Users/pc/Desktop/justatree && cat node_modules/react-window/dist/index.d.ts 2>/dev/null | head -100 || npm show react-window) timeout: 30s                                                         
   ⎿  (No content)                                                                                                                                                                                                   
 
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && ls node_modules/react-window/dist/ && head -100 node_modules/react-window/dist/index.esm.js) timeout: 30s                                                              ⎿  Error: Exit code 1
+● Bash(cd /c/Users/pc/Desktop/justatree && ls node_modules/react-window/dist/ && head -100 node_modules/react-window/dist/index.esm.js) timeout: 30s                                                              ⎿  Error: Exit code 1
      head: cannot open 'node_modules/react-window/dist/index.esm.js' for reading: No such file or directory                                                                                                         
                                                                                                                                                                                                                          react-window.cjs                                                                                                                                                                                               
      react-window.cjs.map                                                                                                                                                                                           
      react-window.d.ts                                                                                                                                                                                                   react-window.js                      
      react-window.js.map                                                                                                                                                                                            
-                                                                                                                                                                                                                    ● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && head -150 node_modules/react-window/dist/react-window.d.ts) timeout: 30s
+                                                                                                                                                                                                                    ● Bash(cd /c/Users/pc/Desktop/justatree && head -150 node_modules/react-window/dist/react-window.d.ts) timeout: 30s
   ⎿  import { ComponentProps } from 'react';                                                                                                                                                                        
      import { CSSProperties } from 'react';
      import { HTMLAttributes } from 'react';
      … +148 lines (ctrl+o to expand)
 
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && npm ls react-window) timeout: 30s                                                                                                                                      ⎿  pos-system@0.1.0 C:\Users\pc\Desktop\elfaroukgroup
+● Bash(cd /c/Users/pc/Desktop/justatree && npm ls react-window) timeout: 30s                                                                                                                                      ⎿  pos-system@0.1.0 C:\Users\pc\Desktop\justatree
      ├─┬ @types/react-window@2.0.0                                                                                                                                                                                  
      │ └── react-window@2.2.5 deduped                                                                                                                                                                               
      └── react-window@2.2.5
@@ -925,19 +925,19 @@
       292 +                                                                                                                                                                                                         
       293 +export default VirtualizedProductGrid;                                                                                                                                                                   
 
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && npx tsc --noEmit --skipLibCheck 2>&1 | grep -E "(VirtualizedProductGrid)" | head -30)
+● Bash(cd /c/Users/pc/Desktop/justatree && npx tsc --noEmit --skipLibCheck 2>&1 | grep -E "(VirtualizedProductGrid)" | head -30)
   ⎿  app/components/ui/VirtualizedProductGrid.tsx(272,8): error TS2322: Type '{ children: ({ height, width }: { height: number; width: number; }) => Element; }' is not assignable to type 'IntrinsicAttributes
      & AutoSizerProps'.
                                                                             
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && head -50 node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer.d.ts) timeout: 30s
+● Bash(cd /c/Users/pc/Desktop/justatree && head -50 node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer.d.ts) timeout: 30s
   ⎿  import { CSSProperties } from 'react';
      import { Dispatch } from 'react';                                                                                                                                                                              
      import { FunctionComponent } from 'react';
      … +47 lines (ctrl+o to expand)                                                                                                                                                                                 
-                                                                                                                                                                                                                    ● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && grep -A 30 "declare type AutoSizerProps" node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer.d.t…) timeout: 30s                                ⎿  export declare type AutoSizerProps = {                                                                                                                                                                         
+                                                                                                                                                                                                                    ● Bash(cd /c/Users/pc/Desktop/justatree && grep -A 30 "declare type AutoSizerProps" node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer.d.t…) timeout: 30s                                ⎿  export declare type AutoSizerProps = {                                                                                                                                                                         
          /**                                                                                                                                                                                                        
           * Corresponds to the `ResizeObserver` [box](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver/observe#box) parameter.                                                                            … +28 lines (ctrl+o to expand)                                                                                                                                                                                 
-                                                                                                                                                                                                                    ● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && cat node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer.d.ts) timeout: 30s                                                                     ⎿  import { CSSProperties } from 'react';                                                                                                                                                                         
+                                                                                                                                                                                                                    ● Bash(cd /c/Users/pc/Desktop/justatree && cat node_modules/react-virtualized-auto-sizer/dist/react-virtualized-auto-sizer.d.ts) timeout: 30s                                                                     ⎿  import { CSSProperties } from 'react';                                                                                                                                                                         
      import { Dispatch } from 'react';                                                                                                                                                                              
      import { FunctionComponent } from 'react';                                                                                                                                                                          … +127 lines (ctrl+o to expand)
                                                                                                                                                                                                                     ● فهمت - الـ API الجديد مختلف. دعني أحدث الكود.                                                                                                                                                                         
@@ -987,12 +987,12 @@
       295    );
       296  }
 
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && npx tsc --noEmit --skipLibCheck 2>&1 | grep -E "(VirtualizedProductGrid|pos/page)" | head -30)
+● Bash(cd /c/Users/pc/Desktop/justatree && npx tsc --noEmit --skipLibCheck 2>&1 | grep -E "(VirtualizedProductGrid|pos/page)" | head -30)
   ⎿  (No content)
 
 ● ممتاز! لا توجد أخطاء TypeScript. دعني أتحقق من أن البناء يعمل.
                                                                             
-● Bash(cd /c/Users/pc/Desktop/elfaroukgroup && npm run build 2>&1 | tail -50) timeout: 5m 0s
+● Bash(cd /c/Users/pc/Desktop/justatree && npm run build 2>&1 | tail -50) timeout: 5m 0s
   ⎿  ├ ƒ /api/whatsapp/send                          0 B                0 B                                                                                                                                         
      ├ ƒ /api/whatsapp/sync                          0 B                0 B
      ├ ƒ /api/whatsapp/sync-contacts                 0 B                0 B                                                                                                                                         
